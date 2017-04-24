@@ -1,2 +1,2 @@
 # iskint
-Personal data, nothing interesting. Certainly nothing intended for public discussion.
+Personal data, not intended for public discussion. Some files are password protected solely for that reason.

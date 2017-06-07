@@ -48,4 +48,7 @@
   <ItemGroup>
     <Compile Include="source\chrys.d" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="dub.sdl" />
+  </ItemGroup>
 </Project>

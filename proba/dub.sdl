@@ -1,0 +1,5 @@
+name "proba"
+description "A minimal D application."
+authors "su"
+copyright "Copyright © 2017, su"
+license "proprietary"

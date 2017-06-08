@@ -1,6 +1,9 @@
 import std.stdio;
+import tools;
+import concept.routes;
 
 void main()
 {
-	writeln("Edit source/app.d to start your project.");
+//    mixin("comCDir".w);
+//    writeln(comCDir);
 }

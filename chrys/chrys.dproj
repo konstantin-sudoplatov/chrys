@@ -4,7 +4,6 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{66AB3854-7D28-45BB-8591-30D93803E22A}</ProjectGuid>
-    <BaseDirectory>.</BaseDirectory>
     <Compiler>DMD2</Compiler>
     <PreferOneStepBuild>true</PreferOneStepBuild>
     <UseDefaultCompiler>true</UseDefaultCompiler>
@@ -44,9 +43,14 @@
   </PropertyGroup>
   <ItemGroup>
     <Folder Include="source\" />
+    <Folder Include="source\concept\" />
+    <Folder Include="source\concept\static\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="source\chrys.d" />
+    <Compile Include="source\concept\routes.d" />
+    <Compile Include="source\tools.d" />
+    <Compile Include="source\concept\static\listen.d" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dub.sdl" />

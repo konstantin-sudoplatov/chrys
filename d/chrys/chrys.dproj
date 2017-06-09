@@ -44,13 +44,15 @@
   <ItemGroup>
     <Folder Include="source\" />
     <Folder Include="source\concept\" />
-    <Folder Include="source\concept\static\" />
+    <Folder Include="source\concept\stat\" />
+    <Folder Include="source\attention\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="source\chrys.d" />
-    <Compile Include="source\concept\routes.d" />
     <Compile Include="source\tools.d" />
-    <Compile Include="source\concept\static\listen.d" />
+    <Compile Include="source\concept\stat\listening.d" />
+    <Compile Include="source\concept\stat\attention_bubble.d" />
+    <Compile Include="source\concept\dirs.d" />
   </ItemGroup>
   <ItemGroup>
     <None Include="dub.sdl" />

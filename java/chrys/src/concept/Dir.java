@@ -5,6 +5,7 @@
  */
 package concept;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,5 +14,6 @@ import java.util.Map;
  * @author su
  */
 public class Dir {
-    Map<Long, Concept> d = new HashMap();
+    public static final Map<Long, Concept> com = new HashMap();
+    public static final ArrayList<Map<Long, Concept>> priv = new ArrayList();
 }

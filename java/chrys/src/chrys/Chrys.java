@@ -5,6 +5,8 @@
  */
 package chrys;
 
+import concept.AttentionBubble;
+
 /**
  *
  * @author su
@@ -15,6 +17,7 @@ public class Chrys {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        new AttentionBubble();
     }
     
 }

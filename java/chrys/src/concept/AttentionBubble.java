@@ -1,43 +1,64 @@
 package concept;
 
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
+
 /**
- * Base class for all concepts.
+ * Data store for the attention flow thread(s). 
+ * It holds all data, which an attention flow needs to do its reasoning, first of all the concept references.
  * @author su
  */
-public class Concept {
+public class AttentionBubble {
     //##################################################################################################################
     //                                              Public types        
-    public enum Lineage {
-        /** Hard-coded concept as opposed to dynamically generated one.*/
-        STATIC,
-        /** Dynamically generated as opposed to hard-coded one. */
-        DYNAMIC
-    }
     
     //##################################################################################################################
     //                                              Public data
-
+    
     //##################################################################################################################
     //                                              Constructors
+
+    /** 
+     *  Constructor.
+     * Inserts itself into ComDir.ATB map.
+     */ 
+    @SuppressWarnings("LeakingThisInConstructor")
+    public AttentionBubble() { 
+    } 
 
     //##################################################################################################################
     //                                              Public methods
 
-    public long getCid() {
-        return cid;
+    public long getBid() {
+        return bid;
     }
 
-    public void setCid(long cid) {
-        this.cid = cid;
+    public void setBid(long bid) {
+        this.bid = bid;
     }
 
+    public Map<Long, Concept> getPrivDir() {
+        return privDir;
+    }
+
+    public void setPrivDir(Map<Long, Concept> privDir) {
+        this.privDir = privDir;
+    }
+    
     //##################################################################################################################
     //                                              Protected data
 
     //##################################################################################################################
-    //                                              Protected data
-    /** Concept Id. Initialized by an illegal ID to show it is not yet generated. */
-    private long cid = -1;
+    //                                              Protected methods
+
+    //##################################################################################################################
+    //                                              Private data
+    /** Bubble Id. Initialized by an illegal ID to show it is not yet generated. */
+    private long bid = -1;
+
+    /** Private concept directory: a concept object by its Id. */
+    private Map<Long, Concept> privDir = new HashMap();
 
     //##################################################################################################################
     //                                              Private methods, data

@@ -5,7 +5,8 @@
  */
 package chrys;
 
-import concept.AttentionBubble;
+import attention.AttnDispatcher;
+import attention.AttnBubble;
 
 /**
  *
@@ -17,7 +18,14 @@ public class Chrys {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        new AttentionBubble();
+        // create and give to dispatcher the console bubble
+        AttnDispatcher.add_atb(new AttnBubble(AttnBubble.Type.CONSOLE_LISTENER));
+        
+        // start all flows
+        AttnDispatcher.start();
+        
+        // wait for them to finish
+        AttnDispatcher.join();
     }
     
 }

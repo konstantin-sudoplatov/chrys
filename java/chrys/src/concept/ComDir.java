@@ -10,10 +10,26 @@ import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
- * Common directory. This is a directory to common concept map, and attention bubbles map and other shared single pieces of data.
+ *                                              Common directory. 
+ * This is a wrapper for the common concept map. The common concept map is readable by any bubble flow, but can be written
+ * by only one flow in order to exclude the race. That flow is tentatively called Leaner because it is supposed to take into
+ * consideration reasoning of other bubble flows and their private concepts and translate them to the common concepts to be
+ * stored in the concept DB.
  * @author su
  */
 public class ComDir {
+
+    //##################################################################################################################
+    //                                              Constructors
+    
+    /**
+     *                                      Disable instantiation.
+     * This class is supposed to contain only static members, it should not ever be instantiated.
+     */
+    private ComDir() {}
+    
+    //##################################################################################################################
+    //                                              Public methods
     
     /**
      * Add an entry to the CPT map.
@@ -49,46 +65,9 @@ public class ComDir {
         return CPT.get(cid);
     }
 
-    /**
-     * Add an entry to the ATB map.
-     * @param ab the bubble object to add.
-     */
-    public static synchronized void put_atb(AttentionBubble ab) {
-        long bId;
-        do {
-            Random rnd = new Random();
-            bId = rnd.nextLong();
-            if(bId < 0) bId = -bId;
-        } while(ATB.containsKey(bId));
-        ab.setBid(bId);
-        
-        ATB.put(bId, ab);
-    }
-    
-    /**
-     *  Check to see if the ATB map contains a key.
-     * @param bid the key to check.
-     * @return
-     */
-    public static boolean contains_key_in_atb(long bid) {
-        return ATB.containsKey(bid);
-    }
-    
-    /**
-     *  Get attention bubble object by Id.
-     * @param bid bubble Id
-     * @return
-     */
-    public static AttentionBubble get_atb(long bid) {
-        return ATB.get(bid);
-    }
-
     //##################################################################################################################
     //                                              Private data
 
     /** Common concept directory: a concept object by concept Id. Can be updated only by the learner attention flow. */
     private static final Map<Long, Concept> CPT = new ConcurrentHashMap();
-    
-    /** Attention bubbles: an attention bubble by the bubble Id. */
-    private static final Map<Long, AttentionBubble> ATB = new ConcurrentHashMap();
 }

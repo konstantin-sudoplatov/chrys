@@ -48,17 +48,4 @@ public class ComDirTest {
         assertEquals(true, ComDir.contains_key_in_cpt(cpt.getCid()));
         assertEquals(cpt, ComDir.get_cpt(cpt.getCid()));
     }
-
-    /**
-     * Test of put_atb method, of class ComDir.
-     */
-    @Test
-    public void testPut_atb() {
-        System.out.println("put_atb");
-        AttentionBubble atb = new AttentionBubble();
-        ComDir.put_atb(atb);
-        assertEquals(true, ComDir.contains_key_in_atb(atb.getBid()));
-        assertEquals(atb, ComDir.get_atb(atb.getBid()));
-    }
-    
 }

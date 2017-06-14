@@ -1,49 +1,62 @@
-package concept;
+package attention;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
- * Data store for the attention flow thread(s). 
- * It holds all data, which an attention flow needs to do its reasoning, first of all the concept references.
+ *                                          Dispatcher of attention flows.
+ * It holds and manages the set of attention bubbles and manages flows on those bubbles.
  * @author su
  */
-public class AttentionBubble {
+public class AttnDispatcher {
     //##################################################################################################################
     //                                              Public types        
     
     //##################################################################################################################
     //                                              Public data
-    
+
     //##################################################################################################################
     //                                              Constructors
 
-    /** 
-     *  Constructor.
-     * Inserts itself into ComDir.ATB map.
-     */ 
-    @SuppressWarnings("LeakingThisInConstructor")
-    public AttentionBubble() { 
-    } 
+    /**
+     *                                      Disable instantiation.
+     * This class is supposed to contain only static members, it should not ever be instantiated.
+     */
+    private AttnDispatcher() {} 
 
     //##################################################################################################################
     //                                              Public methods
 
-    public long getBid() {
-        return bid;
+    /**
+     * Add an entry to the ATB.
+     * @param ab the bubble object to add.
+     */
+    public static synchronized void add_atb(AttnBubble ab) {
+        ATB.add(ab);
     }
 
-    public void setBid(long bid) {
-        this.bid = bid;
+    /**
+     *      Start attention flows.
+     */
+    public static synchronized void start() {
+        ATB.forEach((AttnBubble _item) -> {
+            Thread thr = new Thread(_item);
+            attnThread.add(thr);
+            thr.start();
+        });
     }
-
-    public Map<Long, Concept> getPrivDir() {
-        return privDir;
-    }
-
-    public void setPrivDir(Map<Long, Concept> privDir) {
-        this.privDir = privDir;
+    
+    /**
+     *          Wait for all threads to finish.
+     */
+    public static synchronized void join() {
+        for(Thread thr: attnThread) {
+            try {
+                thr.join();
+            } catch (InterruptedException ex) {}
+        }
     }
     
     //##################################################################################################################
@@ -54,12 +67,13 @@ public class AttentionBubble {
 
     //##################################################################################################################
     //                                              Private data
-    /** Bubble Id. Initialized by an illegal ID to show it is not yet generated. */
-    private long bid = -1;
-
-    /** Private concept directory: a concept object by its Id. */
-    private Map<Long, Concept> privDir = new HashMap();
 
     //##################################################################################################################
     //                                              Private methods, data
+    
+    /** Attention bubbles. */
+    private static final List<AttnBubble> ATB = new ArrayList();
+    
+    /** List of threads. So far it is one thread per flow and one flow per bubble. */
+    private static List<Thread> attnThread = new ArrayList();
 }

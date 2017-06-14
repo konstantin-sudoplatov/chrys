@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package concept;
 
 import java.util.Map;
@@ -12,7 +7,7 @@ import java.util.concurrent.ConcurrentHashMap;
 /**
  *                                              Common directory. 
  * This is a wrapper for the common concept map. The common concept map is readable by any bubble flow, but can be written
- * by only one flow in order to exclude the race. That flow is tentatively called Leaner because it is supposed to take into
+ * by only one flow in order to exclude the race. That flow is tentatively called Learner because it is supposed to take into
  * consideration reasoning of other bubble flows and their private concepts and translate them to the common concepts to be
  * stored in the concept DB.
  * @author su

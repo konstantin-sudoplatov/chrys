@@ -7,6 +7,7 @@ package chrys;
 
 import attention.AttnDispatcher;
 import attention.AttnBubble;
+import attention.ConsoleListener;
 
 /**
  *
@@ -19,7 +20,7 @@ public class Chrys {
      */
     public static void main(String[] args) {
         // create and give to dispatcher the console bubble
-        AttnDispatcher.add_atb(new AttnBubble(AttnBubble.Type.CONSOLE_LISTENER));
+        AttnDispatcher.add_atb(new ConsoleListener());
         
         // start all flows
         AttnDispatcher.start();

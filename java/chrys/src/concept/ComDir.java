@@ -1,8 +1,11 @@
 package concept;
 
+import java.lang.reflect.Constructor;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *                                              Common directory. 
@@ -27,19 +30,29 @@ public class ComDir {
     //                                              Public methods
     
     /**
-     * Add an entry to the CPT map.
+     *                          Add an entry to the CPT map.
+     * For dynamic concepts first a unique id is generated.
      * @param cpt the concept object to add
+     * @return Id of the concept. As side effect the Id is assigned to the concept's cid field.
      */
-    public static synchronized void put_cpt(Concept cpt) {
+    public static synchronized long put_cpt(Concept cpt) {
         long cId;
-        do {
-            Random rnd = new Random();
-            cId = rnd.nextLong();
-            if(cId < 0) cId = -cId;
-        } while(CPT.containsKey(cId));
-        cpt.setCid(cId);
+        if
+                (cpt.level == Concept.Level.STATIC)
+            cId = cpt.getCid();
+        else {
+            do {
+                Random rnd = new Random();
+                cId = rnd.nextLong();
+                if(cId < 0) cId = -cId;
+                cId += Short.MAX_VALUE - Short.MIN_VALUE + 1;
+            } while(CPT.containsKey(cId));
+            cpt.setCid(cId);
+        }
         
         CPT.put(cId, cpt);
+        
+        return cId;
     }
     
     /**
@@ -47,7 +60,7 @@ public class ComDir {
      * @param cid the key to check.
      * @return
      */
-    public static boolean contains_key_in_cpt(long cid) {
+    public static boolean contains_cpt(long cid) {
         return CPT.containsKey(cid);
     }
     
@@ -60,6 +73,31 @@ public class ComDir {
         return CPT.get(cid);
     }
 
+    /**
+     *  Create static concepts and put them into CPT
+     */
+    public static void init_by_static_concepts() {
+        for(Concept.Cid cidEnum: Concept.Cid.values()) {
+            String s = cidEnum.name();
+            @SuppressWarnings("UnusedAssignment")
+            Class cl = null;
+            try {
+                cl = Class.forName(s);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(ComDir.class.getName()).log(Level.SEVERE, "Error getting class " + s, ex);
+                System.exit(1);
+            }
+            Constructor cons;
+            try {
+                cons = cl.getConstructor();
+            } catch (NoSuchMethodException | SecurityException ex) {
+                Logger.getLogger(ComDir.class.getName()).log(Level.SEVERE, "Error constractin " + s, ex);
+                System.exit(1);
+            }
+            put_cpt(cons.newInstance(""));
+        }
+    }
+    
     //##################################################################################################################
     //                                              Private data
 

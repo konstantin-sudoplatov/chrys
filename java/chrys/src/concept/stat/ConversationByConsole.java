@@ -1,14 +1,12 @@
-package attention;
+package concept.stat;
 
-import java.util.ArrayList;
-import java.util.List;
+import concept.Concept;
 
 /**
- *                                          Dispatcher of attention flows.
- * It holds and manages the set of attention bubbles and manages flows on those bubbles.
+ *                                  Conversation by console is taking place.
  * @author su
  */
-public class AttnDispatcher {
+public class ConversationByConsole extends Concept {
     //##################################################################################################################
     //                                              Public types        
     
@@ -18,45 +16,17 @@ public class AttnDispatcher {
     //##################################################################################################################
     //                                              Constructors
 
-    /**
-     *                                      Disable instantiation.
-     * This class is supposed to contain only static members, it should not ever be instantiated.
-     */
-    private AttnDispatcher() {} 
+    /** 
+     * Constructor.
+     */ 
+    public ConversationByConsole() 
+    {   super(Cid.ConversationByConsole.ordinal(), Level.STATIC);
+        
+    } 
 
     //##################################################################################################################
     //                                              Public methods
 
-    /**
-     * Add an entry to the ATB.
-     * @param ab the bubble object to add.
-     */
-    public static synchronized void add_atb(AttnBubble ab) {
-        ATB.add(ab);
-    }
-
-    /**
-     *      Start attention flows.
-     */
-    public static synchronized void start() {
-        ATB.forEach((AttnBubble _item) -> {
-            Thread thr = new Thread(_item);
-            attnThread.add(thr);
-            thr.start();
-        });
-    }
-    
-    /**
-     *          Wait for all threads to finish.
-     */
-    public static synchronized void join() {
-        for(Thread thr: attnThread) {
-            try {
-                thr.join();
-            } catch (InterruptedException ex) {}
-        }
-    }
-    
     //##################################################################################################################
     //                                              Protected data
 
@@ -68,10 +38,4 @@ public class AttnDispatcher {
 
     //##################################################################################################################
     //                                              Private methods, data
-    
-    /** Attention bubbles. */
-    private static final List<AttnBubble> ATB = new ArrayList();
-    
-    /** List of threads. So far it is one thread per flow and one flow per bubble. */
-    private static List<Thread> attnThread = new ArrayList();
 }

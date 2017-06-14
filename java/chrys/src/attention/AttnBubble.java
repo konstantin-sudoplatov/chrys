@@ -9,46 +9,19 @@ import java.util.Map;
  * It holds all data, which an attention flow needs to do its reasoning, first of all the concept references.
  * @author su
  */
-public class AttnBubble implements Runnable {
+abstract public class AttnBubble implements Runnable {
 
     //##################################################################################################################
     //                                              Public types        
-    public enum Type {
-        CONSOLE_LISTENER
-    }
     
     //##################################################################################################################
     //                                              Public data
-
-    /** Private concept directory: a concept object by its Id. */
-    private Map<Long, Concept> privDir = new HashMap();
-
-    /** Type of the bubble. */
-    public final Type bubbleType;
     
     //##################################################################################################################
     //                                              Constructors
 
-    /** 
-     *  Constructor.
-     * @param bubbleType
-     */ 
-    public AttnBubble(Type bubbleType) { 
-        this.bubbleType = bubbleType;
-    } 
-
     //##################################################################################################################
     //                                              Public methods
-    @Override
-    @SuppressWarnings("SleepWhileInLoop")
-    public void run() {
-        for(int i=0; ; i++) {
-            System.out.println("attention.AttnFlow.run()");
-            try {
-                Thread.sleep(1000);
-            } catch (InterruptedException ex) {}
-        }
-    }
 
 //    public long getBid() {
 //        return bid;
@@ -59,19 +32,20 @@ public class AttnBubble implements Runnable {
 //    }
 //
 //    public Map<Long, Concept> getPrivDir() {
-//        return privDir;
+//        return _privDir_;
 //    }
     
     //##################################################################################################################
     //                                              Protected data
+
+    /** Private concept directory: a concept object by its Id. */
+    protected Map<Long, Concept> _privDir_ = new HashMap();
 
     //##################################################################################################################
     //                                              Protected methods
 
     //##################################################################################################################
     //                                              Private data
-//    /** Bubble Id. Initialized by an illegal ID to show it is not yet generated. */
-//    private long bid = -1;
 
     //##################################################################################################################
     //                                              Private methods, data

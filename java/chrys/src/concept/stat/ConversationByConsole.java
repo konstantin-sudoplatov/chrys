@@ -20,7 +20,7 @@ public class ConversationByConsole extends Concept {
      * Constructor.
      */ 
     public ConversationByConsole() 
-    {   super(Cid.ConversationByConsole.ordinal(), Level.STATIC);
+    {   super(SCid.ConversationByConsole.ordinal(), Level.STATIC);
         
     } 
 

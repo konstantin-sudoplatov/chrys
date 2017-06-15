@@ -1,11 +1,14 @@
 package concept;
 
+import concept.stat.SCid;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 
 /**
  *                                              Common directory. 
@@ -74,27 +77,33 @@ public class ComDir {
     }
 
     /**
-     *  Create static concepts and put them into CPT
+     *  Create static concept objects and put them into the CPT map.
      */
-    public static void init_by_static_concepts() {
-        for(Concept.Cid cidEnum: Concept.Cid.values()) {
+    public static void generate_static_concepts() {
+        for(SCid cidEnum: SCid.values()) {
             String s = cidEnum.name();
             @SuppressWarnings("UnusedAssignment")
             Class cl = null;
             try {
-                cl = Class.forName(s);
+                cl = Class.forName(SCid.STATIC_CONCEPTS_PACKET_NAME + "." + s);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(ComDir.class.getName()).log(Level.SEVERE, "Error getting class " + s, ex);
                 System.exit(1);
             }
-            Constructor cons;
+            @SuppressWarnings("UnusedAssignment")
+            Constructor cons = null;
             try {
                 cons = cl.getConstructor();
             } catch (NoSuchMethodException | SecurityException ex) {
-                Logger.getLogger(ComDir.class.getName()).log(Level.SEVERE, "Error constractin " + s, ex);
+                Logger.getLogger(ComDir.class.getName()).log(Level.SEVERE, "Error getting constractor for " + s, ex);
                 System.exit(1);
             }
-            put_cpt(cons.newInstance(""));
+            try {
+                put_cpt((Concept)cons.newInstance());
+            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                Logger.getLogger(ComDir.class.getName()).log(Level.SEVERE, "Error instantiating " + s, ex);
+                System.exit(1);
+            }
         }
     }
     

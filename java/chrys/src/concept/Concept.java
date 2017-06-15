@@ -1,6 +1,7 @@
 package concept;
 
 
+
 /**
  * Base class for all concepts.
  * @author su
@@ -8,11 +9,6 @@ package concept;
 public class Concept {
     //##################################################################################################################
     //                                              Public types        
-    /** Concept Id */
-    public enum Cid {
-        ConversationByConsole,
-    }
-
     /** Defined in code or dynamically generated. */
     public enum Level {
         /** Hard-coded concept as opposed to dynamically generated one.*/

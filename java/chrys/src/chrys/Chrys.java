@@ -6,8 +6,8 @@
 package chrys;
 
 import attention.AttnDispatcher;
-import attention.AttnBubble;
 import attention.ConsoleListener;
+import concept.ComDir;
 
 /**
  *
@@ -19,6 +19,10 @@ public class Chrys {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
+        
+        // create static concepts and put them into ComDir
+        ComDir.generate_static_concepts();
+        
         // create and give to dispatcher the console bubble
         AttnDispatcher.add_atb(new ConsoleListener());
         

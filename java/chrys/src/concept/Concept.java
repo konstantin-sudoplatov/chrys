@@ -1,12 +1,14 @@
 package concept;
 
+import java.util.Random;
+
 
 
 /**
  * Base class for all concepts.
  * @author su
  */
-public class Concept {
+abstract public class Concept {
     //##################################################################################################################
     //                                              Public types        
     /** Defined in code or dynamically generated. */
@@ -30,7 +32,14 @@ public class Concept {
      * Only for dynamic concepts.
      */
     public Concept() {
-        this.cid = -1;      // invalid. will be changed when the concept is inserted into a directory.
+        // generate a unique cid
+        do {
+            Random rnd = new Random();
+            cid = rnd.nextLong();
+            if(cid < 0) cid = -cid;
+            cid += Short.MAX_VALUE - Short.MIN_VALUE + 1;
+        } while(ComDir.contains_cpt(cid));
+        
         this.level = Level.DYNAMIC;
     }
 

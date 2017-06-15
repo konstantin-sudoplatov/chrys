@@ -34,28 +34,10 @@ public class ComDir {
     
     /**
      *                          Add an entry to the CPT map.
-     * For dynamic concepts first a unique id is generated.
      * @param cpt the concept object to add
-     * @return Id of the concept. As side effect the Id is assigned to the concept's cid field.
      */
-    public static synchronized long put_cpt(Concept cpt) {
-        long cId;
-        if
-                (cpt.level == Concept.Level.STATIC)
-            cId = cpt.getCid();
-        else {
-            do {
-                Random rnd = new Random();
-                cId = rnd.nextLong();
-                if(cId < 0) cId = -cId;
-                cId += Short.MAX_VALUE - Short.MIN_VALUE + 1;
-            } while(CPT.containsKey(cId));
-            cpt.setCid(cId);
-        }
-        
-        CPT.put(cId, cpt);
-        
-        return cId;
+    public static synchronized void put_cpt(Concept cpt) {
+        CPT.put(cpt.getCid(), cpt);
     }
     
     /**

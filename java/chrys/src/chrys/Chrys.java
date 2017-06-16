@@ -24,7 +24,7 @@ public class Chrys {
         ComDir.generate_static_concepts();
         
         // create and give to dispatcher the console bubble
-        AttnDispatcher.add_atb(new ConsoleListener());
+        ComDir.add_atb(new ConsoleListener());
         
         // start all flows
         AttnDispatcher.start();

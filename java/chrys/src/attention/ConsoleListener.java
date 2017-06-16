@@ -22,7 +22,7 @@ public class ConsoleListener extends AttnBubble {
     @SuppressWarnings("OverridableMethodCallInConstructor")
     public ConsoleListener() 
     {   super(); 
-        _lightCpt_(SCid.ConversationByConsole);     // light up conversation by console static concept to mark the fact of going conversation
+        _lightCpt_(SCid.ConversationByConsoleType);     // light up conversation by console static concept to mark the fact of going conversation
     } 
 
     //##################################################################################################################

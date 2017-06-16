@@ -2,10 +2,10 @@ package attention;
 
 import concept.Concept;
 import concept.stat.SCid;
-import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * Data store for the attention flow thread(s). 
@@ -59,11 +59,23 @@ abstract public class AttnBubble implements Runnable {
     protected void _lightCpt_(SCid cid) {
         _lightCpt_(cid.ordinal());
     }
+
+    /**
+     *  Getter.
+     * The map is changed from ComDir.
+     * @return private concept directory
+     */
+    public Map<Long, Concept> getPrivDir() {
+        return privDir;
+    }
     
     //##################################################################################################################
     //                                              Private data
-    /** Private concept directory: a concept object by its Id. Here we have only dynamic concepts, that were created in the bubble. */
-    private Map<Long, Concept> privDir = new HashMap();
+    /** Private concept directory: a concept object by its Id. 
+     * Here we have only dynamic concepts, that were created in the bubble.
+       Concurrency: the map is never updated by this object. It asks ComDir to do the work centrally. 
+       It is made concurrent to prevent reading while being updated. */
+    private Map<Long, Concept> privDir = new ConcurrentHashMap();
     
     /** Concept id's, that should be taken into consideration on reasoning. */
     private Set<Long> caldRon = new HashSet();

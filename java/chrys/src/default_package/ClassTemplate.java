@@ -1,12 +1,10 @@
-package concept.stat;
-
-import concept.Concept;
+package default_package;
 
 /**
- *                                  Conversation by console is taking place.
+ *
  * @author su
  */
-public class ConversationByConsole extends Concept {
+public class ClassTemplate {
     //##################################################################################################################
     //                                              Public types        
     
@@ -19,9 +17,7 @@ public class ConversationByConsole extends Concept {
     /** 
      * Constructor.
      */ 
-    public ConversationByConsole() 
-    {   super(SCid.ConversationByConsole.ordinal(), Level.STATIC);
-        
+    public ClassTemplate() { 
     } 
 
     //##################################################################################################################

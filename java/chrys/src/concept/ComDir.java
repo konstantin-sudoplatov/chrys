@@ -1,8 +1,12 @@
 package concept;
 
+import attention.AttnBubble;
 import concept.stat.SCid;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,10 +16,11 @@ import java.util.logging.Logger;
 
 /**
  *                                              Common directory. 
- * This is a wrapper for the common concept map. The common concept map is readable by any bubble flow, but can be written
+ * <p>This is a wrapper for the common concept map. The common concept map is readable by any bubble flow, but can be written
  * by only one flow in order to exclude the race. That flow is tentatively called Learner because it is supposed to take into
  * consideration reasoning of other bubble flows and their private concepts and translate them to the common concepts to be
  * stored in the concept DB.
+ * <p>Bubbles never put or remove their private directories themselves. They ask this class to do it.
  * @author su
  */
 public class ComDir {
@@ -31,13 +36,45 @@ public class ComDir {
     
     //##################################################################################################################
     //                                              Public methods
-    
+
     /**
-     *                          Add an entry to the CPT map.
-     * @param cpt the concept object to add
+     * Create a unique cid, if needed (for dynamic concepts) and put a concept to a target directory.
+     * 
+     * @param cpt the concept to add
+     * @param bubble the bubble, that contains the target directory or null if it is the CPT.
      */
-    public static synchronized void put_cpt(Concept cpt) {
-        CPT.put(cpt.getCid(), cpt);
+    @SuppressWarnings("UnnecessaryLabelOnContinueStatement")
+    public static synchronized void add_cpt(Concept cpt, AttnBubble bubble) {
+        // determine cid
+        long cid;
+        if      
+                (cpt.is_static())
+            cid = cpt.getCid();
+        else {   // generate a unique cid. it is unique to CPT and all privDir's.
+            GENERATE_CID:            
+            while(true) {
+                Random rnd = new Random();
+                cid = rnd.nextLong();
+                if(cid < 0) cid = -cid;
+                cid += Short.MAX_VALUE - Short.MIN_VALUE + 1;
+                if      // is in CPT?
+                        (CPT.containsKey(cid))
+                    continue GENERATE_CID;   // generate once more
+                for(AttnBubble b: ATB) {
+                    if      // is in PrivDir?
+                            (b.getPrivDir().containsKey(cid))
+                        continue GENERATE_CID;
+                }
+                break;
+            }
+        }
+        
+        // put to target dir
+        if
+                (bubble == null)
+            CPT.put(cid, cpt);      // put in CPT
+        else
+            bubble.getPrivDir().put(cid, cpt);
     }
     
     /**
@@ -45,17 +82,38 @@ public class ComDir {
      * @param cid the key to check.
      * @return
      */
-    public static boolean contains_cpt(long cid) {
+    public static synchronized boolean contains_cpt(long cid) {
         return CPT.containsKey(cid);
+    }
+
+    /**
+     * Add an entry to the ATB.
+     * @param ab the bubble object to add.
+     */
+    public static void add_atb(AttnBubble ab) {
+        ATB.add(ab);
     }
     
     /**
-     *  Get concept object by Id.
+     *  Get common concept object by Id.
      * @param cid concept Id
      * @return
      */
-    public static Concept get_cpt(long cid) {
+    public static synchronized Concept get_cpt(long cid) {
         return CPT.get(cid);
+    }
+
+    /**
+     *  Getter.
+     * The list is synchronized, so updating would not get in each other's way. But, do not forget to synchronize on the
+     * list when iterating:
+     *      synchronized(getATB()) {
+     *          for (Object o : list) {}
+     *      }
+     * @return list of bubbles
+     */
+    public static List<AttnBubble> getATB() {
+        return ATB;
     }
 
     /**
@@ -81,7 +139,7 @@ public class ComDir {
                 System.exit(1);
             }
             try {
-                put_cpt((Concept)cons.newInstance());
+                add_cpt((Concept)cons.newInstance(), null);
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 Logger.getLogger(ComDir.class.getName()).log(Level.SEVERE, "Error instantiating " + s, ex);
                 System.exit(1);
@@ -91,7 +149,9 @@ public class ComDir {
     
     //##################################################################################################################
     //                                              Private data
-
-    /** Common concept directory: a concept object by concept Id. Can be updated only by the learner attention flow. */
+    /** Common concept directory: a map of concepts by id's. */
     private static final Map<Long, Concept> CPT = new ConcurrentHashMap();
+    
+    /** Attention bubbles. Is updated only in this class. */
+    public static final List<AttnBubble> ATB = Collections.synchronizedList(new ArrayList());
 }

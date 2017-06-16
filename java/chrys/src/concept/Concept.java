@@ -1,5 +1,6 @@
 package concept;
 
+import attention.AttnBubble;
 import java.util.Random;
 
 
@@ -11,51 +12,39 @@ import java.util.Random;
 abstract public class Concept {
     //##################################################################################################################
     //                                              Public types        
-    /** Defined in code or dynamically generated. */
-    public enum Level {
-        /** Hard-coded concept as opposed to dynamically generated one.*/
-        STATIC,
-        /** Dynamically generated as opposed to hard-coded one. */
-        DYNAMIC
-    }
     
     //##################################################################################################################
     //                                              Public data
-    /** Type of concept: Concept.Level.STATIC for hard-coded, Concept.Level.DYNAMIC for generated at runtime */
-    public final Level level;
 
     //##################################################################################################################
     //                                              Constructors
 
     /**
      *                                          Constructor.
-     * Only for dynamic concepts.
+     * Only for static concepts.
+     * @param cid concept Id.
      */
-    public Concept() {
-        // generate a unique cid
-        do {
-            Random rnd = new Random();
-            cid = rnd.nextLong();
-            if(cid < 0) cid = -cid;
-            cid += Short.MAX_VALUE - Short.MIN_VALUE + 1;
-        } while(ComDir.contains_cpt(cid));
-        
-        this.level = Level.DYNAMIC;
+    public Concept(long cid) {
+        this.cid = cid;
     }
 
     /**
      *                                          Constructor.
-     * Intended to be used only for static concepts. Using for dynamic concepts is discouraged.
-     * @param cid concept Id.
-     * @param level type of concept: Concept.Level.STATIC for hard-coded, Concept.Level.DYNAMIC for generated at runtime.
+     * Only for dynamic concepts.
      */
-    public Concept(long cid, Level level) {
-        this.cid = cid;
-        this.level = level;
-    }
+    public Concept() {}
     
     //##################################################################################################################
     //                                              Public methods
+
+    /**
+     *  Shows type of the concept - static/dynamic.
+     * Static are hard-coded concepts, dynamic are generated at runtime.
+     * @return true - static, false -dynamic
+     */
+    public boolean is_static() {
+        return false;
+    }
 
     public long getCid() {
         return cid;

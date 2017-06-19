@@ -1,6 +1,12 @@
 package attention;
 
+import concept.ComDir;
+import concept.DynamicConcept;
 import concept.stat.SCid;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -19,10 +25,21 @@ public class ConsoleListener extends AttnBubble {
     /** 
      * Constructor.
      */ 
-    @SuppressWarnings("OverridableMethodCallInConstructor")
+    @SuppressWarnings({"OverridableMethodCallInConstructor", "LeakingThisInConstructor"})
     public ConsoleListener() 
     {   super(); 
-        _lightCpt_(SCid.ConceptName);     // light up conversation by console static concept to mark the fact of going conversation
+//        Concept ConversationByConsole = new SimpleConcept(SCid.ConceptName.ordinal(), "ConversationByConsole");
+//        SimpleConcept(SCid.ConceptName.ordinal(), "ConversationByConsole");
+        Map what = new HashMap(2);
+        List par1 = new ArrayList(1);
+        par1.add("ConversationByConsole");
+        what.put(new Long(SCid.ConceptName.ordinal()), par1);
+        List par2 = new ArrayList(1);
+        par2.add("Conversation");
+        what.put(new Long(SCid.ConceptType.ordinal()), par2);
+        DynamicConcept convByCon = new DynamicConcept(what);
+        
+        ComDir.add_cpt(convByCon, this);    // light up conversation by console concept to mark the fact of ongoing conversation
     } 
 
     //##################################################################################################################

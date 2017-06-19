@@ -2,7 +2,7 @@ package concept.dyn;
 
 import concept.Concept;
 import concept.StaticConcept;
-import concept.stat.ConceptTypeMarker;
+import concept.stat.ConceptType;
 
 /**
  *                  The simplest dynamic concept. 
@@ -22,7 +22,7 @@ public class SimpleObject extends Concept {
      * @param objectType type of the concept
      * @param objectSpecs specifications for the concept
      */ 
-    public SimpleObject(ConceptTypeMarker objectType, String objectSpecs) { 
+    public SimpleObject(ConceptType objectType, String objectSpecs) { 
         object_type = objectType;
         object_specs = objectSpecs;
     } 

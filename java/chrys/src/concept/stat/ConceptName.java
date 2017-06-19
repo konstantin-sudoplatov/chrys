@@ -3,11 +3,11 @@ package concept.stat;
 import concept.StaticConcept;
 
 /**
- *                                  Static concept: conversation by console concept type.
- * When assigned to a dynamic concept, reflects the fact, that this is the conversation by console concept.
+ *                                  Static concept: concept name.
+ * Assigns a name to a dynamic type.
  * @author su
  */
-public class ConversationByConsoleType extends StaticConcept {
+public class ConceptName extends StaticConcept {
     //##################################################################################################################
     //                                              Public types        
     
@@ -20,8 +20,8 @@ public class ConversationByConsoleType extends StaticConcept {
     /** 
      * Constructor.
      */ 
-    public ConversationByConsoleType()
-    {   super(SCid.ConversationByConsoleType.ordinal());
+    public ConceptName()
+    {   super(SCid.ConceptName.ordinal());
     } 
 
     //##################################################################################################################

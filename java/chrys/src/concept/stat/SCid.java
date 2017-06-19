@@ -7,8 +7,8 @@ package concept.stat;
  * @author su
  */
 public enum SCid {
-    ConceptTypeMarker,
-    ConversationByConsoleType,
+    ConceptType,
+    ConceptName,
     ;
     
     /** Is used to find static concept classes in ComDir.generate_static_concepts(). Must be the same as the package containing

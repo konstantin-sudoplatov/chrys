@@ -9,6 +9,7 @@ package concept.stat;
 public enum SCid {
     ConceptType,
     ConceptName,
+    
     ;
     
     /** Is used to find static concept classes in ComDir.generate_static_concepts(). Must be the same as the package containing

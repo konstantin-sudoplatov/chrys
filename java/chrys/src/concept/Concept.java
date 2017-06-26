@@ -1,8 +1,5 @@
 package concept;
 
-import attention.AttnBubble;
-import java.util.Random;
-
 
 
 /**

@@ -2,7 +2,9 @@ package attention;
 
 import concept.Concept;
 import concept.stat.SCid;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
@@ -72,10 +74,13 @@ abstract public class AttnBubble implements Runnable {
     //##################################################################################################################
     //                                              Private data
     /** Private concept directory: a concept object by its Id. 
-     * Here we have only dynamic concepts, that were created in the bubble.
+       Here we have only dynamic concepts, that were created in the bubble.
        Concurrency: the map is never updated by this object. It asks ComDir to do the work centrally. 
        It is made concurrent to prevent reading while being updated. */
     private Map<Long, Concept> privDir = new ConcurrentHashMap();
+    
+    /** List of concepts which serve as a contexts to the caldron. */
+    private List<Long> conText = new ArrayList(1);
     
     /** Concept id's, that should be taken into consideration on reasoning. */
     private Set<Long> caldRon = new HashSet();

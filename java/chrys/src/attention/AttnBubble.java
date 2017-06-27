@@ -3,11 +3,10 @@ package attention;
 import concept.Concept;
 import concept.stat.SCid;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
+import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Data store for the attention flow thread(s). 
@@ -50,16 +49,16 @@ abstract public class AttnBubble implements Runnable {
      *  Find and put a static or dynamic concept into the caldron.
      * @param cid concept id as long
      */
-    protected void _lightCpt_(long cid) {
-        caldRon.add(cid);
+    protected void _throwInCaldron_(long cid) {
+        throw new NotImplementedException();
     }
 
     /**
      *  Find and put a static concept into the caldron.
      * @param cid concept id as enum
      */
-    protected void _lightCpt_(SCid cid) {
-        _lightCpt_(cid.ordinal());
+    protected void _throwInCaldron_(SCid cid) {
+        AttnBubble.this._throwInCaldron_(cid.ordinal());
     }
 
     /**
@@ -73,6 +72,7 @@ abstract public class AttnBubble implements Runnable {
     
     //##################################################################################################################
     //                                              Private data
+    
     /** Private concept directory: a concept object by its Id. 
        Here we have only dynamic concepts, that were created in the bubble.
        Concurrency: the map is never updated by this object. It asks ComDir to do the work centrally. 
@@ -83,7 +83,7 @@ abstract public class AttnBubble implements Runnable {
     private List<Long> conText = new ArrayList(1);
     
     /** Concept id's, that should be taken into consideration on reasoning. */
-    private Set<Long> caldRon = new HashSet();
+    private Caldron caldRon = new Caldron();
 
     //##################################################################################################################
     //                                              Private methods, data

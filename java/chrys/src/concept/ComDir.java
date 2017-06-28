@@ -1,7 +1,8 @@
 package concept;
 
 import attention.AttnBubble;
-import concept.stat.SCid;
+import concept.en.SCid;
+import concept.en.SNm;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
@@ -17,10 +18,11 @@ import java.util.logging.Logger;
 /**
  *                                              Common directory. 
  * <p>This is a wrapper for the common concept map. The common concept map is readable by any bubble flow, but can be written
- * by only one flow in order to exclude the race. That flow is tentatively called Learner because it is supposed to take into
+ * by only one flow in order to exclude the race. That flow is called Teacher because it is supposed to take into
  * consideration reasoning of other bubble flows and their private concepts and translate them to the common concepts to be
  * stored in the concept DB.
- * <p>Bubbles never put or remove their private directories themselves. They ask this class to do it.
+ * <p>Bubbles never put or remove concepts from their private directories themselves. They ask this class to do it. That is
+ * done to guarantee the uniqueness of cids.
  * @author su
  */
 public class ComDir {
@@ -117,9 +119,26 @@ public class ComDir {
     }
 
     /**
-     *  Create static concept objects and put them into the CPT map.
+     *  Create static concept objects and put them into the CPT map, and may be some predefined dynamic concepts, if they
+     *  are not still in the CPT.
      */
     public static void generate_static_concepts() {
+        
+        // Load CPT from DB
+        
+        // Load CPN from DB
+        
+        // Create static name dynamic concepts. This is a vocabulary for concept names.
+        for(SNm stName: SNm.values()) {
+            String cptName = stName.name();
+            if      // not created yet?
+                    (!CPN.containsKey(cptName))
+            {
+                
+            }
+        }
+        
+        // Create static concepts.
         for(SCid cidEnum: SCid.values()) {
             String s = cidEnum.name();
             @SuppressWarnings("UnusedAssignment")
@@ -149,8 +168,12 @@ public class ComDir {
     
     //##################################################################################################################
     //                                              Private data
-    /** Common concept directory: a map of concepts by id's. */
+    /** Common concept directory: a map of concepts by cid's. */
     private static final Map<Long, Concept> CPT = new ConcurrentHashMap();
+    
+    /** Common concept name directory: a map of cid's by the concept names. A concept not necessarily has a name. Names can be
+     static, known at compile time or dynamic. */
+    private static final Map<String, Long> CPN = new ConcurrentHashMap();
     
     /** Attention bubbles. Is updated only in this class. */
     public static final List<AttnBubble> ATB = Collections.synchronizedList(new ArrayList());

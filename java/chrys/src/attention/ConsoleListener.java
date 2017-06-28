@@ -2,7 +2,7 @@ package attention;
 
 import concept.ComDir;
 import concept.DynamicConcept;
-import concept.stat.SCid;
+import concept.en.SCid;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -28,15 +28,15 @@ public class ConsoleListener extends AttnBubble {
     @SuppressWarnings({"OverridableMethodCallInConstructor", "LeakingThisInConstructor"})
     public ConsoleListener() 
     {   super(); 
-//        Concept ConversationByConsole = new SimpleConcept(SCid.ConceptName.ordinal(), "ConversationByConsole");
-//        SimpleConcept(SCid.ConceptName.ordinal(), "ConversationByConsole");
+//        Concept ConversationByConsole = new SimpleConcept(SCid.CptName.ordinal(), "ConversationByConsole");
+//        SimpleConcept(SCid.CptName.ordinal(), "ConversationByConsole");
         Map what = new HashMap(2);
         List par1 = new ArrayList(1);
         par1.add("ConversationByConsole");
-        what.put(new Long(SCid.ConceptName.ordinal()), par1);
+        what.put(new Long(SCid.CptStatName.ordinal()), par1);
         List par2 = new ArrayList(1);
         par2.add("Conversation");
-        what.put(new Long(SCid.ConceptType.ordinal()), par2);
+        what.put(new Long(SCid.CptStatType.ordinal()), par2);
         DynamicConcept convByCon = new DynamicConcept(what);
         
         ComDir.add_cpt(convByCon, this);    // light up conversation by console concept to mark the fact of ongoing conversation

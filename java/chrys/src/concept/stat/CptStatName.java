@@ -1,13 +1,14 @@
 package concept.stat;
 
+import concept.en.SCid;
 import concept.StaticConcept;
 
 /**
- *                                  Static concept: concept name.
- * Assigns a name to a dynamic type.
+ *                                  Static concept: concept name marker.
+ * It is a marker of a static name of a dynamic concept. Static names are known at compile time and all of them can be found in the Snm enum.
  * @author su
  */
-public class ConceptName extends StaticConcept {
+public class CptStatName extends StaticConcept {
     //##################################################################################################################
     //                                              Public types        
     
@@ -20,8 +21,8 @@ public class ConceptName extends StaticConcept {
     /** 
      * Constructor.
      */ 
-    public ConceptName()
-    {   super(SCid.ConceptName.ordinal());
+    public CptStatName()
+    {   super(SCid.CptStatName.ordinal());
     } 
 
     //##################################################################################################################

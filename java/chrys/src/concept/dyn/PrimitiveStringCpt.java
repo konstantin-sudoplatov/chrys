@@ -4,25 +4,25 @@ import concept.Concept;
 
 /**
  *                  The simplest dynamic concept. 
- * This is an object, which refers to a single static concept marker, like ConceptName, or ConceptType, or Word and holds 
- * a single value like String, or cid of a concept that holds the value. Type of the value is determined by the static concept.
+ * This is an object, which refers to a single static concept marker, like CptName, or CptType, or Word and holds 
+ * a single value of string type, which contains the argument to the static concept.
  * @author su
  */
-public class SimpleConcept extends Concept {
+public class PrimitiveStringCpt extends Concept {
     //##################################################################################################################
     //                                              Public data
-    public final long marker_cpt;
-    public final Object spec;
+    public final long stat_cpt;
+    public final String spec_cid;
     //##################################################################################################################
     //                                              Constructors
 
     /** 
      * Constructor.
      * @param markerCptId marker static concept
-     * @param spec specifications for the concept. The marker knows what it is.
+     * @param cid specifications for the concept. The marker knows what is it.
      */ 
-    public SimpleConcept(long markerCptId, Object spec) { 
-        this.marker_cpt = markerCptId;
-        this.spec = spec;
+    public PrimitiveStringCpt(long markerCptId, String cid) { 
+        this.stat_cpt = markerCptId;
+        this.spec_cid = cid;
     } 
 }

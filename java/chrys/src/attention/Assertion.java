@@ -4,12 +4,12 @@ import concept.Concept;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.List;
 import java.util.Set;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Data for taking decision.
+ * It represents a single step in reasoning.
  * @author su
  */
 public class Assertion {

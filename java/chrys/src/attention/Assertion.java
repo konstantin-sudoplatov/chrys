@@ -1,9 +1,9 @@
 package attention;
 
-import concept.Concept;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
@@ -23,7 +23,7 @@ public class Assertion {
      * Constructor.
      * @param context
      */ 
-    public Assertion(ArrayList<Concept> context) { 
+    public Assertion(List<Long> context) { 
         this.conText = context;
     } 
     
@@ -32,9 +32,9 @@ public class Assertion {
 
     /**
      * Add a new premise to the set.
-     * @param premise
+     * @param premise id of a premise concept
      */
-    public void add_premise(Concept premise) {
+    public void add_premise(long premise) {
         premiSes.add(premise);
     }
     
@@ -53,9 +53,9 @@ public class Assertion {
     private Timestamp timestamp; // = new Timestamp(System.currentTimeMillis());
     
     /** List of concepts which serve as a context for the reasoning. */
-    private ArrayList<Concept> conText;
+    private List<Long> conText;
     
     /** Set of concept, which serves as premises to the conclusion */
-    private Set<Concept> premiSes = new HashSet();
+    private Set<Long> premiSes = new HashSet();
     
 }

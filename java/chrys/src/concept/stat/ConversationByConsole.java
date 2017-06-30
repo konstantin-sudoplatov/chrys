@@ -1,17 +1,14 @@
 package concept.stat;
 
-import concept.en.SCid;
-import concept.StaticConcept;
+import concept.Concept;
+import concept.stat.base.Conversation;
 
 /**
- *                                  Static concept: concept name marker.
- * It is a marker of a static name of a dynamic concept. Static names are known at compile time and all of them can be found in the Snm enum.
+ * Static type. 
+ * Marked by the CptStatType marker. Extends the Conversation (interface with defaults and statics).
  * @author su
  */
-public class CptStatName extends StaticConcept {
-    //##################################################################################################################
-    //                                              Public types        
-    
+public class ConversationByConsole extends Concept implements Conversation {
     //##################################################################################################################
     //                                              Public data
 
@@ -20,11 +17,14 @@ public class CptStatName extends StaticConcept {
 
     /** 
      * Constructor.
+     * @param  
      */ 
-    public CptStatName()
-    {   super(SCid.CptStatName.ordinal());
+    public ConversationByConsole() { 
     } 
 
     //##################################################################################################################
     //                                              Public methods
+
+    //##################################################################################################################
+    //                                              Private methods, data
 }

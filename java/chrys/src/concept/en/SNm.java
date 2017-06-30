@@ -10,5 +10,5 @@ package concept.en;
  * @author su
  */
 public enum SNm {
-    ConversationByConsole,
+    Unknown,        // for example, unknown collocutor
 }

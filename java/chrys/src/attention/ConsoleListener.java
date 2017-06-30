@@ -4,9 +4,7 @@ import concept.ComDir;
 import concept.dyn.DynamicConcept;
 import concept.en.SCid;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 /**
  *
@@ -28,18 +26,14 @@ public class ConsoleListener extends AttnBubble {
     @SuppressWarnings({"OverridableMethodCallInConstructor", "LeakingThisInConstructor"})
     public ConsoleListener() 
     {   super(); 
-//        Concept ConversationByConsole = new SimpleConcept(SCid.CptName.ordinal(), "ConversationByConsole");
-//        SimpleConcept(SCid.CptName.ordinal(), "ConversationByConsole");
-        Map what = new HashMap(2);
-        List par1 = new ArrayList(1);
-        par1.add("ConversationByConsole");
-        what.put(new Long(SCid.CptStatName.ordinal()), par1);
-        List par2 = new ArrayList(1);
-        par2.add("Conversation");
-        what.put(new Long(SCid.CptStatType.ordinal()), par2);
-        DynamicConcept convByCon = new DynamicConcept(what);
+        // Create dynamic concept showing ConversationByConsole fact
+        DynamicConcept dCpt = new DynamicConcept();
+        List<Long> args = new ArrayList<>(1);
+        args.add(new Long(SCid.ConversationByConsole.ordinal()));
+        dCpt.add_cpt(new Long(SCid.MrkStatType.ordinal()), args);
         
-        ComDir.add_cpt(convByCon, this);    // light up conversation by console concept to mark the fact of ongoing conversation
+        ComDir.add_cpt(dCpt, this);    // add the concept to the private dir
+        _throwInCaldron_(dCpt.getCid());    // throw in caldron
     } 
 
     //##################################################################################################################

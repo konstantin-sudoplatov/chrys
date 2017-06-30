@@ -26,6 +26,14 @@ public class Caldron {
     //##################################################################################################################
     //                                              Public methods
 
+    /**
+     * Drag concept into current assertion.
+     * @param cid
+     */
+    public void throw_in_cpt(long cid) {
+        curAssertion.add_premise(cid);
+    }
+
     //##################################################################################################################
     //                                              Private methods, data
     /** Chronologically ordered sequence of assertions. */

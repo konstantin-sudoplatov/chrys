@@ -46,19 +46,11 @@ abstract public class AttnBubble implements Runnable {
     //                                              Protected methods
 
     /**
-     *  Find and put a static or dynamic concept into the caldron.
+     *  Put a static or dynamic concept into the caldron.
      * @param cid concept id as long
      */
     protected void _throwInCaldron_(long cid) {
-        throw new NotImplementedException();
-    }
-
-    /**
-     *  Find and put a static concept into the caldron.
-     * @param cid concept id as enum
-     */
-    protected void _throwInCaldron_(SCid cid) {
-        AttnBubble.this._throwInCaldron_(cid.ordinal());
+        caldRon.throw_in_cpt(cid);
     }
 
     /**

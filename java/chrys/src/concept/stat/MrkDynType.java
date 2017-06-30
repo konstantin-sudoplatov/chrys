@@ -9,11 +9,11 @@ import concept.StaticConcept;
  * Compiler is unaware of the dynamic types.
  * @author su
  */
-public class CptDynType extends StaticConcept {
+public class MrkDynType extends StaticConcept {
 
     //##################################################################################################################
     //                                              Constructors
-    public CptDynType()
-    {   super(SCid.CptDynType.ordinal());
+    public MrkDynType()
+    {   super(SCid.MrkDynType.ordinal());
     }
 }

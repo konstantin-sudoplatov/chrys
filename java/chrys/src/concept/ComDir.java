@@ -143,7 +143,7 @@ public class ComDir {
             if      // not created yet?
                     (!cpn.containsKey(cptName))
             {
-                Concept c = new PrimitiveStringCpt(SCid.CptStatName.ordinal(), cptName);
+                Concept c = new PrimitiveStringCpt(SCid.MrkStatName.ordinal(), cptName);
                 add_cpt(c);
                 cpn.put(cptName, c.getCid());
             }
@@ -151,13 +151,13 @@ public class ComDir {
         
         // Create static concepts.
         for(SCid cidEnum: SCid.values()) {
-            String s = cidEnum.name();
+            String cptName = cidEnum.name();
             @SuppressWarnings("UnusedAssignment")
             Class cl = null;
             try {
-                cl = Class.forName(SCid.STATIC_CONCEPTS_PACKET_NAME + "." + s);
+                cl = Class.forName(SCid.STATIC_CONCEPTS_PACKET_NAME + "." + cptName);
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(ComDir.class.getName()).log(Level.SEVERE, "Error getting class " + s, ex);
+                Logger.getLogger(ComDir.class.getName()).log(Level.SEVERE, "Error getting class " + cptName, ex);
                 System.exit(1);
             }
             @SuppressWarnings("UnusedAssignment")
@@ -165,15 +165,24 @@ public class ComDir {
             try {
                 cons = cl.getConstructor();
             } catch (NoSuchMethodException | SecurityException ex) {
-                Logger.getLogger(ComDir.class.getName()).log(Level.SEVERE, "Error getting constractor for " + s, ex);
+                Logger.getLogger(ComDir.class.getName()).log(Level.SEVERE, "Error getting constractor for " + cptName, ex);
                 System.exit(1);
             }
+            @SuppressWarnings("UnusedAssignment")
+            Concept sCpt = null;
             try {
-                add_cpt((Concept)cons.newInstance(), null);
+                sCpt = (Concept)cons.newInstance();
+                add_cpt(sCpt);
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                Logger.getLogger(ComDir.class.getName()).log(Level.SEVERE, "Error instantiating " + s, ex);
+                Logger.getLogger(ComDir.class.getName()).log(Level.SEVERE, "Error instantiating " + cptName, ex);
                 System.exit(1);
             }
+            
+            // Put the concept's name into cpn
+            if      // not created yet?
+                    (!cpn.containsKey(cptName))
+                cpn.put(cptName, sCpt.getCid());
+            
         }
     }
     

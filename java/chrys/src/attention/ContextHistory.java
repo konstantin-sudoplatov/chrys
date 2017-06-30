@@ -1,7 +1,7 @@
 package attention;
 
-import concept.Concept;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -27,7 +27,7 @@ public class ContextHistory {
      * Put a concept as a single element of the first context in the list.
      * @param cpt
      */
-    public ContextHistory(Concept cpt) {
+    public ContextHistory(long cpt) {
         this();
         contextHist.get(0).add(cpt);
     }
@@ -38,7 +38,7 @@ public class ContextHistory {
      * Get the last context in the history.
      * @return
      */
-    public ArrayList<Concept> get_current_context() {
+    public List<Long> get_current_context() {
         return contextHist.get(contextHist.size()-1);
     }
     
@@ -47,11 +47,11 @@ public class ContextHistory {
      * @param idx
      * @return
      */
-    public ArrayList<Concept> get_context(int idx) {
+    public List<Long> get_context(int idx) {
         return contextHist.get(idx);
     }
     
     //##################################################################################################################
     //                                              Private methods, data
-    private ArrayList<ArrayList<Concept>> contextHist;
+    private ArrayList<ArrayList<Long>> contextHist;
 }

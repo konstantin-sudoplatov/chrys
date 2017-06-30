@@ -7,10 +7,11 @@ package concept.en;
  * @author su
  */
 public enum SCid {
-    CptStatType,
-    CptDynType,
-    CptStatName,
-    CptDynName,
+    MrkStatType,
+    MrkDynType,
+    MrkStatName,
+    MrkDynName,
+    ConversationByConsole,
     ;
     
     /** Is used to find static concept classes in ComDir.generate_static_concepts(). Must be the same as the package containing

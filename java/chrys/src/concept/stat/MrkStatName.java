@@ -5,10 +5,10 @@ import concept.StaticConcept;
 
 /**
  *                                  Static concept: concept name marker.
- * It is a marker of a dynamic name of a dynamic concept. Dynamic names are unknown to the code.
+ * It is a marker of a static name of a dynamic concept. Static names are known at compile time and all of them can be found in the SNm enum.
  * @author su
  */
-public class CptDynName extends StaticConcept {
+public class MrkStatName extends StaticConcept {
     //##################################################################################################################
     //                                              Public types        
     
@@ -21,8 +21,8 @@ public class CptDynName extends StaticConcept {
     /** 
      * Constructor.
      */ 
-    public CptDynName()
-    {   super(SCid.CptDynName.ordinal());
+    public MrkStatName()
+    {   super(SCid.MrkStatName.ordinal());
     } 
 
     //##################################################################################################################

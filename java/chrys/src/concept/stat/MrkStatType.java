@@ -9,11 +9,11 @@ import concept.StaticConcept;
  * known at the compile time.
  * @author su
  */
-public class CptStatType extends StaticConcept {
+public class MrkStatType extends StaticConcept {
 
     //##################################################################################################################
     //                                              Constructors
-    public CptStatType()
-    {   super(SCid.CptStatType.ordinal());
+    public MrkStatType()
+    {   super(SCid.MrkStatType.ordinal());
     }
 }

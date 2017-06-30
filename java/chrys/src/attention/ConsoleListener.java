@@ -1,7 +1,7 @@
 package attention;
 
 import concept.ComDir;
-import concept.DynamicConcept;
+import concept.dyn.DynamicConcept;
 import concept.en.SCid;
 import java.util.ArrayList;
 import java.util.HashMap;

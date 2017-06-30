@@ -1,6 +1,7 @@
 package concept;
 
 import attention.AttnBubble;
+import concept.dyn.PrimitiveStringCpt;
 import concept.en.SCid;
 import concept.en.SNm;
 import java.lang.reflect.Constructor;
@@ -43,7 +44,7 @@ public class ComDir {
      * Create a unique cid, if needed (for dynamic concepts) and put a concept to a target directory.
      * 
      * @param cpt the concept to add
-     * @param bubble the bubble, that contains the target directory or null if it is the CPT.
+     * @param bubble the bubble, that contains the target directory or null if it is the cpt.
      */
     @SuppressWarnings("UnnecessaryLabelOnContinueStatement")
     public static synchronized void add_cpt(Concept cpt, AttnBubble bubble) {
@@ -52,19 +53,19 @@ public class ComDir {
         if      
                 (cpt.is_static())
             cid = cpt.getCid();
-        else {   // generate a unique cid. it is unique to CPT and all privDir's.
+        else {   // generate a unique cid. it is unique to cpt and all privDir's.
             GENERATE_CID:            
             while(true) {
                 Random rnd = new Random();
                 cid = rnd.nextLong();
                 if(cid < 0) cid = -cid;
                 cid += Short.MAX_VALUE - Short.MIN_VALUE + 1;
-                if      // is in CPT?
-                        (CPT.containsKey(cid))
+                if      // is in cpt?
+                        (ComDir.cpt.containsKey(cid))
                     continue GENERATE_CID;   // generate once more
-                for(AttnBubble b: ATB) {
+                for(AttnBubble b: atb) {
                     if      // is in PrivDir?
-                            (b.getPrivDir().containsKey(cid))
+                            (b.getCpt().containsKey(cid))
                         continue GENERATE_CID;
                 }
                 break;
@@ -74,26 +75,34 @@ public class ComDir {
         // put to target dir
         if
                 (bubble == null)
-            CPT.put(cid, cpt);      // put in CPT
+            ComDir.cpt.put(cid, cpt);      // put in cpt
         else
-            bubble.getPrivDir().put(cid, cpt);
+            bubble.getCpt().put(cid, cpt);
     }
-    
+
     /**
-     *  Check to see if the CPT map contains a key.
+     * Ditto.
+     * @param cpt  the concept to add
+     */
+    public static synchronized void add_cpt(Concept cpt) {
+        add_cpt(cpt, null);
+    }
+        
+    /**
+     *  Check to see if the cpt map contains a key.
      * @param cid the key to check.
      * @return
      */
     public static synchronized boolean contains_cpt(long cid) {
-        return CPT.containsKey(cid);
+        return cpt.containsKey(cid);
     }
 
     /**
-     * Add an entry to the ATB.
+     * Add an entry to the atb.
      * @param ab the bubble object to add.
      */
     public static void add_atb(AttnBubble ab) {
-        ATB.add(ab);
+        atb.add(ab);
     }
     
     /**
@@ -102,7 +111,7 @@ public class ComDir {
      * @return
      */
     public static synchronized Concept get_cpt(long cid) {
-        return CPT.get(cid);
+        return cpt.get(cid);
     }
 
     /**
@@ -114,17 +123,17 @@ public class ComDir {
      *      }
      * @return list of bubbles
      */
-    public static List<AttnBubble> getATB() {
-        return ATB;
+    public static List<AttnBubble> getAtb() {
+        return atb;
     }
 
     /**
-     *  Create static concept objects and put them into the CPT map, and may be some predefined dynamic concepts, if they
-     *  are not still in the CPT.
+     *  Create static concept objects and put them into the cpt map, and may be some predefined dynamic concepts, if they
+        are not still in the DB.
      */
-    public static void generate_static_concepts() {
+    public static synchronized void load_initial_concepts() {
         
-        // Load CPT from DB
+        // Load cpt from DB
         
         // Load CPN from DB
         
@@ -132,9 +141,11 @@ public class ComDir {
         for(SNm stName: SNm.values()) {
             String cptName = stName.name();
             if      // not created yet?
-                    (!CPN.containsKey(cptName))
+                    (!cpn.containsKey(cptName))
             {
-                
+                Concept c = new PrimitiveStringCpt(SCid.CptStatName.ordinal(), cptName);
+                add_cpt(c);
+                cpn.put(cptName, c.getCid());
             }
         }
         
@@ -169,12 +180,12 @@ public class ComDir {
     //##################################################################################################################
     //                                              Private data
     /** Common concept directory: a map of concepts by cid's. */
-    private static final Map<Long, Concept> CPT = new ConcurrentHashMap();
+    private static final Map<Long, Concept> cpt = new ConcurrentHashMap();
     
     /** Common concept name directory: a map of cid's by the concept names. A concept not necessarily has a name. Names can be
      static, known at compile time or dynamic. */
-    private static final Map<String, Long> CPN = new ConcurrentHashMap();
+    private static final Map<String, Long> cpn = new ConcurrentHashMap();
     
     /** Attention bubbles. Is updated only in this class. */
-    public static final List<AttnBubble> ATB = Collections.synchronizedList(new ArrayList());
+    private static final List<AttnBubble> atb = Collections.synchronizedList(new ArrayList());
 }

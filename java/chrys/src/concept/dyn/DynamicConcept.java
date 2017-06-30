@@ -1,5 +1,6 @@
-package concept;
+package concept.dyn;
 
+import concept.Concept;
 import java.util.List;
 import java.util.Map;
 
@@ -10,6 +11,7 @@ import java.util.Map;
 public class DynamicConcept extends Concept {
     //##################################################################################################################
     //                                              Public data
+    /** Related concepts. */
     public Map<Long, List> what;
 
     //##################################################################################################################

@@ -36,7 +36,7 @@ abstract public class AttnBubble implements Runnable {
 //    }
 //
 //    public Map<Long, Concept> getPrivDir() {
-//        return privDir;
+//        return cpt;
 //    }
     
     //##################################################################################################################
@@ -63,11 +63,11 @@ abstract public class AttnBubble implements Runnable {
 
     /**
      *  Getter.
-     * The map is changed from ComDir.
+     * The map is changed from ComDir. We do not remove or add from here.
      * @return private concept directory
      */
-    public Map<Long, Concept> getPrivDir() {
-        return privDir;
+    public Map<Long, Concept> getCpt() {
+        return cpt;
     }
     
     //##################################################################################################################
@@ -77,11 +77,11 @@ abstract public class AttnBubble implements Runnable {
        Here we have only dynamic concepts, that were created in the bubble.
        Concurrency: the map is never updated by this object. It asks ComDir to do the work centrally. 
        It is made concurrent to prevent reading while being updated. */
-    private Map<Long, Concept> privDir = new ConcurrentHashMap();
+    private Map<Long, Concept> cpt = new ConcurrentHashMap();
     
     /** private concept name directory: a map of cid's by the concept names. A concept not necessarily has a name. Names here 
         can be only dynamic. All static names are in the ComDir.CPN */
-    private Map<String, Long> CPN = new ConcurrentHashMap();
+    private Map<String, Long> cpn = new ConcurrentHashMap();
     
     /** List of concepts which serve as a contexts to the caldron. */
     private List<Long> conText = new ArrayList(1);

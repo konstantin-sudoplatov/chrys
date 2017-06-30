@@ -18,11 +18,11 @@ public class PrimitiveStringCpt extends Concept {
 
     /** 
      * Constructor.
-     * @param markerCptId marker static concept
-     * @param cid specifications for the concept. The marker knows what is it.
+     * @param statCptId marker static concept
+     * @param str specifications for the concept. The marker will know what is it.
      */ 
-    public PrimitiveStringCpt(long markerCptId, String cid) { 
-        this.stat_cpt = markerCptId;
-        this.spec_cid = cid;
+    public PrimitiveStringCpt(long statCptId, String str) { 
+        this.stat_cpt = statCptId;
+        this.spec_cid = str;
     } 
 }

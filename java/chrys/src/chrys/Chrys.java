@@ -21,7 +21,7 @@ public class Chrys {
     public static void main(String[] args) {
         
         // create static concepts and put them into ComDir
-        ComDir.generate_static_concepts();
+        ComDir.load_initial_concepts();
         
         // create and give to dispatcher the console bubble
         ComDir.add_atb(new ConsoleListener());

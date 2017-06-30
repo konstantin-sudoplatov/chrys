@@ -29,14 +29,14 @@ public class AttnDispatcher {
     //                                              Public methods
 
     /**
-     *      Start attention flows.
+     *      Start threads for all attention bubbles in ComDir.
      */
     public static void start() {
-        List<AttnBubble> lstATB = ComDir.getATB();
+        List<AttnBubble> lstATB = ComDir.getAtb();
         synchronized(lstATB) {
             for(AttnBubble bubble: lstATB) {
                 Thread thr = new Thread(bubble);
-                attnThread.add(thr);
+                attnThreads.add(thr);
                 thr.start();
             }
         }
@@ -46,7 +46,7 @@ public class AttnDispatcher {
      *          Wait for all threads to finish.
      */
     public static void join() {
-        for(Thread thr: attnThread) {
+        for(Thread thr: attnThreads) {
             try {
                 thr.join();
             } catch (InterruptedException ex) {}
@@ -66,5 +66,5 @@ public class AttnDispatcher {
     //                                              Private methods, data
     
     /** List of threads. So far it is one thread per flow and one flow per bubble. */
-    private static List<Thread> attnThread = new ArrayList();
+    private static final List<Thread> attnThreads = new ArrayList();
 }

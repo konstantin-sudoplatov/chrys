@@ -18,7 +18,7 @@ abstract public class Concept {
 
     /**
      *                                          Constructor.
-     * Only for static concepts.
+     * Only for static concepts. Static concept IDs are defined in the code, so known at the moment of concept creation.
      * @param cid concept Id.
      */
     public Concept(long cid) {
@@ -27,7 +27,7 @@ abstract public class Concept {
 
     /**
      *                                          Constructor.
-     * Only for dynamic concepts.
+     * Only for dynamic concepts. IDs for dynamic concepts generated when putting them into a concept directory.
      */
     public Concept() {}
     

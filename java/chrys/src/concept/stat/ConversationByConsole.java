@@ -17,7 +17,6 @@ public class ConversationByConsole extends Concept implements Conversation {
 
     /** 
      * Constructor.
-     * @param  
      */ 
     public ConversationByConsole() { 
     } 

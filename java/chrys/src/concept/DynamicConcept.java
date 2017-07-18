@@ -1,7 +1,5 @@
-package concept.dyn;
+package concept;
 
-import concept.Concept;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,44 +8,20 @@ import java.util.Map;
  *
  * @author su
  */
-public class DynamicConcept extends Concept {
+abstract public class DynamicConcept extends Concept {
     //##################################################################################################################
     //                                              Public data
-    /** Related concepts. */
-    public final Map<Long, List<Long>> heap;
+    /** Gives concept processing capabilities. */
+    public final Fire fire = new Fire();
+    
+    /** Gives concept data capabilities. */
+    public final Map<Long, List<Long>> properties = new HashMap(0);
 
     //##################################################################################################################
     //                                              Constructors
 
-    /**
-     * Constructor.
-     * Construct concept with empty heap.
-     */
-    public DynamicConcept() {
-        heap = new HashMap(2);
-    }
-    
-    /** 
-     * Constructor.
-     * Construct concept with a given heap.
-     * @param heap
-     */ 
-    public DynamicConcept(Map<Long, List<Long>> heap) {
-        this.heap = heap;
-    } 
-
     //##################################################################################################################
     //                                              Public methods
-
-    /**
-     * Add a concept to the heap.
-     * @param cptId id of the concept
-     * @param args list of arguments to the concept. Elements of the list are id's of other concepts.
-     */
-    public void add_cpt(Long cptId, List<Long> args) {
-        heap.put(cptId, args);
-    }
-
     //##################################################################################################################
     //                                              Private methods, data
 }

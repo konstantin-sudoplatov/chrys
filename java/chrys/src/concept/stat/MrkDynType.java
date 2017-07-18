@@ -2,6 +2,7 @@ package concept.stat;
 
 import concept.en.SCid;
 import concept.StaticConcept;
+import concept.ifc.Marker;
 
 /**
  * Static concept: dynamic type marker. 
@@ -9,7 +10,7 @@ import concept.StaticConcept;
  * Compiler is unaware of the dynamic types.
  * @author su
  */
-public class MrkDynType extends StaticConcept {
+public class MrkDynType extends StaticConcept implements Marker {
 
     //##################################################################################################################
     //                                              Constructors

@@ -1,12 +1,10 @@
 package attention;
 
 import concept.Concept;
-import concept.en.SCid;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
-import sun.reflect.generics.reflectiveObjects.NotImplementedException;
 
 /**
  * Data store for the attention flow thread(s). 

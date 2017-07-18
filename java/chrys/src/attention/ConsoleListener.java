@@ -1,7 +1,7 @@
 package attention;
 
 import concept.ComDir;
-import concept.dyn.DynamicConcept;
+import concept.DynamicConcept;
 import concept.en.SCid;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,14 +26,14 @@ public class ConsoleListener extends AttnBubble {
     @SuppressWarnings({"OverridableMethodCallInConstructor", "LeakingThisInConstructor"})
     public ConsoleListener() 
     {   super(); 
-        // Create dynamic concept showing ConversationByConsole fact
-        DynamicConcept dCpt = new DynamicConcept();
-        List<Long> args = new ArrayList<>(1);
-        args.add(new Long(SCid.ConversationByConsole.ordinal()));
-        dCpt.add_cpt(new Long(SCid.MrkStatType.ordinal()), args);
-        
-        ComDir.add_cpt(dCpt, this);    // add the concept to the private dir
-        _throwInCaldron_(dCpt.getCid());    // throw in caldron
+//        // Create dynamic concept showing ConversationByConsole fact
+//        DynamicConcept dCpt = new DynamicConcept();
+//        List<Long> args = new ArrayList<>(1);
+//        args.add(new Long(SCid.ConversationByConsole.ordinal()));
+//        dCpt.add_cpt(new Long(SCid.MrkStatType.ordinal()), args);
+//        
+//        ComDir.add_cpt(dCpt, this);    // add the concept to the private dir
+//        _throwInCaldron_(dCpt.getCid());    // throw in caldron
     } 
 
     //##################################################################################################################

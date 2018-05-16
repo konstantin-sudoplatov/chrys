@@ -2,3 +2,5 @@
 /chrys/build/
 /java/chrys/dist/
 \.\~*#
+/java/chris/nbproject/private/
+/java/chris/build/

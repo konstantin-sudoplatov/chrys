@@ -5,17 +5,16 @@ import java.util.logging.Logger;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayDeque;
-import message.Msg_AppTermination;
-import message.BaseMessage;
+import master.MasterMessage;
 
 /**
- * Базовый предок очереди сообщений обработчика или целого приложения.
+ * Base message processing loop. Always ends up being a separate thread. 
  * @author su
  */
-abstract public class BaseMessageLoop {
+abstract public class BaseMessageLoop implements Runnable {
     
-    /** Если в очереди больше записей чем порог, метод put_in_queue() ждет. */
-    final static int ПОРОГ_ЗАПОЛНЕНИЯ_ОЧЕРЕДИ = 250;
+    /** If number of messages in the queue reaches the threshold, method put_in_queue() blocks waiting. */
+    final static int QUEUE_THRESHOLD = 250;
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -24,67 +23,73 @@ abstract public class BaseMessageLoop {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     /**
-     * Цикл выборки из очереди и обработки сообщений - основной цикл обработчика или целого
-     * приложения. Синхронизация не нужна, т.к. петля исполняется только одной нитью.
+     * Main cycle of taking out and processing messages in the queue.
      */
-    public void go() {
+    @Override
+    public void run() {
 
-        _послеЗапуска_();
-        
-        // основной цикл
+        _afterStart_();
+
         while(true) {
             
-            //
-            // ждем появления сообщения в очереди и извлекаем его
-            //
-            BaseMessage сообЩение = извлечь_блокируя();
+            // get a new message from the queue or wait if the queue is empty
+            MasterMessage msg = get_blocking();
 
-            //
-            // отрабатываем извлеченное сообщение
-            //
-            if      // объект без явного указания адресата? разобраться чего он хочет и исполнить
-                    (сообЩение.handler_class==null)
-                if      // принята заявка закрытия приложения? выходим
-                        (сообЩение instanceof Msg_AppTermination)
-                {
-                    _передЗавершением_();
-                    break;
-                }
-                else    // иначе, сообщение направлено самому обработчику
-                    _роднаяОбработкаСообщения_(сообЩение);
-            else   // иначе, вызвать функтор для обработки сообщения
+            // may be terminate the thread
+            if      // is it a termination request?
+                    (msg instanceof Msg_LoopTermination)
+            {
+                _beforeTermination_();
+                break;
+            }
+            
+            // may be we need to route this message to another message loop
+            BaseMessageLoop nextHop = _nextHop_(msg);
+            if      // this message is targeted to another loop?
+                    (nextHop != null)
+            {   // yes: send it over there
+                nextHop.put_in_queue(msg);
+                continue;
+            }
+            
+            // process the message
+            if      // no handler functor?
+                    (msg.handler_class==null)
+            {   // do default
+                _defaultProc_(msg);
+            }
+            else   // else, invoke the functor
                 try {
-                    // иначе, вызвать функтор для обработки сообщения
-                    invokeFunctor(сообЩение);
+                    invokeFunctor(msg);
                 } catch (Crash ex) {
                     Logger.getLogger(BaseMessageLoop.class.getName()).log(Level.SEVERE,
-                            "Ошибка в функторе при обработке им сообщения " + сообЩение.getClass().getName(), ex);
+                            "Error invoking message handling functor: " + msg.getClass().getName(), ex);
                 }
-        }   // Основной цикл
-    }   // go()
+        }
+    }   // run()
 
     /**
      * Показывает пуста ли очередь сообщений.
      * @return true/false
      */
-    public synchronized  boolean очередь_пуста() {
-        return очередьСообщений.isEmpty();
+    public synchronized  boolean queue_is_empty() {
+        return msgQueue.isEmpty();
     }
     
     /**
      * Получить размер очереди сообщений.
      * @return
      */
-    public synchronized int размер_очереди() {
-        return очередьСообщений.size();
+    public synchronized int queue_size() {
+        return msgQueue.size();
     }
 
     /**
      * Поместить сообщение в начало очереди. Для приоритетных сообщений.
      * @param сообщениеХризолита помещаемое в очередь сообщение.
      */
-    public synchronized void put_in_the_head_of_queue(BaseMessage сообщениеХризолита) {
-        очередьСообщений.addFirst(сообщениеХризолита);
+    public synchronized void put_in_the_head_of_queue(MasterMessage сообщениеХризолита) {
+        msgQueue.addFirst(сообщениеХризолита);
         notifyAll();
     }
 
@@ -92,9 +97,9 @@ abstract public class BaseMessageLoop {
      * Поместить сообщение в конец очереди.
      * @param сообщениеХризолита помещаемое в очередь сообщение.
      */
-    public synchronized void put_in_queue(BaseMessage сообщениеХризолита) {
+    public synchronized void put_in_queue(MasterMessage сообщениеХризолита) {
         
-        while (очередьСообщений.size() > ПОРОГ_ЗАПОЛНЕНИЯ_ОЧЕРЕДИ) {
+        while (msgQueue.size() > QUEUE_THRESHOLD) {
             try {
                 флагОжиданияПостановкиВОчередь = true;
                 wait();
@@ -103,7 +108,7 @@ abstract public class BaseMessageLoop {
             }
         }
 
-        очередьСообщений.addLast(сообщениеХризолита);
+        msgQueue.addLast(сообщениеХризолита);
         notifyAll();
     }
     private boolean флагОжиданияПостановкиВОчередь = false;
@@ -112,38 +117,38 @@ abstract public class BaseMessageLoop {
      * Дождаться когда в очереди появится сообщение извлечь из начала очереди.
      * @return сообщение или null, если очередь пуста
      */
-    public synchronized BaseMessage извлечь_блокируя() {
+    public synchronized MasterMessage get_blocking() {
         // ждать появления сообщения
-        while(очередьСообщений.isEmpty()) {
+        while(msgQueue.isEmpty()) {
             try {
                 wait();
             } catch (InterruptedException ex) {}
         }
 
         // Взять из очереди сообщение
-        BaseMessage сооб = очередьСообщений.pollFirst();
+        MasterMessage msg = msgQueue.pollFirst();
 
         // Возможно, метод put_in_queue ждет. Толкнуть его.
         if
-                (флагОжиданияПостановкиВОчередь && очередьСообщений.size()<ПОРОГ_ЗАПОЛНЕНИЯ_ОЧЕРЕДИ)
+                (флагОжиданияПостановкиВОчередь && msgQueue.size()<QUEUE_THRESHOLD)
             notifyAll();        
 
-        return сооб;
+        return msg;
     }
     
     /**
      * Извлечь сообщение из начала очереди, если оно имеется.
      * @return сообщение или null, если очередь пуста
      */
-    public synchronized BaseMessage извлечь_не_блокируя() {
-        return очередьСообщений.isEmpty()? null: очередьСообщений.pollFirst();
+    public synchronized MasterMessage get_nonblocking() {
+        return msgQueue.isEmpty()? null: msgQueue.pollFirst();
     }
 
     /**
-     * Запросить остановку нити.
+     * Request terminating this thread.
      */
-    public synchronized void остановить() {
-        put_in_queue(new Msg_AppTermination());
+    public synchronized void request_terminating() {
+        put_in_queue(new Msg_LoopTermination());
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -157,21 +162,30 @@ abstract public class BaseMessageLoop {
     //---$$$---$$$---$$$---$$$---$$$--- protected методы ---$$$---$$$---$$$---$$$---$$$---
 
     /**
-     * Специальная обработка потомка по завершению работы нити.
+     * Hook after starting a thread.
      */
-    protected void _послеЗапуска_() {};
+    protected void _afterStart_() {};
 
     /**
      * Специальная обработка потомка по завершению работы нити.
      */
-    protected void _передЗавершением_() {};
+    protected void _beforeTermination_() {};
     
     /**
-     * Когда в поле адресата сообщения стоит null, подразумевается отдать это сообщение
-     * на распознание обработку объекту петли сообщений, а не функтору.
-     * @param сообЩение сообщение без указания адресата.
+     * Determine if and to which loop we have to route a message.
+     * @param msg message to be routed
+     * @return message loop we have to be routed to or null if the message is targeted to this loop.
      */
-    abstract protected void _роднаяОбработкаСообщения_(BaseMessage сообЩение);
+    protected BaseMessageLoop _nextHop_(MasterMessage msg) {
+        return null;
+    }
+    
+    /**
+     * Default message processing. It is invoked in case when the handler functor is null.
+     * @param msg message to process
+     * @return true - message accepted, false - message is not recognized.
+     */
+    abstract protected boolean _defaultProc_(MasterMessage msg);
     
     //---$$$---$$$---$$$---$$$---$$$--- protected классы ---$$$---$$$---$$$---$$$---$$$---
 
@@ -184,7 +198,7 @@ abstract public class BaseMessageLoop {
     //---%%%---%%%---%%%---%%%--- private переменные ---%%%---%%%---%%%---%%%---%%%---%%%
     
     /** Главная очередь сообщений обработчика. Очередь очень быстрая. Это кольцевой буфер. */
-    private ArrayDeque<BaseMessage> очередьСообщений = new ArrayDeque<BaseMessage>();
+    private ArrayDeque<MasterMessage> msgQueue = new ArrayDeque<MasterMessage>();
     
     //---%%%---%%%---%%%---%%%---%%% private методы ---%%%---%%%---%%%---%%%---%%%---%%%--
 
@@ -194,14 +208,14 @@ abstract public class BaseMessageLoop {
      * содержится в сообщении в поле "Адресат".
      * @param message
      */
-    private void invokeFunctor(BaseMessage message) {
+    private void invokeFunctor(MasterMessage message) {
 
         // выделить статический метод "обработать" функтора
         Method методОбработатьФунктора = null;      // сюда поместим объект, представляющий вызываемый метод
         try {
             методОбработатьФунктора = message.handler_class.getMethod("go",       // имя метода функтора, пришедшего в поле "Адресат" сообщения
                     new Class[] {       // типы параметров, которые будут передаваться методу
-                        BaseMessage.class
+                        MasterMessage.class
                     }        
             );
         } catch (NoSuchMethodException ex) {

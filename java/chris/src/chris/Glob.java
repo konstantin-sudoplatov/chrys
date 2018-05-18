@@ -1,5 +1,8 @@
 package chris;
 
+import attention.AttnDispatcherLoop;
+import console.ConsoleLoop;
+import master.MasterLoop;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -20,11 +23,16 @@ public class Glob {
 
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
+    /** Application message loop. It does not need a separate thread since it works in the application thread. */
+    public final static MasterLoop master_loop = new MasterLoop();
+
     /** Application message loop. */
-    public final static AppLoop app_loop = new AppLoop();
+    public final static AttnDispatcherLoop attn_disp_loop = new AttnDispatcherLoop();
+    public final static Thread attn_disp_thread = new Thread(attn_disp_loop);
 
     /** Console user interface. */
-    public final static ConsoleThread console_thread = new ConsoleThread();
+    public final static ConsoleLoop console_loop = new ConsoleLoop();
+    public final static Thread console_thread = new Thread(console_loop);
     
     /**
      * Disabled constructor. This class should not ever be instantiated.
@@ -41,20 +49,33 @@ public class Glob {
      * Initialization.
      */
     public static void initialize_application() {
+        attn_disp_thread.start();
         console_thread.start();
     }
         
     /**
-     * Releasing resources and stopping all threads.
+     * Release resources and stop all threads.
      */
     public static void terminate_application() {
+        terminateMessageLoopThread(console_thread, console_loop);
+        terminateMessageLoopThread(attn_disp_thread, attn_disp_loop);   // attention dispatcher stops the attention bubbles on its own.
+        master_loop.request_terminating();
+    }
+        
+    /**
+     * Release resources and stop a message loop thread. All except master thread, because it is run by the application itself
+     * (see the main() program).
+     * @param thread a thread to be stopped
+     * @param loop the message loop of the thread
+     */
+    private static void terminateMessageLoopThread(Thread thread, BaseMessageLoop loop) {
 
-        // Завершить работу нити консоли
         if 
-                (console_thread.isAlive())
+                (thread.isAlive())
         {
             try {
-                console_thread.join();
+                loop.request_terminating();
+                thread.join();
             } catch (InterruptedException ex) {}
         }
     }

@@ -12,7 +12,7 @@ public class Chris {
     public static void main(String[] args) {
         Glob.initialize_application();
         
-        Glob.app_loop.go();
+        Glob.master_loop.run();
         
         Glob.terminate_application();
     }

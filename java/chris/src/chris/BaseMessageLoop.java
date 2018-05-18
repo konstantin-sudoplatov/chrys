@@ -69,7 +69,7 @@ abstract public class BaseMessageLoop implements Runnable {
     }   // run()
 
     /**
-     * Показывает пуста ли очередь сообщений.
+     * Shows if the queue is empty.
      * @return true/false
      */
     public synchronized  boolean queue_is_empty() {

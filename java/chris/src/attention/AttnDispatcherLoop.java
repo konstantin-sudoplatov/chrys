@@ -17,9 +17,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
     /** 
-     * Constructor.
-     * @param  
-     */ 
+     * Constructor.     */ 
     public AttnDispatcherLoop() { 
     } 
 
@@ -41,8 +39,8 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
 
     @Override
     protected void _afterStart_() {
-Glob.master_loop.put_in_queue(new Msg_WriteToConsole("hello\n"));        
-Glob.master_loop.put_in_queue(new Msg_ReadFromConsole());        
+Glob.master_loop.put_in_queue(new Msg_WriteToConsole(AttnDispatcherLoop.class, "hello\n"));        
+Glob.master_loop.put_in_queue(new Msg_ReadFromConsole(AttnDispatcherLoop.class));        
     }
 
     @Override
@@ -51,7 +49,7 @@ Glob.master_loop.put_in_queue(new Msg_ReadFromConsole());
                 (msg instanceof Msg_ConsoleToAttnBubble)
         {
 System.out.println("gotten \"" + ((Msg_ConsoleToAttnBubble)msg).text + "\" from console");
-Glob.master_loop.put_in_queue(new Msg_ReadFromConsole());        
+Glob.master_loop.put_in_queue(new Msg_ReadFromConsole(AttnDispatcherLoop.class));        
             return true;
         }    
         

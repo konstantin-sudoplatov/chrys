@@ -51,7 +51,7 @@ public class ConsoleLoop extends BaseMessageLoop {
                             return true;
                         }
                         else {
-                            Glob.master_loop.put_in_queue(new Msg_ConsoleToAttnBubble(line));
+                            Glob.master_loop.put_in_queue(new Msg_ConsoleToAttnBubble(ConsoleLoop.class, line));
                             return true;
                         }
                 }

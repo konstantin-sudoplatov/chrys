@@ -7,19 +7,17 @@ import master.MasterMessage;
  * @author su
  */
 public abstract class ConsoleMessage extends MasterMessage {
+    
+    /** Originator of the message */
+    Class sender;
    
     //---***---***---***---***---***--- public классы ---***---***---***---***---***---***
     
     /**
      * Constructor.
+     * @param sender Message loop that sends this message
      */
-    public ConsoleMessage() {}
-    
-    /**
-     * Constructor.
-     * @param handlerClass functor, that handles this message or null if it is meant to get handled by the message loop.
-     */
-    public ConsoleMessage(Class handlerClass) {
-        super(handlerClass);
+    public ConsoleMessage(Class sender) {
+        this.sender = sender;
     }
 }

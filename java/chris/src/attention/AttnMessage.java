@@ -9,7 +9,8 @@ package attention;
  */
 public abstract class AttnMessage extends AttnDispMessage {
    
-    //---***---***---***---***---***--- public классы ---***---***---***---***---***---***
+    /** Message loop class that originates the message. */
+    Class sender;
     
     /**
      * Constructor.

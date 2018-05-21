@@ -1,32 +1,36 @@
-package attention;
-
-import chris.BaseMessage;
-import chris.BaseMessageLoop;
-import console.Msg_ReadFromConsole;
+package concept;
 
 /**
- *
+ * Base class for all concepts.
  * @author su
  */
-public class AttnBubbleLoop extends BaseMessageLoop {
+abstract public class Concept {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
     /** 
-     * Constructor.
-     * @param attnDisp attention dispatcher
+     * Constructor.     
+     * @param cid concept identifier;
      */ 
-    public AttnBubbleLoop(AttnDispatcherLoop attnDisp) {
-        this.attnDisp = attnDisp;
-    } 
+    public Concept(long cid) {
+        this.cid = cid;
+    }
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
     //                                  Public methods
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
+
+    /**
+     * Getter.
+     * @return concept identifier. 
+     */
+    public long getCid() {
+        return cid;
+    }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
@@ -38,16 +42,6 @@ public class AttnBubbleLoop extends BaseMessageLoop {
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
 
-    @Override
-    protected boolean _defaultProc_(BaseMessage msg) {
-//System.out.println("gotten \"" + ((Msg_ConsoleToAttnBubble)msg).text + "\" from console");
-            
-        // prompt console
-        attnDisp.put_in_queue(new Msg_ReadFromConsole(AttnDispatcherLoop.class));        
-        
-        return true;
-    }
-
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //      Private    Private    Private    Private    Private    Private    Private
@@ -55,9 +49,9 @@ public class AttnBubbleLoop extends BaseMessageLoop {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
-    
-    /** Attention dispatcher */
-    AttnDispatcherLoop attnDisp;
+     
+    /** Concept identifier */
+    private final long cid;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

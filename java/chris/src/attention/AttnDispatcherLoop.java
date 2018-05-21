@@ -52,7 +52,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
 
     @Override
     protected void _afterStart_() {
-//Glob.app_loop.put_in_queue(new Msg_WriteToConsole(AttnDispatcherLoop.class, "hello\n"));        
+
         // prompt console
         Glob.app_loop.put_in_queue(new Msg_ReadFromConsole(AttnDispatcherLoop.class));        
     }
@@ -62,14 +62,12 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
         if      // a message from console to bubble?
                 (msg instanceof Msg_ConsoleToAttnBubble)
         {
-//System.out.println("gotten \"" + ((Msg_ConsoleToAttnBubble)msg).text + "\" from console");
-            
             // May be, create the chat bubble
             if
                     (consoleChatBubble == null)
             {
                 consoleChatBubble = new AttnBubbleLoop(this);
-                attnBubbleList.add(consoleChatBubble);
+                addBubbleToList(consoleChatBubble);
                 consoleChatBubble.start_thread();
             }
             
@@ -104,6 +102,14 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
+    /**
+     * Synchronized adding new bubble to the list of bubbles. We need synchronization if someone from outside the thread wants
+     * to work with the list of bubbles (for example, wants to find a bubble to add a new concept to it).
+     * @param bubble attention bubble loop to add to the list.
+     */
+    private synchronized void addBubbleToList(AttnBubbleLoop bubble) {
+        attnBubbleList.add(consoleChatBubble);
+    }
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--
     
 }

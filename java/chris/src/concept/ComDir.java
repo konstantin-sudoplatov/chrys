@@ -1,25 +1,22 @@
-package attention;
+package concept;
 
-import chris.BaseMessage;
-import chris.BaseMessageLoop;
-import console.Msg_ReadFromConsole;
+import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
  * @author su
  */
-public class AttnBubbleLoop extends BaseMessageLoop {
+public class ComDir {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
     /** 
-     * Constructor.
-     * @param attnDisp attention dispatcher
+     * Constructor.     
      */ 
-    public AttnBubbleLoop(AttnDispatcherLoop attnDisp) {
-        this.attnDisp = attnDisp;
+    public ComDir() { 
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -38,16 +35,6 @@ public class AttnBubbleLoop extends BaseMessageLoop {
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
 
-    @Override
-    protected boolean _defaultProc_(BaseMessage msg) {
-//System.out.println("gotten \"" + ((Msg_ConsoleToAttnBubble)msg).text + "\" from console");
-            
-        // prompt console
-        attnDisp.put_in_queue(new Msg_ReadFromConsole(AttnDispatcherLoop.class));        
-        
-        return true;
-    }
-
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //      Private    Private    Private    Private    Private    Private    Private
@@ -55,10 +42,12 @@ public class AttnBubbleLoop extends BaseMessageLoop {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
+    /** Common concept directory: a map of concepts by cid's. */
+    private static final Map<Long, Concept> cpT = new ConcurrentHashMap();
     
-    /** Attention dispatcher */
-    AttnDispatcherLoop attnDisp;
-    
+    /** Common concept name directory: a map of cid's by the concept names. A concept not necessarily has a name. */
+    private static final Map<String, Long> cpN = new ConcurrentHashMap();
+
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--

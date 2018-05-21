@@ -8,6 +8,7 @@ import console.ConsoleLoop;
  * @author su
  */
 public class Msg_ConsoleToAttnBubble extends AttnDispMessage {
+    public Class sender;
     public String text;
 
     /**
@@ -16,7 +17,7 @@ public class Msg_ConsoleToAttnBubble extends AttnDispMessage {
      * @param text from console to an attention bubble.
      */
     public Msg_ConsoleToAttnBubble(Class<ConsoleLoop> sender, String text) {
-        super(sender);
+        this.sender = sender;
         this.text = text;
     }
 }

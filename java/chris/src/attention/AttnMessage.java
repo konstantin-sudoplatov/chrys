@@ -10,18 +10,13 @@ package attention;
 public abstract class AttnMessage extends AttnDispMessage {
    
     /** Message loop class that originates the message. */
-    Class sender;
+    public Class sender;
     
     /**
      * Constructor.
+     * @param sender Message loop that sends this message
      */
-    public AttnMessage() {}
-    
-    /**
-     * Constructor.
-     * @param handlerClass functor, that handles this message or null if it is meant to get handled by the message loop.
-     */
-    public AttnMessage(Class handlerClass) {
-        super(handlerClass);
+    public AttnMessage(Class sender) {
+        this.sender = sender;
     }
 }

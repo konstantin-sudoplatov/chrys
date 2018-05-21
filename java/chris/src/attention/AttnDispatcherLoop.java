@@ -1,10 +1,11 @@
 package attention;
 
-import master.MasterMessage;
+import chris.BaseMessage;
 import chris.BaseMessageLoop;
 import chris.Glob;
+import console.ConsoleMessage;
 import console.Msg_ReadFromConsole;
-import console.Msg_WriteToConsole;
+import java.util.ArrayList;
 
 /**
  *
@@ -27,6 +28,18 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
+    @Override
+    public void request_termination() {
+        
+        // terminate bubbles
+        for (AttnBubbleLoop bubble : attnBubbleList) {
+            bubble.request_termination();
+        }
+        
+        // terminate yourself
+        super.request_termination();
+    }
+    
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected
@@ -39,23 +52,42 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
 
     @Override
     protected void _afterStart_() {
-Glob.master_loop.put_in_queue(new Msg_WriteToConsole(AttnDispatcherLoop.class, "hello\n"));        
-Glob.master_loop.put_in_queue(new Msg_ReadFromConsole(AttnDispatcherLoop.class));        
+//Glob.app_loop.put_in_queue(new Msg_WriteToConsole(AttnDispatcherLoop.class, "hello\n"));        
+        // prompt console
+        Glob.app_loop.put_in_queue(new Msg_ReadFromConsole(AttnDispatcherLoop.class));        
     }
 
     @Override
-    protected boolean _defaultProc_(MasterMessage msg) {
-        if
+    protected boolean _defaultProc_(BaseMessage msg) {
+        if      // a message from console to bubble?
                 (msg instanceof Msg_ConsoleToAttnBubble)
         {
-System.out.println("gotten \"" + ((Msg_ConsoleToAttnBubble)msg).text + "\" from console");
-Glob.master_loop.put_in_queue(new Msg_ReadFromConsole(AttnDispatcherLoop.class));        
+//System.out.println("gotten \"" + ((Msg_ConsoleToAttnBubble)msg).text + "\" from console");
+            
+            // May be, create the chat bubble
+            if
+                    (consoleChatBubble == null)
+            {
+                consoleChatBubble = new AttnBubbleLoop(this);
+                attnBubbleList.add(consoleChatBubble);
+                consoleChatBubble.start_thread();
+            }
+            
+            // route the message to the cat bubble
+            consoleChatBubble.put_in_queue(msg);
+
             return true;
-        }    
+        }
+        else if // a message to console (probably from a bubble)?
+                (msg instanceof ConsoleMessage)
+        {   // reroute to the application loop, it'll route it to console
+            Glob.app_loop.put_in_queue(msg);
+            return true;
+        }
         
         return false;
     }
-
+    
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //      Private    Private    Private    Private    Private    Private    Private
@@ -63,8 +95,15 @@ Glob.master_loop.put_in_queue(new Msg_ReadFromConsole(AttnDispatcherLoop.class))
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
-
+    
+    /** List of all attention bubbles */
+    private ArrayList<AttnBubbleLoop> attnBubbleList = new ArrayList<>();
+    
+    /** Attention bubble, that chats with console. */
+    private AttnBubbleLoop consoleChatBubble;
+    
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--
+    
 }

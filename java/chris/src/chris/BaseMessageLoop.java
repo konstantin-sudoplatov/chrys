@@ -5,7 +5,6 @@ import java.util.logging.Logger;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayDeque;
-import master.MasterMessage;
 
 /**
  * Base message processing loop. Always ends up being a separate thread. 
@@ -23,6 +22,23 @@ abstract public class BaseMessageLoop implements Runnable {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     /**
+     * Start this loop as a thread.
+     * @return the thread object
+     */
+    public Thread start_thread() {
+        if
+                (threaD == null)
+        {
+            threaD = new Thread(this);
+            threaD.start();
+        }
+        else
+            throw new Crash("Attempt to start a thread that is runnig already.");
+        
+        return threaD;
+    }
+    
+    /**
      * Main cycle of taking out and processing messages in the queue.
      */
     @Override
@@ -33,7 +49,7 @@ abstract public class BaseMessageLoop implements Runnable {
         while(true) {
             
             // get a new message from the queue or wait if the queue is empty
-            MasterMessage msg = get_blocking();
+            BaseMessage msg = get_blocking();
 
             // may be terminate the thread
             if      // is it a termination request?
@@ -66,6 +82,8 @@ abstract public class BaseMessageLoop implements Runnable {
                             "Error invoking message handling functor: " + msg.getClass().getName(), ex);
                 }
         }
+        
+        threaD = null;  // feel free to start again
     }   // run()
 
     /**
@@ -88,7 +106,7 @@ abstract public class BaseMessageLoop implements Runnable {
      * Поместить сообщение в начало очереди. Для приоритетных сообщений.
      * @param сообщениеХризолита помещаемое в очередь сообщение.
      */
-    public synchronized void put_in_the_head_of_queue(MasterMessage сообщениеХризолита) {
+    public synchronized void put_in_the_head_of_queue(BaseMessage сообщениеХризолита) {
         msgQueue.addFirst(сообщениеХризолита);
         notifyAll();
     }
@@ -97,7 +115,7 @@ abstract public class BaseMessageLoop implements Runnable {
      * Поместить сообщение в конец очереди.
      * @param сообщениеХризолита помещаемое в очередь сообщение.
      */
-    public synchronized void put_in_queue(MasterMessage сообщениеХризолита) {
+    public synchronized void put_in_queue(BaseMessage сообщениеХризолита) {
         
         while (msgQueue.size() > QUEUE_THRESHOLD) {
             try {
@@ -117,7 +135,7 @@ abstract public class BaseMessageLoop implements Runnable {
      * Дождаться когда в очереди появится сообщение извлечь из начала очереди.
      * @return сообщение или null, если очередь пуста
      */
-    public synchronized MasterMessage get_blocking() {
+    public synchronized BaseMessage get_blocking() {
         // ждать появления сообщения
         while(msgQueue.isEmpty()) {
             try {
@@ -126,7 +144,7 @@ abstract public class BaseMessageLoop implements Runnable {
         }
 
         // Взять из очереди сообщение
-        MasterMessage msg = msgQueue.pollFirst();
+        BaseMessage msg = msgQueue.pollFirst();
 
         // Возможно, метод put_in_queue ждет. Толкнуть его.
         if
@@ -140,15 +158,23 @@ abstract public class BaseMessageLoop implements Runnable {
      * Извлечь сообщение из начала очереди, если оно имеется.
      * @return сообщение или null, если очередь пуста
      */
-    public synchronized MasterMessage get_nonblocking() {
+    public synchronized BaseMessage get_nonblocking() {
         return msgQueue.isEmpty()? null: msgQueue.pollFirst();
     }
 
     /**
      * Request terminating this thread.
      */
-    public synchronized void request_terminating() {
+    public synchronized void request_termination() {
         put_in_queue(new Msg_LoopTermination());
+    }
+
+    /**
+     * Getter.
+     * @return the thread object.
+     */
+    public Thread get_thread() {
+        return threaD;
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -176,7 +202,7 @@ abstract public class BaseMessageLoop implements Runnable {
      * @param msg message to be routed
      * @return message loop we have to be routed to or null if the message is targeted to this loop.
      */
-    protected BaseMessageLoop _nextHop_(MasterMessage msg) {
+    protected BaseMessageLoop _nextHop_(BaseMessage msg) {
         return null;
     }
     
@@ -185,7 +211,7 @@ abstract public class BaseMessageLoop implements Runnable {
      * @param msg message to process
      * @return true - message accepted, false - message is not recognized.
      */
-    abstract protected boolean _defaultProc_(MasterMessage msg);
+    abstract protected boolean _defaultProc_(BaseMessage msg);
     
     //---$$$---$$$---$$$---$$$---$$$--- protected классы ---$$$---$$$---$$$---$$$---$$$---
 
@@ -197,8 +223,11 @@ abstract public class BaseMessageLoop implements Runnable {
 
     //---%%%---%%%---%%%---%%%--- private переменные ---%%%---%%%---%%%---%%%---%%%---%%%
     
+    /** Thread object, that runs this loop. */
+    private Thread threaD = null;
+    
     /** Главная очередь сообщений обработчика. Очередь очень быстрая. Это кольцевой буфер. */
-    private ArrayDeque<MasterMessage> msgQueue = new ArrayDeque<MasterMessage>();
+    private ArrayDeque<BaseMessage> msgQueue = new ArrayDeque<>();
     
     //---%%%---%%%---%%%---%%%---%%% private методы ---%%%---%%%---%%%---%%%---%%%---%%%--
 
@@ -208,14 +237,14 @@ abstract public class BaseMessageLoop implements Runnable {
      * содержится в сообщении в поле "Адресат".
      * @param message
      */
-    private void invokeFunctor(MasterMessage message) {
+    private void invokeFunctor(BaseMessage message) {
 
         // выделить статический метод "обработать" функтора
         Method методОбработатьФунктора = null;      // сюда поместим объект, представляющий вызываемый метод
         try {
             методОбработатьФунктора = message.handler_class.getMethod("go",       // имя метода функтора, пришедшего в поле "Адресат" сообщения
                     new Class[] {       // типы параметров, которые будут передаваться методу
-                        MasterMessage.class
+                        BaseMessage.class
                     }        
             );
         } catch (NoSuchMethodException ex) {

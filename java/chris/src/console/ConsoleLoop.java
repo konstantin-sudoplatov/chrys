@@ -2,14 +2,14 @@ package console;
 
 import attention.Msg_ConsoleToAttnBubble;
 import chris.Glob;
-import master.MasterMessage;
+import chris.BaseMessage;
 import chris.BaseMessageLoop;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import master.Msg_AppTermination;
+import chris.Msg_AppTermination;
 
 /**
  * Takes lines from console and routes them to the application message loop.
@@ -24,7 +24,7 @@ public class ConsoleLoop extends BaseMessageLoop {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     @Override
-    protected boolean _defaultProc_(MasterMessage msg) {
+    protected boolean _defaultProc_(BaseMessage msg) {
         
         if      // request for writing things?
                 (msg instanceof Msg_WriteToConsole)
@@ -47,11 +47,11 @@ public class ConsoleLoop extends BaseMessageLoop {
                     else if // termination requested?
                             (line.equalsIgnoreCase("P") || line.equalsIgnoreCase("STOP"))
                         {   // command the application loop to finish work
-                            Glob.master_loop.put_in_queue(new Msg_AppTermination());
+                            Glob.app_loop.put_in_queue(new Msg_AppTermination());
                             return true;
                         }
                         else {
-                            Glob.master_loop.put_in_queue(new Msg_ConsoleToAttnBubble(ConsoleLoop.class, line));
+                            Glob.app_loop.put_in_queue(new Msg_ConsoleToAttnBubble(ConsoleLoop.class, line));
                             return true;
                         }
                 }

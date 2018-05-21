@@ -1,19 +1,18 @@
 package attention;
 
-import master.MasterMessage;
+import chris.BaseMessage;
 
 /**
  *  Ancestor for messages that are going to the attention dispatcher loop. Messages are routed to the destination by their class.
  * @author su
  */
-public abstract class AttnDispMessage extends MasterMessage {
-   
-    //---***---***---***---***---***--- public классы ---***---***---***---***---***---***
-    
+public abstract class AttnDispMessage extends BaseMessage {
+
     /**
      * Constructor.
      */
-    public AttnDispMessage() {}
+    public AttnDispMessage() {
+    }
     
     /**
      * Constructor.

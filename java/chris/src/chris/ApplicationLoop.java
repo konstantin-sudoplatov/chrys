@@ -1,15 +1,18 @@
-package master;
+package chris;
 
 import attention.AttnDispMessage;
-import chris.Glob;
-import chris.BaseMessageLoop;
 import console.ConsoleMessage;
 
 /**
  * Application message loop. It is the main loop of the application and it works in the main thread.
  * @author su
  */
-public class MasterLoop extends BaseMessageLoop {
+public class ApplicationLoop extends BaseMessageLoop {
+
+    @Override
+    public Thread start_thread() {
+        throw new Crash("This loop must be started calling the run() method in the application thread.");
+    }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
@@ -22,7 +25,7 @@ public class MasterLoop extends BaseMessageLoop {
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
 
     @Override
-    protected BaseMessageLoop _nextHop_(MasterMessage msg) {
+    protected BaseMessageLoop _nextHop_(BaseMessage msg) {
         if
                 (msg instanceof ConsoleMessage)
             return Glob.console_loop;
@@ -34,7 +37,7 @@ public class MasterLoop extends BaseMessageLoop {
     }
     
     @Override
-    protected boolean _defaultProc_(MasterMessage msg) {
+    protected boolean _defaultProc_(BaseMessage msg) {
         if      // request for termination the application?
                 (msg instanceof Msg_AppTermination)
         {   // yes: stop the application

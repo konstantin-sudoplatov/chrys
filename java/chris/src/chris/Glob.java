@@ -2,7 +2,6 @@ package chris;
 
 import attention.AttnDispatcherLoop;
 import console.ConsoleLoop;
-import master.MasterLoop;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -24,15 +23,13 @@ public class Glob {
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
     /** Application message loop. It does not need a separate thread since it works in the application thread. */
-    public final static MasterLoop master_loop = new MasterLoop();
+    public final static ApplicationLoop app_loop = new ApplicationLoop();
 
     /** Application message loop. */
     public final static AttnDispatcherLoop attn_disp_loop = new AttnDispatcherLoop();
-    public final static Thread attn_disp_thread = new Thread(attn_disp_loop);
 
     /** Console user interface. */
     public final static ConsoleLoop console_loop = new ConsoleLoop();
-    public final static Thread console_thread = new Thread(console_loop);
     
     /**
      * Disabled constructor. This class should not ever be instantiated.
@@ -49,17 +46,17 @@ public class Glob {
      * Initialization.
      */
     public static void initialize_application() {
-        attn_disp_thread.start();
-        console_thread.start();
+        console_loop.start_thread();
+        attn_disp_loop.start_thread();
     }
         
     /**
      * Release resources and stop all threads.
      */
     public static void terminate_application() {
-        terminateMessageLoopThread(console_thread, console_loop);
-        terminateMessageLoopThread(attn_disp_thread, attn_disp_loop);   // attention dispatcher stops the attention bubbles on its own.
-        master_loop.request_terminating();
+        terminateMessageLoopThread(console_loop.get_thread(), console_loop);
+        terminateMessageLoopThread(attn_disp_loop.get_thread(), attn_disp_loop);   // attention dispatcher stops the attention bubbles loops.
+        app_loop.request_termination();
     }
         
     /**
@@ -74,7 +71,7 @@ public class Glob {
                 (thread.isAlive())
         {
             try {
-                loop.request_terminating();
+                loop.request_termination();
                 thread.join();
             } catch (InterruptedException ex) {}
         }

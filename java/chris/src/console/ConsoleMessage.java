@@ -1,15 +1,15 @@
 package console;
 
-import master.MasterMessage;
+import chris.BaseMessage;
 
 /**
  *  Ancestor for messages that are going to console loop. Messages are routed to the destination by their class.
  * @author su
  */
-public abstract class ConsoleMessage extends MasterMessage {
+public abstract class ConsoleMessage extends BaseMessage {
     
     /** Originator of the message */
-    Class sender;
+    public Class sender;
    
     //---***---***---***---***---***--- public классы ---***---***---***---***---***---***
     

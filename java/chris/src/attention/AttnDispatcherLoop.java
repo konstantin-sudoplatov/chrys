@@ -3,9 +3,13 @@ package attention;
 import chris.BaseMessage;
 import chris.BaseMessageLoop;
 import chris.Glob;
+import concept.Concept;
 import console.ConsoleMessage;
 import console.Msg_ReadFromConsole;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Random;
 
 /**
  *
@@ -28,8 +32,69 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
+    /**
+     * Add concept to comdir or to a bubble dir. Static concepts know their cid already, for dynamic concept it is randomly 
+     * generated outside the static range.
+     * @param cpt the concept to add
+     * @param bubble the bubble, that contains the target directory or null if it is the comdir.
+     * @return cid
+     */
+    @SuppressWarnings("UnnecessaryLabelOnContinueStatement")
+    public synchronized long add_cpt(Concept cpt, AttnBubbleLoop bubble) {
+        // determine cid
+        long cid;
+        if      
+                (cpt.is_static())
+            cid = cpt.getCid();
+        else {   // generate a unique cid. it is unique to cpt and all privDir's.
+            GENERATE_CID: while(true) {
+                Random rnd = new Random();
+                cid = rnd.nextLong();
+                if      // cid in the static range? push it out
+                        (cid >= 0 && cid <= Glob.MAX_STATIC_CID)
+                    cid += Glob.MAX_STATIC_CID + 1;
+                if      // is in cpt?
+                        (comConDir.containsKey(cid))
+                    continue GENERATE_CID;   // generate once more
+                for(AttnBubbleLoop b: attnBubbleList) {
+                    if      // is in PrivDir?
+                            (b.cptdir_containsKey(cid))
+                        continue GENERATE_CID;
+                }
+                break;
+            }   // while
+        }
+        
+        // put to target dir
+        cpt.setCid(cid);
+        if
+                (bubble == null)
+            comConDir.put(cid, cpt);      // put in cpt
+        else
+            bubble.cptdir_put(cid, cpt);
+        
+        return cid;
+    }
+
+    /**
+     * Ditto.
+     * @param cpt  the concept to add
+     */
+    public synchronized void add_cpt(Concept cpt) {
+        add_cpt(cpt, null);
+    }
+        
+    /**
+     *  Check to see if the common concept map contains a concept.
+     * @param cid 
+     * @return
+     */
+    public static synchronized boolean comdir_containsKey(long cid) {
+        return comConDir.containsKey(cid);
+    }
+
     @Override
-    public void request_termination() {
+    public synchronized void request_termination() {
         
         // terminate bubbles
         for (AttnBubbleLoop bubble : attnBubbleList) {
@@ -93,6 +158,9 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
+
+    /** Common concept directory: a map of concepts by cid's. */
+    private static final Map<Long, Concept> comConDir = new HashMap<>();
     
     /** List of all attention bubbles */
     private ArrayList<AttnBubbleLoop> attnBubbleList = new ArrayList<>();

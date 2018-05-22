@@ -32,6 +32,23 @@ abstract public class Concept {
         return cid;
     }
 
+    /**
+     * Setter.
+     * @param cid 
+     */
+    public void setCid(long cid) {
+        this.cid = cid;
+    }
+
+    /**
+     *  Shows type of the concept - static/dynamic.
+     * Static are hard-coded concepts, dynamic are generated at runtime.
+     * @return true - static, false -dynamic
+     */
+    public boolean is_static() {
+        return false;
+    }
+
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected
@@ -51,7 +68,7 @@ abstract public class Concept {
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
      
     /** Concept identifier */
-    private final long cid;
+    private long cid;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

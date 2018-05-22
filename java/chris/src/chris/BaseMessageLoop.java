@@ -173,7 +173,7 @@ abstract public class BaseMessageLoop implements Runnable {
      * Getter.
      * @return the thread object.
      */
-    public Thread get_thread() {
+    public synchronized Thread get_thread() {
         return threaD;
     }
 

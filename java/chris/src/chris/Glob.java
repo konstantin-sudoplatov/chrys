@@ -1,6 +1,7 @@
 package chris;
 
 import attention.AttnDispatcherLoop;
+import concept.Concept;
 import console.ConsoleLoop;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -9,8 +10,10 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 import java.util.Stack;
 import java.util.TimeZone;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -22,6 +25,9 @@ public class Glob {
 
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
+    /** The end of the static CIDs range. */
+    public final static long MAX_STATIC_CID = 1000000;
+    
     /** Application message loop. It does not need a separate thread since it works in the application thread. */
     public final static ApplicationLoop app_loop = new ApplicationLoop();
 

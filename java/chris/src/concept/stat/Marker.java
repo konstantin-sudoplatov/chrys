@@ -1,20 +1,23 @@
 package concept.stat;
 
+import concept.StaticConcept;
+
 /**
  * Static concept: Marker.
  * @author su
  */
-public class Marker {
+public class Marker extends StaticConcept {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
     /** 
-     * Constructor.
-     * @param  
+     * Constructor.     
+     * @param cid
      */ 
-    public Marker() { 
+    public Marker(long cid) {
+        super(cid);
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v

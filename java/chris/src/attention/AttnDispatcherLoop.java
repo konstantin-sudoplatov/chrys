@@ -4,12 +4,19 @@ import chris.BaseMessage;
 import chris.BaseMessageLoop;
 import chris.Glob;
 import concept.Concept;
+import concept.StatCptEnum;
+import concept.StaticConcept;
+import concept.stat.Marker;
 import console.ConsoleMessage;
 import console.Msg_ReadFromConsole;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
@@ -23,7 +30,8 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
 
     /** 
      * Constructor.     */ 
-    public AttnDispatcherLoop() { 
+    public AttnDispatcherLoop() {
+        loadStaticConcepts();
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -89,7 +97,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
      * @param cid 
      * @return
      */
-    public static synchronized boolean comdir_containsKey(long cid) {
+    public synchronized boolean comdir_containsKey(long cid) {
         return comConDir.containsKey(cid);
     }
 
@@ -160,10 +168,10 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
     /** Common concept directory: a map of concepts by cid's. */
-    private static final Map<Long, Concept> comConDir = new HashMap<>();
+    private final Map<Long, Concept> comConDir = new HashMap<>();
     
     /** List of all attention bubbles */
-    private ArrayList<AttnBubbleLoop> attnBubbleList = new ArrayList<>();
+    private final ArrayList<AttnBubbleLoop> attnBubbleList = new ArrayList<>();
     
     /** Attention bubble, that chats with console. */
     private AttnBubbleLoop consoleChatBubble;
@@ -177,6 +185,46 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
      */
     private synchronized void addBubbleToList(AttnBubbleLoop bubble) {
         attnBubbleList.add(consoleChatBubble);
+    }
+
+    /**
+     *  Load from DB or create static concept objects and put them into the common concepts map.
+     */
+    private void loadStaticConcepts() {
+        
+        // Load cpt from DB
+        
+        // Load CPN from DB
+        
+        // Create static concepts.
+        for(StatCptEnum cidEnum: StatCptEnum.values()) {
+            String cptName = cidEnum.name();
+            @SuppressWarnings("UnusedAssignment")
+            Class cl = null;
+            try {
+                cl = Class.forName(StatCptEnum.STATIC_CONCEPTS_PACKET_NAME + "." + cptName);
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(StaticConcept.class.getName()).log(Level.SEVERE, "Error getting class " + cptName, ex);
+                System.exit(1);
+            }
+            @SuppressWarnings("UnusedAssignment")
+            Constructor cons = null;
+            try {
+                cons = cl.getConstructor(long.class);
+            } catch (NoSuchMethodException | SecurityException ex) {
+                Logger.getLogger(StaticConcept.class.getName()).log(Level.SEVERE, "Error getting constractor for " + cptName, ex);
+                System.exit(1);
+            }
+            @SuppressWarnings("UnusedAssignment")
+            Concept cpt = null;
+            try {
+                cpt = (Concept)cons.newInstance(cidEnum.ordinal());
+                add_cpt(cpt);
+            } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                Logger.getLogger(StaticConcept.class.getName()).log(Level.SEVERE, "Error instantiating " + cptName, ex);
+                System.exit(1);
+            }
+        }
     }
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--
     

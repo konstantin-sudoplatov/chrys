@@ -77,7 +77,7 @@ public class AttnBubbleLoop extends BaseMessageLoop {
     /** Concept directory: a map of concepts by cid's. Though it can be changed both from inside and 
      outside from the attention dispatcher, all changes would be from this thread (on our request), without concurrency. 
      Just in case don't use direct access to it from inside, use public methods. That way access can be easily synchronized. */
-    private static final Map<Long, Concept> cptDir = new ConcurrentHashMap<>();
+    private final Map<Long, Concept> cptDir = new ConcurrentHashMap<>();
     
     
     /** Attention dispatcher. Parent. */

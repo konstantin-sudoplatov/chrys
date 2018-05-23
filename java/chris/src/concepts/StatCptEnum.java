@@ -1,4 +1,4 @@
-package concept;
+package concepts;
 
 /**
  *  Static concepts identifiers.
@@ -7,11 +7,12 @@ package concept;
  * @author su
  */
 public enum StatCptEnum {
-    Marker,
-    SymbolGroup,
+    Mark_Marker,
+    Mark_Identifier,
+    Mark_Type,
     ;
     
     /** Is used to find static concept classes in ComDir.generate_static_concepts(). Must be the same as the package containing
       those classes. Remember when refactoring! */
-    public static final String STATIC_CONCEPTS_PACKET_NAME = "concept.stat";   // 
+    public static final String STATIC_CONCEPTS_PACKET_NAME = "concepts.stat";   // 
 }

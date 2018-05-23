@@ -1,23 +1,19 @@
-package concept.stat;
-
-import concept.StaticConcept;
+package starter;
 
 /**
- * Static concept: Marker.
+ * When there is no DB or it is empty, we have to start with something...
  * @author su
  */
-public class Marker extends StaticConcept {
+abstract public class Starter {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
     /** 
-     * Constructor.     
-     * @param cid
-     */ 
-    public Marker(long cid) {
-        super(cid);
+     * Constructor.
+    */ 
+    public Starter() { 
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -26,6 +22,10 @@ public class Marker extends StaticConcept {
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
+    public static void generate_dynamic_concepts() {
+        
+    }
+    
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected

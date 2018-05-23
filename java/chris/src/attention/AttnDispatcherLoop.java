@@ -3,10 +3,10 @@ package attention;
 import chris.BaseMessage;
 import chris.BaseMessageLoop;
 import chris.Glob;
-import concept.Concept;
-import concept.StatCptEnum;
-import concept.StaticConcept;
-import concept.stat.Marker;
+import concepts.Concept;
+import concepts.DynamicConcept;
+import concepts.StatCptEnum;
+import concepts.StaticConcept;
 import console.ConsoleMessage;
 import console.Msg_ReadFromConsole;
 import java.lang.reflect.Constructor;
@@ -51,10 +51,13 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
     public synchronized long add_cpt(Concept cpt, AttnBubbleLoop bubble) {
         // determine cid
         long cid;
-        if      
-                (cpt.is_static())
-            cid = cpt.getCid();
-        else {   // generate a unique cid. it is unique to cpt and all privDir's.
+        if      // static concept?
+                (cpt instanceof StaticConcept)
+        {   //yes: get cid
+            cid = StatCptEnum.valueOf(cpt.getClass().getSimpleName()).ordinal();
+        }
+        else 
+        {   //no: generate a unique cid. it is unique all through common and all bubble directories.
             GENERATE_CID: while(true) {
                 Random rnd = new Random();
                 cid = rnd.nextLong();
@@ -71,10 +74,10 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
                 }
                 break;
             }   // while
+            ((DynamicConcept)cpt).setCiD(cid);
         }
         
         // put to target dir
-        cpt.setCid(cid);
         if
                 (bubble == null)
             comConDir.put(cid, cpt);      // put in cpt
@@ -210,7 +213,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
             @SuppressWarnings("UnusedAssignment")
             Constructor cons = null;
             try {
-                cons = cl.getConstructor(long.class);
+                cons = cl.getConstructor();
             } catch (NoSuchMethodException | SecurityException ex) {
                 Logger.getLogger(StaticConcept.class.getName()).log(Level.SEVERE, "Error getting constractor for " + cptName, ex);
                 System.exit(1);
@@ -218,7 +221,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
             @SuppressWarnings("UnusedAssignment")
             Concept cpt = null;
             try {
-                cpt = (Concept)cons.newInstance(cidEnum.ordinal());
+                cpt = (Concept)cons.newInstance();
                 add_cpt(cpt);
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 Logger.getLogger(StaticConcept.class.getName()).log(Level.SEVERE, "Error instantiating " + cptName, ex);

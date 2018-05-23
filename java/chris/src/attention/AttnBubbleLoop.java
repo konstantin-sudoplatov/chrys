@@ -2,7 +2,7 @@ package attention;
 
 import chris.BaseMessage;
 import chris.BaseMessageLoop;
-import concept.Concept;
+import concepts.Concept;
 import console.Msg_ReadFromConsole;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

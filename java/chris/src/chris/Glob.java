@@ -13,6 +13,7 @@ import java.util.Stack;
 import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import starter.Starter;
 
 /**
  *  Global variables, application initialization/clearing.
@@ -51,6 +52,7 @@ public class Glob {
     public static void initialize_application() {
         console_loop.start_thread();
         attn_disp_loop.start_thread();
+        Starter.generate_dynamic_concepts();
     }
         
     /**

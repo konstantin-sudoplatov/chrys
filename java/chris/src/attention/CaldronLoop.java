@@ -1,13 +1,13 @@
 package attention;
 
-import chris.BaseMessageLoop;
 import chris.BaseMessage;
+import chris.BaseMessageLoop;
 
 /**
- *
+ * The reasoning is taking place in a caldron. Caldrons are organized in a hierarchy.
  * @author su
  */
-public class AttnLoop extends BaseMessageLoop {
+public class CaldronLoop extends BaseMessageLoop {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -15,9 +15,8 @@ public class AttnLoop extends BaseMessageLoop {
 
     /** 
      * Constructor.
-     * @param  
      */ 
-    public AttnLoop() { 
+    public CaldronLoop() { 
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -37,7 +36,7 @@ public class AttnLoop extends BaseMessageLoop {
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
 
     @Override
-    protected boolean _defaultProc_(BaseMessage msg) {
+    protected synchronized boolean _defaultProc_(BaseMessage msg) {
         throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
     }
 

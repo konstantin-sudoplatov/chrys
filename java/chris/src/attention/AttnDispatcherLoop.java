@@ -109,7 +109,15 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
         
         // terminate bubbles
         for (AttnBubbleLoop bubble : attnBubbleList) {
-            bubble.request_termination();
+            Thread thread = bubble.get_thread();
+            if 
+                    (thread.isAlive())
+            {
+                try {
+                    bubble.request_termination();
+                    thread.join();
+                } catch (InterruptedException ex) {}
+            }
         }
         
         // terminate yourself
@@ -134,7 +142,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
     }
 
     @Override
-    protected boolean _defaultProc_(BaseMessage msg) {
+    synchronized protected boolean _defaultProc_(BaseMessage msg) {
         if      // a message from console to bubble?
                 (msg instanceof Msg_ConsoleToAttnBubble)
         {

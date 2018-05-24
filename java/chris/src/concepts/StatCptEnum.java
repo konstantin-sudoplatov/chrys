@@ -2,7 +2,7 @@ package concepts;
 
 /**
  *  Static concepts identifiers.
- * Concept Ids are named after the corresponding classes. ordinal() is used as a numerical concept Id in ComDir. Also used for
+ * Concept identifiers are named after the corresponding classes. ordinal() is used as a numerical concept Id in ComDir. Also used for
  * automated generation of the static concept objects pointed by ComDir.
  * @author su
  */

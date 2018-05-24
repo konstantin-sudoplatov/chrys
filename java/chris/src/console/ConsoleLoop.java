@@ -24,7 +24,7 @@ public class ConsoleLoop extends BaseMessageLoop {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     @Override
-    protected boolean _defaultProc_(BaseMessage msg) {
+    synchronized protected boolean _defaultProc_(BaseMessage msg) {
         
         if      // request for writing things?
                 (msg instanceof Msg_WriteToConsole)

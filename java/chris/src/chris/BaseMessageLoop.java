@@ -207,7 +207,8 @@ abstract public class BaseMessageLoop implements Runnable {
     }
     
     /**
-     * Default message processing. It is invoked in case when the handler functor is null.
+     * Default message processing. It is invoked in case when the handler functor is null. It must be synchronized in successors
+     * in order to avoid possible contention race for local variables between our thread and external calls of other synchronized methods.
      * @param msg message to process
      * @return true - message accepted, false - message is not recognized.
      */

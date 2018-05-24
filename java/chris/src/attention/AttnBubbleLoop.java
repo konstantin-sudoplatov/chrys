@@ -19,10 +19,12 @@ public class AttnBubbleLoop extends BaseMessageLoop {
 
     /** 
      * Constructor.
-     * @param attnDisp attention dispatcher
+     * @param attnDisp attention dispatcher (parent).
      */ 
     public AttnBubbleLoop(AttnDispatcherLoop attnDisp) {
         this.attnDisp = attnDisp;
+        caldroN = new AttnCaldronLoop();
+        caldroN.start_thread();
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -49,6 +51,24 @@ public class AttnBubbleLoop extends BaseMessageLoop {
         cptDir.put(cid, cpt);
     }
 
+    @Override
+    public synchronized void request_termination() {
+        
+        // terminate the caldron hierarchy
+        Thread thread = caldroN.get_thread();
+        if 
+                (thread.isAlive())
+        {
+            try {
+                caldroN.request_termination();
+                thread.join();
+            } catch (InterruptedException ex) {}
+        }
+        
+        // terminate yourself
+        super.request_termination();
+    }
+
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected
@@ -57,7 +77,7 @@ public class AttnBubbleLoop extends BaseMessageLoop {
     //---$$$---$$$---$$$---$$$---$$$--- protected data $$$---$$$---$$$---$$$---$$$---$$$--
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
     @Override
-    protected boolean _defaultProc_(BaseMessage msg) {
+    synchronized protected boolean _defaultProc_(BaseMessage msg) {
         //System.out.println("gotten \"" + ((Msg_ConsoleToAttnBubble)msg).text + "\" from console");
             
         // prompt console
@@ -74,14 +94,17 @@ public class AttnBubbleLoop extends BaseMessageLoop {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
-    /** Concept directory: a map of concepts by cid's. Though it can be changed both from inside and 
+    /** Concept directory: a map of concepts by cids. Though it can be changed both from inside and 
      outside from the attention dispatcher, all changes would be from this thread (on our request), without concurrency. 
      Just in case don't use direct access to it from inside, use public methods. That way access can be easily synchronized. */
     private final Map<Long, Concept> cptDir = new ConcurrentHashMap<>();
     
     
     /** Attention dispatcher. Parent. */
-    AttnDispatcherLoop attnDisp;
+    private AttnDispatcherLoop attnDisp;
+    
+    /** Main caldron of the bubble */
+    private AttnCaldronLoop caldroN;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

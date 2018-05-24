@@ -2,18 +2,6 @@
 <project-private xmlns="http://www.netbeans.org/ns/project-private/1">
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
-        <group>
-            <file>file:/home/su/iskint/java/chrys/src/concept/stat/MrkStatName.java</file>
-            <file>file:/home/su/iskint/java/chrys/src/concept/stat/MrkDynType.java</file>
-            <file>file:/home/su/iskint/java/chrys/src/concept/ifc/Marker.java</file>
-            <file>file:/home/su/iskint/java/chrys/src/concept/stat/ConversationByConsole.java</file>
-            <file>file:/home/su/iskint/java/chrys/src/concept/en/SNm.java</file>
-            <file>file:/home/su/iskint/java/chrys/src/concept/dyn/PrimitiveObjCpt.java</file>
-            <file>file:/home/su/iskint/java/chrys/src/concept/DynamicConcept.java</file>
-            <file>file:/home/su/iskint/java/chrys/src/concept/dyn/PrimitiveStringCpt.java</file>
-            <file>file:/home/su/iskint/java/chrys/src/concept/stat/MrkStatType.java</file>
-            <file>file:/home/su/iskint/java/chrys/src/concept/en/SCid.java</file>
-            <file>file:/home/su/iskint/java/chrys/src/concept/stat/base/Conversation.java</file>
-        </group>
+        <group/>
     </open-files>
 </project-private>

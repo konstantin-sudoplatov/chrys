@@ -37,7 +37,7 @@ public class ApplicationLoop extends BaseMessageLoop {
     }
     
     @Override
-    protected boolean _defaultProc_(BaseMessage msg) {
+    synchronized protected boolean _defaultProc_(BaseMessage msg) {
         if      // request for termination the application?
                 (msg instanceof Msg_AppTermination)
         {   // yes: stop the application

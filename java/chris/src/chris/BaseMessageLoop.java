@@ -15,6 +15,12 @@ abstract public class BaseMessageLoop implements Runnable {
     /** If number of messages in the queue reaches the threshold, method put_in_queue() blocks waiting. */
     final static int QUEUE_THRESHOLD = 250;
 
+    /**
+     * Constructor.
+     */
+    public BaseMessageLoop() {
+    }
+
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
     //                            Методы внешнего интерфейса

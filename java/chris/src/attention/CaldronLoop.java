@@ -1,13 +1,14 @@
 package attention;
 
 import chris.BaseMessage;
-import chris.BaseMessageLoop;
+import java.util.ArrayList;
 
 /**
- * The reasoning is taking place in a caldron. Caldrons are organized in a hierarchy.
+ * Child caldron in the lower levels beneath the attention bubble (main caldron). 
+ * Caldrons are organized in a hierarchy.
  * @author su
  */
-public class CaldronLoop extends BaseMessageLoop {
+public class CaldronLoop extends BaseCaldronLoop {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -15,8 +16,10 @@ public class CaldronLoop extends BaseMessageLoop {
 
     /** 
      * Constructor.
+     * @param parenT parent caldron.
      */ 
-    public CaldronLoop() { 
+    public CaldronLoop(BaseCaldronLoop parenT) { 
+        this.parenT = parenT;
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -37,7 +40,7 @@ public class CaldronLoop extends BaseMessageLoop {
 
     @Override
     protected synchronized boolean _defaultProc_(BaseMessage msg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        throw new UnsupportedOperationException("Not supported yet.");
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -47,6 +50,15 @@ public class CaldronLoop extends BaseMessageLoop {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
+    
+    /** Parent caldron. */
+    private final BaseCaldronLoop parenT;
+    
+    /** Chronologically ordered sequence of assertions. */
+    private final ArrayList<Assertion> assertionHistory = new ArrayList<>();
+    
+    /** The freshest in the assertionHistory assertion. */
+    private final Assertion curAssertion = new Assertion();
 
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

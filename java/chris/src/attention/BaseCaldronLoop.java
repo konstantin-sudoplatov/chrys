@@ -1,13 +1,14 @@
 package attention;
 
-import chris.BaseMessage;
-import java.util.List;
+import chris.BaseMessageLoop;
+import java.util.ArrayList;
 
 /**
- * Main caldron of an attention bubble. It is the parent of the rest of the caldrons belonging to the attention bubble.
+ * The reasoning is taking place in a caldron. Caldrons are organized in a hierarchy.
+ * The main caldron is the attention bubble, it can contain subcaldrons.
  * @author su
  */
-public class AttnCaldronLoop extends CaldronLoop {
+abstract public class BaseCaldronLoop extends BaseMessageLoop {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -16,7 +17,8 @@ public class AttnCaldronLoop extends CaldronLoop {
     /** 
      * Constructor.
      */ 
-    public AttnCaldronLoop() { 
+    public BaseCaldronLoop() 
+    {   super();
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -25,30 +27,6 @@ public class AttnCaldronLoop extends CaldronLoop {
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
-    @Override
-    public synchronized void request_termination() {
-        
-        // may be, terminate subcaldrons
-        if      // do subcaldrons exist?
-                (subCaldrons != null)
-        {   //yes: terminate them
-            for (CaldronLoop caldron : subCaldrons) {
-                Thread thread = caldron.get_thread();
-                if 
-                        (thread.isAlive())
-                {
-                    try {
-                        caldron.request_termination();
-                        thread.join();
-                    } catch (InterruptedException ex) {}
-                }
-            }
-        }
-        
-        // terminate yourself
-        super.request_termination();
-    }
-
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected
@@ -56,13 +34,14 @@ public class AttnCaldronLoop extends CaldronLoop {
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
 
     //---$$$---$$$---$$$---$$$---$$$--- protected data $$$---$$$---$$$---$$$---$$$---$$$--
+    
+    /** Chronologically ordered sequence of assertions. */
+    protected final ArrayList<Assertion> _assertHistory_ = new ArrayList<>();
+    
+    /** The freshest in the assertionHistory assertion. */
+    protected Assertion _curAssert_;
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
-
-    @Override
-    protected synchronized boolean _defaultProc_(BaseMessage msg) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
@@ -72,9 +51,6 @@ public class AttnCaldronLoop extends CaldronLoop {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
-    /** List of subcaldrons, if exists, else - null */
-    private List<CaldronLoop> subCaldrons;
-    
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--

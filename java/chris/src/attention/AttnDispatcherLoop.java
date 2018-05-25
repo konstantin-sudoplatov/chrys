@@ -159,7 +159,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
 
     @Override
     synchronized protected boolean _defaultProc_(BaseMessage msg) {
-        if      // a message from console to bubble?
+        if      // is it a message from console to bubble?
                 (msg instanceof Msg_ConsoleToAttnBubble)
         {
             // May be, create the chat bubble
@@ -171,12 +171,12 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
                 consoleChatBubble.start_thread();
             }
             
-            // route the message to the cat bubble
+            // route the message to the chat bubble
             consoleChatBubble.put_in_queue(msg);
 
             return true;
         }
-        else if // a message to console (probably from a bubble)?
+        else if // is it a message to console (probably from a bubble)?
                 (msg instanceof ConsoleMessage)
         {   // reroute to the application loop, it'll route it to console
             Glob.app_loop.put_in_queue(msg);

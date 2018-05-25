@@ -1,16 +1,16 @@
 package attention;
 
 import chris.BaseMessage;
-import chris.BaseMessageLoop;
 import concepts.Concept;
 import concepts.ConceptDirectory;
 import console.Msg_ReadFromConsole;
+import java.util.List;
 
 /**
- *
+ * Attention bubble loop. Works as a main caldron, can contain subcaldrons.
  * @author su
  */
-public class AttnBubbleLoop extends BaseMessageLoop {
+public class AttnBubbleLoop extends BaseCaldronLoop {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -22,8 +22,6 @@ public class AttnBubbleLoop extends BaseMessageLoop {
      */ 
     public AttnBubbleLoop(AttnDispatcherLoop attnDisp) {
         this.attnDisp = attnDisp;
-        caldroN = new AttnCaldronLoop();
-        caldroN.start_thread();
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -71,15 +69,19 @@ public class AttnBubbleLoop extends BaseMessageLoop {
     @Override
     public synchronized void request_termination() {
         
-        // terminate the caldron hierarchy
-        Thread thread = caldroN.get_thread();
-        if 
-                (thread.isAlive())
+        // terminate the caldron hierarchy, if exists
+        if
+                (caldronList != null)
         {
-            try {
-                caldroN.request_termination();
-                thread.join();
-            } catch (InterruptedException ex) {}
+            for(CaldronLoop caldron : caldronList)
+                if 
+                        (caldron.get_thread().isAlive())
+                {
+                    try {
+                        caldron.request_termination();
+                        caldron.get_thread().join();
+                    } catch (InterruptedException ex) {}
+                }
         }
         
         // terminate yourself
@@ -95,12 +97,24 @@ public class AttnBubbleLoop extends BaseMessageLoop {
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
     @Override
     synchronized protected boolean _defaultProc_(BaseMessage msg) {
-        //System.out.println("gotten \"" + ((Msg_ConsoleToAttnBubble)msg).text + "\" from console");
+
+        if
+                (msg instanceof Msg_ConsoleToAttnBubble)
+        {
+            // May be, initialize the bubble on the first message from console
+            if      // hasn't the brewing started yet?
+                    (_curAssert_ == null)
+            {   //no: start it
+                startBrewing(msg);  
+            }
+            
+            return true;
+        }
             
         // prompt console
-        attnDisp.put_in_queue(new Msg_ReadFromConsole(AttnDispatcherLoop.class));        
+//        attnDisp.put_in_queue(new Msg_ReadFromConsole(AttnDispatcherLoop.class));        
         
-        return true;
+        return false;
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -118,12 +132,20 @@ public class AttnBubbleLoop extends BaseMessageLoop {
     
     
     /** Attention dispatcher. Parent. */
-    private AttnDispatcherLoop attnDisp;
+    private final AttnDispatcherLoop attnDisp;
     
-    /** Main caldron of the bubble */
-    private AttnCaldronLoop caldroN;
+    /** Possible set of child caldrons . */
+    private List<CaldronLoop> caldronList;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
+    /**
+     * Initialize a chat on the first message from a chatter.
+     * @param msg 
+     */
+    private void startBrewing(BaseMessage msg) {
+        
+    }
+    
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--
 }

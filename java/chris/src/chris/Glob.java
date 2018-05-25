@@ -1,6 +1,9 @@
 package chris;
 
 import attention.AttnDispatcherLoop;
+import concepts.DynCptEnum;
+import concepts.dyn.Neuron;
+import concepts.dyn.primitives.ConceptIdentifier;
 import console.ConsoleLoop;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -19,11 +22,11 @@ import starter.Starter;
  *  Global variables, application initialization/clearing.
  * @author su
  */
-public class Glob {
+final public class Glob {
 
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
-    /** The end of the static CIDs range. */
+    /** The end of the static cids range. The range goes from 0 to this. */
     public final static long MAX_STATIC_CID = 1000000;
     
     /** Application message loop. It does not need a separate thread since it works in the application thread. */
@@ -52,7 +55,7 @@ public class Glob {
     public static void initialize_application() {
         console_loop.start_thread();
         attn_disp_loop.start_thread();
-        Starter.generate_dynamic_concepts();
+        generateDynamicConcepts();
     }
         
     /**
@@ -529,5 +532,34 @@ public class Glob {
         for(String s: добавляемыйСписок)
             исходныйСписок.add("    " + s);
         return исходныйСписок;
+    }
+
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+    //
+    //      Private    Private    Private    Private    Private    Private    Private
+    //
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+
+    //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
+
+    //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
+
+    /**
+     * Generate all dynamic concepts, whose names are in the DynCptEnum.
+     */
+    public static void generateDynamicConcepts() {
+        for(DynCptEnum cptName: DynCptEnum.values())
+            addNamedCpt(cptName.name());
+    }
+
+    /**
+     * Generate and add a concept, that has an identifier both inside it and the common name directory.
+     * @param name a symbolic identifier of the concept.
+     */
+    private static void addNamedCpt(String name) {
+
+        AttnDispatcherLoop atl = Glob.attn_disp_loop;
+        long cptCid = atl.add_cpt(new ConceptIdentifier(name));
+        atl.add_cpt(new Neuron(new long[] {cptCid}), name);
     }
 }

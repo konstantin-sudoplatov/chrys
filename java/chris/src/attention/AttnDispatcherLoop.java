@@ -4,6 +4,7 @@ import chris.BaseMessage;
 import chris.BaseMessageLoop;
 import chris.Glob;
 import concepts.Concept;
+import concepts.ConceptDirectory;
 import concepts.DynamicConcept;
 import concepts.StatCptEnum;
 import concepts.StaticConcept;
@@ -12,8 +13,6 @@ import console.Msg_ReadFromConsole;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +24,7 @@ import java.util.logging.Logger;
 public class AttnDispatcherLoop extends BaseMessageLoop {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
-
+    
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
     /** 
@@ -41,14 +40,15 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     /**
-     * Add concept to comdir or to a bubble dir. Static concepts know their cid already, for dynamic concept it is randomly 
+     * Add a concept to the common or a bubble directory. Static concepts know their cid already, for dynamic concept it is randomly 
      * generated outside the static range.
      * @param cpt the concept to add
-     * @param bubble the bubble, that contains the target directory or null if it is the comdir.
+     * @param bubble the bubble, that contains the target directory or null if it is the common directory.
+     * @param cptName concept name to put in the name directory or null
      * @return cid
      */
     @SuppressWarnings("UnnecessaryLabelOnContinueStatement")
-    public synchronized long add_cpt(Concept cpt, AttnBubbleLoop bubble) {
+    public synchronized long add_cpt(Concept cpt, AttnBubbleLoop bubble, String cptName) {
         // determine cid
         long cid;
         if      // static concept?
@@ -65,24 +65,29 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
                         (cid >= 0 && cid <= Glob.MAX_STATIC_CID)
                     cid += Glob.MAX_STATIC_CID + 1;
                 if      // is in cpt?
-                        (comConDir.containsKey(cid))
+                        (comDir.cpt_dir.containsKey(cid))
                     continue GENERATE_CID;   // generate once more
                 for(AttnBubbleLoop b: attnBubbleList) {
                     if      // is in PrivDir?
-                            (b.cptdir_containsKey(cid))
+                            (b.cpt_dir_containsKey(cid))
                         continue GENERATE_CID;
                 }
                 break;
             }   // while
-            ((DynamicConcept)cpt).setCiD(cid);
+            ((DynamicConcept)cpt).set_cid(cid);
         }
         
         // put to target dir
         if
                 (bubble == null)
-            comConDir.put(cid, cpt);      // put in cpt
-        else
-            bubble.cptdir_put(cid, cpt);
+        {
+            comDir.cpt_dir.put(cid, cpt);
+            if (cptName != null) comDir.name_dir.put(cptName, cid);
+        }
+        else {
+            bubble.cpt_dir_put(cid, cpt);
+            if (cptName != null) bubble.name_dir_put(cptName, cid);
+        }
         
         return cid;
     }
@@ -90,9 +95,20 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
     /**
      * Ditto.
      * @param cpt  the concept to add
+     * @param name the name of the concept
+     * @return cid
      */
-    public synchronized void add_cpt(Concept cpt) {
-        add_cpt(cpt, null);
+    public synchronized long add_cpt(Concept cpt, String name) {
+        return add_cpt(cpt, null, name);
+    }
+
+    /**
+     * Ditto.
+     * @param cpt  the concept to add
+     * @return cid
+     */
+    public synchronized long add_cpt(Concept cpt) {
+        return add_cpt(cpt, null, null);
     }
         
     /**
@@ -101,7 +117,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
      * @return
      */
     public synchronized boolean comdir_containsKey(long cid) {
-        return comConDir.containsKey(cid);
+        return comDir.cpt_dir.containsKey(cid);
     }
 
     @Override
@@ -178,8 +194,8 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
-    /** Common concept directory: a map of concepts by cid's. */
-    private final Map<Long, Concept> comConDir = new HashMap<>();
+    /** Common concept directory: a map of concepts by cids. */
+    private final ConceptDirectory comDir = new ConceptDirectory();
     
     /** List of all attention bubbles */
     private final ArrayList<AttnBubbleLoop> attnBubbleList = new ArrayList<>();
@@ -195,7 +211,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
      * @param bubble attention bubble loop to add to the list.
      */
     private synchronized void addBubbleToList(AttnBubbleLoop bubble) {
-        attnBubbleList.add(consoleChatBubble);
+        attnBubbleList.add(bubble);
     }
 
     /**
@@ -237,6 +253,6 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
             }
         }
     }
-    //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--
     
+    //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--
 }

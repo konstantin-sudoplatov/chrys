@@ -3,16 +3,8 @@ package concepts.dyn;
 import concepts.DynamicConcept;
 
 /**
- * Base for primitives.
+ * The base for primitives. All primitives are immutable.
  * @author su
  */
-public class Primitive extends DynamicConcept {
-
-    /** 
-     * Constructor.
-     * @param cid
-     */ 
-    public Primitive(long cid) { 
-        super(cid);
-    } 
+public class Primitive extends DynamicConcept implements Immutable {
 }

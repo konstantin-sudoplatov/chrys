@@ -3,9 +3,8 @@ package attention;
 import chris.BaseMessage;
 import chris.BaseMessageLoop;
 import concepts.Concept;
+import concepts.ConceptDirectory;
 import console.Msg_ReadFromConsole;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  *
@@ -38,8 +37,8 @@ public class AttnBubbleLoop extends BaseMessageLoop {
      * @param cid
      * @return true/false
      */
-    public boolean cptdir_containsKey(long cid) {
-        return cptDir.containsKey(cid);
+    public synchronized boolean cpt_dir_containsKey(long cid) {
+        return cptDir.cpt_dir.containsKey(cid);
     }
     
     /**
@@ -47,8 +46,26 @@ public class AttnBubbleLoop extends BaseMessageLoop {
      * @param cid
      * @param cpt 
      */
-    public void cptdir_put(long cid, Concept cpt) {
-        cptDir.put(cid, cpt);
+    public synchronized void cpt_dir_put(long cid, Concept cpt) {
+        cptDir.cpt_dir.put(cid, cpt);
+    }
+
+    /** 
+     * Test if the name directory contains a name of concept.
+     * @param name
+     * @return true/false
+     */
+    public synchronized boolean name_dir_containsKey(String name) {
+        return cptDir.name_dir.containsKey(name);
+    }
+    
+    /**
+     * Put new concept into the concept directory.
+     * @param name
+     * @param cid
+     */
+    public synchronized void name_dir_put(String name, long cid) {
+        cptDir.name_dir.put(name, cid);
     }
 
     @Override
@@ -94,10 +111,10 @@ public class AttnBubbleLoop extends BaseMessageLoop {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
-    /** Concept directory: a map of concepts by cids. Though it can be changed both from inside and 
+    /** Concept directory: a map of concepts by cids and some cids by names. Though it can be changed both from inside and 
      outside from the attention dispatcher, all changes would be from this thread (on our request), without concurrency. 
      Just in case don't use direct access to it from inside, use public methods. That way access can be easily synchronized. */
-    private final Map<Long, Concept> cptDir = new ConcurrentHashMap<>();
+    private final ConceptDirectory cptDir = new ConceptDirectory();
     
     
     /** Attention dispatcher. Parent. */

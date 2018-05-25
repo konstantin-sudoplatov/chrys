@@ -6,7 +6,7 @@ import concepts.*;
  * Base class for the working dynamic concepts as an opposite to primitives.
  * @author su
  */
-abstract public class Neuron extends DynamicConcept {
+public class Neuron extends DynamicConcept {
     
     /** Meaning of bits in the flag field. */
     public enum Flag {
@@ -26,11 +26,17 @@ abstract public class Neuron extends DynamicConcept {
     }
 
     /**
-     *                      Constructor.
-     * @param cid
+     * Default constructor.
      */
-    public Neuron(long cid) 
-    {   super(cid);
+    public Neuron() {
+    }
+
+    /**
+     * Constructor
+     * @param metA array of cids of meta concepts. 
+     */
+    public Neuron(long[] metA) {
+        this.metA = metA;
     }
     
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v

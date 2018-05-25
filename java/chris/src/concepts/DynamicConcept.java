@@ -5,15 +5,6 @@ package concepts;
  * @author su
  */
 abstract public class DynamicConcept extends Concept {
-
-    /**
-     *                      Constructor.
-     * @param cid
-     */
-    public DynamicConcept(long cid) 
-    {   super();   
-        this.ciD = cid;
-    }
     
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -25,7 +16,7 @@ abstract public class DynamicConcept extends Concept {
      * Getter.
      * @return concept identifier. 
      */
-    public long getCiD() {
+    public long get_cid() {
         return ciD;
     }
 
@@ -33,7 +24,7 @@ abstract public class DynamicConcept extends Concept {
      * Setter.
      * @param ciD 
      */
-    public void setCiD(long ciD) {
+    public void set_cid(long ciD) {
         this.ciD = ciD;
     }
 

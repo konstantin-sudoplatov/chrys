@@ -7,9 +7,7 @@ package concepts;
  * @author su
  */
 public enum StatCptEnum {
-    Mark_Marker,
-    Mark_Identifier,
-    Mark_Type,
+    Marker,
     ;
     
     /** Is used to find static concept classes in ComDir.generate_static_concepts(). Must be the same as the package containing

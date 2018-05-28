@@ -3,7 +3,6 @@ package attention;
 import chris.BaseMessage;
 import concepts.Concept;
 import concepts.ConceptDirectory;
-import console.Msg_ReadFromConsole;
 import java.util.List;
 
 /**

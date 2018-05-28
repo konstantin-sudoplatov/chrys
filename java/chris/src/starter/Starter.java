@@ -2,9 +2,10 @@ package starter;
 
 import attention.AttnDispatcherLoop;
 import chris.Glob;
-import concepts.DynCptEnum;
+import concepts.DynCptNameEnum;
+import concepts.StatCptEnum;
 import concepts.dyn.Neuron;
-import concepts.dyn.primitives.ConceptIdentifier;
+import concepts.dyn.primitives.MarkedString;
 
 /**
  * When there is no DB or it is empty, we have to start with something...
@@ -29,7 +30,7 @@ final public class Starter {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     public static void generate_dynamic_concepts() {
-        for(DynCptEnum cptName: DynCptEnum.values())
+        for(DynCptNameEnum cptName: DynCptNameEnum.values())
             addNamedCpt(cptName.name());
     }
     
@@ -60,8 +61,8 @@ final public class Starter {
     private static void addNamedCpt(String name) {
 
         AttnDispatcherLoop atl = Glob.attn_disp_loop;
-        long cptCid = atl.add_cpt(new ConceptIdentifier(name));
-        atl.add_cpt(new Neuron(new long[] {cptCid}), name);
+        long cid = atl.add_cpt(new MarkedString(StatCptEnum.Mrk_ConceptName.ordinal(), name));   // primitive, containing the concept's name
+        atl.add_cpt(new Neuron(new long[] {cid}), name);
     }
     
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--

@@ -1,9 +1,6 @@
 package chris;
 
 import attention.AttnDispatcherLoop;
-import concepts.DynCptEnum;
-import concepts.dyn.Neuron;
-import concepts.dyn.primitives.ConceptIdentifier;
 import console.ConsoleLoop;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -55,7 +52,7 @@ final public class Glob {
     public static void initialize_application() {
         console_loop.start_thread();
         attn_disp_loop.start_thread();
-        generateDynamicConcepts();
+        Starter.generate_dynamic_concepts();
     }
         
     /**
@@ -280,7 +277,7 @@ final public class Glob {
         }
         
     }
-    private static Stack<Замер> стекЗамера = new Stack();
+    private static final Stack<Замер> стекЗамера = new Stack();
 
     /**
      * Вывести данные объекта на печать.
@@ -523,7 +520,7 @@ final public class Glob {
      * Добавить список строк в список строк. Список добавляется с отступом.
      * Позволяет работать с безымянным списком super.в_список_строк()
      * @param исходныйСписок
-     * @param добавляемыйМассивСтрок
+     * @param добавляемыйСписок
      * @return преобразованный список
      */
     public static List<String> добавить_список_строк(List<String> исходныйСписок,
@@ -543,23 +540,4 @@ final public class Glob {
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-    /**
-     * Generate all dynamic concepts, whose names are in the DynCptEnum.
-     */
-    public static void generateDynamicConcepts() {
-        for(DynCptEnum cptName: DynCptEnum.values())
-            addNamedCpt(cptName.name());
-    }
-
-    /**
-     * Generate and add a concept, that has an identifier both inside it and the common name directory.
-     * @param name a symbolic identifier of the concept.
-     */
-    private static void addNamedCpt(String name) {
-
-        AttnDispatcherLoop atl = Glob.attn_disp_loop;
-        long cptCid = atl.add_cpt(new ConceptIdentifier(name));
-        atl.add_cpt(new Neuron(new long[] {cptCid}), name);
-    }
 }

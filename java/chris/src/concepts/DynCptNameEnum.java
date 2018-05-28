@@ -7,7 +7,7 @@ package concepts;
  * some of them by sight, hence this enum.
  * @author su
  */
-public enum DynCptEnum {
+public enum DynCptNameEnum {
     chat,
     it_is_console_chat,                   // chat by console
     chatter_unknown,      

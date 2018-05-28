@@ -6,16 +6,16 @@ import concepts.dyn.Primitive;
  * Any string of text without any limitations.
  * @author su
  */
-public class Str extends Primitive {
+public class JustString extends Primitive {
 
     /** The value of the primitive */
-    public final Str text;
+    public final JustString text;
 
     /** 
      * Constructor.
      * @param text string of symbols.
      */ 
-    public Str(Str text) { 
+    public JustString(JustString text) { 
         this.text = text;
     } 
 }

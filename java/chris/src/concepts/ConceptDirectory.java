@@ -11,7 +11,7 @@ import java.util.Map;
 public class ConceptDirectory {
     
     /** Concept directory: a map of a concept by its cid. */
-    public final Map<Long, Concept> cpt_dir = new HashMap<>();
+    public final Map<Long, Concept> cid_dir = new HashMap<>();
 
     /** Concept name directory: a map of a cid by the concept name. */
     public final Map<String, Long> name_dir = new HashMap<>();

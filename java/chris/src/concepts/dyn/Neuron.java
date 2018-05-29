@@ -46,6 +46,16 @@ public class Neuron extends DynamicConcept {
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
+    @Override
+    public Neuron clone() {
+        Neuron clon = (Neuron)super.clone();
+        if (propertY != null) clon.propertY = Arrays.copyOf(propertY, propertY.length);
+        if (effectCanditate != null) clon.effectCanditate = Arrays.copyOf(effectCanditate, effectCanditate.length);
+        if (premisE != null) clon.premisE = Arrays.copyOf(premisE, premisE.length);
+        
+        return clon;
+    }
+    
     /**
      * Add a concept to the property array.
      * @param cid

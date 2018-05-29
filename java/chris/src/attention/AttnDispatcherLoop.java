@@ -2,6 +2,7 @@ package attention;
 
 import chris.BaseMessage;
 import chris.BaseMessageLoop;
+import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
 import concepts.ConceptDirectory;
@@ -17,7 +18,6 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.naming.OperationNotSupportedException;
 
 /**
  *
@@ -67,11 +67,11 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
                         (cid >= 0 && cid <= Glob.MAX_STATIC_CID)
                     cid += Glob.MAX_STATIC_CID + 1;
                 if      // is in cpt?
-                        (comDir.cpt_dir.containsKey(cid))
+                        (comDir.cid_dir.containsKey(cid))
                     continue GENERATE_CID;   // generate once more
                 for(AttnBubbleLoop b: attnBubbleList) {
                     if      // is in PrivDir?
-                            (b.cpt_dir_containsKey(cid))
+                            (b.cid_dir_containsKey(cid))
                         continue GENERATE_CID;
                 }
                 break;
@@ -83,12 +83,12 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
         if
                 (bubble == null)
         {
-            comDir.cpt_dir.put(cid, cpt);
+            comDir.cid_dir.put(cid, cpt);
             if (cptName != null) comDir.name_dir.put(cptName, cid);
         }
         else {
-            bubble.cpt_dir_put(cid, cpt);
-            if (cptName != null) bubble.name_dir_put(cptName, cid);
+            bubble.put_in_cid_dir(cid, cpt);
+            if (cptName != null) bubble.put_in_name_dir(cptName, cid);
         }
         
         return cid;
@@ -113,10 +113,42 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
         return add_cpt(cpt, null, null);
     }
       
+    /**
+     * Load a concept by cid from common to local directory. name_dir is NOT updated even if the concept is named (i.e. the name
+     * property of the concept is not checked).
+     * @param cid
+     * @param bubble an attention bubble loop.
+     * @return cid
+     */
     public synchronized long copy_cpt_to_bubble(long cid, AttnBubbleLoop bubble) {
-        
-        throw new UnsupportedOperationException("not realized yet");
-//        return cid;
+
+        if
+                (comDir.cid_dir.containsKey(cid))
+        {
+            bubble.put_in_cid_dir(cid, comDir.cid_dir.get(cid).clone());
+            return cid;
+        }
+        else
+            throw new Crash("No concept in common directory with cid = " + cid);
+    }
+    
+    /**
+     * Load a concept by name from common to local directory. name_dir of the local directory is updated with the name and cid.
+     * @param cptName
+     * @param bubble
+     * @return 
+     */
+    public synchronized long copy_cpt_to_bubble(String cptName, AttnBubbleLoop bubble) {
+        if
+                (comDir.name_dir.containsKey(cptName))
+        {
+            long cid = comDir.name_dir.get(cptName);
+            copy_cpt_to_bubble(cid, bubble);
+            bubble.put_in_name_dir(cptName, cid);
+            return cid;
+        }
+        else
+            throw new Crash("No concept in common directory with name = " + cptName);
     }
     
     /**
@@ -125,7 +157,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
      * @return
      */
     public synchronized boolean comdir_containsKey(long cid) {
-        return comDir.cpt_dir.containsKey(cid);
+        return comDir.cid_dir.containsKey(cid);
     }
 
     @Override

@@ -1,11 +1,10 @@
 package attention;
 
 import chris.BaseMessage;
-import chris.Glob;
+import chris.Crash;
 import concepts.Concept;
 import concepts.ConceptDirectory;
 import concepts.DynCptNameEnum;
-import concepts.dyn.primitives.JustString;
 import java.util.List;
 
 /**
@@ -32,13 +31,42 @@ public class AttnBubbleLoop extends BaseCaldronLoop {
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
+    /**
+     * Load a concept by cid from common to local directory. name_dir is NOT updated even if the concept is named (i.e. the name
+     * property of the concept is not checked).
+     * @param cid
+     * @return 
+     */
+    public synchronized long load_cpt(long cid) {
+
+        if (!cptDir.cid_dir.containsKey(cid)) attnDisp.copy_cpt_to_bubble(cid, this);
+
+        return cid;
+    }
+    
+    /**
+     * Load a concept by name from common to local directory. name_dir of the local directory is updated with the name and cid.
+     * @param cptName
+     * @return cid
+     */
+    public synchronized long load_cpt(String cptName) {
+        if 
+                (!cptDir.name_dir.containsKey(cptName)) 
+        {
+            long cid = attnDisp.copy_cpt_to_bubble(cptName, this);
+            return cid;
+        }
+        else
+            return cptDir.name_dir.get(cptName);
+    }
+    
     /** 
      * Test if the concept directory contains a concept.
      * @param cid
      * @return true/false
      */
-    public synchronized boolean cpt_dir_containsKey(long cid) {
-        return cptDir.cpt_dir.containsKey(cid);
+    public synchronized boolean cid_dir_containsKey(long cid) {
+        return cptDir.cid_dir.containsKey(cid);
     }
     
     /**
@@ -46,8 +74,8 @@ public class AttnBubbleLoop extends BaseCaldronLoop {
      * @param cid
      * @param cpt 
      */
-    public synchronized void cpt_dir_put(long cid, Concept cpt) {
-        cptDir.cpt_dir.put(cid, cpt);
+    public synchronized void put_in_cid_dir(long cid, Concept cpt) {
+        cptDir.cid_dir.put(cid, cpt);
     }
 
     /** 
@@ -64,7 +92,7 @@ public class AttnBubbleLoop extends BaseCaldronLoop {
      * @param name
      * @param cid
      */
-    public synchronized void name_dir_put(String name, long cid) {
+    public synchronized void put_in_name_dir(String name, long cid) {
         cptDir.name_dir.put(name, cid);
     }
 
@@ -151,6 +179,7 @@ public class AttnBubbleLoop extends BaseCaldronLoop {
         _curAssert_ = new Assertion();
         
         // Set up its premises
+        load_cpt(DynCptNameEnum.chat.name());
         _curAssert_.add_premise(DynCptNameEnum.chat.ordinal());
         _curAssert_.add_premise(DynCptNameEnum.it_is_console_chat.ordinal());
         _curAssert_.add_premise(DynCptNameEnum.it_is_first_line_of_chat.ordinal());

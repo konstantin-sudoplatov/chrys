@@ -1,8 +1,11 @@
 package attention;
 
 import chris.BaseMessage;
+import chris.Glob;
 import concepts.Concept;
 import concepts.ConceptDirectory;
+import concepts.DynCptNameEnum;
+import concepts.dyn.primitives.JustString;
 import java.util.List;
 
 /**
@@ -144,6 +147,15 @@ public class AttnBubbleLoop extends BaseCaldronLoop {
      */
     private void startBrewing(BaseMessage msg) {
         
+        // Create new current assertion
+        _curAssert_ = new Assertion();
+        
+        // Set up its premises
+        _curAssert_.add_premise(DynCptNameEnum.chat.ordinal());
+        _curAssert_.add_premise(DynCptNameEnum.it_is_console_chat.ordinal());
+        _curAssert_.add_premise(DynCptNameEnum.it_is_first_line_of_chat.ordinal());
+        _curAssert_.add_premise(DynCptNameEnum.line_from_concole.ordinal());
+//        _curAssert_.add_premise(Glob.attn_disp_loop.add_cpt(new JustString(msg.) ));
     }
     
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--

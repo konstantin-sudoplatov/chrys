@@ -8,6 +8,7 @@ import concepts.ConceptDirectory;
 import concepts.DynamicConcept;
 import concepts.StatCptEnum;
 import concepts.StaticConcept;
+import concepts.stat.DummyMarker;
 import console.ConsoleMessage;
 import console.Msg_ReadFromConsole;
 import java.lang.reflect.Constructor;
@@ -16,6 +17,7 @@ import java.util.ArrayList;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.naming.OperationNotSupportedException;
 
 /**
  *
@@ -110,7 +112,13 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
     public synchronized long add_cpt(Concept cpt) {
         return add_cpt(cpt, null, null);
     }
+      
+    public synchronized long copy_cpt_to_bubble(long cid, AttnBubbleLoop bubble) {
         
+        throw new UnsupportedOperationException("not realized yet");
+//        return cid;
+    }
+    
     /**
      *  Check to see if the common concept map contains a concept.
      * @param cid 
@@ -224,8 +232,16 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
         // Load CPN from DB
         
         // Create static concepts.
+        DummyMarker dummyMarker = new DummyMarker();
         for(StatCptEnum cidEnum: StatCptEnum.values()) {
             String cptName = cidEnum.name();
+            if      // concept name starts with "Mrk_"?
+                    (cptName.substring(0, 4).equals("Mrk_"))
+            {   //yes: it is a marker, it does not require an object. We put into the concept directory a dummy - Mrk_Marker
+                // object for all markers
+                dummyMarker.cid = cidEnum.ordinal();
+                continue;
+            }
             @SuppressWarnings("UnusedAssignment")
             Class cl = null;
             try {

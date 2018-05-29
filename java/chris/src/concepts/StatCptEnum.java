@@ -7,11 +7,12 @@ package concepts;
  * @author su
  */
 public enum StatCptEnum {
-    Marker,                 // generic marker
+    Mrk_Marker,             // generic marker. the type of marker is defined by a following primitive.
     Mrk_ConceptName,        // marker of a concept name
     ;
     
-    /** Is used to find static concept classes in ComDir.generate_static_concepts(). Must be the same as the package containing
-      those classes. Remember when refactoring! */
+    /** This package is used to find static concept classes in ComDir.generate_static_concepts(). 
+      Names of all the classes must be the same as the items in this enum, except the the markers, including the DummyMarker.
+      The markers classes are not needed to be defined. Remember when refactoring! */
     public static final String STATIC_CONCEPTS_PACKET_NAME = "concepts.stat";   // 
 }

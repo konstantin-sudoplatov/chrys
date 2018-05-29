@@ -27,10 +27,12 @@ public class Assertion {
 
     /**
      * Add a new premise to the set.
-     * @param premise id of a premise concept
+     * @param cid cid of a premise.
+     * @return added cid
      */
-    public void add_premise(long premise) {
-        premiSes.add(premise);
+    public long add_premise(long cid) {
+        premiseS.add(cid);
+        return cid;
     }
     
     /**
@@ -49,6 +51,6 @@ public class Assertion {
     private final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
     
     /** Set of concept, which serves as premises to the conclusion */
-    private final Set<Long> premiSes = new HashSet();
+    private final Set<Long> premiseS = new HashSet();
     
 }

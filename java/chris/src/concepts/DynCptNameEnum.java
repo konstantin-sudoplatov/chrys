@@ -12,7 +12,7 @@ public enum DynCptNameEnum {
     it_is_console_chat,                   // chat by console
     chatter_unknown,      
     console_log,
-    line_from_concole_came,
+    line_from_concole,
     it_is_first_line_of_chat,             // it is the first line of chat
     line_counter,
     wait_for_next_line,

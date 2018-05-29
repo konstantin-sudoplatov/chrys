@@ -1,6 +1,7 @@
 package concepts.dyn;
 
 import concepts.*;
+import java.util.Arrays;
 
 /**
  * Base class for the working dynamic concepts as an opposite to primitives.
@@ -33,10 +34,10 @@ public class Neuron extends DynamicConcept {
 
     /**
      * Constructor
-     * @param metA array of cids of meta concepts. 
+     * @param props array of cids of concept properties. 
      */
-    public Neuron(long[] metA) {
-        this.metA = metA;
+    public Neuron(long[] props) {
+        this.propertY = props;
     }
     
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -45,6 +46,18 @@ public class Neuron extends DynamicConcept {
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
+    /**
+     * Add a concept to the property array.
+     * @param cid
+     * @return 
+     */
+    public long add_property(long cid) {
+        propertY = Arrays.copyOf(propertY, propertY.length+1);
+        propertY[propertY.length-1] = cid;
+        return cid;
+    }
+            
+    
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //      Private    Private    Private    Private    Private    Private    Private
@@ -62,14 +75,14 @@ public class Neuron extends DynamicConcept {
     /** Count of usage(read or write). If -1, then it is > Short.MAX_VALUE. */ 
     private short usageCount;
     
-    /** Array of cids, defining meta data. The cids are not forbidden to be duplicated in the premises. */
-    long[] metA;
+    /** Array of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
+    private long[] propertY;
     
     /** Array of possible effects. */
-    EffectCandidate[] effectCanditate;
+    private EffectCandidate[] effectCanditate;
     
     /** Array of cids and weights of premises. The cids are not forbidden to be duplicated in the metadata. */
-    Premise[] premisE;
+    private Premise[] premisE;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

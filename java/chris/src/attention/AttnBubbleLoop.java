@@ -1,7 +1,6 @@
 package attention;
 
 import chris.BaseMessage;
-import chris.Crash;
 import concepts.Concept;
 import concepts.ConceptDirectory;
 import concepts.DynCptNameEnum;
@@ -32,32 +31,31 @@ public class AttnBubbleLoop extends BaseCaldronLoop {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     /**
-     * Load a concept by cid from common to local directory. name_dir is NOT updated even if the concept is named (i.e. the name
-     * property of the concept is not checked).
+     * Load a concept by cid from common to local directory. The name directories are updated too, if it is a named concept.
      * @param cid
      * @return 
      */
     public synchronized long load_cpt(long cid) {
 
-        if (!cptDir.cid_dir.containsKey(cid)) attnDisp.copy_cpt_to_bubble(cid, this);
+        if (!cptDir.cid_cpt.containsKey(cid)) attnDisp.copy_cpt_to_bubble(cid, this);
 
         return cid;
     }
     
     /**
-     * Load a concept by name from common to local directory. name_dir of the local directory is updated with the name and cid.
+     * Load a concept by name from common to local directory. name_cid of the local directory is updated with the name and cid.
      * @param cptName
      * @return cid
      */
     public synchronized long load_cpt(String cptName) {
         if 
-                (!cptDir.name_dir.containsKey(cptName)) 
+                (!cptDir.name_cid.containsKey(cptName)) 
         {
             long cid = attnDisp.copy_cpt_to_bubble(cptName, this);
             return cid;
         }
         else
-            return cptDir.name_dir.get(cptName);
+            return cptDir.name_cid.get(cptName);
     }
     
     /** 
@@ -65,17 +63,17 @@ public class AttnBubbleLoop extends BaseCaldronLoop {
      * @param cid
      * @return true/false
      */
-    public synchronized boolean cid_dir_containsKey(long cid) {
-        return cptDir.cid_dir.containsKey(cid);
+    public synchronized boolean cid_cpt_containsKey(long cid) {
+        return cptDir.cid_cpt.containsKey(cid);
     }
     
-    /**
-     * Put new concept into the concept directory.
+    /** 
+     * Test if the reverse name directory contains a concept.
      * @param cid
-     * @param cpt 
+     * @return true/false
      */
-    public synchronized void put_in_cid_dir(long cid, Concept cpt) {
-        cptDir.cid_dir.put(cid, cpt);
+    public synchronized boolean cid_name_containsKey(long cid) {
+        return cptDir.cid_name.containsKey(cid);
     }
 
     /** 
@@ -83,17 +81,27 @@ public class AttnBubbleLoop extends BaseCaldronLoop {
      * @param name
      * @return true/false
      */
-    public synchronized boolean name_dir_containsKey(String name) {
-        return cptDir.name_dir.containsKey(name);
+    public synchronized boolean name_cid_containsKey(String name) {
+        return cptDir.name_cid.containsKey(name);
     }
     
     /**
      * Put new concept into the concept directory.
+     * @param cid
+     * @param cpt 
+     */
+    public synchronized void put_in_cid_cpt(long cid, Concept cpt) {
+        cptDir.cid_cpt.put(cid, cpt);
+    }
+    
+    /**
+     * Put new concept into the front and reverse name directories.
      * @param name
      * @param cid
      */
-    public synchronized void put_in_name_dir(String name, long cid) {
-        cptDir.name_dir.put(name, cid);
+    public synchronized void put_in_name_dirs(String name, long cid) {
+        cptDir.name_cid.put(name, cid);
+        cptDir.cid_name.put(cid, name);
     }
 
     @Override

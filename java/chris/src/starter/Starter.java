@@ -1,11 +1,11 @@
 package starter;
 
-import attention.AttnDispatcherLoop;
 import chris.Glob;
 import concepts.DynCptNameEnum;
 import concepts.StatCptEnum;
 import concepts.dyn.Neuron;
-import concepts.dyn.primitives.MarkedString;
+import concepts.dyn.primitives.Mark;
+import concepts.dyn.primitives.MarkedCidSet;
 
 /**
  * When there is no DB or it is empty, we have to start with something...
@@ -30,8 +30,19 @@ final public class Starter {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     public static void generate_dynamic_concepts() {
-        for(DynCptNameEnum cptName: DynCptNameEnum.values())
-            addNamedCpt(cptName.name());
+
+        long cid1 = Glob.attn_disp_loop.add_cpt(new Mark(StatCptEnum.Mrk_SinglePremise.ordinal()), DynCptNameEnum.chat.name());
+        long cid2 = Glob.attn_disp_loop.add_cpt(new Mark(StatCptEnum.Mrk_SinglePremise.ordinal()), DynCptNameEnum.it_is_console_chat.name());
+        long cid3 = Glob.attn_disp_loop.add_cpt(new Mark(StatCptEnum.Mrk_SinglePremise.ordinal()), DynCptNameEnum.it_is_first_line_of_chat.name());
+        long cid4 = Glob.attn_disp_loop.add_cpt(new Mark(StatCptEnum.Mrk_SinglePremise.ordinal()), DynCptNameEnum.chatter_unknown.name());
+        Glob.attn_disp_loop.add_cpt(new MarkedCidSet(StatCptEnum.Mrk_UnorderedListOfCids.ordinal(), new long[] {cid1, cid2, cid3, cid4}), 
+                DynCptNameEnum.set_of_premises_for_start_of_chat.name());
+        Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.add_line_to_console_log.name());
+        Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.request_next_console_line.name());
+        Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.console_log.name());
+        Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.line_from_concole.name());
+        Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.line_counter.name());
+        Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.introduce_myself_and_ask_chatter_name.name());
     }
     
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -53,17 +64,6 @@ final public class Starter {
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-    /**
-     * Generate and add a concept, that has an identifier both inside it and set into the common name directory.
-     * @param name a symbolic identifier of the concept.
-     */
-    private static void addNamedCpt(String name) {
-
-        AttnDispatcherLoop atl = Glob.attn_disp_loop;
-        long cid = atl.add_cpt(new MarkedString(StatCptEnum.Mrk_ConceptName.ordinal(), name));   // primitive, containing the concept's name
-        atl.add_cpt(new Neuron(new long[] {cid}), name);
-    }
     
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--
 }

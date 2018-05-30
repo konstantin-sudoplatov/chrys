@@ -8,7 +8,8 @@ package concepts;
  */
 public enum StatCptEnum {
     Mrk_Marker,             // generic marker. the type of marker is defined by a following primitive.
-    Mrk_ConceptName,        // marker of a concept name
+    Mrk_UnorderedListOfCids,
+    Mrk_SinglePremise,
     ;
     
     /** This package is used to find static concept classes in ComDir.generate_static_concepts(). 

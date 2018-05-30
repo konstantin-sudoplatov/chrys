@@ -9,11 +9,6 @@ import java.util.Arrays;
  */
 public class Neuron extends DynamicConcept {
     
-    /** Meaning of bits in the flag field. */
-    public enum Flag {
-        
-    }
-    
     /** A pair of likelihood of a concept to become an effect and its cid */
     public class EffectCandidate {
         public float attraction;    // <count of making the cid an effect>/<count of assertions> 
@@ -75,15 +70,6 @@ public class Neuron extends DynamicConcept {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
-    
-    /** Bit flags, according to the Flag enum.  */
-    private int flaG;
-    
-    /** Time of creation in seconds since 1970. */
-    private int createD;
-    
-    /** Count of usage(read or write). If -1, then it is > Short.MAX_VALUE. */ 
-    private short usageCount;
     
     /** Array of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
     private long[] propertY;

@@ -15,6 +15,7 @@ import console.Msg_ReadFromConsole;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -59,7 +60,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
             cid = StatCptEnum.valueOf(cpt.getClass().getSimpleName()).ordinal();
         }
         else 
-        {   //no: generate a unique cid. it is unique all through common and all bubble directories.
+        {   //no: generate a unique cid. it is unique through common and all bubble directories.
             GENERATE_CID: while(true) {
                 Random rnd = new Random();
                 cid = rnd.nextLong();
@@ -67,28 +68,34 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
                         (cid >= 0 && cid <= Glob.MAX_STATIC_CID)
                     cid += Glob.MAX_STATIC_CID + 1;
                 if      // is in cpt?
-                        (comDir.cid_dir.containsKey(cid))
+                        (comDir.cid_cpt.containsKey(cid))
                     continue GENERATE_CID;   // generate once more
                 for(AttnBubbleLoop b: attnBubbleList) {
                     if      // is in PrivDir?
-                            (b.cid_dir_containsKey(cid))
+                            (b.cid_cpt_containsKey(cid))
                         continue GENERATE_CID;
                 }
                 break;
             }   // while
             ((DynamicConcept)cpt).set_cid(cid);
+            ((DynamicConcept)cpt).set_creation_time((int)new Date().getTime()/1000);
         }
         
-        // put to target dir
+        // put to target directories
         if
                 (bubble == null)
         {
-            comDir.cid_dir.put(cid, cpt);
-            if (cptName != null) comDir.name_dir.put(cptName, cid);
+            comDir.cid_cpt.put(cid, cpt);
+            if      // is it a named concept?
+                    (cptName != null) 
+            {   //yes: put the cid into the front and reverse directories
+                comDir.name_cid.put(cptName, cid);
+                comDir.cid_name.put(cid, cptName);
+            }
         }
         else {
-            bubble.put_in_cid_dir(cid, cpt);
-            if (cptName != null) bubble.put_in_name_dir(cptName, cid);
+            bubble.put_in_cid_cpt(cid, cpt);
+            if (cptName != null) bubble.put_in_name_dirs(cptName, cid);
         }
         
         return cid;
@@ -114,40 +121,44 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
     }
       
     /**
-     * Load a concept by cid from common to local directory. name_dir is NOT updated even if the concept is named (i.e. the name
-     * property of the concept is not checked).
+     * Load a concept by cid from common to local directory. The name directories are updated too, if it is a named concept.
      * @param cid
      * @param bubble an attention bubble loop.
      * @return cid
      */
     public synchronized long copy_cpt_to_bubble(long cid, AttnBubbleLoop bubble) {
 
-        if
-                (comDir.cid_dir.containsKey(cid))
-        {
-            bubble.put_in_cid_dir(cid, comDir.cid_dir.get(cid).clone());
+        if      //is there such a concept?
+                (comDir.cid_cpt.containsKey(cid))
+        {   //yes: clone it and load to the bubble
+            bubble.put_in_cid_cpt(cid, comDir.cid_cpt.get(cid).clone());
+            if      // is that a named concept?
+                    (comDir.cid_name.containsKey(cid))
+            {   //yes: also update name dirs
+                String name = comDir.cid_name.get(cid);
+                bubble.put_in_name_dirs(name, cid);
+            }
             return cid;
         }
-        else
+        else//no: crash
             throw new Crash("No concept in common directory with cid = " + cid);
     }
     
     /**
-     * Load a concept by name from common to local directory. name_dir of the local directory is updated with the name and cid.
+     * Load a concept by name from common to local directory. name_cid of the local directory is updated with the name and cid.
      * @param cptName
      * @param bubble
      * @return 
      */
     public synchronized long copy_cpt_to_bubble(String cptName, AttnBubbleLoop bubble) {
-        if
-                (comDir.name_dir.containsKey(cptName))
-        {
-            long cid = comDir.name_dir.get(cptName);
+        if      // is there such named concept?
+                (comDir.name_cid.containsKey(cptName))
+        {   // yes: load it to the bubble
+            long cid = comDir.name_cid.get(cptName);
             copy_cpt_to_bubble(cid, bubble);
-            bubble.put_in_name_dir(cptName, cid);
             return cid;
         }
-        else
+        else// no: crash
             throw new Crash("No concept in common directory with name = " + cptName);
     }
     
@@ -157,7 +168,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
      * @return
      */
     public synchronized boolean comdir_containsKey(long cid) {
-        return comDir.cid_dir.containsKey(cid);
+        return comDir.cid_cpt.containsKey(cid);
     }
 
     @Override

@@ -1,16 +1,20 @@
 package attention;
 
 import chris.BaseMessage;
+import chris.Crash;
+import chris.Glob;
 import concepts.Concept;
 import concepts.ConceptDirectory;
 import concepts.DynCptNameEnum;
+import concepts.StatCptEnum;
+import concepts.StaticConcept;
 import java.util.List;
 
 /**
  * Attention bubble loop. Works as a main caldron, can contain subcaldrons.
  * @author su
  */
-public class AttnBubbleLoop extends BaseCaldronLoop {
+public class AttnBubbleLoop extends BaseCaldronLoop implements ConceptNameSpace {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -31,9 +35,34 @@ public class AttnBubbleLoop extends BaseCaldronLoop {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     /**
+     * Get a local concept, may be load it initially.
+     * @param cid
+     * @return the concept
+     * @throws Crash if not found
+     */
+    @Override
+    public synchronized Concept get_cpt(long cid) {
+        
+        if      // is it a static concept? get it from the common directory
+                (cid >= 0 && cid <= Glob.MAX_STATIC_CID)
+            return attnDisp.get_cpt(cid);
+            
+        Concept cpt = cptDir.cid_cpt.get(cid);
+        if      // is there entry in the local concept directory?
+                (cpt != null)
+            // yes: return the concept
+            return cpt;
+        else {  // no: load the concept from the common directory and return it
+            load_cpt(cid);
+            return cptDir.cid_cpt.get(cid);
+        }
+    }
+
+    /**
      * Load a concept by cid from common to local directory. The name directories are updated too, if it is a named concept.
      * @param cid
-     * @return 
+     * @return cid
+     * @throws Crash if not found
      */
     public synchronized long load_cpt(long cid) {
 
@@ -183,8 +212,11 @@ public class AttnBubbleLoop extends BaseCaldronLoop {
      */
     private void startBrewing(BaseMessage msg) {
         
-        // Create new current assertion
+        // Create and fill new current assertion
         _curAssert_ = new Assertion();
+        long cid = load_cpt(DynCptNameEnum.initial_concepts_for_start_of_console_chat.name());
+        StaticConcept stat = (StaticConcept)get_cpt(StatCptEnum.LoadPremisesIntoFirstAssertion.ordinal());
+        stat.go(this, new long[] {cid}, _curAssert_);
         
         // Set up its premises
         load_cpt(DynCptNameEnum.chat.name());

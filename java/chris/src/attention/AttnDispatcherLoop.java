@@ -24,7 +24,7 @@ import java.util.logging.Logger;
  *
  * @author su
  */
-public class AttnDispatcherLoop extends BaseMessageLoop {
+public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSpace {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
     
@@ -125,6 +125,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
      * @param cid
      * @param bubble an attention bubble loop.
      * @return cid
+     * @throws Crash if the cid does not exists
      */
     public synchronized long copy_cpt_to_bubble(long cid, AttnBubbleLoop bubble) {
 
@@ -148,7 +149,8 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
      * Load a concept by name from common to local directory. name_cid of the local directory is updated with the name and cid.
      * @param cptName
      * @param bubble
-     * @return 
+     * @return cid
+     * @throws Crash if the name does not exists
      */
     public synchronized long copy_cpt_to_bubble(String cptName, AttnBubbleLoop bubble) {
         if      // is there such named concept?
@@ -160,6 +162,15 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
         }
         else// no: crash
             throw new Crash("No concept in common directory with name = " + cptName);
+    }
+
+    @Override
+    public synchronized Concept get_cpt(long cid) {
+        Concept cpt = comDir.cid_cpt.get(cid);
+        if (cpt != null)
+            return cpt;
+        else
+            throw new Crash("No such concept: cid = " + cid + ", name = " + comDir.cid_name.get(cid));
     }
     
     /**

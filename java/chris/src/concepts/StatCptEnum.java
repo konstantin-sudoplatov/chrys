@@ -10,6 +10,7 @@ public enum StatCptEnum {
     Mrk_Marker,             // generic marker. the type of marker is defined by a following primitive.
     Mrk_UnorderedListOfCids,
     Mrk_SinglePremise,
+    LoadPremisesIntoFirstAssertion,
     ;
     
     /** This package is used to find static concept classes in ComDir.generate_static_concepts(). 

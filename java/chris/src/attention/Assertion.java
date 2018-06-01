@@ -1,8 +1,8 @@
 package attention;
 
 import java.sql.Timestamp;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Data for taking decision.
@@ -51,6 +51,6 @@ public class Assertion {
     private final Timestamp timestamp = new Timestamp(System.currentTimeMillis());
     
     /** Set of concept, which serves as premises to the conclusion */
-    private final Set<Long> premiseS = new HashSet();
+    private final List<Long> premiseS = new ArrayList();
     
 }

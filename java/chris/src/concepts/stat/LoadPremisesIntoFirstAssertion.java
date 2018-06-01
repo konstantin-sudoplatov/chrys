@@ -26,8 +26,18 @@ public class LoadPremisesIntoFirstAssertion extends StaticConcept {
      */
     @Override
     public long[] go(ConceptNameSpace nameSpace, long[] paramCid, Object extra) {
-        Assertion assertion = (Assertion)extra;     // the assertion object
+        Assertion asrt = (Assertion)extra;     // the assertion object
         Neuron nr = (Neuron)nameSpace.get_cpt(paramCid[0]);     // the DynCptNameEnum.initial_concepts_for_start_of_console_chat concept
+        
+        // unpack premises
+        for(Neuron.Premise prem: nr.get_premise()) {
+            asrt.add_premise(prem.cid);
+        }
+        
+        // unpack effects
+        for(long effCid: nr.get_effect_cid()) {
+            asrt.
+        }
         
         throw new UnsupportedOperationException("Not supported yet.");
     }

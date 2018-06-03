@@ -4,8 +4,8 @@ import chris.Glob;
 import concepts.DynCptNameEnum;
 import concepts.StatCptEnum;
 import concepts.dyn.Neuron;
-import concepts.dyn.primitives.Mark;
-import concepts.dyn.primitives.MarkedCidArray;
+import concepts.dyn.primitives.MarkedNil;
+import concepts.dyn.primitives.special.BasicPremise;
 
 /**
  * When there is no DB or it is empty, we have to start with something...
@@ -32,10 +32,10 @@ final public class Starter {
     public static void generate_dynamic_concepts() {
 
         // concept "initial_concepts_for_start_of_console_chat" - everything we need for initialization of the first assertion.
-        long cid1 = Glob.attn_disp_loop.add_cpt(new Mark(StatCptEnum.Mrk_SinglePremise.ordinal()), DynCptNameEnum.chat.name());
-        long cid2 = Glob.attn_disp_loop.add_cpt(new Mark(StatCptEnum.Mrk_SinglePremise.ordinal()), DynCptNameEnum.it_is_console_chat.name());
-        long cid3 = Glob.attn_disp_loop.add_cpt(new Mark(StatCptEnum.Mrk_SinglePremise.ordinal()), DynCptNameEnum.it_is_first_line_of_chat.name());
-        long cid4 = Glob.attn_disp_loop.add_cpt(new Mark(StatCptEnum.Mrk_SinglePremise.ordinal()), DynCptNameEnum.chatter_unknown.name());
+        long cid1 = Glob.attn_disp_loop.add_cpt(new BasicPremise(), DynCptNameEnum.chat.name());
+        long cid2 = Glob.attn_disp_loop.add_cpt(new BasicPremise(), DynCptNameEnum.it_is_console_chat.name());
+        long cid3 = Glob.attn_disp_loop.add_cpt(new BasicPremise(), DynCptNameEnum.it_is_first_line_of_chat.name());
+        long cid4 = Glob.attn_disp_loop.add_cpt(new BasicPremise(), DynCptNameEnum.chatter_unknown.name());
         Neuron nrn = new Neuron();
         nrn.set_premise( new Neuron.Premise[] {
                 new Neuron.Premise(0, cid1),

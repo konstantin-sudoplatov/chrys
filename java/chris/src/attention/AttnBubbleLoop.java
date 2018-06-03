@@ -219,11 +219,11 @@ public class AttnBubbleLoop extends BaseCaldronLoop implements ConceptNameSpace 
         stat.go(this, new long[] {cid}, _curAssert_);
         
         // Set up its premises
-        load_cpt(DynCptNameEnum.chat.name());
-        _curAssert_.add_premise(DynCptNameEnum.chat.ordinal());
-        _curAssert_.add_premise(DynCptNameEnum.it_is_console_chat.ordinal());
-        _curAssert_.add_premise(DynCptNameEnum.it_is_first_line_of_chat.ordinal());
-        _curAssert_.add_premise(DynCptNameEnum.line_from_concole.ordinal());
+//        load_cpt(DynCptNameEnum.chat.name());
+//        _curAssert_.add_premise(DynCptNameEnum.chat.ordinal());
+//        _curAssert_.add_premise(DynCptNameEnum.it_is_console_chat.ordinal());
+//        _curAssert_.add_premise(DynCptNameEnum.it_is_first_line_of_chat.ordinal());
+//        _curAssert_.add_premise(DynCptNameEnum.line_from_concole.ordinal());
 //        _curAssert_.add_premise(Glob.attn_disp_loop.add_cpt(new JustString(msg.) ));
     }
     

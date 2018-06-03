@@ -7,9 +7,9 @@ package concepts;
  * @author su
  */
 public enum StatCptEnum {
-    Mrk_Marker,             // generic marker. the type of marker is defined by a following primitive.
+    Mrk_Unimarker,             // generic marker. It is made concrete in the Unimarker primitive.
     Mrk_UnorderedListOfCids,
-    Mrk_SinglePremise,
+    Mrk_BasicPremise,
     LoadPremisesIntoFirstAssertion,
     ;
     

@@ -291,7 +291,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
             String cptName = cidEnum.name();
             if      // concept name starts with "Mrk_"?
                     (cptName.substring(0, 4).equals("Mrk_"))
-            {   //yes: it is a marker, it does not require an object. We put into the concept directory a dummy - Mrk_Marker
+            {   //yes: it is a marker, it does not require an object. We put into the concept directory a dummy - Mrk_Unimarker
                 // object for all markers
                 dummyMarker.cid = cidEnum.ordinal();
                 continue;

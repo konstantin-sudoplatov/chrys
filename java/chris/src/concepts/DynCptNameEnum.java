@@ -8,15 +8,15 @@ package concepts;
  * @author su
  */
 public enum DynCptNameEnum {
-    chat,
-    it_is_console_chat,                   // chat by console
-    it_is_first_line_of_chat,             // it is the first line of chat
+    chat,                               // chatting premise
+    it_is_console_chat,                 // chat by console property to the "chat" premise
+    line_of_chat,
+    it_is_the_first_line_of_chat,       // it is the first line of chat
     chatter_unknown,      
-    initial_concepts_for_start_of_console_chat,
+    console_chat_seed,                  // initial concepts and effects for starting console chat
     add_line_to_console_log,
     request_next_console_line,
     console_log,
-    line_from_concole,
     line_counter,
     introduce_myself_and_ask_chatter_name,
     ;

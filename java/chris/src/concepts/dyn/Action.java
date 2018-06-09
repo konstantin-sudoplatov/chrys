@@ -1,14 +1,14 @@
-package concepts.dyn.primitives.special;
+package concepts.dyn;
 
 import attention.ConceptNameSpace;
+import concepts.DynamicConcept;
 import concepts.StaticConcept;
-import concepts.dyn.Primitive;
 
 /**
  * All that needed to invoke the static processing.
  * @author su
  */
-public class Action extends Primitive {
+public class Action extends DynamicConcept {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 

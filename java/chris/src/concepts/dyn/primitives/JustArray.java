@@ -1,19 +1,21 @@
 package concepts.dyn.primitives;
 
+import chris.Glob;
 import concepts.dyn.Primitive;
 
 /**
- * Any string of text without any limitations.
+ * An array of cids.
  * @author su
  */
-public class JustString extends Primitive {
+public class JustArray extends Primitive {
 
     /** 
      * Constructor.
-     * @param text string of symbols.
+     * @param cidArray set of cids.
      */ 
-    public JustString(String text) { 
-        this.text = text;
+    public JustArray(long[] cidArray) 
+    { 
+        this.cidArray = cidArray;
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -21,21 +23,32 @@ public class JustString extends Primitive {
     //                            Public
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
-    
+
     /**
      * Getter.
      * @return 
      */
-    public String get_text() {
-        return text;
+    public long[] get_cid_array() {
+        return cidArray;
     }
 
     /**
-     * Setter.
-     * @param text 
+     * Add a cid to the end of the array.
+     * @param cid
+     * @return added cid.
      */
-    public void set_text(String text) {
-        this.text = text;
+    public long add_cid(long cid) {
+        Glob.append_cid_array(cidArray, cid);
+        
+        return cid;
+    }
+    
+    /**
+     * Setter.
+     * @param cidArray 
+     */
+    public void set_cid_array(long[] cidArray) {
+        this.cidArray = cidArray;
     }
     
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -45,8 +58,9 @@ public class JustString extends Primitive {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data ---%%%---%%%---%%%---%%%---%%%---%%%
-
-    private String text;
+    
+    /** Array of cids. Is it ordered, sorted or something else is specified by the nested cid. */
+    private long[] cidArray;
 
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 }

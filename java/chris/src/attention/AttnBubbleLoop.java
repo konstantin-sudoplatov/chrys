@@ -214,7 +214,7 @@ public class AttnBubbleLoop extends BaseCaldronLoop implements ConceptNameSpace 
         
         // Create and fill new current assertion
         _curAssert_ = new Assertion();
-        long cid = load_cpt(DynCptNameEnum.initial_concepts_for_start_of_console_chat.name());
+        long cid = load_cpt(DynCptNameEnum.console_chat_seed.name());
         StaticConcept stat = (StaticConcept)get_cpt(StatCptEnum.LoadPremisesIntoFirstAssertion.ordinal());
         stat.go(this, new long[] {cid}, _curAssert_);
         
@@ -222,8 +222,8 @@ public class AttnBubbleLoop extends BaseCaldronLoop implements ConceptNameSpace 
 //        load_cpt(DynCptNameEnum.chat.name());
 //        _curAssert_.add_premise(DynCptNameEnum.chat.ordinal());
 //        _curAssert_.add_premise(DynCptNameEnum.it_is_console_chat.ordinal());
-//        _curAssert_.add_premise(DynCptNameEnum.it_is_first_line_of_chat.ordinal());
-//        _curAssert_.add_premise(DynCptNameEnum.line_from_concole.ordinal());
+//        _curAssert_.add_premise(DynCptNameEnum.it_is_the_first_line_of_chat.ordinal());
+//        _curAssert_.add_premise(DynCptNameEnum.line_of_chat.ordinal());
 //        _curAssert_.add_premise(Glob.attn_disp_loop.add_cpt(new JustString(msg.) ));
     }
     

@@ -1,13 +1,16 @@
 package concepts.dyn;
 
+import attention.CaldronLoop;
+import chris.Glob;
 import concepts.*;
 import java.util.Arrays;
 
 /**
- * A set of premises, vector of weights, activation and set of effects.
+ * It is a concept capable of reasoning, i.e. calculating activation as the weighted sum of premises.
+ * The same way it determines successors and their activations. 
  * @author su
  */
-public class Neuron extends DynamicConcept {
+public class Neuron extends DynamicConcept implements Assertion, Effect, Property {
     
     /** Structure of premises. A pair of weight of a concept and its cid. */
     public static class Premise {
@@ -25,13 +28,13 @@ public class Neuron extends DynamicConcept {
     public Neuron() {
     }
 
-    /**
-     * Constructor
-     * @param props array of cids of concept properties. 
-     */
-    public Neuron(long[] props) {
-        this.propertyCid = props;
-    }
+//    /**
+//     * Constructor
+//     * @param props array of cids of concept properties. 
+//     */
+//    public Neuron(long[] props) {
+//        this.propertieS = props;
+//    }
     
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -42,103 +45,108 @@ public class Neuron extends DynamicConcept {
     @Override
     public Neuron clone() {
         Neuron clon = (Neuron)super.clone();
-        if (actionCid != null) clon.actionCid = Arrays.copyOf(actionCid, actionCid.length);
-        if (propertyCid != null) clon.propertyCid = Arrays.copyOf(propertyCid, propertyCid.length);
-        if (effectCid != null) clon.effectCid = Arrays.copyOf(effectCid, effectCid.length);
-        if (premisE != null) clon.premisE = Arrays.copyOf(premisE, premisE.length);
+        if (actionS != null) clon.actionS = Arrays.copyOf(actionS, actionS.length);
+        if (propertieS != null) clon.propertieS = Arrays.copyOf(propertieS, propertieS.length);
+        if (effectS != null) clon.effectS = Arrays.copyOf(effectS, effectS.length);
+        if (premiseS != null) clon.premiseS = Arrays.copyOf(premiseS, premiseS.length);
         
         return clon;
     }
     
-    /**
-     * Getter.
-     * @return
-     */
-    public float get_activation() {
-        return activatioN;
+    @Override
+    public long[] assertion(CaldronLoop context) {
+        throw new UnsupportedOperationException("Not realized yet");
     }
-
-    /**
-     * Setter.
-     * @param activation
-     */
-    public void set_activation(float activation) {
-        this.activatioN = activation;
-    }
-
-    /**
-     * Getter.
-     * @return
-     */
-    public long[] get_action_cid() {
-        return actionCid;
-    }
-
-    /**
-     * Setter.
-     * @param actionCid
-     */
-    public void set_action_cid(long[] actionCid) {
-        this.actionCid = actionCid;
-    }
-
-    /**
-     * Getter.
-     * @return
-     */
-    public long[] get_effect_cid() {
-        return effectCid;
-    }
-
-    /**
-     * Setter.
-     * @param effectCid
-     */
-    public void set_effect_cid(long[] effectCid) {
-        this.effectCid = effectCid;
-    }
-
-    /**
-     * Getter.
-     * @return
-     */
-    public long[] get_property_cid() {
-        return propertyCid;
-    }
-
-    /**
-     * Setter.
-     * @param propertyCid
-     */
-    public void set_property_cid(long[] propertyCid) {
-        this.propertyCid = propertyCid;
-    }
-
-    /**
-     * Getter.
-     * @return
-     */
-    public Premise[] get_premise() {
-        return premisE;
-    }
-
-    /**
-     * Setter.
-     * @param premise
-     */
-    public void set_premise(Premise[] premise) {
-        this.premisE = premise;
-    }
+//
 //    /**
-//     * Add a concept to the property array.
-//     * @param cid
-//     * @return 
+//     * Getter.
+//     * @return
 //     */
-//    public long add_property(long cid) {
-//        propertyCid = Arrays.copyOf(propertyCid, propertyCid.length+1);
-//        propertyCid[propertyCid.length-1] = cid;
-//        return cid;
+//    public long[] get_action_cid() {
+//        return actionS;
 //    }
+//
+//    /**
+//     * Setter.
+//     * @param actionCid
+//     */
+//    public void set_action_cid(long[] actionCid) {
+//        this.actionS = actionCid;
+//    }
+//
+//    /**
+//     * Getter.
+//     * @return
+//     */
+//    public long[] get_effect_cid() {
+//        return successorS;
+//    }
+//
+//    /**
+//     * Setter.
+//     * @param effectCid
+//     */
+//    public void set_effect_cid(long[] effectCid) {
+//        this.successorS = effectCid;
+//    }
+//
+//    /**
+//     * Getter.
+//     * @return
+//     */
+//    public Premise[] get_premise() {
+//        return premiseS;
+//    }
+//
+//    /**
+//     * Setter.
+//     * @param premise
+//     */
+//    public void set_premise(Premise[] premise) {
+//        this.premiseS = premise;
+//    }
+
+    @Override
+    public long get_effect(int index) {
+        return effectS[index];
+    }
+
+    @Override
+    public long[] get_effects() {
+        return effectS;
+    }
+
+    @Override
+    public long add_effect(long cid) {
+        effectS = Glob.append_cid_array(effectS, cid);
+        return cid;
+    }
+
+    @Override
+    public void set_effects(long[] propArray) {
+        this.effectS = propArray;
+    }
+
+    @Override
+    public long get_property(int index) {
+        return propertieS[index];
+    }
+
+    @Override
+    public long[] get_properties() {
+        return propertieS;
+    }
+
+    @Override
+    public long add_property(long cid) {
+        propertieS = Glob.append_cid_array(propertieS, cid);
+        return cid;
+    }
+
+    @Override
+    public void set_properties(long[] propArray) {
+        this.propertieS = propArray;
+    }
 
     public float get_bias() {
         return biaS;
@@ -156,21 +164,18 @@ public class Neuron extends DynamicConcept {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
-
-    /** Activation value. */
-    private float activatioN;
     
     /** Array of actions. */
-    private long[] actionCid;
+    private long[] actionS;
     
     /** Array of possible effects. */
-    private long[] effectCid;
+    private long[] effectS;
     
     /** Array of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
-    private long[] propertyCid;
+    private long[] propertieS;
     
-    /** Array of cids and weights of premises. The cids are not forbidden to be duplicated in the metadata. */
-    private Premise[] premisE;
+    /** Array of cids and weights of premises. The cids are not forbidden to be duplicated in the properties. */
+    private Premise[] premiseS;
     
     /** The free term of the linear expression. */
     private float biaS;

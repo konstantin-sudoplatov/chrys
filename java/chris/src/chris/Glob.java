@@ -7,6 +7,7 @@ import java.lang.reflect.Method;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.Stack;
@@ -87,6 +88,26 @@ final public class Glob {
     //                      Common functions and tools
     //
     //*****************************************************************************
+    
+    /**
+     * Add a concept identifier to an array.
+     * @param array to be appended. null for an array of 0 elements.
+     * @param cid.
+     * @return appended array.
+     */
+    public static long[] append_cid_array(long[] array, long cid) {
+        long[] newArray;
+        if
+                (array == null)
+            newArray = new long[1];
+        else
+            newArray = Arrays.copyOf(array, array.length+1);
+        
+        newArray[newArray.length-1] = cid;
+        
+        return newArray;
+    }
+
 
     /**
      * Stops executing current thread for a given time period.

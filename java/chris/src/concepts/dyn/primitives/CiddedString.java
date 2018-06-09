@@ -1,19 +1,20 @@
 package concepts.dyn.primitives;
 
-import concepts.dyn.Primitive;
-
 /**
- * Any string of text without any limitations.
+ * A string with a special meaning. The meaning defined by the nested property cid.
  * @author su
  */
-public class JustString extends Primitive {
+public class CiddedString extends CiddedNothing {
 
     /** 
      * Constructor.
-     * @param text string of symbols.
+     * @param nestedCid Meaning of the text field. It can be a marker or, for example, a primitive of CiddedString, 
+     * containing the Marker concept and a text, that specializes it, or anything else.
+     * @param text value of this concept.
      */ 
-    public JustString(String text) { 
-        this.text = text;
+    public CiddedString(long nestedCid, String text) 
+    {   super(nestedCid); 
+        this.texT = text;
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -27,17 +28,9 @@ public class JustString extends Primitive {
      * @return 
      */
     public String get_text() {
-        return text;
+        return texT;
     }
 
-    /**
-     * Setter.
-     * @param text 
-     */
-    public void set_text(String text) {
-        this.text = text;
-    }
-    
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //                               Private
@@ -46,7 +39,6 @@ public class JustString extends Primitive {
 
     //---%%%---%%%---%%%---%%%---%%% private data ---%%%---%%%---%%%---%%%---%%%---%%%
 
-    private String text;
+    private String texT;
 
-    //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
-}
+}   // class

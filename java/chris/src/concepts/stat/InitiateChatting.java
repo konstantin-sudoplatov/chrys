@@ -9,7 +9,7 @@ import concepts.dyn.Neuron;
  * Preparing caldron for the first assertion.
  * @author su
  */
-public class LoadPremisesIntoFirstAssertion extends StaticConcept {
+public class InitiateChatting extends StaticConcept {
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //

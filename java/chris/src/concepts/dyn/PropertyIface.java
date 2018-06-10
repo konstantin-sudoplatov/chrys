@@ -1,10 +1,10 @@
 package concepts.dyn;
 
 /**
- * Getters and setters for the properties array.
+ * Getters and setters for the array of properties.
  * @author su
  */
-public interface Property {
+public interface PropertyIface {
 
     /**
      * Getter.

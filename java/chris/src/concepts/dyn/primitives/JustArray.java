@@ -38,7 +38,7 @@ public class JustArray extends Primitive {
      * @return added cid.
      */
     public long add_cid(long cid) {
-        Glob.append_cid_array(cidArray, cid);
+        Glob.append_array(cidArray, cid);
         
         return cid;
     }

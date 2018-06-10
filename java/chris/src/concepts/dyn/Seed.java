@@ -5,12 +5,12 @@ import chris.Glob;
 import concepts.DynamicConcept;
 
 /**
- * Container for a set of premises and corresponding set of effects. It implements the Assertion
- * interface like the Neuron and what it does is to get the premises in the context, activate them,
- * and get the effect in context, so making them ready for assertions.
+ * Container for a set of premises and corresponding set of effects. It implements the AssertionIface
+ interface like the Neuron and what it does is to get the premises in the context, activate them,
+ and get the effect in context, so making them ready for assertions.
  * @author su
  */
-public class Seed extends DynamicConcept implements Assertion, Effect, Property {
+public class Seed extends DynamicConcept implements AssertionIface, EffectIface, PropertyIface {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -43,7 +43,7 @@ public class Seed extends DynamicConcept implements Assertion, Effect, Property 
 
     @Override
     public long add_effect(long cid) {
-        effectS = Glob.append_cid_array(effectS, cid);
+        effectS = Glob.append_array(effectS, cid);
         return cid;
     }
 
@@ -64,7 +64,7 @@ public class Seed extends DynamicConcept implements Assertion, Effect, Property 
 
     @Override
     public long add_property(long cid) {
-        propertieS = Glob.append_cid_array(propertieS, cid);
+        propertieS = Glob.append_array(propertieS, cid);
         return cid;
     }
 

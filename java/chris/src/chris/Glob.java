@@ -95,7 +95,7 @@ final public class Glob {
      * @param cid.
      * @return appended array.
      */
-    public static long[] append_cid_array(long[] array, long cid) {
+    public static long[] append_array(long[] array, long cid) {
         long[] newArray;
         if
                 (array == null)
@@ -104,6 +104,25 @@ final public class Glob {
             newArray = Arrays.copyOf(array, array.length+1);
         
         newArray[newArray.length-1] = cid;
+        
+        return newArray;
+    }
+    
+    /**
+     * Add an object an array of objects.
+     * @param array to be appended. null for an array of 0 elements.
+     * @param obj.
+     * @return appended array.
+     */
+    public static Object[] append_array(Object[] array, Object obj) {
+        Object[] newArray;
+        if
+                (array == null)
+            newArray = new Object[1];
+        else
+            newArray = Arrays.copyOf(array, array.length+1);
+        
+        newArray[newArray.length-1] = obj;
         
         return newArray;
     }

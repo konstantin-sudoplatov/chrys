@@ -3,6 +3,9 @@ package starter;
 import chris.Glob;
 import concepts.DynCptNameEnum;
 import concepts.StatCptEnum;
+import concepts.dyn.Action;
+import concepts.dyn.Neuron;
+import concepts.dyn.Seed;
 import concepts.dyn.primitives.CiddedArray;
 import concepts.dyn.primitives.CiddedNothing;
 import concepts.dyn.primitives.JustString;
@@ -39,7 +42,7 @@ final public class Starter {
         cidArr.append_array(cid);
         cid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.chatter_unknown.name());
         cidArr.append_array(cid);
-        long cid1 = Glob.attn_disp_loop.add_cpt(cidArr, DynCptNameEnum.chat.name());
+        long chatCid = Glob.attn_disp_loop.add_cpt(cidArr, DynCptNameEnum.chat.name());
         
         // Primitive "line_of_chat" as CiddedArray of property "it_is_the_first_line_of_chat" and JustString text of line
         // as the nested cid.
@@ -47,10 +50,29 @@ final public class Starter {
         cidArr = new CiddedArray(cid);
         cid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.it_is_the_first_line_of_chat.name());
         cidArr.append_array(cid);
-        long cid2 = Glob.attn_disp_loop.add_cpt(cidArr, DynCptNameEnum.line_of_chat.name());
+        long lineCid = Glob.attn_disp_loop.add_cpt(cidArr, DynCptNameEnum.line_of_chat.name());
         
-        // Console chat skirmisher. It will combine all the above premises and determine possible effects. It will do the first assertion
+        // Action of requesting the next line.
+        Action requestNextLineAction = new Action(DynCptNameEnum.request_next_console_line.ordinal());
+        long requestNextLineCid = Glob.attn_disp_loop.add_cpt(requestNextLineAction);
+        
+        //              Neurons, that deal with these premises:
+        // The one that finishes processing of the line.
+        Neuron nrn = new Neuron();
+        Glob.attn_disp_loop.add_cpt(nrn);       // without name
+        nrn.set_premises(new Neuron.Premise[] {
+            new Neuron.Premise(1, chatCid), 
+            new Neuron.Premise(1, lineCid)
+        });
+        nrn.set_effects(new long[] {nrn.get_cid()});    // set up itself as a successor (the cid is assigned already)
+        nrn.set_actions(new long[] {requestNextLineCid});
+        
+        // Console chat skirmisher. It combines all the above premises and determines possible effects. It will make the first assertion
         // in the reasoning tree.
+        Seed seed = new Seed();
+        seed.set_properties(new long[] {chatCid, lineCid});
+        seed.set_effects(new long[] {nrn.get_cid()});
+        Glob.attn_disp_loop.add_cpt(seed, DynCptNameEnum.console_chat_seed.name());
         
 
 //        Neuron nrn = new Neuron();

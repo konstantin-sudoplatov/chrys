@@ -6,7 +6,7 @@ import attention.CaldronLoop;
  * Interface for dynamic concepts capable of doing the reasoning steps.
  * @author su
  */
-public interface Assertion {
+public interface AssertionIface {
     
     /**
      * Do weighing, determine activation, may be, do actions, determine possible effects.

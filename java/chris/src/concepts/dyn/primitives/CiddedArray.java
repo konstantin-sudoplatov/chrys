@@ -48,7 +48,7 @@ public class CiddedArray extends CiddedNothing {
      * @return added cid.
      */
     public long append_array(long cid) {
-        Glob.append_cid_array(cidArray, cid);
+        Glob.append_array(cidArray, cid);
         
         return cid;
     }

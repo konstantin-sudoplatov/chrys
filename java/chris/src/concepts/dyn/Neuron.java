@@ -10,7 +10,7 @@ import java.util.Arrays;
  * The same way it determines successors and their activations. 
  * @author su
  */
-public class Neuron extends DynamicConcept implements Assertion, Effect, Property {
+public class Neuron extends DynamicConcept implements AssertionIface, ActionIface, EffectIface, PropertyIface, PremiseIface {
     
     /** Structure of premises. A pair of weight of a concept and its cid. */
     public static class Premise {
@@ -73,38 +73,27 @@ public class Neuron extends DynamicConcept implements Assertion, Effect, Propert
 //    public void set_action_cid(long[] actionCid) {
 //        this.actionS = actionCid;
 //    }
-//
-//    /**
-//     * Getter.
-//     * @return
-//     */
-//    public long[] get_effect_cid() {
-//        return successorS;
-//    }
-//
-//    /**
-//     * Setter.
-//     * @param effectCid
-//     */
-//    public void set_effect_cid(long[] effectCid) {
-//        this.successorS = effectCid;
-//    }
-//
-//    /**
-//     * Getter.
-//     * @return
-//     */
-//    public Premise[] get_premise() {
-//        return premiseS;
-//    }
-//
-//    /**
-//     * Setter.
-//     * @param premise
-//     */
-//    public void set_premise(Premise[] premise) {
-//        this.premiseS = premise;
-//    }
+
+    @Override
+    public long get_action(int index) {
+        return actionS[index];
+    }
+
+    @Override
+    public long[] get_actions() {
+        return actionS;
+    }
+
+    @Override
+    public long add_action(long cid) {
+        actionS = Glob.append_array(actionS, cid);
+        return cid;
+    }
+
+    @Override
+    public void set_actions(long[] actionArray) {
+        actionS = actionArray;
+    }
 
     @Override
     public long get_effect(int index) {
@@ -118,13 +107,13 @@ public class Neuron extends DynamicConcept implements Assertion, Effect, Propert
 
     @Override
     public long add_effect(long cid) {
-        effectS = Glob.append_cid_array(effectS, cid);
+        effectS = Glob.append_array(effectS, cid);
         return cid;
     }
 
     @Override
     public void set_effects(long[] propArray) {
-        this.effectS = propArray;
+        effectS = propArray;
     }
 
     @Override
@@ -139,13 +128,34 @@ public class Neuron extends DynamicConcept implements Assertion, Effect, Propert
 
     @Override
     public long add_property(long cid) {
-        propertieS = Glob.append_cid_array(propertieS, cid);
+        propertieS = Glob.append_array(propertieS, cid);
         return cid;
     }
 
     @Override
     public void set_properties(long[] propArray) {
-        this.propertieS = propArray;
+        propertieS = propArray;
+    }
+
+    @Override
+    public Premise get_premise(int index) {
+        return premiseS[index];
+    }
+
+    @Override
+    public Premise[] get_premises() {
+        return premiseS;
+    }
+
+    @Override
+    public Premise add_premise(Premise premise) {
+        premiseS = (Premise[])Glob.append_array(premiseS, premise);
+        return premise;
+    }
+
+    @Override
+    public void set_premises(Premise[] premiseArray) {
+        premiseS = premiseArray;
     }
 
     public float get_bias() {
@@ -153,7 +163,7 @@ public class Neuron extends DynamicConcept implements Assertion, Effect, Propert
     }
 
     public void set_bias(float bias) {
-        this.biaS = bias;
+        biaS = bias;
     }
             
     

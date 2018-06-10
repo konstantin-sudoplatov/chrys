@@ -14,11 +14,13 @@ public class Action extends DynamicConcept {
 
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
-    /** Concept, that provides the processing. */
-    public final long stat_cid;
-    
-    /** Array of parameters to the static concept. */
-    public final long[] param_cid;
+    /**
+     * Constructor.
+     * @param statCid cid of the static concept
+     */
+    public Action(long statCid) {
+        this.stat_cid = statCid;
+    }
 
     /**
      * Constructor.
@@ -62,6 +64,12 @@ public class Action extends DynamicConcept {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
+
+    /** Concept, that provides the processing. */
+    private long stat_cid;
+    
+    /** Array of parameters to the static concept. */
+    private long[] param_cid;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

@@ -1,10 +1,10 @@
 package concepts.dyn;
 
 /**
- * Getters and setters for the effects array.
+ * Getters and setters for the array of effects.
  * @author su
  */
-public interface Effect {
+public interface EffectIface {
 
     /**
      * Getter.

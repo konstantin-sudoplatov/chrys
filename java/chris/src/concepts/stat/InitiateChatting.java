@@ -1,9 +1,7 @@
 package concepts.stat;
 
-import attention.Assertion;
 import attention.ConceptNameSpace;
 import concepts.StaticConcept;
-import concepts.dyn.Neuron;
 
 /**
  * Preparing caldron for the first assertion.
@@ -26,8 +24,8 @@ public class InitiateChatting extends StaticConcept {
      */
     @Override
     public long[] go(ConceptNameSpace nameSpace, long[] paramCid, Object extra) {
-        Assertion asrt = (Assertion)extra;     // the assertion object
-        Neuron nr = (Neuron)nameSpace.get_cpt(paramCid[0]);     // the DynCptNameEnum.initial_concepts_for_start_of_console_chat concept
+//        Assertion asrt = (Assertion)extra;     // the assertion object
+//        Neuron nr = (Neuron)nameSpace.get_cpt(paramCid[0]);     // the DynCptNameEnum.initial_concepts_for_start_of_console_chat concept
         
 //        // unpack premises
 //        for(Neuron.Premise prem: nr.get_premise()) {

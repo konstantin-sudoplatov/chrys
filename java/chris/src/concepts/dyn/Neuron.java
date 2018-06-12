@@ -1,6 +1,6 @@
 package concepts.dyn;
 
-import attention.CaldronLoop;
+import attention.Caldron;
 import chris.Glob;
 import concepts.*;
 import java.util.Arrays;
@@ -10,7 +10,7 @@ import java.util.Arrays;
  * The same way it determines successors and their activations. 
  * @author su
  */
-public class Neuron extends DynamicConcept implements AssertionIface, ActionIface, EffectIface, PropertyIface, PremiseIface {
+public class Neuron extends DynamicConcept implements AssessionIface, ActionIface, EffectIface, PropertyIface, PremiseIface {
     
     /** Structure of premises. A pair of weight of a concept and its cid. */
     public static class Premise {
@@ -54,7 +54,7 @@ public class Neuron extends DynamicConcept implements AssertionIface, ActionIfac
     }
     
     @Override
-    public long[] assertion(CaldronLoop context) {
+    public long[] assess(Caldron context) {
         throw new UnsupportedOperationException("Not realized yet");
     }
 //

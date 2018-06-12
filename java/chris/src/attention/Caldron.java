@@ -1,14 +1,17 @@
 package attention;
 
-import chris.BaseMessage;
-import java.util.ArrayList;
+import chris.BaseMessageLoop;
+import concepts.Concept;
+import java.util.HashMap;
+import java.util.Map;
+import concepts.dyn.AssessionIface;
 
 /**
- * Child caldron in the lower levels beneath the attention bubble (main caldron). 
- * Caldrons are organized in a hierarchy.
+ * The reasoning is taking place in a caldron. Caldrons are organized in a hierarchy.
+ * The main caldron is the attention bubble, it can contain subcaldrons.
  * @author su
  */
-public class CaldronLoop extends BaseCaldronLoop {
+abstract public class Caldron extends BaseMessageLoop {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -16,10 +19,11 @@ public class CaldronLoop extends BaseCaldronLoop {
 
     /** 
      * Constructor.
-     * @param parenT parent caldron.
+     * @param parent parent caldron. Null for main caldron, which is supposed to be an attention bubble loop.
      */ 
-    public CaldronLoop(BaseCaldronLoop parenT) { 
-        this.parenT = parenT;
+    public Caldron(Caldron parent) 
+    {   super();
+        parenT = parent;
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -35,13 +39,11 @@ public class CaldronLoop extends BaseCaldronLoop {
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
 
     //---$$$---$$$---$$$---$$$---$$$--- protected data $$$---$$$---$$$---$$$---$$$---$$$--
+    
+    /** The dynamic concept, currently doing assertion. */
+    protected AssessionIface _head_;
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
-
-    @Override
-    protected synchronized boolean _defaultProc_(BaseMessage msg) {
-        throw new UnsupportedOperationException("Not supported yet.");
-    }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
@@ -50,16 +52,10 @@ public class CaldronLoop extends BaseCaldronLoop {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
-    
-    /** Parent caldron. */
-    private final BaseCaldronLoop parenT;
-    
-    /** Chronologically ordered sequence of assertions. */
-    private final ArrayList<Assertion> assertionHistory = new ArrayList<>();
-    
-    /** The freshest in the assertionHistory assertion. */
-    private final Assertion curAssertion = new Assertion();
 
+    /** Parent caldron */
+    private final Caldron parenT;
+    
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--

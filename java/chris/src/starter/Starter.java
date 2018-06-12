@@ -34,26 +34,26 @@ final public class Starter {
 
     public static void generate_dynamic_concepts() {
 
-        // Primitive "chat" as CiddedArray of properties "it_is_console_chat" and "chatter_unknown" and marker Mrk_CompositePremise
+        // Primitive "chat_prem" as CiddedArray of properties "it_is_console_chat_prem" and "chatter_unknown_prem" and marker Mrk_CompositePremise
         // as the nested cid.
         long cid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_CompositePremise.ordinal()));
         CiddedArray cidArr = new CiddedArray(cid);
-        cid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.it_is_console_chat.name());
+        cid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.it_is_console_chat_prem.name());
         cidArr.append_array(cid);
-        cid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.chatter_unknown.name());
+        cid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.chatter_unknown_prem.name());
         cidArr.append_array(cid);
-        long chatCid = Glob.attn_disp_loop.add_cpt(cidArr, DynCptNameEnum.chat.name());
+        long chatCid = Glob.attn_disp_loop.add_cpt(cidArr, DynCptNameEnum.chat_prem.name());
         
-        // Primitive "line_of_chat" as CiddedArray of property "it_is_the_first_line_of_chat" and JustString text of line
+        // Primitive "line_of_chat" as CiddedArray of property "it_is_the_first_line_of_chat_prem" and JustString text of line
         // as the nested cid.
         cid = Glob.attn_disp_loop.add_cpt(new JustString(""));
         cidArr = new CiddedArray(cid);
-        cid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.it_is_the_first_line_of_chat.name());
+        cid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.it_is_the_first_line_of_chat_prem.name());
         cidArr.append_array(cid);
-        long lineCid = Glob.attn_disp_loop.add_cpt(cidArr, DynCptNameEnum.line_of_chat.name());
+        long lineCid = Glob.attn_disp_loop.add_cpt(cidArr, DynCptNameEnum.line_of_chat_string_prim.name());
         
         // Action of requesting the next line.
-        Action requestNextLineAction = new Action(DynCptNameEnum.request_next_console_line.ordinal());
+        Action requestNextLineAction = new Action(DynCptNameEnum.request_next_console_line_actn.ordinal());
         long requestNextLineCid = Glob.attn_disp_loop.add_cpt(requestNextLineAction);
         
         //              Neurons, that deal with these premises:
@@ -67,7 +67,7 @@ final public class Starter {
         nrn.set_effects(new long[] {nrn.get_cid()});    // set up itself as a successor (the cid is assigned already)
         nrn.set_actions(new long[] {requestNextLineCid});
         
-        // Console chat skirmisher. It combines all the above premises and determines possible effects. It will make the first assertion
+        // Console chat_prem skirmisher. It combines all the above premises and determines possible effects. It will make the first assess
         // in the reasoning tree.
         Seed seed = new Seed();
         seed.set_properties(new long[] {chatCid, lineCid});
@@ -84,7 +84,7 @@ final public class Starter {
 //        });
 //        Glob.attn_disp_loop.add_cpt(nrn, DynCptNameEnum.console_chat_seed.name());
 //        long cid5 = Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.add_line_to_console_log.name());
-//        long cid6 = Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.request_next_console_line.name());
+//        long cid6 = Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.request_next_console_line_actn.name());
 //        nrn.set_effect_cid(new long[] {cid5, cid6});
 //        
 //        Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.console_log.name());

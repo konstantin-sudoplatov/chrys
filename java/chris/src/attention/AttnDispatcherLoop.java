@@ -51,7 +51,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
      * @return cid
      */
     @SuppressWarnings("UnnecessaryLabelOnContinueStatement")
-    public synchronized long add_cpt(Concept cpt, AttnBubbleLoop bubble, String cptName) {
+    public synchronized long add_cpt(Concept cpt, AttnCircle bubble, String cptName) {
         // determine cid
         long cid;
         if      // static concept?
@@ -70,7 +70,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
                 if      // is in cpt?
                         (comDir.cid_cpt.containsKey(cid))
                     continue GENERATE_CID;   // generate once more
-                for(AttnBubbleLoop b: attnBubbleList) {
+                for(AttnCircle b: attnBubbleList) {
                     if      // is in PrivDir?
                             (b.cid_cpt_containsKey(cid))
                         continue GENERATE_CID;
@@ -127,7 +127,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
      * @return cid
      * @throws Crash if the cid does not exists
      */
-    public synchronized long copy_cpt_to_bubble(long cid, AttnBubbleLoop bubble) {
+    public synchronized long copy_cpt_to_bubble(long cid, AttnCircle bubble) {
 
         if      //is there such a concept?
                 (comDir.cid_cpt.containsKey(cid))
@@ -152,7 +152,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
      * @return cid
      * @throws Crash if the name does not exists
      */
-    public synchronized long copy_cpt_to_bubble(String cptName, AttnBubbleLoop bubble) {
+    public synchronized long copy_cpt_to_bubble(String cptName, AttnCircle bubble) {
         if      // is there such named concept?
                 (comDir.name_cid.containsKey(cptName))
         {   // yes: load it to the bubble
@@ -186,7 +186,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     public synchronized void request_termination() {
         
         // terminate bubbles
-        for (AttnBubbleLoop bubble : attnBubbleList) {
+        for (AttnCircle bubble : attnBubbleList) {
             Thread thread = bubble.get_thread();
             if 
                     (thread.isAlive())
@@ -228,7 +228,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
             if
                     (consoleChatBubble == null)
             {
-                consoleChatBubble = new AttnBubbleLoop(this);
+                consoleChatBubble = new AttnCircle(this);
                 addBubbleToList(consoleChatBubble);
                 consoleChatBubble.start_thread();
             }
@@ -260,10 +260,10 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     private final ConceptDirectory comDir = new ConceptDirectory();
     
     /** List of all attention bubbles */
-    private final ArrayList<AttnBubbleLoop> attnBubbleList = new ArrayList<>();
+    private final ArrayList<AttnCircle> attnBubbleList = new ArrayList<>();
     
     /** Attention bubble, that chats with console. */
-    private AttnBubbleLoop consoleChatBubble;
+    private AttnCircle consoleChatBubble;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
@@ -272,7 +272,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
      * to work with the list of bubbles (for example, wants to find a bubble to add a new concept to it).
      * @param bubble attention bubble loop to add to the list.
      */
-    private synchronized void addBubbleToList(AttnBubbleLoop bubble) {
+    private synchronized void addBubbleToList(AttnCircle bubble) {
         attnBubbleList.add(bubble);
     }
 

@@ -9,12 +9,13 @@ import concepts.DynCptNameEnum;
 import concepts.StatCptEnum;
 import concepts.StaticConcept;
 import java.util.List;
+import concepts.dyn.AssessionIface;
 
 /**
  * Attention bubble loop. Works as a main caldron, can contain subcaldrons.
  * @author su
  */
-public class AttnBubbleLoop extends BaseCaldronLoop implements ConceptNameSpace {
+public class AttnCircle extends Caldron implements ConceptNameSpace {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -24,7 +25,8 @@ public class AttnBubbleLoop extends BaseCaldronLoop implements ConceptNameSpace 
      * Constructor.
      * @param attnDisp attention dispatcher (parent).
      */ 
-    public AttnBubbleLoop(AttnDispatcherLoop attnDisp) {
+    public AttnCircle(AttnDispatcherLoop attnDisp) 
+    {   super(null);    // null for being a main caldron
         this.attnDisp = attnDisp;
     } 
 
@@ -140,7 +142,7 @@ public class AttnBubbleLoop extends BaseCaldronLoop implements ConceptNameSpace 
         if
                 (caldronList != null)
         {
-            for(CaldronLoop caldron : caldronList)
+            for(Caldron caldron : caldronList)
                 if 
                         (caldron.get_thread().isAlive())
                 {
@@ -170,7 +172,7 @@ public class AttnBubbleLoop extends BaseCaldronLoop implements ConceptNameSpace 
         {
             // May be, initialize the bubble on the first message from console
             if      // hasn't the brewing started yet?
-                    (_curAssert_ == null)
+                    (_head_ == null)
             {   //no: start it
                 startBrewing(msg);  
             }
@@ -202,29 +204,32 @@ public class AttnBubbleLoop extends BaseCaldronLoop implements ConceptNameSpace 
     private final AttnDispatcherLoop attnDisp;
     
     /** Possible set of child caldrons . */
-    private List<CaldronLoop> caldronList;
+    private List<Caldron> caldronList;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     /**
-     * Initialize a chat on the first message from a chatter.
+     * Initialize a chat_prem on the first message from a chatter.
      * @param msg 
      */
     private void startBrewing(BaseMessage msg) {
         
+        // set up the console_chat_seed as a new caldron head
+        _head_ = (AssessionIface)get_cpt(load_cpt(DynCptNameEnum.console_chat_seed.name()));
+        
         // Create and fill new current assertion
-        _curAssert_ = new Assertion();
-        long cid = load_cpt(DynCptNameEnum.console_chat_seed.name());
-        StaticConcept stat = (StaticConcept)get_cpt(StatCptEnum.LoadPremisesIntoFirstAssertion.ordinal());
-        stat.go(this, new long[] {cid}, _curAssert_);
+//        _head_ = new Assertion();
+//        long cid = load_cpt(DynCptNameEnum.console_chat_seed.name());
+//        StaticConcept stat = (StaticConcept)get_cpt(StatCptEnum.LoadPremisesIntoFirstAssertion.ordinal());
+//        stat.go(this, new long[] {cid}, _head_);
         
         // Set up its premises
-//        load_cpt(DynCptNameEnum.chat.name());
-//        _curAssert_.add_premise(DynCptNameEnum.chat.ordinal());
-//        _curAssert_.add_premise(DynCptNameEnum.it_is_console_chat.ordinal());
-//        _curAssert_.add_premise(DynCptNameEnum.it_is_the_first_line_of_chat.ordinal());
-//        _curAssert_.add_premise(DynCptNameEnum.line_of_chat.ordinal());
-//        _curAssert_.add_premise(Glob.attn_disp_loop.add_cpt(new JustString(msg.) ));
+//        load_cpt(DynCptNameEnum.chat_prem.name());
+//        _head_.add_premise(DynCptNameEnum.chat_prem.ordinal());
+//        _head_.add_premise(DynCptNameEnum.it_is_console_chat_prem.ordinal());
+//        _head_.add_premise(DynCptNameEnum.it_is_the_first_line_of_chat_prem.ordinal());
+//        _head_.add_premise(DynCptNameEnum.line_of_chat.ordinal());
+//        _head_.add_premise(Glob.attn_disp_loop.add_cpt(new JustString(msg.) ));
     }
     
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--

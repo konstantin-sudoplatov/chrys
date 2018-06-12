@@ -1,16 +1,16 @@
 package concepts.dyn;
 
-import attention.CaldronLoop;
+import attention.Caldron;
 import chris.Glob;
 import concepts.DynamicConcept;
 
 /**
- * Container for a set of premises and corresponding set of effects. It implements the AssertionIface
+ * Container for a set of premises and corresponding set of effects. It implements the AssessionIface
  interface like the Neuron and what it does is to get the premises in the context, activate them,
  and get the effect in context, so making them ready for assertions.
  * @author su
  */
-public class Seed extends DynamicConcept implements AssertionIface, EffectIface, PropertyIface {
+public class Seed extends DynamicConcept implements AssessionIface, EffectIface, PropertyIface {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -27,7 +27,7 @@ public class Seed extends DynamicConcept implements AssertionIface, EffectIface,
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     @Override
-    public long[] assertion(CaldronLoop context) {
+    public long[] assess(Caldron context) {
         throw new UnsupportedOperationException("Not supported yet.");
     }
 

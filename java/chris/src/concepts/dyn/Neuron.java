@@ -57,22 +57,6 @@ public class Neuron extends DynamicConcept implements AssessionIface, ActionIfac
     public long[] assess(Caldron context) {
         throw new UnsupportedOperationException("Not realized yet");
     }
-//
-//    /**
-//     * Getter.
-//     * @return
-//     */
-//    public long[] get_action_cid() {
-//        return actionS;
-//    }
-//
-//    /**
-//     * Setter.
-//     * @param actionCid
-//     */
-//    public void set_action_cid(long[] actionCid) {
-//        this.actionS = actionCid;
-//    }
 
     @Override
     public long get_action(int index) {
@@ -166,7 +150,6 @@ public class Neuron extends DynamicConcept implements AssessionIface, ActionIfac
         biaS = bias;
     }
             
-    
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //      Private    Private    Private    Private    Private    Private    Private

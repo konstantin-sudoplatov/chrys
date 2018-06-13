@@ -127,7 +127,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
      * @return cid
      * @throws Crash if the cid does not exists
      */
-    public synchronized long copy_cpt_to_bubble(long cid, AttnCircle bubble) {
+    public synchronized long copy_cpt_to_circle(long cid, AttnCircle bubble) {
 
         if      //is there such a concept?
                 (comDir.cid_cpt.containsKey(cid))
@@ -152,12 +152,12 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
      * @return cid
      * @throws Crash if the name does not exists
      */
-    public synchronized long copy_cpt_to_bubble(String cptName, AttnCircle bubble) {
+    public synchronized long copy_cpt_to_circle(String cptName, AttnCircle bubble) {
         if      // is there such named concept?
                 (comDir.name_cid.containsKey(cptName))
         {   // yes: load it to the bubble
             long cid = comDir.name_cid.get(cptName);
-            copy_cpt_to_bubble(cid, bubble);
+            AttnDispatcherLoop.this.copy_cpt_to_circle(cid, bubble);
             return cid;
         }
         else// no: crash
@@ -226,15 +226,15 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
         {
             // May be, create the chat bubble
             if
-                    (consoleChatBubble == null)
+                    (consoleChatCircle == null)
             {
-                consoleChatBubble = new AttnCircle(this);
-                addBubbleToList(consoleChatBubble);
-                consoleChatBubble.start_thread();
+                consoleChatCircle = new AttnCircle(this);
+                addCircleToList(consoleChatCircle);
+                consoleChatCircle.start_thread();
             }
             
             // route the message to the chat bubble
-            consoleChatBubble.put_in_queue(msg);
+            consoleChatCircle.put_in_queue(msg);
 
             return true;
         }
@@ -263,7 +263,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     private final ArrayList<AttnCircle> attnBubbleList = new ArrayList<>();
     
     /** Attention bubble, that chats with console. */
-    private AttnCircle consoleChatBubble;
+    private AttnCircle consoleChatCircle;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
@@ -272,7 +272,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
      * to work with the list of bubbles (for example, wants to find a bubble to add a new concept to it).
      * @param bubble attention bubble loop to add to the list.
      */
-    private synchronized void addBubbleToList(AttnCircle bubble) {
+    private synchronized void addCircleToList(AttnCircle bubble) {
         attnBubbleList.add(bubble);
     }
 

@@ -8,7 +8,7 @@ import concepts.dyn.primitives.CiddedNothing;
  * Just an example of using primitives. Not meant to be implemented.
  * @author su
  */
-abstract public class ElementaryPremise extends CiddedNothing {
+public class ElementaryPremise extends CiddedNothing {
 
     /** 
      * Constructor.
@@ -16,4 +16,18 @@ abstract public class ElementaryPremise extends CiddedNothing {
     public ElementaryPremise() { 
         super(StatCptEnum.Mrk_ElementaryPremise.ordinal());
     } 
+    
+    //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
+    //
+    //                                  Public methods
+    //
+    //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
+
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+    //
+    //      Private    Private    Private    Private    Private    Private    Private
+    //
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+
+    //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 }

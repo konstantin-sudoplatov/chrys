@@ -1,8 +1,11 @@
-package concepts.dyn;
+package sump;
 
 import attention.Caldron;
 import chris.Glob;
 import concepts.DynamicConcept;
+import concepts.dyn.AssessionIface;
+import concepts.dyn.EffectIface;
+import concepts.dyn.PropertyIface;
 
 /**
  * Container for a set of premises and corresponding set of effects. It implements the AssessionIface

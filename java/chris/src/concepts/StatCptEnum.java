@@ -10,7 +10,7 @@ public enum StatCptEnum {
     Mrk_UnorderedListOfCids,
     Mrk_ElementaryPremise,
     Mrk_CompositePremise,
-    LoadPremisesIntoFirstAssertion,
+    InitiateChatting,
     ;
     
     /** This package is used to find static concept classes in ComDir.generate_static_concepts(). 

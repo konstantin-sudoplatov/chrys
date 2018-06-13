@@ -1,10 +1,12 @@
 package concepts;
 
+import concepts.dyn.ActivationIface;
+
 /**
  * The dynamic concept is a common predecessor for the primitives and neurons.
  * @author su
  */
-abstract public class DynamicConcept extends Concept {
+abstract public class DynamicConcept extends Concept implements ActivationIface {
     
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -80,7 +82,8 @@ abstract public class DynamicConcept extends Concept {
      * Getter.
      * @return
      */
-    public Activation get_activation() {
+    @Override
+    public float get_activation() {
         return activatioN;
     }
 
@@ -88,7 +91,8 @@ abstract public class DynamicConcept extends Concept {
      * Setter.
      * @param activation
      */
-    public void set_activation(Activation activation) {
+    @Override
+    public void set_activation(float activation) {
         this.activatioN = activation;
     }
 
@@ -114,7 +118,7 @@ abstract public class DynamicConcept extends Concept {
 
     /** Activation. Its normalized (squashed) value is from -1 to 1. Activation is not stored in the DB.
         It is needed only at the reasoning time. */
-    private Activation activatioN;
+    private float activatioN;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

@@ -5,7 +5,7 @@ import concepts.DynCptNameEnum;
 import concepts.StatCptEnum;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
-import concepts.dyn.Seed;
+import sump.Seed;
 import concepts.dyn.primitives.CiddedArray;
 import concepts.dyn.primitives.CiddedNothing;
 import concepts.dyn.primitives.JustString;
@@ -53,26 +53,26 @@ final public class Starter {
         long lineCid = Glob.attn_disp_loop.add_cpt(cidArr, DynCptNameEnum.line_of_chat_string_prim.name());
         
         // Action of requesting the next line.
-        Action requestNextLineAction = new Action(DynCptNameEnum.request_next_console_line_actn.ordinal());
+        Action requestNextLineAction = new Action(DynCptNameEnum.request_next_line_actn.ordinal());
         long requestNextLineCid = Glob.attn_disp_loop.add_cpt(requestNextLineAction);
         
         //              Neurons, that deal with these premises:
-        // The one that finishes processing of the line.
+        // The one that waits for the console line.
         Neuron nrn = new Neuron();
-        Glob.attn_disp_loop.add_cpt(nrn);       // without name
         nrn.set_premises(new Neuron.Premise[] {
             new Neuron.Premise(1, chatCid), 
             new Neuron.Premise(1, lineCid)
         });
         nrn.set_effects(new long[] {nrn.get_cid()});    // set up itself as a successor (the cid is assigned already)
         nrn.set_actions(new long[] {requestNextLineCid});
+        Glob.attn_disp_loop.add_cpt(nrn, DynCptNameEnum.wait_for_the_line_from_chatter_nrn.name());
         
-        // Console chat_prem skirmisher. It combines all the above premises and determines possible effects. It will make the first assess
-        // in the reasoning tree.
-        Seed seed = new Seed();
-        seed.set_properties(new long[] {chatCid, lineCid});
-        seed.set_effects(new long[] {nrn.get_cid()});
-        Glob.attn_disp_loop.add_cpt(seed, DynCptNameEnum.console_chat_seed.name());
+//        // Console chat_prem skirmisher. It combines all the above premises and determines possible effects. It will make the first assess
+//        // in the reasoning tree.
+//        Seed seed = new Seed();
+//        seed.set_properties(new long[] {chatCid, lineCid});
+//        seed.set_effects(new long[] {nrn.get_cid()});
+//        Glob.attn_disp_loop.add_cpt(seed, DynCptNameEnum.console_chat_seed.name());
         
 
 //        Neuron nrn = new Neuron();
@@ -84,7 +84,7 @@ final public class Starter {
 //        });
 //        Glob.attn_disp_loop.add_cpt(nrn, DynCptNameEnum.console_chat_seed.name());
 //        long cid5 = Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.add_line_to_console_log.name());
-//        long cid6 = Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.request_next_console_line_actn.name());
+//        long cid6 = Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.request_next_line_actn.name());
 //        nrn.set_effect_cid(new long[] {cid5, cid6});
 //        
 //        Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.console_log.name());

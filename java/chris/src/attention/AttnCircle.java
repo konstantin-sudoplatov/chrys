@@ -6,8 +6,7 @@ import chris.Glob;
 import concepts.Concept;
 import concepts.ConceptDirectory;
 import concepts.DynCptNameEnum;
-import concepts.StatCptEnum;
-import concepts.StaticConcept;
+import concepts.dyn.ActivationIface;
 import java.util.List;
 import concepts.dyn.AssessionIface;
 
@@ -37,7 +36,7 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     /**
-     * Get a local concept, may be load it initially.
+     * Get a local concept by cid, may be load it initially.
      * @param cid
      * @return the concept
      * @throws Crash if not found
@@ -55,9 +54,28 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
             // yes: return the concept
             return cpt;
         else {  // no: load the concept from the common directory and return it
-            load_cpt(cid);
+            attnDisp.copy_cpt_to_circle(cid, this);
             return cptDir.cid_cpt.get(cid);
         }
+    }
+    
+    /**
+     * Get a local concept by name, may be load it initially.
+     * @param cptName
+     * @return the concept
+     * @throws Crash if not found
+     */
+    public synchronized Concept get_cpt(String cptName) {
+        long cid;
+        if      // isn't the name in local directory?
+                (!cptDir.name_cid.containsKey(cptName)) 
+        {   // load the concept
+            cid = attnDisp.copy_cpt_to_circle(cptName, this);
+        }
+        else // return its cid
+            cid = cptDir.name_cid.get(cptName);
+        
+        return cptDir.cid_cpt.get(cid);
     }
 
     /**
@@ -68,7 +86,22 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
      */
     public synchronized long load_cpt(long cid) {
 
-        if (!cptDir.cid_cpt.containsKey(cid)) attnDisp.copy_cpt_to_bubble(cid, this);
+        if      // isn't the concept in local directory?
+                (!cptDir.cid_cpt.containsKey(cid)) 
+            // load it
+            attnDisp.copy_cpt_to_circle(cid, this);
+
+        return cid;
+    }
+    
+    /**
+     * Load concept by cid and set up the activation value.
+     * @param cid
+     * @param activation
+     * @return cid
+     */
+    public synchronized long load_cpt(long cid, float activation) {
+        ((ActivationIface)get_cpt(cid)).set_activation(activation);
 
         return cid;
     }
@@ -79,14 +112,27 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
      * @return cid
      */
     public synchronized long load_cpt(String cptName) {
-        if 
+        if      // isn't the name in local directory?
                 (!cptDir.name_cid.containsKey(cptName)) 
-        {
-            long cid = attnDisp.copy_cpt_to_bubble(cptName, this);
+        {   // load the concept
+            long cid = attnDisp.copy_cpt_to_circle(cptName, this);
             return cid;
         }
-        else
+        else // return its cid
             return cptDir.name_cid.get(cptName);
+    }
+
+    /**
+     * Load concept by name and set up the activation value.
+     * @param cptName
+     * @param activation
+     * @return cid
+    */
+    public synchronized long load_cpt(String cptName, float activation) {
+        long cid = load_cpt(cptName);
+        ((ActivationIface)get_cpt(cid)).set_activation(activation);
+        
+        return cid;
     }
     
     /** 
@@ -174,7 +220,7 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
             if      // hasn't the brewing started yet?
                     (_head_ == null)
             {   //no: start it
-                startBrewing(msg);  
+                initialSetupWithConsole();  
             }
             
             return true;
@@ -209,13 +255,22 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     /**
-     * Initialize a chat_prem on the first message from a chatter.
-     * @param msg 
+     * Get all the premises and effects ready for the first assessment, add specifics for chatting via console.
      */
-    private void startBrewing(BaseMessage msg) {
+    private void initialSetupWithConsole() {
+        initialSetup();
         
-        // set up the console_chat_seed as a new caldron head
-        _head_ = (AssessionIface)get_cpt(load_cpt(DynCptNameEnum.console_chat_seed.name()));
+        // set up the caldron head as the next line loader
+        _head_ = (AssessionIface)get_cpt(load_cpt(DynCptNameEnum.wait_for_the_line_from_chatter_nrn.name()));
+    }
+    
+    /**
+     * Get all the premises and effects ready for the first assessment.
+     */
+    private void initialSetup() {
+        
+        // set up its premises, effects and the action of getting the next line
+        
         
         // Create and fill new current assertion
 //        _head_ = new Assertion();

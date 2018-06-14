@@ -1,12 +1,11 @@
 package starter;
 
+import auxiliary.Premise;
 import chris.Glob;
 import concepts.DynCptNameEnum;
 import concepts.StatCptEnum;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
-import sump.Seed;
-import concepts.dyn.primitives.CiddedArray;
 import concepts.dyn.primitives.CiddedNothing;
 import concepts.dyn.primitives.JustString;
 
@@ -34,23 +33,16 @@ final public class Starter {
 
     public static void generate_dynamic_concepts() {
 
-        // Primitive "chat_prem" as CiddedArray of properties "it_is_console_chat_prem" and "chatter_unknown_prem" and marker Mrk_CompositePremise
-        // as the nested cid.
-        long cid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_CompositePremise.ordinal()));
-        CiddedArray cidArr = new CiddedArray(cid);
-        cid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.it_is_console_chat_prem.name());
-        cidArr.append_array(cid);
-        cid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.chatter_unknown_prem.name());
-        cidArr.append_array(cid);
-        long chatCid = Glob.attn_disp_loop.add_cpt(cidArr, DynCptNameEnum.chat_prem.name());
+        // Premises "chat_prem", "it_is_console_chat_prem" and "chatter_unknown_prem".
+        long chatCid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.chat_prem.name());
+        long isConsChatCid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.it_is_console_chat_prem.name());
+        long chatterUnknownCid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.chatter_unknown_prem.name());
         
-        // Primitive "line_of_chat" as CiddedArray of property "it_is_the_first_line_of_chat_prem" and JustString text of line
+        // Primitives "line_of_chat_juststring" and "it_is_the_first_line_of_chat_prem".
         // as the nested cid.
-        cid = Glob.attn_disp_loop.add_cpt(new JustString(""));
-        cidArr = new CiddedArray(cid);
-        cid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.it_is_the_first_line_of_chat_prem.name());
-        cidArr.append_array(cid);
-        long lineCid = Glob.attn_disp_loop.add_cpt(cidArr, DynCptNameEnum.line_of_chat_string_prim.name());
+        long lineHasComeCid = Glob.attn_disp_loop.add_cpt(new JustString(null), DynCptNameEnum.next_line_of_chat_has_come_prem.name());
+        long lineOfChatCid = Glob.attn_disp_loop.add_cpt(new JustString(null), DynCptNameEnum.line_of_chat_juststring.name());
+        Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.it_is_the_first_line_of_chat_prem.name());
         
         // Action of requesting the next line.
         Action requestNextLineAction = new Action(DynCptNameEnum.request_next_line_actn.ordinal());
@@ -59,12 +51,12 @@ final public class Starter {
         //              Neurons, that deal with these premises:
         // The one that waits for the console line.
         Neuron nrn = new Neuron();
-        nrn.set_premises(new Neuron.Premise[] {
-            new Neuron.Premise(1, chatCid), 
-            new Neuron.Premise(1, lineCid)
+        nrn.set_premises(new Premise[] {
+            new Premise(1, chatCid), 
+            new Premise(1, lineOfChatCid)
         });
         nrn.set_effects(new long[] {nrn.get_cid()});    // set up itself as a successor (the cid is assigned already)
-        nrn.set_actions(new long[] {requestNextLineCid});
+        nrn.append_action_ranges(0, new long[] {requestNextLineCid});
         Glob.attn_disp_loop.add_cpt(nrn, DynCptNameEnum.wait_for_the_line_from_chatter_nrn.name());
         
 //        // Console chat_prem skirmisher. It combines all the above premises and determines possible effects. It will make the first assess

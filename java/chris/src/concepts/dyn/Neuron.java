@@ -1,6 +1,8 @@
 package concepts.dyn;
 
 import attention.Caldron;
+import auxiliary.ActionSelector;
+import auxiliary.Premise;
 import chris.Glob;
 import concepts.*;
 import java.util.Arrays;
@@ -10,17 +12,7 @@ import java.util.Arrays;
  * The same way it determines successors and their activations. 
  * @author su
  */
-public class Neuron extends DynamicConcept implements AssessionIface, ActionIface, EffectIface, PropertyIface, PremiseIface {
-    
-    /** Structure of premises. A pair of weight of a concept and its cid. */
-    public static class Premise {
-        public float weight;    // Weight with which this cid takes part in the weighted sum.
-        public long cid;
-        public Premise(float weight, long cid) {
-            this.weight = weight;
-            this.cid = cid;
-        }
-    }
+public class Neuron extends DynamicConcept implements AssessmentIface, ActionIface, EffectIface, PropertyIface, PremiseIface {
 
     /**
      * Default constructor.
@@ -45,7 +37,6 @@ public class Neuron extends DynamicConcept implements AssessionIface, ActionIfac
     @Override
     public Neuron clone() {
         Neuron clon = (Neuron)super.clone();
-        if (actionS != null) clon.actionS = Arrays.copyOf(actionS, actionS.length);
         if (propertieS != null) clon.propertieS = Arrays.copyOf(propertieS, propertieS.length);
         if (effectS != null) clon.effectS = Arrays.copyOf(effectS, effectS.length);
         if (premiseS != null) clon.premiseS = Arrays.copyOf(premiseS, premiseS.length);
@@ -57,26 +48,15 @@ public class Neuron extends DynamicConcept implements AssessionIface, ActionIfac
     public long[] assess(Caldron context) {
         throw new UnsupportedOperationException("Not realized yet");
     }
-
+    
     @Override
-    public long get_action(int index) {
-        return actionS[index];
+    public long[] get_actions(float activation) {
+        return actioN.get_actions(activation);
     }
-
+        
     @Override
-    public long[] get_actions() {
-        return actionS;
-    }
-
-    @Override
-    public long add_action(long cid) {
-        actionS = Glob.append_array(actionS, cid);
-        return cid;
-    }
-
-    @Override
-    public void set_actions(long[] actionArray) {
-        actionS = actionArray;
+    public void append_action_ranges(float lowerBoundary, long[] actions) {
+        actioN.append_action_ranges(lowerBoundary, actions);
     }
 
     @Override
@@ -159,7 +139,7 @@ public class Neuron extends DynamicConcept implements AssessionIface, ActionIfac
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
     
     /** Array of actions. */
-    private long[] actionS;
+    private ActionSelector actioN;
     
     /** Array of possible effects. */
     private long[] effectS;

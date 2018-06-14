@@ -6,7 +6,7 @@ import attention.Caldron;
  * Interface for dynamic concepts capable of doing the reasoning steps.
  * @author su
  */
-public interface AssessionIface {
+public interface AssessmentIface {
     
     /**
      * Do weighing, determine activation, may be, do actions, determine possible effects.

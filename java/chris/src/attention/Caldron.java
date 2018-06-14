@@ -4,7 +4,7 @@ import chris.BaseMessageLoop;
 import concepts.Concept;
 import java.util.HashMap;
 import java.util.Map;
-import concepts.dyn.AssessionIface;
+import concepts.dyn.AssessmentIface;
 
 /**
  * The reasoning is taking place in a caldron. Caldrons are organized in a hierarchy.
@@ -41,7 +41,7 @@ abstract public class Caldron extends BaseMessageLoop {
     //---$$$---$$$---$$$---$$$---$$$--- protected data $$$---$$$---$$$---$$$---$$$---$$$--
     
     /** The dynamic concept, currently doing assertion. */
-    protected AssessionIface _head_;
+    protected AssessmentIface _head_;
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
 

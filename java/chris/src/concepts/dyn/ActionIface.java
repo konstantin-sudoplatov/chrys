@@ -7,28 +7,17 @@ package concepts.dyn;
 public interface ActionIface {
 
     /**
-     * Getter.
-     * @param index
-     * @return action cid with a given index in the array.
+     * Get array of action cids, corresponding to the given activation value.
+     * @param activation activation value
+     * @return array of cids range of which fits the activation. null for the empty list.
      */
-    public long get_action(int index);
-
+    public long[] get_actions(float activation);
+    
     /**
-     * Getter.
-     * @return array of action cids
+     * Add new element to the ranges array. The new boundary must be less or equal to the last existing boundary. One boundary
+     * cannot be repeated more than twice.
+     * @param lowerBoundary this boundary delimits the range from the last existing boundary including to this value excluding.
+     * @param actions list of cids of actions. null for the empty list.
      */
-    public long[] get_actions();
-
-    /**
-     * Add a concept to the action array.
-     * @param cid
-     * @return 
-     */
-    public long add_action(long cid);
-
-    /**
-     * Setter.
-     * @param actionArray array of action cids.
-     */
-    public void set_actions(long[] actionArray);
+    public void append_action_ranges(float lowerBoundary, long[] actions);
 }

@@ -9,7 +9,6 @@ package concepts;
 public enum StatCptEnum {
     Mrk_UnorderedListOfCids,
     Mrk_ElementaryPremise,
-    Mrk_CompositePremise,
     InitiateChatting,
     ;
     

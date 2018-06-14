@@ -3,17 +3,17 @@ package sump;
 import attention.Caldron;
 import chris.Glob;
 import concepts.DynamicConcept;
-import concepts.dyn.AssessionIface;
 import concepts.dyn.EffectIface;
 import concepts.dyn.PropertyIface;
+import concepts.dyn.AssessmentIface;
 
 /**
- * Container for a set of premises and corresponding set of effects. It implements the AssessionIface
+ * Container for a set of premises and corresponding set of effects. It implements the AssessmentIface
  interface like the Neuron and what it does is to get the premises in the context, activate them,
  and get the effect in context, so making them ready for assertions.
  * @author su
  */
-public class Seed extends DynamicConcept implements AssessionIface, EffectIface, PropertyIface {
+public class Seed extends DynamicConcept implements AssessmentIface, EffectIface, PropertyIface {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 

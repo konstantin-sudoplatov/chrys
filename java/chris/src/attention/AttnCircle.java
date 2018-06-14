@@ -8,7 +8,7 @@ import concepts.ConceptDirectory;
 import concepts.DynCptNameEnum;
 import concepts.dyn.ActivationIface;
 import java.util.List;
-import concepts.dyn.AssessionIface;
+import concepts.dyn.AssessmentIface;
 
 /**
  * Attention bubble loop. Works as a main caldron, can contain subcaldrons.
@@ -261,7 +261,7 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
         initialSetup();
         
         // set up the caldron head as the next line loader
-        _head_ = (AssessionIface)get_cpt(load_cpt(DynCptNameEnum.wait_for_the_line_from_chatter_nrn.name()));
+        _head_ = (AssessmentIface)get_cpt(load_cpt(DynCptNameEnum.wait_for_the_line_from_chatter_nrn.name()));
     }
     
     /**

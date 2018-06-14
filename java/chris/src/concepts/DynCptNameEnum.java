@@ -8,10 +8,11 @@ package concepts;
  * @author su
  */
 public enum DynCptNameEnum {
-    chat_prem,                               // chatting premise
-    it_is_console_chat_prem,                 // chat_prem by console property to the "chat_prem" premise
-    line_of_chat_string_prim,
-    it_is_the_first_line_of_chat_prem,       // it is the first line of chat_prem
+    chat_prem,                              // chatting premise
+    it_is_console_chat_prem,                // chat_prem by console property to the "chat_prem" premise
+    line_of_chat_juststring,
+    next_line_of_chat_has_come_prem,        // activation +1: yes, -1: no
+    it_is_the_first_line_of_chat_prem,      // it is the first line of chat_prem
     chatter_unknown_prem,      
     console_chat_seed,                  // initial concepts and effects for starting console chat_prem
     wait_for_the_line_from_chatter_nrn,

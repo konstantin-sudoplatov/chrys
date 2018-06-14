@@ -14,7 +14,6 @@ public enum DynCptNameEnum {
     next_line_of_chat_has_come_prem,        // activation +1: yes, -1: no
     it_is_the_first_line_of_chat_prem,      // it is the first line of chat_prem
     chatter_unknown_prem,      
-    console_chat_seed,                  // initial concepts and effects for starting console chat_prem
     wait_for_the_line_from_chatter_nrn,
     request_next_line_actn,
     add_line_to_console_log,

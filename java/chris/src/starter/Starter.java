@@ -52,8 +52,7 @@ final public class Starter {
         // The one that waits for the console line.
         Neuron nrn = new Neuron();
         nrn.set_premises(new Premise[] {
-            new Premise(1, chatCid), 
-            new Premise(1, lineOfChatCid)
+            new Premise(1, lineHasComeCid)
         });
         nrn.set_effects(new long[] {nrn.get_cid()});    // set up itself as a successor (the cid is assigned already)
         nrn.append_action_ranges(0, new long[] {requestNextLineCid});

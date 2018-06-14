@@ -6,6 +6,7 @@ import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
 import concepts.ConceptDirectory;
+import concepts.DynCptNameEnum;
 import concepts.DynamicConcept;
 import concepts.StatCptEnum;
 import concepts.StaticConcept;
@@ -224,11 +225,11 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
         if      // is it a message from console to bubble?
                 (msg instanceof Msg_ConsoleToAttnBubble)
         {
-            // May be, create the chat bubble
+            // May be, create an attention circle for the chat
             if
                     (consoleChatCircle == null)
             {
-                consoleChatCircle = new AttnCircle(this);
+                consoleChatCircle = new AttnCircle(this, DynCptNameEnum.it_is_console_chat_prem);
                 addCircleToList(consoleChatCircle);
                 consoleChatCircle.start_thread();
             }

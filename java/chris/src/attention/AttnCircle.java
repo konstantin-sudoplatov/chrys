@@ -27,6 +27,9 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
     public AttnCircle(AttnDispatcherLoop attnDisp) 
     {   super(null);    // null for being a main caldron
         this.attnDisp = attnDisp;
+        
+        // Prepare the first assessment
+        initialSetup();
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -220,7 +223,7 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
             if      // hasn't the brewing started yet?
                     (_head_ == null)
             {   //no: start it
-                initialSetupWithConsole();  
+                  
             }
             
             return true;
@@ -253,22 +256,25 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
     private List<Caldron> caldronList;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-    /**
-     * Get all the premises and effects ready for the first assessment, add specifics for chatting via console.
-     */
-    private void initialSetupWithConsole() {
-        initialSetup();
-        
-        // set up the caldron head as the next line loader
-        _head_ = (AssessmentIface)get_cpt(load_cpt(DynCptNameEnum.wait_for_the_line_from_chatter_nrn.name()));
-    }
     
     /**
      * Get all the premises and effects ready for the first assessment.
      */
     private void initialSetup() {
+
+        // set up premises
+        load_cpt(DynCptNameEnum.chat_prem.name(), 1);
+        load_cpt(DynCptNameEnum.it_is_console_chat_prem.name(), 1);
+        load_cpt(DynCptNameEnum..name(), 1);
+        load_cpt(DynCptNameEnum..name(), 1);
+        load_cpt(DynCptNameEnum..name(), 1);
+        load_cpt(DynCptNameEnum..name(), 1);
+        load_cpt(DynCptNameEnum..name(), 1);
+        load_cpt(DynCptNameEnum..name(), 1);
         
+        // set up the caldron head as the next line loader
+        _head_ = (AssessmentIface)get_cpt(load_cpt(DynCptNameEnum.wait_for_the_line_from_chatter_nrn.name()));
+
         // set up its premises, effects and the action of getting the next line
         
         

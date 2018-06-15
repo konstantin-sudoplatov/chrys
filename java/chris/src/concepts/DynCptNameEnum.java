@@ -8,6 +8,7 @@ package concepts;
  * @author su
  */
 public enum DynCptNameEnum {
+    wait_act,                               // stop work in a caldron, addidional info given by the stat_cid
     chat_prem,                              // chatting premise
     it_is_console_chat_prem,                // chat_prem by console property to the "chat_prem" premise
     line_of_chat_string,

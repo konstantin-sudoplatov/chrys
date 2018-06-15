@@ -5,7 +5,6 @@ import chris.BaseMessageLoop;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
-import concepts.ConceptDirectory;
 import concepts.DynCptNameEnum;
 import concepts.DynamicConcept;
 import concepts.StatCptEnum;
@@ -17,6 +16,8 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -47,12 +48,12 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
      * Add a concept to the common or a bubble directory. Static concepts know their cid already, for dynamic concept it is randomly 
      * generated outside the static range.
      * @param cpt the concept to add
-     * @param bubble the bubble, that contains the target directory or null if it is the common directory.
+     * @param circle the bubble, that contains the target directory or null if it is the common directory.
      * @param cptName concept name to put in the name directory or null
      * @return cid
      */
     @SuppressWarnings("UnnecessaryLabelOnContinueStatement")
-    public synchronized long add_cpt(Concept cpt, AttnCircle bubble, String cptName) {
+    public synchronized long add_cpt(Concept cpt, AttnCircle circle, String cptName) {
         // determine cid
         long cid;
         if      // static concept?
@@ -69,11 +70,11 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
                         (cid >= 0 && cid <= Glob.MAX_STATIC_CID)
                     cid += Glob.MAX_STATIC_CID + 1;
                 if      // is in cpt?
-                        (comDir.cid_cpt.containsKey(cid))
+                        (comDir.containsKey(cid))
                     continue GENERATE_CID;   // generate once more
                 for(AttnCircle b: attnBubbleList) {
                     if      // is in PrivDir?
-                            (b.cid_cpt_containsKey(cid))
+                            (b.concept_directory_containsKey(cid))
                         continue GENERATE_CID;
                 }
                 break;
@@ -83,20 +84,19 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
         }
         
         // put to target directories
-        if
-                (bubble == null)
-        {
-            comDir.cid_cpt.put(cid, cpt);
-            if      // is it a named concept?
-                    (cptName != null) 
-            {   //yes: put the cid into the front and reverse directories
-                comDir.name_cid.put(cptName, cid);
-                comDir.cid_name.put(cid, cptName);
-            }
+        if      // is it a named concept?
+                (cptName != null) 
+        {   //yes: put the cid into the front and reverse directories
+            Glob.named.name_cid.put(cptName, cid);
+            Glob.named.cid_name.put(cid, cptName);
         }
-        else {
-            bubble.put_in_cid_cpt(cid, cpt);
-            if (cptName != null) bubble.put_in_name_dirs(cptName, cid);
+        if      // the concept addressed to attention dispatcher?
+                (circle == null)
+        {   //yes: put into comDir
+            comDir.put(cid, cpt);
+        }
+        else { //no: put into the addressed attention circle
+            circle.put_in_concept_directory(cid, cpt);
         }
         
         return cid;
@@ -124,22 +124,16 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     /**
      * Load a concept by cid from common to local directory. The name directories are updated too, if it is a named concept.
      * @param cid
-     * @param bubble an attention bubble loop.
+     * @param circle an attention bubble loop.
      * @return cid
      * @throws Crash if the cid does not exists
      */
-    public synchronized long copy_cpt_to_circle(long cid, AttnCircle bubble) {
+    public synchronized long copy_cpt_to_circle(long cid, AttnCircle circle) {
 
         if      //is there such a concept?
-                (comDir.cid_cpt.containsKey(cid))
+                (comDir.containsKey(cid))
         {   //yes: clone it and load to the bubble
-            bubble.put_in_cid_cpt(cid, comDir.cid_cpt.get(cid).clone());
-            if      // is that a named concept?
-                    (comDir.cid_name.containsKey(cid))
-            {   //yes: also update name dirs
-                String name = comDir.cid_name.get(cid);
-                bubble.put_in_name_dirs(name, cid);
-            }
+            circle.put_in_concept_directory(cid, comDir.get(cid).clone());
             return cid;
         }
         else//no: crash
@@ -149,16 +143,16 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     /**
      * Load a concept by name from common to local directory. name_cid of the local directory is updated with the name and cid.
      * @param cptName
-     * @param bubble
+     * @param circle
      * @return cid
      * @throws Crash if the name does not exists
      */
-    public synchronized long copy_cpt_to_circle(String cptName, AttnCircle bubble) {
+    public synchronized long copy_cpt_to_circle(String cptName, AttnCircle circle) {
+        Long cid = Glob.named.name_cid.get(cptName);
         if      // is there such named concept?
-                (comDir.name_cid.containsKey(cptName))
+                (cid != null)
         {   // yes: load it to the bubble
-            long cid = comDir.name_cid.get(cptName);
-            AttnDispatcherLoop.this.copy_cpt_to_circle(cid, bubble);
+            AttnDispatcherLoop.this.copy_cpt_to_circle(cid, circle);
             return cid;
         }
         else// no: crash
@@ -167,11 +161,20 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
 
     @Override
     public synchronized Concept get_cpt(long cid) {
-        Concept cpt = comDir.cid_cpt.get(cid);
+        Concept cpt = comDir.get(cid);
         if (cpt != null)
             return cpt;
         else
-            throw new Crash("No such concept: cid = " + cid + ", name = " + comDir.cid_name.get(cid));
+            throw new Crash("No such concept: cid = " + cid + ", name = " + Glob.named.cid_name.get(cid));
+    }
+    
+    @Override
+    public synchronized Concept get_cpt(String cptName) {
+        Long cid = Glob.named.name_cid.get(cptName);
+        if (cid != null) 
+            return comDir.get(cid);
+        else 
+            throw new Crash("Now such concept: name = " + cptName);
     }
     
     /**
@@ -180,7 +183,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
      * @return
      */
     public synchronized boolean comdir_containsKey(long cid) {
-        return comDir.cid_cpt.containsKey(cid);
+        return comDir.containsKey(cid);
     }
 
     @Override
@@ -258,7 +261,9 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
     /** Common concept directory: a map of concepts by cids. */
-    private final ConceptDirectory comDir = new ConceptDirectory();
+    
+    /** Concept by cid directory: a map of a concepts by their cids. */
+    public final Map<Long, Concept> comDir = new HashMap<>();
     
     /** List of all attention bubbles */
     private final ArrayList<AttnCircle> attnBubbleList = new ArrayList<>();

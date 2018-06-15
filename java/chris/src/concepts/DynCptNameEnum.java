@@ -10,7 +10,7 @@ package concepts;
 public enum DynCptNameEnum {
     chat_prem,                              // chatting premise
     it_is_console_chat_prem,                // chat_prem by console property to the "chat_prem" premise
-    line_of_chat_juststring,
+    line_of_chat_string,
     next_line_of_chat_has_come_prem,        // activation +1: yes, -1: no
     it_is_the_first_line_of_chat_prem,      // it is the first line of chat_prem
     chatter_unknown_prem,      

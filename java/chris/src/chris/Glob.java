@@ -1,6 +1,7 @@
 package chris;
 
 import attention.AttnDispatcherLoop;
+import auxiliary.NamedConcept;
 import console.ConsoleLoop;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -35,6 +36,9 @@ final public class Glob {
 
     /** Console user interface. */
     public final static ConsoleLoop console_loop = new ConsoleLoop();
+    
+    /** Bidirectional converting name/cid for named concepts. */
+    public final static NamedConcept named = new NamedConcept();
     
     /**
      * Disabled constructor. This class should not ever be instantiated.

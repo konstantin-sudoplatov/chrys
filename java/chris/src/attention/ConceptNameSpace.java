@@ -1,5 +1,6 @@
 package attention;
 
+import chris.Crash;
 import concepts.Concept;
 
 /**
@@ -11,9 +12,17 @@ import concepts.Concept;
 public interface ConceptNameSpace {
 
     /**
-     * Get a concept from current name space.
+     * Get a concept from current name space. If the concept is not in the current name space yet, it gets cloned into it.
      * @param cid
-     * @return
+     * @return concept object
      */
     public Concept get_cpt(long cid);
+    
+    /**
+     * Get a local concept by name. If the concept is not in the current name space yet, it gets cloned into it.
+     * @param cptName
+     * @return the concept
+     * @throws Crash if not found
+     */
+    public Concept get_cpt(String cptName);
 }

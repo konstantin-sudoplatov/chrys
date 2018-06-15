@@ -64,6 +64,10 @@ public class ActionSelector implements ActionIface {
     
     @Override
     public void append_action_ranges(float lowerBoundary, long[] actions) {
+        if
+                (rangeS == null)
+            rangeS = new Range[0];
+        
         if      // is the new lower boundary bigger than the existing?
                 (rangeS.length > 0 && lowerBoundary > rangeS[rangeS.length-1].range)
             throw new Crash("New boundary " + lowerBoundary + " is bigger than the last existing " + rangeS[rangeS.length-1].range);
@@ -71,7 +75,7 @@ public class ActionSelector implements ActionIface {
                 (rangeS.length > 1 && lowerBoundary == rangeS[rangeS.length-2].range)
             throw new Crash("New boundary " + lowerBoundary + " is equal to the last but one.");
         
-        Glob.append_array(rangeS, new Range(lowerBoundary, actions));
+        rangeS = (Range[])Glob.append_array(rangeS, new Range(lowerBoundary, actions));
     }
     
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%

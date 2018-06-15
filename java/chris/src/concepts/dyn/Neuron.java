@@ -12,7 +12,7 @@ import java.util.Arrays;
  * The same way it determines successors and their activations. 
  * @author su
  */
-public class Neuron extends DynamicConcept implements AssessmentIface, ActionIface, EffectIface, PropertyIface, PremiseIface {
+public class Neuron extends DynamicConcept implements AssessmentIface, EffectIface, PropertyIface {
 
     /**
      * Default constructor.
@@ -45,17 +45,16 @@ public class Neuron extends DynamicConcept implements AssessmentIface, ActionIfa
     }
     
     @Override
-    public long[] assess(Caldron context) {
-        throw new UnsupportedOperationException("Not realized yet");
-    }
-    
-    @Override
     public long[] get_actions(float activation) {
         return actioN.get_actions(activation);
     }
         
     @Override
     public void append_action_ranges(float lowerBoundary, long[] actions) {
+        if
+                (actioN == null)
+            actioN = new ActionSelector();
+        
         actioN.append_action_ranges(lowerBoundary, actions);
     }
 
@@ -122,10 +121,12 @@ public class Neuron extends DynamicConcept implements AssessmentIface, ActionIfa
         premiseS = premiseArray;
     }
 
+    @Override
     public float get_bias() {
         return biaS;
     }
 
+    @Override
     public void set_bias(float bias) {
         biaS = bias;
     }
@@ -154,6 +155,6 @@ public class Neuron extends DynamicConcept implements AssessmentIface, ActionIfa
     private float biaS;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
-
+    
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--
 }

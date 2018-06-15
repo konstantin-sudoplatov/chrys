@@ -38,10 +38,10 @@ final public class Starter {
         long isConsChatCid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.it_is_console_chat_prem.name());
         long chatterUnknownCid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.chatter_unknown_prem.name());
         
-        // Primitives "line_of_chat_juststring" and "it_is_the_first_line_of_chat_prem".
+        // Primitives "line_of_chat_string" and "it_is_the_first_line_of_chat_prem".
         // as the nested cid.
         long lineHasComeCid = Glob.attn_disp_loop.add_cpt(new JustString(null), DynCptNameEnum.next_line_of_chat_has_come_prem.name());
-        long lineOfChatCid = Glob.attn_disp_loop.add_cpt(new JustString(null), DynCptNameEnum.line_of_chat_juststring.name());
+        long lineOfChatCid = Glob.attn_disp_loop.add_cpt(new JustString(null), DynCptNameEnum.line_of_chat_string.name());
         Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.it_is_the_first_line_of_chat_prem.name());
         
         // Action of requesting the next line.
@@ -54,7 +54,6 @@ final public class Starter {
         nrn.set_premises(new Premise[] {
             new Premise(1, lineHasComeCid)
         });
-        nrn.set_effects(new long[] {nrn.get_cid()});    // set up itself as a successor (the cid is assigned already)
         nrn.append_action_ranges(0, new long[] {requestNextLineCid});
         Glob.attn_disp_loop.add_cpt(nrn, DynCptNameEnum.wait_for_the_line_from_chatter_nrn.name());
         

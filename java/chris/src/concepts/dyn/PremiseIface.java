@@ -33,4 +33,16 @@ public interface PremiseIface {
      * @param premiseArray array of premise cids.
      */
     public void set_premises(Premise[] premiseArray);
+
+    /**
+     * Getter.
+     * @return the bias value. 
+     */
+    public float get_bias();
+
+    /**
+     * Setter.
+     * @param bias 
+     */
+    public void set_bias(float bias);
 }

@@ -33,9 +33,6 @@ final public class Starter {
 
     public static void generate_dynamic_concepts() {
         
-        // Action "wait_act"
-        Glob.attn_disp_loop.add_cpt(new Action(StatCptEnum.Mrk_wait_for_the_line_from_chatter.ordinal()), DynCptNameEnum.wait_act.name());
-
         // Premises "chat_prem", "it_is_console_chat_prem" and "chatter_unknown_prem".
         long chatCid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.chat_prem.name());
         long isConsChatCid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.it_is_console_chat_prem.name());

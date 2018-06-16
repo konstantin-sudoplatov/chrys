@@ -59,6 +59,13 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
         return parenT.get_cpt(cptName);
     }
 
+    /**
+     * Raise the stopReasoningRequested flag to make this caldron thread wait on its _head_ concept.
+     */
+    public synchronized void request_stop_reasoning() {
+        stopReasoningRequested = true;
+    }
+    
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected
@@ -78,15 +85,23 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
      * the events or waits if the event queue is empty.
      */
     protected void _reasoning_() {
-        long[] heads;
         while(true) {
-            heads = assesS((AssessmentIface)get_cpt(_head_));
-            if      //no effects?
-                    (heads == null)
+            
+            // Do the assessment
+            assesS((AssessmentIface)get_cpt(_head_));
+            
+            // Check if in the course of the assessment (one of the actions of the _head_ concept)
+            // raised the stoppage flag
+            if      //do we have to wait?
+                    (stopReasoningRequested)
                 // finish the reasoning
                 break;
             
             // get new head
+            long[] heads = ((AssessmentIface)get_cpt(_head_)).get_effects();
+            if
+                    (heads == null || heads.length == 0)
+                throw new Crash("The head of the caldron neuron " + _head_ + " has no effects.");
             _head_ = heads[0];
             
             // create new caldrons for the rest of the heads
@@ -115,30 +130,29 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
     /** Children caldrons. */
     private Caldron[] childreN;
     
+    /**  */
+    private boolean stopReasoningRequested;
+    
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     /**
      * Do weighing, determine activation, do actions, determine possible effects.
+     * As a side effect of the assessment an action of the concept may raise the caldron's
+     * flag "stopReasoningRequested".
      * @param context a caldron in which this assess takes place.
-     * @return array of effects, sorted by there suggested usefulness. These effects may serve as
-     * heads in the next step of reasoning. If returned null, then the next assessment is impossible and the caldron must wait.
-     * An empty array is illegal.
+     * @return true/false. true: the reasoning can be continued with a new set of effects, 
+     * false: the reasoning must be stopped and the caldron must wait for changing the premises
+     * in such a way, that would allow continuation of the reasoning.
      */
-    private long[] assesS(AssessmentIface cpt) {
+    private void assesS(AssessmentIface cpt) {
         float activation = calculateActivation(cpt);
         long[] actions = cpt.get_actions(activation);
         if      // is there actions?
                 (actions != null)
-        {   //yes: do actions. after that effects are valid.
+            //yes: do actions. after that effects are valid.
             for(long actCid: actions) {
                 ((Action)get_cpt(actCid)).go(this, null);
             }
-            
-            // return list of effects
-            return cpt.get_effects();
-        }
-        else //no: return null as a signal to stop reasoning
-            return null;
     }
 
     private float calculateActivation(AssessmentIface cpt) {

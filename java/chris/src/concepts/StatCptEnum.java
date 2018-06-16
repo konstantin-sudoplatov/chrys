@@ -7,11 +7,9 @@ package concepts;
  * @author su
  */
 public enum StatCptEnum {
-    Mrk_Nothing,                // an empty static concept, serves as a filler in some cases, for example to show that no special processing should be done
-    Mrk_wait_for_the_line_from_chatter,     // used in the "wait_act" concept as a cause for waiting
     Mrk_UnorderedListOfCids,
     Mrk_ElementaryPremise,
-    InitiateChatting,
+    requestStopReasoning,
     ;
     
     /** This package is used to find static concept classes in ComDir.generate_static_concepts(). 

@@ -94,8 +94,10 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
             // raised the stoppage flag
             if      //do we have to wait?
                     (stopReasoningRequested)
-                // finish the reasoning
+            {   // finish the reasoning
+                stopReasoningRequested = false;
                 break;
+            }
             
             // get new head
             long[] heads = ((AssessmentIface)get_cpt(_head_)).get_effects();

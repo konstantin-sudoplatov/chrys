@@ -8,6 +8,7 @@ package concepts;
  * @author su
  */
 public enum DynCptNameEnum {
+    request_stop_reasoning_actn,            // tell a caldron to stop on the current head and wait for a change in the premises
     chat_prem,                              // chatting premise
     it_is_console_chat_prem,                // chat_prem by console property to the "chat_prem" premise
     line_of_chat_string,

@@ -33,6 +33,10 @@ final public class Starter {
 
     public static void generate_dynamic_concepts() {
         
+        // Action "request_stop_reasoning_actn" - making a caldron wait on a change in premises is widely used
+        long requestStopReasoningCid = Glob.attn_disp_loop.add_cpt(new Action(StatCptEnum.RequestStopReasoning.ordinal(), null), 
+                DynCptNameEnum.request_stop_reasoning_actn.name());
+        
         // Premises "chat_prem", "it_is_console_chat_prem" and "chatter_unknown_prem".
         long chatCid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.chat_prem.name());
         long isConsChatCid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.it_is_console_chat_prem.name());
@@ -55,6 +59,7 @@ final public class Starter {
             new Premise(1, lineHasComeCid)
         });
         nrn.append_action_ranges(0, new long[] {requestNextLineCid});
+        nrn.append_action_ranges(Float.NEGATIVE_INFINITY, new long[] {requestStopReasoningCid});
         Glob.attn_disp_loop.add_cpt(nrn, DynCptNameEnum.wait_for_the_line_from_chatter_nrn.name());
         
 //        // Console chat_prem skirmisher. It combines all the above premises and determines possible effects. It will make the first assess

@@ -237,7 +237,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
                 consoleChatCircle.start_thread();
             }
             
-            // route the message to the chat bubble
+            // route the message to the chat circle
             consoleChatCircle.put_in_queue(msg);
 
             return true;

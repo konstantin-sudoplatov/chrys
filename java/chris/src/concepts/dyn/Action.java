@@ -19,7 +19,7 @@ public class Action extends DynamicConcept {
      * @param statCid cid of the static concept
      */
     public Action(long statCid) {
-        this.stat_cid = statCid;
+        this.statCid = statCid;
     }
 
     /**
@@ -28,8 +28,8 @@ public class Action extends DynamicConcept {
      * @param paramCid array of parameters
      */
     public Action(long statCid, long[] paramCid) {
-        this.stat_cid = statCid;
-        this.param_cid = paramCid;
+        this.statCid = statCid;
+        this.paramCids = paramCid;
     }
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -44,7 +44,7 @@ public class Action extends DynamicConcept {
      * @param extra
      */
     public void go(ConceptNameSpace nameSpace, Object extra) {
-        ((StaticConcept)nameSpace.get_cpt(stat_cid)).go(nameSpace, param_cid, extra);
+        ((StaticConcept)nameSpace.get_cpt(statCid)).go(nameSpace, paramCids, extra);
     }
     
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -66,10 +66,10 @@ public class Action extends DynamicConcept {
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
     /** Concept, that provides the processing. */
-    private long stat_cid;
+    private long statCid;
     
     /** Array of parameters to the static concept. */
-    private long[] param_cid;
+    private long[] paramCids;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

@@ -9,7 +9,7 @@ package concepts;
 public enum StatCptEnum {
     Mrk_UnorderedListOfCids,
     Mrk_ElementaryPremise,
-    requestStopReasoning,
+    RequestStopReasoning,
     ;
     
     /** This package is used to find static concept classes in ComDir.generate_static_concepts(). 

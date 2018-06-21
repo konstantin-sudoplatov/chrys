@@ -5,9 +5,9 @@ import chris.BaseMessageLoop;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
-import concepts.DynCptNameEnum;
+import concepts.DynCptName;
 import concepts.DynamicConcept;
-import concepts.StatCptEnum;
+import concepts.StatCptName;
 import concepts.StaticConcept;
 import concepts.stat.DummyMarker;
 import console.ConsoleMessage;
@@ -59,7 +59,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
         if      // static concept?
                 (cpt instanceof StaticConcept)
         {   //yes: get cid
-            cid = StatCptEnum.valueOf(cpt.getClass().getSimpleName()).ordinal();
+            cid = StatCptName.valueOf(cpt.getClass().getSimpleName()).ordinal();
         }
         else 
         {   //no: generate a unique cid. it is unique through common and all bubble directories.
@@ -226,13 +226,13 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     @Override
     synchronized protected boolean _defaultProc_(BaseMessage msg) {
         if      // is it a message from console to bubble?
-                (msg instanceof Msg_ConsoleToAttnBubble)
+                (msg instanceof Msg_ConsoleToAttnCircle)
         {
             // May be, create an attention circle for the chat
             if
                     (consoleChatCircle == null)
             {
-                consoleChatCircle = new AttnCircle(this, DynCptNameEnum.it_is_console_chat_prem);
+                consoleChatCircle = new AttnCircle(this, DynCptName.it_is_console_chat_prem);
                 addCircleToList(consoleChatCircle);
                 consoleChatCircle.start_thread();
             }
@@ -293,7 +293,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
         
         // Create static concepts.
         DummyMarker dummyMarker = new DummyMarker();
-        for(StatCptEnum cidEnum: StatCptEnum.values()) {
+        for(StatCptName cidEnum: StatCptName.values()) {
             String cptName = cidEnum.name();
             if      // concept name starts with "Mrk_"?
                     (cptName.substring(0, 4).equals("Mrk_"))
@@ -305,7 +305,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
             @SuppressWarnings("UnusedAssignment")
             Class cl = null;
             try {
-                cl = Class.forName(StatCptEnum.STATIC_CONCEPTS_PACKET_NAME + "." + cptName);
+                cl = Class.forName(StatCptName.STATIC_CONCEPTS_PACKET_NAME + "." + cptName);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(StaticConcept.class.getName()).log(Level.SEVERE, "Error getting class " + cptName, ex);
                 System.exit(1);

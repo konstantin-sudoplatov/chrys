@@ -1,6 +1,7 @@
 package concepts;
 
-import concepts.dyn.ActivationIface;
+import concepts.dyn.parts.ActivationIface;
+import concepts.dyn.parts.ActivationImpl;
 
 /**
  * The dynamic concept is a common predecessor for the primitives and neurons.
@@ -18,6 +19,7 @@ abstract public class DynamicConcept extends Concept implements ActivationIface 
      * Getter.
      * @return concept identifier. 
      */
+    @Override
     public long get_cid() {
         return ciD;
     }
@@ -26,6 +28,7 @@ abstract public class DynamicConcept extends Concept implements ActivationIface 
      * Setter.
      * @param ciD 
      */
+    @Override
     public void set_cid(long ciD) {
         this.ciD = ciD;
     }
@@ -84,7 +87,7 @@ abstract public class DynamicConcept extends Concept implements ActivationIface 
      */
     @Override
     public float get_activation() {
-        return activatioN;
+        return activatioN.get_activation();
     }
 
     /**
@@ -93,7 +96,7 @@ abstract public class DynamicConcept extends Concept implements ActivationIface 
      */
     @Override
     public void set_activation(float activation) {
-        this.activatioN = activation;
+        this.activatioN.set_activation(activation);
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -118,7 +121,7 @@ abstract public class DynamicConcept extends Concept implements ActivationIface 
 
     /** Activation. Its normalized (squashed) value is from -1 to 1. Activation is not stored in the DB.
         It is needed only at the reasoning time. */
-    private float activatioN;
+    private ActivationImpl activatioN = new ActivationImpl();
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

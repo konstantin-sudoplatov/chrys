@@ -6,8 +6,8 @@ import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
 import concepts.dyn.Action;
-import concepts.dyn.ActivationIface;
-import concepts.dyn.AssessmentIface;
+import concepts.dyn.parts.ActivationIface;
+import concepts.dyn.parts.AssessmentIface;
 
 /**
  * The reasoning is taking place in a caldron. Caldrons are organized in a hierarchy.

@@ -6,10 +6,11 @@ package concepts;
  * automated generation of the static concept objects pointed by ComDir.
  * @author su
  */
-public enum StatCptEnum {
-    Mrk_UnorderedListOfCids,
-    Mrk_ElementaryPremise,
+public enum StatCptName {
+    Mrk_ItIsConsoleChat,
+    Mrk_ItIsHttpChat,
     RequestStopReasoning,
+    RequestNextLineFromChatter,
     ;
     
     /** This package is used to find static concept classes in ComDir.generate_static_concepts(). 

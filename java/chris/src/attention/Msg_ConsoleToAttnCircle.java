@@ -7,7 +7,7 @@ import console.ConsoleLoop;
  * which bubble to send it to, because it's is him, who keeps track of which bubble talks to whom.
  * @author su
  */
-public class Msg_ConsoleToAttnBubble extends AttnDispMessage {
+public class Msg_ConsoleToAttnCircle extends AttnDispMessage {
     public Class sender;
     public String text;
 
@@ -16,7 +16,7 @@ public class Msg_ConsoleToAttnBubble extends AttnDispMessage {
      * @param sender originator of this message.
      * @param text from console to an attention bubble.
      */
-    public Msg_ConsoleToAttnBubble(Class<ConsoleLoop> sender, String text) {
+    public Msg_ConsoleToAttnCircle(Class<ConsoleLoop> sender, String text) {
         this.sender = sender;
         this.text = text;
     }

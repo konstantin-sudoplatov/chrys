@@ -1,6 +1,8 @@
 package concepts.dyn;
 
-import attention.Caldron;
+import concepts.dyn.parts.PropertyIface;
+import concepts.dyn.parts.EffectIface;
+import concepts.dyn.parts.AssessmentIface;
 import auxiliary.ActionSelector;
 import auxiliary.Premise;
 import chris.Glob;

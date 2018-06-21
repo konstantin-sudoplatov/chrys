@@ -5,10 +5,10 @@ import attention.ConceptNameSpace;
 import concepts.StaticConcept;
 
 /**
- * Requiring the caldron to stop and wait. The caldron would know for what.
+ * Requiring the caldron to send request for the next line of chat.
  * @author su
  */
-public class RequestStopReasoning extends StaticConcept {
+public class RequestNextLineFromChatter extends StaticConcept {
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -17,8 +17,7 @@ public class RequestStopReasoning extends StaticConcept {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     /**
-     * Request the caldron to stop and wait on its _head_ until a change in the premises would
-     * allow continuation of reasoning.
+     * Make caldron to send request for getting the next line from chatter.
      * @param nameSpace caldron, in which thread this function would be invoked.
      * @param paramCids not used in here.
      * @param extra not used in here.

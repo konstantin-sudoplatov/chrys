@@ -2,10 +2,13 @@ package starter;
 
 import auxiliary.Premise;
 import chris.Glob;
-import concepts.DynCptNameEnum;
-import concepts.StatCptEnum;
+import concepts.DynCptName;
+import concepts.StatCptName;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
+import concepts.dyn.PrimusInterParesPremise;
+import concepts.dyn.SimplePremise;
+import concepts.dyn.StringPremise;
 import concepts.dyn.primitives.CiddedNothing;
 import concepts.dyn.primitives.JustString;
 
@@ -34,58 +37,41 @@ final public class Starter {
     public static void generate_dynamic_concepts() {
         
         // Action "request_stop_reasoning_actn" - making a caldron wait on a change in premises is widely used
-        long requestStopReasoningCid = Glob.attn_disp_loop.add_cpt(new Action(StatCptEnum.RequestStopReasoning.ordinal(), null), 
-                DynCptNameEnum.request_stop_reasoning_actn.name());
+        long requestStopReasoningCid = Glob.attn_disp_loop.add_cpt(new Action(StatCptName.RequestStopReasoning.ordinal(), null), 
+                DynCptName.request_stop_reasoning_actn.name());
         
-        // Premises "chat_prem", "it_is_console_chat_prem" and "chatter_unknown_prem".
-        long chatCid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.chat_prem.name());
-        long isConsChatCid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.it_is_console_chat_prem.name());
-        long chatterUnknownCid = Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.chatter_unknown_prem.name());
+        // Premises "chat_prem", "chatter_unknown_prem".
+        long chatCid = Glob.attn_disp_loop.add_cpt(new SimplePremise(), DynCptName.chat_prem.name());
+        long chatterUnknownCid = Glob.attn_disp_loop.add_cpt(new SimplePremise(), DynCptName.chatter_unknown_prem.name());
+
+        // Primus inter pares premises "chat_media_prem" contains "it_is_console_chat_prem", "it_is_http_chat_prem" premises
+        PrimusInterParesPremise chatMedia = new PrimusInterParesPremise();
+        long chatMediaCid = Glob.attn_disp_loop.add_cpt(chatMedia, DynCptName.chat_media_prem.name());
+        chatMedia.set_group(new long[] {StatCptName.Mrk_ItIsConsoleChat.ordinal(), StatCptName.Mrk_ItIsHttpChat.ordinal()});
         
-        // Primitives "line_of_chat_string" and "it_is_the_first_line_of_chat_prem".
+        // Primitives "line_of_chat_string_prem" and "it_is_the_first_line_of_chat_prem".
         // as the nested cid.
-        long lineHasComeCid = Glob.attn_disp_loop.add_cpt(new JustString(null), DynCptNameEnum.next_line_of_chat_has_come_prem.name());
-        long lineOfChatCid = Glob.attn_disp_loop.add_cpt(new JustString(null), DynCptNameEnum.line_of_chat_string.name());
-        Glob.attn_disp_loop.add_cpt(new CiddedNothing(StatCptEnum.Mrk_ElementaryPremise.ordinal()), DynCptNameEnum.it_is_the_first_line_of_chat_prem.name());
+        long lineOfChatCid = Glob.attn_disp_loop.add_cpt(new StringPremise(null), DynCptName.line_of_chat_string_prem.name());
+        Glob.attn_disp_loop.add_cpt(new SimplePremise(), DynCptName.it_is_the_first_line_of_chat_prem.name());
         
         // Action of requesting the next line.
-        Action requestNextLineAction = new Action(DynCptNameEnum.request_next_line_actn.ordinal());
+        Action requestNextLineAction = new Action(StatCptName.RequestNextLineFromChatter.ordinal());
         long requestNextLineCid = Glob.attn_disp_loop.add_cpt(requestNextLineAction);
         
         //              Neurons, that deal with these premises:
-        // The one that waits for the console line.
+        // The one that waits for the line from chatter.
         Neuron nrn = new Neuron();
         nrn.set_premises(new Premise[] {
-            new Premise(1, lineHasComeCid)
+            new Premise(1, lineOfChatCid)
         });
         nrn.append_action_ranges(0, new long[] {requestNextLineCid});
         nrn.append_action_ranges(Float.NEGATIVE_INFINITY, new long[] {requestStopReasoningCid});
-        Glob.attn_disp_loop.add_cpt(nrn, DynCptNameEnum.wait_for_the_line_from_chatter_nrn.name());
-        
-//        // Console chat_prem skirmisher. It combines all the above premises and determines possible effects. It will make the first assess
-//        // in the reasoning tree.
-//        Seed seed = new Seed();
-//        seed.set_properties(new long[] {chatCid, lineCid});
-//        seed.set_effects(new long[] {nrn.get_cid()});
-//        Glob.attn_disp_loop.add_cpt(seed, DynCptNameEnum.console_chat_seed.name());
-        
-
-//        Neuron nrn = new Neuron();
-//        nrn.set_premise(new Neuron.Premise[] {
-//                new Neuron.Premise(0, cid1),
-//                new Neuron.Premise(0, cid2),
-//                new Neuron.Premise(0, cid3),
-//                new Neuron.Premise(0, cid4),
-//        });
-//        Glob.attn_disp_loop.add_cpt(nrn, DynCptNameEnum.console_chat_seed.name());
-//        long cid5 = Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.add_line_to_console_log.name());
-//        long cid6 = Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.request_next_line_actn.name());
-//        nrn.set_effect_cid(new long[] {cid5, cid6});
-//        
-//        Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.console_log.name());
-//        Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.line_of_chat.name());
-//        Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.line_counter.name());
-//        Glob.attn_disp_loop.add_cpt(new Neuron(), DynCptNameEnum.introduce_myself_and_ask_chatter_name.name());
+        Glob.attn_disp_loop.add_cpt(nrn, DynCptName.wait_for_the_line_from_chatter_nrn.name());
+        // The one, that requests the next line
+        nrn = new Neuron();
+        nrn.set_premises(new Premise[] {
+            new Premise(1, chatMediaCid)
+        });
     }
     
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$

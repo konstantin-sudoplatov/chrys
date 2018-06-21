@@ -66,7 +66,7 @@ public class Action extends DynamicConcept {
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
     /** Concept, that provides the processing. */
-    private long statCid;
+    private final long statCid;
     
     /** Array of parameters to the static concept. */
     private long[] paramCids;

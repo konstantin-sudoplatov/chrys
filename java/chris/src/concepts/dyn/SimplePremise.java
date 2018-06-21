@@ -1,20 +1,15 @@
-package concepts.dyn.primitives.specializations;
-
-import concepts.StatCptEnum;
-import concepts.dyn.primitives.CiddedNothing;
+package concepts.dyn;
 
 /**
- * The simplest premise, just a marked (cidded) nothing.
- * Just an example of using primitives. Not meant to be implemented.
+ * The simplest premise.
  * @author su
  */
-public class ElementaryPremise extends CiddedNothing {
+public class SimplePremise extends BasePremise {
 
     /** 
      * Constructor.
      */ 
-    public ElementaryPremise() { 
-        super(StatCptEnum.Mrk_ElementaryPremise.ordinal());
+    public SimplePremise() { 
     } 
     
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v

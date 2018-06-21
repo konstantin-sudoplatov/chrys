@@ -1,4 +1,4 @@
-package concepts.dyn;
+package concepts.dyn.parts;
 
 import auxiliary.Premise;
 

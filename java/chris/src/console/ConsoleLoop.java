@@ -1,6 +1,6 @@
 package console;
 
-import attention.Msg_ConsoleToAttnBubble;
+import attention.Msg_ConsoleToAttnCircle;
 import chris.Glob;
 import chris.BaseMessage;
 import chris.BaseMessageLoop;
@@ -51,7 +51,7 @@ public class ConsoleLoop extends BaseMessageLoop {
                             return true;
                         }
                         else {
-                            Glob.app_loop.put_in_queue(new Msg_ConsoleToAttnBubble(ConsoleLoop.class, line));
+                            Glob.app_loop.put_in_queue(new Msg_ConsoleToAttnCircle(ConsoleLoop.class, line));
                             return true;
                         }
                 }

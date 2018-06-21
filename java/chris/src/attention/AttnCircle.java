@@ -4,8 +4,11 @@ import chris.BaseMessage;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
-import concepts.DynCptNameEnum;
-import concepts.dyn.ActivationIface;
+import concepts.DynCptName;
+import concepts.dyn.PrimusInterParesPremise;
+import concepts.dyn.StringPremise;
+import concepts.dyn.parts.ActivationIface;
+import concepts.dyn.primitives.JustString;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -23,15 +26,16 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
     /** 
      * Constructor.
      * @param attnDisp attention dispatcher (parent).
-     * @param circleType example: DynCptNameEnum.it_is_console_chat_prem
+     * @param circleType example: DynCptName.it_is_console_chat_prem
      */ 
     @SuppressWarnings("OverridableMethodCallInConstructor")
-    public AttnCircle(AttnDispatcherLoop attnDisp, DynCptNameEnum circleType) 
+    public AttnCircle(AttnDispatcherLoop attnDisp, DynCptName circleType) 
     {   super(null, null);    // null for being a main caldron
         this.attnDisp = attnDisp;
         
         // The circle specifics
-        ((ActivationIface)get_cpt(DynCptNameEnum.it_is_console_chat_prem.name())).set_activation(1);
+        ((PrimusInterParesPremise)get_cpt(DynCptName.chat_media_prem.name())).
+                set_primus_cid(DynCptName.it_is_console_chat_prem.ordinal());
         
         // Prepare the first assessment
         initialSetup();
@@ -210,15 +214,14 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
     @Override
     synchronized protected boolean _defaultProc_(BaseMessage msg) {
 
-        if
-                (msg instanceof Msg_ConsoleToAttnBubble)
-        {
-            // May be, initialize the bubble on the first message from console
-            if      // hasn't the brewing started yet?
-                    (_head_ == 0)
-            {   //no: start it
-                  
-            }
+        if      // a line from console has come?
+                (msg instanceof Msg_ConsoleToAttnCircle)
+        {   // put it to the concept "line_of_chat_string_prem" and invoke the reasoning
+            StringPremise lineOfChat = (StringPremise)get_cpt(DynCptName.line_of_chat_string_prem.name());
+            lineOfChat.set_text(((Msg_ConsoleToAttnCircle) msg).text);
+            lineOfChat.set_activation(1);
+            
+            _reasoning_();
             
             return true;
         }
@@ -254,29 +257,12 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
     private void initialSetup() {
 
         // set up premises
-        ((ActivationIface)get_cpt(DynCptNameEnum.chat_prem.name())).set_activation(1);
-        ((ActivationIface)get_cpt(DynCptNameEnum.chatter_unknown_prem.name())).set_activation(1);
-        ((ActivationIface)get_cpt(DynCptNameEnum.next_line_of_chat_has_come_prem.name())).set_activation(-1);
+        ((ActivationIface)get_cpt(DynCptName.chat_prem.name())).set_activation(1);
+        ((ActivationIface)get_cpt(DynCptName.chatter_unknown_prem.name())).set_activation(1);
+        ((ActivationIface)get_cpt(DynCptName.line_of_chat_string_prem.name())).set_activation(-1);
         
         // set up the caldron head as the next line loader
-        _head_ = get_cpt(DynCptNameEnum.wait_for_the_line_from_chatter_nrn.name()).get_cid();
-
-        // set up its premises, effects and the action of getting the next line
-        
-        
-        // Create and fill new current assertion
-//        _head_ = new Assertion();
-//        long cid = load_cpt(DynCptNameEnum.console_chat_seed.name());
-//        StaticConcept stat = (StaticConcept)get_cpt(StatCptEnum.LoadPremisesIntoFirstAssertion.ordinal());
-//        stat.go(this, new long[] {cid}, _head_);
-        
-        // Set up its premises
-//        load_cpt(DynCptNameEnum.chat_prem.name());
-//        _head_.add_premise(DynCptNameEnum.chat_prem.ordinal());
-//        _head_.add_premise(DynCptNameEnum.it_is_console_chat_prem.ordinal());
-//        _head_.add_premise(DynCptNameEnum.it_is_the_first_line_of_chat_prem.ordinal());
-//        _head_.add_premise(DynCptNameEnum.line_of_chat.ordinal());
-//        _head_.add_premise(Glob.attn_disp_loop.add_cpt(new JustString(msg.) ));
+        _head_ = get_cpt(DynCptName.wait_for_the_line_from_chatter_nrn.name()).get_cid();
     }
     
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--

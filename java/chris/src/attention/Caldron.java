@@ -59,6 +59,15 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
         return parenT.get_cpt(cptName);
     }
 
+    @Override
+    public AttnCircle get_attn_circle() {
+        if      // is this caldron an attention circle?
+                (attnCircle == null)
+            return (AttnCircle)this;
+        else
+            return attnCircle;
+    }
+    
     /**
      * Raise the stopReasoningRequested flag to make this caldron thread wait on its _head_ concept.
      */

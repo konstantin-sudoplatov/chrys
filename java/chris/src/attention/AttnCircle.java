@@ -8,7 +8,6 @@ import concepts.DynCptName;
 import concepts.dyn.PrimusInterParesPremise;
 import concepts.dyn.StringPremise;
 import concepts.dyn.parts.ActivationIface;
-import concepts.dyn.primitives.JustString;
 import java.util.List;
 import java.util.HashMap;
 import java.util.Map;
@@ -155,24 +154,6 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
         return cptDir.containsKey(cid);
     }
     
-//    /** 
-//     * Test if the reverse name directory contains a concept.
-//     * @param cid
-//     * @return true/false
-//     */
-//    public synchronized boolean cid_name_containsKey(long cid) {
-//        return Glob.named.cid_name.containsKey(cid);
-//    }
-//
-//    /** 
-//     * Test if the name directory contains a name of concept.
-//     * @param name
-//     * @return true/false
-//     */
-//    public synchronized boolean name_cid_containsKey(String name) {
-//        return Glob.named.name_cid.containsKey(name);
-//    }
-    
     /**
      * Put new concept into the concept directory.
      * @param cid
@@ -182,6 +163,14 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
         cptDir.put(cid, cpt);
     }
 
+    /**
+     * Getter.
+     * @return  
+     */
+    public AttnDispatcherLoop get_attn_dispatcher () {
+        return attnDisp;
+    }
+    
     @Override
     public synchronized void request_termination() {
         

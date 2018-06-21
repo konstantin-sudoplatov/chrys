@@ -26,7 +26,7 @@ import java.util.logging.Logger;
  *
  * @author su
  */
-public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSpace {
+public class AttnDispatcherLoop extends BaseMessageLoop {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
     
@@ -159,7 +159,6 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
             throw new Crash("No concept in common directory with name = " + cptName);
     }
 
-    @Override
     public synchronized Concept get_cpt(long cid) {
         Concept cpt = comDir.get(cid);
         if (cpt != null)
@@ -168,7 +167,6 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
             throw new Crash("No such concept: cid = " + cid + ", name = " + Glob.named.cid_name.get(cid));
     }
     
-    @Override
     public synchronized Concept get_cpt(String cptName) {
         Long cid = Glob.named.name_cid.get(cptName);
         if (cid != null) 
@@ -220,7 +218,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     protected void _afterStart_() {
 
         // prompt console
-        Glob.app_loop.put_in_queue(new Msg_ReadFromConsole(AttnDispatcherLoop.class));        
+        Glob.app_loop.put_in_queue(new Msg_ReadFromConsole());        
     }
 
     @Override

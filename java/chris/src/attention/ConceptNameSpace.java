@@ -25,4 +25,10 @@ public interface ConceptNameSpace {
      * @throws Crash if not found
      */
     public Concept get_cpt(String cptName);
+    
+    /**
+     * Get attention circle for this caldron.
+     * @return 
+     */
+    public AttnCircle get_attn_circle();
 }

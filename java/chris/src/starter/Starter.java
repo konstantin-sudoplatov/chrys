@@ -56,6 +56,7 @@ final public class Starter {
         
         // Action of requesting the next line.
         Action requestNextLineAction = new Action(StatCptName.RequestNextLineFromChatter.ordinal());
+        requestNextLineAction.
         long requestNextLineCid = Glob.attn_disp_loop.add_cpt(requestNextLineAction);
         
         //              Neurons, that deal with these premises:

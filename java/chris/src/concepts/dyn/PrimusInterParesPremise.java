@@ -24,7 +24,7 @@ public final class PrimusInterParesPremise extends BasePremise {
      */ 
     public PrimusInterParesPremise(long[] cids, long activeCid) { 
         set_group(cids);
-        set_primus_cid(activeCid);
+        set_primus(activeCid);
     } 
     
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -37,7 +37,7 @@ public final class PrimusInterParesPremise extends BasePremise {
      * Getter.
      * @return cid of the primus 
      */
-    public long get_primus_cid() {
+    public long get_primus() {
         return primusCid;
     }
 
@@ -46,7 +46,7 @@ public final class PrimusInterParesPremise extends BasePremise {
      * set up activation for this concept (on creation it is -1).
      * @param cid 
      */
-    public void set_primus_cid(long cid) {
+    public void set_primus(long cid) {
         if      // activeCid is not in the set?
                 (!grouP.contains(primusCid))
             throw new Crash("activeCid " + primusCid + " is not in the set " + grouP.getClass().getName());
@@ -75,7 +75,7 @@ public final class PrimusInterParesPremise extends BasePremise {
     }
 
     /**
-     * Disable the activation setter. Activation sets up in the set_primus_cid() method.
+     * Disable the activation setter. Activation sets up in the set_primus() method.
      * @param activation
      */
     @Override

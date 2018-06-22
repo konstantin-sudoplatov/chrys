@@ -37,7 +37,7 @@ final public class Starter {
     public static void generate_dynamic_concepts() {
         
         // Action "request_stop_reasoning_actn" - making a caldron wait on a change in premises is widely used
-        long requestStopReasoningCid = Glob.attn_disp_loop.add_cpt(new Action(StatCptName.RequestStopReasoning.ordinal(), null), 
+        long requestStopReasoningCid = Glob.attn_disp_loop.add_cpt(new Action(StatCptName.RequestStopReasoning.ordinal()), 
                 DynCptName.request_stop_reasoning_actn.name());
         
         // Premises "chat_prem", "chatter_unknown_prem".
@@ -65,8 +65,8 @@ final public class Starter {
         nrn.set_premises(new Premise[] {
             new Premise(1, lineOfChatCid)
         });
-        nrn.append_action_ranges(0, new long[] {requestNextLineCid});
-        nrn.append_action_ranges(Float.NEGATIVE_INFINITY, new long[] {requestStopReasoningCid});
+        nrn.add_action_range(0, new long[] {requestNextLineCid});
+        nrn.add_action_range(Float.NEGATIVE_INFINITY, new long[] {requestStopReasoningCid});
         Glob.attn_disp_loop.add_cpt(nrn, DynCptName.wait_for_the_line_from_chatter_nrn.name());
         // The one, that requests the next line
         nrn = new Neuron();

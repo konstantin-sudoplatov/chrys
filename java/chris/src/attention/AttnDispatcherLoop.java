@@ -9,7 +9,6 @@ import concepts.DynCptName;
 import concepts.DynamicConcept;
 import concepts.StatCptName;
 import concepts.StaticConcept;
-import concepts.stat.DummyMarker;
 import console.ConsoleMessage;
 import console.Msg_ReadFromConsole;
 import java.lang.reflect.Constructor;
@@ -290,14 +289,11 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
         // Load CPN from DB
         
         // Create static concepts.
-        DummyMarker dummyMarker = new DummyMarker();
         for(StatCptName cidEnum: StatCptName.values()) {
             String cptName = cidEnum.name();
             if      // concept name starts with "Mrk_"?
                     (cptName.substring(0, 4).equals("Mrk_"))
-            {   //yes: it is a marker, it does not require an object. We put into the concept directory a dummy - Mrk_Unimarker
-                // object for all markers
-                dummyMarker.cid = cidEnum.ordinal();
+            {   //yes: it is a marker, it does not require an object.
                 continue;
             }
             @SuppressWarnings("UnusedAssignment")

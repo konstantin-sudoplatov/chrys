@@ -1,6 +1,7 @@
 package concepts.dyn;
 
 import attention.ConceptNameSpace;
+import chris.Glob;
 import concepts.DynamicConcept;
 import concepts.StaticConcept;
 
@@ -22,16 +23,6 @@ public class Action extends DynamicConcept {
         this.statCid = statCid;
     }
 
-    /**
-     * Constructor.
-     * @param statCid cid of the static concept
-     * @param paramCid array of parameters
-     */
-    public Action(long statCid, long[] paramCid) {
-        this.statCid = statCid;
-        this.paramCids = paramCid;
-    }
-
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
     //                                  Public methods
@@ -44,8 +35,16 @@ public class Action extends DynamicConcept {
      * @param extra
      */
     public void go(ConceptNameSpace nameSpace, Object extra) {
-        ((StaticConcept)nameSpace.get_cpt(statCid)).go(nameSpace, paramCids, extra);
+        ((StaticConcept)nameSpace.get_cpt(statCid)).go(nameSpace);
     }
+//    
+//    /** 
+//     * Append new cid to paramCids.
+//     * @param cid 
+//     */
+//    public void add_parameter(long cid) {
+//        Glob.append_array(paramCids, cid);
+//    }
     
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
@@ -68,8 +67,8 @@ public class Action extends DynamicConcept {
     /** Concept, that provides the processing. */
     private final long statCid;
     
-    /** Array of parameters to the static concept. */
-    private long[] paramCids;
+//    /** Array of parameters to the static concept. */
+//    private long[] paramCids;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

@@ -99,7 +99,7 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
             // Do the assessment
             assesS((AssessmentIface)get_cpt(_head_));
             
-            // Check if in the course of the assessment (one of the actions of the _head_ concept)
+            // Check if in the course of assessment (one of the actions of the _head_ concept)
             // raised the stoppage flag
             if      //do we have to wait?
                     (stopReasoningRequested)

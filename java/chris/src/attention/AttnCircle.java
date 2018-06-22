@@ -33,8 +33,7 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
         this.attnDisp = attnDisp;
         
         // The circle specifics
-        ((PrimusInterParesPremise)get_cpt(DynCptName.chat_media_prem.name())).
-                set_primus_cid(DynCptName.it_is_console_chat_prem.ordinal());
+        ((PrimusInterParesPremise)get_cpt(DynCptName.chat_media_prem.name())).set_primus(DynCptName.it_is_console_chat_prem.ordinal());
         
         // Prepare the first assessment
         initialSetup();

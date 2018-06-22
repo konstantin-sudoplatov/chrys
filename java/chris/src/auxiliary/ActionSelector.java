@@ -63,7 +63,7 @@ public class ActionSelector implements ActionIface {
     }
     
     @Override
-    public void append_action_ranges(float lowerBoundary, long[] actions) {
+    public void add_action_range(float lowerBoundary, long[] actions) {
         if
                 (rangeS == null)
             rangeS = new Range[0];

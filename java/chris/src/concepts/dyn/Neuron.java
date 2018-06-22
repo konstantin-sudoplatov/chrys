@@ -52,12 +52,12 @@ public class Neuron extends DynamicConcept implements AssessmentIface, EffectIfa
     }
         
     @Override
-    public void append_action_ranges(float lowerBoundary, long[] actions) {
+    public void add_action_range(float lowerBoundary, long[] actions) {
         if
                 (actioN == null)
             actioN = new ActionSelector();
         
-        actioN.append_action_ranges(lowerBoundary, actions);
+        actioN.add_action_range(lowerBoundary, actions);
     }
 
     @Override

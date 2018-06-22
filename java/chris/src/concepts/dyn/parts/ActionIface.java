@@ -19,5 +19,5 @@ public interface ActionIface {
      * @param lowerBoundary this boundary delimits the range from the last existing boundary including to this value excluding.
      * @param actions list of cids of actions. null for the empty list.
      */
-    public void append_action_ranges(float lowerBoundary, long[] actions);
+    public void add_action_range(float lowerBoundary, long[] actions);
 }

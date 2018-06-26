@@ -9,8 +9,6 @@ import concepts.dyn.Neuron;
 import concepts.dyn.PrimusInterParesPremise;
 import concepts.dyn.SimplePremise;
 import concepts.dyn.StringPremise;
-import concepts.dyn.primitives.CiddedNothing;
-import concepts.dyn.primitives.JustString;
 
 /**
  * When there is no DB or it is empty, we have to start with something...
@@ -56,23 +54,26 @@ final public class Starter {
         
         // Action of requesting the next line.
         Action requestNextLineAction = new Action(StatCptName.RequestNextLineFromChatter.ordinal());
-        requestNextLineAction.
         long requestNextLineCid = Glob.attn_disp_loop.add_cpt(requestNextLineAction);
         
         //              Neurons, that deal with these premises:
         // The one that waits for the line from chatter.
-        Neuron nrn = new Neuron();
-        nrn.set_premises(new Premise[] {
+        Neuron waitLineNrn = new Neuron();
+        waitLineNrn.set_premises(new Premise[] {
             new Premise(1, lineOfChatCid)
         });
-        nrn.add_action_range(0, new long[] {requestNextLineCid});
-        nrn.add_action_range(Float.NEGATIVE_INFINITY, new long[] {requestStopReasoningCid});
-        Glob.attn_disp_loop.add_cpt(nrn, DynCptName.wait_for_the_line_from_chatter_nrn.name());
+        waitLineNrn.add_action_range(0, null);      // no actions, just promote
+        waitLineNrn.add_action_range(Float.NEGATIVE_INFINITY, new long[] {requestStopReasoningCid});
+        long waitLineNrnCid = Glob.attn_disp_loop.add_cpt(waitLineNrn, DynCptName.wait_for_the_line_from_chatter_nrn.name());
         // The one, that requests the next line
-        nrn = new Neuron();
-        nrn.set_premises(new Premise[] {
+        Neuron requestLineNrn = new Neuron();
+        requestLineNrn.set_premises(new Premise[] {
             new Premise(1, chatMediaCid)
         });
+        requestLineNrn.add_action_range(0, new long[] {requestNextLineCid});      // no actions, just promote
+        long requestLineNrnCid = Glob.attn_disp_loop.add_cpt(requestLineNrn, DynCptName.request_next_line_nrn.name());
+        waitLineNrn.add_effect(requestLineNrnCid);
+        requestLineNrn.add_effect(waitLineNrnCid);
     }
     
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$

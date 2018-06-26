@@ -1,13 +1,11 @@
 package attention;
 
-import auxiliary.Premise;
 import chris.BaseMessageLoop;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
-import concepts.dyn.Action;
-import concepts.dyn.parts.ActivationIface;
-import concepts.dyn.parts.AssessmentIface;
+import concepts.dyn.parts.EffectIface;
+import concepts.dyn.parts.EvaluationIface;
 
 /**
  * The reasoning is taking place in a caldron. Caldrons are organized in a hierarchy.
@@ -97,10 +95,10 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
         while(true) {
             
             // Do the assessment
-            assesS((AssessmentIface)get_cpt(_head_));
+            ((EvaluationIface)get_cpt(_head_)).calculate_signum_activation_and_do_actions(parenT);
             
             // Check if in the course of assessment (one of the actions of the _head_ concept)
-            // raised the stoppage flag
+            // had been raised the stoppage flag
             if      //do we have to wait?
                     (stopReasoningRequested)
             {   // finish the reasoning
@@ -109,7 +107,7 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
             }
             
             // get new head
-            long[] heads = ((AssessmentIface)get_cpt(_head_)).get_effects();
+            long[] heads = ((EffectIface)get_cpt(_head_)).get_effects();
             if
                     (heads == null || heads.length == 0)
                 throw new Crash("The head of the caldron neuron " + _head_ + " has no effects.");
@@ -145,48 +143,5 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
     private boolean stopReasoningRequested;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-    /**
-     * Do weighing, determine activation, do actions, determine possible effects.
-     * As a side effect of the assessment an action of the concept may raise the caldron's
-     * flag "stopReasoningRequested".
-     * @param context a caldron in which this assess takes place.
-     * @return true/false. true: the reasoning can be continued with a new set of effects, 
-     * false: the reasoning must be stopped and the caldron must wait for changing the premises
-     * in such a way, that would allow continuation of the reasoning.
-     */
-    private void assesS(AssessmentIface cpt) {
-        float activation = calculateActivation(cpt);
-        long[] actions = cpt.get_actions(activation);
-        if      // is there actions?
-                (actions != null)
-            //yes: do actions. after that effects are valid.
-            for(long actCid: actions) {
-                ((Action)get_cpt(actCid)).go(this, null);
-            }
-    }
-
-    private float calculateActivation(AssessmentIface cpt) {
-        
-        // calculate the weighted sum
-        double weightedSum = cpt.get_bias();
-        for(Premise prem: cpt.get_premises()) {
-            ActivationIface premCpt = (ActivationIface)get_cpt(prem.cid);
-            float activation = premCpt.get_activation();
-            float weight = prem.weight;
-            weightedSum += weight*activation;
-        }
-        
-        // do the normalization
-        if      // normalization needed is not needed?
-                (weightedSum == -1 || weightedSum == 0 || weightedSum == 1)
-            // no, set raw activation
-            cpt.set_activation((float)weightedSum);
-        else 
-            // set normalized activation
-            cpt.set_activation((float)((1 - Math.exp(-weightedSum))/(1 + Math.exp(-weightedSum))));
-        
-        return cpt.get_activation();
-    }
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--
 }

@@ -15,9 +15,10 @@ public enum DynCptName {
     it_is_http_chat_prem,                    // chat_prem by http property to the "chat_prem" premise
     line_of_chat_string_prem,                    // ctivation +1: the line has come and waits to be processed, -1: old line invalidated, the new one has not come yet
     it_is_the_first_line_of_chat_prem,      // it is the first line of chat_prem
-    chatter_unknown_prem,      
     wait_for_the_line_from_chatter_nrn,
     request_next_line_actn,
+    request_next_line_nrn,
+    chatter_unknown_prem,      
     add_line_to_console_log,
     console_log,
     line_counter,

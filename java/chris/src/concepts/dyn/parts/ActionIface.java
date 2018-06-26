@@ -10,6 +10,7 @@ public interface ActionIface {
      * Get array of action cids, corresponding to the given activation value.
      * @param activation activation value
      * @return array of cids range of which fits the activation. null for the empty list.
+     * @throws Crash() for uninitialized action selector or for nonexistent range.
      */
     public long[] get_actions(float activation);
     

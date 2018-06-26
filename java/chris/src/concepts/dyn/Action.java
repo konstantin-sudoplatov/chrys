@@ -1,7 +1,6 @@
 package concepts.dyn;
 
 import attention.ConceptNameSpace;
-import chris.Glob;
 import concepts.DynamicConcept;
 import concepts.StaticConcept;
 
@@ -32,9 +31,8 @@ public class Action extends DynamicConcept {
     /**
      * Invoke the function of the static concept functor.
      * @param nameSpace
-     * @param extra
      */
-    public void go(ConceptNameSpace nameSpace, Object extra) {
+    public void go(ConceptNameSpace nameSpace) {
         ((StaticConcept)nameSpace.get_cpt(statCid)).go(nameSpace);
     }
 //    

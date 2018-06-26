@@ -1,7 +1,6 @@
 package concepts;
 
 import concepts.dyn.parts.ActivationIface;
-import concepts.dyn.parts.ActivationImpl;
 
 /**
  * The dynamic concept is a common predecessor for the primitives and neurons.
@@ -87,7 +86,7 @@ abstract public class DynamicConcept extends Concept implements ActivationIface 
      */
     @Override
     public float get_activation() {
-        return activatioN.get_activation();
+        return activatioN;
     }
 
     /**
@@ -96,7 +95,7 @@ abstract public class DynamicConcept extends Concept implements ActivationIface 
      */
     @Override
     public void set_activation(float activation) {
-        this.activatioN.set_activation(activation);
+        this.activatioN = activation;
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -119,9 +118,9 @@ abstract public class DynamicConcept extends Concept implements ActivationIface 
     /** Count of accesses(read or write). If -1, then it is > Short.MAX_VALUE, infinity in a sense. */ 
     private short usageCount;
 
-    /** Activation. Its normalized (squashed) value is from -1 to 1. Activation is not stored in the DB.
-        It is needed only at the reasoning time. */
-    private ActivationImpl activatioN = new ActivationImpl();
+    /** Activation. Its normalized (squashed) value is from -1 to 1. Activation is not stored in the DB
+      and if the concept is not loaded into a name space(caldron) and explicitely changed it is -1. */
+    private float activatioN = -1;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

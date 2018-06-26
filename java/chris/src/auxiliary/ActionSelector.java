@@ -58,8 +58,8 @@ public class ActionSelector implements ActionIface {
             }
         }
         
-        // no matching range: return null as "no actions"
-        return null;
+        // no matching range. it is illegal.
+            throw new Crash("Trying to get an action cid from nonexistent range.");
     }
     
     @Override
@@ -88,7 +88,7 @@ public class ActionSelector implements ActionIface {
 
     /** 
      * Ranges are sorted in descending order, the high boundary including the low excluding. All that is lower than the
-     * lowest boundary - range without an action. Examples:
+     * lowest boundary is range without actions. Examples:
      * <p>new Range[]{new Range(0, new long[]{cid1, cid2}), new Range(-10, new long[] {cid3})}: 
      * Float.MAX_VALUE >= activation > 0: cid1; cid2, 0>= activation > -10: cid3, -10 >= activation >= Float.MIN_VALUE: nothing
      */

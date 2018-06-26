@@ -48,8 +48,8 @@ public final class PrimusInterParesPremise extends BasePremise {
      */
     public void set_primus(long cid) {
         if      // activeCid is not in the set?
-                (!grouP.contains(primusCid))
-            throw new Crash("activeCid " + primusCid + " is not in the set " + grouP.getClass().getName());
+                (!grouP.contains(cid))
+            throw new Crash("primusCid " + cid + " is not in the set " + grouP.getClass().getName());
         
         primusCid = cid;
         super.set_activation(1);

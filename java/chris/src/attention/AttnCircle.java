@@ -32,8 +32,9 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
     {   super(null, null);    // null for being a main caldron
         this.attnDisp = attnDisp;
         
-        // The circle specifics
-        ((PrimusInterParesPremise)get_cpt(DynCptName.chat_media_prem.name())).set_primus(DynCptName.it_is_console_chat_prem.ordinal());
+        // The circle specifics: set up the chat media premise.
+        ((PrimusInterParesPremise)get_cpt(DynCptName.chat_media_prem.name())).
+                set_primus(Glob.named.name_cid.get(DynCptName.it_is_console_chat_prem.name()));
         
         // Prepare the first assessment
         initialSetup();
@@ -86,63 +87,6 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
         else 
             throw new Crash("Now such concept: name = " + cptName);
     }
-//
-//    /**
-//     * Load a concept by cid from common to local directory. The name directories are updated too, if it is a named concept.
-//     * @param cid
-//     * @return cid
-//     * @throws Crash if not found
-//     */
-//    public synchronized long load_cpt(long cid) {
-//
-//        if      // isn't the concept in local directory?
-//                (!cptDir.containsKey(cid)) 
-//            // load it
-//            attnDisp.copy_cpt_to_circle(cid, this);
-//
-//        return cid;
-//    }
-//    
-//    /**
-//     * Load concept by cid and set up the activation value.
-//     * @param cid
-//     * @param activation
-//     * @return cid
-//     */
-//    public synchronized long load_cpt(long cid, float activation) {
-//        ((ActivationIface)get_cpt(cid)).set_activation(activation);
-//
-//        return cid;
-//    }
-//    
-//    /**
-//     * Load a concept by name from common to local directory. name_cid of the local directory is updated with the name and cid.
-//     * @param cptName
-//     * @return cid
-//     */
-//    public synchronized long load_cpt(String cptName) {
-//        if      // isn't the name in local directory?
-//                (!Glob.named.name_cid.containsKey(cptName)) 
-//        {   // load the concept
-//            long cid = attnDisp.copy_cpt_to_circle(cptName, this);
-//            return cid;
-//        }
-//        else // return its cid
-//            return Glob.named.name_cid.get(cptName);
-//    }
-//
-//    /**
-//     * Load concept by name and set up the activation value.
-//     * @param cptName
-//     * @param activation
-//     * @return cid
-//    */
-//    public synchronized long load_cpt(String cptName, float activation) {
-//        long cid = load_cpt(cptName);
-//        ((ActivationIface)get_cpt(cid)).set_activation(activation);
-//        
-//        return cid;
-//    }
     
     /** 
      * Test if the concept directory contains a concept.

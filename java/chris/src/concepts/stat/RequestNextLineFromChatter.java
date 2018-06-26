@@ -45,7 +45,7 @@ public class RequestNextLineFromChatter extends StaticConcept {
                 lineOfChat.set_activation(-1);      // make it antiactive
                 AttnCircle attnCircle = nameSpace.get_attn_circle();
                 AttnDispatcherLoop attnDisp = attnCircle.get_attn_dispatcher();
-                attnCircle.put_in_queue(new Msg_ReadFromConsole());
+                attnDisp.put_in_queue(new Msg_ReadFromConsole());
         }
         else if
                (chatMedia.equals(DynCptName.it_is_http_chat_prem.name()))

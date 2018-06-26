@@ -32,7 +32,7 @@ final public class Starter {
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
-    public static void generate_dynamic_concepts() {
+    public static void read_write_console() {
         
         // Action "request_stop_reasoning_actn" - making a caldron wait on a change in premises is widely used
         long requestStopReasoningCid = Glob.attn_disp_loop.add_cpt(new Action(StatCptName.RequestStopReasoning.ordinal()), 
@@ -43,9 +43,14 @@ final public class Starter {
         long chatterUnknownCid = Glob.attn_disp_loop.add_cpt(new SimplePremise(), DynCptName.chatter_unknown_prem.name());
 
         // Primus inter pares premises "chat_media_prem" contains "it_is_console_chat_prem", "it_is_http_chat_prem" premises
+        long itIsConsoleChatCid = Glob.attn_disp_loop.add_cpt(new SimplePremise(), DynCptName.it_is_console_chat_prem.name());
+        long itIsHttpChatCid = Glob.attn_disp_loop.add_cpt(new SimplePremise(), DynCptName.it_is_http_chat_prem.name());
         PrimusInterParesPremise chatMedia = new PrimusInterParesPremise();
         long chatMediaCid = Glob.attn_disp_loop.add_cpt(chatMedia, DynCptName.chat_media_prem.name());
-        chatMedia.set_group(new long[] {StatCptName.Mrk_ItIsConsoleChat.ordinal(), StatCptName.Mrk_ItIsHttpChat.ordinal()});
+        chatMedia.set_group(new long[] {
+            itIsConsoleChatCid, 
+            itIsHttpChatCid
+        });
         
         // Primitives "line_of_chat_string_prem" and "it_is_the_first_line_of_chat_prem".
         // as the nested cid.

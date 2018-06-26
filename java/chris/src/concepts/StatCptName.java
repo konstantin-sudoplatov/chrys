@@ -7,8 +7,7 @@ package concepts;
  * @author su
  */
 public enum StatCptName {
-    Mrk_ItIsConsoleChat,
-    Mrk_ItIsHttpChat,
+    Mrk_TestMarker,
     RequestStopReasoning,
     RequestNextLineFromChatter,
     ;

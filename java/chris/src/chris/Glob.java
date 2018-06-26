@@ -57,7 +57,7 @@ final public class Glob {
     public static void initialize_application() {
         console_loop.start_thread();
         attn_disp_loop.start_thread();
-        Starter.generate_dynamic_concepts();
+        Starter.read_write_console();
     }
         
     /**

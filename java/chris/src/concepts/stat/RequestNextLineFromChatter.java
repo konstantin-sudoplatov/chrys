@@ -7,8 +7,8 @@ import chris.Crash;
 import chris.Glob;
 import concepts.DynCptName;
 import concepts.StaticConcept;
-import concepts.dyn.PrimusInterParesPremise;
-import concepts.dyn.StringPremise;
+import concepts.dyn.groups.PrimusInterParesGroup;
+import concepts.dyn.ActiveString;
 import console.Msg_ReadFromConsole;
 
 /**
@@ -33,7 +33,7 @@ public class RequestNextLineFromChatter extends StaticConcept {
      */
     @Override
     public void go(ConceptNameSpace nameSpace) {
-        PrimusInterParesPremise chatMediaCpt = (PrimusInterParesPremise)nameSpace.get_cpt(DynCptName.chat_media_prem.name());
+        PrimusInterParesGroup chatMediaCpt = (PrimusInterParesGroup)nameSpace.get_cpt(DynCptName.chat_media_prem.name());
         if      // is not set to a valid cid?
                 (chatMediaCpt.get_activation() != 1)
             throw new Crash("Concept chat_media_prem must be set");
@@ -41,7 +41,7 @@ public class RequestNextLineFromChatter extends StaticConcept {
         if
                 (chatMedia.equals(DynCptName.it_is_console_chat_prem.name()))
         {
-                StringPremise lineOfChat = (StringPremise)nameSpace.get_cpt(DynCptName.line_of_chat_string_prem.name());
+                ActiveString lineOfChat = (ActiveString)nameSpace.get_cpt(DynCptName.line_of_chat_string_prem.name());
                 lineOfChat.set_activation(-1);      // make it antiactive
                 AttnCircle attnCircle = nameSpace.get_attn_circle();
                 AttnDispatcherLoop attnDisp = attnCircle.get_attn_dispatcher();

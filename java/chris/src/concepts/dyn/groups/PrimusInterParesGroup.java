@@ -1,19 +1,20 @@
-package concepts.dyn;
+package concepts.dyn.groups;
 
 import chris.Crash;
-import java.util.HashSet;
+import concepts.dyn.Group;
+import concepts.dyn.ifaces.ActivationIface.NormalizationType;
 import java.util.Set;
 
 /**
  * Premise, that bears a set of cids. Only one of them is a selected member of group.
  * @author su
  */
-public final class PrimusInterParesPremise extends BasePremise {
+public final class PrimusInterParesGroup extends Group {
 
     /**
      * Default constructor.
      */
-    public PrimusInterParesPremise() {
+    public PrimusInterParesGroup() {
         
     }
     
@@ -22,8 +23,8 @@ public final class PrimusInterParesPremise extends BasePremise {
      * @param cids
      * @param activeCid
      */ 
-    public PrimusInterParesPremise(long[] cids, long activeCid) { 
-        set_group(cids);
+    public PrimusInterParesGroup(long[] cids, long activeCid) { 
+        set_members(cids);
         set_primus(activeCid);
     } 
     
@@ -32,6 +33,11 @@ public final class PrimusInterParesPremise extends BasePremise {
     //                                  Public methods
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
+    
+    @Override
+    public NormalizationType normalization_type() {
+        return NormalizationType.BIN;
+    }
     
     /**
      * Getter.
@@ -47,31 +53,13 @@ public final class PrimusInterParesPremise extends BasePremise {
      * @param cid 
      */
     public void set_primus(long cid) {
+        Set<Long> members = get_members();
         if      // activeCid is not in the set?
-                (!grouP.contains(cid))
-            throw new Crash("primusCid " + cid + " is not in the set " + grouP.getClass().getName());
+                (!members.contains(cid))
+            throw new Crash("primusCid " + cid + " is not in the set " + members.getClass().getName());
         
         primusCid = cid;
         super.set_activation(1);
-    }
-    
-    /**
-     * Setter.
-     * @param cids array of cids.
-     */
-    public void set_group(long[] cids) {
-        grouP = new HashSet<>();
-        for(long cid: cids) {
-            grouP.add(cid);
-        }
-    }
-    
-    /**
-     * Getter.
-     * @return set, that contains cids of the group.
-     */
-    public Set<Long> get_group() {
-        return grouP;
     }
 
     /**
@@ -91,9 +79,7 @@ public final class PrimusInterParesPremise extends BasePremise {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
     
-    /** Cids, which the group consists of. */
-    private Set<Long> grouP;
-    
     /** The active cid. The rest of the cids are antiactive. */
     private long primusCid;
+    
 }

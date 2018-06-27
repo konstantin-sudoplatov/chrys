@@ -58,6 +58,7 @@ final public class Glob {
         console_loop.start_thread();
         attn_disp_loop.start_thread();
         Starter.read_write_console();
+        Starter.symbols();
     }
         
     /**

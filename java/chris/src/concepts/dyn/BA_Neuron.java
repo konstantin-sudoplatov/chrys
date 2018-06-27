@@ -1,49 +1,43 @@
 package concepts.dyn;
 
-import attention.ConceptNameSpace;
-import concepts.DynamicConcept;
-import concepts.StaticConcept;
+import chris.Crash;
 
 /**
- * All that needed to invoke the static concept processing. This concept is stateless, i.e. it cannot be used as a premise or a data source.
+ * Neuron with binary normalized activation.
  * @author su
  */
-public class Action extends DynamicConcept {
+public class BA_Neuron extends Neuron {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
-    /**
+    /** 
      * Constructor.
-     * @param statCid cid of the static concept
-     */
-    public Action(long statCid) {
-        this.statCid = statCid;
-    }
+     */ 
+    public BA_Neuron() { 
+    } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
     //                                  Public methods
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
+    
+    @Override
+    public NormalizationType normalization_type() {
+        return NormalizationType.BIN;
+    } 
 
     /**
-     * Invoke the function of the static concept functor.
-     * @param nameSpace
+     * Setter.
+     * @param activation
      */
-    public void go(ConceptNameSpace nameSpace) {
-        ((StaticConcept)nameSpace.get_cpt(statCid)).go(nameSpace);
+    @Override
+    public void set_activation(float activation) {
+        throw new Crash("Activation cannot be directly set for this concept");
     }
-//    
-//    /** 
-//     * Append new cid to paramCids.
-//     * @param cid 
-//     */
-//    public void add_parameter(long cid) {
-//        Glob.append_array(paramCids, cid);
-//    }
-    
+
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected
@@ -54,6 +48,18 @@ public class Action extends DynamicConcept {
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
 
+    @Override
+    protected void _normalize_() {
+        // normalize
+        float a = get_activation();
+        if
+                (a > 0)
+            a = 1;
+        else 
+            a = -1;
+        super.set_activation(a);
+    }
+    
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //      Private    Private    Private    Private    Private    Private    Private
@@ -62,12 +68,6 @@ public class Action extends DynamicConcept {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
-    /** Concept, that provides the processing. */
-    private final long statCid;
-    
-//    /** Array of parameters to the static concept. */
-//    private long[] paramCids;
-    
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--

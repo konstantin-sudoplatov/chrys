@@ -2,7 +2,7 @@ package auxiliary;
 
 import chris.Crash;
 import chris.Glob;
-import concepts.dyn.parts.ActionIface;
+import concepts.dyn.ifaces.ActionIface;
 
 /**
  * A set of ranges and corresponding them lists of actions.

@@ -4,8 +4,8 @@ import chris.BaseMessageLoop;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
-import concepts.dyn.parts.EffectIface;
-import concepts.dyn.parts.EvaluationIface;
+import concepts.dyn.ifaces.EffectIface;
+import concepts.dyn.ifaces.EvaluationIface;
 
 /**
  * The reasoning is taking place in a caldron. Caldrons are organized in a hierarchy.

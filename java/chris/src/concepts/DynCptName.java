@@ -8,6 +8,7 @@ package concepts;
  * @author su
  */
 public enum DynCptName {
+    // Starter.read_write_console()
     request_stop_reasoning_actn,            // tell a caldron to stop on the current head and wait for a change in the premises
     chat_prem,                              // chatting premise
     chat_media_prem,                        // primus inter pares premise, contains "Mrk_ItIsConsoleChat" and "Mrk_ItIsHttpChat" static concepts
@@ -18,10 +19,14 @@ public enum DynCptName {
     wait_for_the_line_from_chatter_nrn,
     request_next_line_actn,
     request_next_line_nrn,
+    
+    // Starter.symbols()
+    word_separators_group,                          // each special symbol is in this group
+    
+    //
     chatter_unknown_prem,      
     add_line_to_console_log,
     console_log,
     line_counter,
-    introduce_myself_and_ask_chatter_name,
-    ;
+    introduce_myself_and_ask_chatter_name
 }

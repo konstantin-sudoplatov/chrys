@@ -1,24 +1,25 @@
 package concepts.dyn;
 
 import attention.ConceptNameSpace;
-import concepts.dyn.parts.PropertyIface;
-import concepts.dyn.parts.EffectIface;
+import concepts.dyn.ifaces.PropertyIface;
+import concepts.dyn.ifaces.EffectIface;
 import auxiliary.ActionSelector;
 import auxiliary.Premise;
+import chris.Crash;
 import chris.Glob;
 import concepts.*;
-import concepts.dyn.parts.ActionIface;
-import concepts.dyn.parts.ActivationIface;
+import concepts.dyn.ifaces.ActionIface;
+import concepts.dyn.ifaces.ActivationIface;
 import java.util.Arrays;
-import concepts.dyn.parts.EvaluationIface;
-import concepts.dyn.parts.PremiseIface;
+import concepts.dyn.ifaces.EvaluationIface;
+import concepts.dyn.ifaces.PremiseIface;
 
 /**
  * It is a concept capable of reasoning, i.e. calculating activation as the weighted sum of premises.
  * The same way it determines successors and their activations. 
  * @author su
  */
-public class Neuron extends DynamicConcept implements EvaluationIface, ActionIface, PremiseIface, EffectIface, PropertyIface {
+abstract public class Neuron extends DynamicConcept implements ActivationIface, EvaluationIface, ActionIface, PremiseIface, EffectIface {
 
     /**
      * Default constructor.
@@ -43,11 +44,29 @@ public class Neuron extends DynamicConcept implements EvaluationIface, ActionIfa
     @Override
     public Neuron clone() {
         Neuron clon = (Neuron)super.clone();
-        if (propertieS != null) clon.propertieS = Arrays.copyOf(propertieS, propertieS.length);
+//        if (propertieS != null) clon.propertieS = Arrays.copyOf(propertieS, propertieS.length);
         if (effectS != null) clon.effectS = Arrays.copyOf(effectS, effectS.length);
         if (premiseS != null) clon.premiseS = Arrays.copyOf(premiseS, premiseS.length);
         
         return clon;
+    }
+   
+    /**
+     * Getter.
+     * @return
+     */
+    @Override
+    public float get_activation() {
+        return activatioN;
+    }
+
+    /**
+     * Setter.
+     * @param activation
+     */
+    @Override
+    public void set_activation(float activation) {
+        activatioN = activation;
     }
 
     /**
@@ -84,27 +103,11 @@ public class Neuron extends DynamicConcept implements EvaluationIface, ActionIfa
             float weight = prem.weight;
             weightedSum += weight*activation;
         }
+        activatioN = (float)weightedSum;
         
-        // normalize
-        float a = 0;
-        if
-                (weightedSum < 0)
-            a = -1;
-        else if
-                (weightedSum > 0)
-            a = 1;
-        set_activation(a);
+        _normalize_();
         
-//        // do the normalization
-//        if      // normalization needed is not needed?
-//                (weightedSum == -1 || weightedSum == 0 || weightedSum == 1)
-//            // no, set raw activation
-//            set_activation((float)weightedSum);
-//        else 
-//            // set normalized activation
-//            set_activation((float)((1 - Math.exp(-weightedSum))/(1 + Math.exp(-weightedSum))));
-        
-        return a;
+        return get_activation();
     }
     
     @Override
@@ -141,27 +144,27 @@ public class Neuron extends DynamicConcept implements EvaluationIface, ActionIfa
     public void set_effects(long[] propArray) {
         effectS = propArray;
     }
-
-    @Override
-    public long get_property(int index) {
-        return propertieS[index];
-    }
-
-    @Override
-    public long[] get_properties() {
-        return propertieS;
-    }
-
-    @Override
-    public long add_property(long cid) {
-        propertieS = Glob.append_array(propertieS, cid);
-        return cid;
-    }
-
-    @Override
-    public void set_properties(long[] propArray) {
-        propertieS = propArray;
-    }
+//
+//    @Override
+//    public long get_property(int index) {
+//        return propertieS[index];
+//    }
+//
+//    @Override
+//    public long[] get_properties() {
+//        return propertieS;
+//    }
+//
+//    @Override
+//    public long add_property(long cid) {
+//        propertieS = Glob.append_array(propertieS, cid);
+//        return cid;
+//    }
+//
+//    @Override
+//    public void set_properties(long[] propArray) {
+//        propertieS = propArray;
+//    }
 
     @Override
     public Premise get_premise(int index) {
@@ -193,7 +196,22 @@ public class Neuron extends DynamicConcept implements EvaluationIface, ActionIfa
     public void set_bias(float bias) {
         biaS = bias;
     }
-            
+    
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+    //
+    //      Protected    Protected    Protected    Protected    Protected    Protected
+    //
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+
+    //---$$$---$$$---$$$---$$$---$$$--- protected data $$$---$$$---$$$---$$$---$$$---$$$--
+
+    //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
+     
+    /**
+     * Normalize activation according to its normalization type.
+     */
+    abstract protected void _normalize_();
+    
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //      Private    Private    Private    Private    Private    Private    Private
@@ -201,6 +219,10 @@ public class Neuron extends DynamicConcept implements EvaluationIface, ActionIfa
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
+
+    /** Activation. Its normalized (squashed) value is from -1 to 1. Activation is not stored in the DB
+      and if the concept is not loaded into a name space(caldron) and explicitely changed it is -1. */
+    private float activatioN = -1;
     
     /** Array of actions. */
     private ActionSelector actioN;
@@ -208,8 +230,8 @@ public class Neuron extends DynamicConcept implements EvaluationIface, ActionIfa
     /** Array of possible effects. */
     private long[] effectS;
     
-    /** Array of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
-    private long[] propertieS;
+//    /** Array of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
+//    private long[] propertieS;
     
     /** Array of cids and weights of premises. The cids are not forbidden to be duplicated in the properties. */
     private Premise[] premiseS;

@@ -1,4 +1,4 @@
-package concepts.dyn.parts;
+package concepts.dyn.ifaces;
 
 /**
  * Getters and setters for the array of properties.

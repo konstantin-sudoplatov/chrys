@@ -6,9 +6,11 @@ import concepts.DynCptName;
 import concepts.StatCptName;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
-import concepts.dyn.PrimusInterParesPremise;
-import concepts.dyn.SimplePremise;
-import concepts.dyn.StringPremise;
+import concepts.dyn.groups.PrimusInterParesGroup;
+import concepts.dyn.Peg;
+import concepts.dyn.ActiveString;
+import concepts.dyn.BA_Neuron;
+import concepts.dyn.Group;
 
 /**
  * When there is no DB or it is empty, we have to start with something...
@@ -39,23 +41,27 @@ final public class Starter {
                 DynCptName.request_stop_reasoning_actn.name());
         
         // Premises "chat_prem", "chatter_unknown_prem".
-        long chatCid = Glob.attn_disp_loop.add_cpt(new SimplePremise(), DynCptName.chat_prem.name());
-        long chatterUnknownCid = Glob.attn_disp_loop.add_cpt(new SimplePremise(), DynCptName.chatter_unknown_prem.name());
+        long chatCid = Glob.attn_disp_loop.add_cpt(new Peg(), DynCptName.chat_prem.name());
+        long chatterUnknownCid = Glob.attn_disp_loop.add_cpt(new Peg(), DynCptName.chatter_unknown_prem.name());
 
         // Primus inter pares premises "chat_media_prem" contains "it_is_console_chat_prem", "it_is_http_chat_prem" premises
-        long itIsConsoleChatCid = Glob.attn_disp_loop.add_cpt(new SimplePremise(), DynCptName.it_is_console_chat_prem.name());
-        long itIsHttpChatCid = Glob.attn_disp_loop.add_cpt(new SimplePremise(), DynCptName.it_is_http_chat_prem.name());
-        PrimusInterParesPremise chatMedia = new PrimusInterParesPremise();
+        Peg itIsConsoleChat = new Peg();
+        long itIsConsoleChatCid = Glob.attn_disp_loop.add_cpt(itIsConsoleChat, DynCptName.it_is_console_chat_prem.name());
+        Peg itIsHttpChat = new Peg();
+        long itIsHttpChatCid = Glob.attn_disp_loop.add_cpt(itIsHttpChat, DynCptName.it_is_http_chat_prem.name());
+        PrimusInterParesGroup chatMedia = new PrimusInterParesGroup();
         long chatMediaCid = Glob.attn_disp_loop.add_cpt(chatMedia, DynCptName.chat_media_prem.name());
-        chatMedia.set_group(new long[] {
+        chatMedia.set_members(new long[] {
             itIsConsoleChatCid, 
             itIsHttpChatCid
         });
+        itIsConsoleChat.add_property(chatMediaCid);
+        itIsHttpChat.add_property(chatMediaCid);
         
         // Primitives "line_of_chat_string_prem" and "it_is_the_first_line_of_chat_prem".
         // as the nested cid.
-        long lineOfChatCid = Glob.attn_disp_loop.add_cpt(new StringPremise(null), DynCptName.line_of_chat_string_prem.name());
-        Glob.attn_disp_loop.add_cpt(new SimplePremise(), DynCptName.it_is_the_first_line_of_chat_prem.name());
+        long lineOfChatCid = Glob.attn_disp_loop.add_cpt(new ActiveString(null), DynCptName.line_of_chat_string_prem.name());
+        Glob.attn_disp_loop.add_cpt(new Peg(), DynCptName.it_is_the_first_line_of_chat_prem.name());
         
         // Action of requesting the next line.
         Action requestNextLineAction = new Action(StatCptName.RequestNextLineFromChatter.ordinal());
@@ -63,7 +69,7 @@ final public class Starter {
         
         //              Neurons, that deal with these premises:
         // The one that waits for the line from chatter.
-        Neuron waitLineNrn = new Neuron();
+        Neuron waitLineNrn = new BA_Neuron();
         waitLineNrn.set_premises(new Premise[] {
             new Premise(1, lineOfChatCid)
         });
@@ -71,7 +77,7 @@ final public class Starter {
         waitLineNrn.add_action_range(Float.NEGATIVE_INFINITY, new long[] {requestStopReasoningCid});
         long waitLineNrnCid = Glob.attn_disp_loop.add_cpt(waitLineNrn, DynCptName.wait_for_the_line_from_chatter_nrn.name());
         // The one, that requests the next line
-        Neuron requestLineNrn = new Neuron();
+        Neuron requestLineNrn = new BA_Neuron();
         requestLineNrn.set_premises(new Premise[] {
             new Premise(1, chatMediaCid)
         });
@@ -79,6 +85,11 @@ final public class Starter {
         long requestLineNrnCid = Glob.attn_disp_loop.add_cpt(requestLineNrn, DynCptName.request_next_line_nrn.name());
         waitLineNrn.add_effect(requestLineNrnCid);
         requestLineNrn.add_effect(waitLineNrnCid);
+    }
+    
+    public static void symbols() {
+        Group symbolsGroup = new Group();
+        long symbolsGroupCid = Glob.attn_disp_loop.add_cpt(symbolsGroup, DynCptName.word_separators_group.name());
     }
     
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$

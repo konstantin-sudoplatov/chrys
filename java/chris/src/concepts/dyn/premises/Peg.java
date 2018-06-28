@@ -1,19 +1,17 @@
-package concepts.dyn;
+package concepts.dyn.premises;
+
+import concepts.dyn.Premise;
 
 /**
- * Premise, that bears a string. First used by "DynCptName.line_of_chat_string_prem".
- * If active (+1), the string has a meaningful value, if antiactive (-1), then string is
- * undefined.
+ * The simplest premise. It is only the cid, that bears information for this concept.
  * @author su
  */
-public class PremiseString extends Premise {
+public class Peg extends Premise {
 
     /** 
      * Constructor.
-     * @param string
      */ 
-    public PremiseString(String string) { 
-        strinG = string;
+    public Peg() { 
     } 
     
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -23,24 +21,8 @@ public class PremiseString extends Premise {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
     
     @Override
-    public NormalizationType normalization_type() {
+    public NormalizationType get_normalization_type() {
         return NormalizationType.BIN;
-    }
-    
-    /**
-     * Getter.
-     * @return 
-     */
-    public String get_text() {
-        return strinG;
-    }
-
-    /**
-     * Setter.
-     * @param string 
-     */
-    public void set_text(String string) {
-        this.strinG = string;
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -50,6 +32,4 @@ public class PremiseString extends Premise {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
-    
-    private String strinG;
 }

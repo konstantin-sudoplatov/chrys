@@ -1,14 +1,12 @@
-package concepts.dyn.actions;
+package concepts.dyn;
 
-import attention.ConceptNameSpace;
-import concepts.StaticAction;
-import concepts.dyn.Action;
+import concepts.DynamicConcept;
 
 /**
- * An operation on two concepts. The first operand is applied to the second one.
+ * Base for the stocks. Main purpose of this class of concepts is to store data.
  * @author su
  */
-public final class BinaryOperation extends Action {
+public class Stock extends DynamicConcept {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -16,9 +14,9 @@ public final class BinaryOperation extends Action {
 
     /** 
      * Constructor.
-     * @param statActionCid
      */ 
-    public BinaryOperation(long statActionCid) { super(statActionCid); } 
+    public Stock() { 
+    } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -26,31 +24,6 @@ public final class BinaryOperation extends Action {
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
-    /**
-     * Invoke the function of the static concept functor.
-     * @param nameSpace
-     */
-    @Override
-    public void go(ConceptNameSpace nameSpace) {
-        ((StaticAction)nameSpace.get_cpt(_statActionCid_)).go(nameSpace, new long[] {firstOperandCid, secondOperandCid}, null);
-    }
-
-    /**
-     * Setter.
-     * @param cid 
-     */
-    public void set_first_operand(long cid) {
-        firstOperandCid = cid;
-    }
-
-    /**
-     * Setter.
-     * @param cid 
-     */
-    public void set_second_operand(long cid) {
-        secondOperandCid = cid;
-    }
-    
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected
@@ -69,9 +42,6 @@ public final class BinaryOperation extends Action {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
-    private long firstOperandCid;
-    private long secondOperandCid;
-    
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--

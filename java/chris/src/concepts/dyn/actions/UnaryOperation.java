@@ -14,15 +14,12 @@ public final class UnaryOperation extends Action {
 
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
+
     /** 
      * Constructor.
      * @param statActionCid
-     * @param operandCid
      */ 
-    public UnaryOperation(long statActionCid, long operandCid) 
-    {   super(statActionCid); 
-        this.operandCid = operandCid;
-    } 
+    public UnaryOperation(long statActionCid) { super(statActionCid); } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -37,6 +34,14 @@ public final class UnaryOperation extends Action {
     @Override
     public void go(ConceptNameSpace nameSpace) {
         ((StaticAction)nameSpace.get_cpt(_statActionCid_)).go(nameSpace, new long[] {operandCid}, null);
+    }
+
+    /**
+     * Setter.
+     * @param cid 
+     */
+    public void set_operand(long cid) {
+        operandCid = cid;
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$

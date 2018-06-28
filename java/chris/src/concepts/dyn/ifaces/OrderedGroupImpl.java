@@ -1,14 +1,15 @@
-package concepts.dyn.actions;
+package concepts.dyn.ifaces;
 
-import attention.ConceptNameSpace;
-import concepts.StaticAction;
-import concepts.dyn.Action;
+
+import concepts.Concept;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
- * An operation on two concepts. The first operand is applied to the second one.
+ * Implementation of the OrderedGroupIface.
  * @author su
  */
-public final class BinaryOperation extends Action {
+public class OrderedGroupImpl implements OrderedGroupIface {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -16,9 +17,11 @@ public final class BinaryOperation extends Action {
 
     /** 
      * Constructor.
-     * @param statActionCid
+     * @param host
      */ 
-    public BinaryOperation(long statActionCid) { super(statActionCid); } 
+    public OrderedGroupImpl(Concept host) { 
+        hosT = host;
+    } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -26,31 +29,39 @@ public final class BinaryOperation extends Action {
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
-    /**
-     * Invoke the function of the static concept functor.
-     * @param nameSpace
-     */
     @Override
-    public void go(ConceptNameSpace nameSpace) {
-        ((StaticAction)nameSpace.get_cpt(_statActionCid_)).go(nameSpace, new long[] {firstOperandCid, secondOperandCid}, null);
+    public int group_size() {
+        return memberS.size();
     }
 
-    /**
-     * Setter.
-     * @param cid 
-     */
-    public void set_first_operand(long cid) {
-        firstOperandCid = cid;
-    }
-
-    /**
-     * Setter.
-     * @param cid 
-     */
-    public void set_second_operand(long cid) {
-        secondOperandCid = cid;
+    @Override
+    public boolean contains_member(Concept cpt) {
+        return memberS.contains(cpt.get_cid());
     }
     
+    @Override
+    public void append_member(Concept cpt) {
+        if (memberS == null) memberS = new ArrayList();
+        memberS.add(cpt.get_cid());
+
+        if      // concept implements property interface?
+                (cpt instanceof PropertyIface)
+        //yes: set up the backward link
+        ((PropertyIface)cpt).add_property(hosT);
+    }
+    
+    @Override
+    public final void set_members(Concept[] concepts) {
+        memberS = new ArrayList();
+        for(Concept cpt: concepts) {
+            memberS.add(cpt.get_cid());
+            if      // concept implements property interface?
+                    (cpt instanceof PropertyIface)
+            //yes: set up the backward link
+            ((PropertyIface)cpt).add_property(hosT);
+        }
+    }
+
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected
@@ -69,8 +80,11 @@ public final class BinaryOperation extends Action {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
-    private long firstOperandCid;
-    private long secondOperandCid;
+    /** Concept, that contains this implementation and supports related interface. */
+    private Concept hosT;
+    
+    /** Cids, which the group consists of. */
+    private List<Long> memberS;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

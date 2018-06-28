@@ -1,16 +1,17 @@
-package concepts.dyn.groups;
+package concepts.dyn.premises;
 
 import chris.Crash;
 import concepts.Concept;
-import concepts.dyn.UnorderedGroup;
+import concepts.dyn.Premise;
 import concepts.dyn.ifaces.ActivationIface.NormalizationType;
-import java.util.Set;
+import concepts.dyn.ifaces.UnorderedGroupIface;
+import concepts.dyn.ifaces.UnorderedGroupImpl;
 
 /**
  * Premise, that bears a set of cids. Only one of them is a selected member of group.
  * @author su
  */
-public final class PrimusInterParesPremise extends UnorderedGroup {
+public final class PrimusInterParesPremise extends Premise implements UnorderedGroupIface {
 
     /**
      * Default constructor.
@@ -36,7 +37,7 @@ public final class PrimusInterParesPremise extends UnorderedGroup {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
     
     @Override
-    public NormalizationType normalization_type() {
+    public NormalizationType get_normalization_type() {
         return NormalizationType.BIN;
     }
     
@@ -54,10 +55,9 @@ public final class PrimusInterParesPremise extends UnorderedGroup {
      * @param cpt 
      */
     public void set_primus(Concept cpt) {
-        Set<Long> members = get_members();
         if      // activeCid is not in the set?
-                (!members.contains(cpt.get_cid()))
-            throw new Crash("primusCid " + cpt + " is not in the set " + members.getClass().getName());
+                (!contains_member(cpt))
+            throw new Crash("primusCid " + cpt.get_cid() + " is not a member of the group.");
         
         primusCid = cpt.get_cid();
         super.set_activation(1);
@@ -72,6 +72,26 @@ public final class PrimusInterParesPremise extends UnorderedGroup {
         throw new Crash("The activation field sets up in the set_primus_cid() method.");
     }
 
+    @Override
+    public int group_size() {
+        return grouP.group_size();
+    }
+
+    @Override
+    public boolean contains_member(Concept cpt) {
+        return grouP.contains_member(cpt);
+    }
+
+    @Override
+    public void add_member(Concept cpt) {
+        grouP.add_member(cpt);
+    }
+
+    @Override
+    public void set_members(Concept[] concepts) {
+        grouP.set_members(concepts);
+    }
+
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //      Private    Private    Private    Private    Private    Private    Private
@@ -83,4 +103,6 @@ public final class PrimusInterParesPremise extends UnorderedGroup {
     /** The active cid. The rest of the cids are antiactive. */
     private long primusCid;
     
+    /** Group, that contains all members of this premise. */
+    private UnorderedGroupImpl grouP = new UnorderedGroupImpl(this);
 }

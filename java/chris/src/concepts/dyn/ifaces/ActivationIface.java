@@ -16,7 +16,7 @@ public interface ActivationIface {
      * Get normalization type of the concept.
      * @return normalization type
      */
-    public NormalizationType normalization_type();
+    public NormalizationType get_normalization_type();
     
     /**
      * Getter.
@@ -29,4 +29,10 @@ public interface ActivationIface {
      * @param activation
      */
     public void set_activation(float activation);
+    
+    /** 
+     * Normalize activation according to normalization type. 
+     * @return normalized activation
+     */
+    public float normalize_activation();
 }

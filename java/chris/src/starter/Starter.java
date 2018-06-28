@@ -7,10 +7,10 @@ import concepts.DynCptName;
 import concepts.StatCptName;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
-import concepts.dyn.Peg;
-import concepts.dyn.PremiseString;
-import concepts.dyn.BA_Neuron;
-import concepts.dyn.groups.PrimusInterParesPremise;
+import concepts.dyn.premises.Peg;
+import concepts.dyn.premises.PremiseString;
+import concepts.dyn.neurons.BA_Neuron;
+import concepts.dyn.premises.PrimusInterParesPremise;
 
 /**
  * When there is no DB or it is empty, we have to start with something...

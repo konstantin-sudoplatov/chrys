@@ -7,8 +7,8 @@ import chris.Crash;
 import chris.Glob;
 import concepts.DynCptName;
 import concepts.StaticAction;
-import concepts.dyn.groups.PrimusInterParesPremise;
-import concepts.dyn.PremiseString;
+import concepts.dyn.premises.PrimusInterParesPremise;
+import concepts.dyn.premises.PremiseString;
 import console.Msg_ReadFromConsole;
 
 /**

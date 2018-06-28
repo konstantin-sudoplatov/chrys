@@ -11,6 +11,7 @@ import java.util.Arrays;
 import concepts.dyn.ifaces.EvaluationIface;
 import concepts.dyn.ifaces.PremiseIface;
 import concepts.dyn.ifaces.ActionRangeIface;
+import concepts.dyn.ifaces.ActivationImpl;
 
 /**
  * It is a concept capable of reasoning, i.e. calculating activation as the weighted sum of premises.
@@ -21,8 +22,11 @@ abstract public class Neuron extends DynamicConcept implements ActivationIface, 
 
     /**
      * Default constructor.
+     * @param normType normalization type
      */
-    public Neuron() {
+    public Neuron(ActivationIface.NormalizationType normType) 
+    {
+        activatioN = new ActivationImpl(normType);
     }
 
 //    /**
@@ -48,23 +52,25 @@ abstract public class Neuron extends DynamicConcept implements ActivationIface, 
         
         return clon;
     }
+
+    @Override
+    public NormalizationType get_normalization_type() {
+        return activatioN.get_normalization_type();
+    }
    
-    /**
-     * Getter.
-     * @return
-     */
     @Override
     public float get_activation() {
-        return activatioN;
+        return activatioN.get_activation();
     }
 
-    /**
-     * Setter.
-     * @param activation
-     */
     @Override
     public void set_activation(float activation) {
-        activatioN = activation;
+        activatioN.set_activation(activation);
+    }
+
+    @Override
+    public float normalize_activation() {
+        return activatioN.normalize_activation();
     }
 
     /**
@@ -101,9 +107,9 @@ abstract public class Neuron extends DynamicConcept implements ActivationIface, 
             float weight = prem.weight;
             weightedSum += weight*activation;
         }
-        activatioN = (float)weightedSum;
+        activatioN.set_activation((float)weightedSum);
         
-        _normalize_();
+        normalize_activation();
         
         return get_activation();
     }
@@ -206,11 +212,6 @@ abstract public class Neuron extends DynamicConcept implements ActivationIface, 
     //---$$$---$$$---$$$---$$$---$$$--- protected data $$$---$$$---$$$---$$$---$$$---$$$--
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
-     
-    /**
-     * Normalize activation according to its normalization type.
-     */
-    abstract protected void _normalize_();
     
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
@@ -220,9 +221,8 @@ abstract public class Neuron extends DynamicConcept implements ActivationIface, 
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
-    /** Activation. Its normalized (squashed) value is from -1 to 1. Activation is not stored in the DB
-      and if the concept is not loaded into a name space(caldron) and explicitely changed it is -1. */
-    private float activatioN = -1;
+    /** Activation.  */
+    private ActivationImpl activatioN;
     
     /** Array of actions. */
     private ActionSelector actioN;

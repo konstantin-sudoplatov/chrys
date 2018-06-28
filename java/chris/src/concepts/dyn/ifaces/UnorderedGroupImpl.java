@@ -1,12 +1,15 @@
-package concepts.dyn;
+package concepts.dyn.ifaces;
 
-import chris.Crash;
+
+import concepts.Concept;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
- * Neuron with binary normalized activation.
+ * Implementation of the UnorderedGroupIface.
  * @author su
  */
-public class BA_Neuron extends Neuron {
+public class UnorderedGroupImpl implements UnorderedGroupIface {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -14,8 +17,10 @@ public class BA_Neuron extends Neuron {
 
     /** 
      * Constructor.
+     * @param host
      */ 
-    public BA_Neuron() { 
+    public UnorderedGroupImpl(Concept host) { 
+        hosT = host;
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -23,19 +28,38 @@ public class BA_Neuron extends Neuron {
     //                                  Public methods
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
+
+    @Override
+    public int group_size() {
+        return memberS.size();
+    }
+
+    @Override
+    public boolean contains_member(Concept cpt) {
+        return memberS.contains(cpt.get_cid());
+    }
     
     @Override
-    public NormalizationType normalization_type() {
-        return NormalizationType.BIN;
-    } 
+    public void add_member(Concept cpt) {
+        if (memberS == null) memberS = new HashSet();
+        memberS.add(cpt.get_cid());
 
-    /**
-     * Setter.
-     * @param activation
-     */
+        if      // concept implements property interface?
+                (cpt instanceof PropertyIface)
+        //yes: set up the backward link
+        ((PropertyIface)cpt).add_property(hosT);
+    }
+    
     @Override
-    public void set_activation(float activation) {
-        throw new Crash("Activation cannot be directly set for this concept");
+    public final void set_members(Concept[] concepts) {
+        memberS = new HashSet<>();
+        for(Concept cpt: concepts) {
+            memberS.add(cpt.get_cid());
+            if      // concept implements property interface?
+                    (cpt instanceof PropertyIface)
+            //yes: set up the backward link
+            ((PropertyIface)cpt).add_property(hosT);
+        }
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -48,18 +72,6 @@ public class BA_Neuron extends Neuron {
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
 
-    @Override
-    protected void _normalize_() {
-        // normalize
-        float a = get_activation();
-        if
-                (a > 0)
-            a = 1;
-        else 
-            a = -1;
-        super.set_activation(a);
-    }
-    
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //      Private    Private    Private    Private    Private    Private    Private
@@ -68,6 +80,12 @@ public class BA_Neuron extends Neuron {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
+    /** Concept, that contains this implementation and supports related interface. */
+    private Concept hosT;
+    
+    /** Cids, which the group consists of. */
+    private Set<Long> memberS;
+    
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--

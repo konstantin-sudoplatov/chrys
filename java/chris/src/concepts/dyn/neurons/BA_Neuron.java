@@ -1,14 +1,14 @@
-package concepts.dyn.actions;
+package concepts.dyn.neurons;
 
-import attention.ConceptNameSpace;
-import concepts.StaticAction;
-import concepts.dyn.Action;
+import chris.Crash;
+import concepts.dyn.Neuron;
+import concepts.dyn.ifaces.ActivationIface;
 
 /**
- * An operation on two concepts. The first operand is applied to the second one.
+ * Neuron with binary normalized activation.
  * @author su
  */
-public final class BinaryOperation extends Action {
+public class BA_Neuron extends Neuron {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -16,9 +16,8 @@ public final class BinaryOperation extends Action {
 
     /** 
      * Constructor.
-     * @param statActionCid
      */ 
-    public BinaryOperation(long statActionCid) { super(statActionCid); } 
+    public BA_Neuron() { super(ActivationIface.NormalizationType.BIN); } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -27,30 +26,14 @@ public final class BinaryOperation extends Action {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     /**
-     * Invoke the function of the static concept functor.
-     * @param nameSpace
+     * Setter.
+     * @param activation
      */
     @Override
-    public void go(ConceptNameSpace nameSpace) {
-        ((StaticAction)nameSpace.get_cpt(_statActionCid_)).go(nameSpace, new long[] {firstOperandCid, secondOperandCid}, null);
+    public void set_activation(float activation) {
+        throw new Crash("Activation cannot be directly set for this concept");
     }
 
-    /**
-     * Setter.
-     * @param cid 
-     */
-    public void set_first_operand(long cid) {
-        firstOperandCid = cid;
-    }
-
-    /**
-     * Setter.
-     * @param cid 
-     */
-    public void set_second_operand(long cid) {
-        secondOperandCid = cid;
-    }
-    
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected
@@ -60,7 +43,7 @@ public final class BinaryOperation extends Action {
     //---$$$---$$$---$$$---$$$---$$$--- protected data $$$---$$$---$$$---$$$---$$$---$$$--
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
-
+    
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //      Private    Private    Private    Private    Private    Private    Private
@@ -69,9 +52,6 @@ public final class BinaryOperation extends Action {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
-    private long firstOperandCid;
-    private long secondOperandCid;
-    
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--

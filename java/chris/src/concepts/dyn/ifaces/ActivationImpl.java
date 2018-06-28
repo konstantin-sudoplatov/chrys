@@ -1,14 +1,10 @@
-package concepts.dyn.actions;
-
-import attention.ConceptNameSpace;
-import concepts.StaticAction;
-import concepts.dyn.Action;
+package concepts.dyn.ifaces;
 
 /**
- * An operation on two concepts. The first operand is applied to the second one.
+ * Implementation of the ActivationIface.
  * @author su
  */
-public final class BinaryOperation extends Action {
+public class ActivationImpl implements ActivationIface {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -16,9 +12,11 @@ public final class BinaryOperation extends Action {
 
     /** 
      * Constructor.
-     * @param statActionCid
+     * @param normType
      */ 
-    public BinaryOperation(long statActionCid) { super(statActionCid); } 
+    public ActivationImpl(ActivationIface.NormalizationType normType) { 
+         this.normType = normType; 
+    } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -26,31 +24,48 @@ public final class BinaryOperation extends Action {
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
-    /**
-     * Invoke the function of the static concept functor.
-     * @param nameSpace
-     */
     @Override
-    public void go(ConceptNameSpace nameSpace) {
-        ((StaticAction)nameSpace.get_cpt(_statActionCid_)).go(nameSpace, new long[] {firstOperandCid, secondOperandCid}, null);
+    public NormalizationType get_normalization_type() {
+        return normType;
     }
 
-    /**
-     * Setter.
-     * @param cid 
-     */
-    public void set_first_operand(long cid) {
-        firstOperandCid = cid;
+    @Override
+    public float get_activation() {
+        return activatioN;
     }
 
-    /**
-     * Setter.
-     * @param cid 
-     */
-    public void set_second_operand(long cid) {
-        secondOperandCid = cid;
+    @Override
+    public void set_activation(float activation) {
+        activatioN = activation;
     }
-    
+
+    @Override
+    public float normalize_activation() {
+        switch(normType) {
+            case BIN:
+                if (activatioN > 0)
+                    activatioN = 1;
+                else 
+                    activatioN = -1;
+                break;
+
+            case SGN:    
+                if (activatioN > 0)
+                    activatioN = 1;
+                else if (activatioN < 0)
+                    activatioN = -1;
+                else
+                    activatioN = 0;
+                break;
+            
+            case ESQUASH:
+                activatioN = ((float)((1 - Math.exp(-activatioN))/(1 + Math.exp(-activatioN))));
+                break;
+        }
+
+        return activatioN;
+    }
+
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected
@@ -68,10 +83,13 @@ public final class BinaryOperation extends Action {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
-
-    private long firstOperandCid;
-    private long secondOperandCid;
     
+    /** Normalization type. */
+    private final ActivationIface.NormalizationType normType;
+    
+    /** Activation value. */
+    private float activatioN = -1;
+
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--

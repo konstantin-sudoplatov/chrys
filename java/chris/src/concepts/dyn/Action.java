@@ -33,8 +33,17 @@ public class Action extends DynamicConcept {
      * @param nameSpace
      */
     public void go(ConceptNameSpace nameSpace) {
-        ((StaticAction)nameSpace.get_cpt(_statActionCid_)).go(nameSpace, null, null);
+        resultCids = ((StaticAction)nameSpace.get_cpt(_statActionCid_)).go(nameSpace, null, null);
     }
+
+    /**
+     * Getter.
+     * @return result cids array. 
+     */
+    public long[] get_result_cids() {
+        return resultCids;
+    }
+    
 //    
 //    /** 
 //     * Append new cid to paramCids.
@@ -65,8 +74,7 @@ public class Action extends DynamicConcept {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
     
-//    /** Array of parameters to the static concept. */
-//    private long[] paramCids;
+    private long[] resultCids;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

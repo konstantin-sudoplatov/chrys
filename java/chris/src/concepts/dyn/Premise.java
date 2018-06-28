@@ -3,6 +3,7 @@ package concepts.dyn;
 import concepts.Concept;
 import concepts.DynamicConcept;
 import concepts.dyn.ifaces.ActivationIface;
+import concepts.dyn.ifaces.ActivationImpl;
 import concepts.dyn.ifaces.PropertyIface;
 import java.util.HashSet;
 import java.util.Set;
@@ -26,23 +27,25 @@ abstract public class Premise extends DynamicConcept implements ActivationIface,
     //                            Public
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
-    
-    /**
-     * Getter.
-     * @return
-     */
+
+    @Override
+    public NormalizationType get_normalization_type() {
+        return activatioN.get_normalization_type();
+    }
+   
     @Override
     public float get_activation() {
-        return activatioN;
+        return activatioN.get_activation();
     }
 
-    /**
-     * Setter.
-     * @param activation
-     */
     @Override
     public void set_activation(float activation) {
-        this.activatioN = activation;
+        activatioN.set_activation(activation);
+    }
+
+    @Override
+    public float normalize_activation() {
+        return activatioN.normalize_activation();
     }
     
     @Override
@@ -86,9 +89,9 @@ abstract public class Premise extends DynamicConcept implements ActivationIface,
 
     //---%%%---%%%---%%%---%%%---%%% private data ---%%%---%%%---%%%---%%%---%%%---%%%
 
-    /** Activation. Its normalized (squashed) value is from -1 to 1. Activation is not stored in the DB
-      and if the concept is not loaded into a name space(caldron) and explicitely changed it is -1. */
-    private float activatioN = -1;
+
+    /** Activation.  */
+    private ActivationImpl activatioN = new ActivationImpl(NormalizationType.BIN);
     
     /** Set of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
     private Set<Long> propertieS;

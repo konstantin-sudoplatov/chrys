@@ -1,12 +1,15 @@
-package concepts.dyn;
+package concepts.dyn.stocks;
 
-import chris.Crash;
+import concepts.Concept;
+import concepts.dyn.Stock;
+import concepts.dyn.ifaces.OrderedGroupIface;
+import concepts.dyn.ifaces.OrderedGroupImpl;
 
 /**
- * Neuron with exponentially squash normalized activation.
+ * Class for keeping arrays of uniform data, like words or lines of text.
  * @author su
  */
-public class ESA_Neuron extends Neuron {
+public class Dictionary extends Stock implements OrderedGroupIface {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -15,7 +18,7 @@ public class ESA_Neuron extends Neuron {
     /** 
      * Constructor.
      */ 
-    public ESA_Neuron() { 
+    public Dictionary() { 
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -23,19 +26,25 @@ public class ESA_Neuron extends Neuron {
     //                                  Public methods
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
-    
-    @Override
-    public NormalizationType normalization_type() {
-        return NormalizationType.ESQUASH;
-    } 
 
-    /**
-     * Setter.
-     * @param activation
-     */
     @Override
-    public void set_activation(float activation) {
-        throw new Crash("Activation cannot be directly set for this concept");
+    public void append_member(Concept cpt) {
+        dicT.append_member(cpt);
+    }
+
+    @Override
+    public int group_size() {
+        return dicT.group_size();
+    }
+
+    @Override
+    public boolean contains_member(Concept cpt) {
+        return dicT.contains_member(cpt);
+    }
+
+    @Override
+    public void set_members(Concept[] concepts) {
+        dicT.set_members(concepts);
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -48,15 +57,6 @@ public class ESA_Neuron extends Neuron {
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
 
-    @Override
-    protected void _normalize_() {
-        
-        // do the normalization
-        float a = get_activation();
-            set_activation((float)((1 - Math.exp(-a))/(1 + Math.exp(-a))));
-        super.set_activation(a);
-    }
-    
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //      Private    Private    Private    Private    Private    Private    Private
@@ -65,6 +65,8 @@ public class ESA_Neuron extends Neuron {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
+    private OrderedGroupImpl dicT;
+    
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--

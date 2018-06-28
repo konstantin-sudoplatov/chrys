@@ -1,4 +1,4 @@
-package concepts.dyn.primitives;
+package concepts.dyn.sample_primitives;
 
 import concepts.dyn.Primitive;
 

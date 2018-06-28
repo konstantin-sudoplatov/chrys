@@ -1,5 +1,8 @@
 package concepts.dyn;
 
+import concepts.Concept;
+import concepts.dyn.ifaces.PropertyIface;
+import concepts.dyn.ifaces.UnorderedGroupIface;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -7,22 +10,22 @@ import java.util.Set;
  * Premise, that bears a set of cids. Only one of them is a selected member of group.
  * @author su
  */
-public class Group extends Premise {
+abstract public class UnorderedGroup extends Premise implements UnorderedGroupIface {
 
     /**
      * Default constructor.
      */
-    public Group() {
+    public UnorderedGroup() {
         
     }
-    
-    /** 
-     * Constructor.
-     * @param cids
-     */ 
-    public Group(long[] cids) { 
-        set_members(cids);
-    } 
+//    
+//    /** 
+//     * Constructor.
+//     * @param concepts
+//     */ 
+//    public UnorderedGroup(Concept[] concepts) { 
+//        set_members(concepts);
+//    } 
     
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -35,30 +38,23 @@ public class Group extends Premise {
         return NormalizationType.BIN;
     }
     
-    /**
-     * Add new cid to the group. Initialize the group if necessary.
-     * @param cid 
-     */
-    public void add_member(long cid) {
+    @Override
+    public void add_member(Concept cpt) {
         if (memberS == null) memberS = new HashSet();
-        memberS.add(cid);
+        memberS.add(cpt.get_cid());
+        ((PropertyIface)cpt).add_property(this);
     }
     
-    /**
-     * Setter.
-     * @param cids array of cids.
-     */
-    public final void set_members(long[] cids) {
+    @Override
+    public final void set_members(Concept[] concepts) {
         memberS = new HashSet<>();
-        for(long cid: cids) {
-            memberS.add(cid);
+        for(Concept cpt: concepts) {
+            memberS.add(cpt.get_cid());
+            ((PropertyIface)cpt).add_property(this);
         }
     }
     
-    /**
-     * Getter.
-     * @return set, that contains cids of the group.
-     */
+    @Override
     public Set<Long> get_members() {
         return memberS;
     }

@@ -1,9 +1,11 @@
 package concepts.dyn;
 
-import chris.Glob;
+import concepts.Concept;
 import concepts.DynamicConcept;
 import concepts.dyn.ifaces.ActivationIface;
 import concepts.dyn.ifaces.PropertyIface;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Ancestor of all premises.
@@ -42,26 +44,38 @@ abstract public class Premise extends DynamicConcept implements ActivationIface,
     public void set_activation(float activation) {
         this.activatioN = activation;
     }
-
+    
     @Override
-    public long get_property(int index) {
-        return propertieS[index];
+    public int property_size() {
+        if (propertieS == null) 
+            return 0;
+        else
+            return propertieS.size();
     }
 
     @Override
     public long[] get_properties() {
-        return propertieS;
+        Long[] a = new Long[propertieS.size()];
+        propertieS.toArray();
+        long[] aa = new long[propertieS.size()];
+        for(int i=0; i<a.length; i++)
+            aa[i] = a[i];
+        
+        return aa;
     }
 
     @Override
-    public long add_property(long cid) {
-        propertieS = Glob.append_array(propertieS, cid);
-        return cid;
+    public long add_property(Concept cpt) {
+        if(propertieS == null) propertieS = new HashSet();
+        propertieS.add(cpt.get_cid());
+        return cpt.get_cid();
     }
 
     @Override
-    public void set_properties(long[] propArray) {
-        propertieS = propArray;
+    public void set_properties(Concept[] concepts) {
+        if(propertieS == null) propertieS = new HashSet();
+        for(Concept cpt: concepts)
+            propertieS.add(cpt.get_cid());
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -76,8 +90,8 @@ abstract public class Premise extends DynamicConcept implements ActivationIface,
       and if the concept is not loaded into a name space(caldron) and explicitely changed it is -1. */
     private float activatioN = -1;
     
-    /** Array of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
-    private long[] propertieS;
+    /** Set of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
+    private Set<Long> propertieS;
 
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

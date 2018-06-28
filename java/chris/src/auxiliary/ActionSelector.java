@@ -2,13 +2,13 @@ package auxiliary;
 
 import chris.Crash;
 import chris.Glob;
-import concepts.dyn.ifaces.ActionIface;
+import concepts.dyn.ifaces.ActionRangeIface;
 
 /**
  * A set of ranges and corresponding them lists of actions.
  * @author su
  */
-public class ActionSelector implements ActionIface {
+public class ActionSelector implements ActionRangeIface {
     
     /**
      * Range and corresponding actions.
@@ -46,7 +46,7 @@ public class ActionSelector implements ActionIface {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     @Override
-    public long[] get_actions(float activation) {
+    public long[] get_action_range(float activation) {
         if      // not initialized yet?
                 (rangeS == null)
             throw new Crash("Trying to get an action cid from uninitialized ActionSelector.");

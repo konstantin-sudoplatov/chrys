@@ -1,25 +1,23 @@
 package concepts.dyn;
 
 import attention.ConceptNameSpace;
-import concepts.dyn.ifaces.PropertyIface;
 import concepts.dyn.ifaces.EffectIface;
 import auxiliary.ActionSelector;
 import auxiliary.Premise;
-import chris.Crash;
 import chris.Glob;
 import concepts.*;
-import concepts.dyn.ifaces.ActionIface;
 import concepts.dyn.ifaces.ActivationIface;
 import java.util.Arrays;
 import concepts.dyn.ifaces.EvaluationIface;
 import concepts.dyn.ifaces.PremiseIface;
+import concepts.dyn.ifaces.ActionRangeIface;
 
 /**
  * It is a concept capable of reasoning, i.e. calculating activation as the weighted sum of premises.
  * The same way it determines successors and their activations. 
  * @author su
  */
-abstract public class Neuron extends DynamicConcept implements ActivationIface, EvaluationIface, ActionIface, PremiseIface, EffectIface {
+abstract public class Neuron extends DynamicConcept implements ActivationIface, EvaluationIface, ActionRangeIface, PremiseIface, EffectIface {
 
     /**
      * Default constructor.
@@ -76,9 +74,9 @@ abstract public class Neuron extends DynamicConcept implements ActivationIface, 
      * @param caldron a caldron in which this assess takes place.
      */
     @Override
-    public void calculate_signum_activation_and_do_actions(ConceptNameSpace caldron) {
-        float activation = calculate_signum_activation(caldron);
-        long[] actions = get_actions(activation);
+    public void calculate_activation_and_do_actions(ConceptNameSpace caldron) {
+        float activation = calculate_activation(caldron);
+        long[] actions = get_action_range(activation);
         if      // is there actions?
                 (actions != null)
             //yes: do actions. after that effects are valid.
@@ -88,12 +86,12 @@ abstract public class Neuron extends DynamicConcept implements ActivationIface, 
     }
 
     /**
-     * Calculate weighed sum, normalize it as the signum function.
+     * Calculate weighed sum, normalize it according the neuron's type.
      * @param caldron
      * @return 
      */
     @Override
-    public float calculate_signum_activation(ConceptNameSpace caldron) {
+    public float calculate_activation(ConceptNameSpace caldron) {
         
         // calculate the weighted sum
         double weightedSum = get_bias();
@@ -111,8 +109,8 @@ abstract public class Neuron extends DynamicConcept implements ActivationIface, 
     }
     
     @Override
-    public long[] get_actions(float activation) {
-        return actioN.get_actions(activation);
+    public long[] get_action_range(float activation) {
+        return actioN.get_action_range(activation);
     }
         
     @Override
@@ -135,14 +133,16 @@ abstract public class Neuron extends DynamicConcept implements ActivationIface, 
     }
 
     @Override
-    public long add_effect(long cid) {
-        effectS = Glob.append_array(effectS, cid);
-        return cid;
+    public long add_effect(Concept cpt) {
+        effectS = Glob.append_array(effectS, cpt.get_cid());
+        return cpt.get_cid();
     }
 
     @Override
-    public void set_effects(long[] propArray) {
-        effectS = propArray;
+    public void set_effects(Concept[] concepts) {
+        effectS = new long[concepts.length];
+        for(int i=0; i<concepts.length; i++)
+            effectS[i] = concepts[i].get_cid();
     }
 //
 //    @Override

@@ -95,7 +95,7 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
         while(true) {
             
             // Do the assessment
-            ((EvaluationIface)get_cpt(_head_)).calculate_signum_activation_and_do_actions(this);
+            ((EvaluationIface)get_cpt(_head_)).calculate_activation_and_do_actions(this);
             
             // Check if in the course of assessment (one of the actions of the _head_ concept)
             // had been raised the stoppage flag

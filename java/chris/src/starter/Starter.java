@@ -2,15 +2,15 @@ package starter;
 
 import auxiliary.Premise;
 import chris.Glob;
+import concepts.Concept;
 import concepts.DynCptName;
 import concepts.StatCptName;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
-import concepts.dyn.groups.PrimusInterParesGroup;
 import concepts.dyn.Peg;
-import concepts.dyn.ActiveString;
+import concepts.dyn.PremiseString;
 import concepts.dyn.BA_Neuron;
-import concepts.dyn.Group;
+import concepts.dyn.groups.PrimusInterParesPremise;
 
 /**
  * When there is no DB or it is empty, we have to start with something...
@@ -49,18 +49,18 @@ final public class Starter {
         long itIsConsoleChatCid = Glob.attn_disp_loop.add_cpt(itIsConsoleChat, DynCptName.it_is_console_chat_prem.name());
         Peg itIsHttpChat = new Peg();
         long itIsHttpChatCid = Glob.attn_disp_loop.add_cpt(itIsHttpChat, DynCptName.it_is_http_chat_prem.name());
-        PrimusInterParesGroup chatMedia = new PrimusInterParesGroup();
+        PrimusInterParesPremise chatMedia = new PrimusInterParesPremise();
         long chatMediaCid = Glob.attn_disp_loop.add_cpt(chatMedia, DynCptName.chat_media_prem.name());
-        chatMedia.set_members(new long[] {
-            itIsConsoleChatCid, 
-            itIsHttpChatCid
+        chatMedia.set_members(new Concept[]{
+            itIsConsoleChat, 
+            itIsHttpChat
         });
-        itIsConsoleChat.add_property(chatMediaCid);
-        itIsHttpChat.add_property(chatMediaCid);
+        itIsConsoleChat.add_property(chatMedia);
+        itIsHttpChat.add_property(chatMedia);
         
         // Primitives "line_of_chat_string_prem" and "it_is_the_first_line_of_chat_prem".
         // as the nested cid.
-        long lineOfChatCid = Glob.attn_disp_loop.add_cpt(new ActiveString(null), DynCptName.line_of_chat_string_prem.name());
+        long lineOfChatCid = Glob.attn_disp_loop.add_cpt(new PremiseString(null), DynCptName.line_of_chat_string_prem.name());
         Glob.attn_disp_loop.add_cpt(new Peg(), DynCptName.it_is_the_first_line_of_chat_prem.name());
         
         // Action of requesting the next line.
@@ -83,13 +83,13 @@ final public class Starter {
         });
         requestLineNrn.add_action_range(0, new long[] {requestNextLineCid});      // no actions, just promote
         long requestLineNrnCid = Glob.attn_disp_loop.add_cpt(requestLineNrn, DynCptName.request_next_line_nrn.name());
-        waitLineNrn.add_effect(requestLineNrnCid);
-        requestLineNrn.add_effect(waitLineNrnCid);
+        waitLineNrn.add_effect(requestLineNrn);
+        requestLineNrn.add_effect(waitLineNrn);
     }
     
     public static void symbols() {
-        Group symbolsGroup = new Group();
-        long symbolsGroupCid = Glob.attn_disp_loop.add_cpt(symbolsGroup, DynCptName.word_separators_group.name());
+//        Group symbolsGroup = new Group();
+//        long symbolsGroupCid = Glob.attn_disp_loop.add_cpt(symbolsGroup, DynCptName.word_separators_group.name());
     }
     
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$

@@ -5,8 +5,8 @@ import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
 import concepts.DynCptName;
-import concepts.dyn.groups.PrimusInterParesGroup;
-import concepts.dyn.ActiveString;
+import concepts.dyn.groups.PrimusInterParesPremise;
+import concepts.dyn.PremiseString;
 import concepts.dyn.ifaces.ActivationIface;
 import java.util.List;
 import java.util.HashMap;
@@ -33,8 +33,8 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
         this.attnDisp = attnDisp;
         
         // The circle specifics: set up the chat media premise.
-        ((PrimusInterParesGroup)get_cpt(DynCptName.chat_media_prem.name())).
-                set_primus(Glob.named.name_cid.get(DynCptName.it_is_console_chat_prem.name()));
+        ((PrimusInterParesPremise)get_cpt(DynCptName.chat_media_prem.name())).
+                set_primus(get_cpt(DynCptName.it_is_console_chat_prem.name()));
         
         // Prepare the first assessment
         initialSetup();
@@ -149,7 +149,7 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
         if      // a line from console has come?
                 (msg instanceof Msg_ConsoleToAttnCircle)
         {   // put it to the concept "line_of_chat_string_prem" and invoke the reasoning
-            ActiveString lineOfChat = (ActiveString)get_cpt(DynCptName.line_of_chat_string_prem.name());
+            PremiseString lineOfChat = (PremiseString)get_cpt(DynCptName.line_of_chat_string_prem.name());
             lineOfChat.set_text(((Msg_ConsoleToAttnCircle) msg).text);
             lineOfChat.set_activation(1);
             

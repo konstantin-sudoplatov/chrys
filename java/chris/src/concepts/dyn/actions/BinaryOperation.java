@@ -1,26 +1,30 @@
-package concepts.dyn;
+package concepts.dyn.actions;
 
 import attention.ConceptNameSpace;
-import concepts.DynamicConcept;
 import concepts.StaticAction;
+import concepts.dyn.Action;
 
 /**
- * All that needed to invoke the static concept processing. This concept is stateless, i.e. it cannot be used as a premise or a data source.
+ * An operation on two concepts. The first operand is applied to the second one.
  * @author su
  */
-public class Action extends DynamicConcept {
+public final class BinaryOperation extends Action {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
-    /**
+    /** 
      * Constructor.
-     * @param statActionCid cid of the static concept
-     */
-    public Action(long statActionCid) {
-        this._statActionCid_ = statActionCid;
-    }
+     * @param statActionCid
+     * @param firstOperandCid
+     * @param secondOperandCid
+     */ 
+    public BinaryOperation(long statActionCid, long firstOperandCid, long secondOperandCid) 
+    {   super(statActionCid); 
+        this.firstOperandCid = firstOperandCid;
+        this.secondOperandCid = secondOperandCid;
+    } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -32,18 +36,11 @@ public class Action extends DynamicConcept {
      * Invoke the function of the static concept functor.
      * @param nameSpace
      */
+    @Override
     public void go(ConceptNameSpace nameSpace) {
-        ((StaticAction)nameSpace.get_cpt(_statActionCid_)).go(nameSpace, null, null);
+        ((StaticAction)nameSpace.get_cpt(_statActionCid_)).go(nameSpace, new long[] {firstOperandCid, secondOperandCid}, null);
     }
-//    
-//    /** 
-//     * Append new cid to paramCids.
-//     * @param cid 
-//     */
-//    public void add_parameter(long cid) {
-//        Glob.append_array(paramCids, cid);
-//    }
-    
+
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected
@@ -51,9 +48,6 @@ public class Action extends DynamicConcept {
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
 
     //---$$$---$$$---$$$---$$$---$$$--- protected data $$$---$$$---$$$---$$$---$$$---$$$--
-
-    /** Concept, that provides the processing. */
-    protected final long _statActionCid_;
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
 
@@ -64,9 +58,9 @@ public class Action extends DynamicConcept {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
-    
-//    /** Array of parameters to the static concept. */
-//    private long[] paramCids;
+
+    private long firstOperandCid;
+    private long secondOperandCid;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

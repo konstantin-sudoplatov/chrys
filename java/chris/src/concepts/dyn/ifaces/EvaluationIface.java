@@ -14,12 +14,12 @@ public interface EvaluationIface {
      * flag "stopReasoningRequested".
      * @param caldron a caldron in which this assess takes place.
      */
-    public void calculate_signum_activation_and_do_actions(ConceptNameSpace caldron);
+    public void calculate_activation_and_do_actions(ConceptNameSpace caldron);
 
     /**
      * Calculate weighed sum, normalize it as the signum function.
      * @param caldron
      * @return 
      */
-    public float calculate_signum_activation(ConceptNameSpace caldron);
+    public float calculate_activation(ConceptNameSpace caldron);
 }

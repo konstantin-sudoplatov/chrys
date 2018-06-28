@@ -4,7 +4,7 @@ package concepts.dyn.ifaces;
  * Getters and setters for the array of actions.
  * @author su
  */
-public interface ActionIface {
+public interface ActionRangeIface {
 
     /**
      * Get array of action cids, corresponding to the given activation value.
@@ -12,7 +12,7 @@ public interface ActionIface {
      * @return array of cids range of which fits the activation. null for the empty list.
      * @throws Crash() for uninitialized action selector or for nonexistent range.
      */
-    public long[] get_actions(float activation);
+    public long[] get_action_range(float activation);
     
     /**
      * Add new element to the ranges array. The new boundary must be less or equal to the last existing boundary. One boundary

@@ -1,4 +1,4 @@
-package concepts.dyn.primitives;
+package concepts.dyn.sample_primitives;
 
 /**
  * A string with a special meaning. The meaning defined by the nested property cid.

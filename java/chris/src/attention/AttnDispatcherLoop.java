@@ -8,7 +8,7 @@ import concepts.Concept;
 import concepts.DynCptName;
 import concepts.DynamicConcept;
 import concepts.StatCptName;
-import concepts.StaticConcept;
+import concepts.StaticAction;
 import console.ConsoleMessage;
 import console.Msg_ReadFromConsole;
 import java.lang.reflect.Constructor;
@@ -56,7 +56,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
         // determine cid
         long cid;
         if      // static concept?
-                (cpt instanceof StaticConcept)
+                (cpt instanceof StaticAction)
         {   //yes: get cid
             cid = StatCptName.valueOf(cpt.getClass().getSimpleName()).ordinal();
         }
@@ -301,7 +301,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
             try {
                 cl = Class.forName(StatCptName.STATIC_CONCEPTS_PACKET_NAME + "." + cptName);
             } catch (ClassNotFoundException ex) {
-                Logger.getLogger(StaticConcept.class.getName()).log(Level.SEVERE, "Error getting class " + cptName, ex);
+                Logger.getLogger(StaticAction.class.getName()).log(Level.SEVERE, "Error getting class " + cptName, ex);
                 System.exit(1);
             }
             @SuppressWarnings("UnusedAssignment")
@@ -309,7 +309,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
             try {
                 cons = cl.getConstructor();
             } catch (NoSuchMethodException | SecurityException ex) {
-                Logger.getLogger(StaticConcept.class.getName()).log(Level.SEVERE, "Error getting constractor for " + cptName, ex);
+                Logger.getLogger(StaticAction.class.getName()).log(Level.SEVERE, "Error getting constractor for " + cptName, ex);
                 System.exit(1);
             }
             @SuppressWarnings("UnusedAssignment")
@@ -318,7 +318,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
                 cpt = (Concept)cons.newInstance();
                 add_cpt(cpt);
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
-                Logger.getLogger(StaticConcept.class.getName()).log(Level.SEVERE, "Error instantiating " + cptName, ex);
+                Logger.getLogger(StaticAction.class.getName()).log(Level.SEVERE, "Error instantiating " + cptName, ex);
                 System.exit(1);
             }
         }

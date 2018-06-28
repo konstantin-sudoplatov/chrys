@@ -6,11 +6,14 @@ import attention.ConceptNameSpace;
  * Base class for static concepts.
  * @author su
  */
-abstract public class StaticConcept extends Concept {
+abstract public class StaticAction extends Concept {
 
     /**
      * Do processing for a static concept.
      * @param nameSpace name space to get concepts from
+     * @param paramCids
+     * @param extra
+     * @return 
      */
-    public abstract void go(ConceptNameSpace nameSpace);
+    public abstract long[] go(ConceptNameSpace nameSpace, long[] paramCids, Object extra);
 }

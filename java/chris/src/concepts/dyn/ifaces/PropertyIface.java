@@ -1,17 +1,25 @@
 package concepts.dyn.ifaces;
 
+import concepts.Concept;
+
 /**
  * Getters and setters for the array of properties.
  * @author su
  */
 public interface PropertyIface {
-
+    
     /**
-     * Getter.
-     * @param index
-     * @return property cid with a given index in the array.
+     * Get property size.
+     * @return 
      */
-    public long get_property(int index);
+    public int property_size();
+//
+//    /**
+//     * Getter.
+//     * @param index
+//     * @return property cid with a given index in the array.
+//     */
+//    public long get_property(int index);
 
     /**
      * Getter.
@@ -21,14 +29,14 @@ public interface PropertyIface {
 
     /**
      * Add a concept to the property array.
-     * @param cid
+     * @param cpt
      * @return 
      */
-    public long add_property(long cid);
+    public long add_property(Concept cpt);
 
     /**
      * Setter.
-     * @param propArray array of property cids.
+     * @param concepts array of properties.
      */
-    public void set_properties(long[] propArray);
+    public void set_properties(Concept[] concepts);
 }

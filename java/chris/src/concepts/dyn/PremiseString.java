@@ -6,13 +6,13 @@ package concepts.dyn;
  * undefined.
  * @author su
  */
-public class ActiveString extends Premise {
+public class PremiseString extends Premise {
 
     /** 
      * Constructor.
      * @param string
      */ 
-    public ActiveString(String string) { 
+    public PremiseString(String string) { 
         strinG = string;
     } 
     

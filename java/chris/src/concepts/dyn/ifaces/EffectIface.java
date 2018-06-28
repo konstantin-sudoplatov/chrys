@@ -1,5 +1,7 @@
 package concepts.dyn.ifaces;
 
+import concepts.Concept;
+
 /**
  * Getters and setters for the array of effects.
  * @author su
@@ -21,14 +23,14 @@ public interface EffectIface {
 
     /**
      * Add a concept to the effect array.
-     * @param cid
-     * @return 
+     * @param cpt
+     * @return added cid
      */
-    public long add_effect(long cid);
+    public long add_effect(Concept cpt);
 
     /**
      * Setter.
-     * @param effectArray array of effect cids.
+     * @param concepts array of effect cids.
      */
-    public void set_effects(long[] effectArray);
+    public void set_effects(Concept[] concepts);
 }

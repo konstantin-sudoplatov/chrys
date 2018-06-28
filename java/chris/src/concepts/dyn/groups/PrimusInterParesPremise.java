@@ -1,7 +1,8 @@
 package concepts.dyn.groups;
 
 import chris.Crash;
-import concepts.dyn.Group;
+import concepts.Concept;
+import concepts.dyn.UnorderedGroup;
 import concepts.dyn.ifaces.ActivationIface.NormalizationType;
 import java.util.Set;
 
@@ -9,23 +10,23 @@ import java.util.Set;
  * Premise, that bears a set of cids. Only one of them is a selected member of group.
  * @author su
  */
-public final class PrimusInterParesGroup extends Group {
+public final class PrimusInterParesPremise extends UnorderedGroup {
 
     /**
      * Default constructor.
      */
-    public PrimusInterParesGroup() {
+    public PrimusInterParesPremise() {
         
     }
     
     /** 
      * Constructor.
-     * @param cids
-     * @param activeCid
+     * @param cpt
+     * @param primus
      */ 
-    public PrimusInterParesGroup(long[] cids, long activeCid) { 
-        set_members(cids);
-        set_primus(activeCid);
+    public PrimusInterParesPremise(Concept[] cpt, Concept primus) { 
+        set_members(cpt);
+        set_primus(primus);
     } 
     
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -50,15 +51,15 @@ public final class PrimusInterParesGroup extends Group {
     /**
      * Setter. As a side effect it sets the activation field to +1. It is the only way to
      * set up activation for this concept (on creation it is -1).
-     * @param cid 
+     * @param cpt 
      */
-    public void set_primus(long cid) {
+    public void set_primus(Concept cpt) {
         Set<Long> members = get_members();
         if      // activeCid is not in the set?
-                (!members.contains(cid))
-            throw new Crash("primusCid " + cid + " is not in the set " + members.getClass().getName());
+                (!members.contains(cpt.get_cid()))
+            throw new Crash("primusCid " + cpt + " is not in the set " + members.getClass().getName());
         
-        primusCid = cid;
+        primusCid = cpt.get_cid();
         super.set_activation(1);
     }
 

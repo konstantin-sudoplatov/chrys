@@ -1,20 +1,30 @@
-package concepts.dyn.primitives;
+package concepts.dyn.sample_primitives;
 
 import chris.Glob;
-import concepts.dyn.Primitive;
 
 /**
- * An array of cids.
+ * An array of cids with a special meaning. The meaning is defined by the nested cid.
  * @author su
  */
-public class JustArray extends Primitive {
+public class CiddedArray extends CiddedNothing {
+
+    /**
+     * Constructor. Array of cids is not allocated (null).
+     * @param nestedCid 
+     */
+    public CiddedArray(long nestedCid) 
+    {
+        super(nestedCid);
+    } 
 
     /** 
      * Constructor.
+     * @param nestedCid meaning of this concept.
      * @param cidArray set of cids.
      */ 
-    public JustArray(long[] cidArray) 
+    public CiddedArray(long nestedCid, long[] cidArray) 
     { 
+        super(nestedCid);
         this.cidArray = cidArray;
     } 
 
@@ -37,7 +47,7 @@ public class JustArray extends Primitive {
      * @param cid
      * @return added cid.
      */
-    public long add_cid(long cid) {
+    public long append_array(long cid) {
         Glob.append_array(cidArray, cid);
         
         return cid;

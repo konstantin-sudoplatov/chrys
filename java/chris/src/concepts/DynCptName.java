@@ -21,10 +21,11 @@ public enum DynCptName {
     request_next_line_nrn,
     
     // Starter.symbols()
-    word_separators_group,                          // each special symbol is in this group
+    chat_log_list,                          // collection of the lines of chat
     
     //
-    chatter_unknown_prem,      
+    word_separators_group,                          // each special symbol is in this group
+    chatter_name_string_prem,      
     add_line_to_console_log,
     console_log,
     line_counter,

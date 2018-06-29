@@ -6,10 +6,10 @@ import concepts.dyn.ifaces.OrderedGroupIface;
 import concepts.dyn.ifaces.OrderedGroupImpl;
 
 /**
- * Class for keeping arrays of uniform data, like words or lines of text.
+ * Class for keeping a list of uniform data, like words or lines of text.
  * @author su
  */
-public class Dictionary extends Stock implements OrderedGroupIface {
+public class List extends Stock implements OrderedGroupIface {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -18,7 +18,7 @@ public class Dictionary extends Stock implements OrderedGroupIface {
     /** 
      * Constructor.
      */ 
-    public Dictionary() { 
+    public List() { 
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -29,22 +29,22 @@ public class Dictionary extends Stock implements OrderedGroupIface {
 
     @Override
     public void append_member(Concept cpt) {
-        dicT.append_member(cpt);
+        lisT.append_member(cpt);
     }
 
     @Override
     public int group_size() {
-        return dicT.group_size();
+        return lisT.group_size();
     }
 
     @Override
     public boolean contains_member(Concept cpt) {
-        return dicT.contains_member(cpt);
+        return lisT.contains_member(cpt);
     }
 
     @Override
     public void set_members(Concept[] concepts) {
-        dicT.set_members(concepts);
+        lisT.set_members(concepts);
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -65,7 +65,7 @@ public class Dictionary extends Stock implements OrderedGroupIface {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
-    private OrderedGroupImpl dicT;
+    private OrderedGroupImpl lisT = new OrderedGroupImpl(this);
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

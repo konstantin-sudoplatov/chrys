@@ -87,7 +87,7 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
         else 
             throw new Crash("Now such concept: name = " + cptName);
     }
-    
+
     /** 
      * Test if the concept directory contains a concept.
      * @param cid
@@ -190,7 +190,6 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
 
         // set up premises
         ((ActivationIface)get_cpt(DynCptName.chat_prem.name())).set_activation(1);
-        ((ActivationIface)get_cpt(DynCptName.chatter_unknown_prem.name())).set_activation(1);
         ((ActivationIface)get_cpt(DynCptName.line_of_chat_string_prem.name())).set_activation(-1);
         
         // set up the caldron head as the next line loader

@@ -7,10 +7,12 @@ import concepts.DynCptName;
 import concepts.StatCptName;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
+import concepts.dyn.actions.BinaryOperation;
 import concepts.dyn.premises.Peg;
 import concepts.dyn.premises.PremiseString;
 import concepts.dyn.neurons.BA_Neuron;
 import concepts.dyn.premises.PrimusInterParesPremise;
+import concepts.dyn.stocks.List;
 
 /**
  * When there is no DB or it is empty, we have to start with something...
@@ -40,15 +42,14 @@ final public class Starter {
         long requestStopReasoningCid = Glob.attn_disp_loop.add_cpt(new Action(StatCptName.RequestStopReasoning.ordinal()), 
                 DynCptName.request_stop_reasoning_actn.name());
         
-        // Premises "chat_prem", "chatter_unknown_prem".
-        long chatCid = Glob.attn_disp_loop.add_cpt(new Peg(), DynCptName.chat_prem.name());
-        long chatterUnknownCid = Glob.attn_disp_loop.add_cpt(new Peg(), DynCptName.chatter_unknown_prem.name());
+        // Premises "chat_prem", "chatter_name_string_prem".
+        Glob.attn_disp_loop.add_cpt(new Peg(), DynCptName.chat_prem.name());
 
         // Primus inter pares premises "chat_media_prem" contains "it_is_console_chat_prem", "it_is_http_chat_prem" premises
         Peg itIsConsoleChat = new Peg();
-        long itIsConsoleChatCid = Glob.attn_disp_loop.add_cpt(itIsConsoleChat, DynCptName.it_is_console_chat_prem.name());
+        Glob.attn_disp_loop.add_cpt(itIsConsoleChat, DynCptName.it_is_console_chat_prem.name());
         Peg itIsHttpChat = new Peg();
-        long itIsHttpChatCid = Glob.attn_disp_loop.add_cpt(itIsHttpChat, DynCptName.it_is_http_chat_prem.name());
+        Glob.attn_disp_loop.add_cpt(itIsHttpChat, DynCptName.it_is_http_chat_prem.name());
         PrimusInterParesPremise chatMedia = new PrimusInterParesPremise();
         long chatMediaCid = Glob.attn_disp_loop.add_cpt(chatMedia, DynCptName.chat_media_prem.name());
         chatMedia.set_members(new Concept[]{
@@ -62,10 +63,18 @@ final public class Starter {
         // as the nested cid.
         long lineOfChatCid = Glob.attn_disp_loop.add_cpt(new PremiseString(null), DynCptName.line_of_chat_string_prem.name());
         Glob.attn_disp_loop.add_cpt(new Peg(), DynCptName.it_is_the_first_line_of_chat_prem.name());
+
+        // Chat log list and operation of adding the line of chat to the list
+        List chatLogList = new List();
+        long chatLogListCid = Glob.attn_disp_loop.add_cpt(chatLogList, DynCptName.chat_log_list.name());
+        BinaryOperation loggingChatLineAct = new BinaryOperation(StatCptName.AddCloneOfElementToList.ordinal());
+        loggingChatLineAct.set_first_operand(chatLogListCid);
+        loggingChatLineAct.set_second_operand(lineOfChatCid);
+        long loggingChatLineActCid = Glob.attn_disp_loop.add_cpt(loggingChatLineAct);
         
         // Action of requesting the next line.
-        Action requestNextLineAction = new Action(StatCptName.RequestNextLineFromChatter.ordinal());
-        long requestNextLineCid = Glob.attn_disp_loop.add_cpt(requestNextLineAction);
+        Action requestNextLineAct = new Action(StatCptName.RequestNextLineFromChatter.ordinal());
+        long requestNextLineCid = Glob.attn_disp_loop.add_cpt(requestNextLineAct);
         
         //              Neurons, that deal with these premises:
         // The one that waits for the line from chatter.
@@ -73,16 +82,16 @@ final public class Starter {
         waitLineNrn.set_premises(new Premise[] {
             new Premise(1, lineOfChatCid)
         });
-        waitLineNrn.add_action_range(0, null);      // no actions, just promote
+        waitLineNrn.add_action_range(0, new long[] {loggingChatLineActCid});      // log the line, promote
         waitLineNrn.add_action_range(Float.NEGATIVE_INFINITY, new long[] {requestStopReasoningCid});
-        long waitLineNrnCid = Glob.attn_disp_loop.add_cpt(waitLineNrn, DynCptName.wait_for_the_line_from_chatter_nrn.name());
+        Glob.attn_disp_loop.add_cpt(waitLineNrn, DynCptName.wait_for_the_line_from_chatter_nrn.name());
         // The one, that requests the next line
         Neuron requestLineNrn = new BA_Neuron();
         requestLineNrn.set_premises(new Premise[] {
             new Premise(1, chatMediaCid)
         });
         requestLineNrn.add_action_range(0, new long[] {requestNextLineCid});      // no actions, just promote
-        long requestLineNrnCid = Glob.attn_disp_loop.add_cpt(requestLineNrn, DynCptName.request_next_line_nrn.name());
+        Glob.attn_disp_loop.add_cpt(requestLineNrn, DynCptName.request_next_line_nrn.name());
         waitLineNrn.add_effect(requestLineNrn);
         requestLineNrn.add_effect(waitLineNrn);
     }

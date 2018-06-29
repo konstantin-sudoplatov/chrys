@@ -316,7 +316,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
             Concept cpt = null;
             try {
                 cpt = (Concept)cons.newInstance();
-                add_cpt(cpt);
+                add_cpt(cpt, cptName);
             } catch (InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
                 Logger.getLogger(StaticAction.class.getName()).log(Level.SEVERE, "Error instantiating " + cptName, ex);
                 System.exit(1);

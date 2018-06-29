@@ -30,15 +30,15 @@ final public class Glob {
     
     /** Application message loop. It does not need a separate thread since it works in the application thread. */
     public final static ApplicationLoop app_loop = new ApplicationLoop();
+    
+    /** Bidirectional converting name/cid for named concepts. */
+    public final static NamedConcept named = new NamedConcept();
 
-    /** Application message loop. */
+    /** Attention dispatcher loop. */
     public final static AttnDispatcherLoop attn_disp_loop = new AttnDispatcherLoop();
 
     /** Console user interface. */
     public final static ConsoleLoop console_loop = new ConsoleLoop();
-    
-    /** Bidirectional converting name/cid for named concepts. */
-    public final static NamedConcept named = new NamedConcept();
     
     /**
      * Disabled constructor. This class should not ever be instantiated.

@@ -8,6 +8,8 @@ package concepts;
  */
 public enum StatCptName {
     Mrk_TestMarker,
+    AddCloneOfElementToList,
+    CloneConcept,
     RequestStopReasoning,
     RequestNextLineFromChatter,
     ;

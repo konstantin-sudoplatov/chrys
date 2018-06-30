@@ -8,7 +8,7 @@ import concepts.dyn.ifaces.ActivationIface;
  * Neuron with binary normalized activation.
  * @author su
  */
-public class BA_Neuron extends Neuron {
+public class BA_nrn extends Neuron {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -17,7 +17,7 @@ public class BA_Neuron extends Neuron {
     /** 
      * Constructor.
      */ 
-    public BA_Neuron() { super(ActivationIface.NormalizationType.BIN); } 
+    public BA_nrn() { super(ActivationIface.NormalizationType.BIN); } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //

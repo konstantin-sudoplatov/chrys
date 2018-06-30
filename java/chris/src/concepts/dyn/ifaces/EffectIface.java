@@ -7,6 +7,12 @@ import concepts.Concept;
  * @author su
  */
 public interface EffectIface {
+    
+    /**
+     * Get property size.
+     * @return 
+     */
+    public int effect_size();
 
     /**
      * Getter.

@@ -8,10 +8,10 @@ package concepts;
  */
 public enum StatCptName {
     Mrk_TestMarker,
-    AddCloneOfElementToList,
-    CloneConcept,
-    RequestStopReasoning,
-    RequestNextLineFromChatter,
+    CloneConceptAndAappendToList_stat,
+    CloneConcept_stat,
+    RequestStopReasoning_stat,
+    RequestNextLineFromChatter_stat,
     ;
     
     /** This package is used to find static concept classes in ComDir.generate_static_concepts(). 

@@ -1,5 +1,8 @@
 package concepts;
 
+import chris.Glob;
+import java.util.List;
+
 /**
  * The dynamic concept is a common predecessor for the primitives and neurons.
  * @author su
@@ -25,7 +28,6 @@ abstract public class DynamicConcept extends Concept {
      * Setter.
      * @param ciD 
      */
-    @Override
     public void set_cid(long ciD) {
         this.ciD = ciD;
     }
@@ -76,6 +78,24 @@ abstract public class DynamicConcept extends Concept {
      */
     public void set_usage_count(short usageCount) {
         this.usageCount = usageCount;
+    }
+
+            // Шаблон для вставки в конкретный класс
+
+    /**
+     * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
+     * @param note printed in the first line just after the object type.
+     * @param debugLevel 0 - the shortest, 2 - the fullest
+     * @return list of lines, describing this object.
+     */
+    @Override
+    public List<String> to_list_of_lines(String note, Integer debugLevel) {
+        List<String> lst = super.to_list_of_lines(note, debugLevel);
+        Glob.add_line(lst, String.format("creationTime = %s,(%d)", Glob.date_time_to_string(1000*(long)creationTime), creationTime));
+        Glob.append_last_line(lst, String.format("; lastAccessTime = %s,(%d)", Glob.date_time_to_string(1000*(long)lastAccessTime), lastAccessTime));
+        Glob.append_last_line(lst, String.format("; usageCount = %s", usageCount));
+
+        return lst;
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%

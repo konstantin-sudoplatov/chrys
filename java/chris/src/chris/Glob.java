@@ -222,7 +222,7 @@ final public class Glob {
     public static String дата_время_в_String(Date вреМя) {
         return new SimpleDateFormat("dd.MM.yyyy HH:mm:ss.SSS").format(вреМя);
     }
-    public static String дата_время_в_String(long вреМя) {
+    public static String date_time_to_string(long вреМя) {
         return дата_время_в_String(new Date(вреМя));
     }
     public static String дата_время_в_String(double вреМяD) {
@@ -289,24 +289,24 @@ final public class Glob {
      * Начать измерение временого интервала. Замеры могут быть вложенными.
      * @param стрКомментарий
      */
-    public static void начать_замер(String стрКомментарий) {
-        стекЗамера.push(new Замер(new Date(), стрКомментарий));
+    public static void start_sample(String стрКомментарий) {
+        стекЗамера.push(new Sample(new Date(), стрКомментарий));
     }
     
     /**
      * Завершить вложение измерения временого интервала и вывести результат.
      */
-    public static void закончить_замер() {
+    public static void finish_sample() {
         if (стекЗамера.empty()) return;
         
-        Замер заМер = стекЗамера.pop();
+        Sample заМер = стекЗамера.pop();
         long длВремя = new Date().getTime() - заМер.времяНачала.getTime();
         SimpleDateFormat форМат = new SimpleDateFormat("HH:mm:ss.SSS");
         форМат.setTimeZone(TimeZone.getTimeZone("GMT0"));       // убрать смещение 3 часа
         String стрВремя = форМат.format(new Date(длВремя));
         System.out.println("\n" + заМер.комментарий + ": " + стрВремя);
     }
-    private static class Замер {
+    private static class Sample {
         
         public Date времяНачала;
         public String комментарий;
@@ -316,95 +316,95 @@ final public class Glob {
          * @param времяНачала
          * @param комментарий
          */
-        public Замер(Date времяНачала, String комментарий) {
+        public Sample(Date времяНачала, String комментарий) {
             this.времяНачала = времяНачала;
             this.комментарий = комментарий;
         }
         
     }
-    private static final Stack<Замер> стекЗамера = new Stack();
+    private static final Stack<Sample> стекЗамера = new Stack();
 
     /**
-     * Вывести данные объекта на печать.
+     * Вывести данные объекта на print.
      * @param печатаемыйОбъект объект, который имеет метод
      * в_список_строк(String уточНение, Integer деТальность)
      */
-    public static void печать(Object печатаемыйОбъект) {
-        печать(печатаемыйОбъект, null, 0);
+    public static void print(Object печатаемыйОбъект) {
+        print(печатаемыйОбъект, null, 0);
     }
 
     /**
-     * Вывести данные объекта на печать.
-     * @param печатаемыйОбъект объект, который имеет метод
-     * в_список_строк(String уточНение, Integer деТальность)
-     * @param уточнение выводится вслед за классом объекта.
-     */
-    public static void печать(Object печатаемыйОбъект, String уточнение) {
-        печать(печатаемыйОбъект, уточнение, 0);
-    }
-
-    /**
-     * Вывести данные объекта на печать.
-     * @param печатаемыйОбъект объект, который имеет метод
-     * в_список_строк(String уточНение, Integer деТальность)
-     * @param детальность уровень выдачи: 0 - самый краткий, 2 - самый полный
-     */
-    public static void печать(Object печатаемыйОбъект, int детальность) {
-        печать(печатаемыйОбъект, null, детальность);
-    }
-
-    /**
-     * Вывести данные объекта на печать. Завершить печать переводом строки.
-     * @param печатаемыйОбъект объект, который имеет метод
-     * в_список_строк(String уточНение, Integer деТальность)
-     */
-    public static void печатьпс(Object печатаемыйОбъект) {
-        печать(печатаемыйОбъект, null, 0);
-        System.out.println();       // закончить пустой строкой
-    }
-
-    /**
-     * Вывести данные объекта на печать. Завершить печать переводом строки.
+     * Вывести данные объекта на print.
      * @param печатаемыйОбъект объект, который имеет метод
      * в_список_строк(String уточНение, Integer деТальность)
      * @param уточнение выводится вслед за классом объекта.
      */
-    public static void печатьпс(Object печатаемыйОбъект, String уточнение) {
-        печать(печатаемыйОбъект, уточнение, 0);
-        System.out.println();       // закончить пустой строкой
+    public static void print(Object печатаемыйОбъект, String уточнение) {
+        print(печатаемыйОбъект, уточнение, 0);
     }
 
     /**
-     * Вывести данные объекта на печать. Завершить печать переводом строки.
+     * Вывести данные объекта на print.
      * @param печатаемыйОбъект объект, который имеет метод
      * в_список_строк(String уточНение, Integer деТальность)
      * @param детальность уровень выдачи: 0 - самый краткий, 2 - самый полный
      */
-    public static void печатьпс(Object печатаемыйОбъект, int детальность) {
-        печать(печатаемыйОбъект, null, детальность);
+    public static void print(Object печатаемыйОбъект, int детальность) {
+        print(печатаемыйОбъект, null, детальность);
+    }
+
+    /**
+     * Вывести данные объекта на print. Завершить print переводом строки.
+     * @param печатаемыйОбъект объект, который имеет метод
+     * в_список_строк(String уточНение, Integer деТальность)
+     */
+    public static void println(Object печатаемыйОбъект) {
+        print(печатаемыйОбъект, null, 0);
         System.out.println();       // закончить пустой строкой
     }
 
     /**
-     * Вывести данные объекта на печать. Завершить печать переводом строки.
+     * Вывести данные объекта на print. Завершить print переводом строки.
      * @param печатаемыйОбъект объект, который имеет метод
      * в_список_строк(String уточНение, Integer деТальность)
      * @param уточнение выводится вслед за классом объекта.
-     * @param детальность уровень выдачи: 0 - самый краткий, 2 - самый полный
      */
-    public static void печатьпс(Object печатаемыйОбъект, String уточнение, int детальность) {
-        печать(печатаемыйОбъект, уточнение, детальность);
+    public static void println(Object печатаемыйОбъект, String уточнение) {
+        print(печатаемыйОбъект, уточнение, 0);
         System.out.println();       // закончить пустой строкой
     }
 
     /**
-     * Вывести данные объекта на печать.
+     * Вывести данные объекта на print. Завершить print переводом строки.
+     * @param печатаемыйОбъект объект, который имеет метод
+     * в_список_строк(String уточНение, Integer деТальность)
+     * @param детальность уровень выдачи: 0 - самый краткий, 2 - самый полный
+     */
+    public static void println(Object печатаемыйОбъект, int детальность) {
+        print(печатаемыйОбъект, null, детальность);
+        System.out.println();       // закончить пустой строкой
+    }
+
+    /**
+     * Вывести данные объекта на print. Завершить print переводом строки.
      * @param печатаемыйОбъект объект, который имеет метод
      * в_список_строк(String уточНение, Integer деТальность)
      * @param уточнение выводится вслед за классом объекта.
      * @param детальность уровень выдачи: 0 - самый краткий, 2 - самый полный
      */
-    public static void печать(Object печатаемыйОбъект, String уточнение, int детальность) {
+    public static void println(Object печатаемыйОбъект, String уточнение, int детальность) {
+        print(печатаемыйОбъект, уточнение, детальность);
+        System.out.println();       // закончить пустой строкой
+    }
+
+    /**
+     * Вывести данные объекта на print.
+     * @param печатаемыйОбъект объект, который имеет метод
+     * в_список_строк(String уточНение, Integer деТальность)
+     * @param уточнение выводится вслед за классом объекта.
+     * @param детальность уровень выдачи: 0 - самый краткий, 2 - самый полный
+     */
+    public static void print(Object печатаемыйОбъект, String уточнение, int детальность) {
 
         // Проверить случай, когда печатаемый объект null
         if (печатаемыйОбъект==null) {
@@ -416,14 +416,14 @@ final public class Glob {
         Method методВСпискоСтрок = null;
         try {
             методВСпискоСтрок = печатаемыйОбъект.getClass().getMethod(
-                    "в_список_строк",
+                    "to_list_of_lines",
                     new Class[] {String.class, Integer.class}
             );
         } catch (NoSuchMethodException ex) {
             try {
                 вызывающийОбъектПоУмолчанию = печатаемыйОбъект;
                 методВСпискоСтрок = Glob.class.getMethod(
-                        "в_список_строк_по_умолчанию",
+                        "to_default_list_of_lines",
                         new Class[] {String.class, Integer.class}
                 );
             } catch (NoSuchMethodException ex1) {
@@ -456,23 +456,23 @@ final public class Glob {
      * @param детальность
      * @return
      */
-    public static List<String> в_список_строк_по_умолчанию(String уточнение, Integer детальность)
+    public static List<String> to_default_list_of_lines(String уточнение, Integer детальность)
     {
-        List<String> список = создать_список_строк(вызывающийОбъектПоУмолчанию, уточнение);
-        дополнить_последнюю_строку(список, "toString() = " + вызывающийОбъектПоУмолчанию.toString());
+        List<String> список = create_list_of_lines(вызывающийОбъектПоУмолчанию, уточнение);
+        append_last_line(список, "toString() = " + вызывающийОбъектПоУмолчанию.toString());
         if
                 (вызывающийОбъектПоУмолчанию instanceof Long)
-            дополнить_последнюю_строку(список, ", как дата: " +
-                    дата_время_в_String((Long)вызывающийОбъектПоУмолчанию));
+            append_last_line(список, ", как дата: " +
+                    date_time_to_string((Long)вызывающийОбъектПоУмолчанию));
         else
             if
                     (вызывающийОбъектПоУмолчанию instanceof Double)
-            дополнить_последнюю_строку(список, ", как дата: " +
+            append_last_line(список, ", как дата: " +
                     дата_время_в_String((Double)вызывающийОбъектПоУмолчанию));
 
         return список;
     }
-    /** Устанавливается в методе печать(), когда печатаемый объект не имеет метода в_список_строк(). */
+    /** Устанавливается в методе print(), когда печатаемый объект не имеет метода в_список_строк(). */
     private static Object вызывающийОбъектПоУмолчанию;
 
     /**
@@ -482,7 +482,7 @@ final public class Glob {
      * @param уточНение выводится в первой строке списка вслед за типом объекта.
      * @return список строк выдачи.
      */
-    public static List<String> создать_список_строк(Object вызывающийОбъект, String уточНение) {
+    public static List<String> create_list_of_lines(Object вызывающийОбъект, String уточНение) {
         List<String> список = new ArrayList();
         список.add(вызывающийОбъект.getClass().getSimpleName() +
                 ((уточНение==null || уточНение.equals(""))? "": ", " + уточНение) + ": ");
@@ -491,36 +491,36 @@ final public class Glob {
 
             // Шаблон для вставки в вершину иерархии конкретного класса
 
+
 //    /**
-//     * Показать данные объекта. Для отладки. Вызывается из метода Глоб.печать().
-//     * @param уточнение выводится в первой строке списка вслед за типом объекта.
-//     * @param детальность уровень выдачи: 0 - самый краткий, 2 - самый полный
-//     * @return список строк выдачи.
+//     * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
+//     * @param note printed in the first line just after the object type.
+//     * @param debugLevel 0 - the shortest, 2 - the fullest
+//     * @return list of lines, describing this object.
 //     */
-//    public List<String> в_список_строк(String уточнение, Integer детальность) {
-//        List<String> список = Глоб.создать_список_строк(this, уточнение);
-//        Глоб.дополнить_последнюю_строку(список, "");
+//    public List<String> to_list_of_lines(String note, Integer debugLevel) {
+//        List<String> lst = Glob.create_list_of_lines(this, note);
+//        Glob.append_last_line(lst, String.format(""));
 //
-//        return список;
+//        return lst;
 //    }
-//    public List<String> в_список_строк() {
-//        return в_список_строк("", 2);
+//    public List<String> to_list_of_lines() {
+//        return to_list_of_lines("", 2);
 //    }
 
             // Шаблон для вставки в конкретный класс
-//
 //    /**
-//     * Показать данные объекта. Для отладки. Вызывается из метода Глоб.печать().
-//     * @param уточнение выводится в первой строке списка вслед за типом объекта.
-//     * @param детальность уровень выдачи: 0 - самый краткий, 2 - самый полный
-//     * @return список строк выдачи.
+//     * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
+//     * @param note printed in the first line just after the object type.
+//     * @param debugLevel 0 - the shortest, 2 - the fullest
+//     * @return list of lines, describing this object.
 //     */
 //    @Override
-//    public List<String> в_список_строк(String уточнение, Integer детальность) {
-//        List<String> список = super.в_список_строк(уточнение, детальность);
-//        Глоб.добавить_строку(список, "");
+//    public List<String> to_list_of_lines(String note, Integer debugLevel) {
+//        List<String> lst = super.to_list_of_lines(note, debugLevel);
+//        Glob.add_line(lst, String.format(""));
 //
-//        return список;
+//        return lst;
 //    }
 
     /**
@@ -529,7 +529,7 @@ final public class Glob {
      * @param строКа
      * @return преобразованный список
      */
-    public static List<String> дополнить_последнюю_строку(List<String> списокСтрок, String строКа) {
+    public static List<String> append_last_line(List<String> списокСтрок, String строКа) {
         списокСтрок.set(списокСтрок.size()-1, списокСтрок.get(списокСтрок.size()-1) + строКа);
         return списокСтрок;
     }
@@ -541,7 +541,7 @@ final public class Glob {
      * @param строКа
      * @return преобразованный список
      */
-    public static List<String> добавить_строку(List<String> списокСтрок, String строКа) {
+    public static List<String> add_line(List<String> списокСтрок, String строКа) {
         списокСтрок.add("    " + строКа);
         return списокСтрок;
     }
@@ -553,7 +553,7 @@ final public class Glob {
      * @param добавляемыйМассивСтрок
      * @return преобразованный список
      */
-    public static List<String> добавить_массив_строк(List<String> исходныйСписок,
+    public static List<String> add_array_of_lines(List<String> исходныйСписок,
             String[] добавляемыйМассивСтрок)
     {
         for(String s: добавляемыйМассивСтрок)
@@ -568,7 +568,7 @@ final public class Glob {
      * @param добавляемыйСписок
      * @return преобразованный список
      */
-    public static List<String> добавить_список_строк(List<String> исходныйСписок,
+    public static List<String> add_list_of_lines(List<String> исходныйСписок,
             List<String> добавляемыйСписок)
     {
         for(String s: добавляемыйСписок)

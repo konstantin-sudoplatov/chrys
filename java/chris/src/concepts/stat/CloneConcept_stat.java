@@ -9,7 +9,7 @@ import concepts.StaticAction;
  * Clone a concept and put the clone into the name space.
  * @author su
  */
-public class CloneConcept extends StaticAction {
+public class CloneConcept_stat extends StaticAction {
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //

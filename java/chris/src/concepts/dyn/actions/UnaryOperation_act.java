@@ -1,23 +1,25 @@
-package concepts.dyn.neurons;
+package concepts.dyn.actions;
 
-import chris.Crash;
-import concepts.dyn.Neuron;
-import concepts.dyn.ifaces.ActivationIface;
+import attention.ConceptNameSpace;
+import concepts.StaticAction;
+import concepts.dyn.Action;
 
 /**
- * Neuron with exponentially squash normalized activation.
+ * An operation on a concept.
  * @author su
  */
-public class ESA_Neuron extends Neuron {
+public final class UnaryOperation_act extends Action {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
+
     /** 
      * Constructor.
+     * @param statActionCid
      */ 
-    public ESA_Neuron() { super(ActivationIface.NormalizationType.ESQUASH); }
+    public UnaryOperation_act(long statActionCid) { super(statActionCid); } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -26,12 +28,20 @@ public class ESA_Neuron extends Neuron {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     /**
-     * Setter.
-     * @param activation
+     * Invoke the function of the static concept functor.
+     * @param nameSpace
      */
     @Override
-    public void set_activation(float activation) {
-        throw new Crash("Activation cannot be directly set for this concept");
+    public void go(ConceptNameSpace nameSpace) {
+        ((StaticAction)nameSpace.get_cpt(_statActionCid_)).go(nameSpace, new long[] {operandCid}, null);
+    }
+
+    /**
+     * Setter.
+     * @param cid 
+     */
+    public void set_operand(long cid) {
+        operandCid = cid;
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -43,7 +53,7 @@ public class ESA_Neuron extends Neuron {
     //---$$$---$$$---$$$---$$$---$$$--- protected data $$$---$$$---$$$---$$$---$$$---$$$--
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
-    
+
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //      Private    Private    Private    Private    Private    Private    Private
@@ -52,6 +62,8 @@ public class ESA_Neuron extends Neuron {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
+    private long operandCid;
+    
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--

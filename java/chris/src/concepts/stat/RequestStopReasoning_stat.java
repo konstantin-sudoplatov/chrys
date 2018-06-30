@@ -8,7 +8,7 @@ import concepts.StaticAction;
  * Requiring the caldron to stop and wait. The caldron would know for what.
  * @author su
  */
-public class RequestStopReasoning extends StaticAction {
+public class RequestStopReasoning_stat extends StaticAction {
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //

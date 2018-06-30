@@ -7,15 +7,15 @@ import chris.Crash;
 import chris.Glob;
 import concepts.DynCptName;
 import concepts.StaticAction;
-import concepts.dyn.premises.PrimusInterParesPremise;
-import concepts.dyn.premises.PremiseString;
+import concepts.dyn.premises.PrimusInterPares_prem;
+import concepts.dyn.premises.String_prem;
 import console.Msg_ReadFromConsole;
 
 /**
  * Requiring the caldron to send request for the next line of chat.
  * @author su
  */
-public class RequestNextLineFromChatter extends StaticAction {
+public class RequestNextLineFromChatter_stat extends StaticAction {
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -36,7 +36,7 @@ public class RequestNextLineFromChatter extends StaticAction {
      */
     @Override
     public long[] go(ConceptNameSpace nameSpace, long[] paramCids, Object extra) {
-        PrimusInterParesPremise chatMediaCpt = (PrimusInterParesPremise)nameSpace.get_cpt(DynCptName.chat_media_prem.name());
+        PrimusInterPares_prem chatMediaCpt = (PrimusInterPares_prem)nameSpace.get_cpt(DynCptName.chat_media_prem.name());
         if      // is not set to a valid cid?
                 (chatMediaCpt.get_activation() != 1)
             throw new Crash("Concept chat_media_prem must be set");
@@ -44,7 +44,7 @@ public class RequestNextLineFromChatter extends StaticAction {
         if
                 (chatMedia.equals(DynCptName.it_is_console_chat_prem.name()))
         {
-                PremiseString lineOfChat = (PremiseString)nameSpace.get_cpt(DynCptName.line_of_chat_string_prem.name());
+                String_prem lineOfChat = (String_prem)nameSpace.get_cpt(DynCptName.line_of_chat_string_prem.name());
                 lineOfChat.set_activation(-1);      // make it antiactive
                 AttnCircle attnCircle = nameSpace.get_attn_circle();
                 AttnDispatcherLoop attnDisp = attnCircle.get_attn_dispatcher();

@@ -1,13 +1,15 @@
 package concepts.dyn.ifaces;
 
+import chris.Crash;
 import chris.Glob;
+import concepts.Concept;
 import java.util.List;
 
 /**
- * Implementation of the ActivationIface.
+ *
  * @author su
  */
-public class ActivationImpl implements ActivationIface {
+public class EffectImpl implements Cloneable, EffectIface {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -15,10 +17,8 @@ public class ActivationImpl implements ActivationIface {
 
     /** 
      * Constructor.
-     * @param normType
      */ 
-    public ActivationImpl(ActivationIface.NormalizationType normType) { 
-        this.normType = normType; 
+    public EffectImpl() { 
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -26,47 +26,44 @@ public class ActivationImpl implements ActivationIface {
     //                                  Public methods
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
-
     @Override
-    public NormalizationType get_normalization_type() {
-        return normType;
-    }
-
-    @Override
-    public float get_activation() {
-        return activatioN;
-    }
-
-    @Override
-    public void set_activation(float activation) {
-        activatioN = activation;
-    }
-
-    @Override
-    public float normalize_activation() {
-        switch(normType) {
-            case BIN:
-                if (activatioN > 0)
-                    activatioN = 1;
-                else 
-                    activatioN = -1;
-                break;
-
-            case SGN:    
-                if (activatioN > 0)
-                    activatioN = 1;
-                else if (activatioN < 0)
-                    activatioN = -1;
-                else
-                    activatioN = 0;
-                break;
-            
-            case ESQUASH:
-                activatioN = ((float)((1 - Math.exp(-activatioN))/(1 + Math.exp(-activatioN))));
-                break;
+    public EffectImpl clone() {
+        try {
+            return (EffectImpl)super.clone();
+        } catch (CloneNotSupportedException ex) {
+            throw new Crash("Cloning a concept failed.");
         }
+    }
+    
+    @Override
+    public int effect_size() {
+        if (effectS == null) 
+            return 0;
+        else
+            return effectS.length;
+    }
 
-        return activatioN;
+    @Override
+    public long get_effect(int index) {
+        return effectS[index];
+    }
+
+    @Override
+    public long[] get_effects() {
+        return effectS;
+    }
+
+    @Override
+    public long add_effect(Concept cpt) {
+        effectS = Glob.append_array(effectS, cpt.get_cid());
+        return cpt.get_cid();
+    }
+
+    @Override
+    public void set_effects(Concept[] concepts) {
+        effectS = new long[concepts.length];
+        for(int i=0; i<concepts.length; i++)
+            effectS[i] = concepts[i].get_cid();
     }
 
     /**
@@ -77,9 +74,17 @@ public class ActivationImpl implements ActivationIface {
      */
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = Glob.create_list_of_lines(this, note);
-        Glob.add_line(lst, String.format("normType = %s, activatioN = %s", normType.name(), activatioN));
+        Glob.add_line(lst, String.format("effect_size() = %s", effect_size()));
+        if (debugLevel > 0) {
+            Glob.add_line(lst, String.format("cids: "));
+            for(Long cid: effectS)
+                Glob.append_last_line(lst, String.format("%s; ", cid));
+        }
 
         return lst;
+    }
+    public List<String> to_list_of_lines() {
+        return to_list_of_lines("", 2);
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -100,11 +105,8 @@ public class ActivationImpl implements ActivationIface {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
     
-    /** Normalization type. */
-    private final ActivationIface.NormalizationType normType;
-    
-    /** Activation value. */
-    private float activatioN = -1;
+    /** Array of possible effects. */
+    private long[] effectS;
 
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

@@ -79,7 +79,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
                 break;
             }   // while
             ((DynamicConcept)cpt).set_cid(cid);
-            ((DynamicConcept)cpt).set_creation_time((int)new Date().getTime()/1000);
+            ((DynamicConcept)cpt).set_creation_time((int)(new Date().getTime()/1000));
         }
         
         // put to target directories

@@ -7,12 +7,12 @@ import concepts.DynCptName;
 import concepts.StatCptName;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
-import concepts.dyn.actions.BinaryOperation;
-import concepts.dyn.premises.Peg;
-import concepts.dyn.premises.PremiseString;
-import concepts.dyn.neurons.BA_Neuron;
-import concepts.dyn.premises.PrimusInterParesPremise;
-import concepts.dyn.stocks.List;
+import concepts.dyn.actions.BinaryOperation_act;
+import concepts.dyn.premises.Peg_prem;
+import concepts.dyn.premises.String_prem;
+import concepts.dyn.neurons.BA_nrn;
+import concepts.dyn.premises.PrimusInterPares_prem;
+import concepts.dyn.stocks.ListStock;
 
 /**
  * When there is no DB or it is empty, we have to start with something...
@@ -39,18 +39,18 @@ final public class Starter {
     public static void read_write_console() {
         
         // Action "request_stop_reasoning_actn" - making a caldron wait on a change in premises is widely used
-        long requestStopReasoningCid = Glob.attn_disp_loop.add_cpt(new Action(StatCptName.RequestStopReasoning.ordinal()), 
+        long requestStopReasoningCid = Glob.attn_disp_loop.add_cpt(new Action(StatCptName.RequestStopReasoning_stat.ordinal()), 
                 DynCptName.request_stop_reasoning_actn.name());
         
         // Premises "chat_prem", "chatter_name_string_prem".
-        Glob.attn_disp_loop.add_cpt(new Peg(), DynCptName.chat_prem.name());
+        Glob.attn_disp_loop.add_cpt(new Peg_prem(), DynCptName.chat_prem.name());
 
         // Primus inter pares premises "chat_media_prem" contains "it_is_console_chat_prem", "it_is_http_chat_prem" premises
-        Peg itIsConsoleChat = new Peg();
+        Peg_prem itIsConsoleChat = new Peg_prem();
         Glob.attn_disp_loop.add_cpt(itIsConsoleChat, DynCptName.it_is_console_chat_prem.name());
-        Peg itIsHttpChat = new Peg();
+        Peg_prem itIsHttpChat = new Peg_prem();
         Glob.attn_disp_loop.add_cpt(itIsHttpChat, DynCptName.it_is_http_chat_prem.name());
-        PrimusInterParesPremise chatMedia = new PrimusInterParesPremise();
+        PrimusInterPares_prem chatMedia = new PrimusInterPares_prem();
         long chatMediaCid = Glob.attn_disp_loop.add_cpt(chatMedia, DynCptName.chat_media_prem.name());
         chatMedia.set_members(new Concept[]{
             itIsConsoleChat, 
@@ -61,24 +61,24 @@ final public class Starter {
         
         // Primitives "line_of_chat_string_prem" and "it_is_the_first_line_of_chat_prem".
         // as the nested cid.
-        long lineOfChatCid = Glob.attn_disp_loop.add_cpt(new PremiseString(null), DynCptName.line_of_chat_string_prem.name());
-        Glob.attn_disp_loop.add_cpt(new Peg(), DynCptName.it_is_the_first_line_of_chat_prem.name());
+        long lineOfChatCid = Glob.attn_disp_loop.add_cpt(new String_prem(null), DynCptName.line_of_chat_string_prem.name());
+        Glob.attn_disp_loop.add_cpt(new Peg_prem(), DynCptName.it_is_the_first_line_of_chat_prem.name());
 
         // Chat log list and operation of adding the line of chat to the list
-        List chatLogList = new List();
+        ListStock chatLogList = new ListStock();
         long chatLogListCid = Glob.attn_disp_loop.add_cpt(chatLogList, DynCptName.chat_log_list.name());
-        BinaryOperation loggingChatLineAct = new BinaryOperation(StatCptName.AddCloneOfElementToList.ordinal());
+        BinaryOperation_act loggingChatLineAct = new BinaryOperation_act(StatCptName.CloneConceptAndAappendToList_stat.ordinal());
         loggingChatLineAct.set_first_operand(chatLogListCid);
         loggingChatLineAct.set_second_operand(lineOfChatCid);
         long loggingChatLineActCid = Glob.attn_disp_loop.add_cpt(loggingChatLineAct);
         
         // Action of requesting the next line.
-        Action requestNextLineAct = new Action(StatCptName.RequestNextLineFromChatter.ordinal());
+        Action requestNextLineAct = new Action(StatCptName.RequestNextLineFromChatter_stat.ordinal());
         long requestNextLineCid = Glob.attn_disp_loop.add_cpt(requestNextLineAct);
         
         //              Neurons, that deal with these premises:
         // The one that waits for the line from chatter.
-        Neuron waitLineNrn = new BA_Neuron();
+        Neuron waitLineNrn = new BA_nrn();
         waitLineNrn.set_premises(new Premise[] {
             new Premise(1, lineOfChatCid)
         });
@@ -86,7 +86,7 @@ final public class Starter {
         waitLineNrn.add_action_range(Float.NEGATIVE_INFINITY, new long[] {requestStopReasoningCid});
         Glob.attn_disp_loop.add_cpt(waitLineNrn, DynCptName.wait_for_the_line_from_chatter_nrn.name());
         // The one, that requests the next line
-        Neuron requestLineNrn = new BA_Neuron();
+        Neuron requestLineNrn = new BA_nrn();
         requestLineNrn.set_premises(new Premise[] {
             new Premise(1, chatMediaCid)
         });

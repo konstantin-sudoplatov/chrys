@@ -1,6 +1,8 @@
 package concepts;
 
 import chris.Crash;
+import chris.Glob;
+import java.util.List;
 
 /**
  * Base class for all concepts.
@@ -17,17 +19,29 @@ abstract public class Concept implements Cloneable {
     }
 
     /**
-     * Dummy getter. You will be able to it use on dynamic concepts without conversion them to the dynamic concept type.
+     * Getter.
      * @return 
      */
-    public long get_cid() {
-        throw new UnsupportedOperationException("get_cid() is not supported for static concepts.");
-    }
+    abstract public long get_cid();
 
     /**
-     * Dummy setter. You will be able to it use on dynamic concepts without conversion them to the dynamic concept type.
-     * @param ciD 
+     * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
+     * @param note printed in the first line just after the object type.
+     * @param debugLevel 0 - the shortest, 2 - the fullest
+     * @return list of lines, describing this object.
      */
-    public void set_cid(long ciD) {
+    public List<String> to_list_of_lines(String note, Integer debugLevel) {
+        List<String> lst = Glob.create_list_of_lines(this, note);
+        Glob.append_last_line(lst, String.format("get_cid() = %d", get_cid()));
+        String cptName = Glob.named.cid_name.get(get_cid());
+        if (cptName != null)
+            Glob.append_last_line(lst, String.format("; concept name: %s.", cptName));
+        else
+            Glob.append_last_line(lst, String.format("; unnamed concept."));
+
+        return lst;
+    }
+    public List<String> to_list_of_lines() {
+        return to_list_of_lines("", 2);
     }
 }

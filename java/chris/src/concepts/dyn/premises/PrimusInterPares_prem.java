@@ -2,21 +2,23 @@ package concepts.dyn.premises;
 
 import chris.Crash;
 import concepts.Concept;
-import concepts.dyn.Premise;
+import concepts.dyn.ifaces.ActivationIface;
 import concepts.dyn.ifaces.ActivationIface.NormalizationType;
-import concepts.dyn.ifaces.UnorderedGroupIface;
-import concepts.dyn.ifaces.UnorderedGroupImpl;
+import concepts.dyn.ifaces.ActivationImpl;
+import concepts.dyn.ifaces.PropertyIface;
+import concepts.dyn.ifaces.PropertyImpl;
+import concepts.dyn.primitives.UnorderedSet_prim;
 
 /**
  * Premise, that bears a set of cids. Only one of them is a selected member of group.
  * @author su
  */
-public final class PrimusInterParesPremise extends Premise implements UnorderedGroupIface {
+public final class PrimusInterPares_prem extends UnorderedSet_prim implements ActivationIface, PropertyIface {
 
     /**
      * Default constructor.
      */
-    public PrimusInterParesPremise() {
+    public PrimusInterPares_prem() {
         
     }
     
@@ -25,7 +27,7 @@ public final class PrimusInterParesPremise extends Premise implements UnorderedG
      * @param cpt
      * @param primus
      */ 
-    public PrimusInterParesPremise(Concept[] cpt, Concept primus) { 
+    public PrimusInterPares_prem(Concept[] cpt, Concept primus) { 
         set_members(cpt);
         set_primus(primus);
     } 
@@ -35,11 +37,6 @@ public final class PrimusInterParesPremise extends Premise implements UnorderedG
     //                                  Public methods
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
-    
-    @Override
-    public NormalizationType get_normalization_type() {
-        return NormalizationType.BIN;
-    }
     
     /**
      * Getter.
@@ -60,7 +57,17 @@ public final class PrimusInterParesPremise extends Premise implements UnorderedG
             throw new Crash("primusCid " + cpt.get_cid() + " is not a member of the group.");
         
         primusCid = cpt.get_cid();
-        super.set_activation(1);
+        activatioN.set_activation(1);
+    }
+
+    @Override
+    public NormalizationType get_normalization_type() {
+        return activatioN.get_normalization_type();
+    }
+   
+    @Override
+    public float get_activation() {
+        return activatioN.get_activation();
     }
 
     /**
@@ -73,23 +80,28 @@ public final class PrimusInterParesPremise extends Premise implements UnorderedG
     }
 
     @Override
-    public int group_size() {
-        return grouP.group_size();
+    public float normalize_activation() {
+        return activatioN.normalize_activation();
+    }
+    
+    @Override
+    public int property_size() {
+            return propertieS.property_size();
     }
 
     @Override
-    public boolean contains_member(Concept cpt) {
-        return grouP.contains_member(cpt);
+    public long[] get_properties() {
+        return propertieS.get_properties();
     }
 
     @Override
-    public void add_member(Concept cpt) {
-        grouP.add_member(cpt);
+    public long add_property(Concept cpt) {
+        return propertieS.add_property(cpt);
     }
 
     @Override
-    public void set_members(Concept[] concepts) {
-        grouP.set_members(concepts);
+    public void set_properties(Concept[] concepts) {
+        propertieS.set_properties(concepts);
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -102,7 +114,10 @@ public final class PrimusInterParesPremise extends Premise implements UnorderedG
     
     /** The active cid. The rest of the cids are antiactive. */
     private long primusCid;
+
+    /** Activation.  */
+    private ActivationImpl activatioN = new ActivationImpl(NormalizationType.BIN);
     
-    /** Group, that contains all members of this premise. */
-    private UnorderedGroupImpl grouP = new UnorderedGroupImpl(this);
+    /** Set of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
+    private PropertyImpl propertieS = new PropertyImpl();
 }

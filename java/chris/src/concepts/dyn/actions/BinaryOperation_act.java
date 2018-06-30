@@ -1,15 +1,14 @@
-package concepts.dyn.stocks;
+package concepts.dyn.actions;
 
-import concepts.Concept;
-import concepts.dyn.Stock;
-import concepts.dyn.ifaces.OrderedGroupIface;
-import concepts.dyn.ifaces.OrderedGroupImpl;
+import attention.ConceptNameSpace;
+import concepts.StaticAction;
+import concepts.dyn.Action;
 
 /**
- * Class for keeping a list of uniform data, like words or lines of text.
+ * An operation on two concepts. The first operand is applied to the second one.
  * @author su
  */
-public class List extends Stock implements OrderedGroupIface {
+public final class BinaryOperation_act extends Action {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -17,9 +16,9 @@ public class List extends Stock implements OrderedGroupIface {
 
     /** 
      * Constructor.
+     * @param statActionCid
      */ 
-    public List() { 
-    } 
+    public BinaryOperation_act(long statActionCid) { super(statActionCid); } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -27,26 +26,31 @@ public class List extends Stock implements OrderedGroupIface {
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
+    /**
+     * Invoke the function of the static concept functor.
+     * @param nameSpace
+     */
     @Override
-    public void append_member(Concept cpt) {
-        lisT.append_member(cpt);
+    public void go(ConceptNameSpace nameSpace) {
+        ((StaticAction)nameSpace.get_cpt(_statActionCid_)).go(nameSpace, new long[] {firstOperandCid, secondOperandCid}, null);
     }
 
-    @Override
-    public int group_size() {
-        return lisT.group_size();
+    /**
+     * Setter.
+     * @param cid 
+     */
+    public void set_first_operand(long cid) {
+        firstOperandCid = cid;
     }
 
-    @Override
-    public boolean contains_member(Concept cpt) {
-        return lisT.contains_member(cpt);
+    /**
+     * Setter.
+     * @param cid 
+     */
+    public void set_second_operand(long cid) {
+        secondOperandCid = cid;
     }
-
-    @Override
-    public void set_members(Concept[] concepts) {
-        lisT.set_members(concepts);
-    }
-
+    
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected
@@ -65,7 +69,8 @@ public class List extends Stock implements OrderedGroupIface {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
-    private OrderedGroupImpl lisT = new OrderedGroupImpl(this);
+    private long firstOperandCid;
+    private long secondOperandCid;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

@@ -1,6 +1,7 @@
 package concepts;
 
 import attention.ConceptNameSpace;
+import chris.Crash;
 
 /**
  * Base class for static concepts.
@@ -16,4 +17,17 @@ abstract public class StaticAction extends Concept {
      * @return 
      */
     public abstract long[] go(ConceptNameSpace nameSpace, long[] paramCids, Object extra);
+
+    @Override
+    public long get_cid() {
+        return StatCptName.valueOf(this.getClass().getSimpleName()).ordinal();
+    }
+    
+    /**
+     * Dummy setter.
+     * @param ciD 
+     */
+    public void set_cid(long ciD) {
+        throw new Crash("You cannot set cid for a static concept.");
+    }
 }

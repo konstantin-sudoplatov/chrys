@@ -1,13 +1,16 @@
 package concepts.dyn.ifaces;
 
 import chris.Glob;
+import concepts.Concept;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
- * Implementation of the ActivationIface.
+ *
  * @author su
  */
-public class ActivationImpl implements ActivationIface {
+public class PropertyImpl implements PropertyIface {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -15,10 +18,8 @@ public class ActivationImpl implements ActivationIface {
 
     /** 
      * Constructor.
-     * @param normType
      */ 
-    public ActivationImpl(ActivationIface.NormalizationType normType) { 
-        this.normType = normType; 
+    public PropertyImpl() { 
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -26,47 +27,38 @@ public class ActivationImpl implements ActivationIface {
     //                                  Public methods
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
-
+    
     @Override
-    public NormalizationType get_normalization_type() {
-        return normType;
+    public int property_size() {
+        if (propertieS == null) 
+            return 0;
+        else
+            return propertieS.size();
     }
 
     @Override
-    public float get_activation() {
-        return activatioN;
+    public long[] get_properties() {
+        Long[] a = new Long[propertieS.size()];
+        propertieS.toArray();
+        long[] aa = new long[propertieS.size()];
+        for(int i=0; i<a.length; i++)
+            aa[i] = a[i];
+        
+        return aa;
     }
 
     @Override
-    public void set_activation(float activation) {
-        activatioN = activation;
+    public long add_property(Concept cpt) {
+        if(propertieS == null) propertieS = new HashSet();
+        propertieS.add(cpt.get_cid());
+        return cpt.get_cid();
     }
 
     @Override
-    public float normalize_activation() {
-        switch(normType) {
-            case BIN:
-                if (activatioN > 0)
-                    activatioN = 1;
-                else 
-                    activatioN = -1;
-                break;
-
-            case SGN:    
-                if (activatioN > 0)
-                    activatioN = 1;
-                else if (activatioN < 0)
-                    activatioN = -1;
-                else
-                    activatioN = 0;
-                break;
-            
-            case ESQUASH:
-                activatioN = ((float)((1 - Math.exp(-activatioN))/(1 + Math.exp(-activatioN))));
-                break;
-        }
-
-        return activatioN;
+    public void set_properties(Concept[] concepts) {
+        if(propertieS == null) propertieS = new HashSet();
+        for(Concept cpt: concepts)
+            propertieS.add(cpt.get_cid());
     }
 
     /**
@@ -77,9 +69,17 @@ public class ActivationImpl implements ActivationIface {
      */
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = Glob.create_list_of_lines(this, note);
-        Glob.add_line(lst, String.format("normType = %s, activatioN = %s", normType.name(), activatioN));
-
+        Glob.add_line(lst, String.format("property_size() = %s", property_size()));
+        if (debugLevel > 0) {
+            Glob.add_line(lst, String.format("cids: "));
+            for(Long cid: propertieS)
+                Glob.append_last_line(lst, String.format("%s; ", cid));
+        }
+        
         return lst;
+    }
+    public List<String> to_list_of_lines() {
+        return to_list_of_lines("", 2);
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -100,11 +100,8 @@ public class ActivationImpl implements ActivationIface {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
     
-    /** Normalization type. */
-    private final ActivationIface.NormalizationType normType;
-    
-    /** Activation value. */
-    private float activatioN = -1;
+    /** Set of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
+    private Set<Long> propertieS;
 
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

@@ -2,7 +2,7 @@ package concepts.dyn;
 
 import attention.ConceptNameSpace;
 import concepts.dyn.ifaces.EffectIface;
-import auxiliary.ActionSelector;
+import concepts.dyn.ifaces.ActionRangeImpl;
 import auxiliary.Premise;
 import chris.Glob;
 import concepts.*;
@@ -12,6 +12,8 @@ import concepts.dyn.ifaces.EvaluationIface;
 import concepts.dyn.ifaces.PremiseIface;
 import concepts.dyn.ifaces.ActionRangeIface;
 import concepts.dyn.ifaces.ActivationImpl;
+import concepts.dyn.ifaces.EffectImpl;
+import java.util.List;
 
 /**
  * It is a concept capable of reasoning, i.e. calculating activation as the weighted sum of premises.
@@ -45,12 +47,12 @@ abstract public class Neuron extends DynamicConcept implements ActivationIface, 
 
     @Override
     public Neuron clone() {
-        Neuron clon = (Neuron)super.clone();
+        Neuron clone = (Neuron)super.clone();
 //        if (propertieS != null) clon.propertieS = Arrays.copyOf(propertieS, propertieS.length);
-        if (effectS != null) clon.effectS = Arrays.copyOf(effectS, effectS.length);
-        if (premiseS != null) clon.premiseS = Arrays.copyOf(premiseS, premiseS.length);
+        if (effectS != null) clone.effectS = (EffectImpl)effectS.clone();
+        if (premiseS != null) clone.premiseS = Arrays.copyOf(premiseS, premiseS.length);
         
-        return clon;
+        return clone;
     }
 
     @Override
@@ -121,34 +123,32 @@ abstract public class Neuron extends DynamicConcept implements ActivationIface, 
         
     @Override
     public void add_action_range(float lowerBoundary, long[] actions) {
-        if
-                (actioN == null)
-            actioN = new ActionSelector();
-        
         actioN.add_action_range(lowerBoundary, actions);
     }
 
     @Override
+    public int effect_size() {
+        return effectS.effect_size();
+    }
+    
+    @Override
     public long get_effect(int index) {
-        return effectS[index];
+        return effectS.get_effect(index);
     }
 
     @Override
     public long[] get_effects() {
-        return effectS;
+        return effectS.get_effects();
     }
 
     @Override
     public long add_effect(Concept cpt) {
-        effectS = Glob.append_array(effectS, cpt.get_cid());
-        return cpt.get_cid();
+        return effectS.add_effect(cpt);
     }
 
     @Override
     public void set_effects(Concept[] concepts) {
-        effectS = new long[concepts.length];
-        for(int i=0; i<concepts.length; i++)
-            effectS[i] = concepts[i].get_cid();
+        effectS.set_effects(concepts);
     }
 //
 //    @Override
@@ -202,6 +202,25 @@ abstract public class Neuron extends DynamicConcept implements ActivationIface, 
     public void set_bias(float bias) {
         biaS = bias;
     }
+
+    /**
+     * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
+     * @param note printed in the first line just after the object type.
+     * @param debugLevel 0 - the shortest, 2 - the fullest
+     * @return list of lines, describing this object.
+     */
+    @Override
+    public List<String> to_list_of_lines(String note, Integer debugLevel) {
+        List<String> lst = super.to_list_of_lines(note, debugLevel);
+        Glob.add_list_of_lines(lst, activatioN.to_list_of_lines("activatioN", debugLevel));
+        Glob.add_list_of_lines(lst, actioN.to_list_of_lines("actioN", debugLevel));
+        Glob.add_list_of_lines(lst, effectS.to_list_of_lines("effectS", debugLevel));
+        for(Premise prm: premiseS)
+            Glob.add_list_of_lines(lst, prm.to_list_of_lines("premiseS", debugLevel));
+        Glob.add_line(lst, String.format("biaS = %s", biaS));
+
+        return lst;
+    }
     
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
@@ -225,10 +244,10 @@ abstract public class Neuron extends DynamicConcept implements ActivationIface, 
     private ActivationImpl activatioN;
     
     /** Array of actions. */
-    private ActionSelector actioN;
+    private ActionRangeImpl actioN = new ActionRangeImpl();
     
     /** Array of possible effects. */
-    private long[] effectS;
+    private EffectImpl effectS = new EffectImpl();
     
 //    /** Array of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
 //    private long[] propertieS;

@@ -1,19 +1,17 @@
 package concepts.dyn.primitives;
 
-
 import chris.Glob;
 import concepts.Concept;
 import concepts.dyn.Primitive;
 import concepts.dyn.ifaces.PropertyIface;
-import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
 
 /**
- * 
+ *
  * @author su
  */
-public class UnorderedSet_prim extends Primitive {
+public class List_prim extends Primitive {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -22,7 +20,7 @@ public class UnorderedSet_prim extends Primitive {
     /** 
      * Constructor.
      */ 
-    public UnorderedSet_prim() { 
+    public List_prim() { 
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -49,12 +47,12 @@ public class UnorderedSet_prim extends Primitive {
     }
     
     /**
-     * Add new cid to the group. Initialize the group if necessary.
-     * @param cpt Added concept. If the concept support the PropertyIface, backward links from the concept to the group 
+     * Add new cid to the end of the group. Initialize the group if necessary.
+     * @param cpt Appended concept. If the concept support the PropertyIface, backward links from the concept to the group 
      * (via property list) will be organized.
      */
-    public void add_member(Concept cpt) {
-        if (memberS == null) memberS = new HashSet();
+    public void append_member(Concept cpt) {
+        if (memberS == null) memberS = new ArrayList();
         memberS.add(cpt.get_cid());
 
         if      // concept implements property interface?
@@ -68,7 +66,7 @@ public class UnorderedSet_prim extends Primitive {
      * @param concepts array of cids.
      */
     public final void set_members(Concept[] concepts) {
-        memberS = new HashSet<>();
+        memberS = new ArrayList();
         for(Concept cpt: concepts) {
             memberS.add(cpt.get_cid());
             if      // concept implements property interface?
@@ -88,11 +86,9 @@ public class UnorderedSet_prim extends Primitive {
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
         Glob.add_line(lst, String.format("group_size() = %s", group_size()));
-        if (debugLevel > 1) {
-            Glob.add_line(lst, String.format("cids: "));
-            for(Long cid: memberS)
-                Glob.append_last_line(lst, String.format("%s; ", cid));
-        }
+        Glob.add_line(lst, String.format("cids: "));
+        for(Long cid: memberS)
+            Glob.append_last_line(lst, String.format("%s; ", cid));
 
         return lst;
     }
@@ -116,7 +112,7 @@ public class UnorderedSet_prim extends Primitive {
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
     
     /** Cids, which the group consists of. */
-    private Set<Long> memberS;
+    private List<Long> memberS;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

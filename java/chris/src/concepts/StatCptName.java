@@ -10,7 +10,6 @@ public enum StatCptName {
     Mrk_TestMarker,
     CloneConceptAndAappendToList_stat,
     CloneConcept_stat,
-    RequestStopReasoning_stat,
     RequestNextLineFromChatter_stat,
     ;
     

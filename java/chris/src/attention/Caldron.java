@@ -4,8 +4,7 @@ import chris.BaseMessageLoop;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
-import concepts.dyn.ifaces.EffectIface;
-import concepts.dyn.ifaces.EvaluationIface;
+import concepts.dyn.Neuron;
 
 /**
  * The reasoning is taking place in a caldron. Caldrons are organized in a hierarchy.
@@ -66,13 +65,6 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
             return attnCircle;
     }
     
-    /**
-     * Raise the stopReasoningRequested flag to make this caldron thread wait on its _head_ concept.
-     */
-    public synchronized void request_stop_reasoning() {
-        stopReasoningRequested = true;
-    }
-    
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected
@@ -95,22 +87,16 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
         while(true) {
             
             // Do the assessment
-            ((EvaluationIface)get_cpt(_head_)).calculate_activation_and_do_actions(this);
+            long[] heads = ((Neuron)get_cpt(_head_)).calculate_activation_and_do_actions(this);
             
-            // Check if in the course of assessment (one of the actions of the _head_ concept)
-            // had been raised the stoppage flag
-            if      //do we have to wait?
-                    (stopReasoningRequested)
+            // May be we have to wait
+            if      //no new head?
+                    (heads == null || heads.length == 0)
             {   // finish the reasoning
-                stopReasoningRequested = false;
                 break;
             }
             
             // get new head
-            long[] heads = ((EffectIface)get_cpt(_head_)).get_effects();
-            if
-                    (heads == null || heads.length == 0)
-                throw new Crash("The head of the caldron neuron " + _head_ + " has no effects.");
             _head_ = heads[0];
             
             // create new caldrons for the rest of the heads
@@ -138,9 +124,6 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
     
     /** Children caldrons. */
     private Caldron[] childreN;
-    
-    /**  */
-    private boolean stopReasoningRequested;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--

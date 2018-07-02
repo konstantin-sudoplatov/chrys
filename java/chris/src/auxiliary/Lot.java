@@ -1,17 +1,31 @@
 package auxiliary;
 
+import chris.Crash;
 import chris.Glob;
 import java.util.List;
 
 /** 
- * Structure of premises. A pair of weight of a concept and its cid. 
+ * A premise and its contribution to the activation. A pair of weight of a concept and its cid. 
  */
-public class Premise {
+public class Lot implements Cloneable {
     public float weight;    // Weight with which this cid takes part in the weighted sum.
     public long cid;
-    public Premise(float weight, long cid) {
+    
+    public Lot(float weight, long cid) {
         this.weight = weight;
         this.cid = cid;
+    }
+
+    @Override
+    public Lot clone() {
+        Lot clone = null;
+        try {
+            clone = (Lot)super.clone();
+        } catch (CloneNotSupportedException ex) {
+            throw new Crash("Cloning a concept failed.");
+        }
+        
+        return clone;
     }
 
     /**

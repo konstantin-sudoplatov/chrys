@@ -1,6 +1,6 @@
 package starter;
 
-import auxiliary.Premise;
+import auxiliary.Lot;
 import chris.Glob;
 import concepts.Concept;
 import concepts.DynCptName;
@@ -38,10 +38,6 @@ final public class Starter {
 
     public static void read_write_console() {
         
-        // Action "request_stop_reasoning_actn" - making a caldron wait on a change in premises is widely used
-        long requestStopReasoningCid = Glob.attn_disp_loop.add_cpt(new Action(StatCptName.RequestStopReasoning_stat.ordinal()), 
-                DynCptName.request_stop_reasoning_actn.name());
-        
         // Premises "chat_prem", "chatter_name_string_prem".
         Glob.attn_disp_loop.add_cpt(new Peg_prem(), DynCptName.chat_prem.name());
 
@@ -74,26 +70,25 @@ final public class Starter {
         
         // Action of requesting the next line.
         Action requestNextLineAct = new Action(StatCptName.RequestNextLineFromChatter_stat.ordinal());
-        long requestNextLineCid = Glob.attn_disp_loop.add_cpt(requestNextLineAct);
+        long requestNextLineActCid = Glob.attn_disp_loop.add_cpt(requestNextLineAct);
         
         //              Neurons, that deal with these premises:
         // The one that waits for the line from chatter.
         Neuron waitLineNrn = new BA_nrn();
-        waitLineNrn.set_premises(new Premise[] {
-            new Premise(1, lineOfChatCid)
-        });
-        waitLineNrn.add_action_range(0, new long[] {loggingChatLineActCid});      // log the line, promote
-        waitLineNrn.add_action_range(Float.NEGATIVE_INFINITY, new long[] {requestStopReasoningCid});
-        Glob.attn_disp_loop.add_cpt(waitLineNrn, DynCptName.wait_for_the_line_from_chatter_nrn.name());
-        // The one, that requests the next line
+        long waitLineNrnCid = Glob.attn_disp_loop.add_cpt(waitLineNrn, DynCptName.wait_for_the_line_from_chatter_nrn.name());
         Neuron requestLineNrn = new BA_nrn();
-        requestLineNrn.set_premises(new Premise[] {
-            new Premise(1, chatMediaCid)
+        long requestLineNrnCid = Glob.attn_disp_loop.add_cpt(requestLineNrn, DynCptName.request_next_line_nrn.name());
+
+        waitLineNrn.set_lots(new Lot[] {
+            new Lot(1, lineOfChatCid)
         });
-        requestLineNrn.add_action_range(0, new long[] {requestNextLineCid});      // no actions, just promote
-        Glob.attn_disp_loop.add_cpt(requestLineNrn, DynCptName.request_next_line_nrn.name());
-        waitLineNrn.add_effect(requestLineNrn);
-        requestLineNrn.add_effect(waitLineNrn);
+        waitLineNrn.add_effects(0, loggingChatLineActCid, requestLineNrnCid);   // log the line, promote
+        waitLineNrn.add_effects(Float.NEGATIVE_INFINITY, null, null);           // stop and wait
+
+        requestLineNrn.set_lots(new Lot[] {
+            new Lot(1, chatMediaCid)
+        });
+        requestLineNrn.add_effects(0, requestNextLineActCid, waitLineNrnCid);      // no actions, just promote
     }
     
     public static void symbols() {

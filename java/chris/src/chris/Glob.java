@@ -525,55 +525,53 @@ final public class Glob {
 
     /**
      * Прицепить текст к последней строке списка.
-     * @param списокСтрок
-     * @param строКа
+     * @param lst
+     * @param line
      * @return преобразованный список
      */
-    public static List<String> append_last_line(List<String> списокСтрок, String строКа) {
-        списокСтрок.set(списокСтрок.size()-1, списокСтрок.get(списокСтрок.size()-1) + строКа);
-        return списокСтрок;
+    public static List<String> append_last_line(List<String> lst, String line) {
+        lst.set(lst.size()-1, lst.get(lst.size()-1) + line);
+        return lst;
     }
 
     /**
      * Добавить строку в список строк. Строка добавляется с отступом.
      * Позволяет работать с безымянным списком super.в_список_строк()
-     * @param списокСтрок
-     * @param строКа
+     * @param lst
+     * @param line
      * @return преобразованный список
      */
-    public static List<String> add_line(List<String> списокСтрок, String строКа) {
-        списокСтрок.add("    " + строКа);
-        return списокСтрок;
+    public static List<String> add_line(List<String> lst, String line) {
+        lst.add("    " + line);
+        return lst;
     }
 
     /**
      * Добавить массив строк в список строк. Строки массива становятся элементами списка.
      * Строки списка добавляются с отступом.
-     * @param исходныйСписок
-     * @param добавляемыйМассивСтрок
+     * @param lst
+     * @param lines
      * @return преобразованный список
      */
-    public static List<String> add_array_of_lines(List<String> исходныйСписок,
-            String[] добавляемыйМассивСтрок)
+    public static List<String> add_array_of_lines(List<String> lst, String[] lines)
     {
-        for(String s: добавляемыйМассивСтрок)
-            исходныйСписок.add("    " + s);
-        return исходныйСписок;
+        for(String s: lines)
+            lst.add("    " + s);
+        return lst;
     }
 
     /**
      * Добавить список строк в список строк. Список добавляется с отступом.
      * Позволяет работать с безымянным списком super.в_список_строк()
-     * @param исходныйСписок
-     * @param добавляемыйСписок
+     * @param lst
+     * @param addedLst
      * @return преобразованный список
      */
-    public static List<String> add_list_of_lines(List<String> исходныйСписок,
-            List<String> добавляемыйСписок)
+    public static List<String> add_list_of_lines(List<String> lst, List<String> addedLst)
     {
-        for(String s: добавляемыйСписок)
-            исходныйСписок.add("    " + s);
-        return исходныйСписок;
+        for(String s: addedLst)
+            lst.add("    " + s);
+        return lst;
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%

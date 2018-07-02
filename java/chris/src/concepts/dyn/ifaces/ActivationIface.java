@@ -1,8 +1,5 @@
 package concepts.dyn.ifaces;
 
-import chris.Glob;
-import java.util.List;
-
 /**
  * Getters and setters for the activation variable.
  * @author su

@@ -1,15 +1,16 @@
 package concepts.dyn.ifaces;
 
+import auxiliary.Effects;
+import auxiliary.Lot;
 import chris.Crash;
 import chris.Glob;
-import concepts.Concept;
 import java.util.List;
 
 /**
  *
  * @author su
  */
-public class EffectImpl implements Cloneable, EffectIface {
+public class LotImpl implements LotIface, Cloneable {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -18,7 +19,7 @@ public class EffectImpl implements Cloneable, EffectIface {
     /** 
      * Constructor.
      */ 
-    public EffectImpl() { 
+    public LotImpl() { 
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -26,44 +27,49 @@ public class EffectImpl implements Cloneable, EffectIface {
     //                                  Public methods
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
+
     @Override
-    public EffectImpl clone() {
+    public LotImpl clone() {
+        LotImpl clone = null;
         try {
-            return (EffectImpl)super.clone();
+            clone = (LotImpl)super.clone();
         } catch (CloneNotSupportedException ex) {
             throw new Crash("Cloning a concept failed.");
         }
-    }
-    
-    @Override
-    public int effect_size() {
-        if (effectS == null) 
-            return 0;
-        else
-            return effectS.length;
+        clone.lotS = lotS.clone();
+        
+        return clone;
     }
 
     @Override
-    public long get_effect(int index) {
-        return effectS[index];
+    public Lot get_lot(int index) {
+        return lotS[index];
     }
 
     @Override
-    public long[] get_effects() {
-        return effectS;
+    public Lot[] get_lot() {
+        return lotS;
     }
 
     @Override
-    public long add_effect(Concept cpt) {
-        effectS = Glob.append_array(effectS, cpt.get_cid());
-        return cpt.get_cid();
+    public Lot add_lot(Lot lot) {
+        lotS = (Lot[])Glob.append_array(lotS, lot);
+        return lot;
     }
 
     @Override
-    public void set_effects(Concept[] concepts) {
-        effectS = new long[concepts.length];
-        for(int i=0; i<concepts.length; i++)
-            effectS[i] = concepts[i].get_cid();
+    public void set_lots(Lot[] lotArray) {
+        lotS = lotArray;
+    }
+
+    @Override
+    public float get_bias() {
+        return biaS;
+    }
+
+    @Override
+    public void set_bias(float bias) {
+        biaS = bias;
     }
 
     /**
@@ -74,13 +80,14 @@ public class EffectImpl implements Cloneable, EffectIface {
      */
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = Glob.create_list_of_lines(this, note);
-        Glob.add_line(lst, String.format("effect_size() = %s", effect_size()));
-        if (debugLevel > 0) {
-            Glob.add_line(lst, String.format("cids: "));
-            for(Long cid: effectS)
-                Glob.append_last_line(lst, String.format("%s; ", cid));
-        }
-
+        Glob.append_last_line(lst, String.format("biaS = %s", biaS));
+        
+        if (lotS == null)
+            Glob.add_line(lst, String.format("lotS = null"));
+        else
+            for(int i = 0; i < lotS.length; i++)
+                Glob.add_list_of_lines(lst, lotS[i].to_list_of_lines(String.format("lot[%s]", i), debugLevel));
+        
         return lst;
     }
     public List<String> to_list_of_lines() {
@@ -105,8 +112,11 @@ public class EffectImpl implements Cloneable, EffectIface {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
     
-    /** Array of possible effects. */
-    private long[] effectS;
+    /** Array of cids and weights of premises. The cids are not forbidden to be duplicated in the properties. */
+    private Lot[] lotS;
+    
+    /** The free term of the linear expression. */
+    private float biaS;
 
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

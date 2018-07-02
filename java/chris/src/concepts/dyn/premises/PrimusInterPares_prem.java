@@ -7,13 +7,13 @@ import concepts.dyn.ifaces.ActivationIface.NormalizationType;
 import concepts.dyn.ifaces.ActivationImpl;
 import concepts.dyn.ifaces.PropertyIface;
 import concepts.dyn.ifaces.PropertyImpl;
-import concepts.dyn.primitives.UnorderedSet_prim;
+import concepts.dyn.primitives.Set_prim;
 
 /**
  * Premise, that bears a set of cids. Only one of them is a selected member of group.
  * @author su
  */
-public final class PrimusInterPares_prem extends UnorderedSet_prim implements ActivationIface, PropertyIface {
+public final class PrimusInterPares_prem extends Set_prim implements ActivationIface, PropertyIface {
 
     /**
      * Default constructor.

@@ -1,50 +1,16 @@
 package concepts.dyn.ifaces;
 
+import auxiliary.ActivRange;
+import auxiliary.Effects;
 import chris.Crash;
 import chris.Glob;
-import concepts.dyn.ifaces.ActionRangeIface;
 import java.util.List;
 
 /**
  * A set of ranges and corresponding them lists of actions.
  * @author su
  */
-public class ActionRangeImpl implements ActionRangeIface {
-    
-    /**
-     * Range and corresponding actions.
-     */
-    public static class Range {
-        public float range;
-        public long[] actions;
-
-        /**
-         * Constructor.
-         * @param range lower boundary of the range, where these actions are valid
-         * @param actions array of cids of actions
-         */
-        public Range(float range, long[] actions) {
-            this.range = range;
-            this.actions = actions;
-        }
-
-    /**
-     * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
-     * @param note printed in the first line just after the object type.
-     * @param debugLevel 0 - the shortest, 2 - the fullest
-     * @return list of lines, describing this object.
-     */
-    public List<String> to_list_of_lines(String note, Integer debugLevel) {
-        List<String> lst = Glob.create_list_of_lines(this, note);
-        Glob.add_line(lst, String.format("range = %s, actions = %s", range, actions));
-
-        return lst;
-    }
-    public List<String> to_list_of_lines() {
-        return to_list_of_lines("", 2);
-    }
-        
-    }
+public class ActivRangeImpl implements ActivRangeIface, Cloneable {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -53,7 +19,7 @@ public class ActionRangeImpl implements ActionRangeIface {
     /** 
      * Constructor.
      */ 
-    public ActionRangeImpl() { 
+    public ActivRangeImpl() { 
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -63,15 +29,28 @@ public class ActionRangeImpl implements ActionRangeIface {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     @Override
-    public long[] get_action_range(float activation) {
+    public ActivRangeImpl clone() {
+        ActivRangeImpl clone = null;
+        try {
+            clone = (ActivRangeImpl)super.clone();
+        } catch (CloneNotSupportedException ex) {
+            throw new Crash("Cloning a concept failed.");
+        }
+        clone.rangeS = (ActivRange[])rangeS.clone();
+        
+        return clone;
+    }
+
+    @Override
+    public Effects get_effects(float activation) {
         if      // not initialized yet?
                 (rangeS == null)
             throw new Crash("Trying to get an action cid from uninitialized ActionSelector.");
         
         // find the first matching range
-        for (Range r : rangeS) {
+        for (ActivRange r : rangeS) {
             if (activation > r.range) {
-                return r.actions;
+                return r.effects;
             }
         }
         
@@ -80,10 +59,10 @@ public class ActionRangeImpl implements ActionRangeIface {
     }
     
     @Override
-    public void add_action_range(float lowerBoundary, long[] actions) {
+    public void add_effects(float lowerBoundary, long[] actions, long[] ways) {
         if
                 (rangeS == null)
-            rangeS = new Range[0];
+            rangeS = new ActivRange[0];
         
         if      // is the new lower boundary bigger than the existing?
                 (rangeS.length > 0 && lowerBoundary > rangeS[rangeS.length-1].range)
@@ -92,7 +71,22 @@ public class ActionRangeImpl implements ActionRangeIface {
                 (rangeS.length > 1 && lowerBoundary == rangeS[rangeS.length-2].range)
             throw new Crash("New boundary " + lowerBoundary + " is equal to the last but one.");
         
-        rangeS = (Range[])Glob.append_array(rangeS, new Range(lowerBoundary, actions));
+        rangeS = (ActivRange[])Glob.append_array(rangeS, new ActivRange(lowerBoundary, actions, ways));
+    }
+
+    @Override
+    public void add_effects(float lowerBoundary, long action, long way) {
+        add_effects(lowerBoundary, new long[] {action}, new long[] {way});
+    }
+
+    @Override
+    public void add_effects(float lowerBoundary, long[] actions, long way) {
+        add_effects(lowerBoundary, actions, new long[] {way});
+    }
+
+    @Override
+    public void add_effects(float lowerBoundary, long action, long[] ways) {
+        add_effects(lowerBoundary, new long[] {action}, ways);
     }
 
     /**
@@ -103,7 +97,7 @@ public class ActionRangeImpl implements ActionRangeIface {
      */
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = Glob.create_list_of_lines(this, note);
-        for(Range rng: rangeS)
+        for(ActivRange rng: rangeS)
             Glob.add_list_of_lines(lst, rng.to_list_of_lines("rangeS", debugLevel));
 
         return lst;
@@ -123,10 +117,10 @@ public class ActionRangeImpl implements ActionRangeIface {
     /** 
      * Ranges are sorted in descending order, the high boundary including the low excluding. All that is lower than the
      * lowest boundary is range without actions. Examples:
-     * <p>new Range[]{new Range(0, new long[]{cid1, cid2}), new Range(-10, new long[] {cid3})}: 
-     * Float.MAX_VALUE >= activation > 0: cid1; cid2, 0>= activation > -10: cid3, -10 >= activation >= Float.MIN_VALUE: nothing
+     * <p>new ActivRange[]{new ActivRange(0, new long[]{cid1, cid2}), new ActivRange(-10, new long[] {cid3})}: 
+ Float.MAX_VALUE >= activation > 0: cid1; cid2, 0>= activation > -10: cid3, -10 >= activation >= Float.MIN_VALUE: nothing
      */
-    private Range[] rangeS;
+    private ActivRange[] rangeS;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

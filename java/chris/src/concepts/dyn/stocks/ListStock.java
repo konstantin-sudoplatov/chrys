@@ -1,12 +1,12 @@
 package concepts.dyn.stocks;
 
-import concepts.dyn.primitives.OrderedSet_prim;
+import concepts.dyn.primitives.List_prim;
 
 /**
  * Class for keeping a list of uniform data, like words or lines of text.
  * @author su
  */
-public class ListStock extends OrderedSet_prim {
+public class ListStock extends List_prim {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 

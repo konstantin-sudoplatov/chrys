@@ -69,11 +69,15 @@ public class PropertyImpl implements PropertyIface {
      */
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = Glob.create_list_of_lines(this, note);
-        Glob.add_line(lst, String.format("property_size() = %s", property_size()));
-        if (debugLevel > 0) {
-            Glob.add_line(lst, String.format("cids: "));
-            for(Long cid: propertieS)
-                Glob.append_last_line(lst, String.format("%s; ", cid));
+        if (propertieS == null)
+            Glob.add_line(lst, String.format("propertieS = null"));
+        else {
+            Glob.add_line(lst, String.format("property_size() = %s", property_size()));
+            if (debugLevel > 0) {
+                Glob.add_line(lst, String.format("cids: "));
+                for(Long cid: propertieS)
+                    Glob.append_last_line(lst, String.format("%s; ", cid));
+            }
         }
         
         return lst;

@@ -1,17 +1,19 @@
 package concepts.dyn.primitives;
 
+
 import chris.Glob;
 import concepts.Concept;
 import concepts.dyn.Primitive;
 import concepts.dyn.ifaces.PropertyIface;
-import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
- *
+ * 
  * @author su
  */
-public class OrderedSet_prim extends Primitive {
+public class Set_prim extends Primitive {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -20,7 +22,7 @@ public class OrderedSet_prim extends Primitive {
     /** 
      * Constructor.
      */ 
-    public OrderedSet_prim() { 
+    public Set_prim() { 
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -47,12 +49,12 @@ public class OrderedSet_prim extends Primitive {
     }
     
     /**
-     * Add new cid to the end of the group. Initialize the group if necessary.
-     * @param cpt Appended concept. If the concept support the PropertyIface, backward links from the concept to the group 
+     * Add new cid to the group. Initialize the group if necessary.
+     * @param cpt Added concept. If the concept support the PropertyIface, backward links from the concept to the group 
      * (via property list) will be organized.
      */
-    public void append_member(Concept cpt) {
-        if (memberS == null) memberS = new ArrayList();
+    public void add_member(Concept cpt) {
+        if (memberS == null) memberS = new HashSet();
         memberS.add(cpt.get_cid());
 
         if      // concept implements property interface?
@@ -66,7 +68,7 @@ public class OrderedSet_prim extends Primitive {
      * @param concepts array of cids.
      */
     public final void set_members(Concept[] concepts) {
-        memberS = new ArrayList();
+        memberS = new HashSet<>();
         for(Concept cpt: concepts) {
             memberS.add(cpt.get_cid());
             if      // concept implements property interface?
@@ -114,7 +116,7 @@ public class OrderedSet_prim extends Primitive {
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
     
     /** Cids, which the group consists of. */
-    private List<Long> memberS;
+    private Set<Long> memberS;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

@@ -1,5 +1,6 @@
 package concepts.dyn.ifaces;
 
+import chris.Crash;
 import chris.Glob;
 import java.util.List;
 
@@ -7,7 +8,7 @@ import java.util.List;
  * Implementation of the ActivationIface.
  * @author su
  */
-public class ActivationImpl implements ActivationIface {
+public class ActivationImpl implements ActivationIface, Cloneable {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -26,7 +27,15 @@ public class ActivationImpl implements ActivationIface {
     //                                  Public methods
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
-
+    @Override
+    public ActivationImpl clone() {
+        try {
+            return (ActivationImpl)super.clone();
+        } catch (CloneNotSupportedException ex) {
+            throw new Crash("Cloning a concept failed.");
+        }
+    }
+        
     @Override
     public NormalizationType get_normalization_type() {
         return normType;

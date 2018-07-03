@@ -264,7 +264,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
     /** List of all attention bubbles */
     private final ArrayList<AttnCircle> attnBubbleList = new ArrayList<>();
     
-    /** Attention bubble, that chats with console. */
+    /** Attention circle, that chats with console. */
     private AttnCircle consoleChatCircle;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--

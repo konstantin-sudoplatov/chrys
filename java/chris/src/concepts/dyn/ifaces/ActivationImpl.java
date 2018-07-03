@@ -60,7 +60,7 @@ public class ActivationImpl implements ActivationIface, Cloneable {
             // set it
             activatioN = activation;
         else // crash
-            throw new Crash("Activation cannot be set with the concept of type " + activType.toString());
+            throw new Crash("Activation cannot be set with concept of type " + activType.toString());
     }
 
     /**
@@ -68,24 +68,56 @@ public class ActivationImpl implements ActivationIface, Cloneable {
      * @param caldron
      * @return 
      */
+    @Override
     public float calculate_activation(ConceptNameSpace caldron) {
-        float activation;
+        LotIface host;
         switch(activType) {
             case WEIGHED_SUM: // calculate the weighted sum
-            LotIface
-            double weightedSum = get_bias();
-            for(Lot lot: get_lot()) {
-                ActivationIface premCpt = (ActivationIface)caldron.get_cpt(lot.cid);
-                float activation = premCpt.get_activation();
-                float weight = lot.weight;
-                weightedSum += weight*activation;
-            }
-            activatioN.set_activation((float)weightedSum);
+                host = (LotIface)hosT;
+                double weightedSum = host.get_bias();
+                for(int i = 0; i < host.size(); i++) {
+                    Lot l = host.get_lot(i);
+                    ActivationIface premCpt = (ActivationIface)caldron.get_cpt(l.cid);
+                    float premActivation = premCpt.get_activation();
+                    float weight = l.weight;
+                    weightedSum += weight*premActivation;
+                }
+                activatioN = (float)weightedSum;
 
             normalize_activation();
+            break;
+            
+            case AND:
+                activatioN = 1;
+                host = (LotIface)hosT;
+                for(int i = 0; i < host.size(); i++) {
+                    Lot l = host.get_lot(i);
+                    ActivationIface premCpt = (ActivationIface)caldron.get_cpt(l.cid);
+                    if (premCpt.get_activation() <= 0) {
+                        activatioN = -1;
+                        break;
+                    }
+                }
+                break;
 
-            return get_activation();
+            case OR:
+                activatioN = -1;
+                host = (LotIface)hosT;
+                for(int i = 0; i < host.size(); i++) {
+                    Lot l = host.get_lot(i);
+                    ActivationIface premCpt = (ActivationIface)caldron.get_cpt(l.cid);
+                    if (premCpt.get_activation() > 0) {
+                        activatioN = 1;
+                        break;
+                    }
+                }
+                break;
+                
+            case SET:
+                throw new Crash("Activation cannot be calculated for concept of type " + activType.toString());
         }
+
+        return activatioN;
     }
 
     @Override

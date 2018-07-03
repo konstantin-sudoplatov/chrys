@@ -18,15 +18,16 @@ import concepts.dyn.ifaces.LotImpl;
  * The same way it determines successors and their activations. 
  * @author su
  */
-abstract public class Neuron extends DynamicConcept implements ActivationIface, ActivRangeIface, LotIface {
+public class Neuron extends DynamicConcept implements ActivationIface, ActivRangeIface, LotIface {
 
     /**
      * Default constructor.
+     * @param activType activation type
      * @param normType normalization type
      */
-    public Neuron(ActivationIface.NormalizationType normType) 
+    public Neuron(ActivationType activType, NormalizationType normType) 
     {
-        activatioN = new ActivationImpl(normType);
+        activatioN = new ActivationImpl(this, activType, normType);
     }
 
 //    /**
@@ -98,26 +99,9 @@ abstract public class Neuron extends DynamicConcept implements ActivationIface, 
             return effects.ways;
     }
 
-    /**
-     * Calculate weighed sum, normalize it according the neuron's type.
-     * @param caldron
-     * @return 
-     */
+    @Override
     public float calculate_activation(ConceptNameSpace caldron) {
-        
-        // calculate the weighted sum
-        double weightedSum = get_bias();
-        for(Lot lot: get_lot()) {
-            ActivationIface premCpt = (ActivationIface)caldron.get_cpt(lot.cid);
-            float activation = premCpt.get_activation();
-            float weight = lot.weight;
-            weightedSum += weight*activation;
-        }
-        activatioN.set_activation((float)weightedSum);
-        
-        normalize_activation();
-        
-        return get_activation();
+        return activatioN.calculate_activation(caldron);
     }
     
     @Override
@@ -192,14 +176,19 @@ abstract public class Neuron extends DynamicConcept implements ActivationIface, 
 //    }
 
     @Override
+    public int size() {
+        return lotS.size();
+    }
+    
+    @Override
     public Lot get_lot(int index) {
         return lotS.get_lot(index);
     }
 
-    @Override
-    public Lot[] get_lot() {
-        return lotS.get_lot();
-    }
+//    @Override
+//    public Lot[] get_lots() {
+//        return lotS.get_lots();
+//    }
 
     @Override
     public Lot add_lot(Lot lot) {

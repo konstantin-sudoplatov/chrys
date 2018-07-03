@@ -187,14 +187,13 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
     public synchronized void request_termination() {
         
         // terminate bubbles
-        for (AttnCircle bubble : attnBubbleList) {
-            Thread thread = bubble.get_thread();
+        for (AttnCircle circle : attnBubbleList) {
             if 
-                    (thread.isAlive())
+                    (circle.isAlive())
             {
                 try {
-                    bubble.request_termination();
-                    thread.join();
+                    circle.request_termination();
+                    circle.join();
                 } catch (InterruptedException ex) {}
             }
         }
@@ -231,7 +230,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
             {
                 consoleChatCircle = new AttnCircle(this, DynCptName.it_is_console_chat_prem);
                 addCircleToList(consoleChatCircle);
-                consoleChatCircle.start_thread();
+                consoleChatCircle.start();
             }
             
             // route the message to the chat circle

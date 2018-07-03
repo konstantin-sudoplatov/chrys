@@ -1,5 +1,7 @@
 package concepts.dyn.premises;
 
+import attention.ConceptNameSpace;
+import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
 import concepts.dyn.ifaces.ActivationIface;
@@ -45,8 +47,13 @@ public class String_prem extends String_prim implements ActivationIface, Propert
     }
 
     @Override
+    public float calculate_activation(ConceptNameSpace caldron) {
+        throw new Crash("Is not realised for this concept.");
+    }
+
+    @Override
     public float normalize_activation() {
-        return activatioN.normalize_activation();
+        throw new Crash("Is not realised for this concept.");
     }
     
     @Override
@@ -78,8 +85,8 @@ public class String_prem extends String_prim implements ActivationIface, Propert
     @Override
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
-        Glob.add_list_of_lines(lst, activatioN.to_list_of_lines("activatioN", debugLevel));
-        Glob.add_list_of_lines(lst, propertieS.to_list_of_lines("propertieS", debugLevel));
+        Glob.add_list_of_lines(lst, activatioN.to_list_of_lines("activatioN", debugLevel-1));
+        Glob.add_list_of_lines(lst, propertieS.to_list_of_lines("propertieS", debugLevel-1));
 
         return lst;
     }
@@ -93,7 +100,7 @@ public class String_prem extends String_prim implements ActivationIface, Propert
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
     /** Activation.  */
-    private ActivationImpl activatioN = new ActivationImpl(ActivationIface.NormalizationType.BIN);
+    private ActivationImpl activatioN = new ActivationImpl(this, ActivationType.SET, NormalizationType.BIN);
     
     /** Set of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
     private PropertyImpl propertieS = new PropertyImpl();

@@ -1,5 +1,6 @@
 package concepts.dyn.primitives;
 
+import attention.Caldron;
 import chris.Glob;
 import concepts.Concept;
 import concepts.dyn.Primitive;
@@ -75,6 +76,14 @@ public class List_prim extends Primitive {
             ((PropertyIface)cpt).add_property(this);
         }
     }
+    
+    /** 
+     * Get set as an array.
+     * @return array of cids.
+     */
+    public final Long[] get_members() {
+        return (Long[])memberS.toArray();
+    }
 
     /**
      * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
@@ -86,9 +95,18 @@ public class List_prim extends Primitive {
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
         Glob.add_line(lst, String.format("group_size() = %s", group_size()));
-        Glob.add_line(lst, String.format("cids: "));
-        for(Long cid: memberS)
-            Glob.append_last_line(lst, String.format("%s; ", cid));
+        if (debugLevel == 1) {
+            Glob.add_line(lst, String.format("cids: "));
+            for(Long cid: memberS)
+                Glob.append_last_line(lst, String.format("%s; ", cid));
+        }
+        else if (debugLevel > 1) {
+            for(Long cid: memberS) {
+                Glob.add_line(lst, String.format("cid: %s; ", cid));
+                Caldron c = (Caldron)Thread.currentThread();
+                Glob.add_list_of_lines(lst, c.get_cpt(cid).to_list_of_lines("", debugLevel-1));
+            }
+        }
 
         return lst;
     }

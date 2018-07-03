@@ -1,5 +1,6 @@
 package concepts.dyn.ifaces;
 
+import attention.Caldron;
 import chris.Glob;
 import concepts.Concept;
 import java.util.HashSet;
@@ -73,15 +74,23 @@ public class PropertyImpl implements PropertyIface {
             Glob.add_line(lst, String.format("propertieS = null"));
         else {
             Glob.add_line(lst, String.format("property_size() = %s", property_size()));
-            if (debugLevel > 0) {
+            if (debugLevel == 1) {
                 Glob.add_line(lst, String.format("cids: "));
                 for(Long cid: propertieS)
                     Glob.append_last_line(lst, String.format("%s; ", cid));
+            }
+            else if (debugLevel > 1) {
+                for(Long cid: propertieS) {
+                    Glob.add_line(lst, String.format("cid: %s; ", cid));
+                    Caldron c = (Caldron)Thread.currentThread();
+                    Glob.add_list_of_lines(lst, c.get_cpt(cid).to_list_of_lines("", debugLevel-1));
+                }
             }
         }
         
         return lst;
     }
+        
     public List<String> to_list_of_lines() {
         return to_list_of_lines("", 2);
     }

@@ -10,7 +10,7 @@ import console.ConsoleMessage;
 public class ApplicationLoop extends BaseMessageLoop {
 
     @Override
-    public Thread start_thread() {
+    public void start() {
         throw new Crash("This loop must be started calling the run() method in the application thread.");
     }
 

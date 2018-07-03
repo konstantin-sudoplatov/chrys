@@ -8,18 +8,21 @@ import auxiliary.Lot;
  */
 public interface LotIface {
 
+    /** Size of the lot list */
+    public int size();
+    
     /**
      * Getter.
      * @param index
      * @return the lot structure with given index.
      */
     public Lot get_lot(int index);
-
-    /**
-     * Getter.
-     * @return array of lots
-     */
-    public Lot[] get_lot();
+//
+//    /**
+//     * Getter.
+//     * @return array of lots
+//     */
+//    public Lot[] get_lots();
 
     /**
      * Add new member to the array of lots.

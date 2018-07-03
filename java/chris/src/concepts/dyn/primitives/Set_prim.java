@@ -77,6 +77,14 @@ public class Set_prim extends Primitive {
             ((PropertyIface)cpt).add_property(this);
         }
     }
+    
+    /** 
+     * Get set as an array.
+     * @return array of cids.
+     */
+    public final Long[] get_members() {
+        return (Long[])memberS.toArray();
+    }
 
     /**
      * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().

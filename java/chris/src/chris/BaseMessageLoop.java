@@ -10,7 +10,7 @@ import java.util.ArrayDeque;
  * Base message processing loop. Always ends up being a separate thread. 
  * @author su
  */
-abstract public class BaseMessageLoop implements Runnable {
+abstract public class BaseMessageLoop extends Thread {
     
     /** If number of messages in the queue reaches the threshold, method put_in_queue() blocks waiting. */
     final static int QUEUE_THRESHOLD = 250;
@@ -26,23 +26,6 @@ abstract public class BaseMessageLoop implements Runnable {
     //                            Методы внешнего интерфейса
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
-
-    /**
-     * Start this loop as a thread.
-     * @return the thread object
-     */
-    public Thread start_thread() {
-        if
-                (threaD == null)
-        {
-            threaD = new Thread(this);
-            threaD.start();
-        }
-        else
-            throw new Crash("Attempt to start a thread that is runnig already.");
-        
-        return threaD;
-    }
     
     /**
      * Main cycle of taking out and processing messages in the queue.
@@ -88,8 +71,6 @@ abstract public class BaseMessageLoop implements Runnable {
                             "Error invoking message handling functor: " + msg.getClass().getName(), ex);
                 }
         }
-        
-        threaD = null;  // feel free to start again
     }   // run()
 
     /**
@@ -175,14 +156,6 @@ abstract public class BaseMessageLoop implements Runnable {
         put_in_queue(new Msg_LoopTermination());
     }
 
-    /**
-     * Getter.
-     * @return the thread object.
-     */
-    public synchronized Thread get_thread() {
-        return threaD;
-    }
-
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //                                  Наследуемый интерфейс
@@ -229,9 +202,6 @@ abstract public class BaseMessageLoop implements Runnable {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%--- private переменные ---%%%---%%%---%%%---%%%---%%%---%%%
-    
-    /** Thread object, that runs this loop. */
-    private Thread threaD = null;
     
     /** Главная очередь сообщений обработчика. Очередь очень быстрая. Это кольцевой буфер. */
     private ArrayDeque<BaseMessage> msgQueue = new ArrayDeque<>();

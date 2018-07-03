@@ -2,63 +2,36 @@ package concepts.dyn.premises;
 
 import attention.ConceptNameSpace;
 import chris.Crash;
+import chris.Glob;
 import concepts.Concept;
 import concepts.dyn.ifaces.ActivationIface;
-import concepts.dyn.ifaces.ActivationIface.NormalizationType;
-import concepts.dyn.ifaces.ActivationImpl;
 import concepts.dyn.ifaces.PropertyIface;
 import concepts.dyn.ifaces.PropertyImpl;
 import concepts.dyn.primitives.Set_prim;
+import java.util.List;
 
 /**
- * Premise, that bears a set of cids. Only one of them is a selected member of group.
+ * Set of cids, all of them must be active for this premise to be active. No calculation of the activation value is needed, activation
+ * is calculated dynamically in the get_activation() method.
  * @author su
  */
-public final class PrimusInterPares_prem extends Set_prim implements ActivationIface, PropertyIface {
+public class And_prem extends Set_prim implements ActivationIface, PropertyIface {
 
-    /**
-     * Default constructor.
-     */
-    public PrimusInterPares_prem() {
-        
-    }
-    
+    //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
+
+    //---***---***---***---***---***--- public data ---***---***---***---***---***--
+
     /** 
      * Constructor.
-     * @param cpt
-     * @param primus
      */ 
-    public PrimusInterPares_prem(Concept[] cpt, Concept primus) { 
-        set_members(cpt);
-        set_primus(primus);
+    public And_prem() { 
     } 
-    
+
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
     //                                  Public methods
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
-    
-    /**
-     * Getter.
-     * @return cid of the primus 
-     */
-    public long get_primus() {
-        return primusCid;
-    }
-
-    /**
-     * Setter. As a side effect it sets the activation field to +1. It is the only way to
-     * set up activation for this concept (on creation it is -1).
-     * @param cpt 
-     */
-    public void set_primus(Concept cpt) {
-        if      // activeCid is not in the set?
-                (!contains_member(cpt))
-            throw new Crash("primusCid " + cpt.get_cid() + " is not a member of the group.");
-        
-        primusCid = cpt.get_cid();
-    }
 
     @Override
     public NormalizationType get_normalization_type() {
@@ -67,16 +40,24 @@ public final class PrimusInterPares_prem extends Set_prim implements ActivationI
    
     @Override
     public float get_activation() {
-        return primusCid == 0? -1: 1;
+        float activation = 1;
+        ConceptNameSpace caldron = (ConceptNameSpace)Thread.currentThread();
+        for (Long cid: get_members()) {
+            ActivationIface cpt = (ActivationIface)caldron.get_cpt(cid);
+            if      // is it an antiactive concept?
+                    (cpt.get_activation() <= 0)
+            {   // our activation will be antiactive also
+                activation = -1;
+                break;
+            }
+        }
+        
+        return activation;
     }
 
-    /**
-     * Disable the activation setter. Activation sets up in the set_primus() method.
-     * @param activation
-     */
     @Override
     public void set_activation(float activation) {
-        throw new Crash("The activation field sets up in the set_primus_cid() method.");
+        throw new Crash("Is not realised for this concept.");
     }
 
     @Override
@@ -109,6 +90,21 @@ public final class PrimusInterPares_prem extends Set_prim implements ActivationI
         propertieS.set_properties(concepts);
     }
 
+    /**
+     * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
+     * @param note printed in the first line just after the object type.
+     * @param debugLevel 0 - the shortest, 2 - the fullest
+     * @return list of lines, describing this object.
+     */
+    @Override
+    public List<String> to_list_of_lines(String note, Integer debugLevel) {
+        List<String> lst = super.to_list_of_lines(note, debugLevel);
+        Glob.append_last_line(lst, String.format("get_activation() = %s", get_activation()));
+        Glob.add_list_of_lines(lst, propertieS.to_list_of_lines("propertieS", debugLevel));
+
+        return lst;
+    }
+
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //      Private    Private    Private    Private    Private    Private    Private
@@ -117,9 +113,8 @@ public final class PrimusInterPares_prem extends Set_prim implements ActivationI
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
     
-    /** The active cid. The rest of the cids are antiactive. */
-    private long primusCid;
-    
     /** Set of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
     private PropertyImpl propertieS = new PropertyImpl();
+
+    //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 }

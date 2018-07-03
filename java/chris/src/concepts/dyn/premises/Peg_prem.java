@@ -1,5 +1,7 @@
 package concepts.dyn.premises;
 
+import attention.ConceptNameSpace;
+import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
 import concepts.dyn.Primitive;
@@ -44,13 +46,18 @@ public class Peg_prem extends Primitive implements ActivationIface, PropertyIfac
     }
 
     @Override
+    public float calculate_activation(ConceptNameSpace caldron) {
+        throw new Crash("Is not realised for this concept.");
+    }
+
+    @Override
     public float normalize_activation() {
-        return activatioN.normalize_activation();
+        throw new Crash("Is not realised for this concept.");
     }
     
     @Override
     public int property_size() {
-            return propertieS.property_size();
+        return propertieS.property_size();
     }
 
     @Override
@@ -92,7 +99,7 @@ public class Peg_prem extends Primitive implements ActivationIface, PropertyIfac
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
     /** Activation.  */
-    private ActivationImpl activatioN = new ActivationImpl(NormalizationType.BIN);
+    private ActivationImpl activatioN = new ActivationImpl(this, ActivationType.SET, NormalizationType.BIN);
     
     /** Set of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
     private PropertyImpl propertieS = new PropertyImpl();

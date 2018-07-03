@@ -41,14 +41,19 @@ public class LotImpl implements LotIface, Cloneable {
     }
 
     @Override
+    public int size() {
+        return lotS.length;
+    }
+    
+    @Override
     public Lot get_lot(int index) {
         return lotS[index];
     }
-
-    @Override
-    public Lot[] get_lot() {
-        return lotS;
-    }
+//
+//    @Override
+//    public Lot[] get_lots() {
+//        return lotS;
+//    }
 
     @Override
     public Lot add_lot(Lot lot) {

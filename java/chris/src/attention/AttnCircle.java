@@ -9,8 +9,6 @@ import concepts.dyn.premises.PrimusInterPares_prem;
 import concepts.dyn.premises.String_prem;
 import concepts.dyn.ifaces.ActivationIface;
 import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * Attention bubble loop. Works as a main caldron, can contain subcaldrons.
@@ -108,11 +106,11 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
         {
             for(Caldron caldron : caldronList)
                 if 
-                        (caldron.get_thread().isAlive())
+                        (caldron.isAlive())
                 {
                     try {
                         caldron.request_termination();
-                        caldron.get_thread().join();
+                        caldron.join();
                     } catch (InterruptedException ex) {}
                 }
         }

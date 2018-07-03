@@ -8,9 +8,9 @@ import concepts.StatCptName;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
 import concepts.dyn.actions.BinaryOperation_act;
+import concepts.dyn.ifaces.ActivationIface;
 import concepts.dyn.premises.Peg_prem;
 import concepts.dyn.premises.String_prem;
-import concepts.dyn.neurons.BA_nrn;
 import concepts.dyn.premises.PrimusInterPares_prem;
 import concepts.dyn.stocks.ListStock;
 
@@ -74,9 +74,9 @@ final public class Starter {
         
         //              Neurons, that deal with these premises:
         // The one that waits for the line from chatter.
-        Neuron waitLineNrn = new BA_nrn();
+        Neuron waitLineNrn = new Neuron(ActivationIface.ActivationType.AND, ActivationIface.NormalizationType.BIN);
         long waitLineNrnCid = Glob.attn_disp_loop.add_cpt(waitLineNrn, DynCptName.wait_for_the_line_from_chatter_nrn.name());
-        Neuron requestLineNrn = new BA_nrn();
+        Neuron requestLineNrn = new Neuron(ActivationIface.ActivationType.AND, ActivationIface.NormalizationType.BIN);
         long requestLineNrnCid = Glob.attn_disp_loop.add_cpt(requestLineNrn, DynCptName.request_next_line_nrn.name());
 
         waitLineNrn.set_lots(new Lot[] {

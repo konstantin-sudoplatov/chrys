@@ -55,8 +55,8 @@ final public class Glob {
      * Initialization.
      */
     public static void initialize_application() {
-        console_loop.start_thread();
-        attn_disp_loop.start_thread();
+        console_loop.start();
+        attn_disp_loop.start();
         Starter.read_write_console();
         Starter.symbols();
     }
@@ -65,8 +65,8 @@ final public class Glob {
      * Release resources and stop all threads.
      */
     public static void terminate_application() {
-        terminateMessageLoopThread(console_loop.get_thread(), console_loop);
-        terminateMessageLoopThread(attn_disp_loop.get_thread(), attn_disp_loop);   // attention dispatcher stops the attention bubbles loops.
+        terminateMessageLoopThread(console_loop, console_loop);
+        terminateMessageLoopThread(attn_disp_loop, attn_disp_loop);   // attention dispatcher stops the attention bubbles loops.
         app_loop.request_termination();
     }
         

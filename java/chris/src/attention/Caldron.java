@@ -5,6 +5,8 @@ import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
 import concepts.dyn.Neuron;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * The reasoning is taking place in a caldron. Caldrons are organized in a hierarchy.
@@ -35,25 +37,40 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     /**
-     * Get a local concept by cid, may be load it initially.
+     * Get local concept by cid, may be load it initially. In the root of hierarchy (class AttnCircle) this method is overriden.
+     * This method is synchronized since it can be concurrently called from different branches of the caldron tree.
      * @param cid
      * @return the concept
      * @throws Crash if not found
      */
     @Override
     public synchronized Concept get_cpt(long cid) {
-        return parenT.get_cpt(cid);
+        Concept cpt = _cptDir_.get(cid);
+        if      // no such concept in the local directory?
+                (cpt == null)
+        {   // get it from parent, put in local directory and return
+            cpt = parenT.get_cpt(cid);     //  In the root of hierarchy (class AttnCircle) the processing never gets here, because we are overriden.
+            return _cptDir_.put(cid, cpt);
+        }
+        else {// concept found, return it
+            return cpt; 
+        }
     }
     
     /**
      * Get a local concept by name, may be load it initially.
+     * This method is synchronized since it can be concurrently called from different branches of the caldron tree.
      * @param cptName
      * @return the concept
      * @throws Crash if not found
      */
     @Override
     public synchronized Concept get_cpt(String cptName) {
-        return parenT.get_cpt(cptName);
+        Long cid = Glob.named.name_cid.get(cptName);
+        if (cid != null) 
+            return get_cpt(cid);
+        else 
+            throw new Crash("Now such concept: name = " + cptName);
     }
 
     @Override
@@ -72,6 +89,9 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
 
     //---$$$---$$$---$$$---$$$---$$$--- protected data $$$---$$$---$$$---$$$---$$$---$$$--
+
+    /** Local concept directory. */
+    protected final Map<Long, Concept> _cptDir_ = new HashMap();
     
     /** The dynamic concept, currently doing assertion. */
     protected long _head_;

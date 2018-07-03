@@ -1,6 +1,5 @@
 package concepts.dyn.ifaces;
 
-import auxiliary.Effects;
 import auxiliary.Lot;
 import chris.Crash;
 import chris.Glob;

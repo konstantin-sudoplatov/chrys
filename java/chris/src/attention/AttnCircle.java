@@ -62,48 +62,33 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
                 (cid >= 0 && cid <= Glob.MAX_STATIC_CID)
             return attnDisp.get_cpt(cid);
             
-        Concept cpt = cptDir.get(cid);
+        Concept cpt = _cptDir_.get(cid);
         if      // found in the local concept directory?
                 (cpt != null)
             // yes: return the concept
             return cpt;
         else {  // no: load the concept from the common directory and return it
             attnDisp.copy_cpt_to_circle(cid, this);
-            return cptDir.get(cid);
+            return _cptDir_.get(cid);
         }
-    }
-    
-    /**
-     * Get a local concept by name, may be load it initially.
-     * @param cptName
-     * @return the concept
-     * @throws Crash if not found
-     */
-    @Override
-    public synchronized Concept get_cpt(String cptName) {
-        Long cid = Glob.named.name_cid.get(cptName);
-        if (cid != null) 
-            return get_cpt(cid);
-        else 
-            throw new Crash("Now such concept: name = " + cptName);
     }
 
     /** 
-     * Test if the concept directory contains a concept.
+     * Test if the concept directory contains a concept. Called from attention dispatcher.
      * @param cid
      * @return true/false
      */
     public synchronized boolean concept_directory_containsKey(long cid) {
-        return cptDir.containsKey(cid);
+        return _cptDir_.containsKey(cid);
     }
     
     /**
-     * Put new concept into the concept directory.
+     * Put new concept into the concept directory. Called from attention dispatcher.
      * @param cid
      * @param cpt 
      */
     public synchronized void put_in_concept_directory(long cid, Concept cpt) {
-        cptDir.put(cid, cpt);
+        _cptDir_.put(cid, cpt);
     }
 
     /**
@@ -171,9 +156,6 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
-
-    /** Local concept directory. */
-    private final Map<Long, Concept> cptDir = new HashMap();
     
     /** Attention dispatcher. Parent. */
     private final AttnDispatcherLoop attnDisp;

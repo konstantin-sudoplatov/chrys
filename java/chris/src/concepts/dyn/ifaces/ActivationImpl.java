@@ -1,7 +1,10 @@
 package concepts.dyn.ifaces;
 
+import attention.ConceptNameSpace;
+import auxiliary.Lot;
 import chris.Crash;
 import chris.Glob;
+import concepts.Concept;
 import java.util.List;
 
 /**
@@ -16,9 +19,13 @@ public class ActivationImpl implements ActivationIface, Cloneable {
 
     /** 
      * Constructor.
+     * @param host
+     * @param activType
      * @param normType
      */ 
-    public ActivationImpl(ActivationIface.NormalizationType normType) { 
+    public ActivationImpl(Concept host, ActivationIface.ActivationType activType, ActivationIface.NormalizationType normType) { 
+        hosT = host;
+        this.activType = activType;
         this.normType = normType; 
     } 
 
@@ -48,7 +55,37 @@ public class ActivationImpl implements ActivationIface, Cloneable {
 
     @Override
     public void set_activation(float activation) {
-        activatioN = activation;
+        if      // activation is to be set for this concept?
+                (activType == ActivationIface.ActivationType.SET)
+            // set it
+            activatioN = activation;
+        else // crash
+            throw new Crash("Activation cannot be set with the concept of type " + activType.toString());
+    }
+
+    /**
+     * Calculate weighed sum, normalize it according the neuron's type.
+     * @param caldron
+     * @return 
+     */
+    public float calculate_activation(ConceptNameSpace caldron) {
+        float activation;
+        switch(activType) {
+            case WEIGHED_SUM: // calculate the weighted sum
+            LotIface
+            double weightedSum = get_bias();
+            for(Lot lot: get_lot()) {
+                ActivationIface premCpt = (ActivationIface)caldron.get_cpt(lot.cid);
+                float activation = premCpt.get_activation();
+                float weight = lot.weight;
+                weightedSum += weight*activation;
+            }
+            activatioN.set_activation((float)weightedSum);
+
+            normalize_activation();
+
+            return get_activation();
+        }
     }
 
     @Override
@@ -72,6 +109,9 @@ public class ActivationImpl implements ActivationIface, Cloneable {
             
             case ESQUASH:
                 activatioN = ((float)((1 - Math.exp(-activatioN))/(1 + Math.exp(-activatioN))));
+                break;
+                
+            case NONE:
                 break;
         }
 
@@ -108,6 +148,12 @@ public class ActivationImpl implements ActivationIface, Cloneable {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
+    
+    /** Component, that implements the interface using this object to transfer methods to. */
+    private final Concept hosT;
+    
+    /** Activation type */
+    private final ActivationIface.ActivationType activType;
     
     /** Normalization type. */
     private final ActivationIface.NormalizationType normType;

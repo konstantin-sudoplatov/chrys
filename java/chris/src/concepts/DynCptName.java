@@ -15,9 +15,8 @@ public enum DynCptName {
     chat_media_prem,                        // primus inter pares premise, contains "Mrk_ItIsConsoleChat" and "Mrk_ItIsHttpChat" static concepts
     it_is_console_chat_prem,                // chat_prem by console property to the "chat_prem" premise
     it_is_http_chat_prem,                   // chat_prem by http property to the "chat_prem" premise
-    line_of_chat_string_prem,               // activation +1: the line has come and waits to be processed, -1: old line invalidated, the new one has not come yet
-    chat_log_list,                          // collection of the lines of chat
-    valve_for_the_line_from_chatter_nrn,    // waits on the valve And_prem for the line of chat to get processed
+    line_from_chatter_strprem,               // activation +1: the line has come and waits to be processed, -1: old line invalidated, the new one has not come yet
+    valve_for_getting_next_line_nrn,        // waits on the valve And_prem for the line of chat to get processed
     request_next_line_actn,                 // sends to console the request for new line
     valve_for_requesting_next_line_prem,    // And_prem that combines all conditions for the valve neuron to pass
     chatter_line_logged_subvalve_prem,      // pass condition from logging, member of the above valve
@@ -25,10 +24,11 @@ public enum DynCptName {
     valve_for_requesting_next_line_nrn,     // waits on its valve until the current chat line is processed, then requests new line
     console_chat_seed_action_packet,        // a seris of actions, which prepares the caldron for processing
     console_chat_seed_nrn,                  // neuron, that executes the chat seed action packet
-    http_chat_seed_action_packet,        // a seris of actions, which prepares the caldron for processing
-    http_chat_seed_nrn,                  // neuron, that executes the chat seed action packet
+    http_chat_seed_action_packet,           // a series of actions, which prepares the caldron for processing
+    http_chat_seed_nrn,                     // neuron, that executes the chat seed action packet
     
-    // Starter.symbols()
+    // Chat log
+    chat_log_lst,                           // collection of the lines of chat
     
     //
     word_separators_group,                          // each special symbol is in this group

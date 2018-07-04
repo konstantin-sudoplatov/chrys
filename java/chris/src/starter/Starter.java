@@ -40,6 +40,7 @@ final public class Starter {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     public static void common_concepts() {
+        // That action we execute from effects of a neuron if we want the caldron to wait on that neuron.
         Glob.attn_disp_loop.add_cpt(new Action(StatCptName.CaldronStopAndWait_stat.ordinal()), DynCptName.caldron_stop_and_wait_actn.name());
     }
     
@@ -59,16 +60,8 @@ final public class Starter {
         itIsConsoleChat.add_property(chatMedia);
         itIsHttpChat.add_property(chatMedia);
         
-        // "line_of_chat_string_prem" as waiting condition for the getting the line neuron.
-        long lineOfChatCid = Glob.attn_disp_loop.add_cpt(new String_prem(null), DynCptName.line_of_chat_string_prem.name());
-
-        // Chat log list and operation of adding the line of chat to the list
-        ListStock chatLogList = new ListStock();
-        long chatLogListCid = Glob.attn_disp_loop.add_cpt(chatLogList, DynCptName.chat_log_list.name());
-        BinaryOperation_act loggingChatLineAct = new BinaryOperation_act(StatCptName.CloneConceptAndAappendToList_stat.ordinal());
-        loggingChatLineAct.set_first_operand(chatLogListCid);
-        loggingChatLineAct.set_second_operand(lineOfChatCid);
-        long loggingChatLineActCid = Glob.attn_disp_loop.add_cpt(loggingChatLineAct);
+        // "line_from_chatter_strprem" as waiting condition for the getting the line neuron.
+        long lineOfChatCid = Glob.attn_disp_loop.add_cpt(new String_prem(null), DynCptName.line_from_chatter_strprem.name());
 
         // And_prem "valve_for_requesting_next_line_prem" and its members "chatter_line_logged_subvalve_prem" and "chatter_line_parsed_subvalve_prem"
         And_prem valveForRequestingNextLine = new And_prem();
@@ -85,14 +78,14 @@ final public class Starter {
         //              Neurons, that deal with these premises:
         // The one that waits for the line from chatter.
         Neuron waitLineNrn = new Neuron(ActivationIface.ActivationType.AND, ActivationIface.NormalizationType.BIN);
-        long waitLineNrnCid = Glob.attn_disp_loop.add_cpt(waitLineNrn, DynCptName.valve_for_the_line_from_chatter_nrn.name());
+        long waitLineNrnCid = Glob.attn_disp_loop.add_cpt(waitLineNrn, DynCptName.valve_for_getting_next_line_nrn.name());
         Neuron requestLineNrn = new Neuron(ActivationIface.ActivationType.AND, ActivationIface.NormalizationType.BIN);
         long requestLineNrnCid = Glob.attn_disp_loop.add_cpt(requestLineNrn, DynCptName.valve_for_requesting_next_line_nrn.name());
 
         waitLineNrn.set_lots(new Lot[] {
             new Lot(1, lineOfChatCid)
         });
-        waitLineNrn.add_effects(0, loggingChatLineActCid, requestLineNrnCid);   // log the line, promote
+        waitLineNrn.add_effects(0, null, requestLineNrnCid);   // promote
         waitLineNrn.add_effects(Float.NEGATIVE_INFINITY, 
                 Glob.attn_disp_loop.get_cpt(DynCptName.caldron_stop_and_wait_actn.name()).get_cid(), null);           // stop and wait
 
@@ -120,7 +113,15 @@ final public class Starter {
         Glob.attn_disp_loop.add_cpt(httpChatSeedNrn, DynCptName.http_chat_seed_nrn.name());
     }
     
-    public static void symbols() {
+    public static void chat_log() {
+
+        // Chat log list and operation of adding the line of chat to the list
+        ListStock chatLogList = new ListStock();
+        long chatLogListCid = Glob.attn_disp_loop.add_cpt(chatLogList, DynCptName.chat_log_lst.name());
+        BinaryOperation_act loggingChatLineAct = new BinaryOperation_act(StatCptName.CloneConceptAndAappendToList_stat.ordinal());
+        loggingChatLineAct.set_first_operand(chatLogListCid);
+        loggingChatLineAct.set_second_operand(Glob.named.name_cid.get(DynCptName.line_from_chatter_strprem.name()));
+        long loggingChatLineActCid = Glob.attn_disp_loop.add_cpt(loggingChatLineAct);
 //        Group symbolsGroup = new Group();
 //        long symbolsGroupCid = Glob.attn_disp_loop.add_cpt(symbolsGroup, DynCptName.word_separators_group.name());
     }

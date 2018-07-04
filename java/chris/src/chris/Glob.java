@@ -59,7 +59,7 @@ final public class Glob {
         attn_disp_loop.start();
         Starter.common_concepts();
         Starter.read_write_console();
-        Starter.symbols();
+        Starter.chat_log();
     }
         
     /**

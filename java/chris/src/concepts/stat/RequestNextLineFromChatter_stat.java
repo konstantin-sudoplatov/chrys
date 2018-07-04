@@ -24,12 +24,12 @@ public class RequestNextLineFromChatter_stat extends StaticAction {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     /**
-     * Make caldron to send request for getting the next line from chatter. On making request
-     * the line_of_chat_string_prem antiactivated to make it invalid until getting the next line.
+     * Make caldron to send request for the next line from chatter. On making request
+     * the line_from_chatter_strprem string premise is antiactivated to make it invalid until getting the next line.
      * @param nameSpace caldron, in which thread this function would be invoked.
      * <p>implicit in parameter "DynCptName.chat_media_prem", media must be set or it'll be crash.
-     * <p>implicit out parameter "DynCptName.line_of_chat_string_prem", its activation set to -1 to
-     * indicate that string is not available yet.
+     * <p>implicit out parameter "DynCptName.line_from_chatter_strprem", its activation set to -1 to
+     *    indicate that string is not available yet.
      * @param paramCids null
      * @param extra null
      * @return null
@@ -44,7 +44,7 @@ public class RequestNextLineFromChatter_stat extends StaticAction {
         if
                 (chatMedia.equals(DynCptName.it_is_console_chat_prem.name()))
         {
-                String_prem lineOfChat = (String_prem)nameSpace.get_cpt(DynCptName.line_of_chat_string_prem.name());
+                String_prem lineOfChat = (String_prem)nameSpace.get_cpt(DynCptName.line_from_chatter_strprem.name());
                 lineOfChat.set_activation(-1);      // make it antiactive
                 AttnCircle attnCircle = nameSpace.get_attn_circle();
                 AttnDispatcherLoop attnDisp = attnCircle.get_attn_dispatcher();

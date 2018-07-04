@@ -125,7 +125,7 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
 
         if      // a line from console has come?
                 (msg instanceof Msg_ConsoleToAttnCircle)
-        {   // put it to the concept "line_of_chat_string_prem" and invoke the reasoning
+        {   // put it to the concept "line_from_chatter_strprem" and invoke the reasoning
             
             // Check if the caldron initialized
             if      // is it the first message?
@@ -137,7 +137,7 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
                 _reasoning_();
             }
             
-            String_prem lineOfChat = (String_prem)get_cpt(DynCptName.line_of_chat_string_prem.name());
+            String_prem lineOfChat = (String_prem)get_cpt(DynCptName.line_from_chatter_strprem.name());
             lineOfChat.set_text(((Msg_ConsoleToAttnCircle) msg).text);
             lineOfChat.set_activation(1);
             

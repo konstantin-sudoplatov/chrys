@@ -5,9 +5,8 @@ import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
 import concepts.DynCptName;
-import concepts.dyn.premises.PrimusInterPares_prem;
+import concepts.dyn.Neuron;
 import concepts.dyn.premises.String_prem;
-import concepts.dyn.ifaces.ActivationIface;
 import java.util.List;
 
 /**
@@ -29,16 +28,6 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
     public AttnCircle(AttnDispatcherLoop attnDisp, DynCptName circleType) 
     {   super(null, null);    // null for being a main caldron
         this.attnDisp = attnDisp;
-        
-        // The circle specifics: set up the chat media premise.
-        ((PrimusInterPares_prem)get_cpt(DynCptName.chat_media_prem.name())).
-                set_primus(get_cpt(DynCptName.it_is_console_chat_prem.name()));
-        
-        // Prepare the first assessment
-        initialSetup();
-        
-        // Do the first reasoning
-        _reasoning_();
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -128,10 +117,26 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
     @Override
     synchronized protected boolean _defaultProc_(BaseMessage msg) {
+        
+        // May be process the message in the ancesstor
+        if      
+                (super._defaultProc_(msg))
+            return true;
 
         if      // a line from console has come?
                 (msg instanceof Msg_ConsoleToAttnCircle)
         {   // put it to the concept "line_of_chat_string_prem" and invoke the reasoning
+            
+            // Check if the caldron initialized
+            if      // is it the first message?
+                    (_head_ == 0)
+            {   //yes: grow the seed
+                Neuron seed = (Neuron)get_cpt(DynCptName.console_chat_seed_nrn.name());
+                _head_ = seed.get_cid();
+                
+                _reasoning_();
+            }
+            
             String_prem lineOfChat = (String_prem)get_cpt(DynCptName.line_of_chat_string_prem.name());
             lineOfChat.set_text(((Msg_ConsoleToAttnCircle) msg).text);
             lineOfChat.set_activation(1);
@@ -162,19 +167,6 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
     private List<Caldron> caldronList;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
-    
-    /**
-     * Get all the premises and effect ready for the first assessment.
-     */
-    private void initialSetup() {
-
-        // set up premises
-        ((ActivationIface)get_cpt(DynCptName.chat_prem.name())).set_activation(1);
-        ((ActivationIface)get_cpt(DynCptName.line_of_chat_string_prem.name())).set_activation(-1);
-        
-        // set up the caldron head as the next line loader
-        _head_ = get_cpt(DynCptName.wait_for_the_line_from_chatter_nrn.name()).get_cid();
-    }
     
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--
 }

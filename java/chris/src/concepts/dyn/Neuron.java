@@ -185,10 +185,10 @@ public class Neuron extends DynamicConcept implements ActivationIface, ActivRang
         return lotS.get_lot(index);
     }
 
-//    @Override
-//    public Lot[] get_lots() {
-//        return lotS.get_lots();
-//    }
+    @Override
+    public Lot[] get_lots() {
+        return lotS.get_lots();
+    }
 
     @Override
     public Lot add_lot(Lot lot) {

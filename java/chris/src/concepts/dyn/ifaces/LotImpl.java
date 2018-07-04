@@ -3,6 +3,7 @@ package concepts.dyn.ifaces;
 import auxiliary.Lot;
 import chris.Crash;
 import chris.Glob;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -35,25 +36,29 @@ public class LotImpl implements LotIface, Cloneable {
         } catch (CloneNotSupportedException ex) {
             throw new Crash("Cloning a concept failed.");
         }
-        clone.lotS = lotS.clone();
+        if (lotS != null) clone.lotS = lotS.clone();
         
         return clone;
     }
 
     @Override
     public int size() {
-        return lotS.length;
+        if (lotS == null)
+            return 0;
+        else
+            return lotS.length;
     }
     
     @Override
     public Lot get_lot(int index) {
         return lotS[index];
     }
-//
-//    @Override
-//    public Lot[] get_lots() {
-//        return lotS;
-//    }
+
+    @Override
+    public Lot[] get_lots() {
+        if (lotS == null) lotS = new Lot[0];
+        return Arrays.copyOf(lotS, lotS.length);
+    }
 
     @Override
     public Lot add_lot(Lot lot) {

@@ -22,6 +22,11 @@ public class Action extends DynamicConcept {
         this._statActionCid_ = statActionCid;
     }
 
+    /**
+     * Constructor for ActionPacket class.
+     */
+    protected Action(){}
+    
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
     //                                  Public methods
@@ -44,15 +49,6 @@ public class Action extends DynamicConcept {
         return resultCids;
     }
     
-//    
-//    /** 
-//     * Append new cid to paramCids.
-//     * @param cid 
-//     */
-//    public void add_parameter(long cid) {
-//        Glob.append_array(paramCids, cid);
-//    }
-    
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected
@@ -62,7 +58,7 @@ public class Action extends DynamicConcept {
     //---$$$---$$$---$$$---$$$---$$$--- protected data $$$---$$$---$$$---$$$---$$$---$$$--
 
     /** Concept, that provides the processing. */
-    protected final long _statActionCid_;
+    protected long _statActionCid_;
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
 

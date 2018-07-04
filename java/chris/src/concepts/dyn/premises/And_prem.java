@@ -1,10 +1,12 @@
 package concepts.dyn.premises;
 
+import attention.Caldron;
 import attention.ConceptNameSpace;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
 import concepts.dyn.ifaces.ActivationIface;
+import concepts.dyn.ifaces.ActivationImpl;
 import concepts.dyn.ifaces.PropertyIface;
 import concepts.dyn.ifaces.PropertyImpl;
 import concepts.dyn.primitives.Set_prim;
@@ -34,40 +36,67 @@ public class And_prem extends Set_prim implements ActivationIface, PropertyIface
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     @Override
+    public boolean add_member(Concept cpt) {
+        boolean r = super.add_member(cpt);
+        if (r) {
+            if (Thread.currentThread() instanceof Caldron) calculate_activation((Caldron)Thread.currentThread());
+            return true;
+        }
+        else
+            return false;
+    }
+
+    @Override
+    public boolean remove_member(Concept cpt) {
+        
+        boolean r = super.remove_member(cpt);
+        if (r) {
+            if (Thread.currentThread() instanceof Caldron) calculate_activation((Caldron)Thread.currentThread());
+            return true;
+        }
+        else
+            return false;
+    }
+
+    @Override
+    public final void set_members(Concept[] concepts) {
+        super.set_members(concepts);
+    }
+
+    @Override
     public NormalizationType get_normalization_type() {
         return NormalizationType.BIN;
     }
    
     @Override
     public float get_activation() {
-        float activation = 1;
-        ConceptNameSpace caldron = (ConceptNameSpace)Thread.currentThread();
+        return activatioN.get_activation();
+    }
+
+    @Override
+    public void set_activation(float activation) {
+        throw new Crash("Is not supported for this concept, use calculate_activation().");
+    }
+
+    @Override
+    public float calculate_activation(ConceptNameSpace caldron) {
+        activatioN.set_activation(1);
         for (Long cid: get_members()) {
             ActivationIface cpt = (ActivationIface)caldron.get_cpt(cid);
             if      // is it an antiactive concept?
                     (cpt.get_activation() <= 0)
             {   // our activation will be antiactive also
-                activation = -1;
+                activatioN.set_activation(-1);
                 break;
             }
         }
         
-        return activation;
-    }
-
-    @Override
-    public void set_activation(float activation) {
-        throw new Crash("Is not realised for this concept.");
-    }
-
-    @Override
-    public float calculate_activation(ConceptNameSpace caldron) {
-        throw new Crash("Is not realised for this concept.");
+        return activatioN.get_activation();
     }
 
     @Override
     public float normalize_activation() {
-        throw new Crash("Is not realised for this concept.");
+        throw new Crash("Is not released for this concept.");
     }
     
     @Override
@@ -81,8 +110,13 @@ public class And_prem extends Set_prim implements ActivationIface, PropertyIface
     }
 
     @Override
-    public long add_property(Concept cpt) {
+    public boolean add_property(Concept cpt) {
         return propertieS.add_property(cpt);
+    }
+
+    @Override
+    public boolean remove_property(Concept cpt) {
+        return propertieS.remove_property(cpt);
     }
 
     @Override
@@ -112,6 +146,9 @@ public class And_prem extends Set_prim implements ActivationIface, PropertyIface
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
+    
+    /** Activation.  */
+    private ActivationImpl activatioN = new ActivationImpl(this, ActivationType.SET, NormalizationType.BIN);
     
     /** Set of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
     private PropertyImpl propertieS = new PropertyImpl();

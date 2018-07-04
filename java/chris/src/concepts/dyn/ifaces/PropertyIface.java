@@ -30,9 +30,16 @@ public interface PropertyIface {
     /**
      * Add a concept to the property array.
      * @param cpt
-     * @return 
+     * @return true/false
      */
-    public long add_property(Concept cpt);
+    public boolean add_property(Concept cpt);
+
+    /**
+     * Remove a concept from the property array.
+     * @param cpt
+     * @return true/false
+     */
+    public boolean remove_property(Concept cpt);
 
     /**
      * Setter.

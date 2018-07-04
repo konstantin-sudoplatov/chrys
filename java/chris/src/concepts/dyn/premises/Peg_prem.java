@@ -66,8 +66,13 @@ public class Peg_prem extends Primitive implements ActivationIface, PropertyIfac
     }
 
     @Override
-    public long add_property(Concept cpt) {
+    public boolean add_property(Concept cpt) {
         return propertieS.add_property(cpt);
+    }
+
+    @Override
+    public boolean remove_property(Concept cpt) {
+        return propertieS.remove_property(cpt);
     }
 
     @Override

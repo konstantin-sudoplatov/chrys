@@ -49,10 +49,17 @@ public class PropertyImpl implements PropertyIface {
     }
 
     @Override
-    public long add_property(Concept cpt) {
+    public boolean add_property(Concept cpt) {
         if(propertieS == null) propertieS = new HashSet();
-        propertieS.add(cpt.get_cid());
-        return cpt.get_cid();
+        
+        return propertieS.add(cpt.get_cid());
+    }
+    
+    @Override
+    public boolean remove_property(Concept cpt) {
+        if (propertieS == null) return false;
+        
+        return propertieS.remove(cpt.get_cid());
     }
 
     @Override

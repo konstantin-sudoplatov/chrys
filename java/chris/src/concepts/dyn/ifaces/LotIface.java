@@ -8,7 +8,10 @@ import auxiliary.Lot;
  */
 public interface LotIface {
 
-    /** Size of the lot list */
+    /** 
+     * Size of the lot list
+     * @return  
+     */
     public int size();
     
     /**
@@ -17,12 +20,12 @@ public interface LotIface {
      * @return the lot structure with given index.
      */
     public Lot get_lot(int index);
-//
-//    /**
-//     * Getter.
-//     * @return array of lots
-//     */
-//    public Lot[] get_lots();
+
+    /**
+     * Getter.
+     * @return array of lots
+     */
+    public Lot[] get_lots();
 
     /**
      * Add new member to the array of lots.

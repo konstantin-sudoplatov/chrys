@@ -100,8 +100,13 @@ public final class PrimusInterPares_prem extends Set_prim implements ActivationI
     }
 
     @Override
-    public long add_property(Concept cpt) {
+    public boolean add_property(Concept cpt) {
         return propertieS.add_property(cpt);
+    }
+
+    @Override
+    public boolean remove_property(Concept cpt) {
+        return propertieS.remove_property(cpt);
     }
 
     @Override

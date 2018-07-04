@@ -57,6 +57,7 @@ final public class Glob {
     public static void initialize_application() {
         console_loop.start();
         attn_disp_loop.start();
+        Starter.common_concepts();
         Starter.read_write_console();
         Starter.symbols();
     }
@@ -65,8 +66,8 @@ final public class Glob {
      * Release resources and stop all threads.
      */
     public static void terminate_application() {
-        terminateMessageLoopThread(console_loop, console_loop);
-        terminateMessageLoopThread(attn_disp_loop, attn_disp_loop);   // attention dispatcher stops the attention bubbles loops.
+        terminateMessageLoopThread(console_loop);
+        terminateMessageLoopThread(attn_disp_loop);   // attention dispatcher stops the attention bubbles loops.
         app_loop.request_termination();
     }
         
@@ -74,15 +75,14 @@ final public class Glob {
      * Release resources and stop a message loop thread. All except master thread, because it is run by the application itself
      * (see the main() program).
      * @param thread a thread to be stopped
-     * @param loop the message loop of the thread
      */
-    private static void terminateMessageLoopThread(Thread thread, BaseMessageLoop loop) {
+    private static void terminateMessageLoopThread(Thread thread) {
 
         if 
                 (thread.isAlive())
         {
             try {
-                loop.request_termination();
+                ((BaseMessageLoop)thread).request_termination();
                 thread.join();
             } catch (InterruptedException ex) {}
         }

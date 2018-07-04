@@ -25,7 +25,7 @@ import java.util.logging.Logger;
  *
  * @author su
  */
-public class AttnDispatcherLoop extends BaseMessageLoop {
+public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSpace {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
     
@@ -86,6 +86,11 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
         if      // is it a named concept?
                 (cptName != null) 
         {   //yes: put the cid into the front and reverse directories
+            if      // does this name already exist?
+                    (Glob.named.name_cid.containsKey(cptName))
+                //yes: that is a crime, crash
+                throw new Crash("Concept " + cptName + " already exists. Attempt to create the same concept.");
+            
             Glob.named.name_cid.put(cptName, cid);
             Glob.named.cid_name.put(cid, cptName);
         }
@@ -200,6 +205,11 @@ public class AttnDispatcherLoop extends BaseMessageLoop {
         
         // terminate yourself
         super.request_termination();
+    }
+
+    @Override
+    public AttnCircle get_attn_circle() {
+        throw new Crash("Not supported for AttnDispLoop.");
     }
     
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$

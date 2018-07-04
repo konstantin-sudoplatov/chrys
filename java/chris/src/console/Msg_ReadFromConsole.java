@@ -1,7 +1,5 @@
 package console;
 
-import chris.BaseMessageLoop;
-
 /**
  *  Sent to ConsoleThread to read a line of text.
  * @author su

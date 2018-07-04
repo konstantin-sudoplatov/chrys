@@ -52,22 +52,37 @@ public class Set_prim extends Primitive {
      * Add new cid to the group. Initialize the group if necessary.
      * @param cpt Added concept. If the concept support the PropertyIface, backward links from the concept to the group 
      * (via property list) will be organized.
+     * @return true/false
      */
-    public void add_member(Concept cpt) {
+    public boolean add_member(Concept cpt) {
         if (memberS == null) memberS = new HashSet();
         memberS.add(cpt.get_cid());
 
         if      // concept implements property interface?
                 (cpt instanceof PropertyIface)
-        //yes: set up the backward link
-        ((PropertyIface)cpt).add_property(this);
+            //yes: set up the backward link
+            ((PropertyIface)cpt).add_property(this);
+        
+        return true;
+    }
+    
+    public boolean remove_member(Concept cpt) {
+        if (memberS == null)
+            return false;
+        
+        if      // concept implements property interface?
+                (cpt instanceof PropertyIface)
+            //yes: set up the backward link
+            ((PropertyIface)cpt).remove_property(this);
+                
+        return memberS.remove(cpt.get_cid());
     }
     
     /**
      * Setter.
      * @param concepts array of cids.
      */
-    public final void set_members(Concept[] concepts) {
+    public void set_members(Concept[] concepts) {
         memberS = new HashSet<>();
         for(Concept cpt: concepts) {
             memberS.add(cpt.get_cid());
@@ -82,7 +97,7 @@ public class Set_prim extends Primitive {
      * Get set as an array.
      * @return array of cids.
      */
-    public final Long[] get_members() {
+    public Long[] get_members() {
         return (Long[])memberS.toArray();
     }
 

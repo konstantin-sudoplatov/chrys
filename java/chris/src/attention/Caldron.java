@@ -1,9 +1,11 @@
 package attention;
 
+import chris.BaseMessage;
 import chris.BaseMessageLoop;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
+import concepts.DynCptName;
 import concepts.dyn.Neuron;
 import java.util.HashMap;
 import java.util.Map;
@@ -82,6 +84,13 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
             return attnCircle;
     }
     
+    /**
+     * Raise flag requestStopReasoning.
+     */
+    public void request_stop_reasoning() {
+        requestStopReasoning = true;
+    }
+    
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected
@@ -105,14 +114,16 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
      */
     protected void _reasoning_() {
         while(true) {
-            
+//Glob.print(get_cpt(_head_), "head");
+//Glob.print(get_cpt(DynCptName.line_of_chat_string_prem.name()), "line before actions");
             // Do the assessment
             long[] heads = ((Neuron)get_cpt(_head_)).calculate_activation_and_do_actions(this);
-            
+//Glob.print(get_cpt(DynCptName.line_of_chat_string_prem.name()), "line after actions");
             // May be we have to wait
             if      //no new head?
-                    (heads == null || heads.length == 0)
+                    (requestStopReasoning || heads == null || heads.length == 0)
             {   // finish the reasoning
+                requestStopReasoning = false;
                 break;
             }
             
@@ -126,6 +137,25 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
                 thread.start();
             }
         }
+    }
+
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+    //
+    //      Protected    Protected    Protected    Protected    Protected    Protected
+    //
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+    //---$$$---$$$---$$$---$$$---$$$--- protected data $$$---$$$---$$$---$$$---$$$---$$$--
+    //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
+    @Override
+    synchronized protected boolean _defaultProc_(BaseMessage msg) {
+        if
+                (msg instanceof Msg_DoReasoningOnCaldron)
+        {
+            _reasoning_();
+            return true;
+        }
+        else 
+            return false;
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -144,6 +174,9 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
     
     /** Children caldrons. */
     private Caldron[] childreN;
+    
+    /** If this flag raised, reasoning will stop and caldron will wait on the neuron. */
+    private boolean requestStopReasoning;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--

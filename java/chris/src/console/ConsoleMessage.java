@@ -1,7 +1,6 @@
 package console;
 
 import chris.BaseMessage;
-import chris.BaseMessageLoop;
 
 /**
  *  Ancestor for messages that are going to console loop. Messages are routed to the destination by their class.

@@ -1,6 +1,7 @@
 package concepts.dyn.actions;
 
 import attention.ConceptNameSpace;
+import chris.Glob;
 import concepts.StaticAction;
 import concepts.dyn.Action;
 import java.util.ArrayList;
@@ -10,7 +11,7 @@ import java.util.List;
  * Call static actions few at once and without preparing their parameters as concepts.
  * @author su
  */
-public class ActionPacket extends Action {
+public class ActionPack extends Action {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -56,7 +57,7 @@ public class ActionPacket extends Action {
     /** 
      * Constructor.
      */ 
-    public ActionPacket() { 
+    public ActionPack() { 
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -84,6 +85,21 @@ public class ActionPacket extends Action {
     public boolean add_act(Act act) {
         return actS.add(act);
     }
+
+    /**
+     * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
+     * @param note printed in the first line just after the object type.
+     * @param debugLevel 0 - the shortest, 2 - the fullest
+     * @return list of lines, describing this object.
+     */
+    @Override
+    public List<String> to_list_of_lines(String note, Integer debugLevel) {
+        List<String> lst = super.to_list_of_lines(note, debugLevel);
+        Glob.add_list_of_lines(lst, note, actS.toArray(), debugLevel);
+        
+        return lst;
+    }
+
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected

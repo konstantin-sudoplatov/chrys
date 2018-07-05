@@ -1,7 +1,9 @@
 package auxiliary;
 
+import attention.ConceptNameSpace;
 import chris.Crash;
 import chris.Glob;
+import concepts.Concept;
 import java.util.List;
 
 /**
@@ -44,17 +46,9 @@ public class Effects implements Cloneable {
      * @return list of lines, describing this object.
      */
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
-        List<String> lst = Glob.create_list_of_lines(this, note);
-        if (actions == null)
-            Glob.add_line(lst, String.format("actions = null"));
-        else
-            for(int i = 0; i < actions.length; i++) 
-                Glob.add_line(lst, String.format("action[%s] = %s", i, actions[i]));
-        if (ways == null)
-            Glob.add_line(lst, String.format("ways = null"));
-        else
-            for(int i = 0; i < ways.length; i++) 
-                Glob.add_line(lst, String.format("effect[%s] = %s", i, ways[i]));
+        List<String> lst = Glob.create_list_of_lines(this, note, debugLevel);
+        Glob.add_list_of_lines(lst, "actions", actions, debugLevel-1);
+        Glob.add_list_of_lines(lst, "ways", ways, debugLevel-1);
 
         return lst;
     }

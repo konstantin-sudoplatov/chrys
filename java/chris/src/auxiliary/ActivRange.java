@@ -47,9 +47,9 @@ public class ActivRange implements Cloneable {
      * @return list of lines, describing this object.
      */
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
-        List<String> lst = Glob.create_list_of_lines(this, note);
+        List<String> lst = Glob.create_list_of_lines(this, note, debugLevel);
         Glob.add_line(lst, String.format("range = %s", range));
-        Glob.add_list_of_lines(lst, effects.to_list_of_lines("effects", debugLevel));
+        Glob.add_list_of_lines(lst, effects.to_list_of_lines("effects", debugLevel-1));
 
         return lst;
     }

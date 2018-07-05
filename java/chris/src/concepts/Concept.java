@@ -31,7 +31,7 @@ abstract public class Concept implements Cloneable {
      * @return list of lines, describing this object.
      */
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
-        List<String> lst = Glob.create_list_of_lines(this, note);
+        List<String> lst = Glob.create_list_of_lines(this, note, debugLevel);
         Glob.append_last_line(lst, String.format("get_cid() = %d", get_cid()));
         String cptName = Glob.named.cid_name.get(get_cid());
         if (cptName != null)

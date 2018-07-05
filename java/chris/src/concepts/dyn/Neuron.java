@@ -209,7 +209,7 @@ public class Neuron extends DynamicConcept implements ActivationIface, ActivRang
     public void set_bias(float bias) {
         lotS.set_bias(bias);
     }
-
+        
     /**
      * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
      * @param note printed in the first line just after the object type.
@@ -219,9 +219,11 @@ public class Neuron extends DynamicConcept implements ActivationIface, ActivRang
     @Override
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
-        Glob.add_list_of_lines(lst, activatioN.to_list_of_lines("activatioN", debugLevel));
-        Glob.add_list_of_lines(lst, rangeS.to_list_of_lines("rangeS", debugLevel));
-        Glob.add_list_of_lines(lst, lotS.to_list_of_lines("lotS", debugLevel));
+        if(debugLevel > 0) {
+            Glob.add_list_of_lines(lst, activatioN.to_list_of_lines("activatioN", debugLevel-1));
+            Glob.add_list_of_lines(lst, rangeS.to_list_of_lines("rangeS", debugLevel-1));
+            Glob.add_list_of_lines(lst, lotS.to_list_of_lines("lotS", debugLevel-1));
+        }
 
         return lst;
     }

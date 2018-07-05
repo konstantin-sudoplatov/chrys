@@ -7,8 +7,8 @@ import concepts.DynCptName;
 import concepts.StatCptName;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
-import concepts.dyn.actions.ActionPacket;
-import concepts.dyn.actions.ActionPacket.Act;
+import concepts.dyn.actions.ActionPack;
+import concepts.dyn.actions.ActionPack.Act;
 import concepts.dyn.actions.BinaryOperation_act;
 import concepts.dyn.ifaces.ActivationIface;
 import concepts.dyn.premises.And_prem;
@@ -40,11 +40,11 @@ final public class Starter {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     public static void common_concepts() {
-        // That action we execute from effects of a neuron if we want the caldron to wait on that neuron.
+        // We execute this action from effects of a neuron if we want the caldron to wait on that neuron.
         Glob.attn_disp_loop.add_cpt(new Action(StatCptName.CaldronStopAndWait_stat.ordinal()), DynCptName.caldron_stop_and_wait_actn.name());
     }
     
-    public static void read_write_console() {
+    public static void chat_rootway() {
 
         // Primus inter pares premises "chat_media_prem" contains "it_is_console_chat_prem", "it_is_http_chat_prem" premises
         Peg_prem itIsConsoleChat = new Peg_prem();
@@ -96,24 +96,24 @@ final public class Starter {
         
         // Seeds.
             // Console chat seeds.
-        ActionPacket consoleChatSeedPack = new ActionPacket();
+        ActionPack consoleChatSeedPack = new ActionPack();
         consoleChatSeedPack.add_act(new Act(StatCptName.Antiactivate_stat.ordinal(), lineOfChatCid));
         consoleChatSeedPack.add_act(new Act(StatCptName.SetPrimusInterPares_stat.ordinal(), chatMediaCid, itIsConsoleChatCid));
-        long consoleChatSeedPackCid = Glob.attn_disp_loop.add_cpt(consoleChatSeedPack, DynCptName.console_chat_seed_action_packet.name());
+        long consoleChatSeedPackCid = Glob.attn_disp_loop.add_cpt(consoleChatSeedPack, DynCptName.chat_console_rootway_seed_apk.name());
         Neuron consoleChatSeedNrn = new Neuron(ActivationIface.ActivationType.WEIGHED_SUM, ActivationIface.NormalizationType.BIN);
         consoleChatSeedNrn.add_effects(Float.NEGATIVE_INFINITY, consoleChatSeedPackCid, waitLineNrnCid);
-        Glob.attn_disp_loop.add_cpt(consoleChatSeedNrn, DynCptName.console_chat_seed_nrn.name());
+        Glob.attn_disp_loop.add_cpt(consoleChatSeedNrn, DynCptName.chat_console_rootway_seed_nrn.name());
             // Http chat seeds.
-        ActionPacket httpChatSeedPack = new ActionPacket();
+        ActionPack httpChatSeedPack = new ActionPack();
         httpChatSeedPack.add_act(new Act(StatCptName.Antiactivate_stat.ordinal(), lineOfChatCid));
         httpChatSeedPack.add_act(new Act(StatCptName.SetPrimusInterPares_stat.ordinal(), chatMediaCid, itIsHttpChatCid));
-        long httpChatSeedPackCid = Glob.attn_disp_loop.add_cpt(httpChatSeedPack, DynCptName.http_chat_seed_action_packet.name());
+        long httpChatSeedPackCid = Glob.attn_disp_loop.add_cpt(httpChatSeedPack, DynCptName.chat_http_rootway_seed_apk.name());
         Neuron httpChatSeedNrn = new Neuron(ActivationIface.ActivationType.WEIGHED_SUM, ActivationIface.NormalizationType.BIN);
         httpChatSeedNrn.add_effects(Float.NEGATIVE_INFINITY, httpChatSeedPackCid, waitLineNrnCid);
-        Glob.attn_disp_loop.add_cpt(httpChatSeedNrn, DynCptName.http_chat_seed_nrn.name());
+        Glob.attn_disp_loop.add_cpt(httpChatSeedNrn, DynCptName.chat_http_rootway_seed_nrn.name());
     }
     
-    public static void chat_log() {
+    public static void chat_log_way() {
 
         // Chat log list and operation of adding the line of chat to the list
         ListStock chatLogList = new ListStock();
@@ -124,6 +124,30 @@ final public class Starter {
         long loggingChatLineActCid = Glob.attn_disp_loop.add_cpt(loggingChatLineAct);
 //        Group symbolsGroup = new Group();
 //        long symbolsGroupCid = Glob.attn_disp_loop.add_cpt(symbolsGroup, DynCptName.word_separators_group.name());
+    }
+    
+    public static void chat_seeds() {
+        
+        // Seeds for root way and branch ways of the chat attention circle, console variant
+        ActionPack chatConsoleMainSeedApk = new ActionPack();
+        long chatConsoleMainSeedApkCid = Glob.attn_disp_loop.add_cpt(chatConsoleMainSeedApk, DynCptName.chat_console_main_seed_apk.name());
+        long chatConsoleRootwayNrnCid = Glob.named.name_cid.get(DynCptName.chat_console_rootway_seed_nrn.name());
+        Neuron chatConsoleMainSeedNrn = new Neuron(ActivationIface.ActivationType.WEIGHED_SUM, ActivationIface.NormalizationType.BIN);
+        Glob.attn_disp_loop.add_cpt(chatConsoleMainSeedNrn, DynCptName.chat_console_main_seed_nrn.name());
+        chatConsoleMainSeedNrn.add_effects(Float.NEGATIVE_INFINITY, chatConsoleMainSeedApkCid, new long[] {
+                chatConsoleRootwayNrnCid,
+        });
+        
+        // Seeds for root way and branch ways of the chat attention circle, http variant
+        ActionPack chatHttpMainSeedApk = new ActionPack();
+        long chatHttpMainSeedApkCid = Glob.attn_disp_loop.add_cpt(chatHttpMainSeedApk, DynCptName.chat_http_main_seed_apk.name());
+        long chatHttpRootwayNrnCid = Glob.named.name_cid.get(DynCptName.chat_http_rootway_seed_nrn.name());
+        Neuron chatHttpMainSeedNrn = new Neuron(ActivationIface.ActivationType.WEIGHED_SUM, ActivationIface.NormalizationType.BIN);
+        Glob.attn_disp_loop.add_cpt(chatHttpMainSeedNrn, DynCptName.chat_http_main_seed_nrn.name());
+        chatHttpMainSeedNrn.add_effects(Float.NEGATIVE_INFINITY, chatHttpMainSeedApkCid, new long[] {
+                chatHttpRootwayNrnCid,
+        });
+        
     }
     
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$

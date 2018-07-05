@@ -91,9 +91,11 @@ abstract public class DynamicConcept extends Concept {
     @Override
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
-        Glob.add_line(lst, String.format("creationTime = %s,(%d)", Glob.date_time_to_string(1000*(long)creationTime), creationTime));
-        Glob.append_last_line(lst, String.format("; lastAccessTime = %s,(%d)", Glob.date_time_to_string(1000*(long)lastAccessTime), lastAccessTime));
-        Glob.append_last_line(lst, String.format("; usageCount = %s", usageCount));
+        if (debugLevel > 0 ) {
+            Glob.add_line(lst, String.format("creationTime = %s,(%d)", Glob.date_time_to_string(1000*(long)creationTime), creationTime));
+            Glob.append_last_line(lst, String.format("; lastAccessTime = %s,(%d)", Glob.date_time_to_string(1000*(long)lastAccessTime), lastAccessTime));
+            Glob.append_last_line(lst, String.format("; usageCount = %s", usageCount));
+        }
 
         return lst;
     }

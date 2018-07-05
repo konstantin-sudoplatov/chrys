@@ -28,6 +28,23 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
     public AttnCircle(AttnDispatcherLoop attnDisp, DynCptName circleType) 
     {   super(null, null);    // null for being a main caldron
         this.attnDisp = attnDisp;
+        
+        // Seed
+        Neuron seed;
+        switch(circleType) {
+            case it_is_console_chat_prem:
+                seed = (Neuron)get_cpt(DynCptName.chat_console_main_seed_nrn.name());
+                break;
+                
+            case it_is_http_chat_prem:
+                seed = (Neuron)get_cpt(DynCptName.chat_http_main_seed_nrn.name());
+                break;
+                
+            default:
+                throw new Crash("Unexpected circle type: " + circleType);
+        }
+        _head_ = seed.get_cid();
+        this.put_in_queue_with_priority(new Msg_DoReasoningOnCaldron());    // put ahead of the possible console lines
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -126,16 +143,6 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
         if      // a line from console has come?
                 (msg instanceof Msg_ConsoleToAttnCircle)
         {   // put it to the concept "line_from_chatter_strprem" and invoke the reasoning
-            
-            // Check if the caldron initialized
-            if      // is it the first message?
-                    (_head_ == 0)
-            {   //yes: grow the seed
-                Neuron seed = (Neuron)get_cpt(DynCptName.console_chat_seed_nrn.name());
-                _head_ = seed.get_cid();
-                
-                _reasoning_();
-            }
             
             String_prem lineOfChat = (String_prem)get_cpt(DynCptName.line_from_chatter_strprem.name());
             lineOfChat.set_text(((Msg_ConsoleToAttnCircle) msg).text);

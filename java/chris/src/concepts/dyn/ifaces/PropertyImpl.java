@@ -76,7 +76,7 @@ public class PropertyImpl implements PropertyIface {
      * @return list of lines, describing this object.
      */
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
-        List<String> lst = Glob.create_list_of_lines(this, note);
+        List<String> lst = Glob.create_list_of_lines(this, note, debugLevel);
         if (propertieS == null)
             Glob.add_line(lst, String.format("propertieS = null"));
         else {

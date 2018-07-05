@@ -93,7 +93,7 @@ abstract public class BaseMessageLoop extends Thread {
      * Поместить сообщение в начало очереди. Для приоритетных сообщений.
      * @param сообщениеХризолита помещаемое в очередь сообщение.
      */
-    public synchronized void put_in_the_head_of_queue(BaseMessage сообщениеХризолита) {
+    public synchronized void put_in_queue_with_priority(BaseMessage сообщениеХризолита) {
         msgQueue.addFirst(сообщениеХризолита);
         notifyAll();
     }

@@ -35,7 +35,7 @@ public class Lot implements Cloneable {
      * @return list of lines, describing this object.
      */
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
-        List<String> lst = Glob.create_list_of_lines(this, note);
+        List<String> lst = Glob.create_list_of_lines(this, note, debugLevel);
         Glob.append_last_line(lst, String.format("weight = %s, cid = %s", weight, cid));
 
         return lst;

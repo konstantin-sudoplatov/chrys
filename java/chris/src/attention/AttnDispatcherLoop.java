@@ -78,6 +78,8 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
                 }
                 break;
             }   // while
+            if(((DynamicConcept)cpt).get_cid() != 0)
+                throw new Crash("Concept already has a cid:\n" + cpt.to_list_of_lines() + "\nConcept cannot be assigned with a cid twice.");
             ((DynamicConcept)cpt).set_cid(cid);
             ((DynamicConcept)cpt).set_creation_time((int)(new Date().getTime()/1000));
         }
@@ -91,8 +93,10 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
                 //yes: that is a crime, crash
                 throw new Crash("Concept " + cptName + " already exists. Attempt to create the same concept.");
             
-            Glob.named.name_cid.put(cptName, cid);
-            Glob.named.cid_name.put(cid, cptName);
+            if (Glob.named.name_cid.put(cptName, cid) != null)
+                throw new Crash(cptName + " is already present in the Glob.named.name_cid");
+            if (Glob.named.cid_name.put(cid, cptName) != null)
+                throw new Crash("cid " + cid + " is already present in the Glob.named.cid_name" );
         }
         if      // the concept addressed to attention dispatcher?
                 (circle == null)

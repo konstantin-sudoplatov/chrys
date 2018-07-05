@@ -96,9 +96,10 @@ public class ActivRangeImpl implements ActivRangeIface, Cloneable {
      * @return list of lines, describing this object.
      */
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
-        List<String> lst = Glob.create_list_of_lines(this, note);
-        for(ActivRange rng: rangeS)
-            Glob.add_list_of_lines(lst, rng.to_list_of_lines("rangeS", debugLevel));
+        List<String> lst = Glob.create_list_of_lines(this, note, debugLevel);
+        Glob.add_list_of_lines(lst, "rangeS", rangeS, debugLevel-1);
+//        for(ActivRange rng: rangeS)
+//            Glob.add_list_of_lines(lst, rng.to_list_of_lines("rangeS", debugLevel-1));
 
         return lst;
     }

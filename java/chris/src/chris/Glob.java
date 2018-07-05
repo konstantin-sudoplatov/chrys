@@ -1,7 +1,9 @@
 package chris;
 
 import attention.AttnDispatcherLoop;
+import attention.ConceptNameSpace;
 import auxiliary.NamedConcept;
+import concepts.Concept;
 import console.ConsoleLoop;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
@@ -58,8 +60,9 @@ final public class Glob {
         console_loop.start();
         attn_disp_loop.start();
         Starter.common_concepts();
-        Starter.read_write_console();
-        Starter.chat_log();
+        Starter.chat_rootway();
+        Starter.chat_log_way();
+        Starter.chat_seeds();
     }
         
     /**
@@ -448,6 +451,52 @@ final public class Glob {
         for(String s: списокСтрок)
             System.out.println(s);
     }
+    
+    /**
+     * Convert array of cids to list and print it.
+     * @param note
+     * @param arrayOfCids
+     * @param debugLevel 
+     */
+    public static void print(String note, long[] arrayOfCids, int debugLevel) {
+        List<String> l = to_list_of_lines(note, arrayOfCids, debugLevel);
+        for(String s: l)
+            System.out.println(s);
+    }
+    
+    /**
+     * Ditto.
+     * @param note
+     * @param arrayOfCids
+     * @param debugLevel 
+     */
+    public static void println(String note, long[] arrayOfCids, int debugLevel) {
+        print(note, arrayOfCids, debugLevel);
+        System.out.println();
+    }
+    
+    /**
+     * Convert array of objects (they must implement the to_list_of_lines() method) to list and print it.
+     * @param note
+     * @param arrayOfObjects
+     * @param debugLevel 
+     */
+    public static void print(String note, Object[] arrayOfObjects, int debugLevel) {
+        List<String> l = to_list_of_lines(note, arrayOfObjects, debugLevel);
+        for(String s: l)
+            System.out.println(s);
+    }
+    
+    /**
+     * Ditto.
+     * @param note
+     * @param arrayOfObjects
+     * @param debugLevel 
+     */
+    public static void println(String note, Object[] arrayOfObjects, int debugLevel) {
+        print(note, arrayOfObjects, debugLevel);
+        System.out.println();
+    }
 
     /**
      * Если в печатаемом объекте не определен метод в_список_строк(), подставляется
@@ -458,7 +507,7 @@ final public class Glob {
      */
     public static List<String> to_default_list_of_lines(String уточнение, Integer детальность)
     {
-        List<String> список = create_list_of_lines(вызывающийОбъектПоУмолчанию, уточнение);
+        List<String> список = create_list_of_lines(вызывающийОбъектПоУмолчанию, уточнение, 0);
         append_last_line(список, "toString() = " + вызывающийОбъектПоУмолчанию.toString());
         if
                 (вызывающийОбъектПоУмолчанию instanceof Long)
@@ -480,11 +529,12 @@ final public class Glob {
      * Вызывается из метода "в_список_строк(String уточНение)" вершины иерархии конкретного класса.
      * @param вызывающийОбъект тип этого объекта выдается в первой строке перед уточнением.
      * @param уточНение выводится в первой строке списка вслед за типом объекта.
+     * @param debugLevel
      * @return список строк выдачи.
      */
-    public static List<String> create_list_of_lines(Object вызывающийОбъект, String уточНение) {
+    public static List<String> create_list_of_lines(Object вызывающийОбъект, String уточНение, Integer debugLevel) {
         List<String> список = new ArrayList();
-        список.add(вызывающийОбъект.getClass().getSimpleName() +
+        список.add(вызывающийОбъект.getClass().getSimpleName() + "(dl=" + debugLevel + ")" +
                 ((уточНение==null || уточНение.equals(""))? "": ", " + уточНение) + ": ");
         return список;
     }
@@ -499,8 +549,15 @@ final public class Glob {
 //     * @return list of lines, describing this object.
 //     */
 //    public List<String> to_list_of_lines(String note, Integer debugLevel) {
-//        List<String> lst = Glob.create_list_of_lines(this, note);
-//        Glob.append_last_line(lst, String.format(""));
+//        List<String> lst = Glob.create_list_of_lines(this, note, debugLevel);
+//        if (debugLevel < 0)
+//            return lst;
+//        else if (debugLevel == 0 ) {
+//            Glob.append_last_line(lst, String.format(""));
+//        }
+//        else {
+//            Glob.add_line(lst, String.format(""));
+//        }
 //
 //        return lst;
 //    }
@@ -518,7 +575,14 @@ final public class Glob {
 //    @Override
 //    public List<String> to_list_of_lines(String note, Integer debugLevel) {
 //        List<String> lst = super.to_list_of_lines(note, debugLevel);
-//        Glob.add_line(lst, String.format(""));
+//        if (debugLevel < 0)
+//            return lst;
+//        else if (debugLevel == 0 ) {
+//            Glob.append_last_line(lst, String.format(""));
+//        }
+//        else {
+//            Glob.add_line(lst, String.format(""));
+//        }
 //
 //        return lst;
 //    }
@@ -572,6 +636,116 @@ final public class Glob {
         for(String s: addedLst)
             lst.add("    " + s);
         return lst;
+    }
+
+    /**
+     * Add to a list lines of a given array of cids. The lines are detailed according to the debugLevel parameter.
+     * @param lst
+     * @param note
+     * @param arrayOfCids
+     * @param debugLevel
+     * @return transformed list
+     */
+    public static List<String> add_list_of_lines(List<String> lst, String note, long[] arrayOfCids, int debugLevel)
+    {
+        add_list_of_lines(lst, to_list_of_lines(note, arrayOfCids, debugLevel));
+        return lst;
+    }
+
+    /**
+     * Show array as a list of lines.
+     * @param note
+     * @param arrayOfCids
+     * @param debugLevel
+     * @return 
+     */
+    public static List<String> to_list_of_lines(String note, long[] arrayOfCids, int debugLevel) {
+        List<String> l = new ArrayList();
+        l.add(((arrayOfCids!=null)? arrayOfCids.getClass().getSimpleName(): "") + "(dl=" + debugLevel + ")" +
+                ((note==null || note.equals(""))? "": ", " + note) + ": ");
+        if (arrayOfCids == null) 
+            append_last_line(l, "null");
+        else
+            append_last_line(l, "size = " + arrayOfCids.length);
+        
+        if (arrayOfCids ==  null) {
+        }
+        else if (debugLevel == 0) {
+            for(long cid: arrayOfCids) 
+                Glob.append_last_line(l, String.format("%s; ",cid));
+        }
+        else if (debugLevel > 0) {
+            ConceptNameSpace caldron = (ConceptNameSpace)Thread.currentThread();
+            for(int i=0; i < arrayOfCids.length; i++) {
+                Concept cpt = caldron.get_cpt(arrayOfCids[i]);
+                Glob.add_list_of_lines(l, cpt.to_list_of_lines("", debugLevel-1));
+            }
+        }
+        
+        return l;
+    }
+
+    /**
+     * Add to a list lines of a given array of objects. The lines are detailed according to the debugLevel parameter.
+     * @param lst
+     * @param note
+     * @param arrayOfObjects
+     * @param debugLevel
+     * @return transformed list
+     */
+    public static List<String> add_list_of_lines(List<String> lst, String note, Object[] arrayOfObjects, int debugLevel)
+    {
+        add_list_of_lines(lst, to_list_of_lines(note, arrayOfObjects, debugLevel));
+        return lst;
+    }
+
+    /**
+     * Show array of objects (that have the to_list_of_lines() method) as a list of lines.
+     * @param note
+     * @param arrayOfObjects
+     * @param debugLevel
+     * @return 
+     */
+    public static List<String> to_list_of_lines(String note, Object[] arrayOfObjects, int debugLevel) {
+        List<String> l = new ArrayList();
+        l.add(((arrayOfObjects!=null)? arrayOfObjects.getClass().getSimpleName(): "") + "(dl=" + debugLevel + ")" +
+                ((note==null || note.equals(""))? "": ", " + note) + ": ");
+        if (arrayOfObjects == null) 
+            append_last_line(l, "null");
+        else
+            append_last_line(l, "size = " + arrayOfObjects.length);
+        
+        if (arrayOfObjects ==  null) {
+        }
+        else if (debugLevel == 0) {
+            for(Object obj: arrayOfObjects) 
+                Glob.add_line(l, String.format("    %s; ",obj));
+        }
+        else if (debugLevel > 0)
+            for(Object obj: arrayOfObjects) {
+                // Find method to_list_of_lines()
+                Method methodToListOfLines = null;
+                try {
+                    methodToListOfLines = obj.getClass().getMethod(
+                            "to_list_of_lines",
+                            new Class[] {String.class, Integer.class}
+                    );
+                } catch (NoSuchMethodException | SecurityException ex) {
+                    Glob.add_line(l, String.format("    %s; ",obj));
+                }
+
+                // Get the list
+                List<String> listOfLines = null;
+                try {
+                    listOfLines = (List<String>) methodToListOfLines.invoke(obj, note, debugLevel);
+                } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
+                    Logger.getLogger(Glob.class.getName()).log(Level.SEVERE, null, ex);
+                }
+                
+                add_list_of_lines(l, listOfLines);
+            }
+        
+        return l;
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%

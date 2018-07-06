@@ -50,6 +50,32 @@ public class ActionPack_actn extends Action {
             parm_cids = parameters;
             this.extra = extra;
         }
+
+        /**
+         * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
+         * @param note printed in the first line just after the object type.
+         * @param debugLevel 0 - the shortest, 2 - the fullest
+         * @return list of lines, describing this object.
+         */
+        public List<String> to_list_of_lines(String note, Integer debugLevel) {
+            List<String> lst = Glob.create_list_of_lines(this, note, debugLevel);
+            if (debugLevel < 0)
+                return lst;
+            else if (debugLevel == 0 ) {
+                Glob.add_line(lst, String.format("stat_action_cid = %s, parm_sid.size() = %s, extra = %s",
+                        stat_action_cid, parm_cids.length, extra));
+            }
+            else if (debugLevel > 0 ) {
+                Glob.add_line(lst, String.format("stat_action_cid = %s", stat_action_cid));
+                Glob.add_list_of_lines(lst, "parm_sids[]", parm_cids, debugLevel-1);
+                Glob.add_line(lst, String.format("extra = %s", extra));
+            }
+
+            return lst;
+        }
+        public List<String> to_list_of_lines() {
+            return to_list_of_lines("", 20);
+        }
     }
     
     //---***---***---***---***---***--- public data ---***---***---***---***---***--

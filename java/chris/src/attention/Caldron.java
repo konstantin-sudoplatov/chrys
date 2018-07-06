@@ -5,6 +5,7 @@ import chris.BaseMessageLoop;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
+import concepts.DynCptName;
 import concepts.dyn.Neuron;
 import java.util.HashMap;
 import java.util.Map;
@@ -116,8 +117,8 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
      */
     protected void _reasoning_() {
         while(true) {
-//Glob.print(get_cpt(_head_), "head before actions", 0);
-
+Glob.print(get_cpt(_head_), "head before actions", 0);
+Glob.println(get_cpt(DynCptName.chat_media_prem.name()), "chat media", 8);
             // Do the assessment
             long[] heads = ((Neuron)get_cpt(_head_)).calculate_activation_and_do_actions(this);
 

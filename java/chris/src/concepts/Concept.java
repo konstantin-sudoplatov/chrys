@@ -1,6 +1,7 @@
 package concepts;
 
 import attention.ConceptNameSpace;
+import chris.BaseMessageLoop;
 import chris.Crash;
 import chris.Glob;
 import java.util.List;
@@ -57,7 +58,7 @@ abstract public class Concept implements Cloneable {
             Glob.append_last_line(lst, String.format("; unnamed concept."));
         
         if (debugLevel > 0)
-            Glob.add_line(lst, String.format("nameSpace = ", nameSpace));
+            Glob.add_list_of_lines(lst, ((BaseMessageLoop)nameSpace).to_list_of_lines("nameSpace", debugLevel-1));
 
         return lst;
     }

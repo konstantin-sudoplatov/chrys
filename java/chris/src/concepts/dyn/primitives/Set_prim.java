@@ -112,10 +112,13 @@ public class Set_prim extends Primitive {
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
         Glob.add_line(lst, String.format("group_size() = %s", group_size()));
-        if (debugLevel > 1) {
+        if (debugLevel == 0) {
             Glob.add_line(lst, String.format("cids: "));
             for(Long cid: memberS)
                 Glob.append_last_line(lst, String.format("%s; ", cid));
+        }
+        else if (debugLevel > 0) {
+            Glob.add_list_of_lines(lst, "memberS[]", memberS.toArray(), debugLevel-1);
         }
 
         return lst;

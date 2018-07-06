@@ -1,10 +1,12 @@
 package concepts.dyn.premises;
 
 import chris.Crash;
+import chris.Glob;
 import concepts.Concept;
 import concepts.dyn.ifaces.ActivationIface;
 import concepts.dyn.ifaces.ActivationIface.NormalizationType;
 import concepts.dyn.primitives.Set_prim;
+import java.util.List;
 
 /**
  * Premise, that bears a set of cids. Only one of them is a selected member of group.
@@ -83,6 +85,20 @@ public final class PrimusInterPares_prem extends Set_prim implements ActivationI
     @Override
     public float normalize_activation() {
         throw new Crash("Is not realised for this concept.");
+    }
+    
+    @Override
+    public List<String> to_list_of_lines(String note, Integer debugLevel) {
+        List<String> lst = super.to_list_of_lines(note, debugLevel);
+        if (debugLevel == 0) {
+            Glob.add_line(lst, String.format("primusCid = %s", primusCid));
+        }
+        else if (debugLevel > 0) {
+            Glob.add_list_of_lines(lst, get_name_space().get_cpt(primusCid).
+                    to_list_of_lines("primusCid", debugLevel-1));
+        }
+
+        return lst;
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%

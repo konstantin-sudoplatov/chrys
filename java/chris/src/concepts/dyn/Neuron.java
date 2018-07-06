@@ -89,9 +89,9 @@ public class Neuron extends DynamicConcept implements ActivationIface, ActivRang
         // Check that this neuron belongs to the caldron
         if (this.get_name_space() != caldron)
             throw new Crash(String.format("Wrong caldron for this neuron.\n%s\n%s\nNeuron:\n%s", 
-                    ((BaseMessageLoop)caldron).to_list_of_lines("must be", 10),
-                    ((BaseMessageLoop)this.get_name_space()).to_list_of_lines("really is", 10),
-                    this.to_list_of_lines("", 10))
+                    Glob.list_to_listln(((BaseMessageLoop)caldron).to_list_of_lines("must be", 10)),
+                    Glob.list_to_listln(((BaseMessageLoop)this.get_name_space()).to_list_of_lines("really is", 10)),
+                    Glob.list_to_listln(this.to_list_of_lines("", 10)))
             );
         
         float activation = calculate_activation();
@@ -207,6 +207,7 @@ public class Neuron extends DynamicConcept implements ActivationIface, ActivRang
         List<String> lst = super.to_list_of_lines(note, debugLevel);
         if(debugLevel > 0) {
             Glob.add_list_of_lines(lst, activatioN.to_list_of_lines("activatioN", debugLevel-1));
+
             Glob.add_list_of_lines(lst, rangeS.to_list_of_lines("rangeS", debugLevel-1));
             Glob.add_list_of_lines(lst, lotS.to_list_of_lines("lotS", debugLevel-1));
         }

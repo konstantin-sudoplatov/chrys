@@ -619,6 +619,8 @@ final public class Glob {
      */
     public static List<String> add_array_of_lines(List<String> lst, String[] lines)
     {
+        if (lines == null) return lst;
+        
         for(String s: lines)
             lst.add("    " + s);
         return lst;
@@ -633,6 +635,8 @@ final public class Glob {
      */
     public static List<String> add_list_of_lines(List<String> lst, List<String> addedLst)
     {
+        if (addedLst == null) return lst;
+
         for(String s: addedLst)
             lst.add("    " + s);
         return lst;
@@ -648,6 +652,8 @@ final public class Glob {
      */
     public static List<String> add_list_of_lines(List<String> lst, String note, long[] arrayOfCids, int debugLevel)
     {
+        if (arrayOfCids == null) return lst;
+        
         add_list_of_lines(lst, to_list_of_lines(note, arrayOfCids, debugLevel));
         return lst;
     }
@@ -661,6 +667,8 @@ final public class Glob {
      */
     public static List<String> to_list_of_lines(String note, long[] arrayOfCids, int debugLevel) {
         List<String> l = new ArrayList();
+        if (arrayOfCids == null) return l;
+
         l.add(((arrayOfCids!=null)? arrayOfCids.getClass().getSimpleName(): "") + "(dl=" + debugLevel + ")" +
                 ((note==null || note.equals(""))? "": ", " + note) + ": ");
         if (arrayOfCids == null) 
@@ -695,6 +703,18 @@ final public class Glob {
      */
     public static List<String> add_list_of_lines(List<String> lst, String note, Object[] arrayOfObjects, int debugLevel)
     {
+        if (arrayOfObjects == null) return lst;
+        
+        if      // is arrayOfObjects Long[]?
+                (arrayOfObjects[0] instanceof Long)
+        {
+            long[] a = new long[arrayOfObjects.length];
+            for(int i=0; i<arrayOfObjects.length; i++)
+                a[i] = (Long)arrayOfObjects[i];
+            
+            return add_list_of_lines(lst, note, a, debugLevel);
+        }       
+            
         add_list_of_lines(lst, to_list_of_lines(note, arrayOfObjects, debugLevel));
         return lst;
     }
@@ -715,7 +735,7 @@ final public class Glob {
         else
             append_last_line(l, "size = " + arrayOfObjects.length);
         
-        if (arrayOfObjects ==  null) {
+        if (arrayOfObjects == null) {
         }
         else if (debugLevel == 0) {
             for(Object obj: arrayOfObjects) 
@@ -746,6 +766,21 @@ final public class Glob {
             }
         
         return l;
+    }
+    
+    /**
+     * Transform list of strings to list of strings where strings are appended with the "\n" symbol.
+     * @param list
+     * @return 
+     */
+    public static List<String> list_to_listln(List<String> list) {
+        if (list == null) return null;
+        
+        List<String> listln= new ArrayList();
+        for(String s: list)
+            listln.add(s + "\n");
+        
+        return listln;
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%

@@ -55,7 +55,8 @@ public class ActivRangeImpl implements ActivRangeIface, Cloneable {
         }
         
         // no matching range. it is illegal.
-            throw new Crash("Trying to get an action cid from nonexistent range.");
+            throw new Crash(String.format("Trying to get an action cid from nonexistent range. activation = %s, concept:\n%s",
+                    activation, Glob.list_to_listln(this.to_list_of_lines("", 10))));
     }
     
     @Override

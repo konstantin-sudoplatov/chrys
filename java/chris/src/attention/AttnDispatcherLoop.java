@@ -153,7 +153,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
             {
                 cpt = comDir.get(cid).clone();
                 cpt.set_name_space(circle);
-                circle.put_in_concept_directory(cid, comDir.get(cid).clone());
+                circle.put_in_concept_directory(cid, cpt);
             }
             return cid;
         }

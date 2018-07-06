@@ -21,6 +21,7 @@
             <word>enum</word>
             <word>initially</word>
             <word>prem</word>
+            <word>strprem</word>
             <word>subcaldrons</word>
         </spellchecker-wordlist>
     </configuration>

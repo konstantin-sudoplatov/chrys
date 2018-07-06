@@ -1,5 +1,6 @@
 package concepts;
 
+import attention.ConceptNameSpace;
 import chris.Crash;
 import chris.Glob;
 import java.util.List;
@@ -23,6 +24,22 @@ abstract public class Concept implements Cloneable {
      * @return 
      */
     abstract public long get_cid();
+    
+    /**
+     * Getter.
+     * @return 
+     */
+    public ConceptNameSpace get_name_space() {
+        return nameSpace;
+    }
+    
+    /**
+     * Setter.
+     * @param nameSpace 
+     */
+    public void set_name_space(ConceptNameSpace nameSpace) {
+        this.nameSpace = nameSpace;
+    }
 
     /**
      * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
@@ -38,10 +55,24 @@ abstract public class Concept implements Cloneable {
             Glob.append_last_line(lst, String.format("; concept name: %s.", cptName));
         else
             Glob.append_last_line(lst, String.format("; unnamed concept."));
+        
+        if (debugLevel > 0)
+            Glob.add_line(lst, String.format("nameSpace = ", nameSpace));
 
         return lst;
     }
     public List<String> to_list_of_lines() {
         return to_list_of_lines("", 2);
     }
+
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+    //
+    //      Private    Private    Private    Private    Private    Private    Private
+    //
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+
+    //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
+    
+    /** Along with cid it is part of concept's address at the runtime. */
+    private ConceptNameSpace nameSpace;
 }

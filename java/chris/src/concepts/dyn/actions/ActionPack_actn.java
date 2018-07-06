@@ -11,7 +11,7 @@ import java.util.List;
  * Call static actions few at once and without preparing their parameters as concepts.
  * @author su
  */
-public class ActionPack extends Action {
+public class ActionPack_actn extends Action {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -57,7 +57,7 @@ public class ActionPack extends Action {
     /** 
      * Constructor.
      */ 
-    public ActionPack() { 
+    public ActionPack_actn() { 
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -95,7 +95,9 @@ public class ActionPack extends Action {
     @Override
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
-        Glob.add_list_of_lines(lst, note, actS.toArray(), debugLevel);
+        if (debugLevel >= 0) {
+            Glob.add_list_of_lines(lst, note, actS.toArray(), debugLevel-1);
+        }
         
         return lst;
     }

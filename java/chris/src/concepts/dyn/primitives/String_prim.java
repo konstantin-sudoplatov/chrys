@@ -30,7 +30,7 @@ public class String_prim extends Primitive {
      * Getter.
      * @return 
      */
-    public String get_text() {
+    public String get_string() {
         return strinG;
     }
 
@@ -38,7 +38,7 @@ public class String_prim extends Primitive {
      * Setter.
      * @param string 
      */
-    public void set_text(String string) {
+    public void set_string(String string) {
         this.strinG = string;
     }
 

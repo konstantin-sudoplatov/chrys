@@ -98,7 +98,8 @@ public class Set_prim extends Primitive {
      * @return array of cids.
      */
     public Long[] get_members() {
-        return (Long[])memberS.toArray();
+        Long[] a = new Long[memberS.size()];
+        return memberS.toArray(a);
     }
 
     /**

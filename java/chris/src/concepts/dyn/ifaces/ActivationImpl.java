@@ -1,6 +1,5 @@
 package concepts.dyn.ifaces;
 
-import attention.ConceptNameSpace;
 import auxiliary.Lot;
 import chris.Crash;
 import chris.Glob;
@@ -65,11 +64,10 @@ public class ActivationImpl implements ActivationIface, Cloneable {
 
     /**
      * Calculate weighed sum, normalize it according the neuron's type.
-     * @param caldron
      * @return 
      */
     @Override
-    public float calculate_activation(ConceptNameSpace caldron) {
+    public float calculate_activation() {
         LotIface host;
         switch(activType) {
             case WEIGHED_SUM: // calculate the weighted sum
@@ -77,7 +75,7 @@ public class ActivationImpl implements ActivationIface, Cloneable {
                 double weightedSum = host.get_bias();
                 for(int i = 0; i < host.size(); i++) {
                     Lot l = host.get_lot(i);
-                    ActivationIface premCpt = (ActivationIface)caldron.get_cpt(l.cid);
+                    ActivationIface premCpt = (ActivationIface)hosT.get_name_space().get_cpt(l.cid);
                     float premActivation = premCpt.get_activation();
                     float weight = l.weight;
                     weightedSum += weight*premActivation;
@@ -92,7 +90,7 @@ public class ActivationImpl implements ActivationIface, Cloneable {
                 host = (LotIface)hosT;
                 for(int i = 0; i < host.size(); i++) {
                     Lot l = host.get_lot(i);
-                    ActivationIface premCpt = (ActivationIface)caldron.get_cpt(l.cid);
+                    ActivationIface premCpt = (ActivationIface)hosT.get_name_space().get_cpt(l.cid);
                     if (premCpt.get_activation() <= 0) {
                         activatioN = -1;
                         break;
@@ -105,7 +103,7 @@ public class ActivationImpl implements ActivationIface, Cloneable {
                 host = (LotIface)hosT;
                 for(int i = 0; i < host.size(); i++) {
                     Lot l = host.get_lot(i);
-                    ActivationIface premCpt = (ActivationIface)caldron.get_cpt(l.cid);
+                    ActivationIface premCpt = (ActivationIface)hosT.get_name_space().get_cpt(l.cid);
                     if (premCpt.get_activation() > 0) {
                         activatioN = 1;
                         break;

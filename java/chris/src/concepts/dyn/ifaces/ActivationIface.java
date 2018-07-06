@@ -42,10 +42,9 @@ public interface ActivationIface {
 
     /**
      * Calculate weighed sum, normalize it according the neuron's type.
-     * @param caldron
      * @return 
      */
-    public float calculate_activation(ConceptNameSpace caldron);
+    public float calculate_activation();
     
     /** 
      * Normalize activation according to normalization type. 

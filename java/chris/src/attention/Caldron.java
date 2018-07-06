@@ -50,8 +50,11 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
         if      // no such concept in the local directory?
                 (cpt == null)
         {   // get it from parent, put in local directory and return
-            cpt = parenT.get_cpt(cid);     //  In the root of hierarchy (class AttnCircle) the processing never gets here, because we are overriden.
-            return _cptDir_.put(cid, cpt);
+            //  In the root of hierarchy (class AttnCircle) the processing never gets here, because we are overriden. So, here
+            // we don't check them for a global or static
+            cpt = parenT.get_cpt(cid).clone();     
+            _cptDir_.put(cid, cpt);
+            return cpt;
         }
         else {// concept found, return it
             return cpt; 

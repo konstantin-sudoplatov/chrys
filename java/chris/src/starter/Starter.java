@@ -7,9 +7,9 @@ import concepts.DynCptName;
 import concepts.StatCptName;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
-import concepts.dyn.actions.ActionPack;
-import concepts.dyn.actions.ActionPack.Act;
-import concepts.dyn.actions.BinaryOperation_act;
+import concepts.dyn.actions.ActionPack_actn;
+import concepts.dyn.actions.ActionPack_actn.Act;
+import concepts.dyn.actions.BinaryOperation_actn;
 import concepts.dyn.ifaces.ActivationIface;
 import concepts.dyn.premises.And_prem;
 import concepts.dyn.premises.Peg_prem;
@@ -57,19 +57,16 @@ final public class Starter {
             itIsConsoleChat, 
             itIsHttpChat
         });
-        itIsConsoleChat.add_property(chatMedia);
-        itIsHttpChat.add_property(chatMedia);
         
         // "line_from_chatter_strprem" as waiting condition for the getting the line neuron.
         long lineOfChatCid = Glob.attn_disp_loop.add_cpt(new String_prem(null), DynCptName.line_from_chatter_strprem.name());
 
         // And_prem "valve_for_requesting_next_line_prem" and its members "chatter_line_logged_subvalve_prem" and "chatter_line_parsed_subvalve_prem"
         And_prem valveForRequestingNextLine = new And_prem();
-        Peg_prem subvalveLineLogged = new Peg_prem();
-        valveForRequestingNextLine.add_member(subvalveLineLogged);
-//        Peg_prem subvalveLineParsed = new Peg_prem();
-//        valveForRequestingNextLine.add_member(subvalveLineParsed);
         Glob.attn_disp_loop.add_cpt(valveForRequestingNextLine, DynCptName.valve_for_requesting_next_line_prem.name());
+        Peg_prem subvalveLineLogged = new Peg_prem();
+        Glob.attn_disp_loop.add_cpt(subvalveLineLogged, DynCptName.chatter_line_logged_subvalve_prem.name());
+        valveForRequestingNextLine.add_member(subvalveLineLogged);
         
         // Action of requesting the next line.
         Action requestNextLineAct = new Action(StatCptName.RequestNextLineFromChatter_stat.ordinal());
@@ -96,7 +93,7 @@ final public class Starter {
         
         // Seeds.
             // Console chat seeds.
-        ActionPack consoleChatSeedPack = new ActionPack();
+        ActionPack_actn consoleChatSeedPack = new ActionPack_actn();
         consoleChatSeedPack.add_act(new Act(StatCptName.Antiactivate_stat.ordinal(), lineOfChatCid));
         consoleChatSeedPack.add_act(new Act(StatCptName.SetPrimusInterPares_stat.ordinal(), chatMediaCid, itIsConsoleChatCid));
         long consoleChatSeedPackCid = Glob.attn_disp_loop.add_cpt(consoleChatSeedPack, DynCptName.chat_console_rootway_seed_apk.name());
@@ -104,7 +101,7 @@ final public class Starter {
         consoleChatSeedNrn.add_effects(Float.NEGATIVE_INFINITY, consoleChatSeedPackCid, waitLineNrnCid);
         Glob.attn_disp_loop.add_cpt(consoleChatSeedNrn, DynCptName.chat_console_rootway_seed_nrn.name());
             // Http chat seeds.
-        ActionPack httpChatSeedPack = new ActionPack();
+        ActionPack_actn httpChatSeedPack = new ActionPack_actn();
         httpChatSeedPack.add_act(new Act(StatCptName.Antiactivate_stat.ordinal(), lineOfChatCid));
         httpChatSeedPack.add_act(new Act(StatCptName.SetPrimusInterPares_stat.ordinal(), chatMediaCid, itIsHttpChatCid));
         long httpChatSeedPackCid = Glob.attn_disp_loop.add_cpt(httpChatSeedPack, DynCptName.chat_http_rootway_seed_apk.name());
@@ -118,7 +115,7 @@ final public class Starter {
         // Chat log list and operation of adding the line of chat to the list
         ListStock chatLogList = new ListStock();
         long chatLogListCid = Glob.attn_disp_loop.add_cpt(chatLogList, DynCptName.chat_log_lst.name());
-        BinaryOperation_act loggingChatLineAct = new BinaryOperation_act(StatCptName.CloneConceptAndAappendToList_stat.ordinal());
+        BinaryOperation_actn loggingChatLineAct = new BinaryOperation_actn(StatCptName.CloneConceptAndAappendToList_stat.ordinal());
         loggingChatLineAct.set_first_operand(chatLogListCid);
         loggingChatLineAct.set_second_operand(Glob.named.name_cid.get(DynCptName.line_from_chatter_strprem.name()));
         long loggingChatLineActCid = Glob.attn_disp_loop.add_cpt(loggingChatLineAct);
@@ -129,7 +126,7 @@ final public class Starter {
     public static void chat_seeds() {
         
         // Seeds for root way and branch ways of the chat attention circle, console variant
-        ActionPack chatConsoleMainSeedApk = new ActionPack();
+        ActionPack_actn chatConsoleMainSeedApk = new ActionPack_actn();
         long chatConsoleMainSeedApkCid = Glob.attn_disp_loop.add_cpt(chatConsoleMainSeedApk, DynCptName.chat_console_main_seed_apk.name());
         long chatConsoleRootwayNrnCid = Glob.named.name_cid.get(DynCptName.chat_console_rootway_seed_nrn.name());
         Neuron chatConsoleMainSeedNrn = new Neuron(ActivationIface.ActivationType.WEIGHED_SUM, ActivationIface.NormalizationType.BIN);
@@ -139,7 +136,7 @@ final public class Starter {
         });
         
         // Seeds for root way and branch ways of the chat attention circle, http variant
-        ActionPack chatHttpMainSeedApk = new ActionPack();
+        ActionPack_actn chatHttpMainSeedApk = new ActionPack_actn();
         long chatHttpMainSeedApkCid = Glob.attn_disp_loop.add_cpt(chatHttpMainSeedApk, DynCptName.chat_http_main_seed_apk.name());
         long chatHttpRootwayNrnCid = Glob.named.name_cid.get(DynCptName.chat_http_rootway_seed_nrn.name());
         Neuron chatHttpMainSeedNrn = new Neuron(ActivationIface.ActivationType.WEIGHED_SUM, ActivationIface.NormalizationType.BIN);

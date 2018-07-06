@@ -1,23 +1,20 @@
 package concepts.dyn.premises;
 
-import attention.Caldron;
-import attention.ConceptNameSpace;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
 import concepts.dyn.ifaces.ActivationIface;
 import concepts.dyn.ifaces.ActivationImpl;
-import concepts.dyn.ifaces.PropertyIface;
-import concepts.dyn.ifaces.PropertyImpl;
 import concepts.dyn.primitives.Set_prim;
 import java.util.List;
 
 /**
  * Set of cids, all of them must be active for this premise to be active. No calculation of the activation value is needed, activation
- * is calculated dynamically in the get_activation() method.
+ * is calculated dynamically in the get_activation() method. That method also actualizes the green count - counter of the antiactive
+ * members.
  * @author su
  */
-public class And_prem extends Set_prim implements ActivationIface, PropertyIface {
+public class And_prem extends Set_prim implements ActivationIface {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -35,11 +32,26 @@ public class And_prem extends Set_prim implements ActivationIface, PropertyIface
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
+    /**
+     * Decrement counter of antiactive premises. That counter allows to avoid unnecessary checks on the premise.
+     * @return new value of the counter.
+     */
+    public int decrement_green_count() {
+        if (greenCount <=0)
+            throw new Crash(String.format("greenCount = %s, but it must be positive.", greenCount));
+        
+        greenCount--;
+        if (greenCount == 0 )
+            set_activation(1);
+        
+        return greenCount;
+    }
+    
     @Override
     public boolean add_member(Concept cpt) {
         boolean r = super.add_member(cpt);
         if (r) {
-            if (Thread.currentThread() instanceof Caldron) calculate_activation((Caldron)Thread.currentThread());
+            calculate_activation();
             return true;
         }
         else
@@ -51,16 +63,11 @@ public class And_prem extends Set_prim implements ActivationIface, PropertyIface
         
         boolean r = super.remove_member(cpt);
         if (r) {
-            if (Thread.currentThread() instanceof Caldron) calculate_activation((Caldron)Thread.currentThread());
+            calculate_activation();
             return true;
         }
         else
             return false;
-    }
-
-    @Override
-    public final void set_members(Concept[] concepts) {
-        super.set_members(concepts);
     }
 
     @Override
@@ -79,15 +86,16 @@ public class And_prem extends Set_prim implements ActivationIface, PropertyIface
     }
 
     @Override
-    public float calculate_activation(ConceptNameSpace caldron) {
+    public float calculate_activation() {
         activatioN.set_activation(1);
+        greenCount = 0;
         for (Long cid: get_members()) {
-            ActivationIface cpt = (ActivationIface)caldron.get_cpt(cid);
+            ActivationIface cpt = (ActivationIface)this.get_name_space().get_cpt(cid);
             if      // is it an antiactive concept?
                     (cpt.get_activation() <= 0)
             {   // our activation will be antiactive also
                 activatioN.set_activation(-1);
-                break;
+                greenCount++;
             }
         }
         
@@ -96,32 +104,7 @@ public class And_prem extends Set_prim implements ActivationIface, PropertyIface
 
     @Override
     public float normalize_activation() {
-        throw new Crash("Is not released for this concept.");
-    }
-    
-    @Override
-    public int property_size() {
-            return propertieS.property_size();
-    }
-
-    @Override
-    public long[] get_properties() {
-        return propertieS.get_properties();
-    }
-
-    @Override
-    public boolean add_property(Concept cpt) {
-        return propertieS.add_property(cpt);
-    }
-
-    @Override
-    public boolean remove_property(Concept cpt) {
-        return propertieS.remove_property(cpt);
-    }
-
-    @Override
-    public void set_properties(Concept[] concepts) {
-        propertieS.set_properties(concepts);
+        throw new Crash("Is not supported for this concept.");
     }
 
     /**
@@ -134,7 +117,6 @@ public class And_prem extends Set_prim implements ActivationIface, PropertyIface
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
         Glob.append_last_line(lst, String.format("get_activation() = %s", get_activation()));
-        Glob.add_list_of_lines(lst, propertieS.to_list_of_lines("propertieS", debugLevel));
 
         return lst;
     }
@@ -150,8 +132,8 @@ public class And_prem extends Set_prim implements ActivationIface, PropertyIface
     /** Activation.  */
     private ActivationImpl activatioN = new ActivationImpl(this, ActivationType.SET, NormalizationType.BIN);
     
-    /** Set of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
-    private PropertyImpl propertieS = new PropertyImpl();
+    /** Count of antiactive members. */
+    private int greenCount;
 
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 }

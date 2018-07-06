@@ -5,20 +5,21 @@ import concepts.StaticAction;
 import concepts.dyn.Action;
 
 /**
- * An operation on two concepts. The first operand is applied to the second one.
+ * An operation on a concept.
  * @author su
  */
-public final class BinaryOperation_act extends Action {
+public final class UnaryOperation_actn extends Action {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
+
     /** 
      * Constructor.
      * @param statActionCid
      */ 
-    public BinaryOperation_act(long statActionCid) { super(statActionCid); } 
+    public UnaryOperation_actn(long statActionCid) { super(statActionCid); } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -32,25 +33,17 @@ public final class BinaryOperation_act extends Action {
      */
     @Override
     public void go(ConceptNameSpace nameSpace) {
-        ((StaticAction)nameSpace.get_cpt(_statActionCid_)).go(nameSpace, new long[] {firstOperandCid, secondOperandCid}, null);
+        ((StaticAction)nameSpace.get_cpt(_statActionCid_)).go(nameSpace, new long[] {operandCid}, null);
     }
 
     /**
      * Setter.
      * @param cid 
      */
-    public void set_first_operand(long cid) {
-        firstOperandCid = cid;
+    public void set_operand(long cid) {
+        operandCid = cid;
     }
 
-    /**
-     * Setter.
-     * @param cid 
-     */
-    public void set_second_operand(long cid) {
-        secondOperandCid = cid;
-    }
-    
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //      Protected    Protected    Protected    Protected    Protected    Protected
@@ -69,8 +62,7 @@ public final class BinaryOperation_act extends Action {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
-    private long firstOperandCid;
-    private long secondOperandCid;
+    private long operandCid;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

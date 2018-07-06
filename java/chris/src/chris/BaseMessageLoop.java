@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.util.ArrayDeque;
+import java.util.List;
 
 /**
  * Base message processing loop. Always ends up being a separate thread. 
@@ -23,7 +24,7 @@ abstract public class BaseMessageLoop extends Thread {
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
-    //                            Методы внешнего интерфейса
+    //                            Public
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
     
@@ -82,7 +83,7 @@ abstract public class BaseMessageLoop extends Thread {
     }
     
     /**
-     * Получить размер очереди сообщений.
+     * Get the size of the queue.
      * @return
      */
     public synchronized int queue_size() {
@@ -90,60 +91,60 @@ abstract public class BaseMessageLoop extends Thread {
     }
 
     /**
-     * Поместить сообщение в начало очереди. Для приоритетных сообщений.
-     * @param сообщениеХризолита помещаемое в очередь сообщение.
+     * Put a message in the head of the queue, so that it would be extracted the first.
+     * @param msg message.
      */
-    public synchronized void put_in_queue_with_priority(BaseMessage сообщениеХризолита) {
-        msgQueue.addFirst(сообщениеХризолита);
+    public synchronized void put_in_queue_with_priority(BaseMessage msg) {
+        msgQueue.addFirst(msg);
         notifyAll();
     }
 
     /**
-     * Поместить сообщение в конец очереди.
-     * @param сообщениеХризолита помещаемое в очередь сообщение.
+     * Put the message in the tail of the queue.
+     * @param msg message
      */
-    public synchronized void put_in_queue(BaseMessage сообщениеХризолита) {
+    public synchronized void put_in_queue(BaseMessage msg) {
         
         while (msgQueue.size() > QUEUE_THRESHOLD) {
             try {
-                флагОжиданияПостановкиВОчередь = true;
+                queueBusyFlag = true;
                 wait();
             } catch (InterruptedException ex) {
-                флагОжиданияПостановкиВОчередь = false;
+                queueBusyFlag = false;
             }
         }
 
-        msgQueue.addLast(сообщениеХризолита);
+        msgQueue.addLast(msg);
         notifyAll();
     }
-    private boolean флагОжиданияПостановкиВОчередь = false;
+    private boolean queueBusyFlag = false;
     
     /**
-     * Дождаться когда в очереди появится сообщение извлечь из начала очереди.
-     * @return сообщение или null, если очередь пуста
+     * Wait until there is a message in the queue and extract if from the head of the queue.
+     * @return extracted message
      */
     public synchronized BaseMessage get_blocking() {
-        // ждать появления сообщения
+        // Wait
         while(msgQueue.isEmpty()) {
             try {
                 wait();
             } catch (InterruptedException ex) {}
         }
 
-        // Взять из очереди сообщение
+        // Extract
         BaseMessage msg = msgQueue.pollFirst();
 
-        // Возможно, метод put_in_queue ждет. Толкнуть его.
+        // May be the put_in_queue() method is waiting. Kick it.
         if
-                (флагОжиданияПостановкиВОчередь && msgQueue.size()<QUEUE_THRESHOLD)
+                (queueBusyFlag && msgQueue.size()<QUEUE_THRESHOLD)
             notifyAll();        
 
         return msg;
     }
     
     /**
-     * Извлечь сообщение из начала очереди, если оно имеется.
-     * @return сообщение или null, если очередь пуста
+     * Extract a message from the head of the queue without waiting. Don't know if I ever need it.
+     * @return the message or null, if the queue is empty
      */
     public synchronized BaseMessage get_nonblocking() {
         return msgQueue.isEmpty()? null: msgQueue.pollFirst();
@@ -156,15 +157,38 @@ abstract public class BaseMessageLoop extends Thread {
         put_in_queue(new Msg_LoopTermination());
     }
 
+    /**
+     * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
+     * @param note printed in the first line just after the object type.
+     * @param debugLevel 0 - the shortest, 2 - the fullest
+     * @return list of lines, describing this object.
+     */
+    public List<String> to_list_of_lines(String note, Integer debugLevel) {
+        List<String> lst = Glob.create_list_of_lines(this, note, debugLevel);
+        if (debugLevel < 0)
+            return lst;
+        else if (debugLevel == 0 ) {
+            Glob.append_last_line(lst, String.format("msgQueue.size() = %s", msgQueue.size()));
+        }
+        else {
+            Glob.add_list_of_lines(lst, "msgQueue[]", msgQueue.toArray(), debugLevel-1);
+        }
+
+        return lst;
+    }
+    public List<String> to_list_of_lines() {
+        return to_list_of_lines("", 20);
+    }
+
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
-    //                                  Наследуемый интерфейс
+    //                                  Protected
     //
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
 
-    //---$$$---$$$---$$$---$$$---$$$ protected переменные ---$$$---$$$---$$$---$$$---$$$--
+    //---$$$---$$$---$$$---$$$---$$$ protected data ---$$$---$$$---$$$---$$$---$$$--
 
-    //---$$$---$$$---$$$---$$$---$$$--- protected методы ---$$$---$$$---$$$---$$$---$$$---
+    //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
 
     /**
      * Hook after starting a thread.
@@ -172,7 +196,7 @@ abstract public class BaseMessageLoop extends Thread {
     protected void _afterStart_() {};
 
     /**
-     * Специальная обработка потомка по завершению работы нити.
+     * Optional processing on the termination of the thread.
      */
     protected void _beforeTermination_() {};
     
@@ -197,30 +221,30 @@ abstract public class BaseMessageLoop extends Thread {
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
-    //                               Внутренний интерфейс
+    //                               Private
     //
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
-    //---%%%---%%%---%%%---%%%--- private переменные ---%%%---%%%---%%%---%%%---%%%---%%%
+    //---%%%---%%%---%%%---%%%--- private data ---%%%---%%%---%%%---%%%---%%%---%%%
     
-    /** Главная очередь сообщений обработчика. Очередь очень быстрая. Это кольцевой буфер. */
+    /** The queue of the loop. It is very fast from the both ends since it is a cyclic buffer. */
     private ArrayDeque<BaseMessage> msgQueue = new ArrayDeque<>();
     
-    //---%%%---%%%---%%%---%%%---%%% private методы ---%%%---%%%---%%%---%%%---%%%---%%%--
+    //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     /**
-     *  Вызвать функтор, для обработки сообщения, извлеченного из очереди.
-     * <p>Функтор - это класс со статическим методом "обработать". Он, обычно,
-     * содержится в сообщении в поле "Адресат".
+     *  Call a functor to process the message from the queue.
+     * <p>Functor - this is an object with a static method go(). The message may have its address, then it gets in here,
+     * else it is get processed in the _defaultProc_() method.
      * @param message
      */
     private void invokeFunctor(BaseMessage message) {
 
-        // выделить статический метод "обработать" функтора
-        Method методОбработатьФунктора = null;      // сюда поместим объект, представляющий вызываемый метод
+        // Extract the static method go() of the functor
+        Method methodGo = null;
         try {
-            методОбработатьФунктора = message.handler_class.getMethod("go",       // имя метода функтора, пришедшего в поле "Адресат" сообщения
-                    new Class[] {       // типы параметров, которые будут передаваться методу
+            methodGo = message.handler_class.getMethod("go",       // name of the method
+                    new Class[] {       // parameter types
                         BaseMessage.class
                     }        
             );
@@ -228,17 +252,14 @@ abstract public class BaseMessageLoop extends Thread {
             throw new Crash("Error while invoking functor " + message.handler_class + ".go()", ex);
         }   // try   // try
 
-        // вызвать его, передав ему как параметр пришедшее сообщение
+        // Call it
         try {
-            методОбработатьФунктора.invoke(
-                    null,               // метод статическийобъект, нет объекта, которому он принадлежит
-                    message         // сообщение, передаваемое методу в качестве параметра
+            methodGo.invoke(
+                    null,           // the method is static, there is no object it belongs to
+                    message         // the message as a parameter
             );
         } catch (IllegalAccessException | IllegalArgumentException | InvocationTargetException ex) {
             throw new Crash("Error while invoking functor " + message.handler_class + ".go()", ex);
         }
-    }   // void ВызватьФунктор()
-
-    //---%%%---%%%---%%%---%%%---%%% private классы ---%%%---%%%---%%%---%%%---%%%---%%%--
-    
-}   // class ПетляСообщений
+    }
+}

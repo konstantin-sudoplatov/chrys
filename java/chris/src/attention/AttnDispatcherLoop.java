@@ -9,6 +9,7 @@ import concepts.DynCptName;
 import concepts.DynamicConcept;
 import concepts.StatCptName;
 import concepts.StaticAction;
+import concepts.dyn.ifaces.GlobalConcept;
 import console.ConsoleMessage;
 import console.Msg_ReadFromConsole;
 import java.lang.reflect.Constructor;
@@ -83,6 +84,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
             ((DynamicConcept)cpt).set_cid(cid);
             ((DynamicConcept)cpt).set_creation_time((int)(new Date().getTime()/1000));
         }
+        cpt.set_name_space(this);
         
         // put to target directories
         if      // is it a named concept?
@@ -104,7 +106,12 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
             comDir.put(cid, cpt);
         }
         else { //no: put into the addressed attention circle
-            circle.put_in_concept_directory(cid, cpt);
+            if      // it is not global, i.e. can be cloned to a caldron?
+                    (!(cpt instanceof GlobalConcept))
+                circle.put_in_concept_directory(cid, cpt);
+            else
+                throw new Crash(String.format("Attempt to put global concept\n %s\n into local namespase\n %s",
+                        cpt.to_list_of_lines("", 10), circle.to_list_of_lines("circle", 10)));
         }
         
         return cid;
@@ -137,11 +144,17 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
      * @throws Crash if the cid does not exists
      */
     public synchronized long copy_cpt_to_circle(long cid, AttnCircle circle) {
-
+        Concept cpt = comDir.get(cid);
         if      //is there such a concept?
-                (comDir.containsKey(cid))
-        {   //yes: clone it and load to the bubble
-            circle.put_in_concept_directory(cid, comDir.get(cid).clone());
+                (cpt != null)
+        {   //yes: clone it and load to the circle
+            if      // it is not global, i.e. can be cloned to a caldron?
+                    (!(cpt instanceof GlobalConcept))
+            {
+                cpt = comDir.get(cid).clone();
+                cpt.set_name_space(circle);
+                circle.put_in_concept_directory(cid, comDir.get(cid).clone());
+            }
             return cid;
         }
         else//no: crash
@@ -167,6 +180,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
             throw new Crash("No concept in common directory with name = " + cptName);
     }
 
+    @Override
     public synchronized Concept get_cpt(long cid) {
         Concept cpt = comDir.get(cid);
         if (cpt != null)
@@ -175,12 +189,18 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
             throw new Crash("No such concept: cid = " + cid + ", name = " + Glob.named.cid_name.get(cid));
     }
     
+    @Override
     public synchronized Concept get_cpt(String cptName) {
         Long cid = Glob.named.name_cid.get(cptName);
         if (cid != null) 
             return comDir.get(cid);
         else 
             throw new Crash("Now such concept: name = " + cptName);
+    }
+
+    @Override
+    public AttnCircle get_attn_circle() {
+        throw new Crash("Not supported for AttnDispatcherLoop.");
     }
     
     /**
@@ -209,11 +229,6 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
         
         // terminate yourself
         super.request_termination();
-    }
-
-    @Override
-    public AttnCircle get_attn_circle() {
-        throw new Crash("Not supported for AttnDispLoop.");
     }
     
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$

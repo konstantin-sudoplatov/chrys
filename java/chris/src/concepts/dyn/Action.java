@@ -61,8 +61,10 @@ public class Action extends DynamicConcept {
     @Override
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
-        Glob.add_line(lst, String.format("_statActionCid_ = %s", _statActionCid_));
-        Glob.add_list_of_lines(lst, "resultCids", resultCids, debugLevel-1);
+        if (debugLevel >= 0) {
+            Glob.add_line(lst, String.format("_statActionCid_ = %s", _statActionCid_));
+            Glob.add_list_of_lines(lst, "resultCids", resultCids, debugLevel-1);
+        }
         
         return lst;
     }

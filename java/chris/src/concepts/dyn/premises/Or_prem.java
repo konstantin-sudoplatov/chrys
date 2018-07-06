@@ -1,12 +1,10 @@
 package concepts.dyn.premises;
 
-import attention.ConceptNameSpace;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
 import concepts.dyn.ifaces.ActivationIface;
-import concepts.dyn.ifaces.PropertyIface;
-import concepts.dyn.ifaces.PropertyImpl;
+import concepts.dyn.ifaces.ActivationImpl;
 import concepts.dyn.primitives.Set_prim;
 import java.util.List;
 
@@ -16,7 +14,7 @@ import java.util.List;
  *
  * @author su
  */
-public class Or_prem extends Set_prim implements ActivationIface, PropertyIface {
+public class Or_prem extends Set_prim implements ActivationIface {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -33,6 +31,29 @@ public class Or_prem extends Set_prim implements ActivationIface, PropertyIface 
     //                                  Public methods
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
+    
+    @Override
+    public boolean add_member(Concept cpt) {
+        boolean r = super.add_member(cpt);
+        if (r) {
+            calculate_activation();
+            return true;
+        }
+        else
+            return false;
+    }
+
+    @Override
+    public boolean remove_member(Concept cpt) {
+        
+        boolean r = super.remove_member(cpt);
+        if (r) {
+            calculate_activation();
+            return true;
+        }
+        else
+            return false;
+    }
 
     @Override
     public NormalizationType get_normalization_type() {
@@ -41,19 +62,7 @@ public class Or_prem extends Set_prim implements ActivationIface, PropertyIface 
    
     @Override
     public float get_activation() {
-        float activation = -1;
-        ConceptNameSpace caldron = (ConceptNameSpace)Thread.currentThread();
-        for (Long cid: get_members()) {
-            ActivationIface cpt = (ActivationIface)caldron.get_cpt(cid);
-            if      // is it an active concept?
-                    (cpt.get_activation() > 0)
-            {   // our activation will be active also
-                activation = 1;
-                break;
-            }
-        }
-        
-        return activation;
+        return activatioN.get_activation();
     }
 
     @Override
@@ -62,38 +71,24 @@ public class Or_prem extends Set_prim implements ActivationIface, PropertyIface 
     }
 
     @Override
-    public float calculate_activation(ConceptNameSpace caldron) {
-        throw new Crash("Is not realised for this concept.");
+    public float calculate_activation() {
+        activatioN.set_activation(-1);
+        for (Long cid: get_members()) {
+            ActivationIface cpt = (ActivationIface)this.get_name_space().get_cpt(cid);
+            if      // is it an active concept?
+                    (cpt.get_activation() > 0)
+            {   // our activation will be active also
+                activatioN.set_activation(1);
+                break;
+            }
+        }
+        
+        return activatioN.get_activation();
     }
 
     @Override
     public float normalize_activation() {
         throw new Crash("Is not realised for this concept.");
-    }
-    
-    @Override
-    public int property_size() {
-            return propertieS.property_size();
-    }
-
-    @Override
-    public long[] get_properties() {
-        return propertieS.get_properties();
-    }
-
-    @Override
-    public boolean add_property(Concept cpt) {
-        return propertieS.add_property(cpt);
-    }
-
-    @Override
-    public boolean remove_property(Concept cpt) {
-        return propertieS.remove_property(cpt);
-    }
-
-    @Override
-    public void set_properties(Concept[] concepts) {
-        propertieS.set_properties(concepts);
     }
 
     /**
@@ -106,7 +101,6 @@ public class Or_prem extends Set_prim implements ActivationIface, PropertyIface 
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
         Glob.append_last_line(lst, String.format("get_activation() = %s", get_activation()));
-        Glob.add_list_of_lines(lst, propertieS.to_list_of_lines("propertieS", debugLevel));
 
         return lst;
     }
@@ -119,8 +113,8 @@ public class Or_prem extends Set_prim implements ActivationIface, PropertyIface 
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
     
-    /** Set of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
-    private PropertyImpl propertieS = new PropertyImpl();
+    /** Activation.  */
+    private ActivationImpl activatioN = new ActivationImpl(this, ActivationType.SET, NormalizationType.BIN);
 
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 }

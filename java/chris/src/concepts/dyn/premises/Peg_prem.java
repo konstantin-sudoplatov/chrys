@@ -1,22 +1,18 @@
 package concepts.dyn.premises;
 
-import attention.ConceptNameSpace;
 import chris.Crash;
 import chris.Glob;
-import concepts.Concept;
 import concepts.dyn.Primitive;
 import concepts.dyn.ifaces.ActivationIface;
 import concepts.dyn.ifaces.ActivationIface.NormalizationType;
 import concepts.dyn.ifaces.ActivationImpl;
-import concepts.dyn.ifaces.PropertyIface;
-import concepts.dyn.ifaces.PropertyImpl;
 import java.util.List;
 
 /**
  * The simplest premise. It is only the cid, that bears information for this concept.
  * @author su
  */
-public class Peg_prem extends Primitive implements ActivationIface, PropertyIface {
+public class Peg_prem extends Primitive implements ActivationIface {
 
     /** 
      * Constructor.
@@ -46,38 +42,13 @@ public class Peg_prem extends Primitive implements ActivationIface, PropertyIfac
     }
 
     @Override
-    public float calculate_activation(ConceptNameSpace caldron) {
+    public float calculate_activation() {
         throw new Crash("Is not realised for this concept.");
     }
 
     @Override
     public float normalize_activation() {
         throw new Crash("Is not realised for this concept.");
-    }
-    
-    @Override
-    public int property_size() {
-        return propertieS.property_size();
-    }
-
-    @Override
-    public long[] get_properties() {
-        return propertieS.get_properties();
-    }
-
-    @Override
-    public boolean add_property(Concept cpt) {
-        return propertieS.add_property(cpt);
-    }
-
-    @Override
-    public boolean remove_property(Concept cpt) {
-        return propertieS.remove_property(cpt);
-    }
-
-    @Override
-    public void set_properties(Concept[] concepts) {
-        propertieS.set_properties(concepts);
     }
 
     /**
@@ -89,8 +60,7 @@ public class Peg_prem extends Primitive implements ActivationIface, PropertyIfac
     @Override
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
-        Glob.add_list_of_lines(lst, activatioN.to_list_of_lines("activatioN", debugLevel));
-        Glob.add_list_of_lines(lst, propertieS.to_list_of_lines("propertieS", debugLevel));
+        Glob.add_list_of_lines(lst, activatioN.to_list_of_lines("activatioN", debugLevel-1));
 
         return lst;
     }
@@ -105,7 +75,4 @@ public class Peg_prem extends Primitive implements ActivationIface, PropertyIfac
 
     /** Activation.  */
     private ActivationImpl activatioN = new ActivationImpl(this, ActivationType.SET, NormalizationType.BIN);
-    
-    /** Set of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
-    private PropertyImpl propertieS = new PropertyImpl();
 }

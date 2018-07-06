@@ -1,20 +1,16 @@
 package concepts.dyn.premises;
 
-import attention.ConceptNameSpace;
 import chris.Crash;
 import concepts.Concept;
 import concepts.dyn.ifaces.ActivationIface;
 import concepts.dyn.ifaces.ActivationIface.NormalizationType;
-import concepts.dyn.ifaces.ActivationImpl;
-import concepts.dyn.ifaces.PropertyIface;
-import concepts.dyn.ifaces.PropertyImpl;
 import concepts.dyn.primitives.Set_prim;
 
 /**
  * Premise, that bears a set of cids. Only one of them is a selected member of group.
  * @author su
  */
-public final class PrimusInterPares_prem extends Set_prim implements ActivationIface, PropertyIface {
+public final class PrimusInterPares_prem extends Set_prim implements ActivationIface {
 
     /**
      * Default constructor.
@@ -80,38 +76,13 @@ public final class PrimusInterPares_prem extends Set_prim implements ActivationI
     }
 
     @Override
-    public float calculate_activation(ConceptNameSpace caldron) {
+    public float calculate_activation() {
         throw new Crash("Is not realised for this concept.");
     }
 
     @Override
     public float normalize_activation() {
         throw new Crash("Is not realised for this concept.");
-    }
-    
-    @Override
-    public int property_size() {
-            return propertieS.property_size();
-    }
-
-    @Override
-    public long[] get_properties() {
-        return propertieS.get_properties();
-    }
-
-    @Override
-    public boolean add_property(Concept cpt) {
-        return propertieS.add_property(cpt);
-    }
-
-    @Override
-    public boolean remove_property(Concept cpt) {
-        return propertieS.remove_property(cpt);
-    }
-
-    @Override
-    public void set_properties(Concept[] concepts) {
-        propertieS.set_properties(concepts);
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -124,7 +95,4 @@ public final class PrimusInterPares_prem extends Set_prim implements ActivationI
     
     /** The active cid. The rest of the cids are antiactive. */
     private long primusCid;
-    
-    /** Set of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
-    private PropertyImpl propertieS = new PropertyImpl();
 }

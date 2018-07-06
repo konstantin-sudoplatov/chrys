@@ -4,6 +4,8 @@ import attention.ConceptNameSpace;
 import auxiliary.Effects;
 import concepts.dyn.ifaces.ActivRangeImpl;
 import auxiliary.Lot;
+import chris.BaseMessageLoop;
+import chris.Crash;
 import chris.Glob;
 import concepts.*;
 import concepts.dyn.ifaces.ActivationIface;
@@ -83,7 +85,16 @@ public class Neuron extends DynamicConcept implements ActivationIface, ActivRang
      * @return array of ways
      */
     public long[] calculate_activation_and_do_actions(ConceptNameSpace caldron) {
-        float activation = calculate_activation(caldron);
+        
+        // Check that this neuron belongs to the caldron
+        if (this.get_name_space() != caldron)
+            throw new Crash(String.format("Wrong caldron for this neuron.\n%s\n%s\nNeuron:\n%s", 
+                    ((BaseMessageLoop)caldron).to_list_of_lines("must be", 10),
+                    ((BaseMessageLoop)this.get_name_space()).to_list_of_lines("really is", 10),
+                    this.to_list_of_lines("", 10))
+            );
+        
+        float activation = calculate_activation();
         Effects effects = get_effects(activation);
         if      // is there actions?
                 (effects != null && effects.actions != null)
@@ -100,8 +111,8 @@ public class Neuron extends DynamicConcept implements ActivationIface, ActivRang
     }
 
     @Override
-    public float calculate_activation(ConceptNameSpace caldron) {
-        return activatioN.calculate_activation(caldron);
+    public float calculate_activation() {
+        return activatioN.calculate_activation();
     }
     
     @Override
@@ -129,31 +140,6 @@ public class Neuron extends DynamicConcept implements ActivationIface, ActivRang
         rangeS.add_effects(lowerBoundary, action, ways);
     }
 
-//    @Override
-//    public int effect_size() {
-//        return effectS.effect_size();
-//    }
-//    
-//    @Override
-//    public long get_effect(int index) {
-//        return effectS.get_effect(index);
-//    }
-//
-//    @Override
-//    public long[] get_effects() {
-//        return effectS.get_effects();
-//    }
-//
-//    @Override
-//    public long add_effect(Concept cpt) {
-//        return effectS.add_effect(cpt);
-//    }
-//
-//    @Override
-//    public void set_effects(Concept[] concepts) {
-//        effectS.set_effects(concepts);
-//    }
-//
 //    @Override
 //    public long get_property(int index) {
 //        return propertieS[index];

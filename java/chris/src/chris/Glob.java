@@ -562,7 +562,7 @@ final public class Glob {
 //        return lst;
 //    }
 //    public List<String> to_list_of_lines() {
-//        return to_list_of_lines("", 2);
+//        return to_list_of_lines("", 20);
 //    }
 
             // Шаблон для вставки в конкретный класс

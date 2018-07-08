@@ -141,7 +141,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
      * @param cid
      * @param circle an attention bubble loop.
      * @return cid
-     * @throws Crash if the cid does not exists
+     * @throws Crash if the cid does not cpt_exists
      */
     public synchronized long copy_cpt_to_circle(long cid, AttnCircle circle) {
         Concept cpt = comDir.get(cid);
@@ -166,7 +166,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
      * @param cptName
      * @param circle
      * @return cid
-     * @throws Crash if the name does not exists
+     * @throws Crash if the name does not cpt_exists
      */
     public synchronized long copy_cpt_to_circle(String cptName, AttnCircle circle) {
         Long cid = Glob.named.name_cid.get(cptName);
@@ -196,6 +196,20 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
             return comDir.get(cid);
         else 
             throw new Crash("Now such concept: name = " + cptName);
+    }
+    
+    @Override
+    public synchronized boolean cpt_exists(long cid) {
+        return comdir_containsKey(cid);
+    }
+    
+    @Override
+    public synchronized boolean cpt_exists(String cptName) {
+        Long cid = Glob.named.name_cid.get(cptName);
+        if (cid != null)
+            return this.cpt_exists(cid);
+        else
+            return false;
     }
 
     @Override

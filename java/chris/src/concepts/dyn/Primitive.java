@@ -7,5 +7,5 @@ import concepts.DynamicConcept;
  * structure.
  * @author su
  */
-public class Primitive extends DynamicConcept {
+abstract public class Primitive extends DynamicConcept {
 }

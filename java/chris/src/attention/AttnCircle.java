@@ -76,6 +76,16 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
             return _cptDir_.get(cid);
         }
     }
+    
+    @Override
+    public synchronized boolean cpt_exists(long cid) {
+        if      // does it exist locally?
+                (_cptDir_.containsKey(cid))
+            // yes
+            return true;
+        else
+            return attnDisp.cpt_exists(cid);
+    }
 
     /** 
      * Test if the concept directory contains a concept. Called from attention dispatcher.
@@ -106,7 +116,7 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
     @Override
     public synchronized void request_termination() {
         
-        // terminate the caldron hierarchy, if exists
+        // terminate the caldron hierarchy, if cpt_exists
         if
                 (caldronList != null)
         {

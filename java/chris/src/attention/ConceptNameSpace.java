@@ -27,6 +27,20 @@ public interface ConceptNameSpace {
     public Concept get_cpt(String cptName);
     
     /**
+     * Check if concept can be get.
+     * @param cid
+     * @return true/false
+     */
+    public boolean cpt_exists(long cid);
+
+    /**
+     * Check if concept can be get.
+     * @param cptName
+     * @return true/false
+     */
+    public boolean cpt_exists(String cptName);
+    
+    /**
      * Get attention circle for this caldron.
      * @return 
      */

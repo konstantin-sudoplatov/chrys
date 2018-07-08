@@ -77,6 +77,26 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
         else 
             throw new Crash("Now such concept: name = " + cptName);
     }
+    
+    @Override
+    public synchronized boolean cpt_exists(long cid) {
+        if      // does it exist locally?
+                (_cptDir_.containsKey(cid))
+            // yes
+            return true;
+        else // find in predecessors. We never get here if this caldron is the attention circle,
+            // since this method is overriden.
+            return parenT.cpt_exists(cid);
+    }
+    
+    @Override
+    public synchronized boolean cpt_exists(String cptName) {
+        Long cid = Glob.named.name_cid.get(cptName);
+        if (cid != null)
+            return Caldron.this.cpt_exists(cid);
+        else
+            return false;
+    }
 
     @Override
     public AttnCircle get_attn_circle() {
@@ -117,6 +137,7 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
      */
     protected void _reasoning_() {
         while(true) {
+Glob.println(Glob.here_count++, "here_count");
 Glob.print(get_cpt(_head_), "head before actions", 0);
 Glob.println(get_cpt(DynCptName.chat_media_prem.name()), "chat media", 8);
             // Do the assessment

@@ -15,6 +15,7 @@ import concepts.dyn.premises.And_prem;
 import concepts.dyn.premises.Peg_prem;
 import concepts.dyn.premises.String_prem;
 import concepts.dyn.premises.PrimusInterPares_prem;
+import concepts.dyn.primitives.Peg_prim;
 import concepts.dyn.stocks.ListStock;
 
 /**
@@ -47,9 +48,9 @@ final public class Starter {
     public static void chat_rootway() {
 
         // Primus inter pares premises "chat_media_prem" contains "it_is_console_chat_prem", "it_is_http_chat_prem" premises
-        Peg_prem itIsConsoleChat = new Peg_prem();
+        Peg_prim itIsConsoleChat = new Peg_prim();
         long itIsConsoleChatCid = Glob.attn_disp_loop.add_cpt(itIsConsoleChat, DynCptName.it_is_console_chat_prem.name());
-        Peg_prem itIsHttpChat = new Peg_prem();
+        Peg_prim itIsHttpChat = new Peg_prim();
         long itIsHttpChatCid = Glob.attn_disp_loop.add_cpt(itIsHttpChat, DynCptName.it_is_http_chat_prem.name());
         PrimusInterPares_prem chatMedia = new PrimusInterPares_prem();
         long chatMediaCid = Glob.attn_disp_loop.add_cpt(chatMedia, DynCptName.chat_media_prem.name());

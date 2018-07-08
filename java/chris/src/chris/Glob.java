@@ -26,6 +26,9 @@ import starter.Starter;
 final public class Glob {
 
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
+    /** Debugging. System.out.println(Glob.here_count++) inserted in a line where a conditional
+      breakpoint would be set up the next run. */
+    public static int here_count = 1;
 
     /** The end of the static cids range. The range goes from 0 to this. */
     public final static long MAX_STATIC_CID = 1000000;
@@ -703,7 +706,7 @@ final public class Glob {
      */
     public static List<String> add_list_of_lines(List<String> lst, String note, Object[] arrayOfObjects, int debugLevel)
     {
-        if (arrayOfObjects == null) return lst;
+        if (arrayOfObjects == null || arrayOfObjects.length == 0) return lst;
         
         if      // is arrayOfObjects Long[]?
                 (arrayOfObjects[0] instanceof Long)

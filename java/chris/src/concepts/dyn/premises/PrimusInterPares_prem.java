@@ -3,13 +3,16 @@ package concepts.dyn.premises;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
+import concepts.dyn.Primitive;
 import concepts.dyn.ifaces.ActivationIface;
 import concepts.dyn.ifaces.ActivationIface.NormalizationType;
 import concepts.dyn.primitives.Set_prim;
 import java.util.List;
 
 /**
- * Premise, that bears a set of cids. Only one of them is a selected member of group.
+ * Premise, that bears a set of cids. Only one of them is a selected member of group and
+ * then this premise gets active (before the selection it is antiactive). To avoid ambiguity
+ * member concepts should not implement the activation interface (must be primitives).
  * @author su
  */
 public final class PrimusInterPares_prem extends Set_prim implements ActivationIface {
@@ -26,7 +29,7 @@ public final class PrimusInterPares_prem extends Set_prim implements ActivationI
      * @param cpt
      * @param primus
      */ 
-    public PrimusInterPares_prem(Concept[] cpt, Concept primus) { 
+    public PrimusInterPares_prem(Primitive[] cpt, Primitive primus) { 
         set_members(cpt);
         set_primus(primus);
     } 
@@ -91,11 +94,19 @@ public final class PrimusInterPares_prem extends Set_prim implements ActivationI
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
         if (debugLevel == 0) {
-            Glob.add_line(lst, String.format("primusCid = %s", primusCid));
+            Glob.add_line(lst, String.format("get_activation() = %s", get_activation()));
+            Glob.append_last_line(lst, String.format(", primusCid = %s", primusCid));
         }
         else if (debugLevel > 0) {
-            Glob.add_list_of_lines(lst, get_name_space().get_cpt(primusCid).
-                    to_list_of_lines("primusCid", debugLevel-1));
+            if      // does the concept exist?
+                    (get_name_space().cpt_exists(primusCid))
+            {
+                Glob.add_line(lst, String.format("get_activation() = %s", get_activation()));
+                Glob.add_list_of_lines(lst, get_name_space().get_cpt(primusCid).
+                        to_list_of_lines("primusCid", debugLevel-1));
+            }
+            else 
+                Glob.add_line(lst, String.format("get_activation() = %s, primusCid = null", get_activation()));
         }
 
         return lst;

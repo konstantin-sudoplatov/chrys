@@ -3,7 +3,6 @@ package concepts.dyn.premises;
 import chris.Crash;
 import chris.Glob;
 import concepts.dyn.ifaces.ActivationIface;
-import concepts.dyn.ifaces.ActivationImpl;
 import concepts.dyn.primitives.String_prim;
 import java.util.List;
 
@@ -29,27 +28,12 @@ public class String_prem extends String_prim implements ActivationIface{
 
     @Override
     public ActivationIface.NormalizationType get_normalization_type() {
-        return activatioN.get_normalization_type();
+        return NormalizationType.BIN;
     }
    
     @Override
     public float get_activation() {
-        return activatioN.get_activation();
-    }
-
-    @Override
-    public void set_activation(float activation) {
-        activatioN.set_activation(activation);
-    }
-
-    @Override
-    public float calculate_activation() {
-        throw new Crash("Is not realised for this concept.");
-    }
-
-    @Override
-    public float normalize_activation() {
-        throw new Crash("Is not realised for this concept.");
+        return get_string() == null? -1: 1;
     }
 
     /**
@@ -61,7 +45,7 @@ public class String_prem extends String_prim implements ActivationIface{
     @Override
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
-        Glob.add_list_of_lines(lst, activatioN.to_list_of_lines("activatioN", debugLevel-1));
+        Glob.append_last_line(lst, String.format(", get_activation() = %s", get_activation()));
 
         return lst;
     }
@@ -73,7 +57,4 @@ public class String_prem extends String_prim implements ActivationIface{
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
-
-    /** Activation.  */
-    private ActivationImpl activatioN = new ActivationImpl(this, ActivationType.SET, NormalizationType.BIN);
 }

@@ -42,7 +42,7 @@ public class LotImpl implements LotIface, Cloneable {
     }
 
     @Override
-    public int size() {
+    public int lot_size() {
         if (lotS == null)
             return 0;
         else
@@ -93,9 +93,11 @@ public class LotImpl implements LotIface, Cloneable {
         
         if (lotS == null)
             Glob.add_line(lst, String.format("lotS = null"));
+        else if (debugLevel <= 0)
+            Glob.append_last_line(lst, String.format(", lotS.length = %s", lotS.length));
         else
-            for(int i = 0; i < lotS.length; i++)
-                Glob.add_list_of_lines(lst, lotS[i].to_list_of_lines(String.format("lot[%s]", i), debugLevel));
+            Glob.add_list_of_lines(lst, "lotS", lotS, debugLevel-1);
+        
         
         return lst;
     }

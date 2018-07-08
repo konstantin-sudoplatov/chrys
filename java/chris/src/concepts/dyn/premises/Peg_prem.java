@@ -1,18 +1,16 @@
 package concepts.dyn.premises;
 
-import chris.Crash;
 import chris.Glob;
 import concepts.dyn.Primitive;
-import concepts.dyn.ifaces.ActivationIface;
 import concepts.dyn.ifaces.ActivationIface.NormalizationType;
-import concepts.dyn.ifaces.ActivationImpl;
+import concepts.dyn.ifaces.BinActivationIface;
 import java.util.List;
 
 /**
  * The simplest premise. It is only the cid, that bears information for this concept.
  * @author su
  */
-public class Peg_prem extends Primitive implements ActivationIface {
+public class Peg_prem extends Primitive implements BinActivationIface {
 
     /** 
      * Constructor.
@@ -28,27 +26,22 @@ public class Peg_prem extends Primitive implements ActivationIface {
 
     @Override
     public NormalizationType get_normalization_type() {
-        return activatioN.get_normalization_type();
+        return NormalizationType.BIN;
     }
    
     @Override
     public float get_activation() {
-        return activatioN.get_activation();
+        return activatioN;
     }
 
     @Override
-    public void set_activation(float activation) {
-        activatioN.set_activation(activation);
+    public void activate() {
+        activatioN = 1;
     }
 
     @Override
-    public float calculate_activation() {
-        throw new Crash("Is not realised for this concept.");
-    }
-
-    @Override
-    public float normalize_activation() {
-        throw new Crash("Is not realised for this concept.");
+    public void antiactivate() {
+        activatioN = -1;
     }
 
     /**
@@ -60,7 +53,7 @@ public class Peg_prem extends Primitive implements ActivationIface {
     @Override
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
-        Glob.add_list_of_lines(lst, activatioN.to_list_of_lines("activatioN", debugLevel-1));
+        Glob.append_last_line(lst, String.format("activatioN", activatioN));
 
         return lst;
     }
@@ -74,5 +67,5 @@ public class Peg_prem extends Primitive implements ActivationIface {
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
     /** Activation.  */
-    private ActivationImpl activatioN = new ActivationImpl(this, ActivationType.SET, NormalizationType.BIN);
+    private float activatioN = -1;  // antiactive until set otherwise.
 }

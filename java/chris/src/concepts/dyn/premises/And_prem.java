@@ -4,7 +4,6 @@ import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
 import concepts.dyn.ifaces.ActivationIface;
-import concepts.dyn.ifaces.ActivationImpl;
 import concepts.dyn.primitives.Set_prim;
 import java.util.List;
 
@@ -42,7 +41,7 @@ public class And_prem extends Set_prim implements ActivationIface {
         
         greenCount--;
         if (greenCount == 0 )
-            set_activation(1);
+            activatioN = 1;
         
         return greenCount;
     }
@@ -77,34 +76,27 @@ public class And_prem extends Set_prim implements ActivationIface {
    
     @Override
     public float get_activation() {
-        return activatioN.get_activation();
+        return activatioN;
     }
 
-    @Override
-    public void set_activation(float activation) {
-        throw new Crash("Is not supported for this concept, use calculate_activation().");
-    }
-
-    @Override
+    /**
+     * Sets the activation value to the logical production of the activations of members.
+     * @return calculated activation value.
+     */
     public float calculate_activation() {
-        activatioN.set_activation(1);
+        activatioN = 1;
         greenCount = 0;
         for (Long cid: get_members()) {
             ActivationIface cpt = (ActivationIface)this.get_name_space().get_cpt(cid);
             if      // is it an antiactive concept?
                     (cpt.get_activation() <= 0)
             {   // our activation will be antiactive also
-                activatioN.set_activation(-1);
+                activatioN = -1;
                 greenCount++;
             }
         }
         
-        return activatioN.get_activation();
-    }
-
-    @Override
-    public float normalize_activation() {
-        throw new Crash("Is not supported for this concept.");
+        return activatioN;
     }
 
     /**
@@ -116,7 +108,7 @@ public class And_prem extends Set_prim implements ActivationIface {
     @Override
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
-        Glob.append_last_line(lst, String.format("get_activation() = %s", get_activation()));
+        Glob.append_last_line(lst, String.format("activatioN = %s", activatioN));
 
         return lst;
     }
@@ -130,7 +122,7 @@ public class And_prem extends Set_prim implements ActivationIface {
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
     
     /** Activation.  */
-    private ActivationImpl activatioN = new ActivationImpl(this, ActivationType.SET, NormalizationType.BIN);
+    private float activatioN = -1;
     
     /** Count of antiactive members. */
     private int greenCount;

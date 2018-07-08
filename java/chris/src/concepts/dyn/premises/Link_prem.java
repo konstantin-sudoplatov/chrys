@@ -1,13 +1,12 @@
 package concepts.dyn.premises;
 
-import attention.Caldron;
 import chris.Crash;
 import chris.Glob;
 import concepts.dyn.primitives.Set_prim;
 import java.util.List;
 
 /**
- * A peg with link to its owner caldron. Used in the inter caldron notification. Its mate is the Link_actn.
+ * A peg with a link to its owner caldron. Used in the inter caldron notification. Its mate is the Link_actn.
  * @author su
  */
 public class Link_prem extends Peg_prem {
@@ -27,10 +26,11 @@ public class Link_prem extends Peg_prem {
     /**
      * Activate the premise and transfer its activation onto the agregator.
      */
+    @Override
     public void activate() {
         if (agregatoR == null)
             throw new Crash("The agregate premise must be set before activation.");
-        super.set_activation(1);
+        super.activate();
         if
                 (agregatoR instanceof And_prem)
             ((And_prem)agregatoR).decrement_green_count();
@@ -44,10 +44,11 @@ public class Link_prem extends Peg_prem {
     /**
      * Antiactivate the premise and transfer its activation onto the agregator.
      */
+    @Override
     public void antiactivate() {
         if (agregatoR == null)
             throw new Crash("The agregate premise must be set before activation.");
-        super.set_activation(-1);
+        super.antiactivate();
         if
                 (agregatoR instanceof And_prem)
             ((And_prem)agregatoR).calculate_activation();

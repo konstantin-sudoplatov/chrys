@@ -156,7 +156,6 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
             
             String_prem lineOfChat = (String_prem)get_cpt(DynCptName.line_from_chatter_strprem.name());
             lineOfChat.set_string(((Msg_ConsoleToAttnCircle) msg).text);
-            lineOfChat.set_activation(1);
             
             _reasoning_();
             

@@ -12,7 +12,7 @@ public interface LotIface {
      * Size of the lot list
      * @return  
      */
-    public int size();
+    public int lot_size();
     
     /**
      * Getter.

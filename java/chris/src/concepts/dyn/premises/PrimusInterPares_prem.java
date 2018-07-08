@@ -70,25 +70,6 @@ public final class PrimusInterPares_prem extends Set_prim implements ActivationI
     public float get_activation() {
         return primusCid == 0? -1: 1;
     }
-
-    /**
-     * Disable the activation setter. Activation sets up in the set_primus() method.
-     * @param activation
-     */
-    @Override
-    public void set_activation(float activation) {
-        throw new Crash("The activation field sets up in the set_primus_cid() method.");
-    }
-
-    @Override
-    public float calculate_activation() {
-        throw new Crash("Is not realised for this concept.");
-    }
-
-    @Override
-    public float normalize_activation() {
-        throw new Crash("Is not realised for this concept.");
-    }
     
     @Override
     public List<String> to_list_of_lines(String note, Integer debugLevel) {

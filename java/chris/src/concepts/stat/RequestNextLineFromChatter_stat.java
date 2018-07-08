@@ -45,7 +45,7 @@ public class RequestNextLineFromChatter_stat extends StaticAction {
                 (chatMedia.equals(DynCptName.it_is_console_chat_prem.name()))
         {
                 String_prem lineOfChat = (String_prem)nameSpace.get_cpt(DynCptName.line_from_chatter_strprem.name());
-                lineOfChat.set_activation(-1);      // make it antiactive
+                lineOfChat.set_string(null);      // make it antiactive
                 AttnCircle attnCircle = nameSpace.get_attn_circle();
                 AttnDispatcherLoop attnDisp = attnCircle.get_attn_dispatcher();
                 attnDisp.put_in_queue(new Msg_ReadFromConsole());

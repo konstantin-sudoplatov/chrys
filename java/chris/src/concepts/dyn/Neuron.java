@@ -9,7 +9,6 @@ import chris.Crash;
 import chris.Glob;
 import concepts.*;
 import concepts.dyn.ifaces.ActivationIface;
-import concepts.dyn.ifaces.ActivationImpl;
 import java.util.List;
 import concepts.dyn.ifaces.LotIface;
 import concepts.dyn.ifaces.ActivRangeIface;
@@ -20,25 +19,14 @@ import concepts.dyn.ifaces.LotImpl;
  * The same way it determines successors and their activations. 
  * @author su
  */
-public class Neuron extends DynamicConcept implements ActivationIface, ActivRangeIface, LotIface {
+public abstract class Neuron extends DynamicConcept implements ActivationIface, ActivRangeIface, LotIface {
 
     /**
      * Default constructor.
-     * @param activType activation type
-     * @param normType normalization type
      */
-    public Neuron(ActivationType activType, NormalizationType normType) 
+    public Neuron() 
     {
-        activatioN = new ActivationImpl(this, activType, normType);
     }
-
-//    /**
-//     * Constructor
-//     * @param props array of cids of concept properties. 
-//     */
-//    public Neuron(long[] props) {
-//        this.propertieS = props;
-//    }
     
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -50,31 +38,17 @@ public class Neuron extends DynamicConcept implements ActivationIface, ActivRang
     public Neuron clone() {
         Neuron clone = (Neuron)super.clone();
 //        if (propertieS != null) clon.propertieS = Arrays.copyOf(propertieS, propertieS.length);
-        if (activatioN != null) clone.activatioN = (ActivationImpl)activatioN.clone();
         if (rangeS != null) clone.rangeS = (ActivRangeImpl)rangeS.clone();
-        if (lotS != null) clone.lotS = (LotImpl)lotS.clone();
         
         return clone;
     }
 
     @Override
-    public NormalizationType get_normalization_type() {
-        return activatioN.get_normalization_type();
-    }
-   
+    public abstract NormalizationType get_normalization_type();
+    
     @Override
     public float get_activation() {
-        return activatioN.get_activation();
-    }
-
-    @Override
-    public void set_activation(float activation) {
-        activatioN.set_activation(activation);
-    }
-
-    @Override
-    public float normalize_activation() {
-        return activatioN.normalize_activation();
+        return _activation_;
     }
 
     /**
@@ -94,7 +68,7 @@ public class Neuron extends DynamicConcept implements ActivationIface, ActivRang
                     Glob.list_to_listln(this.to_list_of_lines("", 10)))
             );
         
-        float activation = calculate_activation();
+        float activation = _calculateActivation_(caldron);
         Effects effects = get_effects(activation);
         if      // is there actions?
                 (effects != null && effects.actions != null)
@@ -108,11 +82,6 @@ public class Neuron extends DynamicConcept implements ActivationIface, ActivRang
             return null;
         else
             return effects.ways;
-    }
-
-    @Override
-    public float calculate_activation() {
-        return activatioN.calculate_activation();
     }
     
     @Override
@@ -160,41 +129,6 @@ public class Neuron extends DynamicConcept implements ActivationIface, ActivRang
 //    public void set_properties(long[] propArray) {
 //        propertieS = propArray;
 //    }
-
-    @Override
-    public int size() {
-        return lotS.size();
-    }
-    
-    @Override
-    public Lot get_lot(int index) {
-        return lotS.get_lot(index);
-    }
-
-    @Override
-    public Lot[] get_lots() {
-        return lotS.get_lots();
-    }
-
-    @Override
-    public Lot add_lot(Lot lot) {
-        return lotS.add_lot(lot);
-    }
-
-    @Override
-    public void set_lots(Lot[] lots) {
-        lotS.set_lots(lots);
-    }
-
-    @Override
-    public float get_bias() {
-        return lotS.get_bias();
-    }
-
-    @Override
-    public void set_bias(float bias) {
-        lotS.set_bias(bias);
-    }
         
     /**
      * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
@@ -205,11 +139,9 @@ public class Neuron extends DynamicConcept implements ActivationIface, ActivRang
     @Override
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
+        Glob.append_last_line(lst, String.format(", _activation_ = %s", _activation_));
         if(debugLevel > 0) {
-            Glob.add_list_of_lines(lst, activatioN.to_list_of_lines("activatioN", debugLevel-1));
-
             Glob.add_list_of_lines(lst, rangeS.to_list_of_lines("rangeS", debugLevel-1));
-            Glob.add_list_of_lines(lst, lotS.to_list_of_lines("lotS", debugLevel-1));
         }
 
         return lst;
@@ -223,7 +155,17 @@ public class Neuron extends DynamicConcept implements ActivationIface, ActivRang
 
     //---$$$---$$$---$$$---$$$---$$$--- protected data $$$---$$$---$$$---$$$---$$$---$$$--
 
+    /** Activation.  */
+    protected float _activation_ = -1;
+    
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
+
+    /**
+     * Calculate it.
+     * @param caldron
+     * @return 
+     */
+    protected abstract float _calculateActivation_(ConceptNameSpace caldron);
     
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
@@ -232,18 +174,12 @@ public class Neuron extends DynamicConcept implements ActivationIface, ActivRang
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
-
-    /** Activation.  */
-    private ActivationImpl activatioN;  // initialized in constructor
     
     /** Array of actions. */
     private ActivRangeImpl rangeS = new ActivRangeImpl();
     
 //    /** Array of cids, defining pertinent data . The cids are not forbidden to be duplicated in the premises. */
 //    private long[] propertieS;
-    
-    /** Weights and premises. */
-    private LotImpl lotS = new LotImpl();
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
     

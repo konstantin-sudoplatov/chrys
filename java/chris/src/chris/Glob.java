@@ -62,10 +62,11 @@ final public class Glob {
     public static void initialize_application() {
         console_loop.start();
         attn_disp_loop.start();
-        Starter.common_concepts();
-        Starter.chat_rootway();
-        Starter.chat_log_way();
-        Starter.chat_seeds();
+        Starter starter = new Starter();
+        starter.common_concepts();
+        starter.chat_seed();
+//        starter.chat_rootway();
+//        starter.chat_log_way();
     }
         
     /**

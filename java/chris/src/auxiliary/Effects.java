@@ -1,9 +1,7 @@
 package auxiliary;
 
-import attention.ConceptNameSpace;
 import chris.Crash;
 import chris.Glob;
-import concepts.Concept;
 import java.util.List;
 
 /**

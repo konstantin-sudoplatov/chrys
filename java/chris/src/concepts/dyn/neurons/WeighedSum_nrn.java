@@ -5,15 +5,16 @@ import auxiliary.Lot;
 import chris.Glob;
 import concepts.dyn.Neuron;
 import concepts.dyn.ifaces.ActivationIface;
+import concepts.dyn.ifaces.LotIface;
 import concepts.dyn.ifaces.LotImpl;
 import java.util.List;
 
 /**
  * Neuron, that has an implementation of a lot interface and implements the _calculateActivation_()
- * method as a weghed sum of premise's activations.
+ * method as a weighed sum of premise's activations.
  * @author su
  */
-public class WeighedSum_nrn extends Neuron {
+public class WeighedSum_nrn extends Neuron implements LotIface{
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 

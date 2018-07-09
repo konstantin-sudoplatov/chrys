@@ -6,6 +6,7 @@ import chris.Glob;
 import concepts.Concept;
 import concepts.DynCptName;
 import concepts.dyn.Neuron;
+import concepts.dyn.premises.Peg_prem;
 import concepts.dyn.premises.String_prem;
 import java.util.List;
 
@@ -30,14 +31,14 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
         this.attnDisp = attnDisp;
         
         // Seed
-        Neuron seed;
+        Neuron seed = (Neuron)get_cpt(DynCptName.chat_seed_uncnrn.name());
         switch(circleType) {
             case it_is_console_chat_prem:
-                seed = (Neuron)get_cpt(DynCptName.chat_console_main_seed_nrn.name());
+                ((Peg_prem)get_cpt(DynCptName.it_is_console_chat_prem.name())).activate();
                 break;
                 
             case it_is_http_chat_prem:
-                seed = (Neuron)get_cpt(DynCptName.chat_http_main_seed_nrn.name());
+                ((Peg_prem)get_cpt(DynCptName.it_is_http_chat_prem.name())).activate();
                 break;
                 
             default:

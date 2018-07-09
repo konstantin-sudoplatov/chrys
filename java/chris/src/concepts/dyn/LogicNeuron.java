@@ -2,56 +2,68 @@ package concepts.dyn;
 
 import attention.ConceptNameSpace;
 import chris.Glob;
-import concepts.DynamicConcept;
-import concepts.StatCptName;
-import concepts.StaticAction;
+import concepts.Concept;
+import concepts.dyn.ifaces.ActivationIface;
 import java.util.List;
 
 /**
- * All that needed to invoke the static concept processing. This concept is stateless, i.e. it cannot be used as a premise or a data source.
+ * Neuron, that keeps its premises as an array of cids and activates only when they satisfy certain boolean logic (e.g. "and" or
+ * "or"). The logic part is provided in descendants.
  * @author su
  */
-public class Action extends DynamicConcept {
+public abstract class LogicNeuron extends Neuron {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
-    /**
-     * Constructor.
-     * @param statAction as it is presented in the StatCptName enum.
-     */
-    public Action(StatCptName statAction) {
-        this._statActionCid_ = statAction.ordinal();
+    /** Constructor. */
+    public LogicNeuron() {
     }
 
-    /**
-     * Constructor for ActionPacket class.
-     */
-    protected Action(){}
-    
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
-    //                                  Public methods
+    //                            Public
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
-    /**
-     * Invoke the function of the static concept functor.
-     * @param nameSpace
-     */
-    public void go(ConceptNameSpace nameSpace) {
-        resultCids = ((StaticAction)nameSpace.get_cpt(_statActionCid_)).go(nameSpace, null, null);
+    @Override
+    public LogicNeuron clone() {
+        LogicNeuron clone = (LogicNeuron)super.clone();
+        if (premiseCids != null) clone.premiseCids = premiseCids.clone();
+        
+        return clone;
     }
-
+    
+    @Override
+    public NormalizationType get_normalization_type() {
+        return NormalizationType.BIN;
+    }
+    
     /**
+     * Add new element to the array of premises.
+     * @param prem 
+     */
+    public void add_premise(ActivationIface prem) {
+        Glob.append_array(premiseCids, ((Concept)prem).get_cid());
+    }
+    
+    /**
+     * Size of the premises array.
+     * @return 
+     */
+    public int premises_size() {
+        return premiseCids.length;
+    }
+    
+    /** 
      * Getter.
-     * @return result cids array. 
+     * @return 
      */
-    public long[] get_result_cids() {
-        return resultCids;
+    public long[] get_premises() {
+        return premiseCids;
     }
-
+    
     /**
      * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
      * @param note printed in the first line just after the object type.
@@ -61,11 +73,12 @@ public class Action extends DynamicConcept {
     @Override
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
-        if (debugLevel >= 0) {
-            Glob.add_line(lst, String.format("_statActionCid_ = %s", _statActionCid_));
-            Glob.add_list_of_lines(lst, "resultCids", resultCids, debugLevel-1);
+        if (debugLevel == 0)
+            Glob.add_line(lst, String.format("premiseCids.length = %s", premiseCids.length));
+        else if(debugLevel > 0) {
+            Glob.add_list_of_lines(lst, "premiseCids[]", premiseCids, debugLevel-1);
         }
-        
+
         return lst;
     }
     
@@ -76,23 +89,22 @@ public class Action extends DynamicConcept {
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
 
     //---$$$---$$$---$$$---$$$---$$$--- protected data $$$---$$$---$$$---$$$---$$$---$$$--
-
-    /** Concept, that provides the processing. */
-    protected long _statActionCid_;
-
-    //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
-
-    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-    //
-    //      Private    Private    Private    Private    Private    Private    Private
-    //
-    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-
-    //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
     
-    private long[] resultCids;
+    //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
+        
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+    //
+    //                               Private
+    //
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+
+    //---%%%---%%%---%%%---%%%---%%% private data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+    /** Premises. Must implement the ActivationIface interface. */
+    private long[] premiseCids;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--
-}
+   
+}   // class

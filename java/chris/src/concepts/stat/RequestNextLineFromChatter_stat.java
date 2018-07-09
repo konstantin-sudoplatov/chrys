@@ -53,7 +53,7 @@ public class RequestNextLineFromChatter_stat extends StaticAction {
         else if
                (chatMedia.equals(DynCptName.it_is_http_chat_prem.name()))
         {
-            throw new Crash("Not realized yet.");
+            throw new Crash("Not implemented yet.");
         }
         else
             throw new Crash("Unknown chat media " + chatMedia);

@@ -1,4 +1,4 @@
-package concepts.dyn.premises;
+package sump;
 
 import chris.Glob;
 import concepts.Concept;

@@ -4,6 +4,8 @@ import auxiliary.ActivRange;
 import auxiliary.Effects;
 import chris.Crash;
 import chris.Glob;
+import concepts.dyn.Action;
+import concepts.dyn.Neuron;
 import java.util.List;
 
 /**
@@ -42,7 +44,7 @@ public class ActivRangeImpl implements ActivRangeIface, Cloneable {
     }
 
     @Override
-    public Effects get_effects(float activation) {
+    public Effects select_effects(float activation) {
         if      // not initialized yet?
                 (rangeS == null)
             throw new Crash("Trying to get an action cid from uninitialized ActionSelector.");
@@ -76,18 +78,18 @@ public class ActivRangeImpl implements ActivRangeIface, Cloneable {
     }
 
     @Override
-    public void add_effects(float lowerBoundary, long action, long way) {
-        add_effects(lowerBoundary, new long[] {action}, new long[] {way});
+    public void add_effects(float lowerBoundary, Action action, Neuron way) {
+        add_effects(lowerBoundary, new long[] {action.get_cid()}, new long[] {way.get_cid()});
     }
 
     @Override
-    public void add_effects(float lowerBoundary, long[] actions, long way) {
-        add_effects(lowerBoundary, actions, new long[] {way});
+    public void add_effects(float lowerBoundary, long[] actions, Neuron way) {
+        add_effects(lowerBoundary, actions, new long[] {way.get_cid()});
     }
 
     @Override
-    public void add_effects(float lowerBoundary, long action, long[] ways) {
-        add_effects(lowerBoundary, new long[] {action}, ways);
+    public void add_effects(float lowerBoundary, Action action, long[] ways) {
+        add_effects(lowerBoundary, new long[] {action.get_cid()}, ways);
     }
 
     /**

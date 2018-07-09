@@ -5,7 +5,6 @@ import chris.BaseMessageLoop;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
-import concepts.DynCptName;
 import concepts.dyn.Neuron;
 import java.util.HashMap;
 import java.util.Map;

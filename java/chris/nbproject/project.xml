@@ -12,20 +12,16 @@
             </test-roots>
         </data>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
-            <word>actn</word>
-            <word>Antiactivate</word>
             <word>antiactivated</word>
             <word>antiactive</word>
             <word>Caldrons</word>
             <word>cid</word>
             <word>cidded</word>
             <word>cids</word>
-            <word>cpt</word>
             <word>enum</word>
             <word>initially</word>
+            <word>nrn</word>
             <word>prem</word>
-            <word>println</word>
-            <word>strprem</word>
             <word>subcaldrons</word>
         </spellchecker-wordlist>
     </configuration>

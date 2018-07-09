@@ -7,18 +7,18 @@ import concepts.dyn.ifaces.ActivationIface;
 import java.util.List;
 
 /**
- * Neuron, that keeps its premises as an array of cids and activates only when all of them 
- * are active.
+ * Neuron, that keeps its premises as an array of cids and activates only when at least one of them 
+ * is active.
  * @author su
  */
-public class And_nrn extends LogicNeuron {
+public class Or_nrn extends LogicNeuron {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
     //---***---***---***---***---***--- public data ---***---***---***---***---***--
 
     /** Constructor. */
-    public And_nrn() {
+    public Or_nrn() {
     }
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -53,13 +53,13 @@ public class And_nrn extends LogicNeuron {
 
     @Override
     protected float _calculateActivation_(ConceptNameSpace caldron) {
-        _activation_ = 1;
+        _activation_ = -1;
         for (long cid: get_premises()) {
             ActivationIface cpt = (ActivationIface)caldron.get_cpt(cid);
             if      // is it an antiactive concept?
-                    (cpt.get_activation() <= 0)
+                    (cpt.get_activation() > 0)
             {   // our activation will be antiactive also
-                _activation_ = -1;
+                _activation_ = 1;
                 break;
             }
         }

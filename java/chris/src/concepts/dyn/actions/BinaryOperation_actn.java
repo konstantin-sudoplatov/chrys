@@ -1,6 +1,7 @@
 package concepts.dyn.actions;
 
 import attention.ConceptNameSpace;
+import concepts.StatCptName;
 import concepts.StaticAction;
 import concepts.dyn.Action;
 
@@ -16,9 +17,9 @@ public final class BinaryOperation_actn extends Action {
 
     /** 
      * Constructor.
-     * @param statActionCid
+     * @param statAction
      */ 
-    public BinaryOperation_actn(long statActionCid) { super(statActionCid); } 
+    public BinaryOperation_actn(StatCptName statAction) { super(statAction); } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //

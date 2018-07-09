@@ -1,6 +1,8 @@
 package concepts.dyn.ifaces;
 
 import auxiliary.Effects;
+import concepts.dyn.Action;
+import concepts.dyn.Neuron;
 
 /**
  * Getters and setters for the array of activation ranges.
@@ -14,7 +16,7 @@ public interface ActivRangeIface {
      * @return effect structure. It can consists of nulls or empty arrays but cannot be null itself.
      * @throws Crash() for uninitialized action selector or for nonexistent range.
      */
-    public Effects get_effects(float activation);
+    public Effects select_effects(float activation);
     
     /**
      * Add new element to the activation ranges array. The new boundary must be less or equal to the last existing boundary. One boundary
@@ -28,25 +30,26 @@ public interface ActivRangeIface {
     /** 
      * Ditto.
      * @param lowerBoundary
-     * @param action single action cid
-     * @param way single way cid
+     * @param action single action concept
+     * @param way single way neuron
      */
-    public void add_effects(float lowerBoundary, long action, long way);
+    public void add_effects(float lowerBoundary, Action action, Neuron way);
 
     /** 
      * Ditto.
      * @param lowerBoundary
      * @param actions array of action cids
-     * @param way single way cid
+     * @param way single way neuron
      */
-    public void add_effects(float lowerBoundary, long[] actions, long way);
+    public void add_effects(float lowerBoundary, long[] actions, Neuron way);
 
     /** 
      * Ditto.
      * @param lowerBoundary
-     * @param action single action cid
+     * @param action single action concept
+     * 
      * @param ways array of way cids
      */
-    public void add_effects(float lowerBoundary, long action, long[] ways);
+    public void add_effects(float lowerBoundary, Action action, long[] ways);
 
 }

@@ -1,5 +1,7 @@
 package concepts.dyn.premises;
 
+import sump.Or_prem;
+import sump.And_prem;
 import chris.Crash;
 import chris.Glob;
 import concepts.dyn.primitives.Set_prim;
@@ -103,6 +105,6 @@ public class Link_prem extends Peg_prem {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
-    /** An agregate premise like And_prem or Or_prem which contains this premise as a member. */
+    /** An agregate premise like And_nrn or Or_nrn which contains this concept as a premise. */
     private Set_prim agregatoR;
 }

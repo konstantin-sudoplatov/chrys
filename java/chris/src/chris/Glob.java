@@ -2,6 +2,7 @@ package chris;
 
 import attention.AttnDispatcherLoop;
 import attention.ConceptNameSpace;
+import auxiliary.CaldronDir;
 import auxiliary.NamedConcept;
 import concepts.Concept;
 import console.ConsoleLoop;

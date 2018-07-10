@@ -48,8 +48,8 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
      * Add a concept to the common or a bubble directory. Static concepts know their cid already, for dynamic concept it is randomly 
      * generated outside the static range.
      * @param cpt the concept to add
-     * @param circle the bubble, that contains the target directory or null if it is the common directory.
-     * @param cptName concept name to put in the name directory or null
+     * @param circle the bubble, that caldir_contains_key the target directory or null if it is the common directory.
+     * @param cptName concept name to put_caldron in the name directory or null
      * @return cid
      */
     @SuppressWarnings("UnnecessaryLabelOnContinueStatement")
@@ -58,7 +58,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
         long cid;
         if      // static concept?
                 (cpt instanceof StaticAction)
-        {   //yes: get cid
+        {   //yes: get_caldron cid
             cid = StatCptName.valueOf(cpt.getClass().getSimpleName()).ordinal();
         }
         else 
@@ -86,10 +86,10 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
         }
         cpt.set_name_space(this);
         
-        // put to target directories
+        // put_caldron to target directories
         if      // is it a named concept?
                 (cptName != null) 
-        {   //yes: put the cid into the front and reverse directories
+        {   //yes: put_caldron the cid into the front and reverse directories
             if      // does this name already exist?
                     (Glob.named.name_cid.containsKey(cptName))
                 //yes: that is a crime, crash
@@ -102,10 +102,10 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
         }
         if      // the concept addressed to attention dispatcher?
                 (circle == null)
-        {   //yes: put into comDir
+        {   //yes: put_caldron into comDir
             comDir.put(cid, cpt);
         }
-        else { //no: put into the addressed attention circle
+        else { //no: put_caldron into the addressed attention circle
             if      // it is not global, i.e. can be cloned to a caldron?
                     (!(cpt instanceof GlobalConcept))
                 circle.put_in_concept_directory(cid, cpt);
@@ -218,12 +218,57 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     }
     
     /**
-     *  Check to see if the common concept map contains a concept.
+     *  Check to see if the common concept map caldir_contains_key a concept.
      * @param cid 
      * @return
      */
     public synchronized boolean comdir_containsKey(long cid) {
         return comDir.containsKey(cid);
+    }
+
+    /**
+     * Get caldir_size.
+     * @return 
+     */
+    synchronized public int caldir_size() {
+        return caldronMap.size();
+    }
+    
+    /**
+     * Find if a cid in the map.
+     * @param cid
+     * @return 
+     */
+    synchronized public boolean caldir_contains_key(Long cid) {
+        return caldronMap.containsKey(cid);
+    }
+    
+    /**
+     * Get caldron.
+     * @param cid
+     * @return 
+     */
+    synchronized public Caldron get_caldron(Long cid) {
+        return caldronMap.get(cid);
+    }
+    
+    /**
+     * Add an entry to the map.
+     * @param cid
+     * @param caldron
+     * @return previous caldron or null.
+     */
+    synchronized public Caldron put_caldron(Long cid, Caldron caldron) {
+        return caldronMap.put(cid, caldron);
+    }
+    
+    /**
+     * Remove entry.
+     * @param cid
+     * @return removed caldron.
+     */
+    synchronized public Caldron remove_caldron(Long cid) {
+        return caldronMap.remove(cid);
     }
 
     @Override
@@ -272,6 +317,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
                     (consoleChatCircle == null)
             {
                 consoleChatCircle = new AttnCircle(this, DynCptName.it_is_console_chat_prem);
+                put_caldron(load_cpt(DynCptName.chat_seed_uncnrn.name()).get_cid(), consoleChatCircle);
                 addCircleToList(consoleChatCircle);
                 consoleChatCircle.start();
             }
@@ -290,6 +336,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
         
         return false;
     }
+    private AttnCircle consoleChatCircle;
     
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
@@ -298,31 +345,31 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
-
-    /** Common concept directory: a map of concepts by cids. */
     
     /** Concept by cid directory: a map of a concepts by their cids. */
     public final Map<Long, Concept> comDir = new HashMap<>();
     
+    /** cid-caldron map, where "cid" is the cid of the seed neuron of 
+      the reasoning branch as an identifier of the caldron. We would need synchronization, 
+      because the map can be concurrently accessed from different caldrons. */
+    private Map<Long, Caldron> caldronMap = new HashMap();
+    
     /** List of all attention bubbles */
     private final ArrayList<AttnCircle> attnBubbleList = new ArrayList<>();
-    
-    /** Attention circle, that chats with console. */
-    private AttnCircle consoleChatCircle;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     /**
      * Synchronized adding new bubble to the list of bubbles. We need synchronization if someone from outside the thread wants
      * to work with the list of bubbles (for example, wants to find a bubble to add a new concept to it).
-     * @param bubble attention bubble loop to add to the list.
+     * @param circle attention bubble loop to add to the list.
      */
-    private synchronized void addCircleToList(AttnCircle bubble) {
-        attnBubbleList.add(bubble);
+    private synchronized void addCircleToList(AttnCircle circle) {
+        attnBubbleList.add(circle);
     }
 
     /**
-     *  Load from DB or create static concept objects and put them into the common concepts map.
+     *  Load from DB or create static concept objects and put_caldron them into the common concepts map.
      */
     private void loadStaticConcepts() {
         

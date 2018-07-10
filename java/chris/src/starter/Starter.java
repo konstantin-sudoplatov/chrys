@@ -175,7 +175,7 @@ final public class Starter {
      * @return 
      */
     private Concept getCpt(long cid) {
-        return Glob.attn_disp_loop.get_cpt(cid);
+        return Glob.attn_disp_loop.load_cpt(cid);
     }
 
     /**
@@ -184,7 +184,7 @@ final public class Starter {
      * @return 
      */
     private Concept getCpt(DynCptName name) {
-        return Glob.attn_disp_loop.get_cpt(name.name());
+        return Glob.attn_disp_loop.load_cpt(name.name());
     }
 
     /**
@@ -193,6 +193,6 @@ final public class Starter {
      * @return 
      */
     private Concept getCpt(StatCptName name) {
-        return Glob.attn_disp_loop.get_cpt(name.name());
+        return Glob.attn_disp_loop.load_cpt(name.name());
     }
 }

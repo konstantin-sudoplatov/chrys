@@ -26,7 +26,7 @@ public class Antiactivate_stat extends StaticAction {
     @Override
     public long[] go(ConceptNameSpace nameSpace, long[] paramCids, Object extra) {
         
-        ((BinActivationIface)nameSpace.get_cpt(paramCids[0])).antiactivate();
+        ((BinActivationIface)nameSpace.load_cpt(paramCids[0])).antiactivate();
         
         return null;
     }

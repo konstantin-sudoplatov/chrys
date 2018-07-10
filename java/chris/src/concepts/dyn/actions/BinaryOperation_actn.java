@@ -33,7 +33,7 @@ public final class BinaryOperation_actn extends Action {
      */
     @Override
     public void go(ConceptNameSpace nameSpace) {
-        ((StaticAction)nameSpace.get_cpt(_statActionCid_)).go(nameSpace, new long[] {firstOperandCid, secondOperandCid}, null);
+        ((StaticAction)nameSpace.load_cpt(_statActionCid_)).go(nameSpace, new long[] {firstOperandCid, secondOperandCid}, null);
     }
 
     /**

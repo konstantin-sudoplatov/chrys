@@ -104,7 +104,7 @@ public class List_prim extends Primitive {
             for(Long cid: memberS) {
                 Glob.add_line(lst, String.format("cid: %s; ", cid));
                 Caldron c = (Caldron)Thread.currentThread();
-                Glob.add_list_of_lines(lst, c.get_cpt(cid).to_list_of_lines("", debugLevel-1));
+                Glob.add_list_of_lines(lst, c.load_cpt(cid).to_list_of_lines("", debugLevel-1));
             }
         }
 

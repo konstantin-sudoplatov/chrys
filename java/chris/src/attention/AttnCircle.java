@@ -31,14 +31,14 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
         this.attnDisp = attnDisp;
         
         // Seed
-        Neuron seed = (Neuron)get_cpt(DynCptName.chat_seed_uncnrn.name());
+        Neuron seed = (Neuron)load_cpt(DynCptName.chat_seed_uncnrn.name());
         switch(circleType) {
             case it_is_console_chat_prem:
-                ((Peg_prem)get_cpt(DynCptName.it_is_console_chat_prem.name())).activate();
+                ((Peg_prem)load_cpt(DynCptName.it_is_console_chat_prem.name())).activate();
                 break;
                 
             case it_is_http_chat_prem:
-                ((Peg_prem)get_cpt(DynCptName.it_is_http_chat_prem.name())).activate();
+                ((Peg_prem)load_cpt(DynCptName.it_is_http_chat_prem.name())).activate();
                 break;
                 
             default:
@@ -61,11 +61,11 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
      * @throws Crash if not found
      */
     @Override
-    public synchronized Concept get_cpt(long cid) {
+    public synchronized Concept load_cpt(long cid) {
         
         if      // is it a static concept? get it from the common directory
                 (cid >= 0 && cid <= Glob.MAX_STATIC_CID)
-            return attnDisp.get_cpt(cid);
+            return attnDisp.load_cpt(cid);
             
         Concept cpt = _cptDir_.get(cid);
         if      // found in the local concept directory?
@@ -155,7 +155,7 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
                 (msg instanceof Msg_ConsoleToAttnCircle)
         {   // put it to the concept "line_from_chatter_strprem" and invoke the reasoning
             
-            String_prem lineOfChat = (String_prem)get_cpt(DynCptName.line_from_chatter_strprem.name());
+            String_prem lineOfChat = (String_prem)load_cpt(DynCptName.line_from_chatter_strprem.name());
             lineOfChat.set_string(((Msg_ConsoleToAttnCircle) msg).text);
             
             _reasoning_();

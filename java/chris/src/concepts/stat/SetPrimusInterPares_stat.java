@@ -27,8 +27,8 @@ public class SetPrimusInterPares_stat extends StaticAction {
     @Override
     public long[] go(ConceptNameSpace nameSpace, long[] paramCids, Object extra) {
         
-        Concept primusCpt = nameSpace.get_cpt(paramCids[1]);
-        ((PrimusInterPares_prem)nameSpace.get_cpt(paramCids[0])).set_primus(primusCpt);
+        Concept primusCpt = nameSpace.load_cpt(paramCids[1]);
+        ((PrimusInterPares_prem)nameSpace.load_cpt(paramCids[0])).set_primus(primusCpt);
         
         return null;
     }

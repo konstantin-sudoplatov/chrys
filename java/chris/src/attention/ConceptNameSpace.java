@@ -16,7 +16,7 @@ public interface ConceptNameSpace {
      * @param cid
      * @return concept object
      */
-    public Concept get_cpt(long cid);
+    public Concept load_cpt(long cid);
     
     /**
      * Get a local concept by name. If the concept is not in the current name space yet, it gets cloned into it.
@@ -24,7 +24,7 @@ public interface ConceptNameSpace {
      * @return the concept
      * @throws Crash if not found
      */
-    public Concept get_cpt(String cptName);
+    public Concept load_cpt(String cptName);
     
     /**
      * Check if concept can be get.

@@ -28,7 +28,7 @@ public class CloneConcept_stat extends StaticAction {
     @Override
     public long[] go(ConceptNameSpace nameSpace, long[] paramCids, Object extra) {
         
-        Concept cpt = nameSpace.get_cpt(paramCids[0]);
+        Concept cpt = nameSpace.load_cpt(paramCids[0]);
         cpt = cpt.clone();
         AttnCircle attnCircle = nameSpace.get_attn_circle();
         long cptCid = attnCircle.get_attn_dispatcher().add_cpt(cpt, attnCircle, null);

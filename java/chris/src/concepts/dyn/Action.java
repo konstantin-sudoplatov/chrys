@@ -41,7 +41,7 @@ public class Action extends DynamicConcept {
      * @param nameSpace
      */
     public void go(ConceptNameSpace nameSpace) {
-        resultCids = ((StaticAction)nameSpace.get_cpt(_statActionCid_)).go(nameSpace, null, null);
+        resultCids = ((StaticAction)nameSpace.load_cpt(_statActionCid_)).go(nameSpace, null, null);
     }
 
     /**

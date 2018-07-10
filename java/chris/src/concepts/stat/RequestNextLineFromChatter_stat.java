@@ -36,7 +36,7 @@ public class RequestNextLineFromChatter_stat extends StaticAction {
      */
     @Override
     public long[] go(ConceptNameSpace nameSpace, long[] paramCids, Object extra) {
-        PrimusInterPares_prem chatMediaCpt = (PrimusInterPares_prem)nameSpace.get_cpt(DynCptName.chat_media_prem.name());
+        PrimusInterPares_prem chatMediaCpt = (PrimusInterPares_prem)nameSpace.load_cpt(DynCptName.chat_media_prem.name());
         if      // is not set to a valid cid?
                 (chatMediaCpt.get_activation() != 1)
             throw new Crash("Concept chat_media_prem must be set");
@@ -44,7 +44,7 @@ public class RequestNextLineFromChatter_stat extends StaticAction {
         if
                 (chatMedia.equals(DynCptName.it_is_console_chat_prem.name()))
         {
-                String_prem lineOfChat = (String_prem)nameSpace.get_cpt(DynCptName.line_from_chatter_strprem.name());
+                String_prem lineOfChat = (String_prem)nameSpace.load_cpt(DynCptName.line_from_chatter_strprem.name());
                 lineOfChat.set_string(null);      // make it antiactive
                 AttnCircle attnCircle = nameSpace.get_attn_circle();
                 AttnDispatcherLoop attnDisp = attnCircle.get_attn_dispatcher();

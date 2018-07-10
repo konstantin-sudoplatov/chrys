@@ -99,7 +99,7 @@ public class ActionPack_actn extends Action {
     @Override
     public void go(ConceptNameSpace nameSpace) {
         for(Act act: actS) {
-            ((StaticAction)nameSpace.get_cpt(act.stat_action_cid)).go(nameSpace, act.parm_cids, act.extra);
+            ((StaticAction)nameSpace.load_cpt(act.stat_action_cid)).go(nameSpace, act.parm_cids, act.extra);
         }
     }
     

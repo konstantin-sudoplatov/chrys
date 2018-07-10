@@ -30,13 +30,13 @@ public class CloneConceptAndAappendToList_stat extends StaticAction {
     public long[] go(ConceptNameSpace nameSpace, long[] paramCids, Object extra) {
         
         // Get params
-        ListStock lst = (ListStock)nameSpace.get_cpt(paramCids[0]);
-        Concept elem = nameSpace.get_cpt(paramCids[1]);     // just to check that the concept cpt_exists
+        ListStock lst = (ListStock)nameSpace.load_cpt(paramCids[0]);
+        Concept elem = nameSpace.load_cpt(paramCids[1]);     // just to check that the concept cpt_exists
         
         // Clone the element
-        CloneConcept_stat cloneCpt = (CloneConcept_stat)nameSpace.get_cpt(StatCptName.CloneConcept_stat.name());
+        CloneConcept_stat cloneCpt = (CloneConcept_stat)nameSpace.load_cpt(StatCptName.CloneConcept_stat.name());
         long clonedElemCid = cloneCpt.go(nameSpace, new long[]{paramCids[1]}, null)[0]; // returns array of only one cid
-        lst.append_member(nameSpace.get_cpt(clonedElemCid));
+        lst.append_member(nameSpace.load_cpt(clonedElemCid));
 
         return null;
     }

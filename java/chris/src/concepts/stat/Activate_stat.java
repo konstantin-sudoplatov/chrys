@@ -26,7 +26,7 @@ public class Activate_stat extends StaticAction {
     @Override
     public long[] go(ConceptNameSpace nameSpace, long[] paramCids, Object extra) {
         
-        ((BinActivationIface)nameSpace.get_cpt(paramCids[0])).activate();
+        ((BinActivationIface)nameSpace.load_cpt(paramCids[0])).activate();
         
         return null;
     }

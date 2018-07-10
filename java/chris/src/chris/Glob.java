@@ -689,7 +689,7 @@ final public class Glob {
         else if (debugLevel > 0) {
             ConceptNameSpace caldron = (ConceptNameSpace)Thread.currentThread();
             for(int i=0; i < arrayOfCids.length; i++) {
-                Concept cpt = caldron.get_cpt(arrayOfCids[i]);
+                Concept cpt = caldron.load_cpt(arrayOfCids[i]);
                 Glob.add_list_of_lines(l, cpt.to_list_of_lines("", debugLevel-1));
             }
         }

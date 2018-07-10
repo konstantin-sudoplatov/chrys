@@ -112,7 +112,7 @@ public class WeighedSum_nrn extends Neuron implements LotIface{
         double weightedSum = get_bias();
         for(int i = 0; i < lot_size(); i++) {
             Lot l = get_lot(i);
-            ActivationIface premise = (ActivationIface)caldron.get_cpt(l.cid);
+            ActivationIface premise = (ActivationIface)caldron.load_cpt(l.cid);
             float premActivation = premise.get_activation();
             float weight = l.weight;
             weightedSum += weight*premActivation;

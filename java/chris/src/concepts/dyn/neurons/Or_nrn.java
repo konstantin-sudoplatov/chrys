@@ -55,7 +55,7 @@ public class Or_nrn extends LogicNeuron {
     protected float _calculateActivation_(ConceptNameSpace caldron) {
         _activation_ = -1;
         for (long cid: get_premises()) {
-            ActivationIface cpt = (ActivationIface)caldron.get_cpt(cid);
+            ActivationIface cpt = (ActivationIface)caldron.load_cpt(cid);
             if      // is it an antiactive concept?
                     (cpt.get_activation() > 0)
             {   // our activation will be antiactive also

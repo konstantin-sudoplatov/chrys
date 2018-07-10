@@ -181,7 +181,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     }
 
     @Override
-    public synchronized Concept get_cpt(long cid) {
+    public synchronized Concept load_cpt(long cid) {
         Concept cpt = comDir.get(cid);
         if (cpt != null)
             return cpt;
@@ -190,7 +190,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     }
     
     @Override
-    public synchronized Concept get_cpt(String cptName) {
+    public synchronized Concept load_cpt(String cptName) {
         Long cid = Glob.named.name_cid.get(cptName);
         if (cid != null) 
             return comDir.get(cid);

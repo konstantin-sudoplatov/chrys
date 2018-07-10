@@ -45,14 +45,14 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
      * @throws Crash if not found
      */
     @Override
-    public synchronized Concept get_cpt(long cid) {
+    public synchronized Concept load_cpt(long cid) {
         Concept cpt = _cptDir_.get(cid);
         if      // no such concept in the local directory?
                 (cpt == null)
         {   // get it from parent, put in local directory and return
             //  In the root of hierarchy (class AttnCircle) the processing never gets here, because we are overriden. So, here
             // we don't check them for a global or static
-            cpt = parenT.get_cpt(cid).clone();     
+            cpt = parenT.load_cpt(cid).clone();     
             _cptDir_.put(cid, cpt);
             return cpt;
         }
@@ -69,10 +69,10 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
      * @throws Crash if not found
      */
     @Override
-    public synchronized Concept get_cpt(String cptName) {
+    public synchronized Concept load_cpt(String cptName) {
         Long cid = Glob.named.name_cid.get(cptName);
         if (cid != null) 
-            return get_cpt(cid);
+            return load_cpt(cid);
         else 
             throw new Crash("Now such concept: name = " + cptName);
     }
@@ -140,7 +140,7 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
 //Glob.println(get_cpt(_head_), "head before actions", 10);
 //Glob.println(get_cpt(DynCptName.chat_media_prem.name()), "_reasoning_()", 2);
             // Do the assessment
-            long[] heads = ((Neuron)get_cpt(_head_)).calculate_activation_and_do_actions(this);
+            long[] heads = ((Neuron)load_cpt(_head_)).calculate_activation_and_do_actions(this);
 
             // May be we have to wait
             if      //no new head?

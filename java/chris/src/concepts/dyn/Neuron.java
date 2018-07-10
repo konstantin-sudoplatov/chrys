@@ -71,7 +71,7 @@ public abstract class Neuron extends DynamicConcept implements ActivationIface, 
                 (effects != null && effects.actions != null)
             //yes: do actions. after that effects are valid.
             for(long actCid: effects.actions) {
-                ((Action)caldron.get_cpt(actCid)).go(caldron);
+                ((Action)caldron.load_cpt(actCid)).go(caldron);
             }
         
         if

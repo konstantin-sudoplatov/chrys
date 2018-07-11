@@ -5,9 +5,7 @@ import concepts.dyn.Primitive;
 import java.util.List;
 
 /**
- * Premise, that bears a string. First used by "DynCptName.line_of_chat_string_prem".
- * If active (+1), the string has a meaningful value, if antiactive (-1), then string is
- * undefined.
+ * Contains a string.
  * @author su
  */
 public class String_prim extends Primitive {

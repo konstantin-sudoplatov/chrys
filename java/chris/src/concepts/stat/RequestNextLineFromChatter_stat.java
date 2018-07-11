@@ -36,27 +36,27 @@ public class RequestNextLineFromChatter_stat extends StaticAction {
      */
     @Override
     public long[] go(ConceptNameSpace nameSpace, long[] paramCids, Object extra) {
-        PrimusInterPares_prem chatMediaCpt = (PrimusInterPares_prem)nameSpace.load_cpt(DynCptName.chat_media_prem.name());
-        if      // is not set to a valid cid?
-                (chatMediaCpt.get_activation() != 1)
-            throw new Crash("Concept chat_media_prem must be set");
-        String chatMedia = Glob.named.cid_name.get(chatMediaCpt.get_primus());
-        if
-                (chatMedia.equals(DynCptName.it_is_console_chat_prem.name()))
-        {
-                String_prem lineOfChat = (String_prem)nameSpace.load_cpt(DynCptName.line_from_chatter_strprem.name());
-                lineOfChat.set_string(null);      // make it antiactive
-                AttnCircle attnCircle = nameSpace.get_attn_circle();
-                AttnDispatcherLoop attnDisp = attnCircle.get_attn_dispatcher();
-                attnDisp.put_in_queue(new Msg_ReadFromConsole());
-        }
-        else if
-               (chatMedia.equals(DynCptName.it_is_http_chat_prem.name()))
-        {
-            throw new Crash("Not implemented yet.");
-        }
-        else
-            throw new Crash("Unknown chat media " + chatMedia);
+//        PrimusInterPares_prem chatMediaCpt = (PrimusInterPares_prem)nameSpace.load_cpt(DynCptName.chat_media_prem.name());
+//        if      // is not set to a valid cid?
+//                (chatMediaCpt.get_activation() != 1)
+//            throw new Crash("Concept chat_media_prem must be set");
+//        String chatMedia = Glob.named.cid_name.get(chatMediaCpt.get_primus());
+//        if
+//                (chatMedia.equals(DynCptName.it_is_console_chat_prem.name()))
+//        {
+//                String_prem lineOfChat = (String_prem)nameSpace.load_cpt(DynCptName.line_from_chatter_strprem.name());
+//                lineOfChat.set_string(null);      // make it antiactive
+//                AttnCircle attnCircle = nameSpace.get_attn_circle();
+//                AttnDispatcherLoop attnDisp = attnCircle.get_attn_dispatcher();
+//                attnDisp.put_in_queue(new Msg_ReadFromConsole());
+//        }
+//        else if
+//               (chatMedia.equals(DynCptName.it_is_http_chat_prem.name()))
+//        {
+//            throw new Crash("Not implemented yet.");
+//        }
+//        else
+//            throw new Crash("Unknown chat media " + chatMedia);
     
         return null;
     }

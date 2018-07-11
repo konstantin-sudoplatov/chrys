@@ -45,6 +45,30 @@ public class Action extends DynamicConcept {
     }
 
     /**
+     * Get the static action cid.
+     * @return 
+     */
+    public long get_stat_action() {
+        return _statActionCid_;
+    }
+    
+    /**
+     * Get array of parameter cids.
+     * @return parameters
+     */
+    public long[] get_parameters() {
+        return null;
+    }
+    
+    /**
+     * Get the extra parameter.
+     * @return extra
+     */
+    public Object get_extra() {
+        return null;
+    }
+    
+    /**
      * Getter.
      * @return result cids array. 
      */
@@ -77,7 +101,7 @@ public class Action extends DynamicConcept {
 
     //---$$$---$$$---$$$---$$$---$$$--- protected data $$$---$$$---$$$---$$$---$$$---$$$--
 
-    /** Concept, that provides the processing. */
+    /** Static concept, that provides the processing. */
     protected long _statActionCid_;
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---

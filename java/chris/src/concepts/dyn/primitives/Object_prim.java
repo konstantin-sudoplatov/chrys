@@ -1,15 +1,12 @@
-package concepts.dyn.actions;
+package concepts.dyn.primitives;
 
-import attention.ConceptNameSpace;
-import concepts.StatCptName;
-import concepts.StaticAction;
-import concepts.dyn.Action;
+import concepts.dyn.Primitive;
 
 /**
- * An operation on two concepts. The first operand is applied to the second one.
+ * Contains Java object.
  * @author su
  */
-public final class BinaryOperation_actn extends Action {
+public class Object_prim extends Primitive {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -17,9 +14,9 @@ public final class BinaryOperation_actn extends Action {
 
     /** 
      * Constructor.
-     * @param statAction
      */ 
-    public BinaryOperation_actn(StatCptName statAction) { super(statAction); } 
+    public Object_prim() { 
+    } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -28,37 +25,19 @@ public final class BinaryOperation_actn extends Action {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     /**
-     * Invoke the function of the static concept functor.
-     * @param nameSpace
+     * Getter.
+     * @return 
      */
-    @Override
-    public void go(ConceptNameSpace nameSpace) {
-        ((StaticAction)nameSpace.load_cpt(_statActionCid_)).go(nameSpace, new long[] {firstOperandCid, secondOperandCid}, null);
+    public Object get_object() {
+        return objecT;
     }
-
+    
     /**
      * Setter.
-     * @param cid 
+     * @param object 
      */
-    public void set_first_operand(long cid) {
-        firstOperandCid = cid;
-    }
-
-    /**
-     * Setter.
-     * @param cid 
-     */
-    public void set_second_operand(long cid) {
-        secondOperandCid = cid;
-    }
-
-    /**
-     * Get array of parameter cids.
-     * @return parameters
-     */
-    @Override
-    public long[] get_parameters() {
-        return new long[] {firstOperandCid, secondOperandCid};
+    public void set_object(Object object) {
+        objecT = object;
     }
     
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -79,8 +58,7 @@ public final class BinaryOperation_actn extends Action {
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
-    private long firstOperandCid;
-    private long secondOperandCid;
+    private Object objecT;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

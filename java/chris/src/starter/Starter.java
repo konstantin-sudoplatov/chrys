@@ -5,9 +5,10 @@ import concepts.Concept;
 import concepts.DynCptName;
 import concepts.StatCptName;
 import concepts.dyn.Action;
+import concepts.dyn.actions.ActionPack_actn;
+import concepts.dyn.actions.UnaryOperation_actn;
 import concepts.dyn.neurons.And_nrn;
 import concepts.dyn.neurons.Uncondidional_nrn;
-import concepts.dyn.neurons.WeighedSum_nrn;
 import concepts.dyn.premises.Peg_prem;
 
 /**
@@ -32,17 +33,32 @@ final public class Starter {
     }
     
     public void chat_seed() {
-        
-        // The main chat seed. It sets up the root way.
-        Uncondidional_nrn seedNrn = newCpt(new Uncondidional_nrn(), DynCptName.chat_seed_uncnrn);
-        WeighedSum_nrn parserNrn = newCpt(new WeighedSum_nrn(), DynCptName.chat_line_parser_weinrn);
-        seedNrn.add_way(parserNrn);     // the first, will be root
-        And_nrn readerNrn = newCpt(new And_nrn(), DynCptName.chat_line_reader_andnrn);
-        seedNrn.add_way(readerNrn);
 
         // Chat media types - console or http. The pertinent type will be activated in the constructor of the attention circle.
         newCpt(new Peg_prem(), DynCptName.it_is_console_chat_prem);
         newCpt(new Peg_prem(), DynCptName.it_is_http_chat_prem);
+        
+        // The main chat seed. It sets up the root way.
+        Uncondidional_nrn seedNrn = newCpt(new Uncondidional_nrn(), DynCptName.chat_main_seed_uncnrn);
+        ActionPack_actn seedApk = newCpt(new ActionPack_actn(), DynCptName.chat_main_seed_apk);
+        And_nrn nextLineValveNrn = newCpt(new And_nrn(), DynCptName.next_chat_line_valve_andnrn);
+        seedNrn.add_way(nextLineValveNrn);
+        ActionPeg_prem consoleCaldronIsUpAPeg = newCpt(new ActionPeg_prem(), DynCptName.console_caldron_is_up_actprem);
+        Peg_prem nextLineComePeg = newCpt(new Peg_prem(), DynCptName.next_chat_line_come_pegprem);
+        UnaryOperation_actn anactivateNextLineComePeg = newCpt(new UnaryOperation_actn(StatCptName.Antiactivate_stat, nextLineComePeg));
+        seedApk.add_act(StatCptName.Antiactivate_stat, nextLineComePeg);
+        nextLineValveNrn.add_effects(Float.NEGATIVE_INFINITY, (Action)getCpt(DynCptName.caldron_stop_and_wait_actn));
+        UnaryOperation_actn requestNextLineAct = 
+                newCpt(new UnaryOperation_actn(StatCptName.RequestNextLineFromChatter_stat, getCpt(DynCptName.console_main_seed_uncnrn)));
+        nextLineValveNrn.add_effects(0, new long[] {anactivateNextLineComePeg.get_cid(), requestNextLineAct.get_cid()}, nextLineValveNrn);
+                
+
+
+//        WeighedSum_nrn parserNrn = newCpt(new WeighedSum_nrn(), DynCptName.chat_line_parser_weinrn);
+//        seedNrn.add_way(parserNrn);     // the first, will be root
+//        And_nrn readerNrn = newCpt(new And_nrn(), DynCptName.chat_line_reader_andnrn);
+//        seedNrn.add_way(readerNrn);
+
         
     }
     
@@ -166,6 +182,16 @@ final public class Starter {
      */
     private <T extends Concept> T newCpt(T cpt, DynCptName name) {
         Glob.attn_disp_loop.add_cpt(cpt, name.name());
+        return cpt;
+    }
+
+    /**
+     * Add new concept to the global name space.
+     * @param cpt
+     * @return created concept
+     */
+    private <T extends Concept> T newCpt(T cpt) {
+        Glob.attn_disp_loop.add_cpt(cpt);
         return cpt;
     }
 

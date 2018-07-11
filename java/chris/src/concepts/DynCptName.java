@@ -11,14 +11,46 @@ public enum DynCptName {
     // Common concepts
     caldron_stop_and_wait_actn,             // request caldron to stop reasoning on the current neuron
     
-    // Chat seed
-    chat_seed_uncnrn,                       // this seed sets up the root way
-    chat_line_parser_weinrn,                // root way of the chat attention circle
-    chat_line_reader_andnrn,                     // console or http communication controller
+    // Main branch seeds
+    chat_main_seed_uncnrn,                  // this is the root way of the chat (perminent)
+        chat_main_seed_apk,                 // seed's actions on initialization of the branch
+    console_main_seed_uncnrn,               // branch for reading/writing console lines (perminent)
+        console_main_seed_apk,              // seed's actions on initialization of the branch
+    chat_log_main_seed_uncnrn,              // branch for logging console lines (perminent)
+        chat_log_main_seed_apk,             // seed's actions on initialization of the branch
+    
+    // Chat branch
     it_is_console_chat_prem,                // chat by console premise
     it_is_http_chat_prem,                   // chat by http premise
+    next_chat_line_valve_andnrn,            // waits for next line of chat
+        console_caldron_is_up_actprem,          // checks status of the console caldron and gives out activation accordingly
+        next_chat_line_come_pegprem,            // is activated by the console or http branch when the next line comes
+        chat_branch_requests_next_console_line_signal_actn, // sends signal to console branch, which tells it that chat is ready to take next line
 
-    line_from_chatter_strprem,              // activation +1: the line has come and waits to be processed, -1: no line is available
+    // Chat log branch
+        
+    // Chat-console-http branches interpaly
+    line_from_chatter_strprim,              // the line from chatter
+    
+    // Console branch
+    next_console_line_valve_andnrn,             // waits for the next line from console
+        chat_requests_next_console_line_pegprem,    // is signaled(activated) by the chat branch when it is ready to take next line
+//        chat_log_requests_next_console_line_pegprem,    // is signaled(activated) by the chat branch when it is ready to take next line
+        console_loop_notifies_next_line_come_pegprem,    // is activated by signal from the console loop when line_from_chatter_strprim set
+        console_mass_notifies_next_line_come_apk,   // compacts signal actions for all interested branches
+            console_notifies_chat_next_line_come_apk,   // packs up the following actions
+                console_notifies_chat_next_line_come_actn,
+                anactivate_chat_requests_next_console_line_pegprem_actn,
+//            console_notifies_chat_log_next_line_come_apk,
+//                console_notifies_chat_log_next_line_come_actn,
+//                anactivate_chat_log_requests_next_console_line_pegprem_actn,
+    
+//    request_next_line_actn,                 // sends to console the request for new line
+    
+
+//    chat_line_reader_andnrn,                // console or http communication controller
+//
+//    line_from_chatter_strprem,              // activation +1: the line has come and waits to be processed, -1: no line is available
 
     
 //    // Common concepts
@@ -29,12 +61,9 @@ public enum DynCptName {
 //    http_chat_main_seed_nrn,                // seed for http chat attention circle, neuron
 //    
 //    // Starter.read_write_console()
-    chat_media_prem,                        // primus inter pares premise, contains "Mrk_ItIsConsoleChat" and "Mrk_ItIsHttpChat" static concepts
-//    it_is_console_chat_prem,                // chat_prem by console property to the "chat_prem" premise
-//    it_is_http_chat_prem,                   // chat_prem by http property to the "chat_prem" premise
+//    chat_media_prem,                        // primus inter pares premise, contains "Mrk_ItIsConsoleChat" and "Mrk_ItIsHttpChat" static concepts
 //    line_from_chatter_strprem,               // activation +1: the line has come and waits to be processed, -1: old line invalidated, the new one has not come yet
 //    valve_for_getting_next_line_nrn,        // waits on the valve And_prem for the line of chat to get processed
-//    request_next_line_actn,                 // sends to console the request for new line
 //    valve_for_requesting_next_line_prem,    // And_prem that combines all conditions for the valve neuron to pass
 //    chatter_line_logged_subvalve_prem,      // pass condition from logging, member of the above valve
 //    chatter_line_parsed_subvalve_prem,      // pass condition from parser, member of the above valve

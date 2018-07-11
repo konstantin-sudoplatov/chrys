@@ -14,7 +14,6 @@ import console.ConsoleMessage;
 import console.Msg_ReadFromConsole;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -72,9 +71,9 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
                 if      // is in cpt?
                         (comDir.containsKey(cid))
                     continue GENERATE_CID;   // generate once more
-                for(AttnCircle b: attnBubbleList) {
+                for(Caldron caldron: caldronMap.values()) {
                     if      // is in PrivDir?
-                            (b.concept_directory_containsKey(cid))
+                            (caldron.cpt_exists(cid))
                         continue GENERATE_CID;
                 }
                 break;
@@ -275,13 +274,13 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     public synchronized void request_termination() {
         
         // terminate bubbles
-        for (AttnCircle circle : attnBubbleList) {
+        for (Caldron caldron : caldronMap.values()) {
             if 
-                    (circle.isAlive())
+                    (caldron.isAlive())
             {
                 try {
-                    circle.request_termination();
-                    circle.join();
+                    caldron.request_termination();
+                    caldron.join();
                 } catch (InterruptedException ex) {}
             }
         }
@@ -317,8 +316,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
                     (consoleChatCircle == null)
             {
                 consoleChatCircle = new AttnCircle(this, DynCptName.it_is_console_chat_prem);
-                put_caldron(load_cpt(DynCptName.chat_seed_uncnrn.name()).get_cid(), consoleChatCircle);
-                addCircleToList(consoleChatCircle);
+                put_caldron(load_cpt(DynCptName.chat_main_seed_uncnrn.name()).get_cid(), consoleChatCircle);
                 consoleChatCircle.start();
             }
             
@@ -354,19 +352,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
       because the map can be concurrently accessed from different caldrons. */
     private Map<Long, Caldron> caldronMap = new HashMap();
     
-    /** List of all attention bubbles */
-    private final ArrayList<AttnCircle> attnBubbleList = new ArrayList<>();
-    
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-    /**
-     * Synchronized adding new bubble to the list of bubbles. We need synchronization if someone from outside the thread wants
-     * to work with the list of bubbles (for example, wants to find a bubble to add a new concept to it).
-     * @param circle attention bubble loop to add to the list.
-     */
-    private synchronized void addCircleToList(AttnCircle circle) {
-        attnBubbleList.add(circle);
-    }
 
     /**
      *  Load from DB or create static concept objects and put_caldron them into the common concepts map.

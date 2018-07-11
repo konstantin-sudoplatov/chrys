@@ -47,9 +47,15 @@ public interface ActivRangeIface {
      * Ditto.
      * @param lowerBoundary
      * @param action single action concept
-     * 
      * @param ways array of way cids
      */
     public void add_effects(float lowerBoundary, Action action, long[] ways);
+
+    /** 
+     * Add new range with no ways (null in the way cids array). Useful for putting the caldron to wait.
+     * @param lowerBoundary
+     * @param action single action concept
+     */
+    public void add_effects(float lowerBoundary, Action action);
 
 }

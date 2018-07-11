@@ -106,6 +106,11 @@ public abstract class Neuron extends DynamicConcept implements ActivationIface, 
         _ranges_.add_effects(lowerBoundary, action, ways);
     }
 
+    @Override
+    public void add_effects(float lowerBoundary, Action action) {
+        _ranges_.add_effects(lowerBoundary, action);
+    }
+
 //    @Override
 //    public long get_property(int index) {
 //        return propertieS[index];

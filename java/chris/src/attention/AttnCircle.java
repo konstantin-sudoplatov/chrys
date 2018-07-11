@@ -7,7 +7,7 @@ import concepts.Concept;
 import concepts.DynCptName;
 import concepts.dyn.Neuron;
 import concepts.dyn.premises.Peg_prem;
-import concepts.dyn.premises.String_prem;
+import concepts.dyn.primitives.String_prim;
 import java.util.List;
 
 /**
@@ -31,7 +31,7 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
         this.attnDisp = attnDisp;
         
         // Seed
-        Neuron seed = (Neuron)load_cpt(DynCptName.chat_seed_uncnrn.name());
+        Neuron seed = (Neuron)load_cpt(DynCptName.chat_main_seed_uncnrn.name());
         switch(circleType) {
             case it_is_console_chat_prem:
                 ((Peg_prem)load_cpt(DynCptName.it_is_console_chat_prem.name())).activate();
@@ -155,7 +155,7 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
                 (msg instanceof Msg_ConsoleToAttnCircle)
         {   // put it to the concept "line_from_chatter_strprem" and invoke the reasoning
             
-            String_prem lineOfChat = (String_prem)load_cpt(DynCptName.line_from_chatter_strprem.name());
+            String_prim lineOfChat = (String_prim)load_cpt(DynCptName.line_from_chatter_strprim.name());
             lineOfChat.set_string(((Msg_ConsoleToAttnCircle) msg).text);
             
             _reasoning_();

@@ -1,6 +1,7 @@
 package concepts.dyn.actions;
 
 import attention.ConceptNameSpace;
+import concepts.Concept;
 import concepts.StatCptName;
 import concepts.StaticAction;
 import concepts.dyn.Action;
@@ -21,6 +22,16 @@ public final class UnaryOperation_actn extends Action {
      * @param statAction
      */ 
     public UnaryOperation_actn(StatCptName statAction) { super(statAction); } 
+
+    /** 
+     * Constructor.
+     * @param statAction
+     * @param operand
+     */ 
+    public UnaryOperation_actn(StatCptName statAction, Concept operand) {
+        this(statAction); 
+        operandCid = operand.get_cid();
+    } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -43,6 +54,15 @@ public final class UnaryOperation_actn extends Action {
      */
     public void set_operand(long cid) {
         operandCid = cid;
+    }
+
+    /**
+     * Get array of parameter cids.
+     * @return parameters
+     */
+    @Override
+    public long[] get_parameters() {
+        return new long[] {operandCid};
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$

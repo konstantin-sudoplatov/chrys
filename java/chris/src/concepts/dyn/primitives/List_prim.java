@@ -9,7 +9,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- *
+ * Contains a list of cids.
  * @author su
  */
 public class List_prim extends Primitive {

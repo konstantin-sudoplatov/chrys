@@ -1,7 +1,10 @@
 package concepts.dyn.actions;
 
 import attention.ConceptNameSpace;
+import chris.Crash;
 import chris.Glob;
+import concepts.Concept;
+import concepts.StatCptName;
 import concepts.StaticAction;
 import concepts.dyn.Action;
 import java.util.ArrayList;
@@ -21,33 +24,39 @@ public class ActionPack_actn extends Action {
         public long[] parm_cids;
         public Object extra;
         
-        public Act(long statActionCid) {
-            stat_action_cid = statActionCid;
+        public Act(StatCptName statAction) {
+            stat_action_cid = statAction.ordinal();
             parm_cids = null;
             extra = null;
         }
         
-        public Act(long statActionCid, long operand) {
-            stat_action_cid = statActionCid;
-            parm_cids = new long[] {operand};
+        public Act(StatCptName statAction, Concept operand) {
+            stat_action_cid = statAction.ordinal();
+            parm_cids = new long[] {operand.get_cid()};
             extra = null;
         }
         
-        public Act(long statActionCid, long firstOperand, long secondOperand) {
-            stat_action_cid = statActionCid;
-            parm_cids = new long[] {firstOperand, secondOperand};
+        public Act(StatCptName statAction, Concept firstOperand, Concept secondOperand) {
+            stat_action_cid = statAction.ordinal();
+            parm_cids = new long[] {firstOperand.get_cid(), secondOperand.get_cid()};
             extra = null;
         }
         
-        public Act(long statActionCid, long[] parameters) {
-            stat_action_cid = statActionCid;
+        public Act(StatCptName statAction, long[] parameters) {
+            stat_action_cid = statAction.ordinal();
             parm_cids = parameters;
             extra = null;
         }
         
-        public Act(long statActionCid, long[] parameters, Object extra) {
-            stat_action_cid = statActionCid;
+        public Act(StatCptName statAction, long[] parameters, Object extra) {
+            stat_action_cid = statAction.ordinal();
             parm_cids = parameters;
+            this.extra = extra;
+        }
+        
+        public Act(long statActionCid, long[] parmCids, Object extra) {
+            stat_action_cid = statActionCid;
+            parm_cids = parmCids;
             this.extra = extra;
         }
 
@@ -102,14 +111,94 @@ public class ActionPack_actn extends Action {
             ((StaticAction)nameSpace.load_cpt(act.stat_action_cid)).go(nameSpace, act.parm_cids, act.extra);
         }
     }
+
+    /**
+     * Add an act without parameters.
+     * @param statAction static action
+     */
+    public void add_act(StatCptName statAction) {
+        add_act(new Act(statAction));
+    }
+
+    /**
+     * Add an unary operation.
+     * @param statAction static action
+     * @param operand
+     */
+    public void add_act(StatCptName statAction, Concept operand) {
+        add_act(new Act(statAction, operand));
+    }
+
+    /**
+     * Add a binary operation.
+     * @param statAction static action
+     * @param firstOperand
+     * @param secondOperand
+     */
+    public void add_act(StatCptName statAction, Concept firstOperand, Concept secondOperand) {
+        add_act(new Act(statAction, firstOperand, secondOperand));
+    }
+
+    /**
+     * Add an action with arbitrary parameters as a cid array.
+     * @param statAction static action
+     * @param parameters array of cids
+     */
+    public void add_act(StatCptName statAction, long[] parameters) {
+        add_act(new Act(statAction, parameters));
+    }
+
+    /**
+     * Add an action with arbitrary parameters as a cid array and an extra parameter as an object. 
+     * @param statAction static action
+     * @param parameters
+     * @param extra
+     */
+    public void add_act(StatCptName statAction, long[] parameters, Object extra) {
+        add_act(new Act(statAction, parameters, extra));
+    }
     
     /**
      * Add new act to the list. 
      * @param act
-     * @return true/false.
      */
-    public boolean add_act(Act act) {
-        return actS.add(act);
+    public void add_act(Act act) {
+        actS.add(act);
+    }
+
+    /**
+     * Add an action as the Action concept.
+     * @param action 
+     */
+    public void add_act(Action action) {
+        add_act(new Act(action.get_stat_action(), action.get_parameters(), action.get_extra()));
+    }
+    
+    /**
+     * Get array of parameter cids.
+     * @return parameters
+     */
+    @Override
+    public long[] get_parameters() {
+        throw new Crash("Not supported for action packs.");
+    }
+    
+    /**
+     * Get the extra parameter.
+     * @return extra
+     */
+    @Override
+    public Object get_extra() {
+        throw new Crash("Not supported for action packs.");
+    }
+    
+    /**
+     * Getter.
+     * @return result cids array. 
+     */
+    @Override
+    public long[] get_result_cids() {
+        throw new Crash("Not supported for action packs.");
     }
 
     /**

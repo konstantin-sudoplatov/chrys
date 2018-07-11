@@ -10,7 +10,7 @@ import java.util.List;
 import java.util.Set;
 
 /**
- * 
+ * Contains a set of cids.
  * @author su
  */
 public class Set_prim extends Primitive {

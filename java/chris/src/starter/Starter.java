@@ -40,12 +40,12 @@ final public class Starter {
         
         // The main chat seed. It sets up the root way.
         Uncondidional_nrn seedNrn = newCpt(new Uncondidional_nrn(), DynCptName.chat_main_seed_uncnrn);
-        ActionPack_actn seedApk = newCpt(new ActionPack_actn(), DynCptName.chat_main_seed_apk);
         And_nrn nextLineValveNrn = newCpt(new And_nrn(), DynCptName.next_chat_line_valve_andnrn);
         seedNrn.add_way(nextLineValveNrn);
         ActionPeg_prem consoleCaldronIsUpAPeg = newCpt(new ActionPeg_prem(), DynCptName.console_caldron_is_up_actprem);
         Peg_prem nextLineComePeg = newCpt(new Peg_prem(), DynCptName.next_chat_line_come_pegprem);
         UnaryOperation_actn anactivateNextLineComePeg = newCpt(new UnaryOperation_actn(StatCptName.Antiactivate_stat, nextLineComePeg));
+        ActionPack_actn seedApk = newCpt(new ActionPack_actn(), DynCptName.chat_main_seed_apk);
         seedApk.add_act(StatCptName.Antiactivate_stat, nextLineComePeg);
         nextLineValveNrn.add_effects(Float.NEGATIVE_INFINITY, (Action)getCpt(DynCptName.caldron_stop_and_wait_actn));
         UnaryOperation_actn requestNextLineAct = 

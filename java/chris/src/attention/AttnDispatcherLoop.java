@@ -68,7 +68,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
                 if      // cid in the static range? push it out
                         (cid >= 0 && cid <= Glob.MAX_STATIC_CID)
                     cid += Glob.MAX_STATIC_CID + 1;
-                if      // is in cpt?
+                if      // is in cpt?ivate
                         (comDir.containsKey(cid))
                     continue GENERATE_CID;   // generate once more
                 for(Caldron caldron: caldronMap.values()) {
@@ -98,6 +98,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
                 throw new Crash(cptName + " is already present in the Glob.named.name_cid");
             if (Glob.named.cid_name.put(cid, cptName) != null)
                 throw new Crash("cid " + cid + " is already present in the Glob.named.cid_name" );
+            cpt.conceptName = cptName;  // for debugging
         }
         if      // the concept addressed to attention dispatcher?
                 (circle == null)
@@ -236,7 +237,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     /**
      * Find if a cid in the map.
      * @param cid
-     * @return 
+     * @return
      */
     synchronized public boolean caldir_contains_key(Long cid) {
         return caldronMap.containsKey(cid);

@@ -136,8 +136,8 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
      */
     protected void _reasoning_() {
         while(true) {
-Glob.println(Glob.here_count++, "here_count");
-Glob.println(load_cpt(_head_), "head before actions", 10);
+//Glob.println(Glob.here_count++, "here_count");
+//Glob.println(load_cpt(_head_), "head before actions", 10);
             // Do the assessment
             long[] heads = ((Neuron)load_cpt(_head_)).calculate_activation_and_do_actions(this);
 

@@ -1,6 +1,5 @@
 package concepts.dyn;
 
-import attention.ConceptNameSpace;
 import chris.Glob;
 import concepts.Concept;
 import java.util.List;
@@ -45,7 +44,7 @@ public abstract class LogicNeuron extends Neuron {
      * @param prem 
      */
     public void add_premise(GetActivationIface prem) {
-        Glob.append_array(premiseCids, ((Concept)prem).get_cid());
+        premiseCids = Glob.append_array(premiseCids, ((Concept)prem).get_cid());
     }
     
     /**

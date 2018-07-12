@@ -1,8 +1,6 @@
 package concepts.dyn.neurons;
 
 import attention.ConceptNameSpace;
-import auxiliary.Effects;
-import chris.Crash;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
 

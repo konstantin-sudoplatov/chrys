@@ -11,6 +11,9 @@ import java.util.List;
  * @author su
  */
 abstract public class Concept implements Cloneable {
+    /** For debugging. */
+    public String conceptName;
+    
     @Override
     public Concept clone() {
         try {

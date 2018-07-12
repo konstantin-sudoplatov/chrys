@@ -59,7 +59,7 @@ final public class Starter {
         seedNrn.append_way(nextLineValveNrn);
         
                 // next line valve neuron
-        consoleCaldronIsUpAPeg.set_operands(seedNrn);
+        consoleCaldronIsUpAPeg.set_operands(getCpt(DynCptName.console_main_seed_uncnrn));
         nextLineValveNrn.add_premise(consoleCaldronIsUpAPeg);
         nextLineValveNrn.add_premise(nextLineComePeg);
         nextLineValveNrn.add_effects(0, new long[] {anactivateNextLineComePeg.get_cid(), requestNextLineAct.get_cid()}, nextLineValveNrn);

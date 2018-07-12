@@ -50,10 +50,10 @@ public final class UnaryOperation_actn extends Action {
 
     /**
      * Setter.
-     * @param cid 
+     * @param cpt 
      */
-    public void set_operand(long cid) {
-        operandCid = cid;
+    public void set_operand(Concept cpt) {
+        operandCid = cpt.get_cid();
     }
 
     /**

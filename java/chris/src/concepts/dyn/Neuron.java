@@ -7,16 +7,16 @@ import chris.BaseMessageLoop;
 import chris.Crash;
 import chris.Glob;
 import concepts.*;
-import concepts.dyn.ifaces.ActivationIface;
 import java.util.List;
 import concepts.dyn.ifaces.ActivRangeIface;
+import concepts.dyn.ifaces.GetActivationIface;
 
 /**
  * It is a concept capable of reasoning, i.e. calculating activation as the weighted sum of premises.
  * The same way it determines successors and their activations. 
  * @author su
  */
-public abstract class Neuron extends DynamicConcept implements ActivationIface, ActivRangeIface {
+public abstract class Neuron extends DynamicConcept implements GetActivationIface, ActivRangeIface {
 
     /**
      * Default constructor.
@@ -109,6 +109,16 @@ public abstract class Neuron extends DynamicConcept implements ActivationIface, 
     @Override
     public void add_effects(float lowerBoundary, Action action) {
         _ranges_.add_effects(lowerBoundary, action);
+    }
+
+    @Override
+    public void append_action(float activation, Action action) {
+        _ranges_.append_action(activation, action);
+    }
+
+    @Override
+    public void append_way(float activation, Neuron way) {
+        _ranges_.append_way(activation, way);
     }
 
 //    @Override

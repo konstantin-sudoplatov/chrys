@@ -13,18 +13,17 @@ public enum DynCptName {
     
     // Main branch seeds
     chat_main_seed_uncnrn,                  // this is the root way of the chat (perminent)
-        chat_main_seed_apk,                 // seed's actions on initialization of the branch
     console_main_seed_uncnrn,               // branch for reading/writing console lines (perminent)
-        console_main_seed_apk,              // seed's actions on initialization of the branch
     chat_log_main_seed_uncnrn,              // branch for logging console lines (perminent)
-        chat_log_main_seed_apk,             // seed's actions on initialization of the branch
     
     // Chat branch
     it_is_console_chat_prem,                // chat by console premise
     it_is_http_chat_prem,                   // chat by http premise
     next_chat_line_valve_andnrn,            // waits for next line of chat
-        console_caldron_is_up_actprem,          // checks status of the console caldron and gives out activation accordingly
+        // prem
+        console_caldron_is_up_activprem,        // checks status of the console caldron and sets up activation of the neuron accordingly
         next_chat_line_come_pegprem,            // is activated by the console or http branch when the next line comes
+        // actn
         chat_branch_requests_next_console_line_signal_actn, // sends signal to console branch, which tells it that chat is ready to take next line
 
     // Chat log branch

@@ -3,8 +3,8 @@ package concepts.dyn.neurons;
 import attention.ConceptNameSpace;
 import chris.Glob;
 import concepts.dyn.LogicNeuron;
-import concepts.dyn.ifaces.ActivationIface;
 import java.util.List;
+import concepts.dyn.ifaces.GetActivationIface;
 
 /**
  * Neuron, that keeps its premises as an array of cids and activates only when all of them 
@@ -55,7 +55,7 @@ public class And_nrn extends LogicNeuron {
     protected float _calculateActivation_(ConceptNameSpace caldron) {
         _activation_ = 1;
         for (long cid: get_premises()) {
-            ActivationIface cpt = (ActivationIface)caldron.load_cpt(cid);
+            GetActivationIface cpt = (GetActivationIface)caldron.load_cpt(cid);
             if      // is it an antiactive concept?
                     (cpt.get_activation() <= 0)
             {   // our activation will be antiactive also

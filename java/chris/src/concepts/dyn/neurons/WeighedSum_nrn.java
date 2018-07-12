@@ -4,10 +4,10 @@ import attention.ConceptNameSpace;
 import auxiliary.Lot;
 import chris.Glob;
 import concepts.dyn.Neuron;
-import concepts.dyn.ifaces.ActivationIface;
 import concepts.dyn.ifaces.LotIface;
 import concepts.dyn.ifaces.LotImpl;
 import java.util.List;
+import concepts.dyn.ifaces.GetActivationIface;
 
 /**
  * Neuron, that has an implementation of a lot interface and implements the _calculateActivation_()
@@ -112,7 +112,7 @@ public class WeighedSum_nrn extends Neuron implements LotIface{
         double weightedSum = get_bias();
         for(int i = 0; i < lot_size(); i++) {
             Lot l = get_lot(i);
-            ActivationIface premise = (ActivationIface)caldron.load_cpt(l.cid);
+            GetActivationIface premise = (GetActivationIface)caldron.load_cpt(l.cid);
             float premActivation = premise.get_activation();
             float weight = l.weight;
             weightedSum += weight*premActivation;

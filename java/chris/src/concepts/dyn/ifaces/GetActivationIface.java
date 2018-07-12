@@ -1,12 +1,10 @@
 package concepts.dyn.ifaces;
 
-import attention.ConceptNameSpace;
-
 /**
  * Getters and setters for the activation variable.
  * @author su
  */
-public interface ActivationIface {
+public interface GetActivationIface {
 //    
 //    public enum ActivationType {
 //        SET,            // do not calculate activation, just set it.
@@ -33,12 +31,6 @@ public interface ActivationIface {
      * @return
      */
     public float get_activation();
-//
-//    /**
-//     * Setter.
-//     * @param activation
-//     */
-//    public void set_activation(float activation);
 //
 //    /**
 //     * Calculate weighed sum, normalize it according the neuron's type.

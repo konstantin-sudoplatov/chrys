@@ -2,9 +2,9 @@ package concepts.dyn.premises;
 
 import chris.Crash;
 import chris.Glob;
-import concepts.dyn.ifaces.ActivationIface;
 import concepts.dyn.primitives.String_prim;
 import java.util.List;
+import concepts.dyn.ifaces.GetActivationIface;
 
 /**
  * Premise, that bears a string. First used by "DynCptName.line_of_chat_string_prem".
@@ -12,7 +12,7 @@ import java.util.List;
  * undefined.
  * @author su
  */
-public class String_prem extends String_prim implements ActivationIface{
+public class String_prem extends String_prim implements GetActivationIface{
 
     /** 
      * Constructor.
@@ -27,7 +27,7 @@ public class String_prem extends String_prim implements ActivationIface{
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     @Override
-    public ActivationIface.NormalizationType get_normalization_type() {
+    public GetActivationIface.NormalizationType get_normalization_type() {
         return NormalizationType.BIN;
     }
    

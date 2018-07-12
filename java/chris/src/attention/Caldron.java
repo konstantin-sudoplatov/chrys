@@ -136,9 +136,8 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
      */
     protected void _reasoning_() {
         while(true) {
-//Glob.println(Glob.here_count++, "here_count");
-//Glob.println(get_cpt(_head_), "head before actions", 10);
-//Glob.println(get_cpt(DynCptName.chat_media_prem.name()), "_reasoning_()", 2);
+Glob.println(Glob.here_count++, "here_count");
+Glob.println(load_cpt(_head_), "head before actions", 10);
             // Do the assessment
             long[] heads = ((Neuron)load_cpt(_head_)).calculate_activation_and_do_actions(this);
 
@@ -153,7 +152,7 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
             // get new head
             _head_ = heads[0];
 //Glob.print("heads", heads, 6);
-//Glob.println(get_cpt(_head_), "head after actions");
+//Glob.println(load_cpt(_head_), "head after actions");
             
             // create new caldrons for the rest of the heads
             for(int i=1; i<heads.length; i++) {

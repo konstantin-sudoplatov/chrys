@@ -2,7 +2,7 @@ package concepts.stat;
 
 import attention.ConceptNameSpace;
 import concepts.StaticAction;
-import concepts.dyn.ifaces.BinActivationIface;
+import concepts.dyn.ifaces.SetActivationIface;
 
 /**
  * Load a concept into the name space and activate it.
@@ -26,7 +26,7 @@ public class Activate_stat extends StaticAction {
     @Override
     public long[] go(ConceptNameSpace nameSpace, long[] paramCids, Object extra) {
         
-        ((BinActivationIface)nameSpace.load_cpt(paramCids[0])).activate();
+        ((SetActivationIface)nameSpace.load_cpt(paramCids[0])).activate();
         
         return null;
     }

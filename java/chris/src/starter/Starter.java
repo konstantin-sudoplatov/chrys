@@ -5,10 +5,10 @@ import concepts.Concept;
 import concepts.DynCptName;
 import concepts.StatCptName;
 import concepts.dyn.Action;
-import concepts.dyn.actions.ActionPack_actn;
 import concepts.dyn.actions.UnaryOperation_actn;
 import concepts.dyn.neurons.And_nrn;
-import concepts.dyn.neurons.Uncondidional_nrn;
+import concepts.dyn.neurons.Unconditional_nrn;
+import concepts.dyn.premises.ActivPeg_prem;
 import concepts.dyn.premises.Peg_prem;
 
 /**
@@ -30,6 +30,9 @@ final public class Starter {
     public void common_concepts() {
         // We execute this action from effects of a neuron if we want the caldron to wait on that neuron.
         newCpt(new Action(StatCptName.CaldronStopAndWait_stat), DynCptName.caldron_stop_and_wait_actn);
+        
+        // Must be added in advance to prevent errors in case of circled links.
+        newCpt(new Unconditional_nrn(), DynCptName.console_main_seed_uncnrn);
     }
     
     public void chat_seed() {
@@ -38,19 +41,30 @@ final public class Starter {
         newCpt(new Peg_prem(), DynCptName.it_is_console_chat_prem);
         newCpt(new Peg_prem(), DynCptName.it_is_http_chat_prem);
         
-        // The main chat seed. It sets up the root way.
-        Uncondidional_nrn seedNrn = newCpt(new Uncondidional_nrn(), DynCptName.chat_main_seed_uncnrn);
+        // Create
+                // seed
+        Unconditional_nrn seedNrn = newCpt(new Unconditional_nrn(), DynCptName.chat_main_seed_uncnrn);
+            UnaryOperation_actn anactivateNextLineComePeg = newCpt(new UnaryOperation_actn(StatCptName.Antiactivate_stat));
+            
+                // next line valve neuron
         And_nrn nextLineValveNrn = newCpt(new And_nrn(), DynCptName.next_chat_line_valve_andnrn);
-        seedNrn.add_way(nextLineValveNrn);
-        ActionPeg_prem consoleCaldronIsUpAPeg = newCpt(new ActionPeg_prem(), DynCptName.console_caldron_is_up_actprem);
-        Peg_prem nextLineComePeg = newCpt(new Peg_prem(), DynCptName.next_chat_line_come_pegprem);
-        UnaryOperation_actn anactivateNextLineComePeg = newCpt(new UnaryOperation_actn(StatCptName.Antiactivate_stat, nextLineComePeg));
-        ActionPack_actn seedApk = newCpt(new ActionPack_actn(), DynCptName.chat_main_seed_apk);
-        seedApk.add_act(StatCptName.Antiactivate_stat, nextLineComePeg);
-        nextLineValveNrn.add_effects(Float.NEGATIVE_INFINITY, (Action)getCpt(DynCptName.caldron_stop_and_wait_actn));
-        UnaryOperation_actn requestNextLineAct = 
-                newCpt(new UnaryOperation_actn(StatCptName.RequestNextLineFromChatter_stat, getCpt(DynCptName.console_main_seed_uncnrn)));
+            ActivPeg_prem consoleCaldronIsUpAPeg = newCpt(new ActivPeg_prem(StatCptName.CaldronIsUp_stat), DynCptName.console_caldron_is_up_activprem);
+            Peg_prem nextLineComePeg = newCpt(new Peg_prem(), DynCptName.next_chat_line_come_pegprem);
+            UnaryOperation_actn requestNextLineAct = newCpt(new UnaryOperation_actn(StatCptName.RequestNextLineFromChatter_stat));
+
+        // Adjust and mate
+                // seed
+        seedNrn.append_action(anactivateNextLineComePeg);
+            anactivateNextLineComePeg.set_operand(nextLineComePeg);
+        seedNrn.append_way(nextLineValveNrn);
+        
+                // next line valve neuron
+        consoleCaldronIsUpAPeg.set_operands(seedNrn);
+        nextLineValveNrn.add_premise(consoleCaldronIsUpAPeg);
+        nextLineValveNrn.add_premise(nextLineComePeg);
         nextLineValveNrn.add_effects(0, new long[] {anactivateNextLineComePeg.get_cid(), requestNextLineAct.get_cid()}, nextLineValveNrn);
+        requestNextLineAct.set_operand(getCpt(DynCptName.console_main_seed_uncnrn));
+        nextLineValveNrn.add_effects(Float.NEGATIVE_INFINITY, (Action)getCpt(DynCptName.caldron_stop_and_wait_actn));
                 
 
 
@@ -175,23 +189,29 @@ final public class Starter {
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     /**
-     * Add new concept to the global name space.
+     * Add new concept to the global name space. If cid as created already, the existing concept is returned.
      * @param cpt
      * @param name
      * @return created concept
      */
     private <T extends Concept> T newCpt(T cpt, DynCptName name) {
-        Glob.attn_disp_loop.add_cpt(cpt, name.name());
+        if
+                (!Glob.attn_disp_loop.cpt_exists(cpt.get_cid()))
+            Glob.attn_disp_loop.add_cpt(cpt, name.name());
+        
         return cpt;
     }
 
     /**
-     * Add new concept to the global name space.
+     * Add new concept to the global name space. If cid as created already, the existing concept is returned.
      * @param cpt
      * @return created concept
      */
     private <T extends Concept> T newCpt(T cpt) {
-        Glob.attn_disp_loop.add_cpt(cpt);
+        if
+                (!Glob.attn_disp_loop.cpt_exists(cpt.get_cid()))
+            Glob.attn_disp_loop.add_cpt(cpt);
+
         return cpt;
     }
 

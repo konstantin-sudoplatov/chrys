@@ -3,8 +3,8 @@ package concepts.dyn;
 import attention.ConceptNameSpace;
 import chris.Glob;
 import concepts.Concept;
-import concepts.dyn.ifaces.ActivationIface;
 import java.util.List;
+import concepts.dyn.ifaces.GetActivationIface;
 
 /**
  * Neuron, that keeps its premises as an array of cids and activates only when they satisfy certain boolean logic (e.g. "and" or
@@ -44,7 +44,7 @@ public abstract class LogicNeuron extends Neuron {
      * Add new element to the array of premises.
      * @param prem 
      */
-    public void add_premise(ActivationIface prem) {
+    public void add_premise(GetActivationIface prem) {
         Glob.append_array(premiseCids, ((Concept)prem).get_cid());
     }
     

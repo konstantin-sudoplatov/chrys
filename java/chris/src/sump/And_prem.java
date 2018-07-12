@@ -3,9 +3,9 @@ package sump;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
-import concepts.dyn.ifaces.ActivationIface;
 import concepts.dyn.primitives.Set_prim;
 import java.util.List;
+import concepts.dyn.ifaces.GetActivationIface;
 
 /**
  * Set of cids, all of them must be active for this premise to be active. No calculation of the activation value is needed, activation
@@ -13,7 +13,7 @@ import java.util.List;
  * members.
  * @author su
  */
-public class And_prem extends Set_prim implements ActivationIface {
+public class And_prem extends Set_prim implements GetActivationIface {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -87,7 +87,7 @@ public class And_prem extends Set_prim implements ActivationIface {
         activatioN = 1;
         greenCount = 0;
         for (Long cid: get_members()) {
-            ActivationIface cpt = (ActivationIface)this.get_name_space().load_cpt(cid);
+            GetActivationIface cpt = (GetActivationIface)this.get_name_space().load_cpt(cid);
             if      // is it an antiactive concept?
                     (cpt.get_activation() <= 0)
             {   // our activation will be antiactive also

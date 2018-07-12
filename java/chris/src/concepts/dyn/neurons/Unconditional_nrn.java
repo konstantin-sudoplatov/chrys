@@ -3,7 +3,6 @@ package concepts.dyn.neurons;
 import attention.ConceptNameSpace;
 import auxiliary.Effects;
 import chris.Crash;
-import chris.Glob;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
 
@@ -11,7 +10,7 @@ import concepts.dyn.Neuron;
  * It is a degenerate, capable only of applying its effects without consulting any premises. Its activation is always 1. Ideal for seeds.
  * @author su
  */
-public class Uncondidional_nrn extends Neuron {
+public class Unconditional_nrn extends Neuron {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -20,7 +19,7 @@ public class Uncondidional_nrn extends Neuron {
     /** 
      * Constructor.
      */ 
-    public Uncondidional_nrn() { 
+    public Unconditional_nrn() { 
         _ranges_.add_effects(Float.NEGATIVE_INFINITY, new long[0], new long[0]);    // placeholder
         _activation_ = 1;
     } 
@@ -40,43 +39,16 @@ public class Uncondidional_nrn extends Neuron {
      * Add new action to the array of actions.
      * @param action 
      */
-    public void add_action(Action action) {
-        Effects effs = _ranges_.select_effects(0);
-        effs.actions = Glob.append_array(effs.actions, action.get_cid());
+    public void append_action(Action action) {
+        _ranges_.append_action(0, action);
     }
 
     /**
      * add new way to the array of ways.
      * @param way 
      */
-    public void add_way(Neuron way) {
-        Effects effs = _ranges_.select_effects(0);
-        effs.ways = Glob.append_array(effs.ways, way.get_cid());
-    }
-    
-    @Override
-    public Effects select_effects(float activation) {
-        throw new Crash("Not supported here");
-    }
-        
-    @Override
-    public void add_effects(float lowerBoundary, long[] actions, long[] ways) {
-        throw new Crash("Not supported here");
-    }
-
-    @Override
-    public void add_effects(float lowerBoundary, Action action, Neuron way) {
-        throw new Crash("Not supported here");
-    }
-
-    @Override
-    public void add_effects(float lowerBoundary, long[] actions, Neuron way) {
-        throw new Crash("Not supported here");
-    }
-
-    @Override
-    public void add_effects(float lowerBoundary, Action action, long[] ways) {
-        throw new Crash("Not supported here");
+    public void append_way(Neuron way) {
+        _ranges_.append_way(0, way);
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$

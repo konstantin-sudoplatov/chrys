@@ -1,6 +1,7 @@
 package concepts.dyn.actions;
 
 import attention.ConceptNameSpace;
+import concepts.Concept;
 import concepts.StatCptName;
 import concepts.StaticAction;
 import concepts.dyn.Action;
@@ -21,6 +22,18 @@ public final class BinaryOperation_actn extends Action {
      */ 
     public BinaryOperation_actn(StatCptName statAction) { super(statAction); } 
 
+    /** 
+     * Constructor.
+     * @param statAction
+     * @param firstOperand
+     * @param secondOperand
+     */ 
+    public BinaryOperation_actn(StatCptName statAction, Concept firstOperand, Concept secondOperand) {
+        this(statAction); 
+        firstOperandCid = firstOperand.get_cid();
+        secondOperandCid = secondOperand.get_cid();
+    } 
+
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
     //                                  Public methods
@@ -38,18 +51,18 @@ public final class BinaryOperation_actn extends Action {
 
     /**
      * Setter.
-     * @param cid 
+     * @param cpt 
      */
-    public void set_first_operand(long cid) {
-        firstOperandCid = cid;
+    public void set_first_operand(Concept cpt) {
+        firstOperandCid = cpt.get_cid();
     }
 
     /**
      * Setter.
-     * @param cid 
+     * @param cpt 
      */
-    public void set_second_operand(long cid) {
-        secondOperandCid = cid;
+    public void set_second_operand(Concept cpt) {
+        secondOperandCid = cpt.get_cid();
     }
 
     /**

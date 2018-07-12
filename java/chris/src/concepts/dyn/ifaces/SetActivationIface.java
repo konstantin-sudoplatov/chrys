@@ -4,7 +4,7 @@ package concepts.dyn.ifaces;
  * Binary activation (NormalizationType.BIN).
  * @author su
  */
-public interface BinActivationIface extends ActivationIface {
+public interface SetActivationIface extends GetActivationIface {
  
     /**
      * Set activation to +1.
@@ -15,5 +15,10 @@ public interface BinActivationIface extends ActivationIface {
      * Set activation to -1.
      */
     public void antiactivate();
-    
+
+    /**
+     * Set arbitrary activation.
+     * @param activation
+     */
+    public void set_activation(float activation);
 }

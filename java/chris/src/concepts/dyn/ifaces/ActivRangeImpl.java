@@ -97,6 +97,18 @@ public class ActivRangeImpl implements ActivRangeIface, Cloneable {
         add_effects(lowerBoundary, new long[] {action.get_cid()}, (long[])null);
     }
 
+    @Override
+    public void append_action(float activation, Action action) {
+        Effects effs = select_effects(activation);
+        effs.actions = Glob.append_array(effs.actions, action.get_cid());
+    }
+
+    @Override
+    public void append_way(float activation, Neuron way) {
+        Effects effs = select_effects(activation);
+        effs.ways = Glob.append_array(effs.ways, way.get_cid());
+    }
+
     /**
      * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
      * @param note printed in the first line just after the object type.

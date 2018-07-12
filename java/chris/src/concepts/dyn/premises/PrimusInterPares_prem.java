@@ -4,10 +4,10 @@ import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
 import concepts.dyn.Primitive;
-import concepts.dyn.ifaces.ActivationIface;
-import concepts.dyn.ifaces.ActivationIface.NormalizationType;
+import concepts.dyn.ifaces.GetActivationIface.NormalizationType;
 import concepts.dyn.primitives.Set_prim;
 import java.util.List;
+import concepts.dyn.ifaces.GetActivationIface;
 
 /**
  * Premise, that bears a set of cids. Only one of them is a selected member of group and
@@ -15,7 +15,7 @@ import java.util.List;
  * member concepts should not implement the activation interface (must be primitives).
  * @author su
  */
-public final class PrimusInterPares_prem extends Set_prim implements ActivationIface {
+public final class PrimusInterPares_prem extends Set_prim implements GetActivationIface {
 
     /**
      * Default constructor.

@@ -1,6 +1,7 @@
 package concepts.dyn.ifaces;
 
 import auxiliary.Effects;
+import chris.Glob;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
 
@@ -57,5 +58,19 @@ public interface ActivRangeIface {
      * @param action single action concept
      */
     public void add_effects(float lowerBoundary, Action action);
+
+    /**
+     * Add new action to the array of actions in a given activation interval.
+     * @param activation activation, that fits the activation interval.
+     * @param action 
+     */
+    public void append_action(float activation, Action action);
+
+    /**
+     * Add new way to the array of ways in a given activation interval.
+     * @param activation activation, that fits the activation interval.
+     * @param way 
+     */
+    public void append_way(float activation, Neuron way);
 
 }

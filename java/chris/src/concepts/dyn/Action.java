@@ -8,7 +8,7 @@ import concepts.StaticAction;
 import java.util.List;
 
 /**
- * All that needed to invoke the static concept processing. This concept is stateless, i.e. it cannot be used as a premise or a data source.
+ * Call static action without parameters and return value.
  * @author su
  */
 public class Action extends DynamicConcept {
@@ -37,7 +37,7 @@ public class Action extends DynamicConcept {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     /**
-     * Invoke the function of the static concept functor.
+     * Invoke the function of the static concept functor without parameter and return cids.
      * @param nameSpace
      */
     public void go(ConceptNameSpace nameSpace) {

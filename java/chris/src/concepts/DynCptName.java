@@ -12,9 +12,9 @@ public enum DynCptName {
     caldron_stop_and_wait_actn,             // request caldron to stop reasoning on the current neuron
     
     // Main branch seeds
-    chat_main_seed_uncnrn,                  // this is the root way of the chat (perminent)
-    console_main_seed_uncnrn,               // branch for reading/writing console lines (perminent)
-    chat_log_main_seed_uncnrn,              // branch for logging console lines (perminent)
+    chat_main_seed_unknrn,                  // this is the root way of the chat (perminent)
+    console_main_seed_unknrn,               // branch for reading/writing console lines (perminent)
+    chat_log_main_seed_unknrn,              // branch for logging console lines (perminent)
     
     // Chat branch
     it_is_console_chat_prem,                // chat by console premise

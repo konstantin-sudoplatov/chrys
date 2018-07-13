@@ -28,9 +28,11 @@ public class Caldron extends BaseMessageLoop implements ConceptNameSpace {
      * @param parent parent caldron. Null for main caldron, which is supposed to be an attention bubble loop.
      * @param attnCircle attention circle as a root of the caldron tree
      */ 
-    public Caldron(Neuron seed, Caldron parent, AttnCircle attnCircle) 
-    {   super();
+    @SuppressWarnings("LeakingThisInConstructor")
+    public Caldron(Neuron seed, Caldron parent, AttnCircle attnCircle) {
+        super();
         seeD = seed;
+        _head_ = seed.get_cid();
         parenT = parent;
         this.attnCircle = attnCircle;
         if      // is it an ordinary caldron (not an attention circle)?
@@ -38,7 +40,12 @@ public class Caldron extends BaseMessageLoop implements ConceptNameSpace {
             //yes: put itself into the caldron map
             get_attn_circle().get_attn_dispatcher().put_caldron(seed, this);
         else {}//no: do nothing, since the dispatcher is unknown yet. We will do it in the descendant.
-    } 
+
+        if      //is am I me?
+            (this.getClass() == Caldron.class)
+        //yes: constructor finished, kick the reasoning
+        this.put_in_queue_with_priority(new Msg_DoReasoningOnBranch());    // put ahead of the possible console lines
+} 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
@@ -61,7 +68,8 @@ public class Caldron extends BaseMessageLoop implements ConceptNameSpace {
         {   // get it from parent, put in local directory and return
             //  In the root of hierarchy (class AttnCircle) the processing never gets here, because we are overriden. So, here
             // we don't check them for a global or static
-            cpt = parenT.load_cpt(cid).clone();     
+            cpt = parenT.load_cpt(cid).clone();  
+            cpt.set_name_space(this);
             _cptDir_.put(cid, cpt);
             return cpt;
         }
@@ -161,6 +169,7 @@ public class Caldron extends BaseMessageLoop implements ConceptNameSpace {
      */
     protected synchronized void _reasoning_() {
         while(true) {
+System.out.printf("caldron = %s, _head_ = %s\n", this, load_cpt(_head_).conceptName);
             // Do the assessment
             long[] heads = ((Neuron)load_cpt(_head_)).calculate_activation_and_do_actions(this);
 

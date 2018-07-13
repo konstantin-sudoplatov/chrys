@@ -310,23 +310,36 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
 
     @Override
     synchronized protected boolean _defaultProc_(BaseMessage msg) {
-        if      // is it a message from console to bubble?
-                (msg instanceof Msg_ConsoleToAttnCircle)
-        {
-            // May be, create an attention circle for the chat
-            if
-                    (consoleChatCircle == null)
-            {
-                consoleChatCircle = new AttnCircle((Neuron)load_cpt(DynCptName.chat_main_seed_uncnrn.name()), this, DynCptName.it_is_console_chat_prem);
-                consoleChatCircle.start();
-            }
-            
-            // route the message to the chat circle
-            consoleChatCircle.put_in_queue(msg);
+        
+        // May be, create an attention circle for the chat
+        if      //is it the first pass through?
+                (consoleCaldron == null)
+        {//yes: create and start the chat caldron and its branches
+            // Create and start chat and branches. That process will add to the caldron map.
+            if      //the chat caldron is not created yet?
+                    (get_caldron(load_cpt(DynCptName.chat_main_seed_unknrn.name())) == null)
+                //no, not yet: create and start it
+                new AttnCircle((Neuron)load_cpt(DynCptName.chat_main_seed_unknrn.name()), 
+                        this, DynCptName.it_is_console_chat_prem).start();
 
+            // extract the console branch
+            consoleCaldron = get_caldron(load_cpt(DynCptName.console_main_seed_unknrn.name()));
+            if      //the console caldron is not created yet?
+                    (consoleCaldron == null)
+            {//no, not yet: rebounce the message
+                this.put_in_queue(msg);
+                return true;
+            }
+        }
+
+        // Proccess the message
+        if      // is it a message from console to the circle?
+                (msg instanceof Msg_ConsoleToAttnCircle)
+        {//yes: reroute the message to the console circle
+            consoleCaldron.put_in_queue(msg);
             return true;
         }
-        else if // is it a message to console (probably from a bubble)?
+        else if // is it a message to console (probably from this circle)?
                 (msg instanceof ConsoleMessage)
         {   // reroute to the application loop, it'll route it to console
             Glob.app_loop.put_in_queue(msg);
@@ -335,7 +348,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
         
         return false;
     }
-    private AttnCircle consoleChatCircle;
+    private Caldron consoleCaldron;
     
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //

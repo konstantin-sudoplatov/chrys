@@ -43,10 +43,10 @@ public class Unconditional_nrn extends Neuron {
 
     /**
      * Add new branch to the array of branches.
-     * @param way 
+     * @param branch 
      */
-    public void append_branch(Neuron way) {
-        _ranges_.append_branch(0, way);
+    public void append_branch(Neuron branch) {
+        _ranges_.append_branch(0, branch);
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$

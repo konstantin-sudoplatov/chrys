@@ -94,7 +94,7 @@ abstract public class BaseMessageLoop extends Thread {
      * Put a message in the head of the queue, so that it would be extracted the first.
      * @param msg message.
      */
-    public synchronized void put_in_queue_with_priority(BaseMessage msg) {
+    public final synchronized void put_in_queue_with_priority(BaseMessage msg) {
         msgQueue.addFirst(msg);
         notifyAll();
     }
@@ -103,7 +103,7 @@ abstract public class BaseMessageLoop extends Thread {
      * Put the message in the tail of the queue.
      * @param msg message
      */
-    public synchronized void put_in_queue(BaseMessage msg) {
+    public final synchronized void put_in_queue(BaseMessage msg) {
         
         while (msgQueue.size() > QUEUE_THRESHOLD) {
             try {

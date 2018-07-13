@@ -47,8 +47,11 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
             default:
                 throw new Crash("Unexpected circle type: " + circleType);
         }
-        _head_ = seed.get_cid();
-        this.put_in_queue_with_priority(new Msg_DoReasoningOnBranch());    // put ahead of the possible console lines
+        
+        if      //is am I me?
+                (this.getClass() == AttnCircle.class)
+            //yes: constructor finished, kick the reasoning
+            this.put_in_queue_with_priority(new Msg_DoReasoningOnBranch());    // put ahead of the possible console lines
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v

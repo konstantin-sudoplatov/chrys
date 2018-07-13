@@ -29,7 +29,7 @@ public class CaldronIsUp_stat extends StaticAction {
     @Override
     public long[] go(ConceptNameSpace nameSpace, long[] paramCids, Object extra) {
         if      // is the seed present in the seed-caldron map in the dispatcher?
-                (((Caldron)nameSpace).get_attn_circle().get_attn_dispatcher().caldir_contains_key(paramCids[0]))
+                (((Caldron)nameSpace).get_attn_circle().get_attn_dispatcher().caldir_contains_key(nameSpace.load_cpt(paramCids[0])))
             //yes: activate the peg
             ((SetActivationIface)extra).activate();
         else //no: anactivate it

@@ -9,6 +9,7 @@ import concepts.DynCptName;
 import concepts.DynamicConcept;
 import concepts.StatCptName;
 import concepts.StaticAction;
+import concepts.dyn.Neuron;
 import concepts.dyn.ifaces.GlobalConcept;
 import console.ConsoleMessage;
 import console.Msg_ReadFromConsole;
@@ -236,45 +237,45 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     
     /**
      * Find if a cid in the map.
-     * @param cid
+     * @param seed seed main seed of the branch as its identifier
      * @return
      */
-    synchronized public boolean caldir_contains_key(Long cid) {
-        return caldronMap.containsKey(cid);
+    synchronized public boolean caldir_contains_key(Concept seed) {
+        return caldronMap.containsKey(seed.get_cid());
     }
     
     /**
-     * Get caldron.
-     * @param cid
+     * Get caldron from the caldron map.
+     * @param seed seed main seed of the branch as its identifier
      * @return 
      */
-    synchronized public Caldron get_caldron(Long cid) {
-        return caldronMap.get(cid);
+    synchronized public Caldron get_caldron(Concept seed) {
+        return caldronMap.get(seed.get_cid());
     }
     
     /**
-     * Add an entry to the map.
-     * @param cid
+     * Add an entry to the caldron map.
+     * @param seed seed main seed of the branch as its identifier
      * @param caldron
      * @return previous caldron or null.
      */
-    synchronized public Caldron put_caldron(Long cid, Caldron caldron) {
-        return caldronMap.put(cid, caldron);
+    synchronized public Caldron put_caldron(Concept seed, Caldron caldron) {
+        return caldronMap.put(seed.get_cid(), caldron);
     }
     
     /**
      * Remove entry.
-     * @param cid
+     * @param seed seed main seed of the branch as its identifier
      * @return removed caldron.
      */
-    synchronized public Caldron remove_caldron(Long cid) {
-        return caldronMap.remove(cid);
+    synchronized public Caldron remove_caldron(Concept seed) {
+        return caldronMap.remove(seed.get_cid());
     }
 
     @Override
     public synchronized void request_termination() {
         
-        // terminate bubbles
+        // terminate circles
         for (Caldron caldron : caldronMap.values()) {
             if 
                     (caldron.isAlive())
@@ -316,8 +317,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
             if
                     (consoleChatCircle == null)
             {
-                consoleChatCircle = new AttnCircle(this, DynCptName.it_is_console_chat_prem);
-                put_caldron(load_cpt(DynCptName.chat_main_seed_uncnrn.name()).get_cid(), consoleChatCircle);
+                consoleChatCircle = new AttnCircle((Neuron)load_cpt(DynCptName.chat_main_seed_uncnrn.name()), this, DynCptName.it_is_console_chat_prem);
                 consoleChatCircle.start();
             }
             

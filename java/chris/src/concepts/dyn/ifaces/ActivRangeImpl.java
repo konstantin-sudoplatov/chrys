@@ -78,18 +78,18 @@ public class ActivRangeImpl implements ActivRangeIface, Cloneable {
     }
 
     @Override
-    public void add_effects(float lowerBoundary, Action action, Neuron way) {
-        add_effects(lowerBoundary, new long[] {action.get_cid()}, new long[] {way.get_cid()});
+    public void add_effects(float lowerBoundary, Action action, Neuron branch) {
+        add_effects(lowerBoundary, new long[] {action.get_cid()}, new long[] {branch.get_cid()});
     }
 
     @Override
-    public void add_effects(float lowerBoundary, long[] actions, Neuron way) {
-        add_effects(lowerBoundary, actions, new long[] {way.get_cid()});
+    public void add_effects(float lowerBoundary, long[] actions, Neuron branch) {
+        add_effects(lowerBoundary, actions, new long[] {branch.get_cid()});
     }
 
     @Override
-    public void add_effects(float lowerBoundary, Action action, long[] ways) {
-        add_effects(lowerBoundary, new long[] {action.get_cid()}, ways);
+    public void add_effects(float lowerBoundary, Action action, long[] branches) {
+        add_effects(lowerBoundary, new long[] {action.get_cid()}, branches);
     }
 
     @Override
@@ -104,9 +104,9 @@ public class ActivRangeImpl implements ActivRangeIface, Cloneable {
     }
 
     @Override
-    public void append_way(float activation, Neuron way) {
+    public void append_branch(float activation, Neuron branch) {
         Effects effs = select_effects(activation);
-        effs.ways = Glob.append_array(effs.ways, way.get_cid());
+        effs.branches = Glob.append_array(effs.branches, branch.get_cid());
     }
 
     /**

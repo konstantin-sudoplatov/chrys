@@ -5,6 +5,8 @@ import chris.BaseMessageLoop;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
+import concepts.StatCptName;
+import concepts.StaticAction;
 import concepts.dyn.Neuron;
 import java.util.HashMap;
 import java.util.Map;
@@ -14,7 +16,7 @@ import java.util.Map;
  * The main caldron is the attention bubble, it can contain subcaldrons.
  * @author su
  */
-abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpace {
+public class Caldron extends BaseMessageLoop implements ConceptNameSpace {
 
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
@@ -22,13 +24,20 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
 
     /** 
      * Constructor.
+     * @param seed main seed of the caldron. It serves as caldron's identifier.
      * @param parent parent caldron. Null for main caldron, which is supposed to be an attention bubble loop.
      * @param attnCircle attention circle as a root of the caldron tree
      */ 
-    public Caldron(Caldron parent, AttnCircle attnCircle) 
+    public Caldron(Neuron seed, Caldron parent, AttnCircle attnCircle) 
     {   super();
+        seeD = seed;
         parenT = parent;
         this.attnCircle = attnCircle;
+        if      // is it an ordinary caldron (not an attention circle)?
+                (!(this instanceof AttnCircle))
+            //yes: put itself into the caldron map
+            get_attn_circle().get_attn_dispatcher().put_caldron(seed, this);
+        else {}//no: do nothing, since the dispatcher is unknown yet. We will do it in the descendant.
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -98,9 +107,9 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
     }
 
     @Override
-    public AttnCircle get_attn_circle() {
+    public final synchronized AttnCircle get_attn_circle() {
         if      // is this caldron an attention circle?
-                (attnCircle == null)
+                (this instanceof AttnCircle)
             return (AttnCircle)this;
         else
             return attnCircle;
@@ -109,8 +118,24 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
     /**
      * Raise flag requestStopReasoning.
      */
-    public void request_stop_reasoning() {
+    public synchronized final void request_stop_reasoning() {
         requestStopReasoning = true;
+    }
+    
+    /**
+     * Get the seed of concept.
+     * @return 
+     */
+    public final Neuron get_seed() {
+        return seeD;
+    }
+    
+    @Override
+    public synchronized void request_termination() {
+        // get itself out of the caldron map
+        get_attn_circle().get_attn_dispatcher().remove_caldron(get_seed());
+        
+        super.request_termination();
     }
     
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -134,10 +159,8 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
      * from other caldrons or a reaction of the chatter for example, this function returns and this loop goes to processing
      * the events or waits if the event queue is empty.
      */
-    protected void _reasoning_() {
+    protected synchronized void _reasoning_() {
         while(true) {
-//Glob.println(Glob.here_count++, "here_count");
-//Glob.println(load_cpt(_head_), "head before actions", 10);
             // Do the assessment
             long[] heads = ((Neuron)load_cpt(_head_)).calculate_activation_and_do_actions(this);
 
@@ -151,13 +174,11 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
             
             // get new head
             _head_ = heads[0];
-//Glob.print("heads", heads, 6);
-//Glob.println(load_cpt(_head_), "head after actions");
             
             // create new caldrons for the rest of the heads
             for(int i=1; i<heads.length; i++) {
-                Thread thread = new Thread(this);
-                Glob.append_array(childreN, thread);
+                Thread thread = new Caldron((Neuron)load_cpt(heads[i]), this, get_attn_circle());
+                childreN = (Caldron[])Glob.append_array(childreN, thread);
                 thread.start();
             }
         }
@@ -173,12 +194,19 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
     @Override
     synchronized protected boolean _defaultProc_(BaseMessage msg) {
         if
-                (msg instanceof Msg_DoReasoningOnCaldron)
+                (msg instanceof Msg_DoReasoningOnBranch)
         {
             _reasoning_();
             return true;
         }
-        else 
+        else if
+                (msg instanceof Msg_NotifyBranch)
+        {   // activate specified in the message peg and do reasoning
+            ((StaticAction)load_cpt(StatCptName.Activate_stat.name())).go(this, new long[] {((Msg_NotifyBranch) msg).peg_cid}, null);
+            _reasoning_();
+            return true;
+        }
+        else
             return false;
     }
 
@@ -190,6 +218,9 @@ abstract public class Caldron extends BaseMessageLoop implements ConceptNameSpac
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
+    /** The seed of the branch. */
+    private final Neuron seeD;
+    
     /** Parent caldron. null if it is the attention circle. */
     private final Caldron parenT;
 

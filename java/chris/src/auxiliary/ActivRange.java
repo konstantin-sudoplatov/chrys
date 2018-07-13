@@ -20,11 +20,13 @@ public class ActivRange implements Cloneable {
      * Constructor.
      * @param range lower exclusive boundary of the range, where these actions are valid
      * @param actions array of cids of actions. Empty array or null - no actions, just continue processing.
-     * @param ways array of cids of ways. Empty array or null - no ways, processing should wait.
+     * @param branches array of cids of branches. Empty array or null - no branches, processing should wait. The first branch is
+     * always root - current caldron in which processing takes place. If there are other branches, there will be formed new
+     * caldrons for them.
      */
-    public ActivRange(float range, long[] actions, long[] ways) {
+    public ActivRange(float range, long[] actions, long[] branches) {
         this.range = range;
-        effects = new Effects(actions, ways);
+        effects = new Effects(actions, branches);
     }
 
     @Override

@@ -1,7 +1,6 @@
 package concepts.dyn.ifaces;
 
 import auxiliary.Effects;
-import chris.Glob;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
 
@@ -24,33 +23,33 @@ public interface ActivRangeIface {
      * cannot be repeated more than twice.
      * @param lowerBoundary this boundary delimits the range from the last existing boundary including to this value excluding.
      * @param actions array of action cids
-     * @param ways array of way cids
+     * @param branches array of branch cids
      */
-    public void add_effects(float lowerBoundary, long[] actions, long[] ways);
+    public void add_effects(float lowerBoundary, long[] actions, long[] branches);
 
     /** 
      * Ditto.
      * @param lowerBoundary
      * @param action single action concept
-     * @param way single way neuron
+     * @param branch single branch neuron
      */
-    public void add_effects(float lowerBoundary, Action action, Neuron way);
+    public void add_effects(float lowerBoundary, Action action, Neuron branch);
 
     /** 
      * Ditto.
      * @param lowerBoundary
      * @param actions array of action cids
-     * @param way single way neuron
+     * @param branch single branch neuron
      */
-    public void add_effects(float lowerBoundary, long[] actions, Neuron way);
+    public void add_effects(float lowerBoundary, long[] actions, Neuron branch);
 
     /** 
      * Ditto.
      * @param lowerBoundary
      * @param action single action concept
-     * @param ways array of way cids
+     * @param branches array of branch cids
      */
-    public void add_effects(float lowerBoundary, Action action, long[] ways);
+    public void add_effects(float lowerBoundary, Action action, long[] branches);
 
     /** 
      * Add new range with no ways (null in the way cids array). Useful for putting the caldron to wait.
@@ -69,8 +68,8 @@ public interface ActivRangeIface {
     /**
      * Add new way to the array of ways in a given activation interval.
      * @param activation activation, that fits the activation interval.
-     * @param way 
+     * @param branch 
      */
-    public void append_way(float activation, Neuron way);
+    public void append_branch(float activation, Neuron branch);
 
 }

@@ -5,6 +5,7 @@ import concepts.Concept;
 import concepts.DynCptName;
 import concepts.StatCptName;
 import concepts.dyn.Action;
+import concepts.dyn.Neuron;
 import concepts.dyn.actions.UnaryOperation_actn;
 import concepts.dyn.neurons.And_nrn;
 import concepts.dyn.neurons.Unconditional_nrn;
@@ -31,49 +32,60 @@ final public class Starter {
         // We execute this action from effects of a neuron if we want the caldron to wait on that neuron.
         newCpt(new Action(StatCptName.CaldronStopAndWait_stat), DynCptName.caldron_stop_and_wait_actn);
         
-        // Must be added in advance to prevent errors in case of circled links.
+        // Must be added in advance to prevent errors in case of circled links. Only named concepts must be used here,
+        // because only them are checked for duplication.
         newCpt(new Unconditional_nrn(), DynCptName.console_main_seed_uncnrn);
     }
     
-    public void chat_seed() {
+    public void chat_branch() {
 
         // Chat media types - console or http. The pertinent type will be activated in the constructor of the attention circle.
         newCpt(new Peg_prem(), DynCptName.it_is_console_chat_prem);
         newCpt(new Peg_prem(), DynCptName.it_is_http_chat_prem);
         
-        // Create
-                // seed
+                // Create
+        // seed
         Unconditional_nrn seedNrn = newCpt(new Unconditional_nrn(), DynCptName.chat_main_seed_uncnrn);
             UnaryOperation_actn anactivateNextLineComePeg = newCpt(new UnaryOperation_actn(StatCptName.Antiactivate_stat));
             
-                // next line valve neuron
-        And_nrn nextLineValveNrn = newCpt(new And_nrn(), DynCptName.next_chat_line_valve_andnrn);
+        // next line valve neuron
+        And_nrn nextLineValveNrn = newCpt(new And_nrn(), DynCptName.wait_next_chat_line_valve_andnrn);
             ActivPeg_prem consoleCaldronIsUpAPeg = newCpt(new ActivPeg_prem(StatCptName.CaldronIsUp_stat), DynCptName.console_caldron_is_up_activprem);
-            Peg_prem nextLineComePeg = newCpt(new Peg_prem(), DynCptName.next_chat_line_come_pegprem);
+            Peg_prem nextLineComePeg = newCpt(new Peg_prem(), DynCptName.console_notifies_chat_next_line_come_pegprem);
             UnaryOperation_actn requestNextLineAct = newCpt(new UnaryOperation_actn(StatCptName.RequestNextLineFromChatter_stat));
 
-        // Adjust and mate
-                // seed
+                // Adjust and mate
+        // seed
+        // finish defining the next line come peg
+        anactivateNextLineComePeg.set_operand(nextLineComePeg);
+        // anactivate the next line come peg
         seedNrn.append_action(anactivateNextLineComePeg);
-            anactivateNextLineComePeg.set_operand(nextLineComePeg);
-        seedNrn.append_way(nextLineValveNrn);
+        // set up the chat as root branch
+        seedNrn.append_branch(nextLineValveNrn);
+        // set up the console as a subsidiary branch
+        seedNrn.append_branch((Neuron)getCpt(DynCptName.console_main_seed_uncnrn));
         
-                // next line valve neuron
+        // next line valve neuron
         consoleCaldronIsUpAPeg.set_operands(getCpt(DynCptName.console_main_seed_uncnrn));
         nextLineValveNrn.add_premise(consoleCaldronIsUpAPeg);
         nextLineValveNrn.add_premise(nextLineComePeg);
         nextLineValveNrn.add_effects(0, new long[] {anactivateNextLineComePeg.get_cid(), requestNextLineAct.get_cid()}, nextLineValveNrn);
         requestNextLineAct.set_operand(getCpt(DynCptName.console_main_seed_uncnrn));
         nextLineValveNrn.add_effects(Float.NEGATIVE_INFINITY, (Action)getCpt(DynCptName.caldron_stop_and_wait_actn));
-                
-
-
-//        WeighedSum_nrn parserNrn = newCpt(new WeighedSum_nrn(), DynCptName.chat_line_parser_weinrn);
-//        seedNrn.add_way(parserNrn);     // the first, will be root
-//        And_nrn readerNrn = newCpt(new And_nrn(), DynCptName.chat_line_reader_andnrn);
-//        seedNrn.add_way(readerNrn);
-
+    }
+    
+    public void console_branch() {
+                // Create
+        // seed
+        newCpt(new Unconditional_nrn(), DynCptName.console_main_seed_uncnrn);
         
+        // next line valve
+        And_nrn nextLineValveNrn = newCpt(new And_nrn(), DynCptName.wait_next_console_line_valve_andnrn);
+            Peg_prem nextLineComePeg = newCpt(new Peg_prem(), DynCptName.console_loop_notifies_next_line_come_pegprem);
+            UnaryOperation_actn consoleNotifiesChatNextLineComeUnop = newCpt(new UnaryOperation_actn(StatCptName.NotifyBranch_stat), 
+                    DynCptName.console_notifies_chat_next_line_come_binopactn);
+        And_nrn requestNextLineValveNrn = newCpt(new And_nrn(), DynCptName.request_next_console_line_valve_andnrn);
+            Peg_prem chatRequestsNextLinePeg = newCpt(new Peg_prem(), DynCptName.chat_requests_next_line_pegprem);
     }
     
 //    public void chat_rootway() {
@@ -195,8 +207,9 @@ final public class Starter {
      * @return created concept
      */
     private <T extends Concept> T newCpt(T cpt, DynCptName name) {
+        Long cid = Glob.named.name_cid.get(name.name());
         if
-                (!Glob.attn_disp_loop.cpt_exists(cpt.get_cid()))
+                (cid == null || !Glob.attn_disp_loop.cpt_exists(cid))
             Glob.attn_disp_loop.add_cpt(cpt, name.name());
         
         return cpt;

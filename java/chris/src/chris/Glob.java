@@ -2,10 +2,10 @@ package chris;
 
 import attention.AttnDispatcherLoop;
 import attention.ConceptNameSpace;
-import auxiliary.CaldronDir;
 import auxiliary.NamedConcept;
 import concepts.Concept;
 import console.ConsoleLoop;
+import java.lang.reflect.Array;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.text.ParseException;
@@ -65,8 +65,8 @@ final public class Glob {
         attn_disp_loop.start();
         Starter starter = new Starter();
         starter.common_concepts();
-        starter.chat_seed();
-//        starter.chat_rootway();
+        starter.chat_branch();
+        starter.console_branch();
 //        starter.chat_log_way();
     }
         
@@ -123,19 +123,20 @@ final public class Glob {
     
     /**
      * Add an object an array of objects.
+     * @param <T> type of array objects
      * @param array to be appended. null for an array of 0 elements.
      * @param obj.
      * @return appended array.
      */
-    public static Object[] append_array(Object[] array, Object obj) {
-        Object[] newArray;
+    public static <T> T[] append_array(T[] array, T obj) {
+        T[] newArray;
         if
                 (array == null)
-            newArray = new Object[1];
+            newArray = (T[])Array.newInstance(obj.getClass(), 1);
         else
             newArray = Arrays.copyOf(array, array.length+1);
         
-        newArray[newArray.length-1] = obj;
+        newArray[newArray.length-1] = (T)obj;
         
         return newArray;
     }

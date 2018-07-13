@@ -19,26 +19,28 @@ public enum DynCptName {
     // Chat branch
     it_is_console_chat_prem,                // chat by console premise
     it_is_http_chat_prem,                   // chat by http premise
-    next_chat_line_valve_andnrn,            // waits for next line of chat
+    wait_next_chat_line_valve_andnrn,            // waits for next line of chat
         // prem
         console_caldron_is_up_activprem,        // checks status of the console caldron and sets up activation of the neuron accordingly
-        next_chat_line_come_pegprem,            // is activated by the console or http branch when the next line comes
+        console_notifies_chat_next_line_come_pegprem,       // is activated by the console or http branch when the next line comes
         // actn
         chat_branch_requests_next_console_line_signal_actn, // sends signal to console branch, which tells it that chat is ready to take next line
+    
+    // Console branch
+    register_console_caldron_in_dispatcher_loop_actn,   // give itself to the dispatcher, so it would know to whome route the console messages
+    wait_next_console_line_valve_andnrn,             // waits for the next line from console
+        console_loop_notifies_next_line_come_pegprem,    // is activated by the loop _defaultProc_ method when it sets new value to line_from_chatter_strprim
+        console_notifies_chat_next_line_come_binopactn,  // console branch notifies chat that the next line has come
+    request_next_console_line_valve_andnrn,             //wait until the console line is taken by all consumers, then request next line
+        chat_requests_next_line_pegprem,    // is signaled(activated) by the chat branch when it is ready to take in the next line
 
     // Chat log branch
         
     // Chat-console-http branches interpaly
     line_from_chatter_strprim,              // the line from chatter
-    
-    // Console branch
-    next_console_line_valve_andnrn,             // waits for the next line from console
-        chat_requests_next_console_line_pegprem,    // is signaled(activated) by the chat branch when it is ready to take next line
+
 //        chat_log_requests_next_console_line_pegprem,    // is signaled(activated) by the chat branch when it is ready to take next line
-        console_loop_notifies_next_line_come_pegprem,    // is activated by signal from the console loop when line_from_chatter_strprim set
         console_mass_notifies_next_line_come_apk,   // compacts signal actions for all interested branches
-            console_notifies_chat_next_line_come_apk,   // packs up the following actions
-                console_notifies_chat_next_line_come_actn,
                 anactivate_chat_requests_next_console_line_pegprem_actn,
 //            console_notifies_chat_log_next_line_come_apk,
 //                console_notifies_chat_log_next_line_come_actn,

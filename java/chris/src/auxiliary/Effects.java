@@ -11,7 +11,7 @@ import java.util.List;
 public class Effects implements Cloneable {
 
     public long[] actions;
-    public long[] ways;
+    public long[] branches;
 
     /** 
      * Constructor.
@@ -20,7 +20,7 @@ public class Effects implements Cloneable {
      */ 
     public Effects(long[] actions, long[] ways) {
         this.actions = actions;
-        this.ways = ways;
+        this.branches = ways;
     } 
 
     @Override
@@ -32,7 +32,7 @@ public class Effects implements Cloneable {
             throw new Crash("Cloning a concept failed.");
         }
         clone.actions = actions.clone();
-        clone.ways = ways.clone();
+        clone.branches = branches.clone();
         
         return clone;
     }
@@ -46,7 +46,7 @@ public class Effects implements Cloneable {
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = Glob.create_list_of_lines(this, note, debugLevel);
         Glob.add_list_of_lines(lst, "actions", actions, debugLevel-1);
-        Glob.add_list_of_lines(lst, "ways", ways, debugLevel-1);
+        Glob.add_list_of_lines(lst, "branches", branches, debugLevel-1);
 
         return lst;
     }

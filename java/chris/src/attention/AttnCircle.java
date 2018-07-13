@@ -22,16 +22,19 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
 
     /** 
      * Constructor.
+     * @param seed main seed of the caldron. It serves as caldron's identifier.
      * @param attnDisp attention dispatcher (parent).
      * @param circleType example: DynCptName.it_is_console_chat_prem
      */ 
     @SuppressWarnings("OverridableMethodCallInConstructor")
-    public AttnCircle(AttnDispatcherLoop attnDisp, DynCptName circleType) 
-    {   super(null, null);    // null for being a main caldron
+    public AttnCircle(Neuron seed, AttnDispatcherLoop attnDisp, DynCptName circleType) 
+    {   super(seed, null, null);    // null for being a main caldron
         this.attnDisp = attnDisp;
         
+        // Put itself into the caldron map
+        attnDisp.put_caldron(seed, this);
+        
         // Seed
-        Neuron seed = (Neuron)load_cpt(DynCptName.chat_main_seed_uncnrn.name());
         switch(circleType) {
             case it_is_console_chat_prem:
                 ((Peg_prem)load_cpt(DynCptName.it_is_console_chat_prem.name())).activate();
@@ -45,7 +48,7 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
                 throw new Crash("Unexpected circle type: " + circleType);
         }
         _head_ = seed.get_cid();
-        this.put_in_queue_with_priority(new Msg_DoReasoningOnCaldron());    // put ahead of the possible console lines
+        this.put_in_queue_with_priority(new Msg_DoReasoningOnBranch());    // put ahead of the possible console lines
     } 
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v

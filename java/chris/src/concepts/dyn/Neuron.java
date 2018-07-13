@@ -78,7 +78,7 @@ public abstract class Neuron extends DynamicConcept implements GetActivationIfac
                 (effects == null)
             return null;
         else
-            return effects.ways;
+            return effects.branches;
     }
     
     @Override
@@ -117,8 +117,8 @@ public abstract class Neuron extends DynamicConcept implements GetActivationIfac
     }
 
     @Override
-    public void append_way(float activation, Neuron way) {
-        _ranges_.append_way(activation, way);
+    public void append_branch(float activation, Neuron way) {
+        _ranges_.append_branch(activation, way);
     }
 
 //    @Override

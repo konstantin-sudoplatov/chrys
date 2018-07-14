@@ -80,10 +80,10 @@ public final class PrimusInterPares_prem extends Set_prim implements GetActivati
         }
         else if (debugLevel > 0) {
             if      // does the concept exist?
-                    (get_name_space().cpt_exists(primusCid))
+                    (name_space.cpt_exists(primusCid))
             {
                 Glob.add_line(lst, String.format("get_activation() = %s", get_activation()));
-                Glob.add_list_of_lines(lst, get_name_space().load_cpt(primusCid).
+                Glob.add_list_of_lines(lst, name_space.load_cpt(primusCid).
                         to_list_of_lines("primusCid", debugLevel-1));
             }
             else 

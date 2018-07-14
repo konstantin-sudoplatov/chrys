@@ -36,7 +36,7 @@ public class And_nrn extends LogicNeuron {
     @Override
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = super.to_list_of_lines(note, debugLevel);
-        Glob.add_line(lst, String.format("_calculateActivation_ = %s", _calculateActivation_(this.get_name_space())));
+        Glob.add_line(lst, String.format("_calculateActivation_ = %s", _calculateActivation_(this.name_space)));
 
         return lst;
     }

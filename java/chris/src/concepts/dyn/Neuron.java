@@ -3,8 +3,6 @@ package concepts.dyn;
 import attention.ConceptNameSpace;
 import auxiliary.Effects;
 import concepts.dyn.ifaces.ActivRangeImpl;
-import chris.BaseMessageLoop;
-import chris.Crash;
 import chris.Glob;
 import concepts.*;
 import java.util.List;
@@ -58,12 +56,7 @@ public abstract class Neuron extends DynamicConcept implements GetActivationIfac
     public long[] calculate_activation_and_do_actions(ConceptNameSpace caldron) {
         
         // Check that this neuron belongs to the caldron
-        if (this.get_name_space() != caldron)
-            throw new Crash(String.format("Wrong caldron for this neuron.\n%s\n%s\nNeuron:\n%s", 
-                    Glob.list_to_listln(((BaseMessageLoop)caldron).to_list_of_lines("must be", 10)),
-                    Glob.list_to_listln(((BaseMessageLoop)this.get_name_space()).to_list_of_lines("really is", 10)),
-                    Glob.list_to_listln(this.to_list_of_lines("", 10)))
-            );
+        assert this.name_space != caldron: "Wrong caldron for this neuron";
         
         float activation = _calculateActivation_(caldron);
         Effects effects = select_effects(activation);

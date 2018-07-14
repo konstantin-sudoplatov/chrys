@@ -84,7 +84,8 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
             ((DynamicConcept)cpt).set_cid(cid);
             ((DynamicConcept)cpt).set_creation_time((int)(new Date().getTime()/1000));
         }
-        cpt.set_name_space(this);
+        
+        assert true: cpt.name_space = this;
         
         // put_caldron to target directories
         if      // is it a named concept?
@@ -99,7 +100,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
                 throw new Crash(cptName + " is already present in the Glob.named.name_cid");
             if (Glob.named.cid_name.put(cid, cptName) != null)
                 throw new Crash("cid " + cid + " is already present in the Glob.named.cid_name" );
-            cpt.conceptName = cptName;  // for debugging
+            cpt.concept_name = cptName;  // for debugging
         }
         if      // the concept addressed to attention dispatcher?
                 (circle == null)
@@ -153,7 +154,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
                     (!(cpt instanceof GlobalConcept))
             {
                 cpt = comDir.get(cid).clone();
-                cpt.set_name_space(circle);
+                assert true: cpt.name_space = circle;
                 circle.put_in_concept_directory(cid, cpt);
             }
             return cid;

@@ -70,7 +70,7 @@ public class Or_prem extends Set_prim implements GetActivationIface {
     public float calculate_activation() {
         activatioN = -1;
         for (Long cid: get_members()) {
-            GetActivationIface cpt = (GetActivationIface)this.get_name_space().load_cpt(cid);
+            GetActivationIface cpt = (GetActivationIface)this.name_space.load_cpt(cid);
             if      // is it an active concept?
                     (cpt.get_activation() > 0)
             {   // our activation will be active also

@@ -87,7 +87,7 @@ public class And_prem extends Set_prim implements GetActivationIface {
         activatioN = 1;
         greenCount = 0;
         for (Long cid: get_members()) {
-            GetActivationIface cpt = (GetActivationIface)this.get_name_space().load_cpt(cid);
+            GetActivationIface cpt = (GetActivationIface)this.name_space.load_cpt(cid);
             if      // is it an antiactive concept?
                     (cpt.get_activation() <= 0)
             {   // our activation will be antiactive also

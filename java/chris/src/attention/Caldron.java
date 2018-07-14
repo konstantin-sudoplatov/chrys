@@ -69,7 +69,7 @@ public class Caldron extends BaseMessageLoop implements ConceptNameSpace {
             //  In the root of hierarchy (class AttnCircle) the processing never gets here, because we are overriden. So, here
             // we don't check them for a global or static
             cpt = parenT.load_cpt(cid).clone();  
-            cpt.set_name_space(this);
+            assert true: cpt.name_space = this;
             _cptDir_.put(cid, cpt);
             return cpt;
         }
@@ -169,7 +169,7 @@ public class Caldron extends BaseMessageLoop implements ConceptNameSpace {
      */
     protected synchronized void _reasoning_() {
         while(true) {
-System.out.printf("caldron = %s, _head_ = %s\n", this, load_cpt(_head_).conceptName);
+System.out.printf("caldron = %s, _head_ = %s\n", this, load_cpt(_head_).concept_name);
             // Do the assessment
             long[] heads = ((Neuron)load_cpt(_head_)).calculate_activation_and_do_actions(this);
 

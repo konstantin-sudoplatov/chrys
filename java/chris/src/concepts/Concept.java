@@ -12,7 +12,8 @@ import java.util.List;
  */
 abstract public class Concept implements Cloneable {
     /** For debugging. */
-    public String conceptName;
+    public String concept_name;
+    public ConceptNameSpace name_space;
     
     @Override
     public Concept clone() {
@@ -28,23 +29,6 @@ abstract public class Concept implements Cloneable {
      * @return 
      */
     abstract public long get_cid();
-    
-    /**
-     * Getter.
-     * @return 
-     */
-    public ConceptNameSpace get_name_space() {
-        return nameSpace;
-    }
-    
-    /**
-     * Setter.
-     * @param nameSpace 
-     */
-    public void set_name_space(ConceptNameSpace nameSpace) {
-        this.nameSpace = nameSpace;
-    }
-
     /**
      * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
      * @param note printed in the first line just after the object type.
@@ -60,7 +44,7 @@ abstract public class Concept implements Cloneable {
         else
             Glob.append_last_line(lst, String.format("; unnamed concept."));
 
-        Glob.add_list_of_lines(lst, ((BaseMessageLoop)nameSpace).to_list_of_lines("nameSpace", debugLevel-1));
+        Glob.add_list_of_lines(lst, ((BaseMessageLoop)name_space).to_list_of_lines("nameSpace", debugLevel-1));
 
         return lst;
     }
@@ -75,7 +59,4 @@ abstract public class Concept implements Cloneable {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
-    
-    /** Along with cid it is part of concept's address at the runtime. */
-    private ConceptNameSpace nameSpace;
 }

@@ -58,9 +58,20 @@ final public class Glob {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     /**
+     * Check if asserts are enabled.
+     * @return true/false
+     */
+    boolean asserts_enabled() {
+        boolean assertsEnabled = false;
+        assert true: assertsEnabled = true;
+        return assertsEnabled;
+    }
+    
+    /**
      * Initialization.
      */
     public static void initialize_application() {
+
         console_loop.start();
         attn_disp_loop.start();
         Starter starter = new Starter();

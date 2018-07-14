@@ -6,11 +6,13 @@ import concepts.DynCptName;
 import concepts.StatCptName;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
+import concepts.dyn.actions.BinaryOperation_actn;
 import concepts.dyn.actions.UnaryOperation_actn;
 import concepts.dyn.neurons.And_nrn;
 import concepts.dyn.neurons.Unconditional_nrn;
 import concepts.dyn.premises.ActivPeg_prem;
 import concepts.dyn.premises.Peg_prem;
+import concepts.dyn.primitives.String_prim;
 
 /**
  * When there is no DB or it is empty, we have to start with something...
@@ -32,6 +34,9 @@ final public class Starter {
         // We execute this action from effects of a neuron if we want the caldron to wait on that neuron.
         newCpt(new Action(StatCptName.CaldronStopAndWait_stat), DynCptName.caldron_stop_and_wait_actn);
         
+        // Concepts, that used in more than one branch
+        newCpt(new String_prim(), DynCptName.line_from_chatter_strprim);
+        
         // Must be added in advance to prevent errors in case of circled links. Only named concepts must be used here,
         // because only them are checked for duplication.
         newCpt(new Unconditional_nrn(), DynCptName.console_main_seed_unknrn);
@@ -46,7 +51,7 @@ final public class Starter {
                 // Create
         // seed
         Unconditional_nrn seedNrn = newCpt(new Unconditional_nrn(), DynCptName.chat_main_seed_unknrn);
-            UnaryOperation_actn anactivateNextLineComePegAct = newCpt(new UnaryOperation_actn(StatCptName.Antiactivate_stat));
+            UnaryOperation_actn anactivateNextLineComePegAct = newCpt(new UnaryOperation_actn(StatCptName.Anactivate_stat));
             
         // next line valve neuron
         And_nrn waitNextLineValveNrn = newCpt(new And_nrn(), DynCptName.wait_next_chat_line_valve_andnrn);
@@ -80,13 +85,14 @@ final public class Starter {
                 // Create
         // seed
         Unconditional_nrn seedNrn = newCpt(new Unconditional_nrn(), DynCptName.console_main_seed_unknrn);
-            UnaryOperation_actn anactivateNextLineComePegAct = newCpt(new UnaryOperation_actn(StatCptName.Antiactivate_stat));
+            UnaryOperation_actn anactivateNextLineComePegAct = newCpt(new UnaryOperation_actn(StatCptName.Anactivate_stat));
 
         // next line valve
         And_nrn waitNextLineValveNrn = newCpt(new And_nrn(), DynCptName.wait_next_console_line_valve_andnrn);
             Peg_prem nextLineComePeg = newCpt(new Peg_prem(), DynCptName.console_loop_notifies_next_line_come_pegprem);
-            UnaryOperation_actn consoleNotifiesChatNextLineComeUnop = newCpt(new UnaryOperation_actn(StatCptName.NotifyBranch_stat), 
+            BinaryOperation_actn consoleNotifiesChatNextLineComeBinop = newCpt(new BinaryOperation_actn(StatCptName.NotifyBranch_stat), 
                     DynCptName.console_notifies_chat_next_line_come_binopactn);
+            UnaryOperation_actn anactivateChatRequestNextLinePeg = newCpt(new UnaryOperation_actn(StatCptName.Anactivate_stat));
         And_nrn requestNextLineValveNrn = newCpt(new And_nrn(), DynCptName.request_next_console_line_valve_andnrn);
             Peg_prem chatRequestsNextLinePeg = newCpt(new Peg_prem(), DynCptName.chat_requests_next_line_pegprem);
             
@@ -99,6 +105,16 @@ final public class Starter {
         seedNrn.append_branch(waitNextLineValveNrn);
         
             // wait for the next line valve
+        // next line from console loop has come premise
+        waitNextLineValveNrn.add_premise(nextLineComePeg);
+        // finish defining notifying chat branch about the next console line coming
+        consoleNotifiesChatNextLineComeBinop.set_first_operand(getCpt(DynCptName.chat_main_seed_unknrn));
+        consoleNotifiesChatNextLineComeBinop.set_second_operand(getCpt(DynCptName.console_notifies_chat_next_line_come_pegprem));
+        // if the line has come, notify the chat branch and anactivate request pegs from other branches for the request line valve 
+        anactivateChatRequestNextLinePeg.set_operand(chatRequestsNextLinePeg);
+        waitNextLineValveNrn.add_effects(0, 
+                new long[] {anactivateChatRequestNextLinePeg.get_cid(), consoleNotifiesChatNextLineComeBinop.get_cid()},
+                requestNextLineValveNrn);
         waitNextLineValveNrn.add_effects(Float.NEGATIVE_INFINITY, (Action)getCpt(DynCptName.caldron_stop_and_wait_actn));
     }
     
@@ -153,7 +169,7 @@ final public class Starter {
 //            // Console chat seeds.
 //        ActionPack_actn consoleChatSeedPack = new ActionPack_actn();
 //        long consoleChatSeedPackCid = Glob.attn_disp_loop.add_cpt(consoleChatSeedPack, DynCptName.console_chat_rootway_seed_apk.name());
-//        consoleChatSeedPack.add_act(new Act(StatCptName.Antiactivate_stat.ordinal(), lineOfChatCid));
+//        consoleChatSeedPack.add_act(new Act(StatCptName.Anactivate_stat.ordinal(), lineOfChatCid));
 //        consoleChatSeedPack.add_act(new Act(StatCptName.SetPrimusInterPares_stat.ordinal(), chatMediaCid, itIsConsoleChatCid));
 //        Neuron consoleChatSeedNrn = new Neuron(ActivationIface.ActivationType.WEIGHED_SUM, ActivationIface.NormalizationType.BIN);
 //        Glob.attn_disp_loop.add_cpt(consoleChatSeedNrn, DynCptName.console_chat_rootway_seed_nrn.name());
@@ -161,7 +177,7 @@ final public class Starter {
 //            // Http chat seeds.
 //        ActionPack_actn httpChatSeedPack = new ActionPack_actn();
 //        long httpChatSeedPackCid = Glob.attn_disp_loop.add_cpt(httpChatSeedPack, DynCptName.http_chat_rootway_seed_apk.name());
-//        httpChatSeedPack.add_act(new Act(StatCptName.Antiactivate_stat.ordinal(), lineOfChatCid));
+//        httpChatSeedPack.add_act(new Act(StatCptName.Anactivate_stat.ordinal(), lineOfChatCid));
 //        httpChatSeedPack.add_act(new Act(StatCptName.SetPrimusInterPares_stat.ordinal(), chatMediaCid, itIsHttpChatCid));
 //        Neuron httpChatSeedNrn = new Neuron(ActivationIface.ActivationType.WEIGHED_SUM, ActivationIface.NormalizationType.BIN);
 //        Glob.attn_disp_loop.add_cpt(httpChatSeedNrn, DynCptName.http_chat_rootway_seed_nrn.name());
@@ -215,30 +231,37 @@ final public class Starter {
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     /**
-     * Add new concept to the global name space. If cid as created already, the existing concept is returned.
+     * Add new concept to the global name space. If cid is created already, the existing 
+     * concept will be returned.
      * @param cpt
      * @param name
      * @return created concept
      */
     private <T extends Concept> T newCpt(T cpt, DynCptName name) {
-        Long cid = Glob.named.name_cid.get(name.name());
-        if
-                (cid == null || !Glob.attn_disp_loop.cpt_exists(cid))
-            Glob.attn_disp_loop.add_cpt(cpt, name.name());
+        assert cpt.get_cid() == 0;  // newly created
         
-        return cpt;
+        Long cid = Glob.named.name_cid.get(name.name());
+        if      //does the concept exist already?
+                (cid != null)
+        {//yes: return it
+            assert Glob.attn_disp_loop.cpt_exists(cid);
+            return (T)Glob.attn_disp_loop.load_cpt(cid);
+        }
+        else {//no: add new concept 
+            Glob.attn_disp_loop.add_cpt(cpt, name.name());
+            return cpt;
+        }
     }
 
     /**
-     * Add new concept to the global name space. If cid as created already, the existing concept is returned.
+     * Add new concept to the global name space.
      * @param cpt
      * @return created concept
      */
     private <T extends Concept> T newCpt(T cpt) {
-        if
-                (!Glob.attn_disp_loop.cpt_exists(cpt.get_cid()))
-            Glob.attn_disp_loop.add_cpt(cpt);
+        assert cpt.get_cid() == 0;  // newly created
 
+        Glob.attn_disp_loop.add_cpt(cpt);
         return cpt;
     }
 

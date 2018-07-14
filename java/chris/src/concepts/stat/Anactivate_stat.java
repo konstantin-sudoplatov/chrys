@@ -8,7 +8,7 @@ import concepts.dyn.ifaces.SetActivationIface;
  * Load a concept into the name space and antiactivate it.
  * @author su
  */
-public class Antiactivate_stat extends StaticAction {
+public class Anactivate_stat extends StaticAction {
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //

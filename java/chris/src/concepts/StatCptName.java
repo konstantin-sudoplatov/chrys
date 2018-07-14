@@ -9,7 +9,7 @@ package concepts;
 public enum StatCptName {
     Mrk_TestMarker,
     Activate_stat,                      // set activation of a concept to 1
-    Antiactivate_stat,                  // set activation of a concept to -1
+    Anactivate_stat,                  // set activation of a concept to -1
     CaldronStopAndWait_stat,            // request caldron to wait on a current neuron until premises changed in a such way, that the processing can be continued
     CloneConceptAndAappendToList_stat,  // clone given concept and add it to the end of a list concept
     CloneConcept_stat,                  // clone a concept and add the clone to the given name space

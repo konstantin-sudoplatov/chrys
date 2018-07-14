@@ -61,9 +61,9 @@ final public class Glob {
      * Check if asserts are enabled.
      * @return true/false
      */
-    boolean asserts_enabled() {
+    public final static boolean assertions_enabled() {
         boolean assertsEnabled = false;
-        assert true: assertsEnabled = true;
+        assert assertsEnabled = true;
         return assertsEnabled;
     }
     

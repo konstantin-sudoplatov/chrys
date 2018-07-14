@@ -16,9 +16,8 @@ public class String_prem extends String_prim implements GetActivationIface{
 
     /** 
      * Constructor.
-     * @param string
      */ 
-    public String_prem(String string) { super(string); } 
+    public String_prem() { super(); } 
     
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //

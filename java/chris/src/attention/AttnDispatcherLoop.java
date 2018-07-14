@@ -85,7 +85,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
             ((DynamicConcept)cpt).set_creation_time((int)(new Date().getTime()/1000));
         }
         
-        assert true: cpt.name_space = this;
+        if (Glob.assertions_enabled()) cpt.name_space = this;
         
         // put_caldron to target directories
         if      // is it a named concept?
@@ -100,7 +100,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
                 throw new Crash(cptName + " is already present in the Glob.named.name_cid");
             if (Glob.named.cid_name.put(cid, cptName) != null)
                 throw new Crash("cid " + cid + " is already present in the Glob.named.cid_name" );
-            cpt.concept_name = cptName;  // for debugging
+            if (Glob.assertions_enabled()) cpt.concept_name = cptName;  // for debugging
         }
         if      // the concept addressed to attention dispatcher?
                 (circle == null)
@@ -312,7 +312,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     @Override
     synchronized protected boolean _defaultProc_(BaseMessage msg) {
         
-        // May be, create an attention circle for the chat
+        // The first call create an attention circle for the chat
         if      //is it the first pass through?
                 (consoleCaldron == null)
         {//yes: create and start the chat caldron and its branches

@@ -38,7 +38,8 @@ public class ActivRangeImpl implements ActivRangeIface, Cloneable {
         } catch (CloneNotSupportedException ex) {
             throw new Crash("Cloning a concept failed.");
         }
-        clone.rangeS = (ActivRange[])rangeS.clone();
+        if (rangeS != null) 
+            clone.rangeS = (ActivRange[])rangeS.clone();
         
         return clone;
     }

@@ -7,7 +7,6 @@ import concepts.Concept;
 import concepts.DynCptName;
 import concepts.dyn.Neuron;
 import concepts.dyn.premises.Peg_prem;
-import concepts.dyn.primitives.String_prim;
 import java.util.List;
 
 /**
@@ -156,18 +155,6 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
         if      
                 (super._defaultProc_(msg))
             return true;
-
-        if      // a line from console has come?
-                (msg instanceof Msg_ConsoleToAttnCircle)
-        {   // put it to the concept "line_from_chatter_strprem" and invoke the reasoning
-            
-            String_prim lineOfChat = (String_prim)load_cpt(DynCptName.line_from_chatter_strprim.name());
-            lineOfChat.set_string(((Msg_ConsoleToAttnCircle) msg).text);
-            
-            _reasoning_();
-            
-            return true;
-        }
             
         // prompt console
 //        attnDisp.put_in_queue(new Msg_ReadFromConsole(AttnDispatcherLoop.class));        

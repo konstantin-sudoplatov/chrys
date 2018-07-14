@@ -12,10 +12,8 @@ public class String_prim extends Primitive {
 
     /** 
      * Constructor.
-     * @param string
      */ 
-    public String_prim(String string) { 
-        strinG = string;
+    public String_prim() { 
     } 
     
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v

@@ -46,6 +46,10 @@ public final class BinaryOperation_actn extends Action {
      */
     @Override
     public void go(ConceptNameSpace nameSpace) {
+        assert nameSpace.cpt_exists(_statActionCid_);
+        assert nameSpace.cpt_exists(firstOperandCid);
+        assert nameSpace.cpt_exists(secondOperandCid);
+        
         ((StaticAction)nameSpace.load_cpt(_statActionCid_)).go(nameSpace, new long[] {firstOperandCid, secondOperandCid}, null);
     }
 

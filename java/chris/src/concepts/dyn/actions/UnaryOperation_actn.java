@@ -45,6 +45,8 @@ public final class UnaryOperation_actn extends Action {
      */
     @Override
     public void go(ConceptNameSpace nameSpace) {
+        assert nameSpace.cpt_exists(_statActionCid_);
+        assert nameSpace.cpt_exists(operandCid);
         ((StaticAction)nameSpace.load_cpt(_statActionCid_)).go(nameSpace, new long[] {operandCid}, null);
     }
 

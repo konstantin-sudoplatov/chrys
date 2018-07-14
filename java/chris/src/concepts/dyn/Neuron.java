@@ -60,18 +60,19 @@ public abstract class Neuron extends DynamicConcept implements GetActivationIfac
         
         float activation = _calculateActivation_(caldron);
         Effects effects = select_effects(activation);
-        if      // is there actions?
+        if      // are there actions?
                 (effects != null && effects.actions != null)
             //yes: do actions. after that effects are valid.
             for(long actCid: effects.actions) {
                 ((Action)caldron.load_cpt(actCid)).go(caldron);
             }
         
-        if
-                (effects == null)
-            return null;
-        else
+        if      // are there any effects?
+                (effects != null)
+            //yes: return branches
             return effects.branches;
+        else //no: return null, the caldron will be waiting
+            return null;
     }
     
     @Override

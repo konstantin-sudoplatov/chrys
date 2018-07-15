@@ -40,6 +40,7 @@ final public class Starter {
         // Must be added in advance to prevent errors in case of circled links. Only named concepts must be used here,
         // because only them are checked for duplication.
         newCpt(new Unconditional_nrn(), DynCptName.console_main_seed_unknrn);
+        newCpt(new Peg_prem(), DynCptName.chat_requests_next_line_pegprem);
     }
     
     public void chat_branch() {
@@ -57,7 +58,7 @@ final public class Starter {
         And_nrn waitNextLineValveNrn = newCpt(new And_nrn(), DynCptName.wait_next_chat_line_valve_andnrn);
             ActivPeg_prem consoleCaldronIsUpAPeg = newCpt(new ActivPeg_prem(StatCptName.CaldronIsUp_stat), DynCptName.console_caldron_is_up_activprem);
             Peg_prem nextLineComePeg = newCpt(new Peg_prem(), DynCptName.console_notifies_chat_next_line_come_pegprem);
-            UnaryOperation_actn requestNextLineAct = newCpt(new UnaryOperation_actn(StatCptName.RequestNextLineFromChatter_stat));
+            BinaryOperation_actn requestNextLineAct = newCpt(new BinaryOperation_actn(StatCptName.NotifyBranch_stat));
 
                 // Adjust and mate
             // seed
@@ -76,7 +77,8 @@ final public class Starter {
         waitNextLineValveNrn.add_premise(consoleCaldronIsUpAPeg);
         waitNextLineValveNrn.add_premise(nextLineComePeg);
         // add effects
-        requestNextLineAct.set_operand(getCpt(DynCptName.console_main_seed_unknrn));
+        requestNextLineAct.set_first_operand(getCpt(DynCptName.console_main_seed_unknrn));
+        requestNextLineAct.set_second_operand(getCpt(DynCptName.chat_requests_next_line_pegprem));
         waitNextLineValveNrn.add_effects(0, new long[] {anactivateNextLineComePegAct.get_cid(), requestNextLineAct.get_cid()}, waitNextLineValveNrn);
         waitNextLineValveNrn.add_effects(Float.NEGATIVE_INFINITY, (Action)getCpt(DynCptName.caldron_stop_and_wait_actn));
     }

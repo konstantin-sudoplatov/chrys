@@ -15,7 +15,6 @@ public enum StatCptName {
     CloneConcept_stat,                  // clone a concept and add the clone to the given name space
     CaldronIsUp_stat,                   // check status of a caldron and activate/anactivate a peg
     NotifyBranch_stat,                  // send a message to the branch loop, which in turn will invoke the NotyfyBranchAgent_stat action in the destination branch environment
-    RequestNextLineFromChatter_stat,    // send to the console loop request for getting a new line from chatter (console will give a promt and send back the message with the line)
     SetPrimusInterPares_stat,           // set primus in the group of equals (activation set automatically)
     ;
     

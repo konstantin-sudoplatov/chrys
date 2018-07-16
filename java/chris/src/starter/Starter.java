@@ -6,13 +6,14 @@ import concepts.DynCptName;
 import concepts.StatCptName;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
+import concepts.dyn.Teleport_actn;
 import concepts.dyn.actions.BinaryOperation_actn;
 import concepts.dyn.actions.UnaryOperation_actn;
 import concepts.dyn.neurons.And_nrn;
 import concepts.dyn.neurons.Unconditional_nrn;
 import concepts.dyn.premises.ActivPeg_prem;
 import concepts.dyn.premises.Peg_prem;
-import concepts.dyn.primitives.String_prim;
+import concepts.dyn.primitives.TransientString_prim;
 
 /**
  * When there is no DB or it is empty, we have to start with something...
@@ -31,27 +32,38 @@ final public class Starter {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     public void common_concepts() {
+                // Common concepts
         // We execute this action from effects of a neuron if we want the caldron to wait on that neuron.
         newCpt(new Action(StatCptName.CaldronStopAndWait_stat), DynCptName.caldron_stop_and_wait_actn);
+        // Chat media types - console or http. The pertinent type will be activated in the constructor of the attention circle.
+        newCpt(new Peg_prem(), DynCptName.it_is_console_chat_prem);
+        newCpt(new Peg_prem(), DynCptName.it_is_http_chat_prem);
+        // line-from-chatter, used in more than one branch
+        newCpt(new TransientString_prim(), DynCptName.line_from_chatter_strprim);
         
-        // Concepts, that used in more than one branch
-        newCpt(new String_prim(), DynCptName.line_from_chatter_strprim);
+                // Main branch seeds
+        newCpt(new Unconditional_nrn(), DynCptName.console_main_seed_uncnrn);
+        newCpt(new Unconditional_nrn(), DynCptName.chat_main_seed_uncnrn);
         
-        // Must be added in advance to prevent errors in case of circled links. Only named concepts must be used here,
-        // because only them are checked for duplication.
-        newCpt(new Unconditional_nrn(), DynCptName.console_main_seed_unknrn);
+                // Chat-console interplay
+        newCpt(new Teleport_actn(), DynCptName.transfer_console_next_line_to_chat_telpatctn);
+    }
+    
+    /**
+     * It is handy to set up some concepts used in chat and console branches in advance.  Only named concepts must be used here,
+     * because only them are checked for duplication and can be used further anyway.
+     */
+    public void chat_console_forward() {
         newCpt(new Peg_prem(), DynCptName.chat_requests_next_line_pegprem);
+        
     }
     
     public void chat_branch() {
 
-        // Chat media types - console or http. The pertinent type will be activated in the constructor of the attention circle.
-        newCpt(new Peg_prem(), DynCptName.it_is_console_chat_prem);
-        newCpt(new Peg_prem(), DynCptName.it_is_http_chat_prem);
         
                 // Create
         // seed
-        Unconditional_nrn seedNrn = newCpt(new Unconditional_nrn(), DynCptName.chat_main_seed_unknrn);
+        Unconditional_nrn seedNrn = newCpt(new Unconditional_nrn(), DynCptName.chat_main_seed_uncnrn);
             UnaryOperation_actn anactivateNextLineComePegAct = newCpt(new UnaryOperation_actn(StatCptName.Anactivate_stat));
             
         // next line valve neuron
@@ -68,16 +80,16 @@ final public class Starter {
         // pass control for the wait for next line neuron
         seedNrn.append_branch(waitNextLineValveNrn);
         // set up the console as a subsidiary branch
-        seedNrn.append_branch((Neuron)getCpt(DynCptName.console_main_seed_unknrn));
+        seedNrn.append_branch((Neuron)getCpt(DynCptName.console_main_seed_uncnrn));
         
             // wait for the next line valve
         // set up the console caldron is up activ peg
-        consoleCaldronIsUpAPeg.set_operands(getCpt(DynCptName.console_main_seed_unknrn));
+        consoleCaldronIsUpAPeg.set_operands(getCpt(DynCptName.console_main_seed_uncnrn));
         // add premises to the valve
         waitNextLineValveNrn.add_premise(consoleCaldronIsUpAPeg);
         waitNextLineValveNrn.add_premise(nextLineComePeg);
         // add effects
-        requestNextLineAct.set_first_operand(getCpt(DynCptName.console_main_seed_unknrn));
+        requestNextLineAct.set_first_operand(getCpt(DynCptName.console_main_seed_uncnrn));
         requestNextLineAct.set_second_operand(getCpt(DynCptName.chat_requests_next_line_pegprem));
         waitNextLineValveNrn.add_effects(0, new long[] {anactivateNextLineComePegAct.get_cid(), requestNextLineAct.get_cid()}, waitNextLineValveNrn);
         waitNextLineValveNrn.add_effects(Float.NEGATIVE_INFINITY, (Action)getCpt(DynCptName.caldron_stop_and_wait_actn));
@@ -86,7 +98,7 @@ final public class Starter {
     public void console_branch() {
                 // Create
         // seed
-        Unconditional_nrn seedNrn = newCpt(new Unconditional_nrn(), DynCptName.console_main_seed_unknrn);
+        Unconditional_nrn seedNrn = newCpt(new Unconditional_nrn(), DynCptName.console_main_seed_uncnrn);
             UnaryOperation_actn anactivateNextLineComePegAct = newCpt(new UnaryOperation_actn(StatCptName.Anactivate_stat));
 
         // next line valve
@@ -110,7 +122,7 @@ final public class Starter {
         // next line from console loop has come premise
         waitNextLineValveNrn.add_premise(nextLineComePeg);
         // finish defining notifying chat branch about the next console line coming
-        consoleNotifiesChatNextLineComeBinop.set_first_operand(getCpt(DynCptName.chat_main_seed_unknrn));
+        consoleNotifiesChatNextLineComeBinop.set_first_operand(getCpt(DynCptName.chat_main_seed_uncnrn));
         consoleNotifiesChatNextLineComeBinop.set_second_operand(getCpt(DynCptName.console_notifies_chat_next_line_come_pegprem));
         // if the line has come, notify the chat branch and anactivate request pegs from other branches for the request line valve 
         anactivateChatRequestNextLinePeg.set_operand(chatRequestsNextLinePeg);

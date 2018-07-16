@@ -2,6 +2,7 @@ package concepts.dyn;
 
 import attention.ConceptNameSpace;
 import chris.Glob;
+import concepts.Concept;
 import concepts.DynamicConcept;
 import concepts.StatCptName;
 import concepts.StaticAction;
@@ -50,6 +51,14 @@ public class Action extends DynamicConcept {
      */
     public long get_stat_action() {
         return _statActionCid_;
+    }
+    
+    /**
+     * Set static action.
+     * @param statAction 
+     */
+    public void set_stat_action(Concept statAction) {
+        _statActionCid_ = statAction.get_cid();
     }
     
     /**

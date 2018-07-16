@@ -10,15 +10,19 @@ package concepts;
 public enum DynCptName {
     // Common concepts
     caldron_stop_and_wait_actn,             // request caldron to stop reasoning on the current neuron
-    
-    // Main branch seeds
-    chat_main_seed_unknrn,                  // this is the root way of the chat (perminent)
-    console_main_seed_unknrn,               // branch for reading/writing console lines (perminent)
-    chat_log_main_seed_unknrn,              // branch for logging console lines (perminent)
-    
-    // Chat branch
     it_is_console_chat_prem,                // chat by console premise
     it_is_http_chat_prem,                   // chat by http premise
+    line_from_chatter_strprim,              // the line from chatter
+    
+    // Main branch seeds
+    chat_main_seed_uncnrn,                  // this is the root way of the chat (perminent)
+    console_main_seed_uncnrn,               // branch for reading/writing console lines (perminent)
+    chat_log_main_seed_unknrn,              // branch for logging console lines (perminent)
+    
+    // Chat-console interplay
+    transfer_console_next_line_to_chat_telpatctn,  // transfer console lines to the chat branch
+    
+    // Chat branch
     wait_next_chat_line_valve_andnrn,            // waits for next line of chat
         // prem
         console_caldron_is_up_activprem,        // checks status of the console caldron and sets up activation of the neuron accordingly
@@ -37,7 +41,6 @@ public enum DynCptName {
     // Chat log branch
         
     // Chat-console-http branches interpaly
-    line_from_chatter_strprim,              // the line from chatter
 
 //        chat_log_requests_next_console_line_pegprem,    // is signaled(activated) by the chat branch when it is ready to take next line
         console_mass_notifies_next_line_come_apk,   // compacts signal actions for all interested branches

@@ -318,13 +318,13 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
         {//yes: create and start the chat caldron and its branches
             // Create and start chat and branches. That process will add to the caldron map.
             if      //the chat caldron is not created yet?
-                    (get_caldron(load_cpt(DynCptName.chat_main_seed_unknrn.name())) == null)
+                    (get_caldron(load_cpt(DynCptName.chat_main_seed_uncnrn.name())) == null)
                 //no, not yet: create and start it
-                new AttnCircle((Neuron)load_cpt(DynCptName.chat_main_seed_unknrn.name()), 
+                new AttnCircle((Neuron)load_cpt(DynCptName.chat_main_seed_uncnrn.name()), 
                         this, DynCptName.it_is_console_chat_prem).start();
 
             // extract the console branch
-            consoleCaldron = get_caldron(load_cpt(DynCptName.console_main_seed_unknrn.name()));
+            consoleCaldron = get_caldron(load_cpt(DynCptName.console_main_seed_uncnrn.name()));
             if      //the console caldron is not created yet?
                     (consoleCaldron == null)
             {//no, not yet: rebounce the message

@@ -14,7 +14,7 @@ abstract public class DynamicConcept extends Concept {
     //                                  Public methods
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
-
+    
     /**
      * Getter.
      * @return concept identifier. 

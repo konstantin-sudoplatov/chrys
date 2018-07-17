@@ -4,7 +4,7 @@ import chris.BaseMessage;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
-import concepts.DynCptName;
+import concepts.DCN;
 import concepts.dyn.Neuron;
 import concepts.dyn.premises.Peg_prem;
 import java.util.List;
@@ -23,10 +23,10 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
      * Constructor.
      * @param seed main seed of the caldron. It serves as caldron's identifier.
      * @param attnDisp attention dispatcher (parent).
-     * @param circleType example: DynCptName.it_is_console_chat_prem
+     * @param circleType example: DCN.it_is_console_chat_prem
      */ 
     @SuppressWarnings("OverridableMethodCallInConstructor")
-    public AttnCircle(Neuron seed, AttnDispatcherLoop attnDisp, DynCptName circleType) 
+    public AttnCircle(Neuron seed, AttnDispatcherLoop attnDisp, DCN circleType) 
     {   super(seed, null, null);    // null for being a main caldron
         this.attnDisp = attnDisp;
         
@@ -36,11 +36,11 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
         // Seed
         switch(circleType) {
             case it_is_console_chat_prem:
-                ((Peg_prem)load_cpt(DynCptName.it_is_console_chat_prem.name())).activate();
+                ((Peg_prem)load_cpt(DCN.it_is_console_chat_prem.name())).activate();
                 break;
                 
             case it_is_http_chat_prem:
-                ((Peg_prem)load_cpt(DynCptName.it_is_http_chat_prem.name())).activate();
+                ((Peg_prem)load_cpt(DCN.it_is_http_chat_prem.name())).activate();
                 break;
                 
             default:

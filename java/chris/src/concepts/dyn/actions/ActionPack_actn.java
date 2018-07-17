@@ -4,7 +4,7 @@ import attention.ConceptNameSpace;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
-import concepts.StatCptName;
+import concepts.SCN;
 import concepts.StaticAction;
 import concepts.dyn.Action;
 import java.util.ArrayList;
@@ -24,31 +24,31 @@ public class ActionPack_actn extends Action {
         public long[] parm_cids;
         public Object extra;
         
-        public Act(StatCptName statAction) {
+        public Act(SCN statAction) {
             stat_action_cid = statAction.ordinal();
             parm_cids = null;
             extra = null;
         }
         
-        public Act(StatCptName statAction, Concept operand) {
+        public Act(SCN statAction, Concept operand) {
             stat_action_cid = statAction.ordinal();
             parm_cids = new long[] {operand.get_cid()};
             extra = null;
         }
         
-        public Act(StatCptName statAction, Concept firstOperand, Concept secondOperand) {
+        public Act(SCN statAction, Concept firstOperand, Concept secondOperand) {
             stat_action_cid = statAction.ordinal();
             parm_cids = new long[] {firstOperand.get_cid(), secondOperand.get_cid()};
             extra = null;
         }
         
-        public Act(StatCptName statAction, long[] parameters) {
+        public Act(SCN statAction, long[] parameters) {
             stat_action_cid = statAction.ordinal();
             parm_cids = parameters;
             extra = null;
         }
         
-        public Act(StatCptName statAction, long[] parameters, Object extra) {
+        public Act(SCN statAction, long[] parameters, Object extra) {
             stat_action_cid = statAction.ordinal();
             parm_cids = parameters;
             this.extra = extra;
@@ -116,7 +116,7 @@ public class ActionPack_actn extends Action {
      * Add an act without parameters.
      * @param statAction static action
      */
-    public void add_act(StatCptName statAction) {
+    public void add_act(SCN statAction) {
         add_act(new Act(statAction));
     }
 
@@ -125,7 +125,7 @@ public class ActionPack_actn extends Action {
      * @param statAction static action
      * @param operand
      */
-    public void add_act(StatCptName statAction, Concept operand) {
+    public void add_act(SCN statAction, Concept operand) {
         add_act(new Act(statAction, operand));
     }
 
@@ -135,7 +135,7 @@ public class ActionPack_actn extends Action {
      * @param firstOperand
      * @param secondOperand
      */
-    public void add_act(StatCptName statAction, Concept firstOperand, Concept secondOperand) {
+    public void add_act(SCN statAction, Concept firstOperand, Concept secondOperand) {
         add_act(new Act(statAction, firstOperand, secondOperand));
     }
 
@@ -144,7 +144,7 @@ public class ActionPack_actn extends Action {
      * @param statAction static action
      * @param parameters array of cids
      */
-    public void add_act(StatCptName statAction, long[] parameters) {
+    public void add_act(SCN statAction, long[] parameters) {
         add_act(new Act(statAction, parameters));
     }
 
@@ -154,7 +154,7 @@ public class ActionPack_actn extends Action {
      * @param parameters
      * @param extra
      */
-    public void add_act(StatCptName statAction, long[] parameters, Object extra) {
+    public void add_act(SCN statAction, long[] parameters, Object extra) {
         add_act(new Act(statAction, parameters, extra));
     }
     

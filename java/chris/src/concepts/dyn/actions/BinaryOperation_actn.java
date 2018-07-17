@@ -2,7 +2,7 @@ package concepts.dyn.actions;
 
 import attention.ConceptNameSpace;
 import concepts.Concept;
-import concepts.StatCptName;
+import concepts.SCN;
 import concepts.StaticAction;
 import concepts.dyn.Action;
 
@@ -25,7 +25,7 @@ public final class BinaryOperation_actn extends Action {
      * Constructor.
      * @param statAction
      */ 
-    public BinaryOperation_actn(StatCptName statAction) { super(statAction); } 
+    public BinaryOperation_actn(SCN statAction) { super(statAction); } 
 
     /** 
      * Constructor.
@@ -33,7 +33,7 @@ public final class BinaryOperation_actn extends Action {
      * @param firstOperand
      * @param secondOperand
      */ 
-    public BinaryOperation_actn(StatCptName statAction, Concept firstOperand, Concept secondOperand) {
+    public BinaryOperation_actn(SCN statAction, Concept firstOperand, Concept secondOperand) {
         this(statAction); 
         firstOperandCid = firstOperand.get_cid();
         secondOperandCid = secondOperand.get_cid();

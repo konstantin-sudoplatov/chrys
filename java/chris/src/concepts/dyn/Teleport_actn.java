@@ -4,7 +4,7 @@ import attention.Caldron;
 import attention.ConceptNameSpace;
 import chris.Crash;
 import concepts.Concept;
-import concepts.StatCptName;
+import concepts.SCN;
 import concepts.StaticAction;
 import concepts.dyn.ifaces.TransientIface;
 import concepts.dyn.neurons.Unconditional_nrn;
@@ -74,7 +74,7 @@ public class Teleport_actn extends Action {
             telegram = null;
         
         // Call the notify branch static action 
-        ((StaticAction)nameSpace.load_cpt(StatCptName.NotifyBranch_stat.name())).go(nameSpace, new long[]{destSeedCid, destPegCid}, telegram);
+        ((StaticAction)nameSpace.load_cpt(SCN.NotifyBranch_stat.name())).go(nameSpace, new long[]{destSeedCid, destPegCid}, telegram);
     }
     
     /**

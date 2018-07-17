@@ -5,8 +5,8 @@ import chris.BaseMessageLoop;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
-import concepts.DynCptName;
-import concepts.StatCptName;
+import concepts.DCN;
+import concepts.SCN;
 import concepts.StaticAction;
 import concepts.dyn.Neuron;
 import concepts.dyn.primitives.String_prim;
@@ -213,7 +213,7 @@ System.out.printf("caldron = %s, _head_ = %s\n", load_cpt(this.seeD.get_cid()).c
         else if //notification has come?
                 (msg instanceof Msg_NotifyBranch)
         {   // activate specified in the message peg and do reasoning
-            ((StaticAction)load_cpt(StatCptName.Activate_stat.name())).go(this, new long[] {((Msg_NotifyBranch) msg).peg_cid}, null);
+            ((StaticAction)load_cpt(SCN.Activate_stat.name())).go(this, new long[] {((Msg_NotifyBranch) msg).peg_cid}, null);
             _reasoning_();
             return true;
         }
@@ -222,10 +222,10 @@ System.out.printf("caldron = %s, _head_ = %s\n", load_cpt(this.seeD.get_cid()).c
                 (msg instanceof Msg_ConsoleToAttnCircle)
         {   // put it to the concept "line_from_chatter_strprim", activate the 
             // "loop_notifies_console_branch_next_line_come_pegprem" peg and invoke the reasoning
-            String_prim lineOfChat = (String_prim)load_cpt(DynCptName.line_from_chatter_strprim.name());
+            String_prim lineOfChat = (String_prim)load_cpt(DCN.line_from_chatter_strprim.name());
             lineOfChat.set_string(((Msg_ConsoleToAttnCircle) msg).text);
-            StaticAction activateStatActn = (StaticAction)load_cpt(StatCptName.Activate_stat.name());
-            activateStatActn.go(this, new long[]{Glob.named.name_cid.get(DynCptName.loop_notifies_console_branch_next_line_come_pegprem.name())}, null);
+            StaticAction activateStatActn = (StaticAction)load_cpt(SCN.Activate_stat.name());
+            activateStatActn.go(this, new long[]{Glob.named.name_cid.get(DCN.loop_notifies_console_branch_next_line_come_pegprem.name())}, null);
             
             _reasoning_();
             

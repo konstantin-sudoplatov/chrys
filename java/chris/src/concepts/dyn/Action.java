@@ -4,7 +4,7 @@ import attention.ConceptNameSpace;
 import chris.Glob;
 import concepts.Concept;
 import concepts.DynamicConcept;
-import concepts.StatCptName;
+import concepts.SCN;
 import concepts.StaticAction;
 import java.util.List;
 
@@ -20,9 +20,9 @@ public class Action extends DynamicConcept {
 
     /**
      * Constructor.
-     * @param statAction as it is presented in the StatCptName enum.
+     * @param statAction as it is presented in the SCN enum.
      */
-    public Action(StatCptName statAction) {
+    public Action(SCN statAction) {
         this._statActionCid_ = statAction.ordinal();
     }
 
@@ -55,10 +55,10 @@ public class Action extends DynamicConcept {
     
     /**
      * Set static action.
-     * @param statAction 
+     * @param statAction as the SCN enum.
      */
-    public void set_static_action(Concept statAction) {
-        _statActionCid_ = statAction.get_cid();
+    public void set_static_action(SCN statAction) {
+        _statActionCid_ = statAction.ordinal();
     }
     
     /**

@@ -20,7 +20,7 @@ abstract public class StaticAction extends Concept {
 
     @Override
     public long get_cid() {
-        return StatCptName.valueOf(this.getClass().getSimpleName()).ordinal();
+        return SCN.valueOf(this.getClass().getSimpleName()).ordinal();
     }
     
     /**

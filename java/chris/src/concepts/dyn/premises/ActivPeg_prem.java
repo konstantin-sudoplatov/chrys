@@ -2,7 +2,7 @@ package concepts.dyn.premises;
 
 import attention.Caldron;
 import concepts.Concept;
-import concepts.StatCptName;
+import concepts.SCN;
 import concepts.StaticAction;
 
 /**
@@ -21,7 +21,7 @@ public class ActivPeg_prem extends Peg_prem {
      * Constructor.
      * @param statAction
      */ 
-    public ActivPeg_prem(StatCptName statAction) { 
+    public ActivPeg_prem(SCN statAction) { 
         statActionCid = statAction.ordinal();
     } 
 
@@ -49,10 +49,10 @@ public class ActivPeg_prem extends Peg_prem {
     
     /**
      * Setter.
-     * @param staticAction 
+     * @param staticAction as SCN enum.
      */
-    public void set_static_action(Concept staticAction) {
-        statActionCid = staticAction.get_cid();
+    public void set_static_action(SCN staticAction) {
+        statActionCid = staticAction.ordinal();
     }
     
     /**

@@ -2,7 +2,7 @@ package concepts.dyn.actions;
 
 import attention.ConceptNameSpace;
 import concepts.Concept;
-import concepts.StatCptName;
+import concepts.SCN;
 import concepts.StaticAction;
 import concepts.dyn.Action;
 
@@ -26,14 +26,14 @@ public final class UnaryOperation_actn extends Action {
      * Constructor.
      * @param statAction
      */ 
-    public UnaryOperation_actn(StatCptName statAction) { super(statAction); } 
+    public UnaryOperation_actn(SCN statAction) { super(statAction); } 
 
     /** 
      * Constructor.
      * @param statAction
      * @param operand
      */ 
-    public UnaryOperation_actn(StatCptName statAction, Concept operand) {
+    public UnaryOperation_actn(SCN statAction, Concept operand) {
         this(statAction); 
         operandCid = operand.get_cid();
     } 

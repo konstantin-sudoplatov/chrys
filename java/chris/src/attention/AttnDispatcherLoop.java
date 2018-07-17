@@ -5,9 +5,9 @@ import chris.BaseMessageLoop;
 import chris.Crash;
 import chris.Glob;
 import concepts.Concept;
-import concepts.DynCptName;
+import concepts.DCN;
 import concepts.DynamicConcept;
-import concepts.StatCptName;
+import concepts.SCN;
 import concepts.StaticAction;
 import concepts.dyn.Neuron;
 import concepts.dyn.ifaces.GlobalConcept;
@@ -59,7 +59,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
         if      // static concept?
                 (cpt instanceof StaticAction)
         {   //yes: get_caldron cid
-            cid = StatCptName.valueOf(cpt.getClass().getSimpleName()).ordinal();
+            cid = SCN.valueOf(cpt.getClass().getSimpleName()).ordinal();
         }
         else 
         {   //no: generate a unique cid. it is unique through common and all bubble directories.
@@ -318,13 +318,13 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
         {//yes: create and start the chat caldron and its branches
             // Create and start chat and branches. That process will add to the caldron map.
             if      //the chat caldron is not created yet?
-                    (get_caldron(load_cpt(DynCptName.chat_main_seed_uncnrn.name())) == null)
+                    (get_caldron(load_cpt(DCN.chat_main_seed_uncnrn.name())) == null)
                 //no, not yet: create and start it
-                new AttnCircle((Neuron)load_cpt(DynCptName.chat_main_seed_uncnrn.name()), 
-                        this, DynCptName.it_is_console_chat_prem).start();
+                new AttnCircle((Neuron)load_cpt(DCN.chat_main_seed_uncnrn.name()), 
+                        this, DCN.it_is_console_chat_prem).start();
 
             // extract the console branch
-            consoleCaldron = get_caldron(load_cpt(DynCptName.console_main_seed_uncnrn.name()));
+            consoleCaldron = get_caldron(load_cpt(DCN.console_main_seed_uncnrn.name()));
             if      //the console caldron is not created yet?
                     (consoleCaldron == null)
             {//no, not yet: rebounce the message
@@ -379,7 +379,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
         // Load CPN from DB
         
         // Create static concepts.
-        for(StatCptName cidEnum: StatCptName.values()) {
+        for(SCN cidEnum: SCN.values()) {
             String cptName = cidEnum.name();
             if      // concept name starts with "Mrk_"?
                     (cptName.substring(0, 4).equals("Mrk_"))
@@ -389,7 +389,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
             @SuppressWarnings("UnusedAssignment")
             Class cl = null;
             try {
-                cl = Class.forName(StatCptName.STATIC_CONCEPTS_PACKET_NAME + "." + cptName);
+                cl = Class.forName(SCN.STATIC_CONCEPTS_PACKET_NAME + "." + cptName);
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(StaticAction.class.getName()).log(Level.SEVERE, "Error getting class " + cptName, ex);
                 System.exit(1);

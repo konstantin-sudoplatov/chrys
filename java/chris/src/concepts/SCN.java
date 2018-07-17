@@ -1,12 +1,12 @@
 package concepts;
 
 /**
- *  Static concepts identifiers.
+ *  Static concepts name.
  * Concept identifiers are named after the corresponding classes. ordinal() is used as a numerical concept Id in ComDir. Also used for
  * automated generation of the static concept objects pointed by ComDir.
  * @author su
  */
-public enum StatCptName {
+public enum SCN {
     Mrk_TestMarker,
     Activate_stat,                      // set activation of a concept to 1
     Anactivate_stat,                  // set activation of a concept to -1

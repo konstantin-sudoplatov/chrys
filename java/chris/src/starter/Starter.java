@@ -39,52 +39,44 @@ final public class Starter {
         newCpt(new Peg_prem(), DCN.it_is_http_chat_prem);
         // line-from-chatter, used in more than one branch
         newCpt(new TransientString_prim(), DCN.line_from_chatter_strprim);
-        
-                // Console branch
-        // Main branch seeds
-        newCpt(new Unconditional_nrn(), DCN.console_main_seed_uncnrn);
-            newCpt(new UnaryOperation_actn(), DCN.anactivate_loop_notifies_console_branch_next_line_come_pegprem_unop);
-        // waits for the next line from console
-        newCpt(new And_nrn(), DCN.wait_next_console_line_valve_andnrn);
-            // prem
-            newCpt(new Peg_prem(), DCN.loop_notifies_console_branch_next_line_come_pegprem);
-            // actn
-            newCpt(new BinaryOperation_actn(), DCN.console_notifies_chat_next_line_come_binop);
-        newCpt(new And_nrn(), DCN.request_next_console_line_valve_andnrn);
-            // prem
-            newCpt(new Peg_prem(), DCN.chat_requests_next_line_pegprem);
 
                 // Chat log branch
         newCpt(new Unconditional_nrn(), DCN.chat_log_main_seed_uncnrn);
     }
     
     public void chat_branch() {
+                // Forward creation
+        Unconditional_nrn consoleSeedNrn = newCpt(new Unconditional_nrn(), DCN.console_main_seed_uncnrn);
+        Peg_prem chatRequestsNextLinePeg = newCpt(new Peg_prem(), DCN.chat_requests_next_line_peg);
+                
                 // Create
         // Main branch seed
         Unconditional_nrn seedNrn = newCpt(new Unconditional_nrn(), DCN.chat_main_seed_uncnrn);
             UnaryOperation_actn anactivateNextLineComePegAct = newCpt(new UnaryOperation_actn() 
-                    , DCN.anactivate_console_notifies_chat_next_line_come_pegprem_unop);
+                    , DCN.anactivate_console_notifies_chat_next_line_come_peg_unop);
         // next line valve neuron
         And_nrn waitNextLineValveNrn = newCpt(new And_nrn(), DCN.wait_next_chat_line_valve_andnrn);
             // premises
             ActivPeg_prem consoleCaldronIsUpAPeg = newCpt(new ActivPeg_prem(), DCN.console_caldron_is_up_activprem);
-            Peg_prem nextLineComePeg = newCpt(new Peg_prem(), DCN.console_notifies_chat_next_line_come_pegprem);
+            Peg_prem nextLineComePeg = newCpt(new Peg_prem(), DCN.console_notifies_chat_next_line_come_peg);
             // actions
             BinaryOperation_actn requestNextLineAct = newCpt(new BinaryOperation_actn(), DCN.chat_requests_next_line_binop);
 
                 // Set up
             // seed
+        // actions
         anactivateNextLineComePegAct.set_static_action(SCN.Anactivate_stat);
             anactivateNextLineComePegAct.set_operand(nextLineComePeg);
-        // next line valve neuron
+            // next line valve neuron
+        // actions
         consoleCaldronIsUpAPeg.set_static_action(SCN.CaldronIsUp_stat);
             consoleCaldronIsUpAPeg.set_operands(getCpt(DCN.console_main_seed_uncnrn) 
                     , getCpt(DCN.console_caldron_is_up_activprem));
         requestNextLineAct.set_static_action(SCN.NotifyBranch_stat);
-            requestNextLineAct.set_first_operand(getCpt(DCN.console_main_seed_uncnrn));
-            requestNextLineAct.set_second_operand(getCpt(DCN.chat_requests_next_line_pegprem));
+            requestNextLineAct.set_first_operand(consoleSeedNrn);
+            requestNextLineAct.set_second_operand(chatRequestsNextLinePeg);
 
-                // Adjust and mate
+                // Mate
             // seed
         // actions
         seedNrn.append_action(anactivateNextLineComePegAct);
@@ -108,42 +100,58 @@ final public class Starter {
     
     public void console_branch() {
         
-        
-        
                 // Create
-        // seed
+        // Main branch seeds
         Unconditional_nrn seedNrn = newCpt(new Unconditional_nrn(), DCN.console_main_seed_uncnrn);
-            UnaryOperation_actn anactivateNextLineComePegAct = newCpt(new UnaryOperation_actn(SCN.Anactivate_stat));
-
-        // next line valve
+            UnaryOperation_actn anactivateNextLineComePegAct = newCpt(new UnaryOperation_actn()
+                    , DCN.anactivate_loop_notifies_console_branch_next_line_come_peg_unop);
+        // wait-the-next-console-line valve
         And_nrn waitNextLineValveNrn = newCpt(new And_nrn(), DCN.wait_next_console_line_valve_andnrn);
-            Peg_prem nextLineComePeg = newCpt(new Peg_prem(), DCN.loop_notifies_console_branch_next_line_come_pegprem);
-            BinaryOperation_actn consoleNotifiesChatNextLineComeBinop = newCpt(new BinaryOperation_actn(SCN.NotifyBranch_stat), 
-                    DCN.console_notifies_chat_next_line_come_binop);
-            UnaryOperation_actn anactivateChatRequestNextLinePeg = newCpt(new UnaryOperation_actn(SCN.Anactivate_stat));
+            // prem
+            Peg_prem nextLineComePeg = newCpt(new Peg_prem(), DCN.loop_notifies_console_branch_next_line_come_peg);
+            // actn
+            UnaryOperation_actn anactivateChatRequestNextLinePeg = newCpt(new UnaryOperation_actn()
+                    , DCN.anactivate_chat_requests_next_line_come_peg);
+            BinaryOperation_actn consoleNotifiesChatNextLineComeBinop = newCpt(new BinaryOperation_actn()
+                    , DCN.console_notifies_chat_next_line_come_binop);
+        // request-next-console-line valve
         And_nrn requestNextLineValveNrn = newCpt(new And_nrn(), DCN.request_next_console_line_valve_andnrn);
-            Peg_prem chatRequestsNextLinePeg = newCpt(new Peg_prem(), DCN.chat_requests_next_line_pegprem);
-            
-                // Adjust and mate
+            // prem
+            Peg_prem chatRequestsNextLinePeg = newCpt(new Peg_prem(), DCN.chat_requests_next_line_peg);
+
+                // Set up
             // seed
-        // finish defining the next line come peg and anactivate it
-        anactivateNextLineComePegAct.set_operand(nextLineComePeg);
+        // actions
+        anactivateNextLineComePegAct.set_static_action(SCN.Anactivate_stat);
+            anactivateNextLineComePegAct.set_operand(nextLineComePeg);
+            // wait-next-console-line valve
+        // actions
+        anactivateChatRequestNextLinePeg.set_static_action(SCN.Anactivate_stat);
+            anactivateChatRequestNextLinePeg.set_operand(chatRequestsNextLinePeg);
+        consoleNotifiesChatNextLineComeBinop.set_static_action(SCN.NotifyBranch_stat);
+            consoleNotifiesChatNextLineComeBinop.set_first_operand(getCpt(DCN.chat_main_seed_uncnrn));
+            consoleNotifiesChatNextLineComeBinop.set_second_operand(getCpt(DCN.console_notifies_chat_next_line_come_peg));
+            consoleNotifiesChatNextLineComeBinop.set_extra(getCpt(DCN.line_from_chatter_strprim));
+            
+                // Mate
+            // seed
+        // actions
         seedNrn.append_action(anactivateNextLineComePegAct);
-        // pass control for the wait for next line neuron
+        // branches
         seedNrn.append_branch(waitNextLineValveNrn);
-        
-            // wait for the next line valve
-        // next line from console loop has come premise
+            // wait-next-console-line valve
+        // premises
         waitNextLineValveNrn.add_premise(nextLineComePeg);
-        // finish defining notifying chat branch about the next console line coming
-        consoleNotifiesChatNextLineComeBinop.set_first_operand(getCpt(DCN.chat_main_seed_uncnrn));
-        consoleNotifiesChatNextLineComeBinop.set_second_operand(getCpt(DCN.console_notifies_chat_next_line_come_pegprem));
-        // if the line has come, notify the chat branch and anactivate request pegs from other branches for the request line valve 
-        anactivateChatRequestNextLinePeg.set_operand(chatRequestsNextLinePeg);
+        // effects 
         waitNextLineValveNrn.add_effects(0, 
                 new long[] {anactivateChatRequestNextLinePeg.get_cid(), consoleNotifiesChatNextLineComeBinop.get_cid()},
                 requestNextLineValveNrn);
         waitNextLineValveNrn.add_effects(Float.NEGATIVE_INFINITY, (Action)getCpt(DCN.caldron_stop_and_wait_actn));
+            // request-next-console-line valve
+        // premises
+        requestNextLineValveNrn.add_premise(chatRequestsNextLinePeg);
+        // effects
+        requestNextLineValveNrn.add_effects(Float.NEGATIVE_INFINITY, (Action)getCpt(DCN.caldron_stop_and_wait_actn));
     }
     
 //    public void chat_rootway() {

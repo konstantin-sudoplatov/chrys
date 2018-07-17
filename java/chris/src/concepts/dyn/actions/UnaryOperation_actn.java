@@ -19,6 +19,11 @@ public final class UnaryOperation_actn extends Action {
 
     /** 
      * Constructor.
+     */ 
+    public UnaryOperation_actn() {} 
+
+    /** 
+     * Constructor.
      * @param statAction
      */ 
     public UnaryOperation_actn(StatCptName statAction) { super(statAction); } 
@@ -55,7 +60,17 @@ public final class UnaryOperation_actn extends Action {
      * @param cpt 
      */
     public void set_operand(Concept cpt) {
+        assert operandCid == 0;
         operandCid = cpt.get_cid();
+    }
+
+    /**
+     * Setter.
+     * @param cpt 
+     */
+    public void set_extra(Concept cpt) {
+        assert extrA == null;
+        extrA = cpt;
     }
 
     /**
@@ -86,6 +101,7 @@ public final class UnaryOperation_actn extends Action {
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
     private long operandCid;
+    private Concept extrA = null;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

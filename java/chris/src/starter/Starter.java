@@ -6,7 +6,6 @@ import concepts.DynCptName;
 import concepts.StatCptName;
 import concepts.dyn.Action;
 import concepts.dyn.Neuron;
-import concepts.dyn.Teleport_actn;
 import concepts.dyn.actions.BinaryOperation_actn;
 import concepts.dyn.actions.UnaryOperation_actn;
 import concepts.dyn.neurons.And_nrn;
@@ -41,36 +40,46 @@ final public class Starter {
         // line-from-chatter, used in more than one branch
         newCpt(new TransientString_prim(), DynCptName.line_from_chatter_strprim);
         
-                // Main branch seeds
+                // Console branch
+        // Main branch seeds
         newCpt(new Unconditional_nrn(), DynCptName.console_main_seed_uncnrn);
-        newCpt(new Unconditional_nrn(), DynCptName.chat_main_seed_uncnrn);
-        
-                // Chat-console interplay
-        newCpt(new Teleport_actn(), DynCptName.transfer_console_next_line_to_chat_telpatctn);
-    }
-    
-    /**
-     * It is handy to set up some concepts used in chat and console branches in advance.  Only named concepts must be used here,
-     * because only them are checked for duplication and can be used further anyway.
-     */
-    public void chat_console_forward() {
-        newCpt(new Peg_prem(), DynCptName.chat_requests_next_line_pegprem);
-        
+            newCpt(new UnaryOperation_actn(), DynCptName.anactivate_loop_notifies_console_branch_next_line_come_pegprem_unop);
+        // waits for the next line from console
+        newCpt(new And_nrn(), DynCptName.wait_next_console_line_valve_andnrn);
+            // prem
+            newCpt(new Peg_prem(), DynCptName.loop_notifies_console_branch_next_line_come_pegprem);
+            // actn
+            newCpt(new BinaryOperation_actn(), DynCptName.console_notifies_chat_next_line_come_binopactn);
+        newCpt(new And_nrn(), DynCptName.request_next_console_line_valve_andnrn);
+            // prem
+            newCpt(new Peg_prem(), DynCptName.chat_requests_next_line_pegprem);
+
+                // Chat log branch
+        newCpt(new Unconditional_nrn(), DynCptName.chat_log_main_seed_uncnrn);
     }
     
     public void chat_branch() {
-
-        
-                // Create
-        // seed
+                // Chat branch
+        // Main branch seed
         Unconditional_nrn seedNrn = newCpt(new Unconditional_nrn(), DynCptName.chat_main_seed_uncnrn);
-            UnaryOperation_actn anactivateNextLineComePegAct = newCpt(new UnaryOperation_actn(StatCptName.Anactivate_stat));
-            
+            UnaryOperation_actn anactivateNextLineComePegAct = newCpt(new UnaryOperation_actn(), 
+                    DynCptName.anactivate_console_notifies_chat_next_line_come_pegprem_unop);
         // next line valve neuron
         And_nrn waitNextLineValveNrn = newCpt(new And_nrn(), DynCptName.wait_next_chat_line_valve_andnrn);
-            ActivPeg_prem consoleCaldronIsUpAPeg = newCpt(new ActivPeg_prem(StatCptName.CaldronIsUp_stat), DynCptName.console_caldron_is_up_activprem);
+            // prem
+            ActivPeg_prem consoleCaldronIsUpAPeg = newCpt(new ActivPeg_prem(), DynCptName.console_caldron_is_up_activprem);
             Peg_prem nextLineComePeg = newCpt(new Peg_prem(), DynCptName.console_notifies_chat_next_line_come_pegprem);
-            BinaryOperation_actn requestNextLineAct = newCpt(new BinaryOperation_actn(StatCptName.NotifyBranch_stat));
+            //console_loop_notifies_next_line_come_pegprem,
+            // actn
+            BinaryOperation_actn requestNextLineAct = newCpt(new BinaryOperation_actn(), DynCptName.chat_requests_next_line_binopactn);
+
+                // Set up
+        // seed
+        anactivateNextLineComePegAct.set_static_action(getCpt(StatCptName.Anactivate_stat));
+        anactivateNextLineComePegAct.set_operand(nextLineComePeg);
+            
+        // next line valve neuron
+            requestNextLineAct.set_static_action(getCpt(StatCptName.NotifyBranch_stat));
 
                 // Adjust and mate
             // seed
@@ -103,7 +112,7 @@ final public class Starter {
 
         // next line valve
         And_nrn waitNextLineValveNrn = newCpt(new And_nrn(), DynCptName.wait_next_console_line_valve_andnrn);
-            Peg_prem nextLineComePeg = newCpt(new Peg_prem(), DynCptName.console_loop_notifies_next_line_come_pegprem);
+            Peg_prem nextLineComePeg = newCpt(new Peg_prem(), DynCptName.loop_notifies_console_branch_next_line_come_pegprem);
             BinaryOperation_actn consoleNotifiesChatNextLineComeBinop = newCpt(new BinaryOperation_actn(StatCptName.NotifyBranch_stat), 
                     DynCptName.console_notifies_chat_next_line_come_binopactn);
             UnaryOperation_actn anactivateChatRequestNextLinePeg = newCpt(new UnaryOperation_actn(StatCptName.Anactivate_stat));

@@ -13,6 +13,12 @@ public class ActivPeg_prem extends Peg_prem {
 
     /** 
      * Constructor.
+     */ 
+    public ActivPeg_prem() { 
+    } 
+
+    /** 
+     * Constructor.
      * @param statAction
      */ 
     public ActivPeg_prem(StatCptName statAction) { 
@@ -40,7 +46,15 @@ public class ActivPeg_prem extends Peg_prem {
         
         return _activation_;
     }
-
+    
+    /**
+     * Setter.
+     * @param staticAction 
+     */
+    public void set_static_action(Concept staticAction) {
+        statActionCid = staticAction.get_cid();
+    }
+    
     /**
      * Setter.
      * @param firstOperand 

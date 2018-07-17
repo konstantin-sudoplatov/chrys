@@ -43,7 +43,7 @@ public class Caldron extends BaseMessageLoop implements ConceptNameSpace {
             get_attn_circle().get_attn_dispatcher().put_caldron(seed, this);
         else {}//no: do nothing, since the dispatcher is unknown yet. We will do it in the descendant.
 
-        if      //is am I me?
+        if      //is it me?
             (this.getClass() == Caldron.class)
         //yes: constructor finished, kick the reasoning
         this.put_in_queue_with_priority(new Msg_DoReasoningOnBranch());    // put ahead of the possible console lines
@@ -221,11 +221,11 @@ System.out.printf("caldron = %s, _head_ = %s\n", load_cpt(this.seeD.get_cid()).c
                 // a line from console has come?
                 (msg instanceof Msg_ConsoleToAttnCircle)
         {   // put it to the concept "line_from_chatter_strprim", activate the 
-            // "console_loop_notifies_next_line_come_pegprem" peg and invoke the reasoning
+            // "loop_notifies_console_branch_next_line_come_pegprem" peg and invoke the reasoning
             String_prim lineOfChat = (String_prim)load_cpt(DynCptName.line_from_chatter_strprim.name());
             lineOfChat.set_string(((Msg_ConsoleToAttnCircle) msg).text);
             StaticAction activateStatActn = (StaticAction)load_cpt(StatCptName.Activate_stat.name());
-            activateStatActn.go(this, new long[]{Glob.named.name_cid.get(DynCptName.console_loop_notifies_next_line_come_pegprem.name())}, null);
+            activateStatActn.go(this, new long[]{Glob.named.name_cid.get(DynCptName.loop_notifies_console_branch_next_line_come_pegprem.name())}, null);
             
             _reasoning_();
             

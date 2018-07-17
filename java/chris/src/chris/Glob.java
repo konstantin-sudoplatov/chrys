@@ -77,7 +77,6 @@ final public class Glob {
         attn_disp_loop.start();
         Starter starter = new Starter();
         starter.common_concepts();
-        starter.chat_console_forward();
         starter.chat_branch();
         starter.console_branch();
 //        starter.chat_log_way();

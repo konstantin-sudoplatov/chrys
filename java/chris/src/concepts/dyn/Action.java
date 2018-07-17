@@ -57,7 +57,7 @@ public class Action extends DynamicConcept {
      * Set static action.
      * @param statAction 
      */
-    public void set_stat_action(Concept statAction) {
+    public void set_static_action(Concept statAction) {
         _statActionCid_ = statAction.get_cid();
     }
     

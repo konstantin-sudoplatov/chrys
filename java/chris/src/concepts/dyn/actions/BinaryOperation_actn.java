@@ -18,6 +18,11 @@ public final class BinaryOperation_actn extends Action {
 
     /** 
      * Constructor.
+     */ 
+    public BinaryOperation_actn() {} 
+
+    /** 
+     * Constructor.
      * @param statAction
      */ 
     public BinaryOperation_actn(StatCptName statAction) { super(statAction); } 
@@ -58,6 +63,7 @@ public final class BinaryOperation_actn extends Action {
      * @param cpt 
      */
     public void set_first_operand(Concept cpt) {
+        assert firstOperandCid == 0;
         firstOperandCid = cpt.get_cid();
     }
 
@@ -66,9 +72,19 @@ public final class BinaryOperation_actn extends Action {
      * @param cpt 
      */
     public void set_second_operand(Concept cpt) {
+        assert secondOperandCid == 0;
         secondOperandCid = cpt.get_cid();
     }
 
+    /**
+     * Setter.
+     * @param cpt 
+     */
+    public void set_extra(Concept cpt) {
+        assert extrA == null;
+        extrA = cpt;
+    }
+    
     /**
      * Get array of parameter cids.
      * @return parameters
@@ -98,6 +114,7 @@ public final class BinaryOperation_actn extends Action {
 
     private long firstOperandCid;
     private long secondOperandCid;
+    private Concept extrA = null;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

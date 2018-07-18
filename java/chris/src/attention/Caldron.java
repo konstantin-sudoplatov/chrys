@@ -386,5 +386,10 @@ if (debugPrint) printBeforeStopAndWait();
         System.out.printf("_head_ = %s\n\n", nrn.concept_name);
     }
     
+    public synchronized String shortNameOfCaldron() {
+        String s = load_cpt(this.seedCid).concept_name;
+        return s.substring(0, s.indexOf("_"));
+    }
+    
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--
 }

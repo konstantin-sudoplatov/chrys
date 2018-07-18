@@ -2,7 +2,6 @@ package concepts.dyn;
 
 import attention.ConceptNameSpace;
 import chris.Glob;
-import concepts.Concept;
 import concepts.DynamicConcept;
 import concepts.SCN;
 import concepts.StaticAction;
@@ -20,16 +19,16 @@ public class Action extends DynamicConcept {
 
     /**
      * Constructor.
+     */
+    public Action(){}
+
+    /**
+     * Constructor.
      * @param statAction as it is presented in the SCN enum.
      */
     public Action(SCN statAction) {
         this._statActionCid_ = statAction.ordinal();
     }
-
-    /**
-     * Constructor for ActionPacket class.
-     */
-    protected Action(){}
     
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //

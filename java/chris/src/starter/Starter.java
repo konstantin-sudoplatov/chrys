@@ -107,17 +107,19 @@ final public class Starter {
                     , DCN.anactivate_loop_notifies_console_branch_next_line_come_peg_unop);
         // wait-the-next-console-line valve
         And_nrn waitNextLineValveNrn = newCpt(new And_nrn(), DCN.wait_next_console_line_valve_andnrn);
-            // prem
+            // premises
             Peg_prem nextLineComePeg = newCpt(new Peg_prem(), DCN.loop_notifies_console_branch_next_line_come_peg);
-            // actn
+            // actions
             UnaryOperation_actn anactivateChatRequestNextLinePeg = newCpt(new UnaryOperation_actn()
                     , DCN.anactivate_chat_requests_next_line_come_peg);
             BinaryOperation_actn consoleNotifiesChatNextLineComeBinop = newCpt(new BinaryOperation_actn()
                     , DCN.console_notifies_chat_next_line_come_binop);
         // request-next-console-line valve
-        And_nrn requestNextLineValveNrn = newCpt(new And_nrn(), DCN.request_next_console_line_valve_andnrn);
-            // prem
+        And_nrn requestNextLineValveNrn = newCpt(new And_nrn(), DCN.request_next_line_from_chatter_valve_andnrn);
+            // premises
             Peg_prem chatRequestsNextLinePeg = newCpt(new Peg_prem(), DCN.chat_requests_next_line_peg);
+            // actions
+            Action requestNextLineFromChatterAct = newCpt(new Action(), DCN.console_requests_next_line_from_chatter_actn);
 
                 // Set up
             // seed
@@ -132,6 +134,9 @@ final public class Starter {
             consoleNotifiesChatNextLineComeBinop.set_first_operand(getCpt(DCN.chat_main_seed_uncnrn));
             consoleNotifiesChatNextLineComeBinop.set_second_operand(getCpt(DCN.console_notifies_chat_next_line_come_peg));
             consoleNotifiesChatNextLineComeBinop.set_extra(getCpt(DCN.line_from_chatter_strprim));
+            // console-requests-next-line-from-chatter action
+        // actions
+        requestNextLineFromChatterAct.set_static_action(SCN.SendReadFromConsoleMessage);
             
                 // Mate
             // seed
@@ -144,13 +149,24 @@ final public class Starter {
         waitNextLineValveNrn.add_premise(nextLineComePeg);
         // effects 
         waitNextLineValveNrn.add_effects(0, 
-                new long[] {anactivateChatRequestNextLinePeg.get_cid(), consoleNotifiesChatNextLineComeBinop.get_cid()},
-                requestNextLineValveNrn);
+            new long[] {
+                anactivateChatRequestNextLinePeg.get_cid(), 
+                consoleNotifiesChatNextLineComeBinop.get_cid()
+            },
+            requestNextLineValveNrn
+        );
         waitNextLineValveNrn.add_effects(Float.NEGATIVE_INFINITY, (Action)getCpt(DCN.caldron_stop_and_wait_actn));
             // request-next-console-line valve
         // premises
         requestNextLineValveNrn.add_premise(chatRequestsNextLinePeg);
         // effects
+        requestNextLineValveNrn.add_effects(0, 
+            new long[] {
+                anactivateNextLineComePegAct.get_cid(), 
+                requestNextLineFromChatterAct.get_cid()
+            }, 
+            waitNextLineValveNrn
+        );
         requestNextLineValveNrn.add_effects(Float.NEGATIVE_INFINITY, (Action)getCpt(DCN.caldron_stop_and_wait_actn));
     }
     

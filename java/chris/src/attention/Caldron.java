@@ -78,7 +78,7 @@ public class Caldron extends BaseMessageLoop implements ConceptNameSpace {
             //  In the root of hierarchy (class AttnCircle) the processing never gets here, because we are overriden. So, here
             // we don't check them for a global or static
             cpt = parenT.load_cpt(cid).clone();  
-            assert true: cpt.name_space = this;
+            if (Glob.assertions_enabled()) cpt.name_space = this;
             _cptDir_.put(cid, cpt);
             return cpt;
         }
@@ -178,6 +178,7 @@ public class Caldron extends BaseMessageLoop implements ConceptNameSpace {
      */
     protected synchronized void _reasoning_() {
         while(true) {
+if (debugPrint) passCount++;            
 if (debugPrint) printAtTheBeginning();
             // Do the assessment
             long[] heads = ((Neuron)load_cpt(_head_)).calculate_activation_and_do_actions(this);
@@ -203,7 +204,6 @@ if (debugPrint) printAfterCalculatingActivationAndDoingActions();
         }
 if (debugPrint) printBeforeStopAndWait();
     }
-    private final static boolean debugPrint = true;     // Controls debug printing.
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
@@ -275,15 +275,19 @@ if (debugPrint) printBeforeStopAndWait();
     
     /** If this flag raised, reasoning will stop and caldron will wait on the neuron. */
     private boolean requestStopReasoning;
+
+    /** Controls debug printing. */
+    private final static boolean debugPrint = Glob.assertions_enabled();
+    /** Counter of the reasoning steps. */
+    private int passCount;
+
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
     
     /**
      * Debug print.
      */
     private synchronized void printAtTheBeginning() {
-        String shortCaldronName = load_cpt(this.seedCid).concept_name;
-        shortCaldronName = shortCaldronName.substring(0, shortCaldronName.indexOf("_"));
-        System.out.printf("%s, before reasoning: ", shortCaldronName );
+        System.out.printf("%s(%s), before reasoning: ", shortNameOfCaldron(), passCount);
         Concept cpt = load_cpt(_head_);
         System.out.printf("_head_ = %s\n", cpt.concept_name);
         
@@ -342,9 +346,7 @@ if (debugPrint) printBeforeStopAndWait();
     }
     
     public synchronized void printAfterCalculatingActivationAndDoingActions() {
-        String shortCaldronName = load_cpt(this.seedCid).concept_name;
-        shortCaldronName = shortCaldronName.substring(0, shortCaldronName.indexOf("_"));
-        System.out.printf("%s, after reasoning: ", shortCaldronName );
+        System.out.printf("%s(%s), after reasoning: ", shortNameOfCaldron(), passCount);
         Neuron nrn = (Neuron)load_cpt(_head_);
         float activation = nrn.get_activation();
         System.out.printf("_head_ = %s. Activation %s\n", nrn.concept_name, activation);
@@ -379,9 +381,7 @@ if (debugPrint) printBeforeStopAndWait();
     }
     
     public synchronized void printBeforeStopAndWait() {
-        String shortCaldronName = load_cpt(this.seedCid).concept_name;
-        shortCaldronName = shortCaldronName.substring(0, shortCaldronName.indexOf("_"));
-        System.out.printf("%s, leaving: ", shortCaldronName );
+        System.out.printf("%s(%s), leaving: ", shortNameOfCaldron(), passCount);
         Neuron nrn = (Neuron)load_cpt(_head_);
         System.out.printf("_head_ = %s\n\n", nrn.concept_name);
     }

@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Random;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -355,7 +356,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     /** cid-caldron map, where "cid" is the cid of the seed neuron of 
       the reasoning branch as an identifier of the caldron. We would need synchronization, 
       because the map can be concurrently accessed from different caldrons. */
-    private Map<Long, Caldron> caldronMap = new HashMap();
+    private Map<Long, Caldron> caldronMap = new ConcurrentHashMap();
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

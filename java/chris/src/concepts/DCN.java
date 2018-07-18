@@ -34,9 +34,11 @@ public enum DCN {
         // actions
         anactivate_chat_requests_next_line_come_peg,
         console_notifies_chat_next_line_come_binop,  // console branch notifies chat that the next line has come
-    request_next_console_line_valve_andnrn,             //wait until the console line is taken by all consumers, then request next line
+    request_next_line_from_chatter_valve_andnrn,             //wait until the console line is taken by all consumers, then request next line
         // premises
         chat_requests_next_line_peg,    // is signaled(activated) by the chat branch when it is ready to take in the next line
+        // actions
+        console_requests_next_line_from_chatter_actn,   // sends Msg_ReadFromConsole to the console loop
 
     // Chat log branch
     chat_log_main_seed_uncnrn,              // branch for logging console lines (permanent branch) 

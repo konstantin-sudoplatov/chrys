@@ -1,5 +1,7 @@
 package attention;
 
+import auxiliary.ActiveRange;
+import auxiliary.Effects;
 import chris.BaseMessage;
 import chris.BaseMessageLoop;
 import chris.Crash;
@@ -8,8 +10,12 @@ import concepts.Concept;
 import concepts.DCN;
 import concepts.SCN;
 import concepts.StaticAction;
+import concepts.dyn.Action;
+import concepts.dyn.LogicNeuron;
 import concepts.dyn.Neuron;
+import concepts.dyn.ifaces.GetActivationIface;
 import concepts.dyn.ifaces.TransientIface;
+import concepts.dyn.neurons.WeighedSum_nrn;
 import concepts.dyn.primitives.String_prim;
 import java.util.HashMap;
 import java.util.Map;
@@ -34,14 +40,14 @@ public class Caldron extends BaseMessageLoop implements ConceptNameSpace {
     @SuppressWarnings("LeakingThisInConstructor")
     public Caldron(Neuron seed, Caldron parent, AttnCircle attnCircle) {
         super();
-        seeD = seed;
+        seedCid = seed.get_cid();
         _head_ = seed.get_cid();
         parenT = parent;
         this.attnCircle = attnCircle;
         if      // is it an ordinary caldron (not an attention circle)?
                 (!(this instanceof AttnCircle))
             //yes: put itself into the caldron map
-            get_attn_circle().get_attn_dispatcher().put_caldron(seed, this);
+            get_attn_circle().get_attn_dispatcher().put_caldron(seedCid, this);
         else {}//no: do nothing, since the dispatcher is unknown yet. We will do it in the descendant.
 
         if      //is it me?
@@ -137,14 +143,14 @@ public class Caldron extends BaseMessageLoop implements ConceptNameSpace {
      * Get the seed of concept.
      * @return 
      */
-    public final Neuron get_seed() {
-        return seeD;
+    public final long get_seed_cid() {
+        return seedCid;
     }
     
     @Override
     public synchronized void request_termination() {
         // get itself out of the caldron map
-        get_attn_circle().get_attn_dispatcher().remove_caldron(get_seed());
+        get_attn_circle().get_attn_dispatcher().remove_caldron(get_seed_cid());
         
         super.request_termination();
     }
@@ -172,9 +178,10 @@ public class Caldron extends BaseMessageLoop implements ConceptNameSpace {
      */
     protected synchronized void _reasoning_() {
         while(true) {
-System.out.printf("caldron = %s, _head_ = %s\n", load_cpt(this.seeD.get_cid()).concept_name, load_cpt(_head_).concept_name);
+if (debugPrint) printAtTheBeginning();
             // Do the assessment
             long[] heads = ((Neuron)load_cpt(_head_)).calculate_activation_and_do_actions(this);
+if (debugPrint) printAfterCalculatingActivationAndDoingActions();
 
             // May be we have to wait
             if      //no new head?
@@ -194,7 +201,9 @@ System.out.printf("caldron = %s, _head_ = %s\n", load_cpt(this.seeD.get_cid()).c
                 thread.start();
             }
         }
+if (debugPrint) printBeforeStopAndWait();
     }
+    private final static boolean debugPrint = true;     // Controls debug printing.
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
@@ -253,7 +262,7 @@ System.out.printf("caldron = %s, _head_ = %s\n", load_cpt(this.seeD.get_cid()).c
     //---%%%---%%%---%%%---%%%---%%% private data %%%---%%%---%%%---%%%---%%%---%%%---%%%
 
     /** The seed of the branch. */
-    private final Neuron seeD;
+    private final long seedCid;
     
     /** Parent caldron. null if it is the attention circle. */
     private final Caldron parenT;
@@ -266,7 +275,116 @@ System.out.printf("caldron = %s, _head_ = %s\n", load_cpt(this.seeD.get_cid()).c
     
     /** If this flag raised, reasoning will stop and caldron will wait on the neuron. */
     private boolean requestStopReasoning;
-    
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
+    
+    /**
+     * Debug print.
+     */
+    private synchronized void printAtTheBeginning() {
+        String shortCaldronName = load_cpt(this.seedCid).concept_name;
+        shortCaldronName = shortCaldronName.substring(0, shortCaldronName.indexOf("_"));
+        System.out.printf("%s, before reasoning: ", shortCaldronName );
+        Concept cpt = load_cpt(_head_);
+        System.out.printf("_head_ = %s\n", cpt.concept_name);
+        
+        // Print out premises and its activations
+        if
+                (cpt instanceof LogicNeuron)
+        {
+            LogicNeuron logicCpt = (LogicNeuron)cpt;
+            
+            System.out.printf("    Premises:\n");
+            for(long cid: logicCpt.get_premises()) {
+                Concept c = load_cpt(cid);
+                String cptName = c.concept_name;
+                if (cptName == null) cptName = String.format("%s", cid);
+                float activation = ((GetActivationIface)c).get_activation();
+                System.out.printf("        %s, activation = %s\n", cptName, activation);
+            }
+        }
+        else if
+                (cpt instanceof WeighedSum_nrn)
+        {
+            WeighedSum_nrn weighedCpt = (WeighedSum_nrn)cpt;
+            System.out.printf("Premises: not realized yet\n");
+        }
+        
+        // Print ranges
+        System.out.println("    Ranges:");
+        Neuron nrn = (Neuron)cpt;
+        for (ActiveRange range: nrn.get_ranges()) {
+            // Print actions
+            System.out.printf("        %s\n            Actions: ", range.range);
+            if (range.effects.actions != null) {
+                for(long actCid: range.effects.actions) {
+                    Action act = (Action)load_cpt(actCid);
+                    System.out.printf("%s; ", act.concept_name);
+                }
+                System.out.println();
+            }
+            else
+                System.out.println("null");
+            
+            // Print branches
+            System.out.print("            Branches: ");
+            if (range.effects.branches != null) {
+                for(long brCid: range.effects.branches) {
+                    Neuron br = (Neuron)load_cpt(brCid);
+                    System.out.printf("%s; ", br.concept_name);
+                }
+                System.out.println();
+            }
+            else
+                System.out.println("null");
+        }
+        
+        System.out.println();
+    }
+    
+    public synchronized void printAfterCalculatingActivationAndDoingActions() {
+        String shortCaldronName = load_cpt(this.seedCid).concept_name;
+        shortCaldronName = shortCaldronName.substring(0, shortCaldronName.indexOf("_"));
+        System.out.printf("%s, after reasoning: ", shortCaldronName );
+        Neuron nrn = (Neuron)load_cpt(_head_);
+        float activation = nrn.get_activation();
+        System.out.printf("_head_ = %s. Activation %s\n", nrn.concept_name, activation);
+
+        // Print out selected actions and branches
+        System.out.println("    Selected:");
+        Effects selectedEffects = nrn.select_effects(activation);
+        System.out.print("        Actions: ");
+        if (selectedEffects.actions != null) {
+            for(long actCid: selectedEffects.actions) {
+                Action act = (Action)load_cpt(actCid);
+                System.out.printf("%s; ", act.concept_name);
+            }
+            System.out.println();
+        }
+        else
+            System.out.println("null");
+
+        // Print branches
+        System.out.print("        Branches: ");
+        if (selectedEffects.branches != null) {
+            for(long brCid: selectedEffects.branches) {
+                Neuron br = (Neuron)load_cpt(brCid);
+                System.out.printf("%s; ", br.concept_name);
+            }
+            System.out.println();
+        }
+        else
+            System.out.println("null");
+        
+        System.out.println();
+    }
+    
+    public synchronized void printBeforeStopAndWait() {
+        String shortCaldronName = load_cpt(this.seedCid).concept_name;
+        shortCaldronName = shortCaldronName.substring(0, shortCaldronName.indexOf("_"));
+        System.out.printf("%s, leaving: ", shortCaldronName );
+        Neuron nrn = (Neuron)load_cpt(_head_);
+        System.out.printf("_head_ = %s\n\n", nrn.concept_name);
+    }
+    
     //---%%%---%%%---%%%---%%%---%%% private classes ---%%%---%%%---%%%---%%%---%%%---%%%--
 }

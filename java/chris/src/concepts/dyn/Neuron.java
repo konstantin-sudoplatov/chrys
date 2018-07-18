@@ -1,6 +1,7 @@
 package concepts.dyn;
 
 import attention.ConceptNameSpace;
+import auxiliary.ActiveRange;
 import auxiliary.Effects;
 import concepts.dyn.ifaces.ActivRangeImpl;
 import chris.Glob;
@@ -56,7 +57,7 @@ public abstract class Neuron extends DynamicConcept implements GetActivationIfac
     public long[] calculate_activation_and_do_actions(ConceptNameSpace caldron) {
         
         // Check that this neuron belongs to the caldron
-        assert this.name_space != caldron: "Wrong caldron for this neuron";
+        assert this.name_space == caldron: "Wrong caldron for this neuron";
         
         float activation = _calculateActivation_(caldron);
         Effects effects = select_effects(activation);
@@ -114,28 +115,15 @@ public abstract class Neuron extends DynamicConcept implements GetActivationIfac
     public void append_branch(float activation, Neuron way) {
         _ranges_.append_branch(activation, way);
     }
-
-//    @Override
-//    public long get_property(int index) {
-//        return propertieS[index];
-//    }
-//
-//    @Override
-//    public long[] get_properties() {
-//        return propertieS;
-//    }
-//
-//    @Override
-//    public long add_property(long cid) {
-//        propertieS = Glob.append_array(propertieS, cid);
-//        return cid;
-//    }
-//
-//    @Override
-//    public void set_properties(long[] propArray) {
-//        propertieS = propArray;
-//    }
         
+    /**
+     * Getter.
+     * @return 
+     */
+    public ActiveRange[] get_ranges() {
+        return _ranges_.get_ranges();
+    }
+    
     /**
      * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
      * @param note printed in the first line just after the object type.

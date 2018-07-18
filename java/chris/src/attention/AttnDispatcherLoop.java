@@ -10,7 +10,6 @@ import concepts.DynamicConcept;
 import concepts.SCN;
 import concepts.StaticAction;
 import concepts.dyn.Neuron;
-import concepts.dyn.ifaces.GlobalConcept;
 import console.ConsoleMessage;
 import console.Msg_ReadFromConsole;
 import java.lang.reflect.Constructor;
@@ -108,12 +107,7 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
             comDir.put(cid, cpt);
         }
         else { //no: put_caldron into the addressed attention circle
-            if      // it is not global, i.e. can be cloned to a caldron?
-                    (!(cpt instanceof GlobalConcept))
-                circle.put_in_concept_directory(cid, cpt);
-            else
-                throw new Crash(String.format("Attempt to put global concept\n %s\n into local namespase\n %s",
-                        cpt.to_list_of_lines("", 10), circle.to_list_of_lines("circle", 10)));
+            circle.put_in_concept_directory(cid, cpt);
         }
         
         return cid;
@@ -150,14 +144,10 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
         if      //is there such a concept?
                 (cpt != null)
         {   //yes: clone it and load to the circle
-            if      // it is not global, i.e. can be cloned to a caldron?
-                    (!(cpt instanceof GlobalConcept))
-            {
                 cpt = comDir.get(cid).clone();
-                assert true: cpt.name_space = circle;
+                if (Glob.assertions_enabled()) cpt.name_space = circle;
                 circle.put_in_concept_directory(cid, cpt);
-            }
-            return cid;
+                return cid;
         }
         else//no: crash
             throw new Crash("No concept in common directory with cid = " + cid);
@@ -256,21 +246,21 @@ public class AttnDispatcherLoop extends BaseMessageLoop implements ConceptNameSp
     
     /**
      * Add an entry to the caldron map.
-     * @param seed seed main seed of the branch as its identifier
+     * @param seedCid seed main seed of the branch as its identifier
      * @param caldron
      * @return previous caldron or null.
      */
-    synchronized public Caldron put_caldron(Concept seed, Caldron caldron) {
-        return caldronMap.put(seed.get_cid(), caldron);
+    synchronized public Caldron put_caldron(long seedCid, Caldron caldron) {
+        return caldronMap.put(seedCid, caldron);
     }
     
     /**
      * Remove entry.
-     * @param seed seed main seed of the branch as its identifier
+     * @param seedCid seed main seed of the branch as its identifier
      * @return removed caldron.
      */
-    synchronized public Caldron remove_caldron(Concept seed) {
-        return caldronMap.remove(seed.get_cid());
+    synchronized public Caldron remove_caldron(long seedCid) {
+        return caldronMap.remove(seedCid);
     }
 
     @Override

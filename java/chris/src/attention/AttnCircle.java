@@ -31,7 +31,7 @@ public class AttnCircle extends Caldron implements ConceptNameSpace {
         this.attnDisp = attnDisp;
         
         // Put itself into the caldron map
-        attnDisp.put_caldron(seed, this);
+        attnDisp.put_caldron(seed.get_cid(), this);
         
         // Seed
         switch(circleType) {

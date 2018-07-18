@@ -1,6 +1,6 @@
 package concepts.dyn.ifaces;
 
-import auxiliary.ActivRange;
+import auxiliary.ActiveRange;
 import auxiliary.Effects;
 import chris.Crash;
 import chris.Glob;
@@ -39,7 +39,7 @@ public class ActivRangeImpl implements ActivRangeIface, Cloneable {
             throw new Crash("Cloning a concept failed.");
         }
         if (rangeS != null) 
-            clone.rangeS = (ActivRange[])rangeS.clone();
+            clone.rangeS = (ActiveRange[])rangeS.clone();
         
         return clone;
     }
@@ -51,7 +51,7 @@ public class ActivRangeImpl implements ActivRangeIface, Cloneable {
             throw new Crash("Trying to get an action cid from uninitialized ActionSelector.");
         
         // find the first matching range
-        for (ActivRange r : rangeS) {
+        for (ActiveRange r : rangeS) {
             if (activation > r.range) {
                 return r.effects;
             }
@@ -66,7 +66,7 @@ public class ActivRangeImpl implements ActivRangeIface, Cloneable {
     public void add_effects(float lowerBoundary, long[] actions, long[] ways) {
         if
                 (rangeS == null)
-            rangeS = new ActivRange[0];
+            rangeS = new ActiveRange[0];
         
         if      // is the new lower boundary bigger than the existing?
                 (rangeS.length > 0 && lowerBoundary > rangeS[rangeS.length-1].range)
@@ -75,7 +75,7 @@ public class ActivRangeImpl implements ActivRangeIface, Cloneable {
                 (rangeS.length > 1 && lowerBoundary == rangeS[rangeS.length-2].range)
             throw new Crash("New boundary " + lowerBoundary + " is equal to the last but one.");
         
-        rangeS = (ActivRange[])Glob.append_array(rangeS, new ActivRange(lowerBoundary, actions, ways));
+        rangeS = (ActiveRange[])Glob.append_array(rangeS, new ActiveRange(lowerBoundary, actions, ways));
     }
 
     @Override
@@ -111,6 +111,14 @@ public class ActivRangeImpl implements ActivRangeIface, Cloneable {
     }
 
     /**
+     * Getter.
+     * @return 
+     */
+    public ActiveRange[] get_ranges() {
+        return rangeS;
+    }
+    
+    /**
      * Create list of lines, which shows the object's content. For debugging. Invoked from Glob.print().
      * @param note printed in the first line just after the object type.
      * @param debugLevel 0 - the shortest, 2 - the fullest
@@ -119,7 +127,7 @@ public class ActivRangeImpl implements ActivRangeIface, Cloneable {
     public List<String> to_list_of_lines(String note, Integer debugLevel) {
         List<String> lst = Glob.create_list_of_lines(this, note, debugLevel);
         Glob.add_list_of_lines(lst, "rangeS", rangeS, debugLevel-1);
-//        for(ActivRange rng: rangeS)
+//        for(ActiveRange rng: rangeS)
 //            Glob.add_list_of_lines(lst, rng.to_list_of_lines("rangeS", debugLevel-1));
 
         return lst;
@@ -139,10 +147,10 @@ public class ActivRangeImpl implements ActivRangeIface, Cloneable {
     /** 
      * Ranges are sorted in descending order, the high boundary including the low excluding. All that is lower than the
      * lowest boundary is range without actions. Examples:
-     * <p>new ActivRange[]{new ActivRange(0, new long[]{cid1, cid2}), new ActivRange(-10, new long[] {cid3})}: 
+     * <p>new ActiveRange[]{new ActiveRange(0, new long[]{cid1, cid2}), new ActiveRange(-10, new long[] {cid3})}: 
  Float.MAX_VALUE >= activation > 0: cid1; cid2, 0>= activation > -10: cid3, -10 >= activation >= Float.MIN_VALUE: nothing
      */
-    private ActivRange[] rangeS;
+    private ActiveRange[] rangeS;
     
     //---%%%---%%%---%%%---%%%---%%% private methods ---%%%---%%%---%%%---%%%---%%%---%%%--
 

@@ -8,7 +8,7 @@ import java.util.List;
  * List of ranges and corresponding them lists of actions.
  * @author su
  */
-public class ActivRange implements Cloneable {
+public class ActiveRange implements Cloneable {
     
     /** Lower exclusive boundary of the range of activation. */
     public float range;
@@ -24,16 +24,16 @@ public class ActivRange implements Cloneable {
      * always root - current caldron in which processing takes place. If there are other branches, there will be formed new
      * caldrons for them.
      */
-    public ActivRange(float range, long[] actions, long[] branches) {
+    public ActiveRange(float range, long[] actions, long[] branches) {
         this.range = range;
         effects = new Effects(actions, branches);
     }
 
     @Override
-    public ActivRange clone() {
-        ActivRange clone = null;
+    public ActiveRange clone() {
+        ActiveRange clone = null;
         try {
-            clone = (ActivRange)super.clone();
+            clone = (ActiveRange)super.clone();
         } catch (CloneNotSupportedException ex) {
             throw new Crash("Cloning a concept failed.");
         }

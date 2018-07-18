@@ -49,7 +49,7 @@ public class Teleport_actn extends Action {
         // Determine our and the destination seeds
         long destSeedCid;
         long destPegCid;
-        long currentSeedCid = ((Caldron)nameSpace).get_seed().get_cid();
+        long currentSeedCid = ((Caldron)nameSpace).get_seed_cid();
         if
                 (currentSeedCid == seedHereCid)
         {

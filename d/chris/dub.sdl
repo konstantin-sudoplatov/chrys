@@ -1,0 +1,11 @@
+name "chris"
+description "A minimal D application."
+authors "su"
+copyright "Copyright © 2018, su"
+license "proprietary"
+targetType "executable"
+targetPath "bin"
+sourcePaths "src"
+configuration "unittest" {
+    mainSourceFile "src/chris.d"
+}

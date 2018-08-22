@@ -15,7 +15,7 @@ import messages;
     for debugging. Instead taking strings from user it generates it in internally and sends as if they were entered by the user.
 */
 void console() {
-    debug {
+debug {
         // define a generator function as a series of lines, that user was supposed to enter.
         import std.concurrency;
         auto r = new Generator!string({
@@ -23,21 +23,21 @@ void console() {
             yield("world!");
             yield("p");
         });
-    }
+}
     try {
         while(true) {
-int i = 2;if(i == 2) assert(false, "test exception");
+
             // print promt
             write("> "); stdout.flush;
 
-            debug { // take the next line from generator
+debug { // take the next line from generator
                 string s = r.front;
                 r.popFront;
                 writeln(s);
-            }
-            else {  // take the next line from user
+}
+else {  // take the next line from user
                 string s = readln.strip;        // read line from console and strip whitespaces including \ln
-            }
+}
 
             if // termination of the application was requested?
             (s == "p" || s == "п")
@@ -50,9 +50,8 @@ int i = 2;if(i == 2) assert(false, "test exception");
     catch   // uncaught exception happened in the function?
             (Throwable e)
     {   //yes: send it to the main thread, so it would rethrow it
-writeln("exception caught");
         (cast()mainTid).send(cast(shared)e);
     }
 
-    FINISH_THE_THREAD:
+FINISH_THE_THREAD:
 }

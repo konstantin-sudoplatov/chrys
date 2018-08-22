@@ -14,12 +14,12 @@ string w(string expLst) {
     import std.string: split, strip;
     import std.format: format;
     string[] asExp = expLst.split(",");
-    string sRes = "import std.stdio: write, writeln;\n";
+    string sRes = "import std.stdio: writeln, stdout;\n";
     foreach(s; asExp) {
         s = s.strip;
-//        sRes ~= format(q{write("%s: "); write(typeid(typeof(%s))); write(" = "); writeln(%s);}, s, s, s) ~ "\n";
-        sRes ~= format(q{write("%s: ", typeid(typeof(%s)), " = ", %s, "\n");}, s, s, s) ~ "\n";
+        sRes ~= format(q{writeln("%s: ", typeid(typeof(%s)), " = ", %s);}, s, s, s) ~ "\n";
     }
+    sRes ~= "stdout.flush;\n";
 
     return sRes;
 }
@@ -28,14 +28,18 @@ unittest {
     int i = 1;
     int j = 2;
     int* p = &j;
-    assert("i, *p".w == `import std.stdio: write, writeln;
-write("i: ", typeid(typeof(i)), " = ", i, "\n");
-write("*p: ", typeid(typeof(*p)), " = ", *p, "\n");
+
+    assert("i, *p".w == `import std.stdio: writeln, stdout;
+writeln("i: ", typeid(typeof(i)), " = ", i);
+writeln("*p: ", typeid(typeof(*p)), " = ", *p);
+stdout.flush;
 `
     );
 
-    assert("i+(*p)".w, `import std.stdio: write, writeln;
-write("i+(*p): ", typeid(typeof(i+(*p)), " = ", i+(*p), "\n");`
+    assert("i+(*p)".w, `import std.stdio: writeln, stdout;
+writeln("i+(*p): ", typeid(typeof(i+(*p)), " = ", i+(*p));
+stdout.flush;
+`
     );
 }
 
@@ -58,6 +62,17 @@ unittest {
 */
 }
 
+/**
+    Logging facility.
+Params:
+    text = the text of the message
+*/
+void logit(string text) {
+    import std.stdio: writeln, stdout;
+
+    writeln(text);
+    stdout.flush;
+}
     //---***---***---***---***---***--- public classes ---***---***---***---***---***---***
 
     //---***---***---***---***---***--- public data ---***---***---***---***---***--

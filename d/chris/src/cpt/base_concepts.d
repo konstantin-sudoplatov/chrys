@@ -1,5 +1,4 @@
 module cpt.base_concepts;
-
 import interfaces;
 
 /// Base for all concepts.

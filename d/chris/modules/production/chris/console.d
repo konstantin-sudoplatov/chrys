@@ -26,7 +26,7 @@ void console() {
     }
     try {
         while(true) {
-
+int i = 2;if(i == 2) assert(false, "test exception");
             // print promt
             write("> "); stdout.flush;
 
@@ -50,6 +50,7 @@ void console() {
     catch   // uncaught exception happened in the function?
             (Throwable e)
     {   //yes: send it to the main thread, so it would rethrow it
+writeln("exception caught");
         (cast()mainTid).send(cast(shared)e);
     }
 

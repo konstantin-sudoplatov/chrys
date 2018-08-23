@@ -1,14 +1,14 @@
 module tools;
 
 /**
-    Tool for pretty output of variables and expressions.
-   Compile time function. Converts a list of expressions into a block of code, wich outputs those exps.
+        Tool for pretty output of variables and expressions.
+    Compile time function. Converts a list of expressions into a block of code, wich outputs those exps.
 
-   Using: mixin("&ltcomma separated list of expressions&gt".w);
-   Parameters:
-   expLst = list of expressions separated by commas
-   Returns: string, that contains a block of code, which outputs the expression titles and values. It is and intended to be mixed
-  into the source code.
+    Using: mixin("&ltcomma separated list of expressions&gt".w);
+    Parameters:
+       expLst = list of expressions separated by commas
+    Returns: string, that contains a block of code, which outputs the expression titles and values. It is and intended to be mixed
+        into the source code.
 */
 string w(string expLst) {
     import std.string: split, strip;

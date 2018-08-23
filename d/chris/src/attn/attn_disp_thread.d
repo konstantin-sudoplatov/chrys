@@ -68,7 +68,12 @@ void attn_dispatcher() {try {   // catchall try block for catching flying except
         if      // is it a regular message?
                 (msg)
         {   // process it
-            if      // TerminateAppMsg message has come?
+            if      // does client request circle's Tid?
+                    (cast(ClientRequestsCircleTidFromDisp)msg)
+            {   //yes: TODO: write function creating(if not exists) circle and send back its Tid
+                continue;
+            }
+            else if // TerminateAppMsg message has come?
                     (cast(TerminateAppMsg)msg) // || var.hasValue)
             {   //yes: terminate me and all my subthreads
                 // TODO: terminate subthreads
@@ -78,15 +83,15 @@ void attn_dispatcher() {try {   // catchall try block for catching flying except
         }
         else if // has come an unexpected message?
             (var.hasValue)
-            {   // log it
-                logit(format!"Unexpected message to the attention dispatcher thread: %s"(var.toString));
-            }
+        {   // log it
+            logit(format!"Unexpected message to the attention dispatcher thread: %s"(var.toString));
+            continue;
+        }
     }
-
-
 
 FINISH_THREAD:
 } catch(Throwable e) {
     (cast()_mainTid_).send(cast(shared)e);
 }
 }
+

@@ -5,10 +5,6 @@ import std.concurrency;
 /// Object must be created in the sender's thread, so that sender's tid was correctly set up. Do not create message objects beforehand!
 immutable abstract class Msg {
 
-protected:
-    Tid _senderTid;
-
-public:
     /// Constructor. Uses the current Tid as sender's.
     this() {
         // We assume that the object is created in the sender's thread (probably, right in the call of the send() function.
@@ -19,23 +15,49 @@ public:
     @property immutable(Tid) sender_tid() immutable {
         return _senderTid;
     }
+
+protected:
+    Tid _senderTid;
 }
 
-/// Request for termination of application, usually from console_thread.
+/// Request for termination of application, usually from console_thread, after that from the main thread over all the structure.
 immutable class TerminateAppMsg: Msg {
     /// Constructor
-    this(){
+    this() {super();}
+}
+
+/// Request for the attention dispatcher start an attention circle thread and send back its Tid.
+immutable class ClientRequestsCircleTidFromDisp: Msg {
+    /// Constructor
+    this() {super();}
+}
+
+/// In response to the client request the dispatcher creates an attention circle thread and gives back its Tid.
+/// If the circle exists already, it just returns its Tid.
+immutable class DispSuppliesClientWithCircleTid: Msg {
+
+    /**
+        Constructor.
+        Parameters:
+            tid - circle's Tid
+    */
+    this(Tid tid) {
         super();
+        tid_ = cast(immutable)tid;
     }
+
+    /// Getter
+    @property Tid tid() immutable {
+        return cast()tid_;
+    }
+
+private:
+    Tid tid_;       // circle's Tid
 }
 
 /// Message to display on the console_thread, usually by an attention circle.
 immutable class CircleSaysToConsoleMsg: Msg {
 
-private:
-    string text_;   /// text to display
-
-public:
     /**
         Constructor.
         Parameters:
@@ -50,23 +72,20 @@ public:
     @property string text() immutable {
         return text_;
     }
+
+private:
+    string text_;   // text to display
 }
 
 /// Request for a new line from console_thread, usually by an attention circle.
 immutable class CircleListensToConsoleMsg: Msg {
     /// Constructor
-    this(){
-        super();
-    }
+    this() {super();}
 }
 
 /// Console sends a line of text to an attention circle
 immutable class ConsoleSaysToCircleMsg: Msg {
 
-private:
-    string text_;   /// text to send
-
-public:
     /**
         Constructor.
         Parameters:
@@ -81,4 +100,7 @@ public:
     @property string text() immutable {
         return text_;
     }
+
+private:
+    string text_;   // text to send
 }

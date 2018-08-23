@@ -34,7 +34,7 @@ void main()
         if      // TerminateAppMsg message has come?
                 (termMsg) // || var.hasValue)
         {   //yes: terminate other subthreads, terminate application
-            //(cast()_attnDispTid_).send(new immutable TerminateAppMsg());
+            (cast()_attnDispTid_).send(new immutable TerminateAppMsg());
             goto TERMINATE_APPLICATION;
         }
         else if // has one of the thead thrown an exception?

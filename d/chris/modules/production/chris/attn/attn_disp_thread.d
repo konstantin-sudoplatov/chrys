@@ -54,17 +54,13 @@ TidCross tidCross;
     message comes from the console.
 */
 void attn_dispatcher() {try {   // catchall try block for catching flying exceptions and forwarding them to the owner thread.
-//(cast()_attnDispTid_).send(new immutable TerminateAppMsg());
-(thisTid).send(new immutable TerminateAppMsg());
-//(thisTid).send(new immutable ConsoleSaysToCircleMsg("hello"));
+
     // Receive messages in a cycle
     while(true) {
         immutable Msg msg;                    // regular message
-        immutable TerminateAppMsg termMsg;    // the main thread requests to terminate me and all my subthreads.
         Variant var;                // the catchall type
 
         receive(
-            (immutable TerminateAppMsg m){cast()termMsg = cast()m;},
             (immutable Msg m){cast()msg = cast() m;},
             (Variant v){var = v;}
         );
@@ -72,27 +68,31 @@ void attn_dispatcher() {try {   // catchall try block for catching flying except
         if      // is it a regular message?
                 (msg)
         {   // process it
-mixin("cast()msg.sender_tid".w);
+            if      // does client request circle's Tid?
+                    (cast(ClientRequestsCircleTidFromDisp)msg)
+            {   //yes: TODO: write function creating(if not exists) circle and send back its Tid
+                continue;
+            }
+            else if // TerminateAppMsg message has come?
+                    (cast(TerminateAppMsg)msg) // || var.hasValue)
+            {   //yes: terminate me and all my subthreads
+                // TODO: terminate subthreads
+                goto FINISH_THREAD;
+            }
 
-        }
-        else if      // TerminateAppMsg message has come?
-                (termMsg) // || var.hasValue)
-        {   //yes: terminate application
-mixin("cast()termMsg.sender_tid".w);
-
-//            goto FINISH_THREAD;
         }
         else if // has come an unexpected message?
             (var.hasValue)
-            {   // log it
-                logit(format!"Unexpected message to the attention dispatcher thread: %s"(var.toString));
-            }
+        {   // log it
+            logit(format!"Unexpected message to the attention dispatcher thread: %s"(var.toString));
+            continue;
+        }
     }
 
 
 
+FINISH_THREAD:
 } catch(Throwable e) {
     (cast()_mainTid_).send(cast(shared)e);
 }
-FINISH_THREAD:
 }

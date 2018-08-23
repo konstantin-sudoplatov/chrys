@@ -8,9 +8,6 @@ import tools;
 import global;
 import messages;
 
-/// The thread to talk to. It may be either an attention circle or the attention dispatcher if the circle does not exist yet.
-Tid attnCircleTid;
-
 /**
     Dialog with user. Thread main function.
 
@@ -68,3 +65,6 @@ else {  // take the next line from user
 
 FINISH_THREAD:
 }
+
+/// The thread to talk to. It may be either an attention circle or the attention dispatcher if the circle does not exist yet.
+private Tid attnCircleTid;

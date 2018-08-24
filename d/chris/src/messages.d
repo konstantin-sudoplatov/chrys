@@ -32,14 +32,36 @@ immutable class ClientRequestsCircleTidFromDisp: Msg {
     this() {super();}
 }
 
-/// In response to the client request the dispatcher creates an attention circle thread and gives back its Tid.
+/// In response to the client request dispatcher creates an attention circle thread and gives back its Tid.
 /// If the circle exists already, it just returns its Tid.
-immutable class DispSuppliesClientWithCircleTid: Msg {
+immutable class DispatcherSuppliesClientWithCircleTid: Msg {
 
     /**
         Constructor.
         Parameters:
             tid - circle's Tid
+    */
+    this(Tid tid) {
+        super();
+        tid_ = cast(immutable)tid;
+    }
+
+    /// Getter
+    @property Tid tid() immutable {
+        return cast()tid_;
+    }
+
+private:
+    Tid tid_;       // circle's Tid
+}
+
+/// In response to the client request dispatcher creates an attention circle thread and sends it the client Tid.
+immutable class DispatcherSuppliesCircleWithClientTid: Msg {
+
+    /**
+        Constructor.
+        Parameters:
+            tid - client's Tid
     */
     this(Tid tid) {
         super();

@@ -5,6 +5,54 @@ import std.format;
 import tools;
 import messages;
 
+/// This module is initialized at the moment of spawning in the dispatcher.
+static this() {
+}
+
+/**
+        Thread function for caldron and attention circle as its successor.
+*/
+void attn_circle_thread() {try{
+    import std.variant: Variant;
+
+    Msg msg;
+    Variant var;
+
+    while(true) {
+        receive(
+        (immutable Msg m) {msg = cast()m;},
+        (Variant v) {var = v;}
+        );
+
+        if (msg)
+        {   // TODO: a lot to do here
+
+        }
+        else {  // unrecognized message of type Msg. Log it.
+            logit(format!"Unexpected message to the caldron thread: %s"(msg));
+        }
+    }
+    FINISH_THREAD:
+} catch(Throwable e) { ownerTid.send(cast(shared)e); } }
+
+
+//###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+//
+//                               Private
+//
+//###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+private:
+//---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+/// The attention circle object
+AttentionCircle attnCircle_;
+
+
+
+//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
+
+//---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
+
 /**
             Main work horse of the system. It provides the room for doing reasoning on some branch.
     This class, as well as it successors, must be shared, i.e. used for creating of shared objects. It must be a shared object
@@ -15,33 +63,7 @@ class Caldron {
     /**
                     Constructor.
     */
-    shared this() {}
-
-    /**
-                    Thread function for caldron and attention circle as its successor.
-    */
-    shared final void thread_function() {try{
-        import std.variant: Variant;
-
-        Msg msg;
-        Variant var;
-
-        while(true) {
-            receive(
-                (immutable Msg m) {msg = cast()m;},
-                (Variant v) {var = v;}
-            );
-
-            if (msg)
-            {   // TODO: a lot to do here
-
-            }
-            else {  // unrecognized message of type Msg. Log it.
-                logit(format!"Unexpected message to the caldron thread: %s"(msg));
-            }
-        }
-    FINISH_THREAD:
-    } catch(Throwable e) { ownerTid.send(cast(shared)e); } }
+    this() {}
 
 protected:
 
@@ -63,13 +85,10 @@ protected:
 class AttentionCircle: Caldron {
 
     /**
-                    Constructor.
-        Parameters:
-            clientTid = client's Tid of the client.
+            Constructor.
     */
-    shared this(Tid clientTid) {
+    this() {
         super();
-        clientTid_ = cast(shared)clientTid;
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%

@@ -1,6 +1,5 @@
 module attn.attn_dispatcher_thread;
 import std.concurrency;
-import std.variant;
 import std.format;
 
 import tools;
@@ -8,70 +7,98 @@ import global;
 import messages;
 import attn.attn_circle_thread;
 
-/// This class contain functionality on creation attention circle threads and linking them to the clients. All workflow starts
-/// in the thread function.
+/**
+        Thread function for attention dispatcher.
+*/
+void attention_dispatcher_thread() {try {   // catchall try block for catching flying exceptions and forwarding them to the owner thread.
+    import std.variant: Variant;
+
+    // Receive messages in a cycle
+    while(true) {
+        Msg msg;                    // regular message
+        Variant var;                // the catchall type
+
+        receive(
+            (immutable Msg m){msg = cast()m;},
+            (Variant v){var = v;}
+        );
+
+        if      // is it a regular message?
+                (msg)
+        {   // process it
+            if      // does client request circle's Tid?
+            (auto m = cast(immutable ClientRequestsCircleTidFromDisp)msg)
+            {   //yes: create new attention circle thread and send back its Tid
+                Tid clientTid = cast()m.sender_tid();
+
+                // the first time create the attention dispatcher object
+                if
+                        (!attnDisp_)
+                    attnDisp_ = new AttentionDispatcher();
+
+                // spawn and cross it
+                Tid circleTid = attnDisp_.createCircleAttentionThread(clientTid);
+
+                // give client and circle Tids of the correspondent
+                (clientTid).send(new immutable DispatcherSuppliesClientWithCircleTid(circleTid));
+                (circleTid).send(new immutable DispatcherSuppliesCircleWithClientTid(clientTid));
+
+                continue;
+            }
+            else if // TerminateAppMsg message has come?
+            (cast(TerminateAppMsg)msg) // || var.hasValue)
+            {   //yes: terminate me and all my subthreads
+                // TODO: terminate subthreads
+                goto FINISH_THREAD;
+            }
+            else {  // unrecognized message of type Msg. Log it.
+                logit(format!"Unexpected message to the attention dispatcher thread: %s"(msg));
+            }
+        }
+        else if // has come an unexpected message?
+        (var.hasValue)
+        {   // log it
+            logit(format!"Unexpected message to the attention dispatcher thread: %s"(var.toString));
+            continue;
+        }
+    }
+
+    FINISH_THREAD:
+} catch(Throwable e) { ownerTid.send(cast(shared)e); } }
+
+//###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+//
+//                               Private
+//
+//###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+private:
+//---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+/// The attention dispatcher object
+AttentionDispatcher attnDisp_;
+
+//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
+
+//---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
+
+/**
+        This class contain functionality on creation attention circle threads and linking them to the clients. All workflow starts
+    in the thread function. Dispatcher doesn't have direct access of the circles. They are located in the thread-local memory
+    of thir threads and cannot be accessed from the outside. All interconnections are through the message system.
+*/
 class AttentionDispatcher {
 
     //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
     //---***---***---***---***---***--- data ---***---***---***---***---***--
 
-    shared this(){}
+    this(){}
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
     //
     //                            Public
     //
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
-
-    /**
-                            Thread function for attention dispatcher.
-        Attention dispatcher controls creation and delition of attention circles. One, for example, must be created when the first
-        message comes from the console.
-    */
-    shared void thread_function() {try {   // catchall try block for catching flying exceptions and forwarding them to the owner thread.
-
-        // Receive messages in a cycle
-        while(true) {
-            Msg msg;                    // regular message
-            Variant var;                // the catchall type
-
-            receive(
-                (immutable Msg m){msg = cast()m;},
-                (Variant v){var = v;}
-            );
-
-            if      // is it a regular message?
-                    (msg)
-            {   // process it
-                if      // does client request circle's Tid?
-                        (auto m = cast(ClientRequestsCircleTidFromDisp)msg)
-                {   //yes: TODO: write function creating(if not exists) circle and send back its Tid
-                    Tid clientTid = cast(Tid)((cast(immutable ClientRequestsCircleTidFromDisp)msg).sender_tid());
-                    mixin("clientTid".w);
-//                    createCircleAttentionThread(clientTid);
-                    continue;
-                }
-                else if // TerminateAppMsg message has come?
-                        (cast(TerminateAppMsg)msg) // || var.hasValue)
-                {   //yes: terminate me and all my subthreads
-                    // TODO: terminate subthreads
-                    goto FINISH_THREAD;
-                }
-                else {  // unrecognized message of type Msg. Log it.
-                    logit(format!"Unexpected message to the attention dispatcher thread: %s"(msg));
-                }
-            }
-            else if // has come an unexpected message?
-                (var.hasValue)
-            {   // log it
-                logit(format!"Unexpected message to the attention dispatcher thread: %s"(var.toString));
-                continue;
-            }
-        }
-
-    FINISH_THREAD:
-    } catch(Throwable e) { ownerTid.send(cast(shared)e); } }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
@@ -93,15 +120,15 @@ class AttentionDispatcher {
 
         Returns: circle's Tid.
     */
-    const(Tid) createCircleAttentionThread(Tid clientTid) {
+    Tid createCircleAttentionThread(Tid clientTid) {
         if      // is client in the cross already?
                 (auto circleTid = tidCross_.client_in(clientTid))
         {   //yes: return the Tid
-            return *circleTid;
+            return cast()*circleTid;
         }
-        else {  //no: create circle and put the pair in the cross
-            shared AttentionCircle attnCircle = new shared AttentionCircle(clientTid);
-            Tid circleTid = spawn(&attnCircle.thread_function);
+        else {  //no: create the circle, tell him the client's Tid and put the pair in the cross
+            Tid circleTid = spawn(&attn_circle_thread);
+            circleTid.send(new immutable DispatcherSuppliesCircleWithClientTid(clientTid));
             tidCross_.add(clientTid, circleTid);
 
             return circleTid;
@@ -127,14 +154,14 @@ class AttentionDispatcher {
                 Check if client is already present and return pointer to the circle Tid. Analogous to the D "in" statement.
         */
         const(Tid*) client_in(Tid client) const {
-            return client in clients_;
+            return client in circles_;
         }
 
         /**
                 Check if client is already present and return pointer to the circle Tid. Analogous to the D "in" statement.
         */
         const(Tid*) circle_in(Tid circle) const {
-            return circle in circles_;
+            return circle in clients_;
         }
 
         /**
@@ -187,13 +214,12 @@ class AttentionDispatcher {
 
         invariant {
             assert(circles_.length == clients_.length);
-            foreach(cir; clients_) {
+            foreach(cir, cl; clients_) {
                 assert(circles_[cast()clients_[cast()cir]] == cast(const)cir);  // we need casts because invariant is the const attribute by default
             }
-            foreach(cl; circles_) {
+            foreach(cl, cir; circles_) {
                 assert(clients_[cast()circles_[cast()cl]] == cast(const)cl);  // we need casts because invariant is the const attribute by default
             }
         }
     }   // struct TidCross
 }
-

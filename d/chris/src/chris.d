@@ -21,12 +21,12 @@ version(unittest) {
 void main()
 {
     while(true) {
-        immutable TerminateAppMsg termMsg;
+        TerminateAppMsg termMsg;
         Throwable ex;
 
         Variant var;
         receive(
-            (immutable TerminateAppMsg m){cast()termMsg = cast()m;},
+            (immutable TerminateAppMsg m){termMsg = cast()m;},
             (shared Throwable e){ex = cast()e;},
             (Variant v) {var = v;}
         );

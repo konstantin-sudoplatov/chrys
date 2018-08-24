@@ -9,15 +9,15 @@ import global;
 import messages;
 
 /**
-    Dialog with user. Thread main function.
-
+                            Thread function for console.
     There is an issue - the debugger in Intellij Idea goes mad on the readln() function. So I have to write diffrent code
     for debugging. Instead taking strings from user it generates it in internally and sends as if they were entered by the user.
 */
-void console() {try {   // catchall try block for catching flying exceptions and forwarding them to the owner thread.
+void console_thread() {try {   // catchall try block for catching flying exceptions and forwarding them to the owner thread.
 
     // Initialize the correspondent with the attention dispatcher's Tid.
     attnCircleTid = cast()_attnDispTid_;
+    (cast()attnCircleTid).send(new immutable ClientRequestsCircleTidFromDisp());
 
     // Get new line from user (separate treatment for the debug and release mode).
 debug {
@@ -60,7 +60,7 @@ else {  // take the next line from user
 } catch // uncaught exception happened in the function?
         (Throwable e)
 {   //yes: send it to the main thread, so it would rethrow it
-    (cast()_mainTid_).send(cast(shared)e);
+    ownerTid.send(cast(shared)e);
 }
 
 FINISH_THREAD:

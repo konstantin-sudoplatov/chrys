@@ -2,19 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e6f13b7-b9cd-4af9-969e-5956d8669eca" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chris" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/production/chris/attn/attn_circle_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/attn/attn_circle_thread.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/production/chris/attn/attn_dispatcher_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/attn/attn_dispatcher_thread.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/production/chris/console_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/console_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/global.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/global.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/messages.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/messages.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/attn/attn_circle_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/attn/attn_circle_thread.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/console_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/global.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/global.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/messages.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/messages.d" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -24,28 +18,6 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="DockManager">
-    <window id="1">
-      <content type="file-editors">
-        <state>
-          <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-            <file pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/src/messages.d">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="454">
-                    <caret line="63" column="24" selection-start-line="63" selection-start-column="24" selection-end-line="63" selection-end-column="24" />
-                    <folding>
-                      <element signature="e#17#40#1" expanded="true" />
-                      <element signature="e#558#559#0" expanded="true" />
-                      <element signature="e#591#592#0" expanded="true" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-          </leaf>
-        </state>
-      </content>
-    </window>
     <window id="1">
       <content type="file-editors">
         <state>
@@ -66,23 +38,56 @@
         </state>
       </content>
     </window>
+    <window id="1">
+      <content type="file-editors">
+        <state>
+          <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+            <file pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/src/messages.d">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="171">
+                    <caret line="36" column="10" selection-start-line="36" selection-start-column="10" selection-end-line="36" selection-end-column="10" />
+                    <folding>
+                      <element signature="e#17#40#1" expanded="true" />
+                      <element signature="e#558#559#0" expanded="true" />
+                      <element signature="e#591#592#0" expanded="true" />
+                      <element signature="e#1472#1473#0" expanded="true" />
+                      <element signature="e#1505#1506#0" expanded="true" />
+                      <element signature="e#1946#1947#0" expanded="true" />
+                      <element signature="e#1979#1980#0" expanded="true" />
+                      <element signature="e#2374#2375#0" expanded="true" />
+                      <element signature="e#2402#2403#0" expanded="true" />
+                      <element signature="e#2626#2627#0" expanded="true" />
+                      <element signature="e#2635#2636#0" expanded="true" />
+                      <element signature="e#2952#2953#0" expanded="true" />
+                      <element signature="e#2980#2981#0" expanded="true" />
+                    </folding>
+                  </state>
+                </provider>
+              </entry>
+            </file>
+          </leaf>
+        </state>
+      </content>
+    </window>
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="76674309">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="31" />
+          <entry key="project.closed" value="32" />
           <entry key="project.open.time.0" value="2" />
           <entry key="project.open.time.1" value="10" />
           <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.13" value="1" />
           <entry key="project.open.time.17" value="1" />
           <entry key="project.open.time.2" value="1" />
+          <entry key="project.open.time.3" value="1" />
           <entry key="project.open.time.6" value="2" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="7" />
-          <entry key="project.open.time.9" value="8" />
-          <entry key="project.opened" value="34" />
+          <entry key="project.open.time.9" value="9" />
+          <entry key="project.opened" value="36" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -91,7 +96,7 @@
           <entry key="atn_dispatcher" value="1" />
           <entry key="circle_thread" value="1" />
           <entry key="common_types" value="1" />
-          <entry key="d" value="125" />
+          <entry key="d" value="128" />
           <entry key="global" value="2" />
           <entry key="properties" value="2" />
           <entry key="vmoptions" value="5" />
@@ -99,7 +104,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="D file" value="124" />
+          <entry key="D file" value="127" />
           <entry key="PLAIN_TEXT" value="11" />
           <entry key="Properties" value="2" />
           <entry key="Scratch" value="1" />
@@ -107,13 +112,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="d" value="22117" />
+          <entry key="d" value="23084" />
           <entry key="vmoptions" value="95" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="D file" value="22117" />
+          <entry key="D file" value="23084" />
           <entry key="PLAIN_TEXT" value="95" />
         </counts>
       </usages-collector>
@@ -124,7 +129,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/chris.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="108">
+            <state relative-caret-position="247">
               <caret line="20" selection-start-line="20" selection-end-line="20" />
               <folding>
                 <element signature="e#14#31#1" expanded="true" />
@@ -133,39 +138,33 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-1288">
-              <caret line="66" selection-start-line="66" selection-end-line="66" />
+            <state relative-caret-position="-114">
+              <caret line="15" selection-start-line="14" selection-end-line="15" />
               <folding>
                 <element signature="e#36#59#1" expanded="true" />
-                <element signature="e#600#601#0" expanded="true" />
-                <element signature="e#615#616#0" expanded="true" />
-                <element signature="e#641#642#0" expanded="true" />
-                <element signature="e#650#651#0" expanded="true" />
-                <element signature="e#5524#5525#0" expanded="true" />
-                <element signature="e#5570#5571#0" expanded="true" />
-                <element signature="e#5768#5769#0" expanded="true" />
-                <element signature="e#5817#5818#0" expanded="true" />
-                <element signature="e#6015#6016#0" expanded="true" />
-                <element signature="e#6064#6065#0" expanded="true" />
-                <element signature="e#6342#6343#0" expanded="true" />
-                <element signature="e#6389#6390#0" expanded="true" />
-                <element signature="e#6667#6668#0" expanded="true" />
-                <element signature="e#6714#6715#0" expanded="true" />
+                <element signature="e#358#386#2" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/attn/attn_circle_thread.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1832">
-              <caret line="102" column="8" selection-start-line="102" selection-start-column="8" selection-end-line="102" selection-end-column="8" />
+            <state relative-caret-position="-1108">
+              <caret line="31" column="38" selection-start-line="31" selection-start-column="38" selection-end-line="31" selection-end-column="38" />
               <folding>
                 <element signature="e#32#55#1" expanded="true" />
+                <element signature="e#321#349#2" expanded="true" />
+                <element signature="e#431#432#0" expanded="true" />
+                <element signature="e#446#447#0" expanded="true" />
+                <element signature="e#473#474#0" expanded="true" />
+                <element signature="e#482#483#0" expanded="true" />
+                <element signature="e#3172#3173#0" expanded="true" />
+                <element signature="e#3199#3200#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -174,17 +173,12 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/console_thread.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="602">
+            <state relative-caret-position="885">
               <caret line="94" column="39" selection-start-line="94" selection-start-column="39" selection-end-line="94" selection-end-column="39" />
               <folding>
                 <element signature="e#42#59#1" expanded="true" />
-                <element signature="e#833#861#1" expanded="true" />
                 <element signature="e#1328#1329#0" expanded="true" />
                 <element signature="e#1345#1346#0" expanded="true" />
-                <element signature="e#2782#2783#0" expanded="true" />
-                <element signature="e#2799#2800#0" expanded="true" />
-                <element signature="e#2826#2827#0" expanded="true" />
-                <element signature="e#2837#2838#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -228,11 +222,11 @@
         <option value="$PROJECT_DIR$/src/attn/attn_dispatcher.d" />
         <option value="$PROJECT_DIR$/src/chris.d" />
         <option value="$APPLICATION_CONFIG_DIR$/idea64.vmoptions" />
+        <option value="$PROJECT_DIR$/src/global.d" />
+        <option value="$PROJECT_DIR$/src/console_thread.d" />
+        <option value="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" />
         <option value="$PROJECT_DIR$/src/messages.d" />
         <option value="$PROJECT_DIR$/src/attn/attn_circle_thread.d" />
-        <option value="$PROJECT_DIR$/src/global.d" />
-        <option value="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" />
-        <option value="$PROJECT_DIR$/src/console_thread.d" />
       </list>
     </option>
   </component>
@@ -247,27 +241,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="PackagesPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chris" type="616d4139:PackageViewModuleNode" />
-            </path>
-            <path>
-              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chris" type="616d4139:PackageViewModuleNode" />
-              <item name="attn" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chris" type="616d4139:PackageViewModuleNode" />
-              <item name="cpt" type="1f31426a:PackageElementNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="Scope">
         <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
           <expand>
@@ -290,6 +263,27 @@
               <item name="chris" type="b2602c69:ProjectViewProjectNode" />
               <item name="chris" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="PackagesPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
+              <item name="chris" type="616d4139:PackageViewModuleNode" />
+            </path>
+            <path>
+              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
+              <item name="chris" type="616d4139:PackageViewModuleNode" />
+              <item name="attn" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
+              <item name="chris" type="616d4139:PackageViewModuleNode" />
+              <item name="cpt" type="1f31426a:PackageElementNode" />
             </path>
           </expand>
           <select />
@@ -503,7 +497,7 @@
     <frame x="1920" y="0" width="1920" height="1080" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2022412" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20651014" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -512,8 +506,8 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32916668" />
-      <window_info anchor="bottom" x="4405" y="29" width="1351" height="1043" id="Run" order="2" type="WINDOWED" weight="0.21789473" />
-      <window_info anchor="bottom" x="0" y="29" width="1169" height="1043" id="Debug" order="3" type="WINDOWED" weight="0.4" />
+      <window_info active="true" anchor="bottom" x="4409" y="29" width="1335" height="1043" id="Run" order="2" type="WINDOWED" visible="true" weight="0.21789473" />
+      <window_info anchor="bottom" x="4" y="29" width="1161" height="1039" id="Debug" order="3" type="WINDOWED" visible="true" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4994664" weight="0.32809225" />
@@ -661,13 +655,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file:///usr/include/dmd/druntime/import/object.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="545">
-          <caret line="1756" column="19" selection-start-line="1756" selection-start-column="19" selection-end-line="1756" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/include/dmd/druntime/import/core/time.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="308">
@@ -675,14 +662,33 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/messages.d">
+    <entry file="file:///usr/include/dmd/phobos/std/concurrency.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="454">
-          <caret line="63" column="24" selection-start-line="63" selection-start-column="24" selection-end-line="63" selection-end-column="24" />
+        <state relative-caret-position="348">
+          <caret line="529" selection-start-line="529" selection-end-line="529" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/dmd/phobos/std/variant.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="887">
+          <caret line="131" selection-start-line="131" selection-end-line="131" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/dmd/druntime/import/object.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="308">
+          <caret line="2828" column="19" selection-start-line="2828" selection-start-column="19" selection-end-line="2828" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chris.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
           <folding>
-            <element signature="e#17#40#1" expanded="true" />
-            <element signature="e#558#559#0" expanded="true" />
-            <element signature="e#591#592#0" expanded="true" />
+            <element signature="e#14#31#1" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -697,77 +703,64 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/attn/attn_circle_thread.d">
+    <entry file="file://$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1832">
-          <caret line="102" column="8" selection-start-line="102" selection-start-column="8" selection-end-line="102" selection-end-column="8" />
+        <state relative-caret-position="-114">
+          <caret line="15" selection-start-line="14" selection-end-line="15" />
           <folding>
-            <element signature="e#32#55#1" expanded="true" />
+            <element signature="e#36#59#1" expanded="true" />
+            <element signature="e#358#386#2" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file:///usr/include/dmd/phobos/std/concurrency.d">
+    <entry file="file://$PROJECT_DIR$/src/messages.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="348">
-          <caret line="529" selection-start-line="529" selection-end-line="529" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/chris.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="108">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
+        <state relative-caret-position="171">
+          <caret line="36" column="10" selection-start-line="36" selection-start-column="10" selection-end-line="36" selection-end-column="10" />
           <folding>
-            <element signature="e#14#31#1" expanded="true" />
+            <element signature="e#17#40#1" expanded="true" />
+            <element signature="e#558#559#0" expanded="true" />
+            <element signature="e#591#592#0" expanded="true" />
+            <element signature="e#1472#1473#0" expanded="true" />
+            <element signature="e#1505#1506#0" expanded="true" />
+            <element signature="e#1946#1947#0" expanded="true" />
+            <element signature="e#1979#1980#0" expanded="true" />
+            <element signature="e#2374#2375#0" expanded="true" />
+            <element signature="e#2402#2403#0" expanded="true" />
+            <element signature="e#2626#2627#0" expanded="true" />
+            <element signature="e#2635#2636#0" expanded="true" />
+            <element signature="e#2952#2953#0" expanded="true" />
+            <element signature="e#2980#2981#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/include/dmd/phobos/std/variant.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="887">
-          <caret line="131" selection-start-line="131" selection-end-line="131" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/console_thread.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="602">
+        <state relative-caret-position="885">
           <caret line="94" column="39" selection-start-line="94" selection-start-column="39" selection-end-line="94" selection-end-column="39" />
           <folding>
             <element signature="e#42#59#1" expanded="true" />
-            <element signature="e#833#861#1" expanded="true" />
             <element signature="e#1328#1329#0" expanded="true" />
             <element signature="e#1345#1346#0" expanded="true" />
-            <element signature="e#2782#2783#0" expanded="true" />
-            <element signature="e#2799#2800#0" expanded="true" />
-            <element signature="e#2826#2827#0" expanded="true" />
-            <element signature="e#2837#2838#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d">
+    <entry file="file://$PROJECT_DIR$/src/attn/attn_circle_thread.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-1288">
-          <caret line="66" selection-start-line="66" selection-end-line="66" />
+        <state relative-caret-position="-1108">
+          <caret line="31" column="38" selection-start-line="31" selection-start-column="38" selection-end-line="31" selection-end-column="38" />
           <folding>
-            <element signature="e#36#59#1" expanded="true" />
-            <element signature="e#600#601#0" expanded="true" />
-            <element signature="e#615#616#0" expanded="true" />
-            <element signature="e#641#642#0" expanded="true" />
-            <element signature="e#650#651#0" expanded="true" />
-            <element signature="e#5524#5525#0" expanded="true" />
-            <element signature="e#5570#5571#0" expanded="true" />
-            <element signature="e#5768#5769#0" expanded="true" />
-            <element signature="e#5817#5818#0" expanded="true" />
-            <element signature="e#6015#6016#0" expanded="true" />
-            <element signature="e#6064#6065#0" expanded="true" />
-            <element signature="e#6342#6343#0" expanded="true" />
-            <element signature="e#6389#6390#0" expanded="true" />
-            <element signature="e#6667#6668#0" expanded="true" />
-            <element signature="e#6714#6715#0" expanded="true" />
+            <element signature="e#32#55#1" expanded="true" />
+            <element signature="e#321#349#2" expanded="true" />
+            <element signature="e#431#432#0" expanded="true" />
+            <element signature="e#446#447#0" expanded="true" />
+            <element signature="e#473#474#0" expanded="true" />
+            <element signature="e#482#483#0" expanded="true" />
+            <element signature="e#3172#3173#0" expanded="true" />
+            <element signature="e#3199#3200#0" expanded="true" />
           </folding>
         </state>
       </provider>

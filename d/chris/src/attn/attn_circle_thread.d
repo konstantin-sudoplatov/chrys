@@ -5,28 +5,49 @@ import std.format;
 import tools;
 import messages;
 
-/// This module is initialized at the moment of spawning in the dispatcher.
-static this() {
-}
-
 /**
         Thread function for caldron and attention circle as its successor.
 */
 void attn_circle_thread() {try{
-    import std.variant: Variant;
 
-    Msg msg;
-    Variant var;
-
+    // Receive messages in a cycle
     while(true) {
+        import std.variant: Variant;
+
+        Msg msg;
+        Variant var;
+
+        // Receive new message
         receive(
-        (immutable Msg m) {msg = cast()m;},
-        (Variant v) {var = v;}
+            (immutable Msg m) {msg = cast()m;},
+            (Variant v) {var = v;}
         );
 
+        // Recognize and process the message
         if (msg)
         {   // TODO: a lot to do here
+            if      // is it Tid of the client sent by Dispatcher?
+                    (auto m = cast(immutable DispatcherSuppliesCircleWithClientTid)msg)
+            {   //yes: create the attention circle object
+                Tid clientTid = cast()m.sender_tid;
+                if      // circle is not created yet?
+                        (attnCircle_ is null)
+                {
+                    attnCircle_ = new AttentionCircle(clientTid);
+                }
 
+            }
+            else if // TerminateAppMsg message has come?
+                    (cast(TerminateAppMsg)msg) // || var.hasValue)
+            {   //yes: terminate me and all my subthreads
+                // TODO: send terminating messages to all caldrons
+                //foreach(cir; attnDisp_.tidCross_.circles){
+                //    cir.send(new immutable TerminateAppMsg);
+                //}
+
+                // terminate itself
+                goto FINISH_THREAD;
+            }
         }
         else {  // unrecognized message of type Msg. Log it.
             logit(format!"Unexpected message to the caldron thread: %s"(msg));
@@ -86,9 +107,12 @@ class AttentionCircle: Caldron {
 
     /**
             Constructor.
+        Parameters:
+            clientTid = Tid of the client of this attention circle.
     */
-    this() {
+    this(Tid clientTid) {
         super();
+        clientTid_ = clientTid;
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -99,7 +123,7 @@ class AttentionCircle: Caldron {
     private:
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
-    /// Tid of the correspondent's thread
+    /// Tid of the correspondent thread
     Tid clientTid_;
 
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--

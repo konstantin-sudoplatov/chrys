@@ -11,23 +11,26 @@ import attn.attn_circle_thread;
         Thread function for attention dispatcher.
 */
 void attention_dispatcher_thread() {try {   // catchall try block for catching flying exceptions and forwarding them to the owner thread.
-    import std.variant: Variant;
 
     // Receive messages in a cycle
     while(true) {
+        import std.variant: Variant;
+
         Msg msg;                    // regular message
         Variant var;                // the catchall type
 
+        // Receive new message
         receive(
             (immutable Msg m){msg = cast()m;},
             (Variant v){var = v;}
         );
 
+        // Recognize and process the message
         if      // is it a regular message?
                 (msg)
         {   // process it
             if      // does client request circle's Tid?
-            (auto m = cast(immutable ClientRequestsCircleTidFromDisp)msg)
+                    (auto m = cast(immutable ClientRequestsCircleTidFromDisp)msg)
             {   //yes: create new attention circle thread and send back its Tid
                 Tid clientTid = cast()m.sender_tid();
 
@@ -36,19 +39,23 @@ void attention_dispatcher_thread() {try {   // catchall try block for catching f
                         (!attnDisp_)
                     attnDisp_ = new AttentionDispatcher();
 
-                // spawn and cross it
+                // spawn the circle, cross it and send to it client's Tid
                 Tid circleTid = attnDisp_.createCircleAttentionThread(clientTid);
 
-                // give client and circle Tids of the correspondent
+                // give the client the correspondent's Tid
                 (clientTid).send(new immutable DispatcherSuppliesClientWithCircleTid(circleTid));
-                (circleTid).send(new immutable DispatcherSuppliesCircleWithClientTid(clientTid));
 
                 continue;
             }
             else if // TerminateAppMsg message has come?
-            (cast(TerminateAppMsg)msg) // || var.hasValue)
+                    (cast(TerminateAppMsg)msg) // || var.hasValue)
             {   //yes: terminate me and all my subthreads
-                // TODO: terminate subthreads
+                // send terminating message to all circles
+                foreach(cir; attnDisp_.tidCross_.circles){
+                    cir.send(new immutable TerminateAppMsg);
+                }
+
+                // terminate itself
                 goto FINISH_THREAD;
             }
             else {  // unrecognized message of type Msg. Log it.
@@ -186,6 +193,22 @@ class AttentionDispatcher {
             return clients_[circle];
         }
 
+        /*
+                Get all clients.
+            Returns: range of client's Tids.
+        */
+        auto clients() {
+            return circles_.byKey;
+        }
+
+        /*
+                Get all circles.
+            Returns: range of circle's Tids.
+        */
+        auto circles() {
+            return clients_.byKey;
+        }
+
         /**
                 Add a pair <client Tid>/<circle Tid>.
             Parameters:
@@ -214,10 +237,10 @@ class AttentionDispatcher {
 
         invariant {
             assert(circles_.length == clients_.length);
-            foreach(cir, cl; clients_) {
+            foreach(cir; clients_.byKey) {
                 assert(circles_[cast()clients_[cast()cir]] == cast(const)cir);  // we need casts because invariant is the const attribute by default
             }
-            foreach(cl, cir; circles_) {
+            foreach(cl; circles_.byKey) {
                 assert(clients_[cast()circles_[cast()cl]] == cast(const)cl);  // we need casts because invariant is the const attribute by default
             }
         }

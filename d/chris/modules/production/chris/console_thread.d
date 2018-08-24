@@ -92,7 +92,7 @@ else {  // take the next line from user
             if      // it was Msg class?
             (msg)
             {   //yes: analize it
-
+                // TODO: catch requests for the next line from console and lines from the circle
             }
             else {  //no: that was variant. Log an error, continue
                 logit(format!"Unexpected message in console thread: %s"(var.toString));

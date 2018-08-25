@@ -31,11 +31,11 @@ void attn_circle_thread() {try{
             {   //yes: create the attention circle object
                 Tid clientTid = cast()m.sender_tid;
                 if      // circle is not created yet?
-                        (attnCircle_ is null)
+                        (caldron_ is null)
                 {
-                    attnCircle_ = new AttentionCircle(clientTid);
+                    caldron_ = new AttentionCircle(clientTid);
                 }
-
+                assert(caldron_._iAmCircle_);
             }
             else if // TerminateAppMsg message has come?
                     (cast(TerminateAppMsg)msg) // || var.hasValue)
@@ -66,9 +66,7 @@ private:
 //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
 /// The attention circle object
-AttentionCircle attnCircle_;
-
-
+Caldron caldron_;
 
 //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
@@ -82,14 +80,15 @@ AttentionCircle attnCircle_;
 class Caldron {
 
     /**
-                    Constructor.
+            Constructor.
     */
     this() {}
+
 
 protected:
 
     /**
-                    Message processing for caldron. All of the caldron workflow starts here.
+            Message processing for caldron. All of the caldron workflow starts here.
         Parameters:
             msg = message from another caldron or the outside world including messages from user, e.g. lines from console
                   and service messages, like TerminateAppMsg for termination.
@@ -99,6 +98,9 @@ protected:
     bool msgProcessing(immutable Msg msg) {
         return true;
     }
+
+    /// Use to check if it is a circle or a caldron, rather than doing cast(AttentionCircle). This way it's gona be faster.
+    bool _iAmCircle_ = false;
 }
 
 /// This class immeadiately works with the attention cilent. It creates a tree of caldrons as it works and it is theroot
@@ -112,6 +114,7 @@ class AttentionCircle: Caldron {
     */
     this(Tid clientTid) {
         super();
+        _iAmCircle_ = true;
         clientTid_ = clientTid;
     }
 
@@ -123,7 +126,7 @@ class AttentionCircle: Caldron {
     private:
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
-    /// Tid of the correspondent thread
+    /// Tid of the correspondent's thread
     Tid clientTid_;
 
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--

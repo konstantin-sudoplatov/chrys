@@ -51,7 +51,7 @@ void attention_dispatcher_thread() {try {   // catchall try block for catching f
                     (cast(TerminateAppMsg)msg) // || var.hasValue)
             {   //yes: terminate me and all my subthreads
                 // send terminating message to all circles
-                foreach(cir; attnDisp_.tidCross_.circles){
+                foreach(cir; attnDisp_.circleRegister_.byValue){
                     cir.send(new immutable TerminateAppMsg);
                 }
 
@@ -115,8 +115,8 @@ class AttentionDispatcher {
     private:
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
-    /// Cross map for client/user Tids.
-    TidCross tidCross_;
+    /// AA of circle's Tids by client's Tids.
+    Tid[Tid] circleRegister_;
 
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
@@ -129,120 +129,18 @@ class AttentionDispatcher {
     */
     Tid createCircleAttentionThread(Tid clientTid) {
         if      // is client in the cross already?
-                (auto circleTid = tidCross_.client_in(clientTid))
+                (auto circleTid = clientTid in circleRegister_)
         {   //yes: return the Tid
             return cast()*circleTid;
         }
-        else {  //no: create the circle, tell him the client's Tid and put the pair in the cross
+        else {  //no: create the circle, tell him the client's Tid and put the pair in the circle register
             Tid circleTid = spawn(&attn_circle_thread);
             circleTid.send(new immutable DispatcherSuppliesCircleWithClientTid(clientTid));
-            tidCross_.add(clientTid, circleTid);
+            circleRegister_[clientTid] = circleTid;
 
             return circleTid;
         }
     }
 
     //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-    /// Cross-map of the attention clients-circles.
-    pure struct TidCross {
-        Tid[Tid] circles_;      /// Map of attention clients threads: <client Tid>[<circle Tid>]
-        Tid[Tid] clients_;      /// Map of attention circles threads: <circle Tid>[<client Tid>]
-
-        /**
-                Check the length of the cross map.
-            Returns: number of pairs in the map.
-        */
-        ulong length() {
-            return circles_.length;
-        }
-
-        /**
-                Check if client is already present and return pointer to the circle Tid. Analogous to the D "in" statement.
-        */
-        const(Tid*) client_in(Tid client) const {
-            return client in circles_;
-        }
-
-        /**
-                Check if client is already present and return pointer to the circle Tid. Analogous to the D "in" statement.
-        */
-        const(Tid*) circle_in(Tid circle) const {
-            return circle in clients_;
-        }
-
-        /**
-                Getter.
-            Parameters:
-                client = Tid of attention client.
-            Returns: Tid of attention circle.
-            Throws: Range error exception if key is not found.
-        */
-        const(Tid) circle_(Tid client) const {
-            return circles_[client];
-        }
-
-        /**
-                Getter.
-            Parameters:
-                circle = Tid of attention circle.
-            Returns: Tid of attention client.
-            Throws: Range error exception if key is not found.
-        */
-        const(Tid) client_(Tid circle) const {
-            return clients_[circle];
-        }
-
-        /*
-                Get all clients.
-            Returns: range of client's Tids.
-        */
-        auto clients() {
-            return circles_.byKey;
-        }
-
-        /*
-                Get all circles.
-            Returns: range of circle's Tids.
-        */
-        auto circles() {
-            return clients_.byKey;
-        }
-
-        /**
-                Add a pair <client Tid>/<circle Tid>.
-            Parameters:
-                client = Tid of attention client.
-                circle = Tid of attention circle.
-        */
-        void add(Tid client, Tid circle) {
-            assert(client !in circles_ && circle !in clients_);
-            circles_[client] = circle;
-            clients_[circle] = client;
-            assert(client in circles_ && circle in clients_);
-        }
-
-        /**
-                Remove pair <client Tid>/<circle Tid>.
-            Parameters:
-                client = Tid of attention client.
-                circle = Tid of attention circle.
-        */
-        void remove(Tid client, Tid circle) {
-            assert(client in circles_ && circle in clients_);
-            circles_.remove(client);
-            clients_.remove(circle);
-            assert(client !in circles_ && circle !in clients_);
-        }
-
-        invariant {
-            assert(circles_.length == clients_.length);
-            foreach(cir; clients_.byKey) {
-                assert(circles_[cast()clients_[cast()cir]] == cast(const)cir);  // we need casts because invariant is the const attribute by default
-            }
-            foreach(cl; circles_.byKey) {
-                assert(clients_[cast()circles_[cast()cl]] == cast(const)cl);  // we need casts because invariant is the const attribute by default
-            }
-        }
-    }   // struct TidCross
 }

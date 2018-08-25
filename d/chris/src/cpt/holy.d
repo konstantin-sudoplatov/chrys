@@ -1,4 +1,4 @@
-module cpt.base_concepts;
+module cpt.holy;
 import interfaces;
 
 /**
@@ -16,16 +16,6 @@ abstract class HolyDynamicConcept: HolyConcept {
 
 }
 
-/// Base for all live dynamic concepts.
-abstract class LiveDynamicConcept {
-    protected HolyDynamicConcept holY;
-}
-
 abstract class HolyNeuron: HolyDynamicConcept {
 
-}
-
-abstract class LiveNeuron: LiveDynamicConcept, EsquashActivationIfc {
-
-    mixin EsquashActivationImpl!LiveNeuron;
 }

@@ -1,13 +1,12 @@
-/// Shared memory, global parameters.
-module global;
+/// Shared memory, global_data parameters.
+module global_data;
 import std.concurrency;
 
 import tools;
+import common_types;
 import attn.attn_dispatcher_thread;
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
-
-alias Cid = uint;       /// Concept identifier is 4 bytes long at the moment.
 
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--

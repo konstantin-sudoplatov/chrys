@@ -1,9 +1,8 @@
 module interfaces;
 
-import cpt.base_concepts;
-
 /// Base activation interface. Does not have an implementation.
 abstract interface ActivationIfc {
+
     enum NormalizationType {
 //        NONE,           // no normalization, the value of activation can be any real number
         BIN,            // active +1, antiactive -1

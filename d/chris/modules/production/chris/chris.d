@@ -5,7 +5,7 @@ import std.variant;
 import std.format;
 
 import tools;
-import global;
+import global_data;
 import messages;
 
 // Show in console_thread, that it is the unittest mode

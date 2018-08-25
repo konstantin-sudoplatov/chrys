@@ -3,7 +3,7 @@ import std.concurrency;
 import std.format;
 
 import tools;
-import global;
+import global_data;
 import messages;
 import attn.attn_circle_thread;
 

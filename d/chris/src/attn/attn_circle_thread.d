@@ -6,73 +6,6 @@ import tools;
 import messages;
 
 /**
-        Thread function for caldron and attention circle as its successor.
-*/
-void attn_circle_thread() {try{
-
-    // Receive messages in a cycle
-    while(true) {
-        import std.variant: Variant;
-
-        Msg msg;
-        Variant var;
-
-        // Receive new message
-        receive(
-            (immutable Msg m) {msg = cast()m;},
-            (Variant v) {var = v;}
-        );
-
-        // Recognize and process the message
-        if (msg)
-        {   // TODO: a lot to do here
-            if      // is it Tid of the client sent by Dispatcher?
-                    (auto m = cast(immutable DispatcherSuppliesCircleWithClientTid)msg)
-            {   //yes: create the attention circle object
-                Tid clientTid = cast()m.sender_tid;
-                if      // circle is not created yet?
-                        (caldron_ is null)
-                {
-                    caldron_ = new AttentionCircle(clientTid);
-                }
-                assert(caldron_._iAmCircle_);
-            }
-            else if // TerminateAppMsg message has come?
-                    (cast(TerminateAppMsg)msg) // || var.hasValue)
-            {   //yes: terminate me and all my subthreads
-                // TODO: send terminating messages to all caldrons
-                //foreach(cir; attnDisp_.tidCross_.circles){
-                //    cir.send(new immutable TerminateAppMsg);
-                //}
-
-                // terminate itself
-                goto FINISH_THREAD;
-            }
-        }
-        else {  // unrecognized message of type Msg. Log it.
-            logit(format!"Unexpected message to the caldron thread: %s"(msg));
-        }
-    }
-    FINISH_THREAD:
-} catch(Throwable e) { ownerTid.send(cast(shared)e); } }
-
-
-//###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-//
-//                               Private
-//
-//###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-private:
-//---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
-
-/// The attention circle object
-Caldron caldron_;
-
-//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-//---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-/**
             Main work horse of the system. It provides the room for doing reasoning on some branch.
     This class, as well as it successors, must be shared, i.e. used for creating of shared objects. It must be a shared object
     to be able to provide threads a thread function (entry point for them).
@@ -133,3 +66,69 @@ class AttentionCircle: Caldron {
 
     //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
 }
+
+/**
+        Thread function for caldron and attention circle as its successor.
+*/
+void attn_circle_thread() {try{
+
+    // Receive messages in a cycle
+    while(true) {
+        import std.variant: Variant;
+
+        Msg msg;
+        Variant var;
+
+        // Receive new message
+        receive(
+        (immutable Msg m) {msg = cast()m;},
+        (Variant v) {var = v;}
+        );
+
+        // Recognize and process the message
+        if (msg)
+        {   // TODO: a lot to do here
+            if      // is it Tid of the client sent by Dispatcher?
+            (auto m = cast(immutable DispatcherSuppliesCircleWithClientTid)msg)
+            {   //yes: create the attention circle object
+                Tid clientTid = cast()m.sender_tid;
+                if      // circle is not created yet?
+                (caldron_ is null)
+                {
+                    caldron_ = new AttentionCircle(clientTid);
+                }
+                assert(caldron_._iAmCircle_);
+            }
+            else if // TerminateAppMsg message has come?
+            (cast(TerminateAppMsg)msg) // || var.hasValue)
+            {   //yes: terminate me and all my subthreads
+                // TODO: send terminating messages to all caldrons
+                //foreach(cir; attnDisp_.tidCross_.circles){
+                //    cir.send(new immutable TerminateAppMsg);
+                //}
+
+                // terminate itself
+                goto FINISH_THREAD;
+            }
+        }
+        else {  // unrecognized message of type Msg. Log it.
+            logit(format!"Unexpected message to the caldron thread: %s"(msg));
+        }
+    }
+    FINISH_THREAD:
+} catch(Throwable e) { ownerTid.send(cast(shared)e); } }
+
+//###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+//
+//                               Private
+//
+//###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+private:
+//---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+/// The attention circle object
+Caldron caldron_;
+
+//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
+
+//---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--

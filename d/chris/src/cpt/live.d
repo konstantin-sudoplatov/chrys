@@ -1,10 +1,20 @@
-module ${DLANGUAGE_MODULE_NAME};
+module cpt.live;
 import std.stdio;
 
-import global, tools;
+import global_data, tools;
+import interfaces;
+import cpt.holy;
+
+/// Base for all live dynamic concepts.
+abstract class LiveDynamicConcept {
+    protected HolyDynamicConcept _holY;
+}
 
 
+abstract class LiveNeuron: LiveDynamicConcept, EsquashActivationIfc {
 
+    mixin EsquashActivationImpl!LiveNeuron;
+}
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--

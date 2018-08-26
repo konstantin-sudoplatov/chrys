@@ -2,53 +2,53 @@ module common_types;
 import std.stdio;
 
 import global_data, tools;
+import attn.attn_circle_thread;
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
 /// Concept identifier is 4 bytes long at the moment.
 alias Cid = uint;
 
-/// Call types of the static concept functions
-enum CallType {
-    type1,      // Cid function(Caldron nameSpace, Cid[] paramCids, Object extra)
-    type2,      // Cid[] function(Caldron nameSpace, Cid[] paramCids, Object extra)
+/// Call types of the static concept (static concept is function).
+enum StatCallType {
+    rCid_p0Cal_p1Cidar_p2Obj,           // Cid function(Caldron nameSpace, Cid[] paramCids, Object extra)
+    rCidar_p0Cal_p1Cidar_p2Obj,         // Cid[] function(Caldron nameSpace, Cid[] paramCids, Object extra)
 }
 
-/// Annotation for the static concept functions
-struct AnnoStat{
-    Cid cid;            // cid of concept
-    CallType type;      // call аgreement for the concept function
+/// Static concept descriptor. It's all you need to call that function. Serves as a value in the StatCptMap, where cid is key.
+struct StatDescriptor {
+    void* fun_ptr;                  // cid of concept
+    StatCallType call_type;          // call аgreement for the concept function
 }
 
-struct StatDir {
-
-    @property void fun_map(void* fun, Cid cid) {
-
-    }
-
-    void* opIndexAssign(void* value, size_t index) {
-        return funMap[cast(Cid)index] = value;
-    }
-
-    void* opIndex(size_t index) {
-        return funMap[cast(Cid)index];
-    }
-
-    private:
-    void*[Cid] funMap;      /// Map of static concept function pointers by cid
+/// Get cid by static concept (it' a function, remember!) name.
+template stat_cid(alias cptName)
+        if      // annotation consists of two elements and their types are int and StatCallType?
+                (__traits(getAttributes, cptName).length == 2 &&
+                is(typeof(__traits(getAttributes, cptName)[0]) == int) &&
+                is(typeof(__traits(getAttributes, cptName)[1]) == StatCallType))
+{   // extract the first element of annotation, which is cid
+    enum int stat_cid = __traits(getAttributes, cptName)[0];
 }
 
+
+///
 unittest {
-    StatDir sd;
-    import attn.attn_circle_thread;
-    static Cid fun(Caldron spaceName, Cid[] cid, Object extra) {
+
+    // Stat concept to make a test call
+    @(1, StatCallType.rCid_p0Cal_p1Cidar_p2Obj) static Cid fun(Caldron spaceName, Cid[] cid, Object extra) {
         assert(spaceName is null && cid is null && extra is null);
-writeln("here");
         return 0;
     }
 
-    sd[1] = &fun;
-    auto fp = cast(Cid function(Caldron, Cid[], Object))sd[1];
+    // extract the descriptor and cid from concept's annotation
+    StatDescriptor sd = StatDescriptor(&fun, __traits(getAttributes, fun)[1]);    // its value
+    Cid cid = __traits(getAttributes, fun)[0];      // its cid
+    assert(stat_cid!fun == cid);    // check cid
+    assert(sd.call_type == StatCallType.rCid_p0Cal_p1Cidar_p2Obj);
+
+    // use the descriptor form the map to call the concept.
+    auto fp = cast(Cid function(Caldron, Cid[], Object))sd.fun_ptr;
     fp(null, null, null);
 }
 

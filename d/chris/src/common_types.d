@@ -1,13 +1,12 @@
 module common_types;
 import std.stdio;
 
-import global_data, tools;
+import global, tools;
 import attn.attn_circle_thread;
+import cpt.holy;
+
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
-
-/// Concept identifier is 4 bytes long at the moment.
-alias Cid = uint;
 
 /// Call types of the static concept (static concept is function).
 enum StatCallType {
@@ -53,12 +52,76 @@ unittest {
 }
 
 /**
+            Holy concepts map. It is a wrapper for actual associative array.
+        Map of all static and dynamic shared storrable (holy) concepts. This map will be used concurrently by all caldrons,
+    so it must be synchronized. At the moment, it is usual syncronization on the class object. In the future it can possibly
+    be changed to atomic, because the concurrent asccess might be intensive. To that end acsses via the class methods would
+    help, because this way we could get away with changes to only interface methods for the real map.
+*/
+shared pure @safe nothrow class HolyMap {
+
+    //---***---***---***---***---***--- types ---***---***---***---***---***---***
+
+    //---***---***---***---***---***--- data ---***---***---***---***---***--
+
+    /**
+        Constructor
+    */
+    this(){}
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /**
+                Assign/constract-assign new holy map entry.
+        Parameters:
+            cpt = shared concept to assign
+            cid = key
+    */
+    synchronized shared(HolyConcept) opIndexAssign(shared HolyConcept cpt, Cid cid) {
+        holyMap_[cid] = cpt;
+        return cpt;
+    }
+
+    /**
+                Get a holy map entry.
+        Parameters:
+            cid = key
+        Returns: shared concept
+    */
+    synchronized shared(HolyConcept) opIndex(Cid cid) {
+        return holyMap_[cid];
+    }
+
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+    //
+    //                               Private
+    //
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+    private:
+    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+    HolyConcept[Cid] holyMap_;       /// map caldron[seed]
+
+    //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
+
+    //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
+}
+
+///
+unittest {
+    shared HolyMap hm = new shared HolyMap;
+    shared UnconditionalNeuron_hnr hnr = new shared UnconditionalNeuron_hnr;
+    Cid cid = 1;
+    hm[cid] = hnr;
+    assert(hm[cid] is hnr);
+}
+
+/**
             It is a wrapper for caldron/seed map.
-    Here "seed" is the cid of the seed neuron of the reasoning branch as an identifier of the branch and caldron.
+        Here "seed" is the cid of the seed neuron of the reasoning branch as an identifier of the branch and caldron.
     We will need synchronization, because this map will be concurrently accessed by different caldrons, so it is a class,
     just not to introduce a separate mutex object.
 */
-pure @safe nothrow class CaldronMap {
+shared pure @safe nothrow class CaldronMap {
     import std.concurrency: Tid;
 
     //---***---***---***---***---***--- types ---***---***---***---***---***---***

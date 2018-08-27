@@ -5,7 +5,7 @@ import std.variant;
 import std.format;
 
 import tools;
-import global_data;
+import global;
 import messages;
 
 // Show in console_thread, that it is the unittest mode
@@ -16,10 +16,11 @@ version(unittest) {
 /**
     Main function of the project.
     Main initialization including creation of the key processes done in the global module constructor. Actually, the application
-    started there. Here we wait for messages requiring termination and do it.
+    started there. Here we only wait for messages requiring termination.
 */
 void main()
 {
+    // Wait for messages from the key threads. Thematically applicable only requests for termination or rethrown exceptions.
     while(true) {
         TerminateAppMsg termMsg;
         Throwable ex;

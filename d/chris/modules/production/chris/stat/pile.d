@@ -2,7 +2,7 @@
 module stat.pile;
 import std.stdio;
 
-import global_data, tools, common_types;
+import global, tools, common_types;
 import attn.attn_circle_thread;
 
 /**
@@ -11,5 +11,6 @@ import attn.attn_circle_thread;
 @(1, StatCallType.rCid_p0Cal_p1Cidar_p2Obj)
         Cid activate_stat(Caldron nameSpace, Cid[] paramCids, Object extra)
 {
+writeln("In activate_stat");
     return 0;
 }

@@ -1,7 +1,7 @@
 module cpt.live;
 import std.stdio;
 
-import global_data, tools;
+import global, tools;
 import interfaces;
 import cpt.holy;
 

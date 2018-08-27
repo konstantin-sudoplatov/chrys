@@ -6,7 +6,7 @@ import std.concurrency;
 import core.thread;
 
 import tools;
-import global_data;
+import global;
 import messages;
 
 enum msgTimeout = 5;    // seconds

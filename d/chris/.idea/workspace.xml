@@ -5,22 +5,13 @@
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chris" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/attn/attn_dispatcher_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/attn/attn_dispatcher_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/chris.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/production/chris/common_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/common_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/console_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/console_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/cpt/holy.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/cpt/holy.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/cpt/live.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/cpt/live.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/global_data.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/production/chris/global.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/global.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/production/chris/stat/pile.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/stat/pile.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/chris.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/common_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/common_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/console_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpt/holy.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/holy.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpt/live.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/live.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/global_data.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/global.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/global.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/global.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stat/pile.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/stat/pile.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stat/substat/subpile.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/stat/substat/subpile.d" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -28,6 +19,83 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="DockManager">
+    <window id="1">
+      <content type="file-editors">
+        <state>
+          <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+            <file pinned="false" current-in-tab="false">
+              <entry file="file://$PROJECT_DIR$/src/cpt/live.d">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="20">
+                    <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+                  </state>
+                </provider>
+              </entry>
+            </file>
+            <file pinned="false" current-in-tab="false">
+              <entry file="file://$PROJECT_DIR$/src/common_types.d">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="300">
+                    <caret line="27" column="28" selection-start-line="27" selection-start-column="28" selection-end-line="27" selection-end-column="28" />
+                    <folding>
+                      <element signature="e#21#38#1" expanded="true" />
+                      <element signature="e#3614#3615#0" expanded="true" />
+                      <element signature="e#3650#3651#0" expanded="true" />
+                    </folding>
+                  </state>
+                </provider>
+              </entry>
+            </file>
+            <file pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/src/cpt/holy.d">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="200">
+                    <caret line="22" column="11" selection-start-line="22" selection-start-column="11" selection-end-line="22" selection-end-column="11" />
+                    <folding>
+                      <element signature="e#17#31#1" expanded="true" />
+                      <element signature="e#739#759#1" expanded="true" />
+                    </folding>
+                  </state>
+                </provider>
+              </entry>
+            </file>
+          </leaf>
+        </state>
+      </content>
+    </window>
+    <window id="1">
+      <content type="file-editors">
+        <state>
+          <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+            <file pinned="false" current-in-tab="false">
+              <entry file="file://$PROJECT_DIR$/src/messages.d">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="780">
+                    <caret line="41" column="30" selection-start-line="41" selection-start-column="30" selection-end-line="41" selection-end-column="30" />
+                    <folding>
+                      <element signature="e#17#40#1" expanded="true" />
+                      <element signature="e#558#559#0" expanded="true" />
+                      <element signature="e#591#592#0" expanded="true" />
+                    </folding>
+                  </state>
+                </provider>
+              </entry>
+            </file>
+            <file pinned="false" current-in-tab="true">
+              <entry file="file://$PROJECT_DIR$/src/interfaces.d">
+                <provider selected="true" editor-type-id="text-editor">
+                  <state relative-caret-position="280">
+                    <caret line="14" selection-start-line="14" selection-end-line="14" />
+                  </state>
+                </provider>
+              </entry>
+            </file>
+          </leaf>
+        </state>
+      </content>
+    </window>
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="76674309">
@@ -54,7 +122,7 @@
           <entry key="atn_dispatcher" value="1" />
           <entry key="circle_thread" value="1" />
           <entry key="common_types" value="1" />
-          <entry key="d" value="152" />
+          <entry key="d" value="156" />
           <entry key="global" value="2" />
           <entry key="live" value="7" />
           <entry key="pile" value="1" />
@@ -65,7 +133,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="D file" value="151" />
+          <entry key="D file" value="155" />
           <entry key="PLAIN_TEXT" value="20" />
           <entry key="Properties" value="2" />
           <entry key="Scratch" value="1" />
@@ -73,13 +141,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="d" value="36800" />
+          <entry key="d" value="39499" />
           <entry key="vmoptions" value="95" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="D file" value="36800" />
+          <entry key="D file" value="39499" />
           <entry key="PLAIN_TEXT" value="95" />
         </counts>
       </usages-collector>
@@ -93,24 +161,12 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/global.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="721">
-              <caret line="107" column="27" selection-start-line="107" selection-start-column="27" selection-end-line="107" selection-end-column="27" />
+            <state relative-caret-position="511">
+              <caret line="124" column="10" lean-forward="true" selection-start-line="124" selection-start-column="10" selection-end-line="124" selection-end-column="10" />
               <folding>
                 <element signature="e#53#76#1" expanded="true" />
-                <element signature="e#2052#2069#2" expanded="true" />
-                <element signature="e#3223#3243#3" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/stat/substat/subpile.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="15" column="14" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="14" />
-              <folding>
-                <element signature="e#29#46#1" expanded="true" />
+                <element signature="e#3172#3207#2" expanded="true" />
+                <element signature="e#4006#4023#2" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -119,54 +175,31 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/stat/pile.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="13" selection-start-line="13" selection-end-line="13" />
+            <state relative-caret-position="320">
+              <caret line="19" column="2" selection-start-line="19" selection-start-column="2" selection-end-line="19" selection-end-column="2" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/attn/attn_circle_thread.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="505">
+              <caret line="119" selection-start-line="119" selection-end-line="119" />
               <folding>
-                <element signature="e#47#64#1" expanded="true" />
+                <element signature="e#32#55#1" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cpt/holy.d">
+        <entry file="file://$PROJECT_DIR$/src/stat/substat/subpile.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="798">
-              <caret line="45" selection-start-line="45" selection-end-line="45" />
+            <state relative-caret-position="220">
+              <caret line="11" column="3" selection-start-line="11" selection-start-column="3" selection-end-line="11" selection-end-column="3" />
               <folding>
-                <element signature="e#17#31#1" expanded="true" />
-                <element signature="e#753#773#1" expanded="true" />
-                <element signature="e#1328#1329#0" expanded="true" />
-                <element signature="e#1351#1352#0" expanded="true" />
-                <element signature="e#1608#1609#0" expanded="true" />
-                <element signature="e#1631#1632#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cpt/live.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="15" column="42" selection-start-line="15" selection-start-column="42" selection-end-line="15" selection-end-column="42" />
-              <folding>
-                <element signature="e#17#34#1" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/common_types.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1861">
-              <caret line="110" column="34" selection-start-line="110" selection-start-column="34" selection-end-line="110" selection-end-column="34" />
-              <folding>
-                <element signature="e#21#38#1" expanded="true" />
-                <element signature="e#3463#3464#0" expanded="true" />
-                <element signature="e#3499#3500#0" expanded="true" />
-                <element signature="e#4667#4695#1" expanded="true" />
+                <element signature="e#29#46#1" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -222,9 +255,9 @@
         <option value="$PROJECT_DIR$/src/global_data.d" />
         <option value="$PROJECT_DIR$/src/cpt/holy.d" />
         <option value="$PROJECT_DIR$/src/common_types.d" />
-        <option value="$PROJECT_DIR$/src/stat/substat/subpile.d" />
         <option value="$PROJECT_DIR$/src/stat/pile.d" />
         <option value="$PROJECT_DIR$/src/global.d" />
+        <option value="$PROJECT_DIR$/src/stat/substat/subpile.d" />
       </list>
     </option>
   </component>
@@ -240,6 +273,22 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chris" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chris" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="PackagesPane">
         <subPane>
           <expand>
@@ -272,22 +321,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chris" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chris" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="Scope">
         <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
           <expand>
@@ -307,8 +340,8 @@
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="D" />
     <property name="full.screen.before.presentation.mode" value="true" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/docs" />
-    <property name="project.structure.last.edited" value="Project" />
-    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.last.edited" value="SDKs" />
+    <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="preferences.keymap" />
   </component>
@@ -508,11 +541,11 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-3" width="1924" height="1087" extended-state="7" />
+    <frame x="1920" y="0" width="1920" height="1080" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.496875" visible="true" weight="0.18924618" />
-      <window_info id="Structure" order="1" sideWeight="0.503125" side_tool="true" visible="true" weight="0.18924618" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.49685535" visible="true" weight="0.19156884" />
+      <window_info id="Structure" order="1" sideWeight="0.5031447" side_tool="true" visible="true" weight="0.19156884" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
@@ -520,8 +553,8 @@
       <window_info id="Favorites" order="6" sideWeight="0.500994" side_tool="true" weight="0.18729989" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.328125" />
-      <window_info active="true" anchor="bottom" x="0" y="775" width="1916" height="305" id="Run" order="2" type="WINDOWED" visible="true" weight="0.21789473" />
-      <window_info anchor="bottom" x="2" y="765" width="1916" height="315" id="Debug" order="3" type="WINDOWED" visible="true" weight="0.4" />
+      <window_info active="true" anchor="bottom" x="4398" y="29" width="1362" height="1051" id="Run" order="2" type="WINDOWED" visible="true" weight="0.21789473" />
+      <window_info anchor="bottom" x="2" y="765" width="1916" height="315" id="Debug" order="3" type="WINDOWED" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4994664" weight="0.3280318" />
@@ -529,6 +562,7 @@
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50053364" side_tool="true" weight="0.32809225" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32916668" />
       <window_info anchor="bottom" id="Messages" order="10" />
+      <window_info anchor="right" x="0" y="0" width="430" height="880" id="Documentation" side_tool="true" weight="0.32977587" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -684,39 +718,16 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/base_concepts.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="437">
-          <caret line="23" column="47" lean-forward="true" selection-start-line="23" selection-start-column="47" selection-end-line="23" selection-end-column="47" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/attn/attn_circle_thread.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1577">
-          <caret line="134" selection-start-line="134" selection-end-line="134" />
-          <folding>
-            <element signature="e#32#55#1" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/base_concepts.d" />
     <entry file="file://$PROJECT_DIR$/src/messages.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="741">
+        <state relative-caret-position="780">
           <caret line="41" column="30" selection-start-line="41" selection-start-column="30" selection-end-line="41" selection-end-column="30" />
           <folding>
             <element signature="e#17#40#1" expanded="true" />
             <element signature="e#558#559#0" expanded="true" />
             <element signature="e#591#592#0" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/interfaces.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="14" selection-start-line="14" selection-end-line="14" />
         </state>
       </provider>
     </entry>
@@ -730,72 +741,78 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/live.d">
+    <entry file="file://$PROJECT_DIR$/src/interfaces.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="15" column="42" selection-start-line="15" selection-start-column="42" selection-end-line="15" selection-end-column="42" />
-          <folding>
-            <element signature="e#17#34#1" expanded="true" />
-          </folding>
+        <state relative-caret-position="280">
+          <caret line="14" selection-start-line="14" selection-end-line="14" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/stat/substat/subpile.d">
+    <entry file="file://$PROJECT_DIR$/src/cpt/live.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="15" column="14" selection-start-line="15" selection-start-column="14" selection-end-line="15" selection-end-column="14" />
+        <state relative-caret-position="20">
+          <caret line="5" column="11" selection-start-line="5" selection-start-column="11" selection-end-line="5" selection-end-column="11" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/attn/attn_circle_thread.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="505">
+          <caret line="119" selection-start-line="119" selection-end-line="119" />
           <folding>
-            <element signature="e#29#46#1" expanded="true" />
+            <element signature="e#32#55#1" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/stat/pile.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="13" selection-start-line="13" selection-end-line="13" />
+        <state relative-caret-position="320">
+          <caret line="19" column="2" selection-start-line="19" selection-start-column="2" selection-end-line="19" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/common_types.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="27" column="28" selection-start-line="27" selection-start-column="28" selection-end-line="27" selection-end-column="28" />
           <folding>
-            <element signature="e#47#64#1" expanded="true" />
+            <element signature="e#21#38#1" expanded="true" />
+            <element signature="e#3614#3615#0" expanded="true" />
+            <element signature="e#3650#3651#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cpt/holy.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="798">
-          <caret line="45" selection-start-line="45" selection-end-line="45" />
+        <state relative-caret-position="200">
+          <caret line="22" column="11" selection-start-line="22" selection-start-column="11" selection-end-line="22" selection-end-column="11" />
           <folding>
             <element signature="e#17#31#1" expanded="true" />
-            <element signature="e#753#773#1" expanded="true" />
-            <element signature="e#1328#1329#0" expanded="true" />
-            <element signature="e#1351#1352#0" expanded="true" />
-            <element signature="e#1608#1609#0" expanded="true" />
-            <element signature="e#1631#1632#0" expanded="true" />
+            <element signature="e#739#759#1" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/common_types.d">
+    <entry file="file://$PROJECT_DIR$/src/stat/substat/subpile.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1861">
-          <caret line="110" column="34" selection-start-line="110" selection-start-column="34" selection-end-line="110" selection-end-column="34" />
+        <state relative-caret-position="220">
+          <caret line="11" column="3" selection-start-line="11" selection-start-column="3" selection-end-line="11" selection-end-column="3" />
           <folding>
-            <element signature="e#21#38#1" expanded="true" />
-            <element signature="e#3463#3464#0" expanded="true" />
-            <element signature="e#3499#3500#0" expanded="true" />
-            <element signature="e#4667#4695#1" expanded="true" />
+            <element signature="e#29#46#1" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/global.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="721">
-          <caret line="107" column="27" selection-start-line="107" selection-start-column="27" selection-end-line="107" selection-end-column="27" />
+        <state relative-caret-position="511">
+          <caret line="124" column="10" lean-forward="true" selection-start-line="124" selection-start-column="10" selection-end-line="124" selection-end-column="10" />
           <folding>
             <element signature="e#53#76#1" expanded="true" />
-            <element signature="e#2052#2069#2" expanded="true" />
-            <element signature="e#3223#3243#3" expanded="true" />
+            <element signature="e#3172#3207#2" expanded="true" />
+            <element signature="e#4006#4023#2" expanded="true" />
           </folding>
         </state>
       </provider>
@@ -851,7 +868,7 @@
       </state>
       <state key="JdkListConfigurable.UI">
         <settings>
-          <last-edited>DMD64 D Compiler v2.081.1</last-edited>
+          <last-edited>1.8</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

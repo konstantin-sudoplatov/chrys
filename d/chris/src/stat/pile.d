@@ -8,9 +8,19 @@ import attn.attn_circle_thread;
 /**
         Load a concept into the name space, if not loaded, and activate it.
 */
-@(1, StatCallType.rCid_p0Cal_p1Cidar_p2Obj)
-        Cid activate_stat(Caldron nameSpace, Cid[] paramCids, Object extra)
+@(5, StatCallType.rCid_p0Cal_p1Cidar_p2Obj)
+Cid anactivate_stat(Caldron nameSpace, Cid[] paramCids, Object extra)
 {
-writeln("In activate_stat");
+    writeln("In anactivate_stat");
+    return 0;
+}
+
+/**
+        Load a concept into the name space, if not loaded, and activate it.
+*/
+@(1, StatCallType.rCid_p0Cal_p1Cidar_p2Obj)
+Cid activate_stat(Caldron nameSpace, Cid[] paramCids, Object extra)
+{
+    writeln("In activate_stat");
     return 0;
 }

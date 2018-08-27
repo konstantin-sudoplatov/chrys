@@ -2,6 +2,7 @@
 module global;
 import std.concurrency;
 import std.traits;
+import std.conv;
 
 import tools;
 import common_types;
@@ -32,6 +33,9 @@ immutable Tid _attnDispTid_;     /// Attention dispatcher thread Tid
 
 /// The map of holy(stable and storrable and shared) concepts.
 shared HolyMap _hm_;
+
+///     caldron/seed map
+shared CaldronMap _cm_;
 
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
@@ -68,58 +72,86 @@ unittest {
 private:
 //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
+/// Manifest constant array of descriptors of all static concepts of the project.
+enum statDescriptors = createStaticConceptDescriptors_;
+
+enum unusedCids = unusedCids_;
+
+//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
+
 /**
-            Fill in static concepts into the holy map.;
+        Create array of names plus static concept descriptors, CTFE.
+    Used to create the manifest constant array namedStaticDescriptors.
+    Returns: array of static concept descriptors.
+*/
+StatDescriptor[] createStaticConceptDescriptors_() {
+
+    // Declare named static descriptor array
+    StatDescriptor[] sds;
+
+    // Fill the named descriptors array
+    StatDescriptor sd;
+    static foreach (moduleName; [EnumMembers!StatConceptModules]) {
+        static foreach (memberName; __traits(allMembers, mixin(moduleName))) {
+            static if (__traits(isStaticFunction, __traits(getMember, mixin(moduleName), memberName))) {
+                sd.cid = __traits(getAttributes, mixin(memberName))[0];
+                sd.name = memberName;
+                sd.fun_ptr = mixin("&" ~ memberName);
+                sd.call_type = __traits(getAttributes, mixin(memberName))[1];
+
+                sds ~= sd;
+            }
+        }
+    }
+
+    // Sort it
+    import std.algorithm.sorting: sort;
+    sds.sort;
+
+    return sds;
+}
+
+/**
+        Create array of unused cids, CTFE.
+    Returns: array of free cids
+*/
+Cid[] unusedCids_() {
+    Cid[] unusedCids;
+
+    // find unused cids
+    Cid lastCid = 0;
+    foreach(sd; statDescriptors) {
+        assert(sd.cid > lastCid, "cid " ~ to!string(sd.cid) ~ ": cids cannot be used multiple times.");
+        if
+            (sd.cid > lastCid + 1)
+        {
+            for(Cid j = lastCid + 1; j < sd.cid; ++j ) unusedCids ~= j;
+        }
+        lastCid = sd.cid;
+    }
+
+    return unusedCids;
+}
+
+/**
+            Fill in static concepts into the holy map.
     Parameters:
         hm = holy map to fill
 */
 void fillInStaticConcepts_(shared HolyMap hm) {
     import std.stdio;
-    import std.typecons;
 
-    alias NamedStaticConcept = Tuple!(string, "name", shared HolyConcept, "obj");    // static concept plus its name
-    NamedStaticConcept namedCpt;
-    NamedStaticConcept[] namedCpts;
-    StatDescriptor sd;
-    shared StaticConcept cpt;
-    static foreach(moduleName; [EnumMembers!StatConceptModules])
-        static foreach(memberName; __traits(allMembers, mixin(moduleName))) {
-            static if (__traits(isStaticFunction, __traits(getMember, mixin(moduleName), memberName))) {
-                sd.fun_ptr = mixin("&" ~ memberName);
-                sd.call_type = __traits(getAttributes, mixin(memberName))[1];
-                cpt = new shared StaticConcept(__traits(getAttributes, mixin(memberName))[0], sd);
-                namedCpt.name = memberName;
-                namedCpt.obj = cpt;
-                namedCpts ~= namedCpt;
-            }
-        }
-
-    foreach(nc; namedCpts){
-        writeln(nc.name);
-        writeln((cast(shared StaticConcept)nc.obj).sd.fun_ptr);
-        writeln((cast(shared StaticConcept)nc.obj).sd.call_type);
+    foreach(sd; statDescriptors) {
+        writefln("%s, %s, %s, %s", sd.cid, sd.name, sd.fun_ptr, sd.call_type);
     }
+
+    // report static cids usage
+    writefln("Unused cids: %s", unusedCids);
+    writefln("Last used cid: %s", statDescriptors[$-1].cid);
+
+    // fill the holy map
+    //foreach(sd; statDescriptors)
+    //    _hm_
 }
-
-enum aaa = createNamedStaticConceptDescriptors();
-
-auto createNamedStaticConceptDescriptors() {
-    import std.typecons;
-
-    int[] ar;
-    ar ~= 1;
-    ar ~= 2;
-    ar ~= 3;
-
-    return ar;
-}
-
-///     caldron/cid map, where "cid" is the cid of the seed neuron of the reasoning branch as an identifier of the branch
-/// and caldron. We will need synchronization, because the map can be concurrently accessed by different caldrons.
-shared Tid[Cid] _caldronMap_;
-
-
-//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
-
 
 //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--

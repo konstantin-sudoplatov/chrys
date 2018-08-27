@@ -16,8 +16,20 @@ enum StatCallType {
 
 /// Static concept descriptor. It's all you need to call that function. Serves as a value in the StatCptMap, where cid is key.
 struct StatDescriptor {
-    void* fun_ptr;                  // cid of concept
-    StatCallType call_type;          // call аgreement for the concept function
+    Cid cid;                        /// cid of the concept
+    string name;                    /// concept's name
+    void* fun_ptr;                  /// pointer to the function
+    StatCallType call_type;         /// call аgreement for the function
+
+    /// Reload opCmp to make it sortable on cid (not nescessary, actually, since cid is the first field in the structure).
+    int opCmp(ref const StatDescriptor s) const {
+        if(cid < s.cid)
+            return -1;
+        else if(cid > s.cid)
+            return 1;
+        else
+            return 0;
+    }
 }
 
 /// Get cid by static concept (it' a function, remember!) name.
@@ -40,8 +52,8 @@ unittest {
         return 0;
     }
 
-    // extract the descriptor and cid from concept's annotation
-    StatDescriptor sd = StatDescriptor(&fun, __traits(getAttributes, fun)[1]);    // its value
+    // extract the descriptor, cid and name from concept's annotation and declaration
+    StatDescriptor sd = StatDescriptor(__traits(getAttributes, fun)[0], "fun", &fun, __traits(getAttributes, fun)[1]);
     Cid cid = __traits(getAttributes, fun)[0];      // its cid
     assert(stat_cid!fun == cid);    // check cid
     assert(sd.call_type == StatCallType.rCid_p0Cal_p1Cidar_p2Obj);

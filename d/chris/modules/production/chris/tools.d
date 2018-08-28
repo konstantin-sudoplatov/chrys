@@ -17,109 +17,109 @@ class Crash: Exception {
 /**
             Cross-map.
     It is a pair of associated arrays FirstT[SecondT] and its reverse SecondT[firstT]. For example it may contain pairs of
-    <concept name>/<Cid>, so that we can find any Cid by name and name by Cid. For any entry in the first AA there always is
+    &ltconcept name&gt/&ltCid&gt, so that we can find any Cid by name and name by Cid. For any entry in the first AA there always is
     one corresponding entry in the second AA. By definition this cross is always symmetrical.
 */
-pure struct CrossMap(FirstT, SecondT) {
+pure nothrow struct CrossMap(FirstT, SecondT) {
 
     /**
                 Check the length of the cross map.
             Returns: number of pairs in the map.
     */
-    ulong length() {
-        return first_.length;
+    auto length() {
+        return cids.length;
     }
 
     /**
             Check if the first key present in the cross. Analogous to the D "in" statement.
     */
     const(SecondT*) first_in(FirstT first) const {
-        return first in second_;
+        return first in names;
     }
 
     /**
             Check if the second key present in the cross. Analogous to the D "in" statement.
     */
     const(FirstT*) second_in(SecondT second) const {
-        return second in first_;
+        return second in cids;
     }
 
     /**
-                Get the second key by the first one.
-            Parameters:
-                second = the second key.
-            Returns: the first key.
-            Throws: RangeError exception if the key not found.
+            Get the second key by the first one.
+        Parameters:
+            second = the second key.
+        Returns: the first key.
+        Throws: RangeError exception if the key not found.
     */
     const(FirstT) first(SecondT second) const {
-        return first_[second];
+        return cids[second];
     }
 
     /**
-                Get the first key by the second one.
-            Parameters:
-                first = the first key
-            Returns: the second key.
-            Throws: RangeError exception if the key not found.
+            Get the first key by the second one.
+        Parameters:
+            first = the first key
+        Returns: the second key.
+        Throws: RangeError exception if the key not found.
     */
     const(SecondT) second(FirstT first) const {
-        return second_[first];
+        return names[first];
     }
 
     /*
-                Get a range of the first keys.
-            Returns: range of the firsts.
+            Get the range of the first keys.
+        Returns: range of the firsts.
     */
     auto firsts() {
-        return second_.byKey;
+        return names.byKey;
     }
 
     /*
-                Get a range of the second keys.
-            Returns: range of the seconds.
+            Get the range of the second keys.
+        Returns: range of the seconds.
     */
     auto seconds() {
-        return first_.byKey;
+        return cids.byKey;
     }
 
     /**
-                Add a pair <first key>/<second key>.
-            Parameters:
-                first = the first key
-                second = the second key
+            Add a pair &ltfirst key&gt/&ltsecond key&gt.
+        Parameters:
+            first = the first key
+            second = the second key
     */
     void add(FirstT first, SecondT second) {
-        assert(second !in first_ && first !in second_, "Keys are already in the map. We won't want to have assimetric maps.");     // if not, we risk having assimetric maps.
-        first_[second] = first;
-        second_[first] = second;
-        assert(second in first_ && first in second_);
+        assert(second !in cids && first !in names, "Keys are already in the map. We won't want to have assimetric maps.");     // if not, we risk having assimetric maps.
+        cids[second] = first;
+        names[first] = second;
+        assert(second in cids && first in names);
     }
 
     /**
-                Remove pair <first key>/<second key>. If there is no such pair, nothing happens.
-            Parameters:
-                first = the first key
-                second = the second key
+            Remove pair &ltfirst key&gt/&ltsecond key&gt. If there is no such pair, nothing happens.
+        Parameters:
+            first = the first key
+            second = the second key
     */
     void remove(FirstT first, SecondT second) {
-        first_.remove(second);
-        second_.remove(first);
-        assert(second !in first_ && first !in second_);
+        cids.remove(second);
+        names.remove(first);
+        assert(second !in cids && first !in names);
     }
 
     invariant {
-        assert(first_.length == second_.length);
-        foreach(first; second_.byKey) {
-            assert(cast(FirstT)first_[cast(SecondT)second_[cast(FirstT)first]] == cast(FirstT)first);  // we need casts because invariant is the const attribute by default
+        assert(cids.length == names.length);
+        foreach(first; names.byKey) {
+            assert(cast(FirstT)cids[cast(SecondT)names[cast(FirstT)first]] == cast(FirstT)first);  // we need casts because invariant is the const attribute by default
         }
-        foreach(second; first_.byKey) {
-            assert(cast(SecondT)second_[cast(FirstT)first_[cast(SecondT)second]] == cast(SecondT)second);  // we need casts because invariant is the const attribute by default
+        foreach(second; cids.byKey) {
+            assert(cast(SecondT)names[cast(FirstT)cids[cast(SecondT)second]] == cast(SecondT)second);  // we need casts because invariant is the const attribute by default
         }
     }
 
     private:
-    FirstT[SecondT] first_;
-    SecondT[FirstT] second_;
+    FirstT[SecondT] cids;
+    SecondT[FirstT] names;
 }   // struct TidCross
 
 ///

@@ -3,7 +3,8 @@ module stat.pile;
 import std.stdio;
 
 import global, tools, common_types;
-import attn.attn_circle_thread;
+import attn.attn_circle_thread: Caldron;
+import cpt.holy: StatCallType;
 
 /**
         Load a concept into the name space, if not loaded, and activate it.

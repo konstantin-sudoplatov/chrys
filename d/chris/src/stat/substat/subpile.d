@@ -1,8 +1,9 @@
 module stat.substat.subpile;
 import std.stdio;
 
-import global, tools, common_types;
-import attn.attn_circle_thread;
+import global, tools;
+import attn.attn_circle_thread: Caldron;
+import cpt.holy: StatCallType;
 
 
 

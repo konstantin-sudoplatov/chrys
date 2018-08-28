@@ -1,6 +1,13 @@
 module cpt.holy;
+
 import global;
 import interfaces;
+
+/// Call types of the static concept (static concept is function).
+enum StatCallType {
+    rCid_p0Cal_p1Cidar_p2Obj,           // Cid function(Caldron nameSpace, Cid[] paramCids, Object extra)
+    rCidar_p0Cal_p1Cidar_p2Obj,         // Cid[] function(Caldron nameSpace, Cid[] paramCids, Object extra)
+}
 
 /**
             Base for all concepts.
@@ -19,21 +26,23 @@ protected:
 /**
             Static concept.
 */
-class StaticConcept: HolyConcept {
+shared final class StaticConcept: HolyConcept {
     import common_types;
 
-    /// Static concept descriptor
-    immutable StatDescriptor sd;
+    immutable void* fp;                     /// function pointer to the static concept function
+    immutable StatCallType call_type;       /// call type of the static concept function
 
     /**
                 Constructor
         Parameters:
             cid = cid
-            sd = descriptor of a static concept
+            fp = function pointer to the static concept function
+            callType = call type of the static concept function
     */
-    this(Cid cid, StatDescriptor sd){
+    this(Cid cid, void* fp, StatCallType callType){
         cast()_cid = cid;
-        cast()this.sd = sd;
+        cast()this.fp = cast(immutable)fp;
+        cast()call_type = callType;
     }
 }
 

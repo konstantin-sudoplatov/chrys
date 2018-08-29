@@ -1,16 +1,16 @@
-module attn.attn_dispatcher_thread;
+module attn_dispatcher_thread;
 import std.concurrency;
 import std.format;
 
 import tools;
 import global;
 import messages;
-import attn.attn_circle_thread;
+import attn_circle_thread;
 
 /**
         Thread function for attention dispatcher.
 */
-void attention_dispatcher_thread() {try {   // catchall try block for catching flying exceptions and forwarding them to the owner thread.
+void attention_dispatcher_thread_func() {try {   // catchall try block for catching flying exceptions and forwarding them to the owner thread.
 
     // Receive messages in a cycle
     while(true) {
@@ -134,7 +134,7 @@ class AttentionDispatcher {
             return cast()*circleTid;
         }
         else {  //no: create the circle, tell him the client's Tid and put the pair in the circle register
-            Tid circleTid = spawn(&attn_circle_thread);
+            Tid circleTid = spawn(&attn_circle_thread_func);
             circleTid.send(new immutable DispatcherSuppliesCircleWithClientTid(clientTid));
             circleRegister_[clientTid] = circleTid;
 

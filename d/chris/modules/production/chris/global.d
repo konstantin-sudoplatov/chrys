@@ -5,25 +5,32 @@ import std.traits;
 import std.conv;
 
 import tools;
-import attn.attn_dispatcher_thread;
-import cpt.holy;
-
-// modules with static concepts
-import stat.pile;
-import stat.substat.subpile;
+import attn_dispatcher_thread;
+import cpt_holy;
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
 /// Concept identifier is 4 bytes long at the moment.
 alias Cid = uint;
-/// Seed is a cid of an unconditional neuron, which represents a reasoning branch and caldron that runs it.
-alias Seed = Cid;
+
+/// Static cid range is from 1 to MAX_STATIC_CID;
+enum MAX_STATIC_CID = 1000000;
+
+// modules with static concepts
+import stat_pile;
+import stat_substat_subpile;
 
 /// Full list of modules, that contain static concept functions. It is used at compile time to gather together all static
 /// concepts to put them in the holy map.
 enum StatConceptModules {
-    pile = "stat.pile",
-    subpile = "stat.substat.subpile"
+    pile = "stat_pile",
+    subpile = "stat_substat_subpile"
+}
+
+import crank_pile;
+
+enum DynConceptNameEnums {
+    names = "dyn_cpt_names"
 }
 
 /// It is a two-way map of concept name/cid. The concepts are both static and dynamic. Here are gathered all of the concepts
@@ -201,6 +208,15 @@ synchronized shared pure @safe nothrow class HolyMap {
         return holyMap_[cid];
     }
 
+    /**
+                Overload for "in".
+        Parameters:
+            cid = cid of the concept.
+    */
+    shared(HolyConcept*) opBinaryRight(string op)(Cid cid) {
+        return cid in holyMap_;
+    }
+
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //                               Private
@@ -282,11 +298,11 @@ shared static this() {
     _mainTid_ = cast(immutable)thisTid;
 
     // Spawn the attention dispatcher thread.
-    _attnDispTid_ = cast(immutable)spawn(&attention_dispatcher_thread);
+    _attnDispTid_ = cast(immutable)spawn(&attention_dispatcher_thread_func);
 
     // Spawn the console thread thread.
-    import console_thread: console_thread;
-    spawn(&console_thread);
+    import console_thread: console_thread_func;
+    spawn(&console_thread_func);
 
     // Create and initialize the key shared structures
     _nm_ = new shared NameMap;
@@ -385,8 +401,10 @@ do {
     import std.stdio;
 
     foreach(sd; statDescriptors_) {
+        assert(sd.cid !in _hm_, "Cid: " ~ to!string(sd.cid) ~ ". Cids cannot be reused.");
         _hm_[sd.cid] = new shared StaticConcept(sd.cid, sd.fun_ptr, sd.call_type);
         _nm_.add(sd.cid, sd.name);
+
     }
 
     // report static cids usage
@@ -416,7 +434,7 @@ struct StatDescriptor {
 
 ///
 unittest {
-    import attn.attn_circle_thread: Caldron;
+    import attn_circle_thread: Caldron;
 
     // Stat concept to make a test call
     @(1, StatCallType.rCid_p0Cal_p1Cidar_p2Obj) static Cid fun(Caldron spaceName, Cid[] cid, Object extra) {

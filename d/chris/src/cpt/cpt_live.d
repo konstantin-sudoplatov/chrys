@@ -1,9 +1,9 @@
-module cpt.live;
+module cpt_live;
 import std.stdio;
 
 import global, tools;
 import interfaces;
-import cpt.holy;
+import cpt_holy;
 
 /// Base for all live dynamic concepts.
 abstract class LiveDynamicConcept {

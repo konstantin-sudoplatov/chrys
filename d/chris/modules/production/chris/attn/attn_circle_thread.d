@@ -1,4 +1,4 @@
-module attn.attn_circle_thread;
+module attn_circle_thread;
 import std.concurrency;
 import std.format;
 
@@ -70,7 +70,7 @@ class AttentionCircle: Caldron {
 /**
         Thread function for caldron and attention circle as its successor.
 */
-void attn_circle_thread() {try{
+void attn_circle_thread_func() {try{
 
     // Receive messages in a cycle
     while(true) {
@@ -81,8 +81,8 @@ void attn_circle_thread() {try{
 
         // Receive new message
         receive(
-        (immutable Msg m) {msg = cast()m;},
-        (Variant v) {var = v;}
+            (immutable Msg m) {msg = cast()m;},
+            (Variant v) {var = v;}
         );
 
         // Recognize and process the message

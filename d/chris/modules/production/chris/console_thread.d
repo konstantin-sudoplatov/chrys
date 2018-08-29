@@ -16,7 +16,7 @@ enum msgTimeout = 5;    // seconds
     There is an issue - the debugger in Intellij Idea goes mad on the readln() function. So I have to write diffrent code
     for debugging. Instead taking strings from user it generates it in internally and sends as if they were entered by the user.
 */
-void console_thread() {try {   // catchall try block for catching flying exceptions and forwarding them to the owner thread.
+void console_thread_func() {try {   // catchall try block for catching flying exceptions and forwarding them to the owner thread.
     import std.variant: Variant;
 
     // Get new line from user (separate treatment for the debug and release mode).

@@ -2,8 +2,8 @@ module common_types;
 import std.stdio;
 
 import global, tools;
-import attn.attn_circle_thread;
-import cpt.holy;
+import attn_circle_thread;
+import cpt_holy;
 
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***

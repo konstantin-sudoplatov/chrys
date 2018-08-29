@@ -15,6 +15,30 @@ class Crash: Exception {
 }
 
 /**
+            Clone an object.
+        It makes a shallow copy of an object.
+    Note, the runtime type of the object is used, not the compile (declared) type.
+        Written by Burton Radons <burton-radons smocky.com>
+        https://digitalmars.com/d/archives/digitalmars/D/learn/1625.html
+        Tested against memory leaks in the garbage collecter both via copied object omission and omission of reference to other
+    object in the its body.
+    Parameters:
+        srcObject = object to clone
+    Returns: cloned object
+*/
+private extern (C) Object _d_newclass (ClassInfo info);
+Object clone (Object srcObject)
+{
+    if (srcObject is null)
+        return null;
+
+    void *copy = cast(void*)_d_newclass(srcObject.classinfo);
+    size_t size = srcObject.classinfo.initializer.length;
+    copy [8 .. size] = (cast(void *)srcObject)[8 .. size];
+    return cast(Object)copy;
+}
+
+/**
             Cross-map.
     It is a pair of associated arrays FirstT[SecondT] and its reverse SecondT[firstT]. For example it may contain pairs of
     &ltconcept name&gt/&ltCid&gt, so that we can find any Cid by name and name by Cid. For any entry in the first AA there always is

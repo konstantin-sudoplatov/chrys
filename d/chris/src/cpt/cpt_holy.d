@@ -1,4 +1,4 @@
-module cpt.holy;
+module cpt_holy;
 
 import global;
 import interfaces;
@@ -17,7 +17,32 @@ enum StatCallType {
 
     "shared" attribute is inherrited by successors and cannot be changed.
 */
+private extern (C) Object _d_newclass (ClassInfo info);
 shared abstract class HolyConcept {
+
+
+    /**
+                Clone an object.
+            It makes a shallow copy of an object.
+        Note, the runtime type of the object is used, not the compile (declared) type.
+            Written by Burton Radons <burton-radons smocky.com>
+            https://digitalmars.com/d/archives/digitalmars/D/learn/1625.html
+            Tested against memory leaks in the garbage collecter both via copied object omission and omission of reference to other
+        object in the its body.
+        Parameters:
+            srcObject = object to clone
+        Returns: cloned object
+    */
+    Object clone (Object srcObject)
+    {
+        if (srcObject is null)
+            return null;
+
+        void *copy = cast(void*)_d_newclass(srcObject.classinfo);
+        size_t size = srcObject.classinfo.initializer.length;
+        copy [8 .. size] = (cast(void *)srcObject)[8 .. size];
+        return cast(Object)copy;
+    }
 
 protected:
     immutable Cid _cid = 0;       /// Cid of the concept, to check if cid used to find a concept is its actual cid. (paranoia)
@@ -66,7 +91,6 @@ abstract class HolyNeuron: HolyDynamicConcept {
 /**
             Uncontitional neuron.
         It is a degenerate, capable only of applying its effects without consulting any premises. Its activation is always 1.
-    Ideal for seeds.
  */
 class UnconditionalNeuron_hnr: HolyDynamicConcept {
     this() {
@@ -74,5 +98,9 @@ class UnconditionalNeuron_hnr: HolyDynamicConcept {
     }
 }
 
-
-//public class Unconditional_nrn extends Neuron {
+/**
+            Seed.
+*/
+class Seed: UnconditionalNeuron_hnr {
+    this() { super(); }
+}

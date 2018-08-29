@@ -14,7 +14,7 @@ import cpt_holy;
 alias Cid = uint;
 
 /// Static cid range is from 1 to MAX_STATIC_CID;
-enum MAX_STATIC_CID = 1000000;
+enum MAX_STATIC_CID = 1_000_000;
 
 // modules with static concepts
 import stat_pile;
@@ -33,7 +33,7 @@ import crank_subcrank_subpile;
 
 /// Full list of modules, that contain dynamic concept names.This list is used at compile time to gather together all dynamic
 ///// concept names along with cids and put them in the name map.
-enum DynConceptNameEnums {
+enum CrankModules {
     pile = "crank_pile",
     subpile = "crank_subcrank_subpile"
 }
@@ -332,35 +332,32 @@ private:
 //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
 /// Manifest constant array of descriptors (cids, names, pointers, call types) of all the static concepts of the project.
-enum statDescriptors_ = createStaticConceptDescriptors_;
+enum statDescriptors_ = createTempStatDescriptors_;
 
 /// Manifest constant array of gaps in the static cids sequense, used for the static concepts.
-enum unusedStaticCids = unusedCids_;
+enum unusedStaticCids_ = unusedStatCids_;
 
-/// Manifest constant array of descriptors (cids, names) of all the named dynamic concepts of the project. Remember, that most
-/// of the dynamic concepts are supposed to be unnamed in the sence, that they are not visible directly to the code.
-enum dynDescriptors_ = createDynConceptDescriptors_;
-
-/// Manifest constant array of gaps in the named dynamic cids sequense, used for the named dynamic concepts.
-enum unusedDynamicCids = unusedDynamicCids_;
+/// Manifest constant array of descriptors (cids, names) of all of the named dynamic concepts of the project. Remember, that most
+/// of the dynamic concepts are supposed to be unnamed in the sence, that they are not directly visible to the code.
+enum dynDescriptors_ = createTempDynDescriptors_();
 
 //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
 /**
-        Create array of names plus static concept descriptors, CTFE.
-    Used to create the manifest constant array namedStaticDescriptors.
+        Create array of static concept descriptors, CTFE.
+    Used to create the manifest constant arrays StatDescriptors_.
     Returns: array of static concept descriptors.
 */
-TempCptDescriptor[] createStaticConceptDescriptors_() {
+TempStatDescriptor[] createTempStatDescriptors_() {
 
     // Declare named static descriptor array
-    TempCptDescriptor[] sds;
+    TempStatDescriptor[] sds;
 
     // Fill the named descriptors array
-    TempCptDescriptor sd;
-    static foreach (moduleName; [EnumMembers!StatConceptModules]) {
-        static foreach (memberName; __traits(allMembers, mixin(moduleName))) {
-            static if (__traits(isStaticFunction, __traits(getMember, mixin(moduleName), memberName))) {
+    TempStatDescriptor sd;
+    static foreach(moduleName; [EnumMembers!StatConceptModules]) {
+        static foreach(memberName; __traits(allMembers, mixin(moduleName))) {
+            static if(__traits(isStaticFunction, __traits(getMember, mixin(moduleName), memberName))) {
                 sd.cid = __traits(getAttributes, mixin(memberName))[0];
                 sd.name = memberName;
                 sd.fun_ptr = mixin("&" ~ memberName);
@@ -379,10 +376,53 @@ TempCptDescriptor[] createStaticConceptDescriptors_() {
 }
 
 /**
+        Create array of name/cid pairs packed into the TempDynDescriptor struct, CTFE.
+    Used to create the manifest constant arrays DynDescriptors_.
+    Returns: array of static concept descriptors.
+*/
+TempDynDescriptor[] createTempDynDescriptors_() {
+
+    // Declare named static descriptor array
+    TempDynDescriptor[] dds;
+
+    // Fill the named descriptors array
+    TempDynDescriptor sd;
+    static foreach(moduleName; [EnumMembers!CrankModules]) {
+        static foreach(memberName; __traits(allMembers, mixin(moduleName))) {
+            static if(mixin("is(" ~ memberName ~ "==enum)")) {
+                static foreach(enumElem; __traits(allMembers, mixin(memberName))) {
+                    static if(enumElem != "max") {
+                        sd.cid = mixin(memberName ~ "." ~ enumElem);
+                        sd.name = enumElem;
+                        dds ~= sd;
+                    }
+                }
+            }
+        }
+    }
+
+    // Sort it
+    import std.algorithm.sorting: sort;
+    dds.sort;
+
+    // Check if cids in the array are unique.
+    Cid lastCid = 0;
+    foreach(dd; dds) {
+        assert(dd.cid > lastCid, "cid "~ to!string(dd.cid) ~ ": cids cannot be used multiple times.");
+        lastCid = dd.cid;
+    }
+
+
+    return dds;
+}
+
+/**
         Create array of unused cids, CTFE.
+    Parameters:
+        descArray = either statDecsriptors_ or DynDescriptors_
     Returns: array of free cids
 */
-Cid[] unusedCids_() {
+Cid[] unusedStatCids_() {
     Cid[] unusedCids;
 
     // find unused cids
@@ -421,7 +461,7 @@ do {
     }
 
     // report static cids usage
-    writefln("Unused cids: %s", unusedCids);
+    writefln("Unused cids: %s", unusedStaticCids_);
     writefln("Last used cid: %s", statDescriptors_[$-1].cid);
 }
 
@@ -430,14 +470,14 @@ do {
 /// Info about static concept descriptor (it's all you need to call that function) and also this structure is used to
 /// gather together name/cid pairs for dynamic concepts. Arrays of this structures will be stored as enums at compile
 /// time for following processing them to fill in the holy and name maps.
-struct TempCptDescriptor {
+struct TempStatDescriptor {
     Cid cid;                        /// cid of the concept
     string name;                    /// concept's name
     void* fun_ptr;                  /// pointer to the function
     StatCallType call_type;         /// call аgreement for the function
 
     /// Reload opCmp to make it sortable on cid (not nescessary, actually, since cid is the first field in the structure).
-    int opCmp(ref const TempCptDescriptor s) const {
+    int opCmp(ref const TempStatDescriptor s) const {
         if(cid < s.cid)
             return -1;
         else if(cid > s.cid)
@@ -458,11 +498,29 @@ unittest {
     }
 
     // extract the descriptor, cid and name from concept's annotation and declaration
-    TempCptDescriptor sd = TempCptDescriptor(__traits(getAttributes, fun)[0], "fun", &fun, __traits(getAttributes, fun)[1]);
+    TempStatDescriptor sd = TempStatDescriptor(__traits(getAttributes, fun)[0], "fun", &fun, __traits(getAttributes, fun)[1]);
     assert(sd.call_type == StatCallType.rCid_p0Cal_p1Cidar_p2Obj);
 
     // use the descriptor form the map to call the concept.
     auto fp = cast(Cid function(Caldron, Cid[], Object))sd.fun_ptr;
     fp(null, null, null);
+}
+
+/// Info about static concept descriptor (it's all you need to call that function) and also this structure is used to
+/// gather together name/cid pairs for dynamic concepts. Arrays of this structures will be stored as enums at compile
+/// time for following processing them to fill in the holy and name maps.
+struct TempDynDescriptor {
+    Cid cid;                        /// cid of the concept
+    string name;                    /// concept's name
+
+    /// Reload opCmp to make it sortable on cid (not nescessary, actually, since cid is the first field in the structure).
+    int opCmp(ref const TempDynDescriptor s) const {
+        if(cid < s.cid)
+            return -1;
+        else if(cid > s.cid)
+            return 1;
+        else
+            return 0;
+    }
 }
 

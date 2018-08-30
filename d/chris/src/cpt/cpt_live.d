@@ -3,7 +3,7 @@ import std.stdio;
 
 import global, tools;
 import interfaces;
-import cpt_holy;
+import cpt_holy_abstract;
 
 /// Base for all live dynamic concepts.
 abstract class LiveDynamicConcept {

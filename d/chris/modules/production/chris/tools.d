@@ -3,7 +3,8 @@ import std.stdio;
 
 /// Private exception of the project.
 class Crash: Exception {
-    @nogc @safe pure nothrow this(string msg, string file = __FILE__, size_t line = __LINE__, Throwable nextInChain = null)
+    @nogc @safe pure nothrow
+            this(string msg, string file = __FILE__, size_t line = __LINE__, Throwable nextInChain = null)
     {
         super(msg, file, line, nextInChain);
     }
@@ -113,7 +114,8 @@ pure nothrow struct CrossMap(FirstT, SecondT) {
             second = the second key
     */
     void add(FirstT first, SecondT second) {
-        assert(second !in cids && first !in names, "Keys are already in the map. We won't want to have assimetric maps.");     // if not, we risk having assimetric maps.
+        assert(second !in cids && first !in names,
+                "Keys are already in the map. We won't want to have assimetric maps.");     // if not, we risk having assimetric maps.
         cids[second] = first;
         names[first] = second;
         assert(second in cids && first in names);
@@ -167,7 +169,7 @@ unittest {
     // throws RangeError on non-existent key
     import core.exception: RangeError;
     try {
-        int i = cm.second("three");
+        cast(void)cm.second("three");
     } catch(RangeError e) {
         assert(e.msg == "Range violation");
     }
@@ -203,9 +205,9 @@ string w(string expLst) {
 }
 
 unittest {
-    int i = 1;
+    const int i = 1;
     int j = 2;
-    int* p = &j;
+    const int* p = &j;
 
     assert("i, *p".w == `import std.stdio: writeln, stdout;
 writeln("i: ", typeid(typeof(i)), " = ", i);

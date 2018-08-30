@@ -6,7 +6,7 @@ import std.conv;
 
 import tools;
 import attn_dispatcher_thread;
-import cpt_holy;
+import cpt_holy_abstract, cpt_holy;
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
@@ -14,7 +14,14 @@ import cpt_holy;
 alias Cid = uint;
 
 /// Static cid range is from 1 to MAX_STATIC_CID;
-enum MAX_STATIC_CID = 1_000_000;
+enum MIN_STATIC_CID = Cid(1);
+enum MAX_STATIC_CID = Cid(1_000_000);
+enum MIN_DYNAMIC_CID = Cid(2_000_000);
+enum MAX_DINAMIC_CID = Cid.max;
+static assert(MIN_DYNAMIC_CID > MAX_STATIC_CID);
+enum MIN_TEMP_CID = MAX_STATIC_CID + 1;
+enum MAX_TEMP_CID = MIN_DYNAMIC_CID - 1;
+static assert(MAX_TEMP_CID >= MIN_TEMP_CID);
 
 // modules with static concepts
 import stat_pile;
@@ -40,7 +47,7 @@ enum CrankModules {
 
 /// It is a two-way map of concept name/cid. The concepts are both static and dynamic. Here are gathered all of the concepts
 /// which have names, that are known to the compiler, t.e. can be manipulated directly from the code.
-synchronized shared pure nothrow class NameMap {
+shared synchronized final pure nothrow class NameMap {
     import tools: CrossMap;
 
     /**
@@ -152,7 +159,7 @@ unittest {
     //import std.stdio: writeln;
     //writeln(nm.names);     // will produce ["firstCpt", "secondCpt"]
 
-                // Makes the program crash with code -4. A bug in DMD, obviously.
+        // Makes the program crash with code -4. A bug in DMD, obviously. In the tools.d module analogous code works just fine.
     // throws RangeError on non-existent key
     //import core.exception: RangeError;
     //try {
@@ -174,7 +181,8 @@ unittest {
     be changed to atomic, because the concurrent asccess might be intensive. To that end acsses via the class methods would
     help, because this way we could get away with changes to only interface methods for the real map.
 */
-synchronized shared pure @safe nothrow class HolyMap {
+import std.random;
+shared synchronized final pure nothrow @safe class HolyMap {
 
     //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
@@ -183,24 +191,82 @@ synchronized shared pure @safe nothrow class HolyMap {
     /**
         Constructor
     */
-    this(){}
+    this(){
+        // Initialize random generator
+        rnd_ = Random(unpredictableSeed);
+    }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
+    /**
+                Length of the map.
+        Returns: the length of the map as in an AA.
+    */
     auto length() {
-        assert(holyMap_, "The map must be allocated.");
         return holyMap_.length;
     }
 
     /**
-                Assign/constract-assign new holy map entry.
+                Assign/construct-assign new holy map entry. If cid had not been assigned to the cpt yet, it is generated.
+        Parameters:
+            cpt = shared concept to assign
+    */
+    shared(HolyConcept) add(shared HolyConcept cpt)
+    in {
+        if      // dinamic?
+                (cast(shared HolyDynamicConcept)cpt)
+            assert(cpt.cid == 0,
+                    "Cid: " ~ to!string(cpt.cid) ~ ", dynamic concepts with non-zero cid are not allowed here.");
+        else if // static?
+                (cast(shared HolyStaticConcept)cpt)
+        {
+            assert(cpt.cid != 0, "Static concepts can't have zero cid. Their cids are initialized at construction.");
+            assert(MIN_STATIC_CID && cpt.cid <= MAX_STATIC_CID,
+            "Cid: " ~ to!string(cpt.cid) ~ ", cids for static concepts must lie in the range of " ~
+            to!string(MIN_STATIC_CID) ~ ".." ~ to!string(MAX_STATIC_CID));
+        }
+        else    // neither dynamic and nor static?
+            assert(true, to!string(cpt) ~ " - not expected type here.");
+    }
+    do {
+        // generate cid and use it
+        cast()cpt.cid = generateDynamicCid_;
+        holyMap_[cpt.cid] = cpt;
+        return cpt;
+    }
+
+    /**
+                Assign/construct-assign new holy map entry. If cid had not been assigned to the cpt yet, it is assigned.
         Parameters:
             cpt = shared concept to assign
             cid = key
     */
     shared(HolyConcept) opIndexAssign(shared HolyConcept cpt, Cid cid) {
+        assert  // cid in the concept is the same as parameter or cid is not assigned to concept yet
+                (cpt.cid == cid || cpt.cid == 0,
+                "Cannot reassign cid. Old cid: " ~ to!string(cpt.cid) ~ ", new cid: " ~ to!string(cid));
+
+        if      // isn't cid assigned yet?
+                (cpt.cid == 0)
+            //no: assign it
+            cast()cpt.cid = cid;
+
+        // put the entry in the map
+        assert  // cid is not used in the map for another concept
+                (cid !in holyMap_ || holyMap_[cid] is cpt,
+                "Cid: " ~ to!string(cid) ~ " is used already.");
         holyMap_[cid] = cpt;
         return cpt;
+    }
+
+    /**
+            Remove key from map. Analogously to the AAs.
+        Parameters:
+            cid = key
+        Returns: true if existed, else false
+    */
+    bool remove(Cid cid) {
+        return holyMap_.remove(cid);
     }
 
     /**
@@ -222,28 +288,59 @@ synchronized shared pure @safe nothrow class HolyMap {
         return cid in holyMap_;
     }
 
+    /**
+                Generate a namber of dynamic cids.
+        Parameters:
+            howMany = how many cids you need
+        Returns: array of fresh cidsj
+    */
+    Cid[] generate_some_cids(int howMany) {
+
+        Cid[] sids;
+        foreach(i; 0..howMany)
+            sids ~= generateDynamicCid_;
+
+        return sids;
+    }
+
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //                               Private
     //
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-    private:
-    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
-    HolyConcept[Cid] holyMap_;       /// map caldron[seed]
 
+    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+    private HolyConcept[Cid] holyMap_;       /// map concept/cid
 
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
+    /**
+                Generate new unique throughout the system cid.
+        Returns: cid
+    */
+    private Cid generateDynamicCid_() {
+        Cid cid;
+        do {
+            cid = rnd_.uniform!Cid;
+        } while(cid in holyMap_);        // do until not repeated in the map
+
+        return cid;
+    }
+    private static typeof(Random(unpredictableSeed())) rnd_;    // rnd generator. Initialized from constructor.
+
     //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
 }
-
 ///
 unittest {
     shared HolyMap hm = new shared HolyMap;
-    shared UnconditionalNeuron_hnr hnr = new shared UnconditionalNeuron_hnr;
+    shared HolyUnconditionalNeuron hnr = new shared HolyUnconditionalNeuron;
     Cid cid = 1;
+
+    assert(hm.length == 0);
     hm[cid] = hnr;
     assert(hm[cid] is hnr);
+    hm.remove(cid);
+    assert(hm.length == 0);
 }
 
 /**
@@ -252,7 +349,7 @@ unittest {
     We will need synchronization, because this map will be concurrently accessed by different caldrons, so it is a class,
     just not to introduce a separate mutex object.
 */
-shared pure @safe nothrow class CaldronMap {
+shared synchronized final pure @safe nothrow class CaldronMap {
     import std.concurrency: Tid;
 
     //---***---***---***---***---***--- types ---***---***---***---***---***---***
@@ -312,7 +409,7 @@ shared static this() {
     // Create and initialize the key shared structures
     _nm_ = new shared NameMap;
     _hm_ = new shared HolyMap;
-    fillInStaticConcepts_(_hm_, _nm_);
+    fillInConceptMaps_(_hm_, _nm_);
     _cm_ = new shared CaldronMap;
 
 
@@ -328,18 +425,18 @@ unittest {
 //                               Private
 //
 //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-private:
+
 //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
 /// Manifest constant array of descriptors (cids, names, pointers, call types) of all the static concepts of the project.
-enum statDescriptors_ = createTempStatDescriptors_;
+private enum statDescriptors_ = createTempStatDescriptors_;
 
 /// Manifest constant array of gaps in the static cids sequense, used for the static concepts.
-enum unusedStaticCids_ = unusedStatCids_;
+private enum unusedStaticCids_ = findUnusedStatCids_;
 
 /// Manifest constant array of descriptors (cids, names) of all of the named dynamic concepts of the project. Remember, that most
 /// of the dynamic concepts are supposed to be unnamed in the sence, that they are not directly visible to the code.
-enum dynDescriptors_ = createTempDynDescriptors_();
+private enum dynDescriptors_ = createTempDynDescriptors_();
 
 //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
@@ -348,7 +445,7 @@ enum dynDescriptors_ = createTempDynDescriptors_();
     Used to create the manifest constant arrays StatDescriptors_.
     Returns: array of static concept descriptors.
 */
-TempStatDescriptor[] createTempStatDescriptors_() {
+private TempStatDescriptor[] createTempStatDescriptors_() {
 
     // Declare named static descriptor array
     TempStatDescriptor[] sds;
@@ -380,7 +477,7 @@ TempStatDescriptor[] createTempStatDescriptors_() {
     Used to create the manifest constant arrays DynDescriptors_.
     Returns: array of static concept descriptors.
 */
-TempDynDescriptor[] createTempDynDescriptors_() {
+private TempDynDescriptor[] createTempDynDescriptors_() {
 
     // Declare named static descriptor array
     TempDynDescriptor[] dds;
@@ -417,12 +514,12 @@ TempDynDescriptor[] createTempDynDescriptors_() {
 }
 
 /**
-        Create array of unused cids, CTFE.
+        Create enum array of unused cids, CTFE.
     Parameters:
         descArray = either statDecsriptors_ or DynDescriptors_
     Returns: array of free cids
 */
-Cid[] unusedStatCids_() {
+private Cid[] findUnusedStatCids_() {
     Cid[] unusedCids;
 
     // find unused cids
@@ -441,36 +538,45 @@ Cid[] unusedStatCids_() {
 }
 
 /**
-            Fill in static concepts into the holy map.
+            Fill in gathered in statDescriptors_ and dynDescriptors_ info into the holy map and name map.
     Parameters:
         hm = holy map to fill
 */
-void fillInStaticConcepts_(shared HolyMap hm, shared NameMap nm)
+private void fillInConceptMaps_(shared HolyMap hm, shared NameMap nm)
 out{
-    assert(_hm_.length == statDescriptors_.length);
-    assert(_nm_.length == statDescriptors_.length);
+    assert(hm.length == statDescriptors_.length);
+    assert(nm.length == statDescriptors_.length + dynDescriptors_.length);
 }
 do {
-    import std.stdio;
+    import std.stdio: writefln;
 
+    // Accept static concepts and their names from the statDescriptors_ enum
     foreach(sd; statDescriptors_) {
-        assert(sd.cid !in _hm_, "Cid: " ~ to!string(sd.cid) ~ ". Cids cannot be reused.");
-        _hm_[sd.cid] = new shared StaticConcept(sd.cid, sd.fun_ptr, sd.call_type);
-        _nm_.add(sd.cid, sd.name);
+        assert(sd.cid !in hm, "Cid: " ~ to!string(sd.cid) ~ ". Cids cannot be reused.");
+        hm[sd.cid] = new shared HolyStaticConcept(sd.cid, sd.fun_ptr, sd.call_type);
+        nm.add(sd.cid, sd.name);
 
     }
 
     // report static cids usage
     writefln("Unused cids: %s", unusedStaticCids_);
     writefln("Last used cid: %s", statDescriptors_[$-1].cid);
+
+    // Accept dynamic concept names from the dynDescriptors_ enum
+    foreach(dd; dynDescriptors_) {
+        assert(!nm.cid_in(dd.cid) && !nm.name_in(dd.name));
+        nm.add(dd.cid, dd.name);
+    }
+
+    writefln("Some free dynamic cids: %s", _hm_.generate_some_cids(5));
 }
 
 //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
 
-/// Info about static concept descriptor (it's all you need to call that function) and also this structure is used to
+/// Info about static concept descriptor (it's all you need to call that function). This structure is used to
 /// gather together name/cid pairs for dynamic concepts. Arrays of this structures will be stored as enums at compile
 /// time for following processing them to fill in the holy and name maps.
-struct TempStatDescriptor {
+private struct TempStatDescriptor {
     Cid cid;                        /// cid of the concept
     string name;                    /// concept's name
     void* fun_ptr;                  /// pointer to the function
@@ -498,7 +604,8 @@ unittest {
     }
 
     // extract the descriptor, cid and name from concept's annotation and declaration
-    TempStatDescriptor sd = TempStatDescriptor(__traits(getAttributes, fun)[0], "fun", &fun, __traits(getAttributes, fun)[1]);
+    const TempStatDescriptor sd =
+            TempStatDescriptor(__traits(getAttributes, fun)[0], "fun", &fun, __traits(getAttributes, fun)[1]);
     assert(sd.call_type == StatCallType.rCid_p0Cal_p1Cidar_p2Obj);
 
     // use the descriptor form the map to call the concept.
@@ -509,7 +616,7 @@ unittest {
 /// Info about static concept descriptor (it's all you need to call that function) and also this structure is used to
 /// gather together name/cid pairs for dynamic concepts. Arrays of this structures will be stored as enums at compile
 /// time for following processing them to fill in the holy and name maps.
-struct TempDynDescriptor {
+private struct TempDynDescriptor {
     Cid cid;                        /// cid of the concept
     string name;                    /// concept's name
 

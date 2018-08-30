@@ -9,7 +9,7 @@ import tools;
 import global;
 import messages;
 
-enum msgTimeout = 5;    // seconds
+enum msgTimeout = 1;    // seconds
 
 /**
                             Thread function for console.

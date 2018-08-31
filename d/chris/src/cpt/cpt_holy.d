@@ -21,7 +21,7 @@ final class HolyStaticConcept: HolyConcept {
             callType = call type of the static concept function
     */
     this(Cid cid, void* fp, StatCallType callType){
-        cast()cid = cid;
+        cast()super.cid = cid;
         cast()this.fp = cast(immutable)fp;
         cast()call_type = callType;
     }

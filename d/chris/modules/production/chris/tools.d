@@ -181,6 +181,53 @@ unittest {
 }
 
 /**
+                Roll a list of Cid enums into a single anonymous enum of type Cid. CTFE.
+        The result of this function is supposed to be mixined into a function that use those enums.
+    Used simplification of writing the crank functions. Nested "with" statement can be as well use instead of that
+    mixin, but this implementation seems to looke cleaner. Do not forget to use imports for the source enums.
+    Parameters:
+        enumList = list of enums of type Cid
+    Returns: string, containing the resulting enum statement, ready to be mixed in the code.
+*/
+string dequalify_enums(enumList...)() {
+    import global: Cid;
+    string res = "enum : Cid {\n";
+    foreach (enuM; enumList)     // each enum en in the list of enums E
+    {
+        static assert(is(enuM == enum) && is(enuM: Cid));
+        foreach(enEl; __traits(allMembers, enuM))         // each enum element
+            static if //not the "max" element? (not real element, must not end up in the result)
+                    (enEl != "max")
+            {
+                res ~= "    " ~ enEl ~ " = " ~ enuM.stringof ~ "." ~ enEl ~ ",\n";
+            }
+    }
+
+    return res ~ "}\n";
+}
+
+unittest {
+    import std.conv: asOriginalType;
+    import global: Cid, MAX_STATIC_CID;
+    enum CommonConcepts: Cid {
+        chat_seed = MAX_STATIC_CID + 1,                  // this is the root branch of the chat
+        do_not_know_what_it_is,
+        max         // The first not used cid. Must be the last in the enum.
+    }
+
+    enum Chat: Cid {
+        test_concept_name = CommonConcepts.max.asOriginalType,
+        max         // The first not used cid. Must be the last in the enum.
+    }
+
+    // Declare enums with the same members as in the CommonConcepts and Chat
+    mixin(dequalify_enums!(CommonConcepts, Chat));
+    assert(chat_seed == CommonConcepts.chat_seed);
+    assert(do_not_know_what_it_is == CommonConcepts.do_not_know_what_it_is);
+    assert(test_concept_name == Chat.test_concept_name);
+}
+
+/**
         Tool for pretty output of variables and expressions.
     Compile time function. Converts a list of expressions into a block of code, wich outputs those exps.
 

@@ -85,6 +85,11 @@ shared synchronized final pure nothrow class NameMap {
         return (cast()cross).first(name);
     }
 
+    /// Ditto.
+    const(Cid) opIndex(string name) const {
+        return cid(name);
+    }
+
     /**
             Get the name of the concept by cid.
         Parameters:
@@ -94,6 +99,11 @@ shared synchronized final pure nothrow class NameMap {
     */
     const(string) name(Cid  cid) const {
         return (cast()cross).second(cid);
+    }
+
+    /// Ditto.
+    const(string) opIndex(Cid cid) const {
+        return name(cid);
     }
 
     /*
@@ -182,7 +192,7 @@ unittest {
     help, because this way we could get away with changes to only interface methods for the real map.
 */
 import std.random;
-shared synchronized final pure nothrow @safe class HolyMap {
+shared synchronized final pure nothrow class HolyMap {
 
     //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
@@ -191,10 +201,7 @@ shared synchronized final pure nothrow @safe class HolyMap {
     /**
         Constructor
     */
-    this(){
-        // Initialize random generator
-        rnd_ = Random(unpredictableSeed);
-    }
+    this(){}
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
@@ -210,8 +217,9 @@ shared synchronized final pure nothrow @safe class HolyMap {
                 Assign/construct-assign new holy map entry. If cid had not been assigned to the cpt yet, it is generated.
         Parameters:
             cpt = shared concept to assign
+            name = (optional) name of the concept
     */
-    shared(HolyConcept) add(shared HolyConcept cpt)
+    shared(HolyConcept) add(shared HolyConcept cpt, string name = null)
     in {
         if      // dinamic?
                 (cast(shared HolyDynamicConcept)cpt)
@@ -226,38 +234,52 @@ shared synchronized final pure nothrow @safe class HolyMap {
             to!string(MIN_STATIC_CID) ~ ".." ~ to!string(MAX_STATIC_CID));
         }
         else    // neither dynamic and nor static?
-            assert(true, to!string(cpt) ~ " - not expected type here.");
+            assert(false, to!string(cpt) ~ " - not expected type here.");
     }
     do {
         // generate cid and use it
-        cast()cpt.cid = generateDynamicCid_;
-        holyMap_[cpt.cid] = cpt;
-        return cpt;
-    }
-
-    /**
-                Assign/construct-assign new holy map entry. If cid had not been assigned to the cpt yet, it is assigned.
-        Parameters:
-            cpt = shared concept to assign
-            cid = key
-    */
-    shared(HolyConcept) opIndexAssign(shared HolyConcept cpt, Cid cid) {
-        assert  // cid in the concept is the same as parameter or cid is not assigned to concept yet
-                (cpt.cid == cid || cpt.cid == 0,
-                "Cannot reassign cid. Old cid: " ~ to!string(cpt.cid) ~ ", new cid: " ~ to!string(cid));
-
-        if      // isn't cid assigned yet?
+        if      // is it a dynamic concept (static ones have non-zero cid)?
                 (cpt.cid == 0)
-            //no: assign it
-            cast()cpt.cid = cid;
+            //yes: generate cid
+            cast()cpt.cid = generateDynamicCid_;
 
-        // put the entry in the map
-        assert  // cid is not used in the map for another concept
-                (cid !in holyMap_ || holyMap_[cid] is cpt,
-                "Cid: " ~ to!string(cid) ~ " is used already.");
-        holyMap_[cid] = cpt;
+        // put the pair in the map
+        holyMap_[cpt.cid] = cpt;
+
+        // May be, add name to the name map
+        if      // name specified?
+                (name !is null)
+        {   //yes: add it to the name map
+            assert(!_nm_.name_in(name), `name: "` ~ name ~ `". Reuse of the concept's names is not allowed.`);
+            _nm_.add(cpt.cid, name);
+        }
+
         return cpt;
     }
+
+    ///**
+    //            Assign/construct-assign new holy map entry. If cid had not been assigned to the cpt yet, it is assigned.
+    //    Parameters:
+    //        cpt = shared concept to assign
+    //        cid = key
+    //*/
+    //shared(HolyConcept) opIndexAssign(shared HolyConcept cpt, Cid cid) {
+    //    assert  // cid in the concept is the same as parameter or cid is not assigned to concept yet
+    //            (cpt.cid == cid || cpt.cid == 0,
+    //            "Cannot reassign cid. Old cid: " ~ to!string(cpt.cid) ~ ", new cid: " ~ to!string(cid));
+    //
+    //    if      // isn't cid assigned yet?
+    //            (cpt.cid == 0)
+    //        //no: assign it
+    //        cast()cpt.cid = cid;
+    //
+    //    // put the entry in the map
+    //    assert  // cid is not used in the map for another concept
+    //            (cid !in holyMap_ || holyMap_[cid] is cpt,
+    //            "Cid: " ~ to!string(cid) ~ " is used already.");
+    //    holyMap_[cid] = cpt;
+    //    return cpt;
+    //}
 
     /**
             Remove key from map. Analogously to the AAs.
@@ -270,7 +292,7 @@ shared synchronized final pure nothrow @safe class HolyMap {
     }
 
     /**
-                Get a holy map entry.
+                Get concept by cid.
         Parameters:
             cid = key
         Returns: shared concept
@@ -280,12 +302,39 @@ shared synchronized final pure nothrow @safe class HolyMap {
     }
 
     /**
+                Get concept by name.
+        Parameters:
+            name = key
+        Returns: shared concept
+    */
+    shared(HolyConcept) opIndex(string name) {
+        assert(_nm_.name_in(name));
+        return holyMap_[_nm_[name]];
+    }
+
+    /**
                 Overload for "in".
         Parameters:
             cid = cid of the concept.
     */
     shared(HolyConcept*) opBinaryRight(string op)(Cid cid) {
         return cid in holyMap_;
+    }
+
+    /**
+                Pass through for byKey.
+        Returns: range of cids
+    */
+    auto byKey() {
+        return (cast()holyMap_).byKey;      // need to cast off the shared attribute to avoid a compiler error
+    }
+
+    /**
+                Pass through for byValue.
+        Returns: range of concepts
+    */
+    auto byValue() {
+        return (cast()holyMap_).byValue;      // need to cast off the shared attribute to avoid a compiler error
     }
 
     /**
@@ -326,21 +375,8 @@ shared synchronized final pure nothrow @safe class HolyMap {
 
         return cid;
     }
-    private static typeof(Random(unpredictableSeed())) rnd_;    // rnd generator. Initialized from constructor.
 
     //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
-}
-///
-unittest {
-    shared HolyMap hm = new shared HolyMap;
-    shared HolyUnconditionalNeuron hnr = new shared HolyUnconditionalNeuron;
-    Cid cid = 1;
-
-    assert(hm.length == 0);
-    hm[cid] = hnr;
-    assert(hm[cid] is hnr);
-    hm.remove(cid);
-    assert(hm.length == 0);
 }
 
 /**
@@ -395,6 +431,8 @@ shared HolyMap _hm_;        /// The map of holy(stable and storrable and shared)
     Spawn the key threads (console_thread, attention dispatcher), capture their Tids.
 */
 shared static this() {
+    // Initialize random generator
+    rnd_ = Random(unpredictableSeed);
 
     // Capture Tid of the main thread.
     _mainTid_ = cast(immutable)thisTid;
@@ -412,13 +450,16 @@ shared static this() {
     fillInConceptMaps_(_hm_, _nm_);
     _cm_ = new shared CaldronMap;
 
+    // Crank the system
+    runCranks_;
+    import std.stdio: writefln;
+    writefln("Some free dynamic cids: %s", _hm_.generate_some_cids(5));
 
 }
 
-///
 unittest {
-
 }
+
 
 //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 //
@@ -436,7 +477,10 @@ private enum unusedStaticCids_ = findUnusedStatCids_;
 
 /// Manifest constant array of descriptors (cids, names) of all of the named dynamic concepts of the project. Remember, that most
 /// of the dynamic concepts are supposed to be unnamed in the sence, that they are not directly visible to the code.
-private enum dynDescriptors_ = createTempDynDescriptors_();
+//private enum dynDescriptors_ = createTempDynDescriptors_();
+
+/// rnd generator. Initialized from constructor.
+private static typeof(Random(unpredictableSeed())) rnd_;
 
 //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
@@ -452,9 +496,9 @@ private TempStatDescriptor[] createTempStatDescriptors_() {
 
     // Fill the named descriptors array
     TempStatDescriptor sd;
-    static foreach(moduleName; [EnumMembers!StatConceptModules]) {
-        static foreach(memberName; __traits(allMembers, mixin(moduleName))) {
-            static if(__traits(isStaticFunction, __traits(getMember, mixin(moduleName), memberName))) {
+    static foreach(modul; [EnumMembers!StatConceptModules]) {
+        static foreach(memberName; __traits(allMembers, mixin(modul))) {
+            static if(__traits(isStaticFunction, __traits(getMember, mixin(modul), memberName))) {
                 sd.cid = __traits(getAttributes, mixin(memberName))[0];
                 sd.name = memberName;
                 sd.fun_ptr = mixin("&" ~ memberName);
@@ -472,46 +516,46 @@ private TempStatDescriptor[] createTempStatDescriptors_() {
     return sds;
 }
 
-/**
-        Create array of name/cid pairs packed into the TempDynDescriptor struct, CTFE.
-    Used to create the manifest constant arrays DynDescriptors_.
-    Returns: array of static concept descriptors.
-*/
-private TempDynDescriptor[] createTempDynDescriptors_() {
-
-    // Declare named static descriptor array
-    TempDynDescriptor[] dds;
-
-    // Fill the named descriptors array
-    TempDynDescriptor sd;
-    static foreach(moduleName; [EnumMembers!CrankModules]) {
-        static foreach(memberName; __traits(allMembers, mixin(moduleName))) {
-            static if(mixin("is(" ~ memberName ~ "==enum)")) {
-                static foreach(enumElem; __traits(allMembers, mixin(memberName))) {
-                    static if(enumElem != "max") {
-                        sd.cid = mixin(memberName ~ "." ~ enumElem);
-                        sd.name = enumElem;
-                        dds ~= sd;
-                    }
-                }
-            }
-        }
-    }
-
-    // Sort it
-    import std.algorithm.sorting: sort;
-    dds.sort;
-
-    // Check if cids in the array are unique.
-    Cid lastCid = 0;
-    foreach(dd; dds) {
-        assert(dd.cid > lastCid, "cid "~ to!string(dd.cid) ~ ": cids cannot be used multiple times.");
-        lastCid = dd.cid;
-    }
-
-
-    return dds;
-}
+///**
+//        Create array of name/cid pairs packed into the TempDynDescriptor struct, CTFE.
+//    Used to create the manifest constant arrays DynDescriptors_.
+//    Returns: array of static concept descriptors.
+//*/
+//private TempDynDescriptor[] createTempDynDescriptors_() {
+//
+//    // Declare named static descriptor array
+//    TempDynDescriptor[] dds;
+//
+//    // Fill the named descriptors array
+//    TempDynDescriptor sd;
+//    static foreach(moduleName; [EnumMembers!CrankModules]) {
+//        static foreach(memberName; __traits(allMembers, mixin(moduleName))) {
+//            static if(mixin("is(" ~ memberName ~ "==enum)")) {
+//                static foreach(enumElem; __traits(allMembers, mixin(memberName))) {
+//                    static if(enumElem != "max") {
+//                        sd.cid = mixin(memberName ~ "." ~ enumElem);
+//                        sd.name = enumElem;
+//                        dds ~= sd;
+//                    }
+//                }
+//            }
+//        }
+//    }
+//
+//    // Sort it
+//    import std.algorithm.sorting: sort;
+//    dds.sort;
+//
+//    // Check if cids in the array are unique.
+//    Cid lastCid = 0;
+//    foreach(dd; dds) {
+//        assert(dd.cid > lastCid, "cid "~ to!string(dd.cid) ~ ": cids cannot be used multiple times.");
+//        lastCid = dd.cid;
+//    }
+//
+//
+//    return dds;
+//}
 
 /**
         Create enum array of unused cids, CTFE.
@@ -545,7 +589,7 @@ private Cid[] findUnusedStatCids_() {
 private void fillInConceptMaps_(shared HolyMap hm, shared NameMap nm)
 out{
     assert(hm.length == statDescriptors_.length);
-    assert(nm.length == statDescriptors_.length + dynDescriptors_.length);
+    assert(nm.length == statDescriptors_.length); // + dynDescriptors_.length);
 }
 do {
     import std.stdio: writefln;
@@ -553,22 +597,39 @@ do {
     // Accept static concepts and their names from the statDescriptors_ enum
     foreach(sd; statDescriptors_) {
         assert(sd.cid !in hm, "Cid: " ~ to!string(sd.cid) ~ ". Cids cannot be reused.");
-        hm[sd.cid] = new shared HolyStaticConcept(sd.cid, sd.fun_ptr, sd.call_type);
-        nm.add(sd.cid, sd.name);
-
+        hm.add(new shared HolyStaticConcept(sd.cid, sd.fun_ptr, sd.call_type), sd.name);
     }
 
     // report static cids usage
-    writefln("Unused cids: %s", unusedStaticCids_);
-    writefln("Last used cid: %s", statDescriptors_[$-1].cid);
+    writefln("Unused static cids: %s", unusedStaticCids_);
+    writefln("Last used static cid: %s", statDescriptors_[$-1].cid);
 
-    // Accept dynamic concept names from the dynDescriptors_ enum
-    foreach(dd; dynDescriptors_) {
-        assert(!nm.cid_in(dd.cid) && !nm.name_in(dd.name));
-        nm.add(dd.cid, dd.name);
-    }
+    //// Accept dynamic concept names from the dynDescriptors_ enum
+    //foreach(dd; dynDescriptors_) {
+    //    assert(!nm.cid_in(dd.cid) && !nm.name_in(dd.name));
+    //    nm.add(dd.cid, dd.name);
+    //}
+}
 
-    writefln("Some free dynamic cids: %s", _hm_.generate_some_cids(5));
+/**
+            Extract all of the crank functions from crank modules and run them. The functions run in order as modules
+    are defined in the CrankModules enum and then in the order of definition functions in the modules.
+*/
+private void runCranks_() {
+
+    // Fill in fps with addresses of the crank functions
+    void function()[] fps;      // array of the pointers of functions
+    static foreach(modul; [EnumMembers!CrankModules])
+        static foreach(modMbr; __traits(allMembers, mixin(modul)))
+            static if      // is the member of module a function?
+                    (__traits(isStaticFunction, mixin(modMbr)))
+            {   //yes: generate a call of it
+                fps ~= mixin("&" ~ modMbr);
+            }
+
+    // Run the crank functions
+    foreach(fp; fps)
+        fp();
 }
 
 //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--

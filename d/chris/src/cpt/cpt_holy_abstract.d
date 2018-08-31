@@ -1,6 +1,7 @@
 /// The HolyConcept and its descendants. All holy classes are shared, and they inherit the shared attribute from the root class
 /// HolyConcept.
 module cpt_holy_abstract;
+import std.format;
 
 import global;
 import interfaces;
@@ -26,6 +27,8 @@ abstract:
 */
 shared abstract class HolyConcept {
 
+    immutable Cid cid = 0;       /// Cid of the concept, to check if cid used to find a concept is its actual cid. (paranoia)
+
     /**
                 Clone an object.
             It makes a shallow copy of an object.
@@ -48,7 +51,14 @@ shared abstract class HolyConcept {
         return cast(Object)copy;
     }
 
-    immutable Cid cid = 0;       /// Cid of the concept, to check if cid used to find a concept is its actual cid. (paranoia)
+    /// Obvious.
+    string toString() {
+        if
+                (auto name = _nm_.cid_in(cid))
+            return format!"cid: %s; name: %s"(cid, *name);
+        else
+            return format!"cid: %s"(cid);
+    }
 }
 
 /**

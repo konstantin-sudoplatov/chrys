@@ -447,14 +447,9 @@ shared static this() {
     import std.stdio: writefln;
     writefln("Some free dynamic cids: %s", _hm_.generate_some_cids(5));
 
-    // TODO: remove from the name map entries not related to the concepts
-
-
+    // Remove from the name map entries not related to the concepts.
+    cleanupNotUsedNames;
 }
-
-unittest {
-}
-
 
 //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 //
@@ -628,8 +623,29 @@ private void runCranks_() {
         fp();
 }
 
+/**
+            Remove from the name map all entries that don't have related entry in the holy map.
+*/
 private void cleanupNotUsedNames() {
-    import
+    import std.typecons;
+
+    // Find all orphan entries in the name map.
+    alias Entry = Tuple!(Cid, "cid", string, "name");
+    Entry[] orphans;
+    Entry orphan;
+    foreach(cid; _nm_.cids)
+        if      //is not cid in the holy map?
+                (cid !in _hm_)
+        {
+            orphan.cid = cid;
+            orphan.name =_nm_[cid];
+
+            orphans ~= orphan;
+        }
+
+    // Remove orphans
+    foreach(orph; orphans)
+        _nm_.remove(orph.cid, orph.name);
 }
 
 //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--

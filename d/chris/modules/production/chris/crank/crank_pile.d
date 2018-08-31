@@ -17,7 +17,10 @@ enum CommonConcepts: Cid {
 
 void common_concepts() {
     mixin(dequalify_enums!CommonConcepts);
-    _hm_.add(new shared HolySeed, to!string(chat_seed));
+    shared HolySeed cpt;
+    auto cpt= new shared HolySeed;
+    (cast()cpt.cid) = chat_seed;
+    _hm_.add();
 shared HolyConcept c = _hm_[to!string(chat_seed)];
 mixin("c".w);
 }

@@ -217,42 +217,34 @@ shared synchronized final pure nothrow class HolyMap {
                 Assign/construct-assign new holy map entry. If cid had not been assigned to the cpt yet, it is generated.
         Parameters:
             cpt = shared concept to assign
-            name = (optional) name of the concept
     */
-    shared(HolyConcept) add(shared HolyConcept cpt, string name = null)
+    shared(HolyConcept) add(shared HolyConcept cpt)
     in {
         if      // dinamic?
                 (cast(shared HolyDynamicConcept)cpt)
-            assert(cpt.cid == 0,
-                    "Cid: " ~ to!string(cpt.cid) ~ ", dynamic concepts with non-zero cid are not allowed here.");
+            assert(cpt.cid >= MIN_DYNAMIC_CID && cpt.cid <= MAX_DINAMIC_CID,
+                    "Cid: " ~ to!string(cpt.cid) ~ ", cids for dynamic concepts must lie in the range of " ~
+                    to!string(MIN_DYNAMIC_CID) ~ ".." ~ to!string(MAX_DINAMIC_CID));
         else if // static?
                 (cast(shared HolyStaticConcept)cpt)
         {
             assert(cpt.cid != 0, "Static concepts can't have zero cid. Their cids are initialized at construction.");
-            assert(MIN_STATIC_CID && cpt.cid <= MAX_STATIC_CID,
-            "Cid: " ~ to!string(cpt.cid) ~ ", cids for static concepts must lie in the range of " ~
-            to!string(MIN_STATIC_CID) ~ ".." ~ to!string(MAX_STATIC_CID));
+            assert(cpt.cid >= MIN_STATIC_CID && cpt.cid <= MAX_STATIC_CID,
+                    "Cid: " ~ to!string(cpt.cid) ~ ", cids for static concepts must lie in the range of " ~
+                    to!string(MIN_STATIC_CID) ~ ".." ~ to!string(MAX_STATIC_CID));
         }
         else    // neither dynamic and nor static?
             assert(false, to!string(cpt) ~ " - not expected type here.");
     }
     do {
         // generate cid and use it
-        if      // is it a dynamic concept (static ones have non-zero cid)?
+        if      // is not cid set yet?
                 (cpt.cid == 0)
-            //yes: generate cid
+            //no: generate and set it
             cast()cpt.cid = generateDynamicCid_;
 
         // put the pair in the map
         holyMap_[cpt.cid] = cpt;
-
-        // May be, add name to the name map
-        if      // name specified?
-                (name !is null)
-        {   //yes: add it to the name map
-            assert(!_nm_.name_in(name), `name: "` ~ name ~ `". Reuse of the concept's names is not allowed.`);
-            _nm_.add(cpt.cid, name);
-        }
 
         return cpt;
     }
@@ -455,6 +447,8 @@ shared static this() {
     import std.stdio: writefln;
     writefln("Some free dynamic cids: %s", _hm_.generate_some_cids(5));
 
+    // TODO: remove from the name map entries not related to the concepts
+
 }
 
 unittest {
@@ -477,7 +471,7 @@ private enum unusedStaticCids_ = findUnusedStatCids_;
 
 /// Manifest constant array of descriptors (cids, names) of all of the named dynamic concepts of the project. Remember, that most
 /// of the dynamic concepts are supposed to be unnamed in the sence, that they are not directly visible to the code.
-//private enum dynDescriptors_ = createTempDynDescriptors_();
+private enum dynDescriptors_ = createTempDynDescriptors_();
 
 /// rnd generator. Initialized from constructor.
 private static typeof(Random(unpredictableSeed())) rnd_;
@@ -516,46 +510,46 @@ private TempStatDescriptor[] createTempStatDescriptors_() {
     return sds;
 }
 
-///**
-//        Create array of name/cid pairs packed into the TempDynDescriptor struct, CTFE.
-//    Used to create the manifest constant arrays DynDescriptors_.
-//    Returns: array of static concept descriptors.
-//*/
-//private TempDynDescriptor[] createTempDynDescriptors_() {
-//
-//    // Declare named static descriptor array
-//    TempDynDescriptor[] dds;
-//
-//    // Fill the named descriptors array
-//    TempDynDescriptor sd;
-//    static foreach(moduleName; [EnumMembers!CrankModules]) {
-//        static foreach(memberName; __traits(allMembers, mixin(moduleName))) {
-//            static if(mixin("is(" ~ memberName ~ "==enum)")) {
-//                static foreach(enumElem; __traits(allMembers, mixin(memberName))) {
-//                    static if(enumElem != "max") {
-//                        sd.cid = mixin(memberName ~ "." ~ enumElem);
-//                        sd.name = enumElem;
-//                        dds ~= sd;
-//                    }
-//                }
-//            }
-//        }
-//    }
-//
-//    // Sort it
-//    import std.algorithm.sorting: sort;
-//    dds.sort;
-//
-//    // Check if cids in the array are unique.
-//    Cid lastCid = 0;
-//    foreach(dd; dds) {
-//        assert(dd.cid > lastCid, "cid "~ to!string(dd.cid) ~ ": cids cannot be used multiple times.");
-//        lastCid = dd.cid;
-//    }
-//
-//
-//    return dds;
-//}
+/**
+        Create array of name/cid pairs packed into the TempDynDescriptor struct, CTFE.
+    Used to create the manifest constant arrays DynDescriptors_.
+    Returns: array of static concept descriptors.
+*/
+private TempDynDescriptor[] createTempDynDescriptors_() {
+
+    // Declare named static descriptor array
+    TempDynDescriptor[] dds;
+
+    // Fill the named descriptors array
+    TempDynDescriptor sd;
+    static foreach(moduleName; [EnumMembers!CrankModules]) {
+        static foreach(memberName; __traits(allMembers, mixin(moduleName))) {
+            static if(mixin("is(" ~ memberName ~ "==enum)")) {
+                static foreach(enumElem; __traits(allMembers, mixin(memberName))) {
+                    static if(enumElem != "max") {
+                        sd.cid = mixin(memberName ~ "." ~ enumElem);
+                        sd.name = enumElem;
+                        dds ~= sd;
+                    }
+                }
+            }
+        }
+    }
+
+    // Sort it
+    import std.algorithm.sorting: sort;
+    dds.sort;
+
+    // Check if cids in the array are unique.
+    Cid lastCid = 0;
+    foreach(dd; dds) {
+        assert(dd.cid > lastCid, "cid "~ to!string(dd.cid) ~ ": cids cannot be used multiple times.");
+        lastCid = dd.cid;
+    }
+
+
+    return dds;
+}
 
 /**
         Create enum array of unused cids, CTFE.
@@ -604,11 +598,11 @@ do {
     writefln("Unused static cids: %s", unusedStaticCids_);
     writefln("Last used static cid: %s", statDescriptors_[$-1].cid);
 
-    //// Accept dynamic concept names from the dynDescriptors_ enum
-    //foreach(dd; dynDescriptors_) {
-    //    assert(!nm.cid_in(dd.cid) && !nm.name_in(dd.name));
-    //    nm.add(dd.cid, dd.name);
-    //}
+    // Accept dynamic concept names from the dynDescriptors_ enum
+    foreach(dd; dynDescriptors_) {
+        assert(!nm.cid_in(dd.cid) && !nm.name_in(dd.name));
+        nm.add(dd.cid, dd.name);
+    }
 }
 
 /**

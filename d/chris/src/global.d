@@ -449,6 +449,7 @@ shared static this() {
 
     // TODO: remove from the name map entries not related to the concepts
 
+
 }
 
 unittest {
@@ -583,7 +584,7 @@ private Cid[] findUnusedStatCids_() {
 private void fillInConceptMaps_(shared HolyMap hm, shared NameMap nm)
 out{
     assert(hm.length == statDescriptors_.length);
-    assert(nm.length == statDescriptors_.length); // + dynDescriptors_.length);
+    assert(nm.length == statDescriptors_.length + dynDescriptors_.length);
 }
 do {
     import std.stdio: writefln;
@@ -591,7 +592,8 @@ do {
     // Accept static concepts and their names from the statDescriptors_ enum
     foreach(sd; statDescriptors_) {
         assert(sd.cid !in hm, "Cid: " ~ to!string(sd.cid) ~ ". Cids cannot be reused.");
-        hm.add(new shared HolyStaticConcept(sd.cid, sd.fun_ptr, sd.call_type), sd.name);
+        hm.add(new shared HolyStaticConcept(sd.cid, sd.fun_ptr, sd.call_type));
+        nm.add(sd.cid, sd.name);
     }
 
     // report static cids usage
@@ -624,6 +626,10 @@ private void runCranks_() {
     // Run the crank functions
     foreach(fp; fps)
         fp();
+}
+
+private void cleanupNotUsedNames() {
+    import
 }
 
 //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--

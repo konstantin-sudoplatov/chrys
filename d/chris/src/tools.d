@@ -52,21 +52,21 @@ pure nothrow struct CrossMap(FirstT, SecondT) {
             Returns: number of pairs in the map.
     */
     auto length() {
-        return cids.length;
+        return firsts.length;
     }
 
     /**
             Check if the first key present in the cross. Analogous to the D "in" statement.
     */
-    const(SecondT*) first_in(FirstT first) const {
-        return first in names;
+    const(SecondT*) opBinaryRight(string op)(FirstT first) const {
+        return first in seconds;
     }
 
     /**
             Check if the second key present in the cross. Analogous to the D "in" statement.
     */
-    const(FirstT*) second_in(SecondT second) const {
-        return second in cids;
+    const(FirstT*) opBinaryRight(string op)(SecondT second) const {
+        return second in firsts;
     }
 
     /**
@@ -76,8 +76,8 @@ pure nothrow struct CrossMap(FirstT, SecondT) {
         Returns: the first key.
         Throws: RangeError exception if the key not found.
     */
-    const(FirstT) first(SecondT second) const {
-        return cids[second];
+    const(FirstT) opIndex(SecondT second) const {
+        return firsts[second];
     }
 
     /**
@@ -87,24 +87,24 @@ pure nothrow struct CrossMap(FirstT, SecondT) {
         Returns: the second key.
         Throws: RangeError exception if the key not found.
     */
-    const(SecondT) second(FirstT first) const {
-        return names[first];
+    const(SecondT) opIndex(FirstT first) const {
+        return seconds[first];
     }
 
     /*
             Get the range of the first keys.
         Returns: range of the firsts.
     */
-    auto firsts() {
-        return names.byKey;
+    auto seconds_by_key() {
+        return seconds.byKey;
     }
 
     /*
             Get the range of the second keys.
         Returns: range of the seconds.
     */
-    auto seconds() {
-        return cids.byKey;
+    auto firsts_by_key() {
+        return firsts.byKey;
     }
 
     /**
@@ -114,11 +114,11 @@ pure nothrow struct CrossMap(FirstT, SecondT) {
             second = the second key
     */
     void add(FirstT first, SecondT second) {
-        assert(second !in cids && first !in names,
+        assert(second !in firsts && first !in seconds,
                 "Keys are already in the map. We won't want to have assimetric maps.");     // if not, we risk having assimetric maps.
-        cids[second] = first;
-        names[first] = second;
-        assert(second in cids && first in names);
+        firsts[second] = first;
+        seconds[first] = second;
+        assert(second in firsts && first in seconds);
     }
 
     /**
@@ -128,24 +128,24 @@ pure nothrow struct CrossMap(FirstT, SecondT) {
             second = the second key
     */
     void remove(FirstT first, SecondT second) {
-        cids.remove(second);
-        names.remove(first);
-        assert(second !in cids && first !in names);
+        firsts.remove(second);
+        seconds.remove(first);
+        assert(second !in firsts && first !in seconds);
     }
 
     invariant {
-        assert(cids.length == names.length);
-        foreach(first; names.byKey) {
-            assert(cast(FirstT)cids[cast(SecondT)names[cast(FirstT)first]] == cast(FirstT)first);  // we need casts because invariant is the const attribute by default
+        assert(firsts.length == seconds.length);
+        foreach(first; seconds.byKey) {
+            assert(cast(FirstT)firsts[cast(SecondT)seconds[cast(FirstT)first]] == cast(FirstT)first);  // we need casts because invariant is the const attribute by default
         }
-        foreach(second; cids.byKey) {
-            assert(cast(SecondT)names[cast(FirstT)cids[cast(SecondT)second]] == cast(SecondT)second);  // we need casts because invariant is the const attribute by default
+        foreach(second; firsts.byKey) {
+            assert(cast(SecondT)seconds[cast(FirstT)firsts[cast(SecondT)second]] == cast(SecondT)second);  // we need casts because invariant is the const attribute by default
         }
     }
 
     private:
-    FirstT[SecondT] cids;
-    SecondT[FirstT] names;
+    FirstT[SecondT] firsts;
+    SecondT[FirstT] seconds;
 }   // struct TidCross
 
 ///
@@ -153,23 +153,23 @@ unittest {
     CrossMap!(string, int) cm;
     cm.add("one", 1);
     assert(cm.length == 1);
-    assert(cm.first_in("one"));
-    assert(cm.second_in(1));
+    assert("one" in cm);
+    assert(1 in cm);
 
     import std.array: array;
     import std.algorithm.iteration: sum, joiner;
 //  cm.add("two", 1);       // this will produce an error, because 1 is in the cross already. We won't want to end up with assimetric maps.
     cm.add("two", 2);
-    assert(cm.first(2) == "two");
-    assert(cm.second("two") == 2);
-    assert(cm.seconds.sum == 3);
-    assert(cm.firsts.joiner.array.length == 6);
+    assert(cm[2] == "two");
+    assert(cm["two"] == 2);
+    assert(cm.firsts_by_key.sum == 3);
+    assert(cm.seconds_by_key.joiner.array.length == 6);
 //  writeln(cm.firsts);     // will produce ["two", "one"]
 
     // throws RangeError on non-existent key
     import core.exception: RangeError;
     try {
-        cast(void)cm.second("three");
+        cast(void)cm["three"];
     } catch(RangeError e) {
         assert(e.msg == "Range violation");
     }

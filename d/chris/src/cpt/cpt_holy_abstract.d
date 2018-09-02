@@ -54,7 +54,7 @@ shared abstract class HolyConcept {
     /// Obvious.
     string toString() {
         if
-                (auto name = _nm_.cid_in(cid))
+                (auto name = cid in _nm_)
             return format!"cid: %s; name: %s"(cid, *name);
         else
             return format!"cid: %s"(cid);

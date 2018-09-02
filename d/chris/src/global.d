@@ -59,19 +59,23 @@ shared synchronized final pure nothrow class NameMap {
     }
 
     /**
-            Check if the cid present in the map. Analogous to the D "in" statement.
+                Overload for "in".
+        Parameters:
+            cid = cid of the concept.
+        Returns: pointer to name or null
     */
-    const(string*) cid_in(Cid cid) {
-        return (cast()cross).first_in(cid);
+    const(string*) opBinaryRight(string op)(Cid cid) {
+        return cid in (cast()cross);
     }
 
     /**
-            Check if the name present in the map. Analogous to the D "in" statement.
+                Overload for "in".
         Parameters:
             name = name of the concept.
+        Returns: pointer to cid or null
     */
-    const(Cid*) name_in(string name) const {
-        return (cast()cross).second_in(name);
+    const(Cid*) opBinaryRight(string op)(string name) const {
+        return name in (cast()cross);
     }
 
     /**
@@ -82,7 +86,7 @@ shared synchronized final pure nothrow class NameMap {
         Throws: RangeError exception if the name is not found.
     */
     const(Cid) cid(string name) const {
-        return (cast()cross).first(name);
+        return (cast()cross)[name];
     }
 
     /// Ditto.
@@ -98,7 +102,7 @@ shared synchronized final pure nothrow class NameMap {
         Throws: RangeError exception if the cid is not found.
     */
     const(string) name(Cid  cid) const {
-        return (cast()cross).second(cid);
+        return (cast()cross)[cid];
     }
 
     /// Ditto.
@@ -111,7 +115,7 @@ shared synchronized final pure nothrow class NameMap {
         Returns: range of cids.
     */
     auto cids() {
-        return (cast()cross).firsts;
+        return (cast()cross).seconds_by_key;
     }
 
     /*
@@ -119,7 +123,7 @@ shared synchronized final pure nothrow class NameMap {
         Returns: range of names.
     */
     auto names() {
-        return (cast()cross).seconds;
+        return (cast()cross).firsts_by_key;
     }
 
     /**
@@ -129,9 +133,9 @@ shared synchronized final pure nothrow class NameMap {
             name = name of the concept
     */
     void add(Cid cid, string name) {
-        assert(!name_in(name) && !cid_in(cid), "Keys are already in the map. We won't want to have assimetric maps.");     // if not, we risk having assimetric maps.
+        assert(name !in this && cid !in this, "Keys are already in the map. We won't want to have assimetric maps.");     // if not, we risk having assimetric maps.
         (cast()cross).add(cid, name);
-        assert(name_in(name) && cid_in(cid));
+        assert(name in this && cid in this);
     }
 
     /**
@@ -141,9 +145,9 @@ shared synchronized final pure nothrow class NameMap {
             name = name of the concept
     */
     void remove(Cid cid, string name) {
-        assert((!name_in(name) && !cid_in(cid)) || (name_in(name) && cid_in(cid)));
+        assert((name !in this && cid !in this) || (name in this && cid in this));
         (cast()cross).remove(cid, name);
-        assert(!name_in(name) && !cid_in(cid));
+        assert(name !in this && cid !in this);
     }
 
     private:
@@ -155,8 +159,8 @@ unittest {
     shared NameMap nm = new shared NameMap;
     nm.add(1, "firstCpt");
     assert(nm.length == 1);
-    assert(nm.name_in("firstCpt"));
-    assert(nm.cid_in(1));
+    assert("firstCpt" in nm);
+    assert(1 in nm);
 
     import std.array: array;
     import std.algorithm.iteration: sum, joiner;
@@ -300,7 +304,7 @@ shared synchronized final pure nothrow class HolyMap {
         Returns: shared concept
     */
     shared(HolyConcept) opIndex(string name) {
-        assert(_nm_.name_in(name));
+        assert(name in _nm_);
         return holyMap_[_nm_[name]];
     }
 
@@ -308,6 +312,7 @@ shared synchronized final pure nothrow class HolyMap {
                 Overload for "in".
         Parameters:
             cid = cid of the concept.
+        Returns: pointer to the concept or null
     */
     shared(HolyConcept*) opBinaryRight(string op)(Cid cid) {
         return cid in holyMap_;
@@ -597,7 +602,7 @@ do {
 
     // Accept dynamic concept names from the dynDescriptors_ enum
     foreach(dd; dynDescriptors_) {
-        assert(!nm.cid_in(dd.cid) && !nm.name_in(dd.name));
+        assert(dd.cid !in nm && dd.name !in nm);
         nm.add(dd.cid, dd.name);
     }
 }

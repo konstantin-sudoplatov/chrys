@@ -1,10 +1,9 @@
 /// The HolyConcept and its descendants. All holy classes are shared, and they inherit the shared attribute from the root class
 /// HolyConcept.
 module cpt_holy_abstract;
-import std.format;
 
 import global;
-import interfaces;
+import cpt_live_abstract, cpt_live;
 
 /// External runtime function, that creates new objects by their ClassInfo. No constructors are called. Very fast, much faster
 /// than manually allocating the object in the heap as new buf[], as it is done in the emplace function (and more economical, no
@@ -16,6 +15,7 @@ enum StatCallType {
     rCid_p0Cal_p1Cidar_p2Obj,           // Cid function(Caldron nameSpace, Cid[] paramCids, Object extra)
     rCidar_p0Cal_p1Cidar_p2Obj,         // Cid[] function(Caldron nameSpace, Cid[] paramCids, Object extra)
 }
+
 abstract:
 /**
             Base for all concepts.
@@ -28,6 +28,11 @@ abstract:
 shared abstract class HolyConcept {
 
     immutable Cid cid = 0;       /// Cid of the concept, to check if cid used to find a concept is its actual cid. (paranoia)
+
+    /**
+        Create "live" wrapper for this object.
+    */
+    abstract Concept live_factory() const;
 
     /**
                 Clone an object.
@@ -50,22 +55,12 @@ shared abstract class HolyConcept {
         copy [8 .. size] = (cast(void *)srcObject)[8 .. size];
         return cast(Object)copy;
     }
-
-    /// Obvious.
-    string toString() {
-        if
-                (auto name = cid in _nm_)
-            return format!"cid: %s; name: %s"(cid, *name);
-        else
-            return format!"cid: %s"(cid);
-    }
 }
 
 /**
             Base for all holy dynamic concepts.
 */
 abstract class HolyDynamicConcept: HolyConcept {
-    this(){}
 }
 
 /**
@@ -101,8 +96,4 @@ abstract class HolyLogicalNeuron: HolyNeuron {}
 /**
             Base for all weighing neurons.
 */
-abstract class HolyWeightNeuron: HolyNeuron {
-    this(){
-        super();
-    }
-}
+abstract class HolyWeightNeuron: HolyNeuron {}

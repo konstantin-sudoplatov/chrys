@@ -23,6 +23,11 @@ enum MIN_TEMP_CID = MAX_STATIC_CID + 1;
 enum MAX_TEMP_CID = MIN_DYNAMIC_CID - 1;
 static assert(MAX_TEMP_CID >= MIN_TEMP_CID);
 
+/// The concept chat_seed defined here, since it is used in intialization of the attention circles.
+enum GlobalConcepts: Cid {
+    chat_seed = MIN_DYNAMIC_CID,                  // this is the root branch of the chat
+}
+
 // modules with static concepts
 import stat_pile;
 import stat_substat_subpile;
@@ -45,9 +50,13 @@ enum CrankModules {
     subpile = "crank_subcrank_subpile"
 }
 
-/// It is a two-way map of concept name/cid. The concepts are both static and dynamic. Here are gathered all of the concepts
-/// which have names, that are known to the compiler, t.e. can be manipulated directly from the code.
-shared synchronized final pure nothrow class NameMap {
+/**
+            It is a two-way map of concept name/cid. The concepts are both static and dynamic. Here are gathered all
+    of the concepts which have names, that are known to the compiler, i.e. can be manipulated directly from the code.
+    Since this object is changed only in this module constructor (only this thread) and is immutable throughout all
+    the rest lifetime, it is not synchronized.
+*/
+shared final pure nothrow class NameMap {
     import tools: CrossMap;
 
     /**
@@ -253,30 +262,6 @@ shared synchronized final pure nothrow class HolyMap {
         return cpt;
     }
 
-    ///**
-    //            Assign/construct-assign new holy map entry. If cid had not been assigned to the cpt yet, it is assigned.
-    //    Parameters:
-    //        cpt = shared concept to assign
-    //        cid = key
-    //*/
-    //shared(HolyConcept) opIndexAssign(shared HolyConcept cpt, Cid cid) {
-    //    assert  // cid in the concept is the same as parameter or cid is not assigned to concept yet
-    //            (cpt.cid == cid || cpt.cid == 0,
-    //            "Cannot reassign cid. Old cid: " ~ to!string(cpt.cid) ~ ", new cid: " ~ to!string(cid));
-    //
-    //    if      // isn't cid assigned yet?
-    //            (cpt.cid == 0)
-    //        //no: assign it
-    //        cast()cpt.cid = cid;
-    //
-    //    // put the entry in the map
-    //    assert  // cid is not used in the map for another concept
-    //            (cid !in holyMap_ || holyMap_[cid] is cpt,
-    //            "Cid: " ~ to!string(cid) ~ " is used already.");
-    //    holyMap_[cid] = cpt;
-    //    return cpt;
-    //}
-
     /**
             Remove key from map. Analogously to the AAs.
         Parameters:
@@ -431,6 +416,18 @@ shared static this() {
     // Initialize random generator
     rnd_ = Random(unpredictableSeed);
 
+    // Create and initialize the key shared structures
+    _nm_ = new shared NameMap;
+    _hm_ = new shared HolyMap;
+    fillInConceptMaps_(_hm_, _nm_);     // static concepts from the stat modules, dynamic concept names from the crank modules
+    _cm_ = new shared CaldronMap;
+
+    // Create the chat_seed concept. It will be used in initialization of the attention circles.
+    auto cpt= new shared HolySeed;
+    (cast()cpt.cid) = GlobalConcepts.chat_seed;     // assign cid
+    _nm_.add(cpt.cid, to!string(GlobalConcepts.chat_seed));     // add to the name map, since it isn't there (never been in the crank module)
+    _hm_.add(cpt);                                  // add to the holy map.
+
     // Capture Tid of the main thread.
     _mainTid_ = cast(immutable)thisTid;
 
@@ -441,14 +438,8 @@ shared static this() {
     import console_thread: console_thread_func;
     spawn(&console_thread_func);
 
-    // Create and initialize the key shared structures
-    _nm_ = new shared NameMap;
-    _hm_ = new shared HolyMap;
-    fillInConceptMaps_(_hm_, _nm_);
-    _cm_ = new shared CaldronMap;
-
-    // Crank the system
-    runCranks_;
+    // Crank the system. System must be cranked befor spawning any circle threads since they use the chat_seed concept to start.
+    runCranks_;     // create and setup manually programed dynamic concepts
     import std.stdio: writefln;
     writefln("Some free dynamic cids: %s", _hm_.generate_some_cids(5));
 
@@ -632,7 +623,7 @@ private void runCranks_() {
             Remove from the name map all entries that don't have related entry in the holy map.
 */
 private void cleanupNotUsedNames() {
-    import std.typecons;
+    import std.typecons: Tuple;
 
     // Find all orphan entries in the name map.
     alias Entry = Tuple!(Cid, "cid", string, "name");

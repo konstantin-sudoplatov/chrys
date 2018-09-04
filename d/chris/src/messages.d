@@ -126,3 +126,8 @@ immutable class ConsoleSaysToCircleMsg: Msg {
 private:
     string text_;   // text to send
 }
+
+/// Request to caldron to start reasoning. May come from another caldron and sometimes from itself.
+immutable class StartReasoningMsg: Msg {
+    this() {super();}
+}

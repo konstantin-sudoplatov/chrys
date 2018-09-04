@@ -14,7 +14,7 @@ abstract interface ActivationIfc {
     @property NormalizationType normalization();
 
     /// Getter
-    @property float activation();
+    @property float activation() const;
 }
 
 /// Interface for ESQUASH normalization activation.
@@ -37,12 +37,12 @@ mixin template EsquashActivationImpl(T: EsquashActivationIfc){
 
     /// Getter
     @property float activation() const {
-        return activatioN;
+        return activation_;
     }
 
     /// Setter
     @property float activation(float a) {
-        return activatioN = a;
+        return activation_ = a;
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -51,7 +51,7 @@ mixin template EsquashActivationImpl(T: EsquashActivationIfc){
     //
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 private:
-    float activatioN = 0;
+    float activation_ = 0;       /// activation value
 }
 
 /// Interface for BIN normalization activation.
@@ -66,28 +66,28 @@ interface BinActivationIfc: ActivationIfc {
 
 /// Imlementation for BIN normalization activation. This mixin is inserted into the class, which is declared to implement
 /// the BinActivationIfc interface.
-mixin template BinActivationImpl(T: EsquashActivationIfc) {
+mixin template BinActivationImpl(T: BinActivationIfc) {
     static assert (is(typeof(this) == T), `You introduced yourself as a "` ~ T.stringof ~ `" and you are a "` ~
             this.stringof ~ `". Are you an imposter?`);
 
     /// Getter
     @property NormalizationType normalization(){
-        return NormalizationType.ESQUASH;
+        return NormalizationType.BIN;
     }
 
     /// Getter
     @property float activation() const {
-        return activatioN;
+        return activation_;
     }
 
     /// Set activation to 1.
     float activate(){
-        return activatioN = 1;
+        return activation_ = 1;
     }
 
     /// Set activation to -1 (antiactivate). By definition a concept is antiactivated if its activation <= 0.
     float anactivate(){
-        return activatioN = -1;
+        return activation_ = -1;
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -96,5 +96,5 @@ mixin template BinActivationImpl(T: EsquashActivationIfc) {
     //
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 private:
-    float activatioN = 0;
+    float activation_ = 0;
 }

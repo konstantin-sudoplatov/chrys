@@ -2,19 +2,24 @@ module cpt_live;
 import std.stdio;
 
 import global, tools;
-import interfaces;
-import cpt_holy_abstract;
+import cpt_live_abstract, cpt_holy;
 
-/// Base for all live dynamic concepts.
-abstract class LiveDynamicConcept {
-    protected HolyDynamicConcept _holY;
+/// Live wrapper for the HolyConcept class
+final class StaticConcept: Concept {
+    this(immutable HolyStaticConcept holyStaticConcept) { super(holyStaticConcept); }
+}
+
+/// Ditto
+class UnconditionalNeuron: Neuron {
+    this(immutable HolyUnconditionalNeuron holyUnconditionalNeuron) { super(holyUnconditionalNeuron);}
+}
+
+/// Ditto
+final class Seed: UnconditionalNeuron {
+    this(immutable HolySeed holySeed) { super(holySeed); }
 }
 
 
-abstract class LiveNeuron: LiveDynamicConcept, EsquashActivationIfc {
-
-    mixin EsquashActivationImpl!LiveNeuron;
-}
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--

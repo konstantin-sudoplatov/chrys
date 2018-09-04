@@ -29,21 +29,26 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
         if      // is it a regular message?
                 (msg)
         {   // process it
-            if      // does client request circle's Tid?
+            if      // is that client's request for circle's Tid?
                     (auto m = cast(immutable ClientRequestsCircleTidFromDisp)msg)
             {   //yes: create new attention circle thread and send back its Tid
                 Tid clientTid = cast()m.sender_tid();
 
-                // the first time create the attention dispatcher object
-                if
-                        (!attnDisp_)
-                    attnDisp_ = new AttentionDispatcher();
-
-                // spawn the circle, cross it and send to it client's Tid
-                Tid circleTid = attnDisp_.createCircleAttentionThread(clientTid);
+                // Create and start an attention circle thread if it doesn't exist yet, send back its Tid.
+                Tid circleTid;
+                if      // is client in the register already?
+                        (auto circleTidPtr = clientTid in circleRegister_)
+                {   //yes: take the circle's Tid from the register
+                    circleTid = *circleTidPtr;
+                }
+                else {  //no: create the circle, tell him the client's Tid and put the pair in the circle register
+                    circleTid = spawn(&attn_circle_thread_func);
+                    circleTid.send(new immutable DispatcherSuppliesCircleWithClientTid(clientTid));
+                    circleRegister_[clientTid] = circleTid;
+                }
 
                 // give the client the correspondent's Tid
-                (clientTid).send(new immutable DispatcherSuppliesClientWithCircleTid(circleTid));
+                clientTid.send(new immutable DispatcherSuppliesClientWithCircleTid(circleTid));
 
                 continue;
             }
@@ -51,7 +56,7 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                     (cast(TerminateAppMsg)msg) // || var.hasValue)
             {   //yes: terminate me and all my subthreads
                 // send terminating message to all circles
-                foreach(cir; attnDisp_.circleRegister_.byValue){
+                foreach(cir; circleRegister_.byValue){
                     cir.send(new immutable TerminateAppMsg);
                 }
 
@@ -81,66 +86,9 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
 private:
 //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
-/// The attention dispatcher object
-AttentionDispatcher attnDisp_;
+/// Circle's Tids by client's Tids.
+Tid[Tid] circleRegister_;
 
 //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
 //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-/**
-        This class contain functionality on creation attention circle threads and linking them to the clients. All workflow starts
-    in the thread function. Dispatcher doesn't have direct access of the circles. They are located in the thread-local memory
-    of thir threads and cannot be accessed from the outside. All interconnections are through the message system.
-*/
-class AttentionDispatcher {
-
-    //---***---***---***---***---***--- types ---***---***---***---***---***---***
-
-    //---***---***---***---***---***--- data ---***---***---***---***---***--
-
-    this(){}
-
-    //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
-    //
-    //                            Public
-    //
-    //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
-
-    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-    //
-    //                               Private
-    //
-    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-    private:
-    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
-
-    /// AA of circle's Tids by client's Tids.
-    Tid[Tid] circleRegister_;
-
-    //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-    /**
-                    Create and start an attention circle thread if it doesn't exist yet and return its Tid.
-        Parameters:
-            clientTid = Tid of the client, that corresponds with that circle.
-
-        Returns: circle's Tid.
-    */
-    Tid createCircleAttentionThread(Tid clientTid) {
-        if      // is client in the cross already?
-                (auto circleTid = clientTid in circleRegister_)
-        {   //yes: return the Tid
-            return cast()*circleTid;
-        }
-        else {  //no: create the circle, tell him the client's Tid and put the pair in the circle register
-            Tid circleTid = spawn(&attn_circle_thread_func);
-            circleTid.send(new immutable DispatcherSuppliesCircleWithClientTid(clientTid));
-            circleRegister_[clientTid] = circleTid;
-
-            return circleTid;
-        }
-    }
-
-    //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
-}

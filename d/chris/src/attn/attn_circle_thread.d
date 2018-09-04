@@ -2,7 +2,9 @@ module attn_circle_thread;
 import std.concurrency;
 import std.format;
 
-import tools;
+import global, tools;
+import cpt_holy_abstract, cpt_holy;
+import cpt_live_abstract, cpt_live;
 import messages;
 
 /**
@@ -14,9 +16,18 @@ class Caldron {
 
     /**
             Constructor.
+        Parameters:
+            seed = the seed concept of the caldron
     */
-    this() {}
+    this(Cid seed) {
+        tid_ = cast(immutable)thisTid;      // catch the Tid
+        this.head_ = seed;
+    }
 
+    /// Getter.
+    @property const(Tid) tid() const {
+        return tid_;
+    }
 
 protected:
 
@@ -29,11 +40,70 @@ protected:
 
     */
     bool msgProcessing(immutable Msg msg) {
-        return true;
+        if // is it a request for starting reasoning?
+                (cast(StartReasoningMsg)msg)
+        {
+            reasoning_;
+            return true;
+        }
+        return false;
     }
 
-    /// Use to check if it is a circle or a caldron, rather than doing cast(AttentionCircle). This way it's gona be faster.
-    bool _iAmCircle_ = false;
+    /// Used to check if it is a circle or a caldron, rather than doing cast(AttentionCircle). This way it's gona be faster.
+    bool _iAmCircle = false;
+
+
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+    //
+    //                               Private
+    //
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+
+    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+    /// Tid of the caldron.
+    immutable Tid tid_;
+
+    /// Live map. All holy concepts, that are ever addressed by the caldron are wrapped in corresponding live object and
+    /// put in this map. So, caldron always works with its own instance of a concept.
+    private Concept[Cid] lm_;
+
+    /// The head of the branch.
+    private Cid head_;
+
+    //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
+
+    /**
+            Does the cycle of assessments. When the assessment chain cannot be continued, because it has to wait for something,
+       for example results from other caldrons or a reaction of the chatter, this function returns and this loop goes to
+       processing other events in the queue or waits if the event queue is empty.
+     */
+    void reasoning_() {
+
+    }
+
+    /**
+                Get concept by cid.
+            If concept is present in the live map, get it from there, if not, generate it based on the holy concept and put it
+        in the live map.
+        Parameters:
+            cid = cid of the concept or its correspondig enum.
+        Returns: the live concept object
+    */
+    Concept cpt(Cid cid) {
+        assert(cid in _hm_);
+        if
+                (auto p = cid in lm_)
+            return *p;
+        else
+            return _hm_[cid].live_factory;
+    }
+
+    /// Ditto.
+    Concept cpt(string name) {
+        assert(name in _nm_ && _nm_[name] in _hm_);
+        return cpt(_nm_[name]);
+    }
 }
 
 /// This class immeadiately works with the attention cilent. It creates a tree of caldrons as it works and it is theroot
@@ -46,8 +116,8 @@ class AttentionCircle: Caldron {
             clientTid = Tid of the client of this attention circle.
     */
     this(Tid clientTid) {
-        super();
-        _iAmCircle_ = true;
+        super(GlobalConcepts.chat_seed);    // use standard seed for starting a chat
+        _iAmCircle = true;
         clientTid_ = clientTid;
     }
 
@@ -56,11 +126,10 @@ class AttentionCircle: Caldron {
     //                               Private
     //
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-    private:
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /// Tid of the correspondent's thread
-    Tid clientTid_;
+    private Tid clientTid_;
 
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
@@ -76,31 +145,33 @@ void attn_circle_thread_func() {try{
     while(true) {
         import std.variant: Variant;
 
-        Msg msg;
-        Variant var;
+        immutable Msg msg;
+debug   Variant var;
 
         // Receive new message
-        receive(
-            (immutable Msg m) {msg = cast()m;},
+debug   receive(
+            (immutable Msg m) {(cast()msg) = cast()m;},
             (Variant v) {var = v;}
         );
+else    receive(
+            (immutable Msg m) {(cast()msg) = cast()m;}
+        );
+
+debug   if(var.hasValue) {  // unrecognized message of type Variant. Log it.
+            logit(format!"Unexpected message to the caldron thread: %s"(var.toString));
+            continue;
+        }
 
         // Recognize and process the message
-        if (msg)
-        {   // TODO: a lot to do here
-            if      // is it Tid of the client sent by Dispatcher?
-            (auto m = cast(immutable DispatcherSuppliesCircleWithClientTid)msg)
-            {   //yes: create the attention circle object
-                Tid clientTid = cast()m.sender_tid;
-                if      // circle is not created yet?
-                (caldron_ is null)
-                {
-                    caldron_ = new AttentionCircle(clientTid);
-                }
-                assert(caldron_._iAmCircle_);
-            }
+        assert(msg, "The message must not be null here.");
+        if      // caldron is created yet?
+                (caldron_ !is null)
+        {
+            if      // processed by caldron?
+                    (caldron_.msgProcessing(msg))
+                continue;
             else if // TerminateAppMsg message has come?
-            (cast(TerminateAppMsg)msg) // || var.hasValue)
+                    (cast(TerminateAppMsg)msg) // || var.hasValue)
             {   //yes: terminate me and all my subthreads
                 // TODO: send terminating messages to all caldrons
                 //foreach(cir; attnDisp_.tidCross_.circles){
@@ -111,8 +182,22 @@ void attn_circle_thread_func() {try{
                 goto FINISH_THREAD;
             }
         }
-        else {  // unrecognized message of type Msg. Log it.
+        else    //no: check if we can create it
+            if // is it the Tid of the client sent by Dispatcher?
+                    (auto m = cast(immutable DispatcherSuppliesCircleWithClientTid)msg)
+            {   //yes: create the attention circle object
+                Tid clientTid = cast()m.sender_tid;
+                caldron_ = new AttentionCircle(clientTid);
+                assert(caldron_._iAmCircle);
+                continue;
+            }
+            else {
+                // TODO: check if we can create a regular caldron
+            }
+
+debug   {  // unrecognized message of type Msg. Log it.
             logit(format!"Unexpected message to the caldron thread: %s"(msg));
+            continue;
         }
     }
     FINISH_THREAD:
@@ -123,11 +208,11 @@ void attn_circle_thread_func() {try{
 //                               Private
 //
 //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-private:
+
 //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
-/// The attention circle object
-Caldron caldron_;
+/// The attention circle/caldron object, thead local.
+private Caldron caldron_;
 
 //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 

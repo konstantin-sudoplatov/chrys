@@ -1,5 +1,6 @@
 module cpt_holy;
 import cpt_holy_abstract;
+import cpt_live_abstract, cpt_live;
 
 import global, tools;
 
@@ -25,17 +26,38 @@ final class HolyStaticConcept: HolyConcept {
         cast()this.fp = cast(immutable)fp;
         cast()call_type = callType;
     }
+
+    /**
+        Create live wrapper for the holy static concept.
+    */
+    override StaticConcept live_factory() const {
+        return new StaticConcept(cast(immutable)this);
+    }
 }
 
 /**
             Uncontitional neuron.
         It is a degenerate neuron, capable only of applying its effects without consulting any premises. Its activation is always 1.
  */
-class HolyUnconditionalNeuron: HolyNeuron {}
+class HolyUnconditionalNeuron: HolyNeuron {
+
+    /**
+        Create live wrapper for the holy static concept.
+    */
+    override UnconditionalNeuron live_factory() const {
+        return new UnconditionalNeuron(cast(immutable)this);
+    }
+}
 
 /**
             Seed.
 */
 final class HolySeed: HolyUnconditionalNeuron {
-    this() { super(); }
+
+    /**
+        Create live wrapper for the holy static concept.
+    */
+    override Seed live_factory() const {
+        return new Seed(cast(immutable)this);
+    }
 }

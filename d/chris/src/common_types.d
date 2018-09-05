@@ -26,7 +26,7 @@ unittest {
         return 0;
     }
 
-    Cid cid = __traits(getAttributes, fun)[0];      // its cid
+    const Cid cid = __traits(getAttributes, fun)[0];      // its cid
     assert(stat_cid!fun == cid);    // check cid
 }
 

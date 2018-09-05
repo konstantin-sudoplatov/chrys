@@ -194,6 +194,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
     }
 
 
+
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
     //
     //                                  Private

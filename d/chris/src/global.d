@@ -388,6 +388,8 @@ shared static this() {
 
     // Remove from the name map entries not related to the concepts.
     cleanupNotUsedNames;
+    _hm_.rehash;
+    _nm_.rehash;
 
     // Capture Tid of the main thread.
     _mainTid_ = cast(immutable)thisTid;

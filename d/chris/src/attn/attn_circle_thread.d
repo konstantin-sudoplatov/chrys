@@ -5,6 +5,7 @@ import std.format;
 import global, tools;
 import cpt_holy_abstract, cpt_holy;
 import cpt_live_abstract, cpt_live;
+import crank_pile;
 import messages;
 
 /**
@@ -116,7 +117,7 @@ class AttentionCircle: Caldron {
             clientTid = Tid of the client of this attention circle.
     */
     this(Tid clientTid) {
-        super(GlobalConcepts.chat_seed);    // use standard seed for starting a chat
+        super(CommonConcepts.chat_seed);    // use standard seed for starting a chat
         _iAmCircle = true;
         clientTid_ = clientTid;
     }

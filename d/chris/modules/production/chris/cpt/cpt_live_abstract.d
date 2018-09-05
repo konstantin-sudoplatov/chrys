@@ -60,16 +60,6 @@ abstract class LogicalNeuron: DynamicConcept, BinActivationIfc {
     mixin BinActivationImpl!LogicalNeuron;
 }
 
-/// Ditto
-abstract class WeightNeuron: DynamicConcept, EsquashActivationIfc {
-
-    /// Constructor
-    this (immutable HolyWeightNeuron holyWeightNeuron) { super(holyWeightNeuron); }
-
-    // implementation of the interface
-    mixin EsquashActivationImpl!WeightNeuron;
-}
-
 
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***

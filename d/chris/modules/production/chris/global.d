@@ -23,11 +23,6 @@ enum MIN_TEMP_CID = MAX_STATIC_CID + 1;
 enum MAX_TEMP_CID = MIN_DYNAMIC_CID - 1;
 static assert(MAX_TEMP_CID >= MIN_TEMP_CID);
 
-/// The concept chat_seed defined here, since it is used in intialization of the attention circles.
-enum GlobalConcepts: Cid {
-    chat_seed = MIN_DYNAMIC_CID,                  // this is the root branch of the chat
-}
-
 // modules with static concepts
 import stat_pile;
 import stat_substat_subpile;
@@ -361,40 +356,6 @@ shared synchronized final pure nothrow class HolyMap {
     //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
 }
 
-/**
-            It is a wrapper for caldron/seed map.
-        Here "seed" is the cid of the seed neuron of the reasoning branch as an identifier of the branch and caldron.
-    We will need synchronization, because this map will be concurrently accessed by different caldrons, so it is a class,
-    just not to introduce a separate mutex object.
-*/
-shared synchronized final pure @safe nothrow class CaldronMap {
-    import std.concurrency: Tid;
-
-    //---***---***---***---***---***--- types ---***---***---***---***---***---***
-
-    //---***---***---***---***---***--- data ---***---***---***---***---***--
-
-    /**
-        Constructor
-    */
-    //this(){}
-
-    //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-    //
-    //                               Private
-    //
-    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-    private:
-    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
-    Tid[Cid] caldronMap_;       /// map caldron[seed]
-
-    //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-    //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
-}
-
 //---***---***---***---***---***--- data ---***---***---***---***---***--
 
 //      Key threads of the project. The console thead will be spawned, but we don't need to remember its Tid. The circle
@@ -404,7 +365,6 @@ immutable Tid _attnDispTid_;     /// Attention dispatcher thread Tid
 
 // Key shared data structures
 shared NameMap _nm_;        /// name/seed two-way map
-shared CaldronMap _cm_;     ///     caldron/seed map
 shared HolyMap _hm_;        /// The map of holy(stable and storrable and shared) concepts.
 
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -420,13 +380,14 @@ shared static this() {
     _nm_ = new shared NameMap;
     _hm_ = new shared HolyMap;
     fillInConceptMaps_(_hm_, _nm_);     // static concepts from the stat modules, dynamic concept names from the crank modules
-    _cm_ = new shared CaldronMap;
 
-    // Create the chat_seed concept. It will be used in initialization of the attention circles.
-    auto cpt= new shared HolySeed;
-    (cast()cpt.cid) = GlobalConcepts.chat_seed;     // assign cid
-    _nm_.add(cpt.cid, to!string(GlobalConcepts.chat_seed));     // add to the name map, since it isn't there (never been in the crank module)
-    _hm_.add(cpt);                                  // add to the holy map.
+    // Crank the system. System must be cranked befor spawning any circle threads since they use the chat_seed concept to start.
+    runCranks_;     // create and setup manually programed dynamic concepts
+    import std.stdio: writefln;
+    writefln("Some free dynamic cids: %s", _hm_.generate_some_cids(5));
+
+    // Remove from the name map entries not related to the concepts.
+    cleanupNotUsedNames;
 
     // Capture Tid of the main thread.
     _mainTid_ = cast(immutable)thisTid;
@@ -437,14 +398,6 @@ shared static this() {
     // Spawn the console thread thread.
     import console_thread: console_thread_func;
     spawn(&console_thread_func);
-
-    // Crank the system. System must be cranked befor spawning any circle threads since they use the chat_seed concept to start.
-    runCranks_;     // create and setup manually programed dynamic concepts
-    import std.stdio: writefln;
-    writefln("Some free dynamic cids: %s", _hm_.generate_some_cids(5));
-
-    // Remove from the name map entries not related to the concepts.
-    cleanupNotUsedNames;
 }
 
 //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%

@@ -5,6 +5,7 @@ import std.format;
 import global, tools;
 import cpt_holy_abstract, cpt_holy;
 import cpt_live_abstract, cpt_live;
+import crank_pile;
 import messages;
 
 /**
@@ -73,7 +74,11 @@ protected:
 
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
-
+    /**
+            Does the cycle of assessments. When the assessment chain cannot be continued, because it has to wait for something,
+       for example results from other caldrons or a reaction of the chatter, this function returns and this loop goes to
+       processing other events in the queue or waits if the event queue is empty.
+     */
     void reasoning_() {
 
     }
@@ -112,7 +117,7 @@ class AttentionCircle: Caldron {
             clientTid = Tid of the client of this attention circle.
     */
     this(Tid clientTid) {
-        super(GlobalConcepts.chat_seed);    // use standard seed for starting a chat
+        super(CommonConcepts.chat_seed);    // use standard seed for starting a chat
         _iAmCircle = true;
         clientTid_ = clientTid;
     }

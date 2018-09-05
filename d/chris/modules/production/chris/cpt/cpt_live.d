@@ -3,6 +3,7 @@ import std.stdio;
 
 import global, tools;
 import cpt_live_abstract, cpt_holy;
+import interfaces;
 
 /// Live wrapper for the HolyConcept class
 final class StaticConcept: Concept {
@@ -17,6 +18,16 @@ class UnconditionalNeuron: Neuron {
 /// Ditto
 final class Seed: UnconditionalNeuron {
     this(immutable HolySeed holySeed) { super(holySeed); }
+}
+
+/// Ditto
+final class WeightNeuron: DynamicConcept, EsquashActivationIfc {
+
+    /// Constructor
+    this (immutable HolyWeightNeuron holyWeightNeuron) { super(holyWeightNeuron); }
+
+    // implementation of the interface
+    mixin EsquashActivationImpl!WeightNeuron;
 }
 
 

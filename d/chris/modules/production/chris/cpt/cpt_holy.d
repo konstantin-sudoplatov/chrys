@@ -27,6 +27,8 @@ final class HolyStaticConcept: HolyConcept {
         cast()call_type = callType;
     }
 
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
     /**
         Create live wrapper for the holy static concept.
     */
@@ -42,6 +44,22 @@ final class HolyStaticConcept: HolyConcept {
 class HolyUnconditionalNeuron: HolyNeuron {
 
     /**
+                Default constructor.
+            Cid will be generated and assigned in the _hm_.add() method.
+    */
+    this() {}
+
+    /**
+                Constructor
+        Parameters:
+            Used for concepts with predefined cids.
+            cid = concept identifier
+    */
+    this(Cid cid) { super(cid); }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /**
         Create live wrapper for the holy static concept.
     */
     override UnconditionalNeuron live_factory() const {
@@ -55,9 +73,54 @@ class HolyUnconditionalNeuron: HolyNeuron {
 final class HolySeed: HolyUnconditionalNeuron {
 
     /**
+                Default constructor.
+            Cid will be generated and assigned in the _hm_.add() method.
+    */
+    this() {}
+
+    /**
+                Constructor
+        Parameters:
+            Used for concepts with predefined cids.
+            cid = concept identifier
+    */
+    this(Cid cid) { super(cid); }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /**
         Create live wrapper for the holy static concept.
     */
     override Seed live_factory() const {
         return new Seed(cast(immutable)this);
+    }
+}
+
+/**
+            Base for all weighing neurons.
+*/
+final class HolyWeightNeuron: HolyNeuron {
+
+    /**
+                Default constructor.
+            Cid will be generated and assigned in the _hm_.add() method.
+    */
+    this() {}
+
+    /**
+                Constructor
+        Parameters:
+            Used for concepts with predefined cids.
+            cid = concept identifier
+    */
+    this(Cid cid) { super(cid); }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /**
+        Create live wrapper for the holy static concept.
+    */
+    override WeightNeuron live_factory() const {
+        return new WeightNeuron(cast(immutable)this);
     }
 }

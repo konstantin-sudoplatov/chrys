@@ -133,6 +133,14 @@ pure nothrow struct CrossMap(FirstT, SecondT) {
         assert(second !in firsts && first !in seconds);
     }
 
+    /**
+                Rebuild associative arrays to make them more efficient.
+    */
+    void rehash() {
+        firsts.rehash;
+        seconds.rehash;
+    }
+
     invariant {
         assert(firsts.length == seconds.length);
         foreach(first; seconds.byKey) {
@@ -178,6 +186,8 @@ unittest {
     assert(cm.length == 1);
     cm.remove("three", 1);  // nothing happens
     assert(cm.length == 1);
+
+    cm.rehash;
 }
 
 /**

@@ -59,7 +59,7 @@ shared final pure nothrow class NameMap {
             Returns: number of pairs in the map.
     */
     auto length() {
-        return (cast()cross).length;
+        return (cast()cross_).length;
     }
 
     /**
@@ -69,7 +69,7 @@ shared final pure nothrow class NameMap {
         Returns: pointer to name or null
     */
     const(string*) opBinaryRight(string op)(Cid cid) {
-        return cid in (cast()cross);
+        return cid in (cast()cross_);
     }
 
     /**
@@ -79,7 +79,7 @@ shared final pure nothrow class NameMap {
         Returns: pointer to cid or null
     */
     const(Cid*) opBinaryRight(string op)(string name) const {
-        return name in (cast()cross);
+        return name in (cast()cross_);
     }
 
     /**
@@ -90,7 +90,7 @@ shared final pure nothrow class NameMap {
         Throws: RangeError exception if the name is not found.
     */
     const(Cid) cid(string name) const {
-        return (cast()cross)[name];
+        return (cast()cross_)[name];
     }
 
     /// Ditto.
@@ -106,7 +106,7 @@ shared final pure nothrow class NameMap {
         Throws: RangeError exception if the cid is not found.
     */
     const(string) name(Cid  cid) const {
-        return (cast()cross)[cid];
+        return (cast()cross_)[cid];
     }
 
     /// Ditto.
@@ -119,7 +119,7 @@ shared final pure nothrow class NameMap {
         Returns: range of cids.
     */
     auto cids() {
-        return (cast()cross).seconds_by_key;
+        return (cast()cross_).seconds_by_key;
     }
 
     /*
@@ -127,7 +127,7 @@ shared final pure nothrow class NameMap {
         Returns: range of names.
     */
     auto names() {
-        return (cast()cross).firsts_by_key;
+        return (cast()cross_).firsts_by_key;
     }
 
     /**
@@ -138,7 +138,7 @@ shared final pure nothrow class NameMap {
     */
     void add(Cid cid, string name) {
         assert(name !in this && cid !in this, "Keys are already in the map. We won't want to have assimetric maps.");     // if not, we risk having assimetric maps.
-        (cast()cross).add(cid, name);
+        (cast()cross_).add(cid, name);
         assert(name in this && cid in this);
     }
 
@@ -150,12 +150,19 @@ shared final pure nothrow class NameMap {
     */
     void remove(Cid cid, string name) {
         assert((name !in this && cid !in this) || (name in this && cid in this));
-        (cast()cross).remove(cid, name);
+        (cast()cross_).remove(cid, name);
         assert(name !in this && cid !in this);
     }
 
+    /**
+                Rebuild associative arrays to make them more efficient.
+    */
+    void rehash() {
+        (cast()cross_).rehash;
+    }
+
     private:
-    CrossMap!(Cid, string) cross;   // we use the cross map implementation, adding interface pass-through methods, to make it readable
+    CrossMap!(Cid, string) cross_;   // we use the cross map implementation, adding interface pass-through methods, to make it readable
 }
 
 ///
@@ -312,6 +319,13 @@ shared synchronized final pure nothrow class HolyMap {
     */
     auto byValue() {
         return (cast()holyMap_).byValue;      // need to cast off the shared attribute to avoid a compiler error
+    }
+
+    /**
+                Rebuild associative array to make it more efficient.
+    */
+    void rehash() {
+        holyMap_.rehash;
     }
 
     /**

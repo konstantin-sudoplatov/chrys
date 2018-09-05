@@ -14,6 +14,11 @@ abstract class Concept {
         this.holy = holy;
     }
 
+    /// Getter
+    @property cid() {
+        return holy.cid;
+    }
+
     /// Overrided default Object.toString()
     override string toString() {
         import std.format: format;
@@ -33,11 +38,6 @@ abstract class DynamicConcept: Concept {
 /// Ditto
 abstract class Primitive: DynamicConcept {
     this(immutable HolyPrimitive holyPrimitive) { super(holyPrimitive); }
-}
-
-/// Ditto
-abstract class Action: DynamicConcept {
-    this(immutable HolyAction holyAction) { super(holyAction); }
 }
 
 /// Ditto

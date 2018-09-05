@@ -38,6 +38,37 @@ final class HolyStaticConcept: HolyConcept {
 }
 
 /**
+            Base for all holy actions. The action concept is an interface, bridge between the world of cids and dynamic concepts,
+    that knows nothing about the code and the static world, which is a big set of functions, that actually are the code.
+    All concrete descendants will have the "_act" suffix.
+*/
+final class HolyAction: HolyDynamicConcept {
+
+    /**
+                Default constructor.
+            Cid will be generated and assigned in the _hm_.add() method.
+    */
+    this() {}
+
+    /**
+                Constructor
+        Parameters:
+            Used for concepts with predefined cids.
+            cid = concept identifier
+    */
+    this(Cid cid) { super(cid); }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /**
+        Create live wrapper for the holy static concept.
+    */
+    override Action live_factory() const {
+        return new Action(cast(immutable)this);
+    }
+}
+
+/**
             Uncontitional neuron.
         It is a degenerate neuron, capable only of applying its effects without consulting any premises. Its activation is always 1.
  */

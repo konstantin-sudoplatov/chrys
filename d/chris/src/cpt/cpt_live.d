@@ -11,6 +11,11 @@ final class StaticConcept: Concept {
 }
 
 /// Ditto
+final class Action: DynamicConcept {
+    this(immutable HolyAction holyAction) { super(holyAction); }
+}
+
+/// Ditto
 class UnconditionalNeuron: Neuron {
     this(immutable HolyUnconditionalNeuron holyUnconditionalNeuron) { super(holyUnconditionalNeuron);}
 }

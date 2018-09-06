@@ -1,12 +1,11 @@
 /// The HolyConcept and its descendants. All holy classes are shared, and they inherit the shared attribute from the root class
 /// HolyConcept.
-module cpt_holy_abstract;
-import std.conv;
+module cpt_abstract;
+import std.conv, std.format;
 
 import global, tools;
 import interfaces;
-import cpt_holy;
-import cpt_live_abstract, cpt_live;
+import cpt_concrete;
 
 /// External runtime function, that creates new objects by their ClassInfo. No constructors are called. Very fast, much faster
 /// than manually allocating the object in the heap as new buf[], as it is done in the emplace function (and more economical, no
@@ -19,6 +18,20 @@ enum StatCallType {
     rCidar_p0Cal_p1Cidar_p2Obj,         // Cid[] function(Caldron nameSpace, Cid[] paramCids, Object extra)
 }
 
+/// Concept's attributes.
+enum HolyCptFlags: short {
+
+    /// Static concept
+    STATIC = 0x0001,
+
+    /// Temporary dynamic concept. Heavily uses its live part, since it is thread local. Even its holy part is not designed
+    /// to be stored in the DB, if only to collect the usage info.
+    TEMP = 0x0002,
+
+    /// Permanent dynamic concept. The holy part is stored in the DB and constitutes the knoledge base.
+    PERM = 0x0004,
+}
+
 /**
             Base for all concepts.
     "Holy" means stable and storable as opposed to "Live" concepts, that are in a constant using and change and living only
@@ -29,7 +42,11 @@ enum StatCallType {
 */
 shared abstract class HolyConcept {
 
-    immutable Cid cid = 0;       /// Cid of the concept, to check if cid used to find a concept is its actual cid. (paranoia)
+    /// Concept identifier.
+    immutable Cid cid = 0;
+
+    /// Attributes of the concept.
+    immutable HolyCptFlags flags =  cast(HolyCptFlags)0;
 
     /**
                 Default constructor.
@@ -71,6 +88,48 @@ shared abstract class HolyConcept {
         copy [8 .. size] = (cast(void *)this)[8 .. size];
         return cast(shared HolyConcept)copy;
     }
+
+    invariant {
+        with(HolyCptFlags) {
+            int f = flags & (STATIC | TEMP | PERM);
+            assert(f == STATIC || f == TEMP || f == PERM, "flags " ~ format!"%016b"(flags) ~
+                    " can only be either STATIC or TEMP or PERM, but not none of them and not their combination.");
+        }
+    }
+}
+
+/**
+            Live wrapper for the HolyConcept.
+        Every live concept has a reference to its holy counterpart.
+    While the holy concepts contain stable data, and in fact all namespaces (caldrons) can count on them to be immutable,
+    dispite the fact that the holy classes declared as just shared, their live mates operate with changeable data, like
+    activation or prerequisites. While the holy concepts are shared by all caldrons, the live ones are thread local.
+
+        We don't create live concepts directly through constructors, instead we use the live_factory() method of their
+    holy partners.
+*/
+abstract class Concept {
+    immutable HolyConcept holy;
+
+    /// Constructor
+    this(immutable HolyConcept holy) {
+        this.holy = holy;
+    }
+
+    /// Getter
+    @property cid() {
+        return holy.cid;
+    }
+
+    /// Overrided default Object.toString()
+    override string toString() {
+        import std.format: format;
+        if
+        (auto name = holy.cid in _nm_)
+            return format!"%s: cid = %s, name = %s"(super.toString, holy.cid, *name);
+        else
+            return format!"%s: cid = %s"(super.toString, holy.cid);
+    }
 }
 
 /**
@@ -86,13 +145,18 @@ abstract class HolyDynamicConcept: HolyConcept {
 
     /**
                 Constructor
+        Used for concepts with predefined cids.
         Parameters:
-            Used for concepts with predefined cids.
             cid = concept identifier
     */
     this(Cid cid) { super(cid); }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
+}
+
+/// Ditto
+abstract class DynamicConcept: Concept {
+    this(immutable HolyDynamicConcept holyDynamicConcept) { super(holyDynamicConcept); }
 }
 
 /**
@@ -119,6 +183,11 @@ abstract class HolyPrimitive: HolyDynamicConcept {
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 }
 
+/// Ditto
+abstract class Primitive: DynamicConcept {
+    this(immutable HolyPrimitive holyPrimitive) { super(holyPrimitive); }
+}
+
 /**
             Base for all premises.
     All concrete descendants will have the "_pre" suffix.
@@ -142,10 +211,26 @@ abstract class HolyPremise: HolyDynamicConcept {
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 }
 
+/// Ditto
+abstract class Premise: DynamicConcept {
+    this(immutable HolyPremise holyPremise) { super(holyPremise); }
+}
+
 /**
             Base for all neurons.
 */
 abstract class HolyNeuron: HolyDynamicConcept {
+
+    //---***---***---***---***---***--- types ---***---***---***---***---***---***
+
+    /// Element of the effects_ array.
+    static struct Effect {
+        float upperBound;    /// lower boundary of the span (excluding)
+        Cid[] actions;          /// actions, that will be taken before the branching
+        Cid[] branches;         /// list of branches where the first branch is the next head of the current branch and the rest will be spawned
+    }
+
+    //---***---***---***---***---***--- data ---***---***---***---***---***--
 
     /**
                 Default constructor.
@@ -186,14 +271,14 @@ abstract class HolyNeuron: HolyDynamicConcept {
         Returns:
             the Effect struct as the Voldemort value.
     */
-    final auto select_effects(float activation) {
+    final Effect select_effects(float activation) {
         assert(activation !is float.nan);
 
         // find and return the span
         foreach(eff; effects_) {
             if      // activation fits the span?
                     (activation <= eff.upperBound)
-            return eff;
+            return cast()eff;
         }
 
         // not found, return null effects
@@ -314,17 +399,10 @@ abstract class HolyNeuron: HolyDynamicConcept {
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-    /// Element of the effects_ array.
-    private static struct Effect {
-        float upperBound;    /// lower boundary of the span (excluding)
-        Cid[] actions;          /// actions, that will be taken before the branching
-        Cid[] branches;         /// list of branches where the first branch is the next head of the current branch and the rest will be spawned
-    }
 }
 
 unittest {
-    import cpt_holy: HolyWeightNeuron;
+    import cpt_concrete: HolyWeightNeuron;
 
     shared HolyNeuron nrn = new shared HolyWeightNeuron;
     assert(nrn.select_effects(0).upperBound == float.infinity && nrn.select_effects(0).actions is null &&
@@ -370,6 +448,25 @@ unittest {
     assert(nrn1.effects_[0].actions == nrn.effects_[0].actions);
 }
 
+/// Ditto
+abstract class Neuron: DynamicConcept, ActivationIfc, PrerequisiteCheckIfc {
+
+    /// Constructor
+    this(immutable HolyNeuron holyNeuron) { super(holyNeuron); }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /**
+                Calculate activation value and set up the activation_ variable.
+        Returns: effects, corresponding calculated activation as Voldemort type:
+                 .upperBound as float; .actions as Cid[]; .branches as Cid[]
+    */
+    abstract HolyNeuron.Effect calculate_activation_and_get_effects();
+
+    /// The prerequisite check implementation
+    mixin PrerequisiteCheckImpl!Neuron;
+}
+
 /**
             Base for neurons, that take its decisions by pure logic on premises, as opposed to weighing them.
 */
@@ -391,3 +488,50 @@ abstract class HolyLogicalNeuron: HolyNeuron {
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 }
+
+/// Ditto
+abstract class LogicalNeuron: DynamicConcept, BinActivationIfc {
+
+    /// Constructor
+    this (immutable HolyLogicalNeuron holyLogicalNeuron) { super(holyLogicalNeuron); }
+
+    // implementation of the interface
+    mixin BinActivationImpl!LogicalNeuron;
+}
+
+
+
+//---***---***---***---***---***--- types ---***---***---***---***---***---***
+
+//---***---***---***---***---***--- data ---***---***---***---***---***--
+
+/**
+        Constructor
+*/
+//this(){}
+
+//---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+//~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+//
+//                                 Protected
+//
+//~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+protected:
+//---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
+
+//---$$$---$$$---$$$---$$$---$$$--- functions ---$$$---$$$---$$$---$$$---$$$---
+
+//---$$$---$$$---$$$---$$$---$$$--- types ---$$$---$$$---$$$---$$$---$$$---
+
+//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+//
+//                                  Private
+//
+//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+private:
+//---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
+
+//---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--

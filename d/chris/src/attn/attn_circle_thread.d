@@ -3,8 +3,7 @@ import std.concurrency;
 import std.format;
 
 import global, tools;
-import cpt_holy_abstract, cpt_holy;
-import cpt_live_abstract, cpt_live;
+import cpt_abstract, cpt_concrete;
 import crank_pile;
 import messages;
 
@@ -22,7 +21,7 @@ class Caldron {
     */
     this(Cid seed) {
         tid_ = thisTid;      // catch the Tid
-        this.head_ = seed;
+        this.headCid_ = seed;
         tid_.send(new immutable StartReasoningMsg);
     }
 
@@ -73,14 +72,17 @@ class Caldron {
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /// Tid of the caldron.
-    Tid tid_;
+    private Tid tid_;
 
     /// Live map. All holy concepts, that are ever addressed by the caldron are wrapped in corresponding live object and
     /// put in this map. So, caldron always works with its own instance of a concept.
     private Concept[Cid] lm_;
 
-    /// The head of the branch.
-    private Cid head_;
+    /// The head of the branch. It is cid of seed neuron.
+    private Cid headCid_;
+
+    /// Stop and wait flag. Can be raised by actions.
+    private bool stopAndWait_ = false;
 
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
@@ -89,10 +91,34 @@ class Caldron {
        for example results from other caldrons or a reaction of the chatter, this function returns and this loop goes to
        processing other events in the queue or waits if the event queue is empty.
      */
-    void reasoning_() {
+    private void reasoning_() {
         while(true) {
-            break;
+            Neuron head = cast(Neuron)cpt_(headCid_);
+            if      // isn't the head neuron ready?
+                    (!head.go_ahead)
+                //no: stop
+                goto STOP_AND_WAIT;
+
+            // Let the head be processed, determine effects and do the actions.
+            auto effect = head.calculate_activation_and_get_effects;
+            foreach(actCid; effect.actions) {
+                Action act = cast(Action)cpt_(actCid);
+                // TODO: do the action
+            }
+
+            // May be stop
+            if      // was stop required by an action or is there no new head?
+                    (stopAndWait_ || effect.branches.length == 0)
+                goto STOP_AND_WAIT;
+
+            // Set up new head and may be start new caldrons
+            headCid_ = effect.branches[0];     // the first branch in the list is the new head
+            int len = cast(int)effect.branches.length;
+            for(int i = 1; i < len; i++) {
+                // TODO: start new caldrons
+            }
         }
+    STOP_AND_WAIT:
     }
 
     /**
@@ -103,7 +129,7 @@ class Caldron {
             cid = cid of the concept or its correspondig enum.
         Returns: the live concept object
     */
-    Concept cpt_(Cid cid) {
+    private Concept cpt_(Cid cid) {
         assert(cid in _hm_);
         if
                 (auto p = cid in lm_)
@@ -113,7 +139,7 @@ class Caldron {
     }
 
     /// Ditto.
-    Concept cpt_(string name) {
+    private Concept cpt_(string name) {
         assert(name in _nm_ && _nm_[name] in _hm_);
         return cpt_(_nm_[name]);
     }
@@ -129,7 +155,7 @@ class AttentionCircle: Caldron {
             clientTid = Tid of the client of this attention circle.
     */
     this(Tid clientTid) {
-        super(CommonConcepts.chat_seed);    // use standard seed for starting a chat
+        super(CommonConcepts.circle_seed);    // use standard seed for starting a chat
         _iAmCircle = true;
         clientTid_ = clientTid;
     }

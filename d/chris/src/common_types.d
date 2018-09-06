@@ -3,7 +3,7 @@ import std.stdio;
 
 import global, tools;
 import attn_circle_thread;
-import cpt_holy_abstract;
+import cpt_abstract;
 
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***

@@ -6,7 +6,7 @@ import std.conv;
 
 import tools;
 import attn_dispatcher_thread;
-import cpt_holy_abstract, cpt_holy;
+import cpt_abstract, cpt_concrete;
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 

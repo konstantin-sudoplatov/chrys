@@ -4,14 +4,14 @@ module interfaces;
 abstract interface ActivationIfc {
 
     enum NormalizationType {
-//        NONE,           // no normalization, the value of activation can be any real number
+        NONE,           // no normalization, the value of activation can be any real number
         BIN,            // active +1, antiactive -1
 //        SGN,            // active +1, antiactive -1, indefinite 0
         ESQUASH         // exponential squashification (1 - Math.exp(-activation))/(1 + Math.exp(-activation)
     }
 
     /// Getter
-    @property NormalizationType normalization();
+    NormalizationType normalization();
 
     /// Getter
     @property float activation() const;
@@ -35,7 +35,7 @@ mixin template EsquashActivationImpl(T: EsquashActivationIfc){
             this.stringof ~ `". Are you an imposter?`);
 
     /// Getter
-    @property NormalizationType normalization(){
+    NormalizationType normalization(){
         return NormalizationType.ESQUASH;
     }
 
@@ -91,12 +91,12 @@ mixin template BinActivationImpl(T: BinActivationIfc) {
             this.stringof ~ `". Are you an imposter?`);
 
     /// Getter
-    @property NormalizationType normalization(){
+    NormalizationType normalization(){
         return NormalizationType.BIN;
     }
 
     /// Getter
-    @property float activation() const {
+    float activation() const {
         return activation_;
     }
 
@@ -170,7 +170,7 @@ mixin template PrerequisiteCheckImpl(T: PrerequisiteCheckIfc) {
 
     /// The go ahead flag. If it is true, then this concept's activation can be calculated and it can be used by other concepts as
     /// a premise for calculation their activations. If it is false, the reasoning must wait until it is true.
-    private bool goAhead_;
+    private bool goAhead_ = true;       // the concept is ready by default
 }
 
 unittest {

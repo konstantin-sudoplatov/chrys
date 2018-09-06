@@ -187,6 +187,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
             the Effect struct as the Voldemort value.
     */
     final auto select_effects(float activation) {
+        assert(activation !is float.nan);
 
         // find and return the span
         foreach(eff; effects_) {
@@ -231,17 +232,17 @@ abstract class HolyNeuron: HolyDynamicConcept {
     */
     void add_effects(Tu: float, Ta, Tb)(Tu upperBound, Ta act, Tb bran)
         if      // Ta is Action or Action[] or Cid or Cid[] and Tb is Neuron or Neuron[] or Cid or Cid[]?
-                ((is(Ta : Action) || (is(Ta Tact : Tact[]) && is(Tact : Action)) ||
-                                is(Ta: Cid) || (is(Ta Tcid : Tcid[]) && is(Tcid : Cid)))
+                (is(Ta : shared HolyAction) || (is(Ta Tact : Tact[]) && is(Tact : shared HolyAction)) ||
+                                is(Ta: Cid) || (is(Ta Tcid : Tcid[]) && is(Tcid : Cid))
                         &&
-                (is(Tb : Neuron) || (is(Tb TTact : TTact[]) && is(TTact : Neuron)) ||
-                                is(Tb: Cid) || (is(Tb TTcid : TTcid[]) && is(TTcid : Cid))))
+                is(Tb : shared HolyNeuron) || (is(Tb TTact : TTact[]) && is(TTact : shared HolyNeuron)) ||
+                                is(Tb: Cid) || (is(Tb TTcid : TTcid[]) && is(TTcid : Cid)))
     {
         // convert Action or Action[] to Cid[]
         static if   // is Ta an array?
                 (is(Ta T : T[]))
             static if // is it array of actions?
-                    (is(T : Action))
+                    (is(T : shared HolyAction))
             {   //yes: convert it into array of cids
                 Cid[] a;
                 foreach (ac; act)
@@ -253,7 +254,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
             }
         else    //no: it is a single value
             static if // is it an action?
-                    (is(Ta : Action))
+                    (is(Ta : shared HolyAction))
             {  //yes, it is a single action object: convert it to array of cids
                 Cid[] a = [act.cid];
             }
@@ -266,7 +267,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
         static if   // is Tb an array?
                 (is(Tb TT : TT[]))
             static if // is it array of neurons?
-                    (is(TT : Neuron))
+                    (is(TT : shared HolyNeuron))
             {   //yes: convert it into array of cids
                 Cid[] b;
                 foreach(br; bran)
@@ -278,7 +279,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
             }
         else    //no: it is a single value
             static if // is it a neuron?
-                    (is(Tb : Neuron))
+                    (is(Tb : shared HolyNeuron))
             {  //yes, it is a single neuron object: convert it to array of cids
                 Cid[] b = [bran.cid];
             }
@@ -326,6 +327,8 @@ unittest {
     import cpt_holy: HolyWeightNeuron;
 
     shared HolyNeuron nrn = new shared HolyWeightNeuron;
+    assert(nrn.select_effects(0).upperBound == float.infinity && nrn.select_effects(0).actions is null &&
+            nrn.select_effects(0).branches is null);
     nrn.add_effects(0, [MAX_STATIC_CID+1, MAX_STATIC_CID+2], [MAX_STATIC_CID+3, MAX_STATIC_CID+4]);
     nrn.add_effects(1, [MAX_STATIC_CID+5, MAX_STATIC_CID+6], [MAX_STATIC_CID+7, MAX_STATIC_CID+8]);
 
@@ -338,15 +341,15 @@ unittest {
     assert(nrn.select_effects(float.infinity).branches is null);
 
     // check various forms of add_effects()
-    nrn.add_effects(5, [new shared HolyAction(MAX_STATIC_CID+10).live_factory],
-            [new shared HolySeed(MAX_STATIC_CID+11).live_factory]);
+    nrn.add_effects(5, [new shared HolyAction(MAX_STATIC_CID+10)],
+            [new shared HolySeed(MAX_STATIC_CID+11)]);
     assert(nrn.select_effects(5).actions[0] == MAX_STATIC_CID+10);
-    nrn.add_effects(10, new shared HolyAction(MAX_STATIC_CID+12).live_factory,
-            new shared HolySeed(MAX_STATIC_CID+13).live_factory);
+    nrn.add_effects(10, new shared HolyAction(MAX_STATIC_CID+12),
+            new shared HolySeed(MAX_STATIC_CID+13));
     assert(nrn.select_effects(10).branches[0] == MAX_STATIC_CID+13);
-    nrn.add_effects(15, [new shared HolyAction(MAX_STATIC_CID+14).live_factory,
-            new shared HolyAction(MAX_STATIC_CID+15).live_factory],
-            new shared HolySeed(MAX_STATIC_CID+16).live_factory);
+    nrn.add_effects(15, [new shared HolyAction(MAX_STATIC_CID+14),
+            new shared HolyAction(MAX_STATIC_CID+15)],
+            new shared HolySeed(MAX_STATIC_CID+16));
     assert(nrn.select_effects(14).actions[1] == MAX_STATIC_CID+15);
     nrn.add_effects(20, MAX_STATIC_CID+17, [MAX_STATIC_CID+18]);
     assert(nrn.select_effects(20).actions[0] == MAX_STATIC_CID+17);

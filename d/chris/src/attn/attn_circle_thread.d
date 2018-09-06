@@ -21,8 +21,9 @@ class Caldron {
             seed = the seed concept of the caldron
     */
     this(Cid seed) {
-        tid_ = cast(immutable)thisTid;      // catch the Tid
+        tid_ = thisTid;      // catch the Tid
         this.head_ = seed;
+        tid_.send(new immutable StartReasoningMsg);
     }
 
     /// Getter.
@@ -30,7 +31,18 @@ class Caldron {
         return tid_;
     }
 
-protected:
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+    //
+    //                                 Protected
+    //
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+
+    //---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
+
+    /// Used to check if it is a circle or a caldron, rather than doing cast(AttentionCircle). This way it's gona be faster.
+    protected bool _iAmCircle = false;
+
+    //---$$$---$$$---$$$---$$$---$$$--- functions ---$$$---$$$---$$$---$$$---$$$---
 
     /**
             Message processing for caldron. All of the caldron workflow starts here.
@@ -40,8 +52,9 @@ protected:
         Returns: true if the message was recognized, else false.
 
     */
-    bool msgProcessing(immutable Msg msg) {
-        if // is it a request for starting reasoning?
+    protected bool msgProcessing(immutable Msg msg) {
+
+        if      // is it a request for starting reasoning?
                 (cast(StartReasoningMsg)msg)
         {
             reasoning_;
@@ -49,9 +62,6 @@ protected:
         }
         return false;
     }
-
-    /// Used to check if it is a circle or a caldron, rather than doing cast(AttentionCircle). This way it's gona be faster.
-    bool _iAmCircle = false;
 
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -63,7 +73,7 @@ protected:
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /// Tid of the caldron.
-    immutable Tid tid_;
+    Tid tid_;
 
     /// Live map. All holy concepts, that are ever addressed by the caldron are wrapped in corresponding live object and
     /// put in this map. So, caldron always works with its own instance of a concept.
@@ -80,7 +90,9 @@ protected:
        processing other events in the queue or waits if the event queue is empty.
      */
     void reasoning_() {
-
+        while(true) {
+            break;
+        }
     }
 
     /**
@@ -91,7 +103,7 @@ protected:
             cid = cid of the concept or its correspondig enum.
         Returns: the live concept object
     */
-    Concept cpt(Cid cid) {
+    Concept cpt_(Cid cid) {
         assert(cid in _hm_);
         if
                 (auto p = cid in lm_)
@@ -101,9 +113,9 @@ protected:
     }
 
     /// Ditto.
-    Concept cpt(string name) {
+    Concept cpt_(string name) {
         assert(name in _nm_ && _nm_[name] in _hm_);
-        return cpt(_nm_[name]);
+        return cpt_(_nm_[name]);
     }
 }
 
@@ -147,18 +159,24 @@ void attn_circle_thread_func() {try{
         import std.variant: Variant;
 
         immutable Msg msg;
-debug   Variant var;
+
+// When debugging, catch any mesages, which are not of the Msg type and log them
+debug
+        Variant var;    // the catchall type
 
         // Receive new message
-debug   receive(
+debug
+        receive(
             (immutable Msg m) {(cast()msg) = cast()m;},
-            (Variant v) {var = v;}
+            (Variant v) {var = v;}          // the catchall clause
         );
-else    receive(
+else
+        receive(
             (immutable Msg m) {(cast()msg) = cast()m;}
         );
 
-debug   if(var.hasValue) {  // unrecognized message of type Variant. Log it.
+debug   // Log unexpected message
+        if(var.hasValue) {  // unrecognized message of type Variant. Log it.
             logit(format!"Unexpected message to the caldron thread: %s"(var.toString));
             continue;
         }
@@ -167,11 +185,13 @@ debug   if(var.hasValue) {  // unrecognized message of type Variant. Log it.
         assert(msg, "The message must not be null here.");
         if      // caldron is created yet?
                 (caldron_ !is null)
-        {
+        {   //yes: send the message to caldron
             if      // processed by caldron?
                     (caldron_.msgProcessing(msg))
+                //yes: go for a new message
                 continue;
-            else if // TerminateAppMsg message has come?
+            else//no: check if the message is of special type
+                if // TerminateAppMsg message has come?
                     (cast(TerminateAppMsg)msg) // || var.hasValue)
             {   //yes: terminate me and all my subthreads
                 // TODO: send terminating messages to all caldrons
@@ -183,8 +203,8 @@ debug   if(var.hasValue) {  // unrecognized message of type Variant. Log it.
                 goto FINISH_THREAD;
             }
         }
-        else    //no: check if we can create it
-            if // is it the Tid of the client sent by Dispatcher?
+        else//no: check if we can create the caldron
+            if      // is it a Tid of the client sent by Dispatcher?
                     (auto m = cast(immutable DispatcherSuppliesCircleWithClientTid)msg)
             {   //yes: create the attention circle object
                 Tid clientTid = cast()m.sender_tid;
@@ -192,8 +212,9 @@ debug   if(var.hasValue) {  // unrecognized message of type Variant. Log it.
                 assert(caldron_._iAmCircle);
                 continue;
             }
-            else {
-                // TODO: check if we can create a regular caldron
+            else//no: TODO: check if we can create a regular caldron
+            {
+
             }
 
 debug   {  // unrecognized message of type Msg. Log it.

@@ -133,13 +133,29 @@ unittest {
 }
 
 /// Interface for checking dependencies of a concept on premises and other concepts.
-interface PrerequisiteCheckIfc {
+interface ReadinessCheckIfc {
 
-    /// Getter
-    @property bool go_ahead();
+    /**
+            Check if the concept is ready for reasoning
+        Returns: true/false
+    */
+    bool is_up();
 
-    /// Setter
-    @property bool go_ahead(bool goAhead);
+    /**
+            Check if the concept is not ready for reasoning
+        Returns: true/false
+    */
+    bool is_down();
+
+    /**
+            Set the concept ready.
+    */
+    void set_up();
+
+    /**
+            Set the concept not ready.
+    */
+    void set_down();
 }
 
 /**
@@ -147,19 +163,40 @@ interface PrerequisiteCheckIfc {
     the PrerequisiteCheckIfc interface.
     Parameters:
         T = static type of the class, that uses this implementation. That class must extend the PrerequisiteCheckIfc interface.
+        isUp = initial state: true - up, false - down
 */
-mixin template PrerequisiteCheckImpl(T: PrerequisiteCheckIfc) {
+mixin template ReadinessCheckImpl(T: ReadinessCheckIfc, bool isUp = true) {
     static assert (is(typeof(this) == T), `You introduced yourself as a "` ~ T.stringof ~ `" and you are a "` ~
     this.stringof ~ `". Are you an imposter?`);
 
-    /// Getter
-    @property bool go_ahead() {
-        return goAhead_;
+    /**
+            Check if the concept is ready for reasoning
+        Returns: true/false
+    */
+    bool is_up() {
+        return isUp_;
     }
 
-    /// Setter
-    @property bool go_ahead(bool goAhead) {
-        return goAhead_ = goAhead;
+    /**
+            Check if the concept is not ready for reasoning
+        Returns: true/false
+    */
+    bool is_down() {
+        return !isUp_;
+    }
+
+    /**
+            Set the concept ready.
+    */
+    void set_up() {
+        isUp_ = true;
+    }
+
+    /**
+            Set the concept not ready.
+    */
+    void set_down() {
+        isUp_ = false;
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -170,17 +207,17 @@ mixin template PrerequisiteCheckImpl(T: PrerequisiteCheckIfc) {
 
     /// The go ahead flag. If it is true, then this concept's activation can be calculated and it can be used by other concepts as
     /// a premise for calculation their activations. If it is false, the reasoning must wait until it is true.
-    private bool goAhead_ = true;       // the concept is ready by default
+    private bool isUp_ = isUp;       // the concept is ready by default
 }
 
 unittest {
-    class A: PrerequisiteCheckIfc {
-        mixin PrerequisiteCheckImpl!A;
+    class A: ReadinessCheckIfc {
+        mixin ReadinessCheckImpl!A;
     }
 
     A a = new A;
-    a.go_ahead = true;
-    assert(a.go_ahead);
-    a.go_ahead = false;
-    assert(!a.go_ahead);
+    a.set_up;
+    assert(a.is_up);
+    a.set_down;
+    assert(a.is_down);
 }

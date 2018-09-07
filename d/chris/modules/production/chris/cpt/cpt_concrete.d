@@ -85,9 +85,15 @@ final class Action: DynamicConcept {
 }
 
 /**
-    Container for TID. TID itself is stored in the live part, since it is a changeable entity, but the holy part.
+            Branch identifier.
+        On one hand it is a container for TID. TID itself is stored in the live part, since it is a changeable entity. On the
+    other, it is a pointer to the seed of the branch. Its cid is stored in the holy part.
+
+        This concept can be used to start new branch instead of the seed, if we want to have in the parent branch a handler
+    to a child to send it messages. This concept will be that handler. After the new branch started, its tid will be put
+    in the tid_ field of the live part.
 */
-final class HolyTidPrimitive: HolyPrimitive {
+final class HolyBreed: HolyPrimitive {
 
     /**
                 Default constructor.
@@ -103,8 +109,6 @@ final class HolyTidPrimitive: HolyPrimitive {
     */
     this(Cid cid) {
         super(cid);
-        cast()flags &= ~cast(int)HolyCptFlags.PERM;      // lower the permanent flag
-        cast()flags |= HolyCptFlags.TEMP;       // raise the temporary flag
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -112,17 +116,28 @@ final class HolyTidPrimitive: HolyPrimitive {
     /**
         Create live wrapper for the holy tid primitive concept.
     */
-    override TidPrimitive live_factory() const {
-        return new TidPrimitive(cast(immutable)this);
+    override Breed live_factory() const {
+        return new Breed(cast(immutable)this);
     }
+
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+    //
+    //                                  Private
+    //
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+
+    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+    /// The seed of the branch.
+    private Cid seedCid_;
 }
 
 /// Ditto.
-final class TidPrimitive: Primitive {
+final class Breed: Primitive, ReadinessCheckIfc {
     import std.concurrency: Tid;
 
     /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
-    private this(immutable HolyTidPrimitive holyTidPrimitive) { super(holyTidPrimitive); }
+    private this(immutable HolyBreed holyTidPrimitive) { super(holyTidPrimitive); }
 
     /// Getter.
     @property Tid tid() {
@@ -133,6 +148,17 @@ final class TidPrimitive: Primitive {
     @property Tid tid(Tid tid) {
         return tid_ = tid;
     }
+
+    /// Mixin up/down states.
+    mixin ReadinessCheckImpl!(Breed, false);     // initialize to down
+
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+    //
+    //                                  Private
+    //
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+
+    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /// Thread identifier.
     private Tid tid_;
@@ -195,6 +221,9 @@ class UnconditionalNeuron: Neuron {
 
 /**
             Seed.
+        Used for anonymous branching as apposed to the Breed. After a branch is started with seed there is no branch identifier
+    left in the parent branch, so there is no way to communicate to it except waiting for a result concept or set of concepts,
+    that the branch will send to the parent when it finishes.
 */
 final class HolySeed: HolyUnconditionalNeuron {
 

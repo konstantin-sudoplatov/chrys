@@ -380,6 +380,8 @@ immutable Tid _attnDispTid_;     /// Attention dispatcher thread Tid
 // Key shared data structures
 shared NameMap _nm_;        /// name/seed two-way map
 shared HolyMap _hm_;        /// The map of holy(stable and storrable and shared) concepts.
+debug
+    immutable bool _maps_fully_setup_;
 
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
@@ -404,6 +406,8 @@ shared static this() {
     cleanupNotUsedNames;
     _hm_.rehash;
     _nm_.rehash;
+    debug
+        _maps_fully_setup_ = true;
 
     // Capture Tid of the main thread.
     _mainTid_ = cast(immutable)thisTid;

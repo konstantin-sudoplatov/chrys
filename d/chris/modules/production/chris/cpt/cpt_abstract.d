@@ -48,11 +48,6 @@ shared abstract class HolyConcept {
     /// Attributes of the concept.
     immutable HolyCptFlags flags =  cast(HolyCptFlags)0;
 
-    debug{
-        bool fully_setup;           // after cranking, ready to use
-        void check_invariant(){}
-    }
-
     /**
                 Default constructor.
             Cid will be generated and assigned in the _hm_.add() method.
@@ -68,11 +63,6 @@ shared abstract class HolyConcept {
     this(Cid cid) {
         this.cid = cid;
     }
-
-    /**
-        Create "live" wrapper for this object.
-    */
-    abstract Concept live_factory() const;
 
     /**
                 Clone an object.
@@ -94,20 +84,27 @@ shared abstract class HolyConcept {
         return cast(shared HolyConcept)copy;
     }
 
+    /**
+        Create "live" wrapper for this object.
+    */
+    abstract Concept live_factory() const;
+
     invariant {
-        debug if(!fully_setup) return;
+        debug if(!_maps_fully_setup_) return;
+
         with(HolyCptFlags) {
             int f = flags & (STATIC | TEMP | PERM);     // type of concept: static, temporary on permanent
             assert(f == STATIC || f == TEMP || f == PERM, "flags " ~ format!"%016b"(flags) ~
                     " can only be either STATIC or TEMP or PERM, but not none of them and not their combination.");
-        if
-                (f == STATIC)
-            assert(cid >= MIN_STATIC_CID && cid <= MAX_STATIC_CID);
-        else if
-                (f == TEMP)
-            assert(cid >= MIN_TEMP_CID && cid <= MAX_TEMP_CID);
-        else
-            assert(cid >= MIN_DYNAMIC_CID && cid <= MAX_DINAMIC_CID);
+
+            if
+                    (f == STATIC)
+                assert(cid >= MIN_STATIC_CID && cid <= MAX_STATIC_CID);
+            else if
+                    (f == TEMP)
+                assert(cid >= MIN_TEMP_CID && cid <= MAX_TEMP_CID);
+            else
+                assert(cid >= MIN_DYNAMIC_CID && cid <= MAX_DINAMIC_CID);
         }
 
     }
@@ -419,55 +416,55 @@ abstract class HolyNeuron: HolyDynamicConcept {
     //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
 }
 
-unittest {
-    import cpt_concrete: HolyWeightNeuron;
-
-    shared HolyNeuron nrn = new shared HolyWeightNeuron;
-    assert(nrn.select_effects(0).upperBound == float.infinity && nrn.select_effects(0).actions is null &&
-            nrn.select_effects(0).branches is null);
-    nrn.add_effects(0, [MAX_STATIC_CID+1, MAX_STATIC_CID+2], [MAX_STATIC_CID+3, MAX_STATIC_CID+4]);
-    nrn.add_effects(1, [MAX_STATIC_CID+5, MAX_STATIC_CID+6], [MAX_STATIC_CID+7, MAX_STATIC_CID+8]);
-
-    // check select_effects()
-    assert(nrn.select_effects(-0.5).upperBound == 0);
-    assert(nrn.select_effects(-float.infinity).branches[1] == MAX_STATIC_CID+4);
-    assert(nrn.select_effects(0).upperBound == 0);
-    assert(nrn.select_effects(0+float.epsilon).upperBound == 1);
-    assert(nrn.select_effects(10).upperBound == float.infinity);
-    assert(nrn.select_effects(float.infinity).branches is null);
-
-    // check various forms of add_effects()
-    nrn.add_effects(5, [new shared HolyAction(MAX_STATIC_CID+10)],
-            [new shared HolySeed(MAX_STATIC_CID+11)]);
-    assert(nrn.select_effects(5).actions[0] == MAX_STATIC_CID+10);
-    nrn.add_effects(10, new shared HolyAction(MAX_STATIC_CID+12),
-            new shared HolySeed(MAX_STATIC_CID+13));
-    assert(nrn.select_effects(10).branches[0] == MAX_STATIC_CID+13);
-    nrn.add_effects(15, [new shared HolyAction(MAX_STATIC_CID+14),
-            new shared HolyAction(MAX_STATIC_CID+15)],
-            new shared HolySeed(MAX_STATIC_CID+16));
-    assert(nrn.select_effects(14).actions[1] == MAX_STATIC_CID+15);
-    nrn.add_effects(20, MAX_STATIC_CID+17, [MAX_STATIC_CID+18]);
-    assert(nrn.select_effects(20).actions[0] == MAX_STATIC_CID+17);
-    nrn.add_effects(25, [MAX_STATIC_CID+19], MAX_STATIC_CID+20);
-    assert(nrn.select_effects(25).branches[0] == MAX_STATIC_CID+20);
-    nrn.add_effects(30, MAX_STATIC_CID+21, MAX_STATIC_CID+22);
-    assert(nrn.select_effects(30).branches[0] == MAX_STATIC_CID+22);
-
-
-    // check cloning
-    shared const HolyNeuron nrn1 = cast(shared HolyWeightNeuron)nrn.clone;
-    assert(nrn1 !is nrn);
-    assert(nrn1.effects_ !is nrn.effects_);
-    assert(nrn1.effects_ == nrn.effects_);
-    assert(nrn1.effects_[0].branches !is nrn.effects_[0].branches);
-    assert(nrn1.effects_[0].branches == nrn.effects_[0].branches);
-    assert(nrn1.effects_[0].actions !is nrn.effects_[0].actions);
-    assert(nrn1.effects_[0].actions == nrn.effects_[0].actions);
-}
+//unittest {
+//    import cpt_concrete: HolyWeightNeuron;
+//
+//    shared HolyNeuron nrn = new shared HolyWeightNeuron;
+//    assert(nrn.select_effects(0).upperBound == float.infinity && nrn.select_effects(0).actions is null &&
+//            nrn.select_effects(0).branches is null);
+//    nrn.add_effects(0, [MAX_STATIC_CID+1, MAX_STATIC_CID+2], [MAX_STATIC_CID+3, MAX_STATIC_CID+4]);
+//    nrn.add_effects(1, [MAX_STATIC_CID+5, MAX_STATIC_CID+6], [MAX_STATIC_CID+7, MAX_STATIC_CID+8]);
+//
+//    // check select_effects()
+//    assert(nrn.select_effects(-0.5).upperBound == 0);
+//    assert(nrn.select_effects(-float.infinity).branches[1] == MAX_STATIC_CID+4);
+//    assert(nrn.select_effects(0).upperBound == 0);
+//    assert(nrn.select_effects(0+float.epsilon).upperBound == 1);
+//    assert(nrn.select_effects(10).upperBound == float.infinity);
+//    assert(nrn.select_effects(float.infinity).branches is null);
+//
+//    // check various forms of add_effects()
+//    nrn.add_effects(5, [new shared HolyAction(MAX_STATIC_CID+10)],
+//            [new shared HolySeed(MAX_STATIC_CID+11)]);
+//    assert(nrn.select_effects(5).actions[0] == MAX_STATIC_CID+10);
+//    nrn.add_effects(10, new shared HolyAction(MAX_STATIC_CID+12),
+//            new shared HolySeed(MAX_STATIC_CID+13));
+//    assert(nrn.select_effects(10).branches[0] == MAX_STATIC_CID+13);
+//    nrn.add_effects(15, [new shared HolyAction(MAX_STATIC_CID+14),
+//            new shared HolyAction(MAX_STATIC_CID+15)],
+//            new shared HolySeed(MAX_STATIC_CID+16));
+//    assert(nrn.select_effects(14).actions[1] == MAX_STATIC_CID+15);
+//    nrn.add_effects(20, MAX_STATIC_CID+17, [MAX_STATIC_CID+18]);
+//    assert(nrn.select_effects(20).actions[0] == MAX_STATIC_CID+17);
+//    nrn.add_effects(25, [MAX_STATIC_CID+19], MAX_STATIC_CID+20);
+//    assert(nrn.select_effects(25).branches[0] == MAX_STATIC_CID+20);
+//    nrn.add_effects(30, MAX_STATIC_CID+21, MAX_STATIC_CID+22);
+//    assert(nrn.select_effects(30).branches[0] == MAX_STATIC_CID+22);
+//
+//
+//    // check cloning
+//    shared const HolyNeuron nrn1 = cast(shared HolyWeightNeuron)nrn.clone;
+//    assert(nrn1 !is nrn);
+//    assert(nrn1.effects_ !is nrn.effects_);
+//    assert(nrn1.effects_ == nrn.effects_);
+//    assert(nrn1.effects_[0].branches !is nrn.effects_[0].branches);
+//    assert(nrn1.effects_[0].branches == nrn.effects_[0].branches);
+//    assert(nrn1.effects_[0].actions !is nrn.effects_[0].actions);
+//    assert(nrn1.effects_[0].actions == nrn.effects_[0].actions);
+//}
 
 /// Ditto
-abstract class Neuron: DynamicConcept, ActivationIfc, PrerequisiteCheckIfc {
+abstract class Neuron: DynamicConcept, ActivationIfc, ReadinessCheckIfc {
 
     /// Constructor
     this(immutable HolyNeuron holyNeuron) { super(holyNeuron); }
@@ -482,7 +479,7 @@ abstract class Neuron: DynamicConcept, ActivationIfc, PrerequisiteCheckIfc {
     abstract HolyNeuron.Effect calculate_activation_and_get_effects();
 
     /// The prerequisite check implementation
-    mixin PrerequisiteCheckImpl!Neuron;
+    mixin ReadinessCheckImpl!Neuron;
 }
 
 /**

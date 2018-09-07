@@ -5,6 +5,7 @@ import std.format;
 import tools;
 import global;
 import messages;
+import crank_pile;
 import attn_circle_thread;
 
 /**
@@ -42,7 +43,7 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                     circleTid = *circleTidPtr;
                 }
                 else {  //no: create the circle, tell him the client's Tid and put the pair in the circle register
-                    circleTid = spawn(&attn_circle_thread_func);
+                    circleTid = spawn(&caldron_thread_func, true, CommonConcepts.chat_seed);
                     circleTid.send(new immutable DispatcherSuppliesCircleWithClientTid(clientTid));
                     circleRegister_[clientTid] = circleTid;
                 }

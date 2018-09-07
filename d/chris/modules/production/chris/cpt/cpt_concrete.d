@@ -85,7 +85,7 @@ final class Action: DynamicConcept {
 }
 
 /**
-    Container for TID. TID itself is stored in the live part, since it is a changeable entity.
+    Container for TID. TID itself is stored in the live part, since it is a changeable entity, but the holy part.
 */
 final class HolyTidPrimitive: HolyPrimitive {
 
@@ -101,7 +101,11 @@ final class HolyTidPrimitive: HolyPrimitive {
             Used for concepts with predefined cids.
             cid = concept identifier
     */
-    this(Cid cid) { super(cid); }
+    this(Cid cid) {
+        super(cid);
+        cast()flags &= ~cast(int)HolyCptFlags.PERM;      // lower the permanent flag
+        cast()flags |= HolyCptFlags.TEMP;       // raise the temporary flag
+    }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 

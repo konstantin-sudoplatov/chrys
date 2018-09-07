@@ -20,6 +20,11 @@ void common_concepts() {
 
     // Create the chat_seed concept. It will be used in initialization of the attention circles.
     _hm_.add(new shared HolySeed(circle_seed));                                  // add to the holy map.
+    debug {
+        _hm_[circle_seed].fully_setup = true;
+        _hm_[circle_seed].check_invariant;
+    }
+
 }
 
 enum Chat: Cid {

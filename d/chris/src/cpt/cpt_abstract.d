@@ -48,6 +48,11 @@ shared abstract class HolyConcept {
     /// Attributes of the concept.
     immutable HolyCptFlags flags =  cast(HolyCptFlags)0;
 
+    debug{
+        bool fully_setup;           // after cranking, ready to use
+        void check_invariant(){}
+    }
+
     /**
                 Default constructor.
             Cid will be generated and assigned in the _hm_.add() method.
@@ -90,11 +95,21 @@ shared abstract class HolyConcept {
     }
 
     invariant {
+        debug if(!fully_setup) return;
         with(HolyCptFlags) {
-            int f = flags & (STATIC | TEMP | PERM);
+            int f = flags & (STATIC | TEMP | PERM);     // type of concept: static, temporary on permanent
             assert(f == STATIC || f == TEMP || f == PERM, "flags " ~ format!"%016b"(flags) ~
                     " can only be either STATIC or TEMP or PERM, but not none of them and not their combination.");
+        if
+                (f == STATIC)
+            assert(cid >= MIN_STATIC_CID && cid <= MAX_STATIC_CID);
+        else if
+                (f == TEMP)
+            assert(cid >= MIN_TEMP_CID && cid <= MAX_TEMP_CID);
+        else
+            assert(cid >= MIN_DYNAMIC_CID && cid <= MAX_DINAMIC_CID);
         }
+
     }
 }
 
@@ -149,7 +164,10 @@ abstract class HolyDynamicConcept: HolyConcept {
         Parameters:
             cid = concept identifier
     */
-    this(Cid cid) { super(cid); }
+    this(Cid cid) {
+        super(cid);
+        cast()flags |= HolyCptFlags.PERM;       // all dynamic concepts are permanent until further notice
+    }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 }

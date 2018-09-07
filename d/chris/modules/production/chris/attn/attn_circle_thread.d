@@ -111,8 +111,22 @@ class Caldron {
             // Set up new head and may be start new caldrons
             headCid_ = effect.branches[0];     // the first branch in the list is the new head
             int len = cast(int)effect.branches.length;
-            for(int i = 1; i < len; i++) {
-                // TODO: start new caldrons
+            foreach(cid; effect.branches[1..$]) {
+                assert(cast(Seed)cpt_(cid) || cast(Breed)cpt_(cid));
+                if      // is it a seed?
+                        (cast(Seed)cpt_(cid))
+                {   //yes: spawn an anonymous branch
+                    childCaldrons_ ~= spawn(&caldron_thread_func, false, cid);
+                }
+                else
+                {   //no: it is a breed. Spawn an identified branch
+                    auto breed = cast(Breed)cpt_(cid);
+                    Cid seedCid = breed.seed_cid;
+                    assert(cast(Seed)cpt_(seedCid));
+                    Tid tid = spawn(&caldron_thread_func, false, seedCid);
+                    breed.tid = tid;        // save the Tid in the breed concept in this name space
+                    childCaldrons_ ~= tid;
+                }
             }
         }
     STOP_AND_WAIT:
@@ -190,19 +204,19 @@ class AttentionCircle: Caldron {
         calledByDispatcher = the caller, true - the dispatcher, false - a caldron
         seed = seed or breed (only seed for the attention circle)
 */
-void caldron_thread_func(bool calledByDispatcher, Cid seed) {try{
+void caldron_thread_func(bool calledByDispatcher, Cid seedCid) {try{
 
     // Create caldron
     if      //is dispatcher spawning an attention circle?
             (calledByDispatcher)
     {   //yes: create attention circle
-        caldron_ = new AttentionCircle(seed);
-        assert(cast(Seed)caldron_.cpt_(seed));
+        caldron_ = new AttentionCircle(seedCid);
+        assert(cast(Seed)caldron_.cpt_(seedCid));
     }
     else//no: it was a caldron
     {
-        caldron_ = new Caldron(seed);
-        assert(cast(Seed)caldron_.cpt_(seed) || cast(Breed)caldron_.cpt_(seed));
+        caldron_ = new Caldron(seedCid);
+        assert(cast(Seed)caldron_.cpt_(seedCid) || cast(Breed)caldron_.cpt_(seedCid));
     }
 
     // Receive messages in a cycle

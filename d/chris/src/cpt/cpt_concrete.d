@@ -111,6 +111,11 @@ final class HolyBreed: HolyPrimitive {
         super(cid);
     }
 
+    /// Getter.
+    const(Cid) seed_cid() const {
+        return seedCid_;
+    }
+
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     /**
@@ -147,6 +152,11 @@ final class Breed: Primitive, ReadinessCheckIfc {
     /// Setter.
     @property Tid tid(Tid tid) {
         return tid_ = tid;
+    }
+
+    /// Getter.
+    const(Cid) seed_cid() const {
+        return (cast(immutable HolyBreed)holy).seed_cid;
     }
 
     /// Mixin up/down states.

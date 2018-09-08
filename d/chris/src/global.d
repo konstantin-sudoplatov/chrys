@@ -45,6 +45,16 @@ enum CrankModules {
     subpile = "crank_subcrank_subpile"
 }
 
+/// Structure of the crank enums.
+struct ConceptDescriptor {
+    string class_name;      // named concept's class
+    int cid;                // named concept's cid
+    alias cid this;         // the enum's value by default is cid
+}
+
+/// Enum template for declaring named dynamic concepts. Used in the crank modules.
+enum cpt(T : HolyDynamicConcept, Cid cid)  = ConceptDescriptor(T.stringof, cid);
+
 /**
             It is a two-way map of concept name/cid. The concepts are both static and dynamic. Here are gathered all
     of the concepts which have names, that are known to the compiler, i.e. can be manipulated directly from the code.
@@ -235,11 +245,14 @@ shared synchronized final pure nothrow class HolyMap {
     */
     shared(HolyConcept) add(shared HolyConcept cpt)
     in {
-        if      // dinamic?
+        if      // dynamic?
                 (cast(shared HolyDynamicConcept)cpt)
-            assert(cpt.cid >= MIN_DYNAMIC_CID && cpt.cid <= MAX_DINAMIC_CID,
-                    "Cid: " ~ to!string(cpt.cid) ~ ", cids for dynamic concepts must lie in the range of " ~
-                    to!string(MIN_DYNAMIC_CID) ~ ".." ~ to!string(MAX_DINAMIC_CID));
+            if      // with preset cid?
+                    (cpt.cid != 0)
+                assert(cpt.cid >= MIN_DYNAMIC_CID && cpt.cid <= MAX_DINAMIC_CID,
+                        "Cid: " ~ to!string(cpt.cid) ~ ", cids for dynamic concepts must lie in the range of " ~
+                        to!string(MIN_DYNAMIC_CID) ~ ".." ~ to!string(MAX_DINAMIC_CID));
+            else {} //no: dynamic concepts without cid are allowed, cid will be generated
         else if // static?
                 (cast(shared HolyStaticConcept)cpt)
         {
@@ -275,13 +288,27 @@ shared synchronized final pure nothrow class HolyMap {
     }
 
     /**
-                Get concept by cid.
+                Get concept by cid, an overload for the index operation.
         Parameters:
             cid = key
         Returns: shared concept
     */
     shared(HolyConcept) opIndex(Cid cid) {
         return holyMap_[cid];
+    }
+
+    /**
+                Add concept to the map, an overload for the index assignment operation.
+            Example of usage:
+        ---
+            _hm_[] = cpt;
+        ---
+        Parameters:
+            cpt = concept to add
+        Returns: assigned concept
+    */
+    shared(HolyConcept) opIndexAssign(shared HolyConcept cpt) {
+        return add(cpt);
     }
 
     /**
@@ -491,11 +518,9 @@ private TempDynDescriptor[] createTempDynDescriptors_() {
         static foreach(memberName; __traits(allMembers, mixin(moduleName))) {
             static if(mixin("is(" ~ memberName ~ "==enum)")) {
                 static foreach(enumElem; __traits(allMembers, mixin(memberName))) {
-                    static if(enumElem != "max") {
-                        sd.cid = mixin(memberName ~ "." ~ enumElem);
-                        sd.name = enumElem;
-                        dds ~= sd;
-                    }
+                    sd.cid = mixin(memberName ~ "." ~ enumElem);
+                    sd.name = enumElem;
+                    dds ~= sd;
                 }
             }
         }
@@ -508,10 +533,10 @@ private TempDynDescriptor[] createTempDynDescriptors_() {
     // Check if cids in the array are unique.
     Cid lastCid = 0;
     foreach(dd; dds) {
-        assert(dd.cid > lastCid, "cid "~ to!string(dd.cid) ~ ": cids cannot be used multiple times.");
+        assert(dd.cid > lastCid, "cid: "~ to!string(dd.cid) ~ ", name: " ~ dd.name ~
+                " - cids cannot be used multiple times.");
         lastCid = dd.cid;
     }
-
 
     return dds;
 }

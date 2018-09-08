@@ -112,8 +112,13 @@ final class HolyBreed: HolyPrimitive {
     }
 
     /// Getter.
-    const(Cid) seed_cid() const {
+    @property Cid seed_cid() const {
         return seedCid_;
+    }
+
+    /// Setter.
+    @property Cid seed_cid(Cid seedCid) {
+        return seedCid_ = seedCid;
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -195,6 +200,44 @@ class HolyUnconditionalNeuron: HolyNeuron {
     this(Cid cid) { super(cid); }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /**
+                Adding effects analogous to the holy neuron concept, except that the span is not needed in this case.
+        Parameters:
+            act = either Action or Action[] or Cid or Cid[]
+            bran = either Neuron or Neuron[] or Cid or Cid[]
+    */
+    void add_effects(Ta, Tb)(Ta act, Tb bran) {
+        super.add_effects(float.infinity, act, bran);
+    }
+
+    /**
+            Append action cids analogous to holy neuron, except that span selection is not needed here.
+        Parameters:
+            actionCids = array of cids of appended actions.
+    */
+    final void append_actions(Cid[] actionCids) {
+        super.append_actions(float.infinity, actionCids);
+    }
+
+    /// Ditto.
+    final void append_actions(Cid actionCid) {
+        super.append_actions(float.infinity, [actionCid]);
+    }
+
+    /**
+            Append branch cids analogous to holy neuron, except that span selection is not needed here.
+        Parameters:
+            branchCids = array of cids of appended branches.
+    */
+    final void append_branches(Cid[] branchCids) {
+        super.append_branches(float.infinity, branchCids);
+    }
+
+    /// Ditto.
+    final void append_branches(Cid branchCid) {
+        super.append_branches(float.infinity, [branchCid]);
+    }
 
     /**
         Create live wrapper for the holy static concept.

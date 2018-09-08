@@ -89,6 +89,17 @@ shared abstract class HolyConcept {
     */
     abstract Concept live_factory() const;
 
+    /// Cannot override Object.toString with shared function, so live with it.
+    string toString() {
+        import std.format: format;
+
+        if      // is there a name to this concept?
+                (auto name = cid in _nm_)
+            return format!"cid: %s, name: %s"(cid, *name);
+        else
+            return format!"cid: %s"(cid);
+    }
+
     invariant {
         debug if(!_maps_fully_setup_) return;
 
@@ -136,11 +147,8 @@ abstract class Concept {
     /// Overrided default Object.toString()
     override string toString() {
         import std.format: format;
-        if
-        (auto name = holy.cid in _nm_)
-            return format!"%s: cid = %s, name = %s"(super.toString, holy.cid, *name);
-        else
-            return format!"%s: cid = %s"(super.toString, holy.cid);
+
+        return (cast(shared)holy).toString;
     }
 }
 
@@ -306,7 +314,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
             upperBound = higher boundary of the span, including. The lower boundary of the span is the upper bound of the
                          previous span, excluding, or -float.infinity, if it is the first span.
     */
-    final void  add_effects(float upperBound, Cid[] actions, Cid[] branches)
+    final void add_effects(float upperBound, Cid[] actions, Cid[] branches)
     in {
         if(effects_.length > 0)
             assert(upperBound > effects_[$-1].upperBound, "The upper bound " ~ to!string(upperBound) ~
@@ -324,13 +332,80 @@ abstract class HolyNeuron: HolyDynamicConcept {
     }
 
     /**
+            Append action cids to an existing span.
+        Parameters:
+            activation = activation value to select span.
+            actionCids = array of cids of appended actions.
+    */
+    final void append_actions(float activation, Cid[] actionCids)
+    in {
+        assert(effects_.length > 0, "First add then append.");
+        foreach(act; actionCids) {
+            assert(act > MAX_STATIC_CID, "The action cid " ~ to!string(act) ~
+            " is laying within the static concept range, which is not allowed.");
+            assert(act in _hm_, "Cid " ~ to!string(act) ~ " must be present in the holy map");
+            assert(cast(Seed)_hm_[act] || cast(Breed)_hm_[act],
+                    "Cid " ~ to!string(act) ~ " - must be the Seed or Breed concept");
+        }
+    }
+    do {
+        // find and append
+        foreach(ref eff; effects_) {
+            if      // activation fits the span?
+                    (activation <= eff.upperBound)
+            {
+                eff.actions ~= actionCids;
+                break;
+            }
+        }
+    }
+
+    /// Ditto.
+    final void append_actions(float activation, Cid actionCid) {
+        append_actions(activation, [actionCid]);
+    }
+
+    /**
+            Append branch cids to an existing span.
+        Parameters:
+            activation = activation value to select span.
+            branchCids = array of cids of appended branches.
+    */
+    final void append_branches(float activation, Cid[] branchCids)
+    in {
+        assert(effects_.length > 0, "First add then append.");
+        foreach(br; branchCids) {
+            assert(br > MAX_STATIC_CID, "The action cid " ~ to!string(br) ~
+            " is laying within the static concept range, which is not allowed.");
+            assert(br in _hm_, "Cid " ~ to!string(br) ~ " must be present in the holy map");
+            assert(cast(Seed)_hm_[br] || cast(Breed)_hm_[br], "Cid " ~ to!string(br) ~ " - must be the Seed or Breed concept");
+        }
+    }
+    do {
+        // find and append
+        foreach(ref eff; effects_) {
+            if      // activation fits the span?
+                    (activation <= eff.upperBound)
+            {
+                eff.branches ~= branchCids;
+                break;
+            }
+        }
+    }
+
+    /// Ditto.
+    final void append_branches(float activation, Cid branchCid) {
+        append_branches(activation, [branchCid]);
+    }
+
+    /**
                 Call add_effects() with various variations types of parameters. Actual parameters are converted into arrays of cids.
         Parameters:
             uppewBound = float upper bound as usual
             act = either Action or Action[] or Cid or Cid[]
             bran = either Neuron or Neuron[] or Cid or Cid[]
     */
-    void add_effects(Tu: float, Ta, Tb)(Tu upperBound, Ta act, Tb bran)
+    final void add_effects(Tu: float, Ta, Tb)(Tu upperBound, Ta act, Tb bran)
         if      // Ta is Action or Action[] or Cid or Cid[] and Tb is Neuron or Neuron[] or Cid or Cid[]?
                 (is(Ta : shared HolyAction) || (is(Ta Tact : Tact[]) && is(Tact : shared HolyAction)) ||
                                 is(Ta: Cid) || (is(Ta Tcid : Tcid[]) && is(Tcid : Cid))
@@ -389,6 +464,13 @@ abstract class HolyNeuron: HolyDynamicConcept {
             }
 
         add_effects(upperBound, a, b);
+    }
+
+    override string toString() {
+        string s = super.toString;
+        s ~= format!"\neffects_: %s"(effects_);
+
+        return s;
     }
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@

@@ -16,6 +16,32 @@ class Crash: Exception {
 }
 
 /**
+        Convert name of type represented as a string to real type. Don't forget, the type you a trying to instantiate must
+    exist, i.e. to be imported or to be a basic type.
+    Parameters:
+        typeName = name of type
+*/
+template type(string typeName) {
+    mixin("alias type = " ~ typeName ~ ";");
+}
+
+///
+unittest {
+    auto a = new type!"ClassA"(42);
+    assert(a.x == 42);
+
+    type!"int" i;
+    assert(is(typeof(i) == int));
+}
+/// test class for previous unittest
+class ClassA {
+    int x;
+    this(int i) {
+        x = i;
+    }
+}
+
+/**
             Clone an object.
         It makes a shallow copy of an object.
     Note, the runtime type of the object is used, not the compile (declared) type.
@@ -200,17 +226,14 @@ unittest {
     Returns: string, containing the resulting enum statement, ready to be mixed in the code.
 */
 string dequalify_enums(enumList...)() {
-    import global: Cid;
-    string res = "enum : Cid {\n";
-    foreach (enuM; enumList)     // each enum en in the list of enums E
+    import global: CptDescriptor;
+//    string res = "enum : ConceptDesctriptor {\n";
+    string res = "enum : CptDescriptor {\n";
+    static foreach (enuM; enumList)     // each enum en in the list of enums
     {
-        static assert(is(enuM == enum) && is(enuM: Cid));
-        foreach(enEl; __traits(allMembers, enuM))         // each enum element
-            static if //not the "max" element? (not real element, must not end up in the result)
-                    (enEl != "max")
-            {
-                res ~= "    " ~ enEl ~ " = " ~ enuM.stringof ~ "." ~ enEl ~ ",\n";
-            }
+        static assert(is(enuM == enum) && is(enuM: CptDescriptor));
+        static foreach(enEl; __traits(allMembers, enuM))         // each enum element
+            res ~= "    " ~ enEl ~ " = " ~ enuM.stringof ~ "." ~ enEl ~ ",\n";
     }
 
     return res ~ "}\n";
@@ -218,23 +241,22 @@ string dequalify_enums(enumList...)() {
 
 unittest {
     import std.conv: asOriginalType;
-    import global: Cid, MAX_STATIC_CID;
-    enum CommonConcepts: Cid {
-        chat_seed = MAX_STATIC_CID + 1,                  // this is the root branch of the chat
-        do_not_know_what_it_is,
-        max         // The first not used cid. Must be the last in the enum.
+    import global: CptDescriptor, cd, MAX_STATIC_CID;
+    import cpt_concrete: HolySeed, HolyBreed;
+    enum CommonConcepts: CptDescriptor {
+        chat_seed = cd!(HolySeed, 2_500_739_441),                  // this is the root branch of the chat
+        do_not_know_what_it_is = cd!(HolySeed, 580_052_493),
     }
 
-    enum Chat: Cid {
-        test_concept_name = CommonConcepts.max.asOriginalType,
-        max         // The first not used cid. Must be the last in the enum.
+    enum Chat: CptDescriptor {
+        console_breed = cd!(HolyBreed, 4_021_308_401),
+        console_seed = cd!(HolySeed, 1_771_384_341),
     }
 
     // Declare enums with the same members as in the CommonConcepts and Chat
     mixin(dequalify_enums!(CommonConcepts, Chat));
     assert(chat_seed == CommonConcepts.chat_seed);
     assert(do_not_know_what_it_is == CommonConcepts.do_not_know_what_it_is);
-    assert(test_concept_name == Chat.test_concept_name);
 }
 
 /**

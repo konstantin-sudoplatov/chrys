@@ -214,15 +214,25 @@ class HolyUnconditionalNeuron: HolyNeuron {
     /**
             Append action cids analogous to holy neuron, except that span selection is not needed here.
         Parameters:
-            actionCids = array of cids of appended actions.
+            actCids = array of cids of appended actions.
     */
-    final void append_actions(Cid[] actionCids) {
-        super.append_actions(float.infinity, actionCids);
+    final void append_actions(Cid[] actCids) {
+        super.append_actions(float.infinity, actCids);
     }
 
     /// Ditto.
-    final void append_actions(Cid actionCid) {
-        super.append_actions(float.infinity, [actionCid]);
+    final void append_actions(Cid actCid) {
+        super.append_actions(float.infinity, actCid);
+    }
+
+    /// Ditto.
+    final void append_actions(CptDescriptor actDesc) {
+        super.append_actions(float.infinity, actDesc);
+    }
+
+    /// Ditto.
+    final void append_actions(CptDescriptor[] actDescs) {
+        super.append_actions(float.infinity, actDescs);
     }
 
     /**
@@ -236,7 +246,17 @@ class HolyUnconditionalNeuron: HolyNeuron {
 
     /// Ditto.
     final void append_branches(Cid branchCid) {
-        super.append_branches(float.infinity, [branchCid]);
+        super.append_branches(float.infinity, branchCid);
+    }
+
+    /// Ditto.
+    final void append_branches(CptDescriptor branchDesc) {
+        super.append_branches(float.infinity, branchDesc);
+    }
+
+    /// Ditto.
+    final void append_branches(CptDescriptor[] branchDescs) {
+        super.append_branches(float.infinity, branchDescs);
     }
 
     /**
@@ -328,7 +348,9 @@ final class HolyWeightNeuron: HolyNeuron {
             Used for concepts with predefined cids.
             cid = concept identifier
     */
-    this(Cid cid) { super(cid); }
+    this(Cid cid) {
+        super(cid);
+    }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 

@@ -6,7 +6,7 @@ import cpt_concrete;
 import crank_pile;
 
 enum OtherConcepts {
-    another_test_concept_name = cpt!(HolyUnconditionalNeuron, 258_455_509),
+    another_test_concept_name = cd!(HolyUnconditionalNeuron, 258_455_509),
 }
 
 void other_concepts() {

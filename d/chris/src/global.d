@@ -23,6 +23,16 @@ enum MIN_TEMP_CID = MAX_STATIC_CID + 1;
 enum MAX_TEMP_CID = MIN_DYNAMIC_CID - 1;
 static assert(MAX_TEMP_CID >= MIN_TEMP_CID);
 
+/**
+        Convert name of type represented as a string to real type. Don't forget, the type you a trying to instantiate must
+    exist, i.e. to be imported or to be a basic type.
+    Parameters:
+        typeName = name of type
+*/
+template type(string typeName) {
+    mixin("alias type = " ~ typeName ~ ";");
+}
+
 // modules with static concepts
 import stat_pile;
 import stat_substat_subpile;
@@ -46,14 +56,34 @@ enum CrankModules {
 }
 
 /// Structure of the crank enums.
-struct ConceptDescriptor {
-    string class_name;      // named concept's class
-    int cid;                // named concept's cid
-    alias cid this;         // the enum's value by default is cid
+struct CptDescriptor {
+    string className;      // named concept's class
+    Cid cid;                // named concept's cid
+//    alias cid this;         // the enum's value by default is cid
 }
 
 /// Enum template for declaring named dynamic concepts. Used in the crank modules.
-enum cpt(T : HolyDynamicConcept, Cid cid)  = ConceptDescriptor(T.stringof, cid);
+enum cd(T : HolyDynamicConcept, Cid cid)  = CptDescriptor(T.stringof, cid);
+
+/**
+        Retrieve a concept from the holy map by its enum constant and cast it from the HolyConcept to its original type, once
+    again, gotten from the enum constant (the ConceptDescriptor type).
+    Parameters:
+        cd = constant descriptor of the enum, describing the concept
+    Returns: the wanted concept casted to its original type.
+*/
+auto cpt(alias cd)() {
+    return cast(type!("shared " ~ cd.className))_hm_[cd.cid];
+}
+
+///
+unittest {
+    import std.stdio: writeln;
+    import crank_pile: CommonConcepts, Chat;
+    mixin(dequalify_enums!(CommonConcepts, Chat));
+
+    assert(cpt!(chat_seed) is cast(shared HolySeed)_hm_[chat_seed.cid]);
+}
 
 /**
             It is a two-way map of concept name/cid. The concepts are both static and dynamic. Here are gathered all
@@ -245,6 +275,7 @@ shared synchronized final pure nothrow class HolyMap {
     */
     shared(HolyConcept) add(shared HolyConcept cpt)
     in {
+        assert(cpt !in this, "Cid " ~ to!string(cpt.cid) ~ " - this cid already exists in the holy map.");
         if      // dynamic?
                 (cast(shared HolyDynamicConcept)cpt)
             if      // with preset cid?
@@ -330,6 +361,11 @@ shared synchronized final pure nothrow class HolyMap {
     */
     shared(HolyConcept*) opBinaryRight(string op)(Cid cid) {
         return cid in holyMap_;
+    }
+
+    /// Ditto.
+    shared(HolyConcept*) opBinaryRight(string op)(shared HolyConcept cpt) {
+        return cpt.cid in holyMap_;
     }
 
     /**
@@ -518,8 +554,9 @@ private TempDynDescriptor[] createTempDynDescriptors_() {
         static foreach(memberName; __traits(allMembers, mixin(moduleName))) {
             static if(mixin("is(" ~ memberName ~ "==enum)")) {
                 static foreach(enumElem; __traits(allMembers, mixin(memberName))) {
-                    sd.cid = mixin(memberName ~ "." ~ enumElem);
+                    sd.cid = mixin(memberName ~ "." ~ enumElem ~ ".cid");
                     sd.name = enumElem;
+                    sd.class_name = mixin(memberName ~ "." ~ enumElem ~ ".className");
                     dds ~= sd;
                 }
             }
@@ -540,6 +577,7 @@ private TempDynDescriptor[] createTempDynDescriptors_() {
 
     return dds;
 }
+
 
 /**
         Create enum array of unused cids, CTFE.
@@ -572,7 +610,7 @@ private Cid[] findUnusedStatCids_() {
 */
 private void fillInConceptMaps_(shared HolyMap hm, shared NameMap nm)
 out{
-    assert(hm.length == statDescriptors_.length);
+    assert(hm.length == statDescriptors_.length + dynDescriptors_.length);
     assert(nm.length == statDescriptors_.length + dynDescriptors_.length);
 }
 do {
@@ -593,6 +631,11 @@ do {
     foreach(dd; dynDescriptors_) {
         assert(dd.cid !in nm && dd.name !in nm);
         nm.add(dd.cid, dd.name);
+    }
+
+    // Create dynamic concepts based on the dynDescriptors_ enum
+    static foreach(dd; dynDescriptors_) {
+        _hm_[] = mixin("new shared " ~ dd.class_name ~ "(" ~ to!string(dd.cid) ~ ")");
     }
 }
 
@@ -690,6 +733,7 @@ unittest {
 private struct TempDynDescriptor {
     Cid cid;                        /// cid of the concept
     string name;                    /// concept's name
+    string class_name;              /// concept's class name - will be used for creating the concept object
 
     /// Reload opCmp to make it sortable on cid (not nescessary, actually, since cid is the first field in the structure).
     int opCmp(ref const TempDynDescriptor s) const {

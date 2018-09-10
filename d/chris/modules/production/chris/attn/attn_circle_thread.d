@@ -54,7 +54,7 @@ class Caldron {
         if      // is it a request for starting reasoning?
                 (cast(StartReasoningMsg)msg)
         {
-            reasoning_;
+//            reasoning_;
             return true;
         }
         return false;
@@ -173,14 +173,16 @@ class AttentionCircle: Caldron {
     /// Ditto.
     protected override bool _msgProcessing(immutable Msg msg) {
 
-        if      // is it a Tid of the client sent by Dispatcher?
+        if (super._msgProcessing(msg))
+            return true;
+        else if      // is it a Tid of the client sent by Dispatcher?
                 (auto m = cast(immutable DispatcherSuppliesCircleWithClientTid)msg)
         {   //yes: accept the Tid
             clientTid_ = cast()m.sender_tid;
             return true;
         }
-
-        return false;
+        else
+            return false;
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -263,6 +265,7 @@ void caldron_thread_func(bool calledByDispatcher, Cid seedCid) {try{
         }
 
 debug   {  // unrecognized message of type Msg. Log it.
+mixin("msg".w);
             logit(format!"Unexpected message to the caldron thread: %s"(msg));
             continue;
         }

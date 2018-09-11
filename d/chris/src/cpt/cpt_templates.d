@@ -3,32 +3,6 @@ import std.stdio;
 
 import global, tools;
 
-/**
-        Test for an array of a given type.
-    Parameters:
-        S = type to test
-        T = type of array element
-*/
-enum bool isArrayOf(S, T) = is(S : T[]);
-///
-unittest {
-    assert(isArrayOf!(int[], int));
-    assert(!isArrayOf!(int[], long));
-}
-
-/**
-        Test for a given type.
-    Parameters:
-        S = type to test
-        T = type to test against
-*/
-enum bool isOf(S, T) = is(S == T);
-///
-unittest {
-    assert(isOf!(shared int, shared int));
-    assert(isOf!(int[], int[]));
-}
-
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 

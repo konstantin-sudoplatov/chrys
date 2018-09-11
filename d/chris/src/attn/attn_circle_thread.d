@@ -1,5 +1,6 @@
 module attn_circle_thread;
 import core.thread, std.concurrency;
+import std.conv;
 import std.format;
 
 import global, tools;
@@ -54,7 +55,7 @@ class Caldron {
         if      // is it a request for starting reasoning?
                 (cast(StartReasoningMsg)msg)
         {
-//            reasoning_;
+            reasoning_;
             return true;
         }
         return false;
@@ -91,10 +92,6 @@ class Caldron {
     private void reasoning_() {
         while(true) {
             Neuron head = cast(Neuron)cpt_(headCid_);
-            if      // isn't the head neuron ready?
-                    (head.is_down)
-                //no: stop
-                goto STOP_AND_WAIT;
 
             // Let the head be processed, determine effects and do the actions.
             auto effect = head.calculate_activation_and_get_effects;
@@ -109,6 +106,8 @@ class Caldron {
                 goto STOP_AND_WAIT;
 
             // Set up new head and may be start new caldrons
+            assert(cast(Neuron)cpt_(effect.branches[0]), "Cid: " ~ to!string(effect.branches[0]) ~
+                    " new head must be a Neuron and it is " ~ to!string(typeid(cpt_(effect.branches[0]))));
             headCid_ = effect.branches[0];     // the first branch in the list is the new head
             int len = cast(int)effect.branches.length;
             foreach(cid; effect.branches[1..$]) {
@@ -121,7 +120,7 @@ class Caldron {
                 else
                 {   //no: it is a breed. Spawn an identified branch
                     auto breed = cast(Breed)cpt_(cid);
-                    Cid seedCid = breed.seed_cid;
+                    Cid seedCid = breed.seed;
                     assert(cast(Seed)cpt_(seedCid));
                     Tid tid = spawn(&caldron_thread_func, false, seedCid);
                     breed.tid = tid;        // save the Tid in the breed concept in this name space
@@ -130,6 +129,7 @@ class Caldron {
             }
         }
     STOP_AND_WAIT:
+mixin("headCid_".w);
     }
 
     /**
@@ -146,7 +146,7 @@ class Caldron {
                 (auto p = cid in lm_)
             return *p;
         else
-            return _hm_[cid].live_factory;
+            return lm_[cid] = _hm_[cid].live_factory;
     }
 
     /// Ditto.
@@ -226,49 +226,50 @@ void caldron_thread_func(bool calledByDispatcher, Cid seedCid) {try{
         import std.variant: Variant;
 
         immutable Msg msg;
+        Throwable ex;
+        Variant var;    // the catchall type
 
-        // When debugging, catch any mesages, which are not of the Msg type and log them
-        debug
-            Variant var;    // the catchall type
+        receive(
+            (immutable Msg m) {(cast()msg) = cast()m;},
+            (shared Throwable e){ex = cast()e;},
+            (Variant v) {var = v;}          // the catchall clause
+        );
 
-        // Receive new message
-        debug
-            receive(
-                (immutable Msg m) {(cast()msg) = cast()m;},
-                (Variant v) {var = v;}          // the catchall clause
-            );
-        else
-            receive(
-                (immutable Msg m) {(cast()msg) = cast()m;}
-            );
-
-        debug   // Log unexpected message
-            if(var.hasValue) {  // unrecognized message of type Variant. Log it.
-                logit(format!"Unexpected message to the caldron thread: %s"(var.toString));
-                continue;
-            }
-
-        assert(msg, "The message must not be null here.");
-
-        //Send the message to caldron
-        if      // processed by caldron?
-                (caldron_._msgProcessing(msg))
+        // Recognize and process the message
+        if      // is it a regular message?
+                (msg)
+        {   // process it
+            //Send the message to caldron
+            if // processed by caldron?
+            (caldron_._msgProcessing(msg))
             //yes: go for a new message
-            continue;
-        else if // is it a request for the circle termination?
-                (cast(TerminateAppMsg)msg)
-        {   //yes: terminate me and all my subthreads
-            caldron_.terminate_children;
+                continue ;
+            else if // is it a request for the circle termination?
+            (cast(TerminateAppMsg)msg)
+            {   //yes: terminate me and all my subthreads
+                caldron_.terminate_children;
 
-            // terminate itself
-            goto FINISH_THREAD;
+                // terminate itself
+                goto FINISH_THREAD;
+            }
+            else
+            {  // unrecognized message of type Msg. Log it.
+                logit(format!"Unexpected message to the caldron thread: %s"(typeid(msg)));
+                continue ;
+            }
+        }
+        else if // exception message?
+                (ex)
+        {   // rethrow exception
+            throw ex;
+        }
+        else if
+                (var.hasValue)
+        {  // unrecognized message of type Variant. Log it.
+            logit(format!"Unexpected message of type Variant to the caldron thread: %s"(var.toString));
+            continue;
         }
 
-debug   {  // unrecognized message of type Msg. Log it.
-mixin("msg".w);
-            logit(format!"Unexpected message to the caldron thread: %s"(msg));
-            continue;
-        }
     }
     FINISH_THREAD:
 } catch(Throwable e) { ownerTid.send(cast(shared)e); } }

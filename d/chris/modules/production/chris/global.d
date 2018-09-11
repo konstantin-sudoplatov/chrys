@@ -44,6 +44,12 @@ enum StatConceptModules {
     subpile = "stat_substat_subpile"
 }
 
+/// Call types of the static concept (static concept is function).
+enum StatCallType {
+    rCid_p0Cal_p1Cidar_p2Obj,           // Cid function(Caldron nameSpace, Cid[] paramCids, Object extra)
+    rCidar_p0Cal_p1Cidar_p2Obj,         // Cid[] function(Caldron nameSpace, Cid[] paramCids, Object extra)
+}
+
 // modules with dynamic concept names and cranks
 import crank_pile;
 import crank_subcrank_subpile;

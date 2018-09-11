@@ -4,7 +4,6 @@ import std.stdio;
 
 import global, tools, common_types;
 import attn_circle_thread: Caldron;
-import cpt_abstract: StatCallType;
 
 /**
         Load a concept into the name space, if not loaded, and activate it.

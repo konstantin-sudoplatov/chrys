@@ -18,7 +18,7 @@ final class HolyStaticConcept: HolyConcept {
     /**
                 Constructor
         Parameters:
-            cid = cid
+            cid = Concept identifier. Must lay in the range of static concepts.
             fp = function pointer to the static concept function
             callType = call type of the static concept function
     */
@@ -29,14 +29,12 @@ final class HolyStaticConcept: HolyConcept {
         cast()call_type = callType;
     }
 
-    //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-    /**
-        Create live wrapper for the holy static concept.
-    */
+    /// Create live wrapper for the holy static concept.
     override StaticConcept live_factory() const {
         return new StaticConcept(cast(immutable)this);
     }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
 }
 
 /// Live wrapper for the HolyConcept class
@@ -54,12 +52,6 @@ final class StaticConcept: Concept {
 final class HolyAction: HolyDynamicConcept {
 
     /**
-                Default constructor.
-            Cid will be generated and assigned in the _hm_.add() method.
-    */
-    this() {}
-
-    /**
                 Constructor
         Parameters:
             Used for concepts with predefined cids.
@@ -67,14 +59,12 @@ final class HolyAction: HolyDynamicConcept {
     */
     this(Cid cid) { super(cid); }
 
-    //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-    /**
-        Create live wrapper for the holy static concept.
-    */
+    /// Create live wrapper for the holy static concept.
     override Action live_factory() const {
         return new Action(cast(immutable)this);
     }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
 }
 
 /// Ditto
@@ -96,12 +86,6 @@ final class Action: DynamicConcept {
 final class HolyBreed: HolyPrimitive {
 
     /**
-                Default constructor.
-            Cid will be generated and assigned in the _hm_.add() method.
-    */
-    this() {}
-
-    /**
                 Constructor
         Parameters:
             Used for concepts with predefined cids.
@@ -111,23 +95,25 @@ final class HolyBreed: HolyPrimitive {
         super(cid);
     }
 
-    /// Getter.
-    @property Cid seed_cid() const {
-        return seedCid_;
-    }
-
-    /// Setter.
-    @property Cid seed_cid(Cid seedCid) {
-        return seedCid_ = seedCid;
+    /// Create live wrapper for the holy static concept.
+    override Breed live_factory() const {
+        return new Breed(cast(immutable)this);
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
-    /**
-        Create live wrapper for the holy tid primitive concept.
-    */
-    override Breed live_factory() const {
-        return new Breed(cast(immutable)this);
+    /// Getter.
+    @property Cid seed() const {
+        return seedCid_;
+    }
+
+    /// Setter.
+    @property Cid seed(Cid seedCid) {
+        return seedCid_ = seedCid;
+    }
+
+    @property Cid seed(CptDescriptor seedDesc) {
+        return seedCid_ = seedDesc.cid;
     }
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
@@ -160,8 +146,8 @@ final class Breed: Primitive, ReadinessCheckIfc {
     }
 
     /// Getter.
-    const(Cid) seed_cid() const {
-        return (cast(immutable HolyBreed)holy).seed_cid;
+    const(Cid) seed() const {
+        return (cast(immutable HolyBreed)holy).seed;
     }
 
     /// Mixin up/down states.
@@ -186,18 +172,17 @@ final class Breed: Primitive, ReadinessCheckIfc {
 class HolyUnconditionalNeuron: HolyNeuron {
 
     /**
-                Default constructor.
-            Cid will be generated and assigned in the _hm_.add() method.
-    */
-    this() {}
-
-    /**
                 Constructor
         Parameters:
             Used for concepts with predefined cids.
             cid = concept identifier
     */
     this(Cid cid) { super(cid); }
+
+    /// Create live wrapper for the holy static concept.
+    override UnconditionalNeuron live_factory() const {
+        return new UnconditionalNeuron(cast(immutable)this);
+    }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
@@ -258,13 +243,6 @@ class HolyUnconditionalNeuron: HolyNeuron {
     final void append_branches(CptDescriptor[] branchDescs) {
         super.append_branches(float.infinity, branchDescs);
     }
-
-    /**
-        Create live wrapper for the holy static concept.
-    */
-    override UnconditionalNeuron live_factory() const {
-        return new UnconditionalNeuron(cast(immutable)this);
-    }
 }
 
 /// Ditto
@@ -289,7 +267,6 @@ class UnconditionalNeuron: Neuron {
     float activation() const {
         return 1;
     }
-
 }
 
 /**
@@ -301,12 +278,6 @@ class UnconditionalNeuron: Neuron {
 final class HolySeed: HolyUnconditionalNeuron {
 
     /**
-                Default constructor.
-            Cid will be generated and assigned in the _hm_.add() method.
-    */
-    this() {}
-
-    /**
                 Constructor
         Parameters:
             Used for concepts with predefined cids.
@@ -314,14 +285,12 @@ final class HolySeed: HolyUnconditionalNeuron {
     */
     this(Cid cid) { super(cid); }
 
-    //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-    /**
-        Create live wrapper for the holy static concept.
-    */
+    /// Create live wrapper for the holy static concept.
     override Seed live_factory() const {
         return new Seed(cast(immutable)this);
     }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
 }
 
 /// Ditto
@@ -332,15 +301,37 @@ final class Seed: UnconditionalNeuron {
 }
 
 /**
+            Base for neurons, that take its decisions by pure logic on premises, as opposed to weighing them.
+*/
+final class HolyAndNeuron: HolyLogicalNeuron {
+
+    /**
+                Constructor
+        Parameters:
+            Used for concepts with predefined cids.
+            cid = concept identifier
+    */
+    this(Cid cid) { super(cid); }
+
+    /// Create live wrapper for the holy static concept.
+    override AndNeuron live_factory() const {
+        return new AndNeuron(cast(immutable)this);
+    }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+}
+
+/// Ditto
+final class AndNeuron: LogicalNeuron {
+
+    /// Constructor
+    this (immutable HolyAndNeuron holyAndNeuron) { super(holyAndNeuron); }
+}
+
+/**
             Base for all weighing neurons.
 */
 final class HolyWeightNeuron: HolyNeuron {
-
-    /**
-                Default constructor.
-            Cid will be generated and assigned in the _hm_.add() method.
-    */
-    this() {}
 
     /**
                 Constructor
@@ -352,14 +343,12 @@ final class HolyWeightNeuron: HolyNeuron {
         super(cid);
     }
 
-    //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-    /**
-        Create live wrapper for the holy static concept.
-    */
+    /// Create live wrapper for the holy static concept.
     override WeightNeuron live_factory() const {
         return new WeightNeuron(cast(immutable)this);
     }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
 }
 
 /// Ditto

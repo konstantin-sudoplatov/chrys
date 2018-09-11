@@ -13,10 +13,30 @@ import cpt_concrete;
 /// waisting 16 bytes on the array descriptor). Used in the HolyConcept.clone() method.
 private extern (C) Object _d_newclass (ClassInfo info);     //
 
-/// Call types of the static concept (static concept is function).
-enum StatCallType {
-    rCid_p0Cal_p1Cidar_p2Obj,           // Cid function(Caldron nameSpace, Cid[] paramCids, Object extra)
-    rCidar_p0Cal_p1Cidar_p2Obj,         // Cid[] function(Caldron nameSpace, Cid[] paramCids, Object extra)
+/**
+        Test for an array of a given type.
+    Parameters:
+        S = type to test
+        T = type of array element
+*/
+enum bool isArrayOf(S, T) = is(S : T[]);
+///
+unittest {
+    assert(isArrayOf!(int[], int));
+    assert(!isArrayOf!(int[], long));
+}
+
+/**
+        Test for a given type.
+    Parameters:
+        S = type to test
+        T = type to test against
+*/
+enum bool isOf(S, T) = is(S == T);
+///
+unittest {
+    assert(isOf!(shared int, shared int));
+    assert(isOf!(int[], int[]));
 }
 
 /// Concept's attributes.
@@ -50,16 +70,10 @@ shared abstract class HolyConcept {
     immutable HolyCptFlags flags =  cast(HolyCptFlags)0;
 
     /**
-                Default constructor.
-            Cid will be generated and assigned in the _hm_.add() method.
-    */
-    this() {}
-
-    /**
                 Constructor
             Used for concepts with predefined cids.
         Parameters:
-            cid = concept identifier
+            cid = Concept identifier.
     */
     this(Cid cid) {
         this.cid = cid;
@@ -139,16 +153,11 @@ abstract class Concept {
 abstract class HolyDynamicConcept: HolyConcept {
 
     /**
-                Default constructor.
-            Cid will be generated and assigned in the _hm_.add() method.
-    */
-    this() {}
-
-    /**
                 Constructor
         Used for concepts with predefined cids.
         Parameters:
-            cid = concept identifier
+            cid = Concept identifier. Can be a preassigned value or 0. If it is 0, then actual value is generated when you
+                  add the concept to the holy map.
     */
     this(Cid cid) {
         super(cid);
@@ -171,12 +180,6 @@ abstract class DynamicConcept: Concept {
 abstract class HolyPrimitive: HolyDynamicConcept {
 
     /**
-                Default constructor.
-            Cid will be generated and assigned in the _hm_.add() method.
-    */
-    this() {}
-
-    /**
                 Constructor
         Parameters:
             Used for concepts with predefined cids.
@@ -197,12 +200,6 @@ abstract class Primitive: DynamicConcept {
     All concrete descendants will have the "_pre" suffix.
 */
 abstract class HolyPremise: HolyDynamicConcept {
-
-    /**
-                Default constructor.
-            Cid will be generated and assigned in the _hm_.add() method.
-    */
-    this() {}
 
     /**
                 Constructor
@@ -241,12 +238,6 @@ abstract class HolyNeuron: HolyDynamicConcept {
     }
 
     //---***---***---***---***---***--- data ---***---***---***---***---***--
-
-    /**
-                Default constructor.
-            Cid will be generated and assigned in the _hm_.add() method.
-    */
-    this() {}
 
     /**
                 Constructor
@@ -572,7 +563,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
 }
 
 /// Ditto
-abstract class Neuron: DynamicConcept, ActivationIfc, ReadinessCheckIfc {
+abstract class Neuron: DynamicConcept, ActivationIfc {
 
     /// Constructor
     this(immutable HolyNeuron holyNeuron) { super(holyNeuron); }
@@ -585,21 +576,12 @@ abstract class Neuron: DynamicConcept, ActivationIfc, ReadinessCheckIfc {
                  .upperBound as float; .actions as Cid[]; .branches as Cid[]
     */
     abstract HolyNeuron.Effect calculate_activation_and_get_effects();
-
-    /// The prerequisite check implementation
-    mixin ReadinessCheckImpl!Neuron;
 }
 
 /**
             Base for neurons, that take its decisions by pure logic on premises, as opposed to weighing them.
 */
 abstract class HolyLogicalNeuron: HolyNeuron {
-
-    /**
-                Default constructor.
-            Cid will be generated and assigned in the _hm_.add() method.
-    */
-    this() {}
 
     /**
                 Constructor
@@ -610,10 +592,21 @@ abstract class HolyLogicalNeuron: HolyNeuron {
     this(Cid cid) { super(cid); }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+    //
+    //                                 Protected
+    //
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+
+    //---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
+
+    /// Array of premise cids.
+    protected Cid[] premises_;
 }
 
 /// Ditto
-abstract class LogicalNeuron: DynamicConcept, BinActivationIfc {
+abstract class LogicalNeuron: Neuron, BinActivationIfc {
 
     /// Constructor
     this (immutable HolyLogicalNeuron holyLogicalNeuron) { super(holyLogicalNeuron); }

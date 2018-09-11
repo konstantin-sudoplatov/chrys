@@ -18,11 +18,13 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
         import std.variant: Variant;
 
         Msg msg;                    // regular message
+        Throwable ex;               // exception message from a child
         Variant var;                // the catchall type
 
         // Receive new message
         receive(
             (immutable Msg m){msg = cast()m;},
+            (shared Throwable e){ex = cast()e;},
             (Variant v){var = v;}
         );
 
@@ -43,7 +45,7 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                     circleTid = *circleTidPtr;
                 }
                 else {  //no: create the circle, tell him the client's Tid and put the pair in the circle register
-                    circleTid = spawn(&caldron_thread_func, true, CommonConcepts.chat_seed.cid);
+                    circleTid = spawn(&caldron_thread_func, true, Chat.chat_seed.cid);
                     circleTid.send(new immutable DispatcherSuppliesCircleWithClientTid(clientTid));
                     circleRegister_[clientTid] = circleTid;
                 }
@@ -65,13 +67,18 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                 goto FINISH_THREAD;
             }
             else {  // unrecognized message of type Msg. Log it.
-                logit(format!"Unexpected message to the attention dispatcher thread: %s"(msg));
+                logit(format!"Unexpected message to the attention dispatcher thread: %s"(typeid(msg)));
             }
         }
+        else if // exception message?
+                (ex)
+        {   // rethrow exception
+            throw ex;
+        }
         else if // has come an unexpected message?
-        (var.hasValue)
+                (var.hasValue)
         {   // log it
-            logit(format!"Unexpected message to the attention dispatcher thread: %s"(var.toString));
+            logit(format!"Unexpected message of type Variant to the attention dispatcher thread: %s"(var.toString));
             continue;
         }
     }

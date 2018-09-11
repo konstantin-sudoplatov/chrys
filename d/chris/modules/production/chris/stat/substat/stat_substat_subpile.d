@@ -3,7 +3,6 @@ import std.stdio;
 
 import global, tools;
 import attn_circle_thread: Caldron;
-import cpt_abstract: StatCallType;
 
 
 

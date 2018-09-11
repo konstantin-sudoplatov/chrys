@@ -1,4 +1,7 @@
 module interfaces;
+import std.format;
+
+import global;
 
 /// Base activation interface. Does not have an implementation.
 abstract interface ActivationIfc {
@@ -41,22 +44,16 @@ mixin template EsquashActivationImpl(T: EsquashActivationIfc){
 
     /// Getter
     @property float activation() const {
-        return activation_;
+        return _activation;
     }
 
     /// Setter
     @property float activation(float a) {
-        return activation_ = a;
+        return _activation = a;
     }
 
-    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-    //
-    //                               Private
-    //
-    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-
     /// activation value
-    private float activation_ = 0;
+    protected float _activation = 0;
 }
 
 unittest {
@@ -97,26 +94,20 @@ mixin template BinActivationImpl(T: BinActivationIfc) {
 
     /// Getter
     float activation() const {
-        return activation_;
+        return _activation;
     }
 
     /// Set activation to 1.
     float activate(){
-        return activation_ = 1;
+        return _activation = 1;
     }
 
     /// Set activation to -1 (antiactivate). By definition a concept is antiactivated if its activation <= 0.
     float anactivate(){
-        return activation_ = -1;
+        return _activation = -1;
     }
 
-    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-    //
-    //                               Private
-    //
-    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-
-    private float activation_ = 0;
+    protected float _activation = 0;
 }
 
 unittest {
@@ -132,8 +123,71 @@ unittest {
     assert(a.activation == -1);
 }
 
-/// Interface for checking dependencies of a concept on premises and other concepts.
-interface ReadinessCheckIfc {
+/**
+            Interface for logical (boolean logic) premises.
+*/
+interface PremiseIfc {
+
+    /// Add premises by cid.
+    void _addPremise_(Cid[] premCids);
+
+    /// Add premise by cid.
+    void _addPremise_(Cid premCid);
+
+    /// Adapter.
+    void _addPremise_(CptDescriptor[] premDescs);
+
+    /// Adapter.
+    void _addPremise_(CptDescriptor premDesc);
+}
+
+/**
+    Imlementation of the PremiseIfc
+*/
+mixin template PremiseImpl(T : PremiseIfc) {
+    static assert (is(typeof(this) == T), `You introduced yourself as a "` ~ T.stringof ~ `" and you are a "` ~
+            this.stringof ~ `". Are you an imposter?`);
+
+    /// Add premises by cid.
+    void _addPremise_(Cid[] premCids) {
+        foreach(cid; premCids)
+            assert(cast(BinActivationIfc)_hm_[cid],
+                    format!"Cid %s must implement BinActivationIfc. Check the class %s."(cid, typeid(_hm_[cid])));
+
+        _premises ~= premCids;
+    }
+
+    /// Add premise by cid.
+    void _addPremise_(Cid[] premCid) {
+        assert(cast(BinActivationIfc)_hm_[premCid],
+                format!"Cid %s must implement BinActivationIfc. Check the class %s."(premCid, typeid(_hm_[premCid])));
+
+        _premises ~= premCid;
+    }
+
+    /// Adapter.
+    void _addPremise_(CptDescriptor[] premDescs) {
+        Cid[] cids;
+        foreach(cd; premDescs)
+            cids ~= cd.cid;
+
+        _addPremise_(cids);
+    }
+
+    /// Adapter.
+    void _addPremise_(CptDescriptor premDesc) {
+        _addPremise_(premDesc.cid);
+    }
+
+    /// Array of premise cids.
+    protected Cid[] _premises;
+}
+
+/**
+        Interface for checking dependencies of a concept on premises and other concepts. Deprecated until it is realy justified.
+    For now it seems to overlap the activation interfaces functionality.
+*/
+deprecated interface ReadinessCheckIfc {
 
     /**
             Check if the concept is ready for reasoning
@@ -165,7 +219,7 @@ interface ReadinessCheckIfc {
         T = static type of the class, that uses this implementation. That class must extend the PrerequisiteCheckIfc interface.
         isUp = initial state: true - up, false - down
 */
-mixin template ReadinessCheckImpl(T: ReadinessCheckIfc, bool isUp = true) {
+deprecated mixin template ReadinessCheckImpl(T: ReadinessCheckIfc, bool isUp = true) {
     static assert (is(typeof(this) == T), `You introduced yourself as a "` ~ T.stringof ~ `" and you are a "` ~
     this.stringof ~ `". Are you an imposter?`);
 
@@ -174,7 +228,7 @@ mixin template ReadinessCheckImpl(T: ReadinessCheckIfc, bool isUp = true) {
         Returns: true/false
     */
     bool is_up() {
-        return isUp_;
+        return _isUp;
     }
 
     /**
@@ -182,32 +236,26 @@ mixin template ReadinessCheckImpl(T: ReadinessCheckIfc, bool isUp = true) {
         Returns: true/false
     */
     bool is_down() {
-        return !isUp_;
+        return !_isUp;
     }
 
     /**
             Set the concept ready.
     */
     void set_up() {
-        isUp_ = true;
+        _isUp = true;
     }
 
     /**
             Set the concept not ready.
     */
     void set_down() {
-        isUp_ = false;
+        _isUp = false;
     }
-
-    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-    //
-    //                               Private
-    //
-    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     /// The go ahead flag. If it is true, then this concept's activation can be calculated and it can be used by other concepts as
     /// a premise for calculation their activations. If it is false, the reasoning must wait until it is true.
-    private bool isUp_ = isUp;       // the concept is ready by default
+    protected bool _isUp = isUp;       // the concept is ready by default
 }
 
 unittest {

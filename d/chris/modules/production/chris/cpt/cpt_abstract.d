@@ -4,7 +4,6 @@ module cpt_abstract;
 import std.conv, std.format;
 
 import global, tools;
-import cpt_templates;
 import interfaces;
 import cpt_concrete;
 
@@ -571,11 +570,24 @@ abstract class Neuron: DynamicConcept, ActivationIfc {
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     /**
-                Calculate activation value and set up the activation_ variable.
-        Returns: effects, corresponding calculated activation as Voldemort type:
-                 .upperBound as float; .actions as Cid[]; .branches as Cid[]
+                Calculate activation based on premises or lots.
+        Returns: activation value
     */
-    abstract HolyNeuron.Effect calculate_activation_and_get_effects();
+    abstract float calculate_activation();
+
+    /**
+                Calculate activation value and set up the activation_ variable.
+        Returns: effects, corresponding calculated activation
+    */
+
+    /**
+                Calculate activation value and set up the activation_ variable.
+        Returns: effects, corresponding calculated activation
+    */
+    HolyNeuron.Effect calculate_activation_and_get_effects() {
+
+        return (cast(HolyNeuron)holy).select_effects(calculate_activation);
+    }
 }
 
 /**
@@ -592,6 +604,17 @@ abstract class HolyLogicalNeuron: HolyNeuron {
     this(Cid cid) { super(cid); }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+    //
+    //                                 Protected
+    //
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+
+    //---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
+
+    /// Array of premise cids.
+    protected Cid[] premises_;
 }
 
 /// Ditto

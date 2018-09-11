@@ -78,7 +78,7 @@ final class Action: DynamicConcept {
             Active premise.
     This type of premise don't store its activation in the field but gets dynamically.
 */
-final class HolyActivePremise: HolyPremise {
+final class HolyPegPremise: HolyPremise {
 
     /**
                 Constructor
@@ -89,18 +89,18 @@ final class HolyActivePremise: HolyPremise {
     this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the holy static concept.
-    override ActivePremise live_factory() const {
-        return new ActivePremise(cast(immutable)this);
+    override PegPremise live_factory() const {
+        return new PegPremise(cast(immutable)this);
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 }
 
 /// Ditto
-final class ActivePremise: Premise, BinActivationIfc {
-    this(immutable HolyActivePremise holyActivePremise) { super(holyActivePremise); }
+final class PegPremise: Premise, BinActivationIfc {
+    this(immutable HolyPegPremise holyActivePremise) { super(holyActivePremise); }
 
-    mixin BinActivationImpl!ActivePremise;
+    mixin BinActivationImpl!PegPremise;
 }
 
 /**
@@ -112,7 +112,28 @@ final class ActivePremise: Premise, BinActivationIfc {
     to a child to send it messages. This concept will be that handler. After the new branch started, its tid will be put
     in the tid_ field of the live part.
 */
-final class HolyBreed: HolyPrimitive {
+final class HolyBreed: HolyTidPrimitive {
+
+    this(Cid cid) { super(cid); }
+
+    /// Create live wrapper for the holy static concept.
+    override TidPrimitive live_factory() const {
+        return new TidPrimitive(cast(immutable)this);
+    }
+}
+
+/// Live.
+final class Breed: TidPrimitive, BinActivationIfc {
+
+    /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
+    private this(immutable HolyBreed holyBreed) { super(holyBreed); }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    mixin BinActivationImpl!Breed;
+}
+
+class HolyTidPrimitive: HolyPrimitive {
 
     /**
                 Constructor
@@ -125,8 +146,8 @@ final class HolyBreed: HolyPrimitive {
     }
 
     /// Create live wrapper for the holy static concept.
-    override Breed live_factory() const {
-        return new Breed(cast(immutable)this);
+    override TidPrimitive live_factory() const {
+        return new TidPrimitive(cast(immutable)this);
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -145,12 +166,6 @@ final class HolyBreed: HolyPrimitive {
         return seedCid_ = seedDesc.cid;
     }
 
-    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-    //
-    //                                  Private
-    //
-    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /// The seed of the branch.
@@ -158,11 +173,11 @@ final class HolyBreed: HolyPrimitive {
 }
 
 /// Ditto.
-final class Breed: Primitive, ReadinessCheckIfc {
+class TidPrimitive: Primitive {
     import std.concurrency: Tid;
 
     /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
-    private this(immutable HolyBreed holyTidPrimitive) { super(holyTidPrimitive); }
+    private this(immutable HolyTidPrimitive holyTidPrimitive) { super(holyTidPrimitive); }
 
     /// Getter.
     @property Tid tid() {
@@ -178,9 +193,6 @@ final class Breed: Primitive, ReadinessCheckIfc {
     const(Cid) seed() const {
         return (cast(immutable HolyBreed)holy).seed;
     }
-
-    /// Mixin up/down states.
-    mixin ReadinessCheckImpl!(Breed, false);     // initialize to down
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
     //
@@ -332,7 +344,7 @@ final class Seed: UnconditionalNeuron {
 /**
             Base for neurons, that take its decisions by pure logic on premises, as opposed to weighing them.
 */
-final class HolyAndNeuron: HolyLogicalNeuron {
+final class HolyAndNeuron: HolyLogicalNeuron, PremiseIfc  {
 
     /**
                 Constructor
@@ -348,6 +360,8 @@ final class HolyAndNeuron: HolyLogicalNeuron {
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    mixin PremiseImpl!HolyAndNeuron;
 }
 
 /// Ditto
@@ -355,6 +369,16 @@ final class AndNeuron: LogicalNeuron {
 
     /// Constructor
     this (immutable HolyAndNeuron holyAndNeuron) { super(holyAndNeuron); }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /**
+                Calculate activation based on premises or lots.
+        Returns: activation value
+    */
+    override float calculate_activation() {
+        res
+    }
 }
 
 /**

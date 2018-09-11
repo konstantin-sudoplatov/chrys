@@ -16,7 +16,7 @@ enum Chat: CptDescriptor {
     uline_valve_anrn = cd!(HolyAndNeuron, 497_144_117),     // wait on this neuron for the next line from user
 }
 
-void start() {
+void start_chat_branch() {
     mixin(dequalify_enums!(Chat, Uline));    // anonymizes the concept enums, so we don't need use their full names.
 
     // Setup the chat_seed

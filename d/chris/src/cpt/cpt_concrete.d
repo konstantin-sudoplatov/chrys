@@ -1,9 +1,9 @@
 module cpt_concrete;
-
-import cpt_abstract;
-import interfaces;
+import std.format;
 
 import global, tools;
+import cpt_abstract;
+import interfaces;
 
 /**
             Static concept.
@@ -103,36 +103,7 @@ final class PegPremise: Premise, BinActivationIfc {
     mixin BinActivationImpl!PegPremise;
 }
 
-/**
-            Branch identifier.
-        On one hand it is a container for TID. TID itself is stored in the live part, since it is a changeable entity. On the
-    other, it is a pointer to the seed of the branch. Its cid is stored in the holy part.
-
-        This concept can be used to start new branch instead of the seed, if we want to have in the parent branch a handler
-    to a child to send it messages. This concept will be that handler. After the new branch started, its tid will be put
-    in the tid_ field of the live part.
-*/
-final class HolyBreed: HolyTidPrimitive {
-
-    this(Cid cid) { super(cid); }
-
-    /// Create live wrapper for the holy static concept.
-    override TidPrimitive live_factory() const {
-        return new TidPrimitive(cast(immutable)this);
-    }
-}
-
-/// Live.
-final class Breed: TidPrimitive, BinActivationIfc {
-
-    /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
-    private this(immutable HolyBreed holyBreed) { super(holyBreed); }
-
-    //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-    mixin BinActivationImpl!Breed;
-}
-
+/// Concept primitive for holding a Tid
 class HolyTidPrimitive: HolyPrimitive {
 
     /**
@@ -194,16 +165,40 @@ class TidPrimitive: Primitive {
         return (cast(immutable HolyBreed)holy).seed;
     }
 
-    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-    //
-    //                                  Private
-    //
-    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /// Thread identifier.
     private Tid tid_;
+}
+
+/**
+            Branch identifier.
+        On one hand it is a container for TID. TID itself is stored in the live part, since it is a changeable entity. On the
+    other, it is a pointer to the seed of the branch. Its cid is stored in the holy part.
+
+        This concept can be used to start new branch instead of the seed, if we want to have in the parent branch a handler
+    to a child to send it messages. This concept will be that handler. After the new branch started, its tid will be put
+    in the tid_ field of the live part.
+*/
+final class HolyBreed: HolyTidPrimitive {
+
+    this(Cid cid) { super(cid); }
+
+    /// Create live wrapper for the holy static concept.
+    override Breed live_factory() const {
+        return new Breed(cast(immutable)this);
+    }
+}
+
+/// Live.
+final class Breed: TidPrimitive, BinActivationIfc {
+
+    /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
+    private this(immutable HolyBreed holyBreed) { super(holyBreed); }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    mixin BinActivationImpl!Breed;
 }
 
 /**
@@ -228,6 +223,14 @@ class HolyUnconditionalNeuron: HolyNeuron {
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     /**
+                Calculate activation based on premises or lots.
+        Returns: activation value.
+    */
+    override float calculate_activation() {
+        return 1;
+    }
+
+    /**
                 Adding effects analogous to the holy neuron concept, except that the span is not needed in this case.
         Parameters:
             act = either Action or Action[] or Cid or Cid[]
@@ -236,67 +239,76 @@ class HolyUnconditionalNeuron: HolyNeuron {
     void add_effects(Ta, Tb)(Ta act, Tb bran) {
         super.add_effects(float.infinity, act, bran);
     }
-
-    /**
-            Append action cids analogous to holy neuron, except that span selection is not needed here.
-        Parameters:
-            actCids = array of cids of appended actions.
-    */
-    final void append_actions(Cid[] actCids) {
-        super.append_actions(float.infinity, actCids);
-    }
-
-    /// Ditto.
-    final void append_actions(Cid actCid) {
-        super.append_actions(float.infinity, actCid);
-    }
-
-    /// Ditto.
-    final void append_actions(CptDescriptor actDesc) {
-        super.append_actions(float.infinity, actDesc);
-    }
-
-    /// Ditto.
-    final void append_actions(CptDescriptor[] actDescs) {
-        super.append_actions(float.infinity, actDescs);
-    }
-
-    /**
-            Append branch cids analogous to holy neuron, except that span selection is not needed here.
-        Parameters:
-            branchCids = array of cids of appended branches.
-    */
-    final void append_branches(Cid[] branchCids) {
-        super.append_branches(float.infinity, branchCids);
-    }
-
-    /// Ditto.
-    final void append_branches(Cid branchCid) {
-        super.append_branches(float.infinity, branchCid);
-    }
-
-    /// Ditto.
-    final void append_branches(CptDescriptor branchDesc) {
-        super.append_branches(float.infinity, branchDesc);
-    }
-
-    /// Ditto.
-    final void append_branches(CptDescriptor[] branchDescs) {
-        super.append_branches(float.infinity, branchDescs);
-    }
+    //
+    ///**
+    //        Append action cids analogous to holy neuron, except that span selection is not needed here.
+    //    Parameters:
+    //        actCids = array of cids of appended actions.
+    //*/
+    //final void add_actions(Cid[] actCids) {
+    //    if(_effects.length == 0)
+    //        add_effects(actCids, null);
+    //    else
+    //        super.append_actions(float.infinity, actCids);
+    //}
+    //
+    ///// Ditto.
+    //final void add_actions(Cid actCid) {
+    //    if(_effects.length == 0)
+    //        add_effects(actCid, null);
+    //    else
+    //    super.append_actions(float.infinity, actCid);
+    //}
+    //
+    ///// Ditto.
+    //final void add_actions(CptDescriptor actDesc) {
+    //    super.append_actions(float.infinity, actDesc);
+    //}
+    //
+    ///// Ditto.
+    //final void add_actions(CptDescriptor[] actDescs) {
+    //    super.append_actions(float.infinity, actDescs);
+    //}
+    //
+    ///**
+    //        Append branch cids analogous to holy neuron, except that span selection is not needed here.
+    //    Parameters:
+    //        branchCids = array of cids of appended branches.
+    //*/
+    //final void add_branches(Cid[] branchCids) {
+    //    super.append_branches(float.infinity, branchCids);
+    //}
+    //
+    ///// Ditto.
+    //final void add_branches(Cid branchCid) {
+    //    super.append_branches(float.infinity, branchCid);
+    //}
+    //
+    ///// Ditto.
+    //final void add_branches(CptDescriptor branchDesc) {
+    //    super.append_branches(float.infinity, branchDesc);
+    //}
+    //
+    ///// Ditto.
+    //final void add_branches(CptDescriptor[] branchDescs) {
+    //    super.append_branches(float.infinity, branchDescs);
+    //}
 }
 
 /// Ditto
-class UnconditionalNeuron: Neuron {
+class UnconditionalNeuron: Neuron, ActivationIfc {
 
     /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
     private this(immutable HolyUnconditionalNeuron holyUnconditionalNeuron) { super(holyUnconditionalNeuron);}
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
-    /// No calculation of activation for an unconditional neuron.
-    override HolyNeuron.Effect calculate_activation_and_get_effects() {
-        return (cast(shared HolyNeuron)holy).select_effects(1);
+    /**
+                Calculate activation based on premises or lots.
+        Returns: activation value
+    */
+    override float calculate_activation() {
+        return (cast(shared HolyUnconditionalNeuron)holy).calculate_activation;
     }
 
     /// Getter
@@ -344,7 +356,7 @@ final class Seed: UnconditionalNeuron {
 /**
             Base for neurons, that take its decisions by pure logic on premises, as opposed to weighing them.
 */
-final class HolyAndNeuron: HolyLogicalNeuron, PremiseIfc  {
+final class HolyAndNeuron: HolyLogicalNeuron {
 
     /**
                 Constructor
@@ -354,14 +366,29 @@ final class HolyAndNeuron: HolyLogicalNeuron, PremiseIfc  {
     */
     this(Cid cid) { super(cid); }
 
-    /// Create live wrapper for the holy static concept.
+    // Create live wrapper for the holy static concept.
     override AndNeuron live_factory() const {
         return new AndNeuron(cast(immutable)this);
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
-    mixin PremiseImpl!HolyAndNeuron;
+    /**
+                Calculate activation based on premises or lots.
+        Returns: activation value
+    */
+    override float calculate_activation() {
+        float res = 1;
+        foreach(pr; _premises) {
+            assert(cast(ActivationIfc)_hm_[pr], format!"Cid %s, ActivationIfs must be realised for %s"(pr, typeid(_hm_[pr])));
+            if ((cast(ActivationIfc)_hm_[pr]).activation <= 0) {
+                res = -1;
+                break ;
+            }
+        }
+
+        return res;
+    }
 }
 
 /// Ditto
@@ -371,14 +398,6 @@ final class AndNeuron: LogicalNeuron {
     this (immutable HolyAndNeuron holyAndNeuron) { super(holyAndNeuron); }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-    /**
-                Calculate activation based on premises or lots.
-        Returns: activation value
-    */
-    override float calculate_activation() {
-        res
-    }
 }
 
 /**
@@ -402,16 +421,35 @@ final class HolyWeightNeuron: HolyNeuron {
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /**
+                Calculate activation based on premises or lots.
+        Returns: activation value
+    */
+    override float calculate_activation() {
+        assert(true, "Not realized yet");
+        return float.nan;
+    }
 }
 
 /// Ditto
-final class WeightNeuron: DynamicConcept, EsquashActivationIfc {
+final class WeightNeuron: Neuron, EsquashActivationIfc {
 
     /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
     private this (immutable HolyWeightNeuron holyWeightNeuron) { super(holyWeightNeuron); }
 
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
     // implementation of the interface
     mixin EsquashActivationImpl!WeightNeuron;
+
+    /**
+                Calculate activation based on premises or lots.
+        Returns: activation value
+    */
+    override float calculate_activation() {
+        return _activation = (cast(shared HolyWeightNeuron)holy).calculate_activation;
+    }
 }
 
 

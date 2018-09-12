@@ -30,6 +30,10 @@ interface EsquashActivationIfc: ActivationIfc {
 /**
         Imlementation for ESQUASH normalization activation. This mixin is inserted into the class, which is declared to implement
     the EsquashActivationIfc interface.
+
+    Note: strange thing happens - mixed in a class implemented functions work without the "override" attribute. And that is
+          fine, there is no way to insert this attribute into the template.
+
     Parameters:
         T = static type of the class, that uses this implementation. That class must extend the EsquashActivationIfc interface.
 */
@@ -107,7 +111,8 @@ mixin template BinActivationImpl(T: BinActivationIfc) {
         return _activation = -1;
     }
 
-    protected float _activation = 0;
+    // Activation, anactivated by default
+    protected float _activation = -1;
 }
 
 unittest {
@@ -125,8 +130,10 @@ unittest {
 
 /**
             Interface for logical (boolean logic) premises.
+    Note: the interface must be "shared" for it would be overrided by shared functions. Else it causes strange errors
+          "not implemented interface functions".
 */
-interface PremiseIfc {
+shared interface PremiseIfc {
 
     /// Add premises by cid.
     void _addPremise_(Cid[] premCids);
@@ -142,7 +149,7 @@ interface PremiseIfc {
 }
 
 /**
-    Imlementation of the PremiseIfc
+    Imlementation of the PremiseIfc.
 */
 mixin template PremiseImpl(T : PremiseIfc) {
     static assert (is(typeof(this) == T), `You introduced yourself as a "` ~ T.stringof ~ `" and you are a "` ~
@@ -158,7 +165,7 @@ mixin template PremiseImpl(T : PremiseIfc) {
     }
 
     /// Add premise by cid.
-    void _addPremise_(Cid[] premCid) {
+    void _addPremise_(Cid premCid) {
         assert(cast(BinActivationIfc)_hm_[premCid],
                 format!"Cid %s must implement BinActivationIfc. Check the class %s."(premCid, typeid(_hm_[premCid])));
 
@@ -258,14 +265,14 @@ deprecated mixin template ReadinessCheckImpl(T: ReadinessCheckIfc, bool isUp = t
     protected bool _isUp = isUp;       // the concept is ready by default
 }
 
-unittest {
-    class A: ReadinessCheckIfc {
-        mixin ReadinessCheckImpl!A;
-    }
-
-    A a = new A;
-    a.set_up;
-    assert(a.is_up);
-    a.set_down;
-    assert(a.is_down);
-}
+//unittest {
+//    class A: ReadinessCheckIfc {
+//        mixin ReadinessCheckImpl!A;
+//    }
+//
+//    A a = new A;
+//    a.set_up;
+//    assert(a.is_up);
+//    a.set_down;
+//    assert(a.is_down);
+//}

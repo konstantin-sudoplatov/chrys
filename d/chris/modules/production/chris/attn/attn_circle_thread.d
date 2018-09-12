@@ -7,7 +7,7 @@ import global, tools;
 import cpt_abstract, cpt_concrete;
 import crank_pile;
 import messages;
-
+debug = 2;
 /**
             Main work horse of the system. It provides the room for doing reasoning on some branch.
     This class, as well as it successors, must be shared, i.e. used for creating of shared objects. It must be a shared object
@@ -22,14 +22,26 @@ class Caldron {
     */
     this(Cid seedCid) {
         assert(cast(Seed)cpt_(seedCid) || cast(Breed)cpt_(seedCid));
-        this.headCid_ = seedCid;
+        headCid_ = seedCid_ = seedCid;
         thisTid.send(new immutable StartReasoningMsg);
     }
 
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /// Send children the termination signal and wait their termination.
     void terminate_children() {
-        foreach(child; childCaldrons_)
+        foreach (child; childCaldrons_)
             child.send(new immutable TerminateAppMsg);
-        thread_joinAll;
+    }
+
+    // Debug return the caldron seed's name, if exist, else word "noname" will be returned.
+    debug {
+        string _seedName_() {
+            if (auto nmp = seedCid_ in _nm_)
+                return *nmp;
+            else
+                return "noname";
+        }
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -69,6 +81,8 @@ class Caldron {
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
+    private Cid seedCid_;
+
     /// Caldrons, that were parented here.
     private Tid[] childCaldrons_;
 
@@ -76,7 +90,7 @@ class Caldron {
     /// put in this map. So, caldron always works with its own instance of a concept.
     private Concept[Cid] lm_;
 
-    /// The head of the branch. It is cid of seed neuron.
+    /// The head of the branch. It is cid of the seed neuron.
     private Cid headCid_;
 
     /// Stop and wait flag. Can be raised by actions.
@@ -90,7 +104,16 @@ class Caldron {
        processing other events in the queue or waits if the event queue is empty.
      */
     private void reasoning_() {
+        debug(2)
+            logit(_seedName_ ~ ":");
         while(true) {
+            debug(3){
+                HolyConcept cpt = cast()_hm_[headCid_];
+                logit(format!"    headCid_: %s, %s: %s"(headCid_, to!string(typeid(cpt)), _nm_[headCid_]));
+            }
+            else
+                debug(2) logit(format!"    headCid_: %s, %s"(headCid_, _nm_[headCid_]));
+
             Neuron head = cast(Neuron)cpt_(headCid_);
 
             // Let the head be processed, determine effects and do the actions.
@@ -102,18 +125,19 @@ class Caldron {
 
             // May be stop
             if      // was stop required by an action or is there no new head?
-                    (stopAndWait_ || effect.branches.length == 0)
+            (stopAndWait_ || effect.branches.length == 0)
                 goto STOP_AND_WAIT;
 
             // Set up new head and may be start new caldrons
             assert(cast(Neuron)cpt_(effect.branches[0]), "Cid: " ~ to!string(effect.branches[0]) ~
-                    " new head must be a Neuron and it is " ~ to!string(typeid(cpt_(effect.branches[0]))));
+            " new head must be a Neuron and it is " ~ to!string(typeid(cpt_(effect.branches[0]))));
             headCid_ = effect.branches[0];     // the first branch in the list is the new head
             int len = cast(int)effect.branches.length;
             foreach(cid; effect.branches[1..$]) {
-                assert(cast(Seed)cpt_(cid) || cast(Breed)cpt_(cid));
+                assert(cast(Seed)cpt_(cid) || cast(Breed)cpt_(cid),
+                format!"Cid: %s, this concept must be of Seed or Breed type, not of %s."(cid, typeid(cpt_(cid))));
                 if      // is it a seed?
-                        (cast(Seed)cpt_(cid))
+                (cast(Seed)cpt_(cid))
                 {   //yes: spawn an anonymous branch
                     childCaldrons_ ~= spawn(&caldron_thread_func, false, cid);
                 }
@@ -128,8 +152,10 @@ class Caldron {
                 }
             }
         }
+
     STOP_AND_WAIT:
-mixin("headCid_".w);
+    debug(2)
+        logit("    stop and wait on " ~ _seedName_);
     }
 
     /**
@@ -247,6 +273,8 @@ void caldron_thread_func(bool calledByDispatcher, Cid seedCid) {try{
             else if // is it a request for the circle termination?
             (cast(TerminateAppMsg)msg)
             {   //yes: terminate me and all my subthreads
+                debug(2)
+                    logit("terminating " ~ caldron_._seedName_);
                 caldron_.terminate_children;
 
                 // terminate itself

@@ -13,6 +13,10 @@ import cpt_abstract, cpt_concrete;
 /// Concept identifier is 4 bytes long at the moment.
 alias Cid = uint;
 
+/// Minimal debug level, the debug prints are set for, like "debug(DBG)"
+enum DBG = 1;
+enum DBG_1 = DBG + 1;
+
 /// Static cid range is from 1 to MAX_STATIC_CID;
 enum MIN_STATIC_CID = Cid(1);
 enum MAX_STATIC_CID = Cid(1_000_000);

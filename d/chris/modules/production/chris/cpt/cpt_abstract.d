@@ -255,14 +255,20 @@ abstract class HolyNeuron: HolyDynamicConcept {
         shared HolyNeuron clon = cast(shared HolyNeuron)super.clone;
 
         // Make it deep.
-        clon.effects_ = (cast()this).effects_.dup;
-        foreach(int i, eff; clon.effects_) {
-            clon.effects_[i].branches = effects_[i].branches.dup;
-            clon.effects_[i].actions = effects_[i].actions.dup;
+        clon._effects = (cast()this)._effects.dup;
+        foreach(int i, eff; clon._effects) {
+            clon._effects[i].branches = _effects[i].branches.dup;
+            clon._effects[i].actions = _effects[i].actions.dup;
         }
 
         return clon;
     }
+
+    /**
+                Calculate activation based on premises or lots.
+        Returns: activation value.
+    */
+    abstract float calculate_activation();
 
     /**
                 Get effects corresponding to given activation.
@@ -275,7 +281,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
         assert(activation !is float.nan);
 
         // find and return the span
-        foreach(eff; effects_) {
+        foreach(eff; _effects) {
             if      // activation fits the span?
                     (activation <= eff.upperBound)
             return cast()eff;
@@ -293,10 +299,10 @@ abstract class HolyNeuron: HolyDynamicConcept {
     */
     final void add_effects(float upperBound, Cid[] actions, Cid[] branches)
     in {
-        if(effects_.length > 0)
-            assert(upperBound > effects_[$-1].upperBound, "The upper bound " ~ to!string(upperBound) ~
+        if(_effects.length > 0)
+            assert(upperBound > _effects[$-1].upperBound, "The upper bound " ~ to!string(upperBound) ~
                     " must be bigger than the upper bound of the previous span, which is " ~
-                    to!string(effects_[$-1].upperBound));
+                    to!string(_effects[$-1].upperBound));
         foreach(act; actions)
             assert(act > MAX_STATIC_CID, "The action cid " ~ to!string(act) ~
                     " is laying within the static concept range, which is not allowed.");
@@ -305,7 +311,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
                     " is laying within the static concept range, which is not allowed.");
     }
     do {
-        effects_ ~= cast(shared)Effect(upperBound, actions, branches);
+        _effects ~= cast(shared)Effect(upperBound, actions, branches);
     }
 
     /**
@@ -316,26 +322,27 @@ abstract class HolyNeuron: HolyDynamicConcept {
             brans = Branches. It can be null, a single cid, an array of cids, single CptDescriptor, an array of CptDescriptors.
     */
     void add_effects(Tu: float, Ta, Tb)(Tu upperBound, Ta acts, Tb brans)
-    if ((isOf!(Ta, Cid) || isArrayOf!(Ta, Cid) || isOf!(Ta, CptDescriptor) || isArrayOf!(Ta, CptDescriptor))
-    &&
-    (isOf!(Tb, Cid) || isArrayOf!(Tb, Cid) || isOf!(Tb, CptDescriptor) || isArrayOf!(Tb, CptDescriptor)))
+    if
+            ((isOf!(Ta, Cid) || isArrayOf!(Ta, Cid) || isOf!(Ta, CptDescriptor) || isArrayOf!(Ta, CptDescriptor))
+                                                    &&
+            (isOf!(Tb, Cid) || isArrayOf!(Tb, Cid) || isOf!(Tb, CptDescriptor) || isArrayOf!(Tb, CptDescriptor)))
     {
         // convert act to Cid[]
         static if      // is array of actions null?
-        (is(Ta == typeof(null)))
+                (is(Ta == typeof(null)))
         {   // leave the first parameter null
             Cid[] a;
         }
         else static if   // is Ta an array?
-        (is(Ta T : T[]))
+                (is(Ta T : T[]))
             static if // is it array of the concept descriptors?
-            (is(T == CptDescriptor))
+                    (is(T == CptDescriptor))
             {   //yes: convert it into array of cids
                 Cid[] a;
                 foreach (cd; acts) {
                     debug if(_maps_fully_setup_)
                         assert(cast(shared HolyAction)_hm_[cd.cid], "Cid: " ~ to!string(cd.cid) ~
-                        " must be an action, and it is a " ~ cd.className);
+                                " must be an action, and it is a " ~ cd.className);
                     a ~= cd.cid;
                 }
             }
@@ -344,36 +351,36 @@ abstract class HolyNeuron: HolyDynamicConcept {
                 debug if(_maps_fully_setup_)
                     foreach (cid; acts) {
                         assert(cast(shared HolyAction)_hm_[cid], "Cid: " ~ to!string(cid) ~
-                        " must be an action, and it is a " ~ typeid(_hm_[cid]));
+                                " must be an action, and it is a " ~ typeid(_hm_[cid]));
                     }
                 Cid[] a = acts;
             }
         else static if // is it a concept descriptor?
-            (is(Ta == CptDescriptor))
+                    (is(Ta == CptDescriptor))
             {  //yes: convert it to array of cids
                 debug if(_maps_fully_setup_)
                     assert(cast(shared HolyAction)_hm_[acts.cid], "Cid: " ~ to!string(acts.cid) ~
-                    " must be an action, and it is a " ~ acts.className);
+                            " must be an action, and it is a " ~ acts.className);
                 Cid[] a = [acts.cid];
             }
             else
             {
                 debug if(_maps_fully_setup_)
                     assert(cast(shared HolyAction)_hm_[acts], "Cid: " ~ to!string(acts) ~
-                    " must be an action, and it is a " ~ typeid(_hm_[acts]));
+                            " must be an action, and it is a " ~ typeid(_hm_[acts]));
                 Cid[] a = [acts];
             }
 
         // convert bran to Cid[]
         static if      // is array of branches null?
-        (is(Tb == typeof(null)))
+                (is(Tb == typeof(null)))
         {   // leave the branch parameter null
             Cid[] b;
         }
-        static if   // is Tb an array?
-        (is(Tb TT : TT[]))
+        else static if   // is Tb an array?
+                (is(Tb TT : TT[]))
             static if // is it array of the concept descriptors?
-            (is(TT == CptDescriptor))
+                    (is(TT == CptDescriptor))
             {   //yes: convert it into array of cids
                 Cid[] b;
                 foreach (cd; brans) {
@@ -395,7 +402,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
             }
         else    //no: it is a single value
             static if // is it a concept descriptor?
-            (is(Ta == CptDescriptor))
+                    (is(Ta == CptDescriptor))
             {  //yes: convert it to array of cids
                 debug if(_maps_fully_setup_)
                     assert(cast(shared HolySeed)_hm_[acts.cid] || cast(shared HolyBreed)_hm_[acts.cid],
@@ -423,16 +430,18 @@ abstract class HolyNeuron: HolyDynamicConcept {
         // If no spans are defined, select_effects() will produce an initial span [-inF, +inF], actions: null, branches:null
         assert(nrn.select_effects(0).upperBound == float.infinity && nrn.select_effects(0).actions is null &&
         nrn.select_effects(0).branches is null);
-        nrn.add_effects(0, [MAX_STATIC_CID+1, MAX_STATIC_CID+2], [MAX_STATIC_CID+3, MAX_STATIC_CID+4]);
-        nrn.add_effects(1, [MAX_STATIC_CID+5, MAX_STATIC_CID+6], [MAX_STATIC_CID+7, MAX_STATIC_CID+8]);
+        nrn.add_effects(0, MAX_STATIC_CID+1, null);
 
-        // check select_effects()
-        assert(nrn.select_effects(-0.5).upperBound == 0);
-        assert(nrn.select_effects(-float.infinity).branches[1] == MAX_STATIC_CID+4);
-        assert(nrn.select_effects(0).upperBound == 0);
-        assert(nrn.select_effects(0+float.epsilon).upperBound == 1);
-        assert(nrn.select_effects(10).upperBound == float.infinity);
-        assert(nrn.select_effects(float.infinity).branches is null);
+        //nrn.add_effects(0, [MAX_STATIC_CID+1, MAX_STATIC_CID+2], [MAX_STATIC_CID+3, MAX_STATIC_CID+4]);
+        //nrn.add_effects(1, [MAX_STATIC_CID+5, MAX_STATIC_CID+6], [MAX_STATIC_CID+7, MAX_STATIC_CID+8]);
+        //
+        //// check select_effects()
+        //assert(nrn.select_effects(-0.5).upperBound == 0);
+        //assert(nrn.select_effects(-float.infinity).branches[1] == MAX_STATIC_CID+4);
+        //assert(nrn.select_effects(0).upperBound == 0);
+        //assert(nrn.select_effects(0+float.epsilon).upperBound == 1);
+        //assert(nrn.select_effects(10).upperBound == float.infinity);
+        //assert(nrn.select_effects(float.infinity).branches is null);
     }
 
     /**
@@ -443,7 +452,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
     */
     final void append_actions(float activation, Cid[] actCids)
     in {
-        assert(effects_.length > 0, "First add then append.");
+        assert(_effects.length > 0, "First add then append.");
         foreach(act; actCids) {
             assert(act > MAX_STATIC_CID, "The action cid " ~ to!string(act) ~
             " is laying within the static concept range, which is not allowed.");
@@ -454,7 +463,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
     }
     do {
         // find and append
-        foreach(ref eff; effects_) {
+        foreach(ref eff; _effects) {
             if      // activation fits the span?
                     (activation <= eff.upperBound)
             {
@@ -490,7 +499,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
     */
     final void append_branches(float activation, Cid[] branchCids)
     in {
-        assert(effects_.length > 0, "First add then append.");
+        assert(_effects.length > 0, "First add then append.");
         foreach(br; branchCids) {
             assert(br > MAX_STATIC_CID, "The action cid " ~ to!string(br) ~
             " is laying within the static concept range, which is not allowed.");
@@ -501,7 +510,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
     }
     do {
         // find and append
-        foreach(ref eff; effects_) {
+        foreach(ref eff; _effects) {
             if      // activation fits the span?
                     (activation <= eff.upperBound)
             {
@@ -531,16 +540,10 @@ abstract class HolyNeuron: HolyDynamicConcept {
 
     override string toString() const {
         string s = super.toString;
-        s ~= format!"\neffects_: %s"(effects_);
+        s ~= format!"\neffects_: %s"(_effects);
 
         return s;
     }
-
-    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-    //
-    //                                  Private
-    //
-    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
@@ -554,7 +557,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
     /// on the current branch.
     /// In all cases when the actions array is null or empty that means the action "stop and wait", and if the branches array
     /// is null or empty, it means no change of branch.
-    private Effect[] effects_;
+    protected Effect[] _effects;
 
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
@@ -571,7 +574,7 @@ abstract class Neuron: DynamicConcept, ActivationIfc {
 
     /**
                 Calculate activation based on premises or lots.
-        Returns: activation value
+        Returns: activation value. As a byproduct the _activation field is setup.
     */
     abstract float calculate_activation();
 
@@ -586,14 +589,14 @@ abstract class Neuron: DynamicConcept, ActivationIfc {
     */
     HolyNeuron.Effect calculate_activation_and_get_effects() {
 
-        return (cast(HolyNeuron)holy).select_effects(calculate_activation);
+        return (cast(shared HolyNeuron)holy).select_effects(calculate_activation);
     }
 }
 
 /**
             Base for neurons, that take its decisions by pure logic on premises, as opposed to weighing them.
 */
-abstract class HolyLogicalNeuron: HolyNeuron {
+abstract class HolyLogicalNeuron: HolyNeuron, PremiseIfc {
 
     /**
                 Constructor
@@ -613,8 +616,7 @@ abstract class HolyLogicalNeuron: HolyNeuron {
 
     //---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
 
-    /// Array of premise cids.
-    protected Cid[] premises_;
+    mixin PremiseImpl!HolyLogicalNeuron;
 }
 
 /// Ditto
@@ -623,8 +625,19 @@ abstract class LogicalNeuron: Neuron, BinActivationIfc {
     /// Constructor
     this (immutable HolyLogicalNeuron holyLogicalNeuron) { super(holyLogicalNeuron); }
 
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
     // implementation of the interface
     mixin BinActivationImpl!LogicalNeuron;
+
+    /**
+                Calculate activation based on premises or lots.
+        Returns: activation value
+    */
+    override float calculate_activation() {
+        return _activation = (cast(shared HolyLogicalNeuron)holy).calculate_activation;
+    }
+
 }
 
 

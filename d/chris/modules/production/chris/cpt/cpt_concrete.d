@@ -239,60 +239,78 @@ class HolyUnconditionalNeuron: HolyNeuron {
     void add_effects(Ta, Tb)(Ta act, Tb bran) {
         super.add_effects(float.infinity, act, bran);
     }
-    //
-    ///**
-    //        Append action cids analogous to holy neuron, except that span selection is not needed here.
-    //    Parameters:
-    //        actCids = array of cids of appended actions.
-    //*/
-    //final void add_actions(Cid[] actCids) {
-    //    if(_effects.length == 0)
-    //        add_effects(actCids, null);
-    //    else
-    //        super.append_actions(float.infinity, actCids);
-    //}
-    //
-    ///// Ditto.
-    //final void add_actions(Cid actCid) {
-    //    if(_effects.length == 0)
-    //        add_effects(actCid, null);
-    //    else
-    //    super.append_actions(float.infinity, actCid);
-    //}
-    //
-    ///// Ditto.
-    //final void add_actions(CptDescriptor actDesc) {
-    //    super.append_actions(float.infinity, actDesc);
-    //}
-    //
-    ///// Ditto.
-    //final void add_actions(CptDescriptor[] actDescs) {
-    //    super.append_actions(float.infinity, actDescs);
-    //}
-    //
-    ///**
-    //        Append branch cids analogous to holy neuron, except that span selection is not needed here.
-    //    Parameters:
-    //        branchCids = array of cids of appended branches.
-    //*/
-    //final void add_branches(Cid[] branchCids) {
-    //    super.append_branches(float.infinity, branchCids);
-    //}
-    //
-    ///// Ditto.
-    //final void add_branches(Cid branchCid) {
-    //    super.append_branches(float.infinity, branchCid);
-    //}
-    //
-    ///// Ditto.
-    //final void add_branches(CptDescriptor branchDesc) {
-    //    super.append_branches(float.infinity, branchDesc);
-    //}
-    //
-    ///// Ditto.
-    //final void add_branches(CptDescriptor[] branchDescs) {
-    //    super.append_branches(float.infinity, branchDescs);
-    //}
+
+    /**
+            Append action cids analogous to holy neuron, except that span selection is not needed here.
+        Parameters:
+            actCids = array of cids of appended actions.
+    */
+    final void add_actions(Cid[] actCids) {
+        if(_effects.length == 0)
+            add_effects(actCids, null);
+        else
+            super.append_actions(float.infinity, actCids);
+    }
+
+    /// Adapter.
+    final void add_actions(Cid actCid) {
+        if(_effects.length == 0)
+            add_effects(actCid, null);
+        else
+            super.append_actions(float.infinity, actCid);
+    }
+
+    /// Adapter.
+    final void add_actions(CptDescriptor actDesc) {
+        if(_effects.length == 0)
+            add_effects(actDesc, null);
+        else
+            super.append_actions(float.infinity, actDesc);
+    }
+
+    /// Adapter.
+    final void add_actions(CptDescriptor[] actDescs) {
+        if(_effects.length == 0)
+            add_effects(actDescs, null);
+        else
+            super.append_actions(float.infinity, actDescs);
+    }
+
+    /**
+            Append branch cids analogous to holy neuron, except that span selection is not needed here.
+        Parameters:
+            branchCids = array of cids of appended branches.
+    */
+    final void add_branches(Cid[] branchCids) {
+        if(_effects.length == 0)
+            add_effects(branchCids, null);
+        else
+            super.append_branches(float.infinity, branchCids);
+    }
+
+    /// Adapter.
+    final void add_branches(Cid branchCid) {
+        if(_effects.length == 0)
+            add_effects(branchCid, null);
+        else
+            super.append_branches(float.infinity, branchCid);
+    }
+
+    /// Adapter.
+    final void add_branches(CptDescriptor branchDesc) {
+        if(_effects.length == 0)
+            add_effects(branchDesc, null);
+        else
+            super.append_branches(float.infinity, branchDesc);
+    }
+
+    /// Adapter.
+    final void add_branches(CptDescriptor[] branchDescs) {
+        if(_effects.length == 0)
+            add_effects(branchDescs, null);
+        else
+            super.append_branches(float.infinity, branchDescs);
+    }
 }
 
 /// Ditto

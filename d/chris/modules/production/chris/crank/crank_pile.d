@@ -20,7 +20,7 @@ void start_chat_branch() {
     mixin(dequalify_enums!(Chat, Uline));    // anonymizes the concept enums, so we don't need use their full names.
 
     // Setup the chat_seed
-//    cpt!chat_seed.add_effects(null, [uline_valve_anrn, uline_breed]);
+    cpt!chat_seed.add_effects(null, [uline_valve_anrn, uline_breed]);
 }
 
 enum Uline {

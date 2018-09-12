@@ -300,15 +300,15 @@ abstract class HolyNeuron: HolyDynamicConcept {
     final void add_effects(float upperBound, Cid[] actions, Cid[] branches)
     in {
         if(_effects.length > 0)
-            assert(upperBound > _effects[$-1].upperBound, "The upper bound " ~ to!string(upperBound) ~
-                    " must be bigger than the upper bound of the previous span, which is " ~
-                    to!string(_effects[$-1].upperBound));
+            assert(upperBound > _effects[$-1].upperBound,
+                    format!"The upper bound %s must be bigger than the upper bound of the previous span, which is %s"
+                            (upperBound, _effects[$-1].upperBound));
         foreach(act; actions)
-            assert(act > MAX_STATIC_CID, "The action cid " ~ to!string(act) ~
-                    " is laying within the static concept range, which is not allowed.");
+            assert(act > MAX_STATIC_CID,
+                    format!"The action cid %s is laying within the static concept range, which is not allowed."(act));
         foreach(br; branches)
-            assert(br > MAX_STATIC_CID, "The action cid " ~ to!string(br) ~
-                    " is laying within the static concept range, which is not allowed.");
+            assert(br > MAX_STATIC_CID,
+                    format!"The action cid %s is laying within the static concept range, which is not allowed."(br));
     }
     do {
         _effects ~= cast(shared)Effect(upperBound, actions, branches);
@@ -341,8 +341,8 @@ abstract class HolyNeuron: HolyDynamicConcept {
                 Cid[] a;
                 foreach (cd; acts) {
                     debug if(_maps_fully_setup_)
-                        assert(cast(shared HolyAction)_hm_[cd.cid], "Cid: " ~ to!string(cd.cid) ~
-                                " must be an action, and it is a " ~ cd.className);
+                        assert(cast(shared HolyAction)_hm_[cd.cid],
+                                format!"Cid: %s must be an action, and it is a %s."(cd.cid, cd.className));
                     a ~= cd.cid;
                 }
             }
@@ -350,8 +350,8 @@ abstract class HolyNeuron: HolyDynamicConcept {
             {
                 debug if(_maps_fully_setup_)
                     foreach (cid; acts) {
-                        assert(cast(shared HolyAction)_hm_[cid], "Cid: " ~ to!string(cid) ~
-                                " must be an action, and it is a " ~ typeid(_hm_[cid]));
+                        assert(cast(shared HolyAction)_hm_[cid],
+                                format!"Cid: %s must be an action, and it is a %s."(cid, typeid(_hm_[cid])));
                     }
                 Cid[] a = acts;
             }
@@ -359,15 +359,15 @@ abstract class HolyNeuron: HolyDynamicConcept {
                     (is(Ta == CptDescriptor))
             {  //yes: convert it to array of cids
                 debug if(_maps_fully_setup_)
-                    assert(cast(shared HolyAction)_hm_[acts.cid], "Cid: " ~ to!string(acts.cid) ~
-                            " must be an action, and it is a " ~ acts.className);
+                    assert(cast(shared HolyAction)_hm_[acts.cid],
+                            format!"Cid: %s must be an action, and it is a %s."(acts.cid, acts.className));
                 Cid[] a = [acts.cid];
             }
             else
             {
                 debug if(_maps_fully_setup_)
-                    assert(cast(shared HolyAction)_hm_[acts], "Cid: " ~ to!string(acts) ~
-                            " must be an action, and it is a " ~ typeid(_hm_[acts]));
+                    assert(cast(shared HolyAction)_hm_[acts],
+                            format!"Cid: %s must be an action, and it is a %s."(acts, typeid(_hm_[acts])));
                 Cid[] a = [acts];
             }
 
@@ -385,8 +385,8 @@ abstract class HolyNeuron: HolyDynamicConcept {
                 Cid[] b;
                 foreach (cd; brans) {
                     debug if(_maps_fully_setup_)
-                        assert(cast(shared HolySeed)_hm_[cd.cid] || cast(shared HolyBreed)_hm_[cd.cid], "Cid: " ~
-                        to!string(cd.cid) ~ " must be HolySeed or HolyBreed, and it is a " ~ cd.className);
+                        assert(cast(shared HolySeed)_hm_[cd.cid] || cast(shared HolyBreed)_hm_[cd.cid],
+                                format!"Cid: %s must be HolySeed or HolyBreed, and it is a %s."(cd.cid, cd.className));
                     b ~= cd.cid;
                 }
             }
@@ -395,8 +395,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
                 debug if(_maps_fully_setup_)
                     foreach (cid; acts) {
                         assert(cast(shared HolySeed)_hm_[cid] || cast(shared HolyBreed)_hm_[cid],
-                        "Cid: " ~ to!string(cid) ~ " must be HolySeed or HolyBreed, and it is a " ~
-                        typeid(_hm_[cid]));
+                                format!"Cid: %s must be HolySeed or HolyBreed, and it is a %s"(cid, typeid(_hm_[cid])));
                     }
                 Cid[] b = brans;
             }
@@ -406,42 +405,18 @@ abstract class HolyNeuron: HolyDynamicConcept {
             {  //yes: convert it to array of cids
                 debug if(_maps_fully_setup_)
                     assert(cast(shared HolySeed)_hm_[acts.cid] || cast(shared HolyBreed)_hm_[acts.cid],
-                    "Cid: " ~ to!string(acts.cid) ~ " must be HolySeed or HolyBreed, and it is a " ~
-                    acts.className);
+                            format!"Cid: %s must be HolySeed or HolyBreed, and it is a %s."(acts.cid, acts.className));
                 Cid[] b = [brans.cid];
             }
             else
             {
                 debug if(_maps_fully_setup_)
                     assert(cast(shared HolySeed)_hm_[acts] || cast(shared HolyBreed)_hm_[acts],
-                    "Cid: " ~ to!string(acts) ~ " must be HolySeed or HolyBreed, and it is a " ~
-                    typeid(_hm_[acts]));
+                            format!"Cid: %s must be HolySeed or HolyBreed, and it is a %s."(acts, typeid(_hm_[acts])));
                 Cid[] b = [brans];
             }
 
         add_effects(upperBound, a, b);
-    }
-
-    ///
-    unittest{
-        import cpt_concrete: HolyWeightNeuron;
-        shared HolyNeuron nrn = new shared HolyWeightNeuron(MIN_DYNAMIC_CID);
-
-        // If no spans are defined, select_effects() will produce an initial span [-inF, +inF], actions: null, branches:null
-        assert(nrn.select_effects(0).upperBound == float.infinity && nrn.select_effects(0).actions is null &&
-        nrn.select_effects(0).branches is null);
-        nrn.add_effects(0, MAX_STATIC_CID+1, null);
-
-        //nrn.add_effects(0, [MAX_STATIC_CID+1, MAX_STATIC_CID+2], [MAX_STATIC_CID+3, MAX_STATIC_CID+4]);
-        //nrn.add_effects(1, [MAX_STATIC_CID+5, MAX_STATIC_CID+6], [MAX_STATIC_CID+7, MAX_STATIC_CID+8]);
-        //
-        //// check select_effects()
-        //assert(nrn.select_effects(-0.5).upperBound == 0);
-        //assert(nrn.select_effects(-float.infinity).branches[1] == MAX_STATIC_CID+4);
-        //assert(nrn.select_effects(0).upperBound == 0);
-        //assert(nrn.select_effects(0+float.epsilon).upperBound == 1);
-        //assert(nrn.select_effects(10).upperBound == float.infinity);
-        //assert(nrn.select_effects(float.infinity).branches is null);
     }
 
     /**
@@ -454,11 +429,11 @@ abstract class HolyNeuron: HolyDynamicConcept {
     in {
         assert(_effects.length > 0, "First add then append.");
         foreach(act; actCids) {
-            assert(act > MAX_STATIC_CID, "The action cid " ~ to!string(act) ~
-            " is laying within the static concept range, which is not allowed.");
-            assert(act in _hm_, "Cid " ~ to!string(act) ~ " must be present in the holy map");
+            assert(act > MAX_STATIC_CID,
+                    format!"The action cid %s is laying within the static concept range, which is not allowed."(act));
+            assert(act in _hm_, format!"Cid %s must be present in the holy map"(act));
             assert(cast(Seed)_hm_[act] || cast(Breed)_hm_[act],
-                    "Cid " ~ to!string(act) ~ " - must be the Seed or Breed concept");
+                    format!"Cid %s - must be the Seed or Breed concept"(act));
         }
     }
     do {
@@ -501,11 +476,10 @@ abstract class HolyNeuron: HolyDynamicConcept {
     in {
         assert(_effects.length > 0, "First add then append.");
         foreach(br; branchCids) {
-            assert(br > MAX_STATIC_CID, "The action cid " ~ to!string(br) ~
-            " is laying within the static concept range, which is not allowed.");
-            assert(br in _hm_, "Cid " ~ to!string(br) ~ " must be present in the holy map");
-            assert(cast(Seed)_hm_[br] || cast(Breed)_hm_[br], "Cid " ~ to!string(br) ~
-                    " - must be the Seed or Breed concept");
+            assert(br > MAX_STATIC_CID,
+                    format!"The action cid %s is laying within the static concept range, which is not allowed."(br));
+            assert(br in _hm_, format!"Cid %s must be present in the holy map"(br));
+            assert(cast(Seed)_hm_[br] || cast(Breed)_hm_[br], format!"Cid %s - must be the Seed or Breed concept"(br));
         }
     }
     do {

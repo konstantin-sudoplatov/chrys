@@ -7,7 +7,8 @@ import global, tools;
 import cpt_abstract, cpt_concrete;
 import crank_pile;
 import messages;
-debug = 2;
+debug = 1;
+
 /**
             Main work horse of the system. It provides the room for doing reasoning on some branch.
     This class, as well as it successors, must be shared, i.e. used for creating of shared objects. It must be a shared object
@@ -18,18 +19,48 @@ class Caldron {
     /**
             Constructor.
         Parameters:
-            seedCid = either seed or breed concept
+            seedCid = seed
+            parentBreedCid = cid of the parent's breed concept, only for a caldron. If supplied, its incarnation in this caldron's
+                             space name will be set up in the caldron constructor, so we will be able to address the parent caldron
+                             on the conceptual level.
     */
-    this(Cid seedCid) {
-        assert(cast(Seed)cpt_(seedCid) || cast(Breed)cpt_(seedCid));
+    this(Cid seedCid, Cid parentBreedCid = 0) {
+        if(parentBreedCid) {
+            debug _checkCid_!HolyBreed(parentBreedCid);
+            (cast(Breed)_cpt_(parentBreedCid))._tid_ = ownerTid;     // finish setting up the parent breed
+        }
+        debug _checkCid_!HolySeed(seedCid);
+
         headCid_ = seedCid_ = seedCid;
         thisTid.send(new immutable StartReasoningMsg);
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
+    /**
+                Get concept by cid.
+            If concept is present in the live map, get it from there, if not, generate it based on the holy concept and put it
+        in the live map.
+        Parameters:
+            cid = cid of the concept or its correspondig enum.
+        Returns: the live concept object
+    */
+    Concept _cpt_(Cid cid) {
+        assert(cid in _hm_);
+        if
+                (auto p = cid in lm_)
+            return *p;
+        else
+            return lm_[cid] = _hm_[cid].live_factory;
+    }
+
+    /// Adapter
+    Concept _cpt_(CptDescriptor cd) {
+        return _cpt_(cd.cid);
+    }
+
     /// Send children the termination signal and wait their termination.
-    void terminate_children() {
+    void _terminateChildren_() {
         foreach (child; childCaldrons_)
             child.send(new immutable TerminateAppMsg);
     }
@@ -114,12 +145,12 @@ class Caldron {
             else
                 debug(2) logit(format!"    headCid_: %s, %s"(headCid_, _nm_[headCid_]));
 
-            Neuron head = cast(Neuron)cpt_(headCid_);
+            Neuron head = cast(Neuron)_cpt_(headCid_);
 
             // Let the head be processed, determine effects and do the actions.
             auto effect = head.calculate_activation_and_get_effects;
             foreach(actCid; effect.actions) {
-                Action act = cast(Action)cpt_(actCid);
+                Action act = cast(Action)_cpt_(actCid);
                 // TODO: do the action
             }
 
@@ -129,25 +160,25 @@ class Caldron {
                 goto STOP_AND_WAIT;
 
             // Set up new head and may be start new caldrons
-            assert(cast(Neuron)cpt_(effect.branches[0]), "Cid: " ~ to!string(effect.branches[0]) ~
-            " new head must be a Neuron and it is " ~ to!string(typeid(cpt_(effect.branches[0]))));
+            assert(cast(Neuron)_cpt_(effect.branches[0]), "Cid: " ~ to!string(effect.branches[0]) ~
+            " new head must be a Neuron and it is " ~ to!string(typeid(_cpt_(effect.branches[0]))));
             headCid_ = effect.branches[0];     // the first branch in the list is the new head
-            int len = cast(int)effect.branches.length;
             foreach(cid; effect.branches[1..$]) {
-                assert(cast(Seed)cpt_(cid) || cast(Breed)cpt_(cid),
-                format!"Cid: %s, this concept must be of Seed or Breed type, not of %s."(cid, typeid(cpt_(cid))));
+                assert(cast(Seed)_cpt_(cid) || cast(Breed)_cpt_(cid),
+                        format!"Cid: %s, this concept must be of Seed or Breed type, not of %s."
+                                (cid, typeid(_cpt_(cid))));
                 if      // is it a seed?
-                (cast(Seed)cpt_(cid))
+                (cast(Seed)_cpt_(cid))
                 {   //yes: spawn an anonymous branch
-                    childCaldrons_ ~= spawn(&caldron_thread_func, false, cid);
+                    childCaldrons_ ~= spawn(&caldron_thread_func, false, cid, 0);
                 }
                 else
                 {   //no: it is a breed. Spawn an identified branch
-                    auto breed = cast(Breed)cpt_(cid);
-                    Cid seedCid = breed.seed;
-                    assert(cast(Seed)cpt_(seedCid));
-                    Tid tid = spawn(&caldron_thread_func, false, seedCid);
-                    breed.tid = tid;        // save the Tid in the breed concept in this name space
+                    auto breed = cast(Breed)_cpt_(cid);
+                    Cid seedCid = breed._seed_;
+                    assert(cast(Seed)_cpt_(seedCid));
+                    Tid tid = spawn(&caldron_thread_func, false, seedCid, breed._parentBreed_);
+                    breed._tid_ = tid;        // save the Tid in the breed concept in this name space
                     childCaldrons_ ~= tid;
                 }
             }
@@ -158,27 +189,10 @@ class Caldron {
         logit("    stop and wait on " ~ _seedName_);
     }
 
-    /**
-                Get concept by cid.
-            If concept is present in the live map, get it from there, if not, generate it based on the holy concept and put it
-        in the live map.
-        Parameters:
-            cid = cid of the concept or its correspondig enum.
-        Returns: the live concept object
-    */
-    private Concept cpt_(Cid cid) {
-        assert(cid in _hm_);
-        if
-                (auto p = cid in lm_)
-            return *p;
-        else
-            return lm_[cid] = _hm_[cid].live_factory;
-    }
-
     /// Ditto.
     private Concept cpt_(string name) {
         assert(name in _nm_ && _nm_[name] in _hm_);
-        return cpt_(_nm_[name]);
+        return _cpt_(_nm_[name]);
     }
 }
 
@@ -188,12 +202,14 @@ class AttentionCircle: Caldron {
 
     /**
             Constructor.
-        Parameters:
-            clientTid = Tid of the client of this attention circle.
-            seedCid = seed to start the circle
     */
-    this(Cid seedCid) {
-        super(seedCid);    // use standard seed for starting a chat
+    this() {
+
+        // Setup chat_breed
+        Breed breed = cast(Breed)_cpt_(Chat.chat_breed);
+        breed._tid_ = thisTid;
+
+        super(breed._seed_);    // use standard seed for starting a chat
     }
 
     /// Ditto.
@@ -230,21 +246,21 @@ class AttentionCircle: Caldron {
         Thread function for caldrons and the attention circle.
     Parameters:
         calledByDispatcher = the caller, true - the dispatcher, false - a caldron
-        seed = seed or breed (only seed for the attention circle)
+        seedCid = seed, only for a caldron
+        parentBreedCid = cid of the parent's breed concept, only for a caldron.
 */
-void caldron_thread_func(bool calledByDispatcher, Cid seedCid) {try{
+void caldron_thread_func(bool calledByDispatcher, Cid seedCid = 0, Cid parentBreedCid = 0) {try{
 
     // Create caldron
     if      //is dispatcher spawning an attention circle?
             (calledByDispatcher)
     {   //yes: create attention circle
-        caldron_ = new AttentionCircle(seedCid);
-        assert(cast(Seed)caldron_.cpt_(seedCid));
+        caldron_ = new AttentionCircle();
+        assert(seedCid == 0);
     }
     else//no: it was a caldron
     {
-        caldron_ = new Caldron(seedCid);
-        assert(cast(Seed)caldron_.cpt_(seedCid) || cast(Breed)caldron_.cpt_(seedCid));
+        caldron_ = new Caldron(seedCid, parentBreedCid);
     }
 
     // Receive messages in a cycle
@@ -275,7 +291,7 @@ void caldron_thread_func(bool calledByDispatcher, Cid seedCid) {try{
             {   //yes: terminate me and all my subthreads
                 debug(2)
                     logit("terminating " ~ caldron_._seedName_);
-                caldron_.terminate_children;
+                caldron_._terminateChildren_;
 
                 // terminate itself
                 goto FINISH_THREAD;

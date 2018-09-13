@@ -79,18 +79,15 @@ shared abstract class HolyConcept {
     }
 
     /**
-                Clone an object.
-            It makes a shallow copy of this object.
+                Clone an object and than make it a deep copy.
         Note, the runtime type of the object is used, not the compile (declared) type.
             Written by Burton Radons <burton-radons smocky.com>
             https://digitalmars.com/d/archives/digitalmars/D/learn/1625.html
             Tested against memory leaks in the garbage collecter both via copied object omission and omission of reference to other
         object in the its body.
-        Parameters:
-            srcObject = object to clone
-        Returns: cloned object
+        Returns: deep clone of itself
     */
-    shared(HolyConcept) clone() const {
+    shared(HolyConcept) _deep_copy_() const {
 
         void* copy = cast(void*)_d_newclass(this.classinfo);
         size_t size = this.classinfo.initializer.length;
@@ -131,6 +128,21 @@ abstract class Concept {
     /// Constructor
     this(immutable HolyConcept holy) {
         this.holy = holy;
+    }
+
+    /**
+            It is a partly deep copy. All fields of the object cloned deeply except the holy part. The holy is immutable
+        for a caldron, no need to duplicate it.
+    */
+    Concept clone() const {
+
+        // binary copy
+        void* copy = cast(void*)_d_newclass(this.classinfo);
+        size_t size = this.classinfo.initializer.length;
+        copy [8 .. size] = (cast(void *)this)[8 .. size];
+        Concept cpt = cast(Concept)copy;
+
+        return cpt;
     }
 
     /// Getter
@@ -246,13 +258,11 @@ abstract class HolyNeuron: HolyDynamicConcept {
     */
     this(Cid cid) { super(cid); }
 
-    //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
     /// Ditto.
-    override shared(HolyNeuron) clone() const {
+    override shared(HolyNeuron) _deep_copy_() const {
 
         // Take shallow copy
-        shared HolyNeuron clon = cast(shared HolyNeuron)super.clone;
+        shared HolyNeuron clon = cast(shared HolyNeuron)super._deep_copy_;
 
         // Make it deep.
         clon._effects = (cast()this)._effects.dup;
@@ -263,6 +273,8 @@ abstract class HolyNeuron: HolyDynamicConcept {
 
         return clon;
     }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     /**
                 Calculate activation based on premises or lots.
@@ -579,6 +591,14 @@ abstract class HolyLogicalNeuron: HolyNeuron, PremiseIfc {
             cid = concept identifier
     */
     this(Cid cid) { super(cid); }
+
+    /// Clone
+    override shared(HolyLogicalNeuron) _deep_copy_() const {
+        shared HolyLogicalNeuron cpt = cast(shared HolyLogicalNeuron)super._deep_copy_;
+        cpt._premises = this._premises.dup;      // deep copy of premises
+
+        return cpt;
+    }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 

@@ -103,8 +103,16 @@ final class PegPremise: Premise, BinActivationIfc {
     mixin BinActivationImpl!PegPremise;
 }
 
-/// Concept primitive for holding a Tid
-class HolyTidPrimitive: HolyPrimitive {
+/**
+            Branch identifier.
+        On one hand it is a container for TID. TID itself is stored in the live part, since it is a changeable entity. On the
+    other, it is a pointer to the seed of the branch. Its cid is stored in the holy part.
+
+        This concept can be used to start new branch instead of the seed, if we want to have in the parent branch a handler
+    to a child to send it messages. This concept will be that handler. After the new branch started, its tid will be put
+    in the tid_ field of the live part.
+*/
+class HolyBreed: HolyPrimitive {
 
     /**
                 Constructor
@@ -117,88 +125,94 @@ class HolyTidPrimitive: HolyPrimitive {
     }
 
     /// Create live wrapper for the holy static concept.
-    override TidPrimitive live_factory() const {
-        return new TidPrimitive(cast(immutable)this);
+    override Breed live_factory() const {
+        return new Breed(cast(immutable)this);
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     /// Getter.
-    @property Cid seed() const {
+    @property Cid _seed_() const {
         return seedCid_;
     }
 
     /// Setter.
-    @property Cid seed(Cid seedCid) {
+    @property Cid _seed_(Cid seedCid) {
+        debug _checkCid_!HolySeed(seedCid);
+
         return seedCid_ = seedCid;
     }
 
-    @property Cid seed(CptDescriptor seedDesc) {
+    /// Adapter.
+    @property Cid _seed_(CptDescriptor seedDesc) {
+        debug _checkCid_!HolySeed(seedDesc.cid);
+
         return seedCid_ = seedDesc.cid;
+    }
+
+    /// Getter.
+    @property Cid _parentBreed_() const {
+        return parentBreedCid_;
+    }
+
+    /// Setter.
+    @property Cid _parentBreed_(Cid parentBreedCid) {
+        debug _checkCid_!HolyBreed(parentBreedCid);
+
+        return parentBreedCid_ = parentBreedCid;
+    }
+
+    /// Adapter.
+    @property Cid _parentBreed_(CptDescriptor parentBreedDesc) {
+        debug _checkCid_!HolyBreed(parentBreedDesc.cid);
+
+        return parentBreedCid_ = parentBreedDesc.cid;
     }
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /// The seed of the branch.
     private Cid seedCid_;
+
+    /// Breed of the parent. It is incarnated in the new caldron name space when spawning the caldron.
+    /// If this field left 0, it's ok. That would be an anonymous caldron with no need for any ID, since there should be
+    // no messages from other caldrons.
+    private Cid parentBreedCid_;
 }
 
 /// Ditto.
-class TidPrimitive: Primitive {
+class Breed: Primitive, BinActivationIfc {
     import std.concurrency: Tid;
 
-    /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
-    private this(immutable HolyTidPrimitive holyTidPrimitive) { super(holyTidPrimitive); }
+    /// Private constructor. Use HolyBreed.live_factory() instead.
+    private this(immutable HolyBreed holyBreed) { super(holyBreed); }
 
     /// Getter.
-    @property Tid tid() {
+    @property Tid _tid_() {
         return tid_;
     }
 
     /// Setter.
-    @property Tid tid(Tid tid) {
+    @property Tid _tid_(Tid tid) {
         return tid_ = tid;
     }
 
     /// Getter.
-    const(Cid) seed() const {
-        return (cast(immutable HolyBreed)holy).seed;
+    const(Cid) _seed_() const {
+        return (cast(immutable HolyBreed)holy)._seed_;
     }
+
+    /// Getter.
+    const(Cid) _parentBreed_() const {
+        return (cast(immutable HolyBreed)holy)._parentBreed_;
+    }
+
+    mixin BinActivationImpl!Breed;
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /// Thread identifier.
     private Tid tid_;
-}
-
-/**
-            Branch identifier.
-        On one hand it is a container for TID. TID itself is stored in the live part, since it is a changeable entity. On the
-    other, it is a pointer to the seed of the branch. Its cid is stored in the holy part.
-
-        This concept can be used to start new branch instead of the seed, if we want to have in the parent branch a handler
-    to a child to send it messages. This concept will be that handler. After the new branch started, its tid will be put
-    in the tid_ field of the live part.
-*/
-final class HolyBreed: HolyTidPrimitive {
-
-    this(Cid cid) { super(cid); }
-
-    /// Create live wrapper for the holy static concept.
-    override Breed live_factory() const {
-        return new Breed(cast(immutable)this);
-    }
-}
-
-/// Live.
-final class Breed: TidPrimitive, BinActivationIfc {
-
-    /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
-    private this(immutable HolyBreed holyBreed) { super(holyBreed); }
-
-    //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-    mixin BinActivationImpl!Breed;
 }
 
 /**

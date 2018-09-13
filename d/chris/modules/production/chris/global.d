@@ -2,6 +2,7 @@
 module global;
 import std.concurrency;
 import std.traits;
+import std.format;
 import std.conv;
 
 import tools;
@@ -35,6 +36,18 @@ static assert(MAX_TEMP_CID >= MIN_TEMP_CID);
 */
 template type(string typeName) {
     mixin("alias type = " ~ typeName ~ ";");
+}
+
+/**
+            Check up the type of cid. If check does not pass, an assert will stop the project.
+    Parameters:
+        T = type to check against
+        cid = cid of a concept, that is checked
+*/
+void _checkCid_(T: HolyConcept)(Cid cid) {
+    debug if(_maps_fully_setup_)
+        assert(cast(T)_hm_[cid],
+                format!"Cid: %s, must be of type %s and it is of type %s."(cid, T.stringof, typeid(_hm_[cid])));
 }
 
 // modules with static concepts

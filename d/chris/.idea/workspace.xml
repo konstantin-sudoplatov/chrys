@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1e6f13b7-b9cd-4af9-969e-5956d8669eca" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chris" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/attn/attn_circle_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/attn/attn_circle_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/attn/attn_dispatcher_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/attn/attn_dispatcher_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/cpt/cpt_abstract.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/cpt/cpt_abstract.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/cpt/cpt_concrete.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/cpt/cpt_concrete.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/crank/crank_pile.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/crank/crank_pile.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/global.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/global.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/attn/attn_circle_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/attn/attn_circle_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpt/cpt_abstract.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/cpt_abstract.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpt/cpt_concrete.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/cpt_concrete.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/crank/crank_pile.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/crank/crank_pile.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/global.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/global.d" afterDir="false" />
-    </list>
+    <list default="true" id="1e6f13b7-b9cd-4af9-969e-5956d8669eca" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -425,7 +410,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="width" value="1920" />
     <option name="height" value="1074" />
   </component>
@@ -754,7 +739,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-3" width="1924" height="1087" extended-state="7" />
+    <frame x="-2" y="-3" width="1924" height="1087" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.396875" visible="true" weight="0.18924618" />

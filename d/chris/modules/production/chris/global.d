@@ -6,7 +6,7 @@ import std.format;
 import std.conv;
 
 import tools;
-import attn_dispatcher_thread;
+import attn_dispatcher_thread, attn_circle_thread;
 import cpt_abstract, cpt_concrete;
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
@@ -39,15 +39,49 @@ template type(string typeName) {
 }
 
 /**
+        Get cid by static concept (it' a function, remember!) name.
+    Parameters:
+        cptName = name of the static concept function
+    Returns: its cid (from the annotation) as int enum.
+*/
+template _statCid_(alias cptName)
+    if      // annotation consists of two elements and their types are int and StatCallType?
+            (__traits(getAttributes, cptName).length == 2 &&
+            is(typeof(__traits(getAttributes, cptName)[0]) == int) &&
+            is(typeof(__traits(getAttributes, cptName)[1]) == StatCallType))
+{   // extract the first element of annotation, which is cid
+    enum int _statCid_ = __traits(getAttributes, cptName)[0];
+}
+
+///
+unittest {
+
+    @(1, StatCallType.rCid_p0Cal_p1Cidar_p2Obj) static Cid fun(Caldron spaceName, Cid[] cid, Object extra) {
+        return 0;
+    }
+
+    const Cid cid = __traits(getAttributes, fun)[0];      // its cid
+    assert(_statCid_!fun == cid);    // check cid
+}
+
+/**
             Check up the type of cid. If check does not pass, an assert will stop the project.
     Parameters:
         T = type to check against
         cid = cid of a concept, that is checked
 */
 void _checkCid_(T: HolyConcept)(Cid cid) {
-    debug if(_maps_fully_setup_)
+    debug if(_maps_filled_)
         assert(cast(T)_hm_[cid],
                 format!"Cid: %s, must be of type %s and it is of type %s."(cid, T.stringof, typeid(_hm_[cid])));
+}
+
+///         Adapter for live concepts.
+void _checkCid_(T: Concept)(Caldron caldron, Cid cid) {
+    debug if(_cranked_)
+        assert((cast(T)caldron._cpt_(cid)),
+                format!"Cid: %s, must be of type %s and it is of type %s."
+                        (cid, T.stringof, typeid(caldron._cpt_(cid))));
 }
 
 // modules with static concepts
@@ -63,6 +97,7 @@ enum StatConceptModules {
 
 /// Call types of the static concept (static concept is function).
 enum StatCallType {
+    none,                               // void function()
     rCid_p0Cal_p1Cidar_p2Obj,           // Cid function(Caldron nameSpace, Cid[] paramCids, Object extra)
     rCidar_p0Cal_p1Cidar_p2Obj,         // Cid[] function(Caldron nameSpace, Cid[] paramCids, Object extra)
 }
@@ -466,8 +501,13 @@ immutable Tid _attnDispTid_;     /// Attention dispatcher thread Tid
 // Key shared data structures
 shared NameMap _nm_;        /// name/seed two-way map
 shared HolyMap _hm_;        /// The map of holy(stable and storrable and shared) concepts.
-debug
-    immutable bool _maps_fully_setup_;
+debug {
+    // set to true after the maps are filled in with names,cids and references to the concept objects
+    immutable bool _maps_filled_;
+
+    // set to true after the cranking is finished and the maps rehashed
+    immutable bool _cranked_;
+}
 
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
@@ -482,6 +522,8 @@ shared static this() {
     _nm_ = new shared NameMap;
     _hm_ = new shared HolyMap;
     fillInConceptMaps_(_hm_, _nm_);     // static concepts from the stat modules, dynamic concept names from the crank modules
+    debug
+        _maps_filled_ = true;
 
     // Crank the system. System must be cranked befor spawning any circle threads since they use the chat_seed concept to start.
     runCranks_;     // create and setup manually programed dynamic concepts
@@ -493,7 +535,7 @@ shared static this() {
     _hm_.rehash;
     _nm_.rehash;
     debug
-        _maps_fully_setup_ = true;
+        _cranked_ = true;
 
     // Capture Tid of the main thread.
     _mainTid_ = cast(immutable)thisTid;

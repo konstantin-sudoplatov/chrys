@@ -7,7 +7,7 @@ import global, tools;
 import cpt_abstract, cpt_concrete;
 import crank_pile;
 import messages;
-debug = 1;
+debug = 2;
 
 /**
             Main work horse of the system. It provides the room for doing reasoning on some branch.
@@ -28,6 +28,7 @@ class Caldron {
         if(parentBreedCid) {
             debug _checkCid_!HolyBreed(parentBreedCid);
             (cast(Breed)_cpt_(parentBreedCid))._tid_ = ownerTid;     // finish setting up the parent breed
+            debug parentBreedCid_ = parentBreedCid;
         }
         debug _checkCid_!HolySeed(seedCid);
 
@@ -112,7 +113,12 @@ class Caldron {
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
+    /// Seed for this caldron.
     private Cid seedCid_;
+
+    /// Parent breed, usually used to send the parent messages
+    debug
+        private Cid parentBreedCid_;
 
     /// Caldrons, that were parented here.
     private Tid[] childCaldrons_;
@@ -151,29 +157,30 @@ class Caldron {
             auto effect = head.calculate_activation_and_get_effects;
             foreach(actCid; effect.actions) {
                 Action act = cast(Action)_cpt_(actCid);
-                // TODO: do the action
+                act._do_;
             }
 
             // May be stop
             if      // was stop required by an action or is there no new head?
-            (stopAndWait_ || effect.branches.length == 0)
+                    (stopAndWait_ || effect.branches.length == 0)
                 goto STOP_AND_WAIT;
 
-            // Set up new head and may be start new caldrons
-            assert(cast(Neuron)_cpt_(effect.branches[0]), "Cid: " ~ to!string(effect.branches[0]) ~
-            " new head must be a Neuron and it is " ~ to!string(typeid(_cpt_(effect.branches[0]))));
+            // Set up the new head
+            _checkCid_!Neuron(this, effect.branches[0]);
             headCid_ = effect.branches[0];     // the first branch in the list is the new head
+
+            // May be start new caldrons
             foreach(cid; effect.branches[1..$]) {
                 assert(cast(Seed)_cpt_(cid) || cast(Breed)_cpt_(cid),
                         format!"Cid: %s, this concept must be of Seed or Breed type, not of %s."
                                 (cid, typeid(_cpt_(cid))));
                 if      // is it a seed?
-                (cast(Seed)_cpt_(cid))
+                        (cast(Seed)_cpt_(cid))
                 {   //yes: spawn an anonymous branch
                     childCaldrons_ ~= spawn(&caldron_thread_func, false, cid, 0);
                 }
                 else
-                {   //no: it is a breed. Spawn an identified branch
+                {   //no: it is a breed. Spawn a breeded branch
                     auto breed = cast(Breed)_cpt_(cid);
                     Cid seedCid = breed._seed_;
                     assert(cast(Seed)_cpt_(seedCid));
@@ -209,7 +216,7 @@ class AttentionCircle: Caldron {
         Breed breed = cast(Breed)_cpt_(Chat.chat_breed);
         breed._tid_ = thisTid;
 
-        super(breed._seed_);    // use standard seed for starting a chat
+        super(breed._seed_, 0);    // no parent
     }
 
     /// Ditto.
@@ -263,6 +270,24 @@ void caldron_thread_func(bool calledByDispatcher, Cid seedCid = 0, Cid parentBre
         caldron_ = new Caldron(seedCid, parentBreedCid);
     }
 
+    debug(2) {
+        string s;
+        if      // is it a parentless branch?
+                (caldron_.parentBreedCid_ == 0)
+            s = format!"starting caldron %s as a parentless branch"(caldron_._seedName_);
+        else    //no: it is a breeded branch
+            if      // is it a named branch (the breed concept has a name)?
+                    (auto ps = caldron_.parentBreedCid_ in _nm_)
+            {   //yes: it is a breeded named branch
+                s = format!"starting caldron %s, parent breed: %s"
+                        (caldron_._seedName_, *ps);
+            }
+            else    //no: it is a breeded noname branch (the breed concept doesn't have a name)
+                s = format!"starting caldron %s, noname parent breed, parent breed cid: %s"
+                        (caldron_._seedName_, caldron_.parentBreedCid_);
+        logit(s);
+    }
+
     // Receive messages in a cycle
     while(true) {
         import std.variant: Variant;
@@ -290,7 +315,7 @@ void caldron_thread_func(bool calledByDispatcher, Cid seedCid = 0, Cid parentBre
             (cast(TerminateAppMsg)msg)
             {   //yes: terminate me and all my subthreads
                 debug(2)
-                    logit("terminating " ~ caldron_._seedName_);
+                    logit("terminating caldron " ~ caldron_._seedName_);
                 caldron_._terminateChildren_;
 
                 // terminate itself

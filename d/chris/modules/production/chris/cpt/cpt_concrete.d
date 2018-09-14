@@ -13,7 +13,7 @@ import interfaces;
 final class HolyStaticConcept: HolyConcept {
 
     immutable void* fp;                     /// function pointer to the static concept function
-    immutable StatCallType call_type;       /// call type of the static concept function
+    immutable StatCallType _callType_;       /// call type of the static concept function
 
     /**
                 Constructor
@@ -26,7 +26,7 @@ final class HolyStaticConcept: HolyConcept {
         super(cid);
         cast()flags |= HolyCptFlags.STATIC;
         cast()this.fp = cast(immutable)fp;
-        cast()call_type = callType;
+        cast()_callType_ = callType;
     }
 
     /// Create live wrapper for the holy static concept.
@@ -54,8 +54,7 @@ final class HolyAction: HolyDynamicConcept {
     /**
                 Constructor
         Parameters:
-            Used for concepts with predefined cids.
-            cid = concept identifier
+            cid = predefined concept identifier
     */
     this(Cid cid) { super(cid); }
 
@@ -65,17 +64,51 @@ final class HolyAction: HolyDynamicConcept {
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /// Call static concept function
+    void _do_() {
+        _checkCid_!HolyStaticConcept(statActionCid_);
+        assert((cast(HolyStaticConcept)_hm_[statActionCid_])._callType_ == StatCallType.none,
+                format!"Static concept: %s( cid:%s) in HolyAction must have StatCallType none and it has %s."
+                      (_nm_[statActionCid_], statActionCid_, (cast(HolyStaticConcept)_hm_[statActionCid_])._callType_));
+
+        auto statCpt = (cast(HolyStaticConcept)_hm_[statActionCid_]);
+        (cast(void function())statCpt.fp)();
+    }
+
+    /// Getter
+    @property Cid _statActionCid_() {
+        return statActionCid_;
+    }
+
+    /// Setter
+    @property Cid _statActionCid_(Cid cid) {
+        debug _checkCid_!HolyStaticConcept(cid);
+        return statActionCid_ = cid;
+    }
+
+    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+    // Static action.
+    private Cid statActionCid_;
 }
 
-/// Ditto
+/// Live.
 final class Action: DynamicConcept {
 
     /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
     private this(immutable HolyAction holyAction) { super(holyAction); }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /// Call static concept function
+    void _do_() {
+        (cast(shared HolyAction)holy)._do_;
+    }
 }
 
 /**
-            Active premise.
+            Peg premise.
     This type of premise don't store its activation in the field but gets dynamically.
 */
 final class HolyPegPremise: HolyPremise {
@@ -83,8 +116,7 @@ final class HolyPegPremise: HolyPremise {
     /**
                 Constructor
         Parameters:
-            Used for concepts with predefined cids.
-            cid = concept identifier
+            cid = predefined concept identifier
     */
     this(Cid cid) { super(cid); }
 
@@ -96,11 +128,52 @@ final class HolyPegPremise: HolyPremise {
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 }
 
-/// Ditto
-final class PegPremise: Premise, BinActivationIfc {
-    this(immutable HolyPegPremise holyActivePremise) { super(holyActivePremise); }
+/// Live.
+final class PegPremise: Premise {
+    this(immutable HolyPegPremise holyPegPremise) { super(holyPegPremise); }
+}
 
-    mixin BinActivationImpl!PegPremise;
+/**
+            Active premise.
+    This type of premise don't store its activation in the field but gets dynamically.
+*/
+final class HolyStringPremise: HolyPremise {
+
+    /**
+                Constructor
+        Parameters:
+            cid = predefined concept identifier
+    */
+    this(Cid cid) { super(cid); }
+
+    /// Create live wrapper for the holy static concept.
+    override StringPremise live_factory() const {
+        return new StringPremise(cast(immutable)this);
+    }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+}
+
+/// Live.
+final class StringPremise: Premise {
+    this(immutable HolyStringPremise holyStringPremise) { super(holyStringPremise); }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /// Getter
+    @property string str() {
+        return str_;
+    }
+
+    /// Setter
+    @property string str(string s) {
+        return str_ = s;
+    }
+
+    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+    /// String
+    private string str_;
 }
 
 /**
@@ -112,13 +185,12 @@ final class PegPremise: Premise, BinActivationIfc {
     to a child to send it messages. This concept will be that handler. After the new branch started, its tid will be put
     in the tid_ field of the live part.
 */
-class HolyBreed: HolyPrimitive {
+final class HolyBreed: HolyPremise {
 
     /**
                 Constructor
         Parameters:
-            Used for concepts with predefined cids.
-            cid = concept identifier
+            cid = predefined concept identifier
     */
     this(Cid cid) {
         super(cid);
@@ -180,8 +252,8 @@ class HolyBreed: HolyPrimitive {
     private Cid parentBreedCid_;
 }
 
-/// Ditto.
-class Breed: Primitive, BinActivationIfc {
+/// Live.
+final class Breed: Premise {
     import std.concurrency: Tid;
 
     /// Private constructor. Use HolyBreed.live_factory() instead.
@@ -207,8 +279,6 @@ class Breed: Primitive, BinActivationIfc {
         return (cast(immutable HolyBreed)holy)._parentBreed_;
     }
 
-    mixin BinActivationImpl!Breed;
-
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /// Thread identifier.
@@ -224,8 +294,7 @@ class HolyUnconditionalNeuron: HolyNeuron {
     /**
                 Constructor
         Parameters:
-            Used for concepts with predefined cids.
-            cid = concept identifier
+            cid = predefined concept identifier
     */
     this(Cid cid) { super(cid); }
 
@@ -327,7 +396,7 @@ class HolyUnconditionalNeuron: HolyNeuron {
     }
 }
 
-/// Ditto
+/// Live.
 class UnconditionalNeuron: Neuron, ActivationIfc {
 
     /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
@@ -365,8 +434,7 @@ final class HolySeed: HolyUnconditionalNeuron {
     /**
                 Constructor
         Parameters:
-            Used for concepts with predefined cids.
-            cid = concept identifier
+            cid = predefined concept identifier
     */
     this(Cid cid) { super(cid); }
 
@@ -378,7 +446,7 @@ final class HolySeed: HolyUnconditionalNeuron {
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 }
 
-/// Ditto
+/// Live.
 final class Seed: UnconditionalNeuron {
 
     /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
@@ -393,8 +461,7 @@ final class HolyAndNeuron: HolyLogicalNeuron {
     /**
                 Constructor
         Parameters:
-            Used for concepts with predefined cids.
-            cid = concept identifier
+            cid = predefined concept identifier
     */
     this(Cid cid) { super(cid); }
 
@@ -406,13 +473,15 @@ final class HolyAndNeuron: HolyLogicalNeuron {
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     /**
-                Calculate activation based on premises or lots.
-        Returns: activation value
+                Calculate activation based on premises.
+        Returns: activation value. Activation is 1 if all premises are active, else it is -1. If list of premises is empty,
+                activation is 1.
     */
     override float calculate_activation() {
         float res = 1;
         foreach(pr; _premises) {
-            assert(cast(ActivationIfc)_hm_[pr], format!"Cid %s, ActivationIfs must be realised for %s"(pr, typeid(_hm_[pr])));
+            assert(cast(ActivationIfc)_hm_[pr],
+                    format!"Cid %s, ActivationIfs must be realised for %s"(pr, typeid(_hm_[pr])));
             if ((cast(ActivationIfc)_hm_[pr]).activation <= 0) {
                 res = -1;
                 break ;
@@ -423,7 +492,7 @@ final class HolyAndNeuron: HolyLogicalNeuron {
     }
 }
 
-/// Ditto
+/// Live.
 final class AndNeuron: LogicalNeuron {
 
     /// Constructor
@@ -440,8 +509,7 @@ final class HolyWeightNeuron: HolyNeuron {
     /**
                 Constructor
         Parameters:
-            Used for concepts with predefined cids.
-            cid = concept identifier
+            cid = predefined concept identifier
     */
     this(Cid cid) {
         super(cid);
@@ -464,7 +532,7 @@ final class HolyWeightNeuron: HolyNeuron {
     }
 }
 
-/// Ditto
+/// Live.
 final class WeightNeuron: Neuron, EsquashActivationIfc {
 
     /// Private constructor. Use HolyTidPrimitive.live_factory() instead.

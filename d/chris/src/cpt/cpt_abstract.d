@@ -224,8 +224,10 @@ abstract class HolyPremise: HolyDynamicConcept {
 }
 
 /// Ditto
-abstract class Premise: DynamicConcept {
+abstract class Premise: DynamicConcept, BinActivationIfc {
     this(immutable HolyPremise holyPremise) { super(holyPremise); }
+
+    mixin BinActivationImpl!Premise;
 }
 
 /**
@@ -352,7 +354,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
             {   //yes: convert it into array of cids
                 Cid[] a;
                 foreach (cd; acts) {
-                    debug if(_maps_fully_setup_)
+                    debug if(_maps_filled_)
                         assert(cast(shared HolyAction)_hm_[cd.cid],
                                 format!"Cid: %s must be an action, and it is a %s."(cd.cid, cd.className));
                     a ~= cd.cid;
@@ -360,7 +362,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
             }
             else //no: it is array of Cids
             {
-                debug if(_maps_fully_setup_)
+                debug if(_maps_filled_)
                     foreach (cid; acts) {
                         assert(cast(shared HolyAction)_hm_[cid],
                                 format!"Cid: %s must be an action, and it is a %s."(cid, typeid(_hm_[cid])));
@@ -370,14 +372,14 @@ abstract class HolyNeuron: HolyDynamicConcept {
         else static if // is it a concept descriptor?
                     (is(Ta == CptDescriptor))
             {  //yes: convert it to array of cids
-                debug if(_maps_fully_setup_)
+                debug if(_maps_filled_)
                     assert(cast(shared HolyAction)_hm_[acts.cid],
                             format!"Cid: %s must be an action, and it is a %s."(acts.cid, acts.className));
                 Cid[] a = [acts.cid];
             }
-            else
+            else//no: it is a cid; convert it to an array of cids
             {
-                debug if(_maps_fully_setup_)
+                debug if(_maps_filled_)
                     assert(cast(shared HolyAction)_hm_[acts],
                             format!"Cid: %s must be an action, and it is a %s."(acts, typeid(_hm_[acts])));
                 Cid[] a = [acts];
@@ -396,35 +398,39 @@ abstract class HolyNeuron: HolyDynamicConcept {
             {   //yes: convert it into array of cids
                 Cid[] b;
                 foreach (cd; brans) {
-                    debug if(_maps_fully_setup_)
-                        assert(cast(shared HolySeed)_hm_[cd.cid] || cast(shared HolyBreed)_hm_[cd.cid],
-                                format!"Cid: %s must be HolySeed or HolyBreed, and it is a %s."(cd.cid, cd.className));
+                    debug if(_maps_filled_)
+                        assert(cast(shared HolyBreed)_hm_[cd.cid] || cast(shared HolyNeuron)_hm_[cd.cid],
+                                format!"Cid: %s must be HolyNeuron, including HolySeed or HolyBreed, and it is a %s."
+                                        (cd.cid, cd.className));
                     b ~= cd.cid;
                 }
             }
             else //no: it is array of Cids
             {
-                debug if(_maps_fully_setup_)
-                    foreach (cid; acts) {
-                        assert(cast(shared HolySeed)_hm_[cid] || cast(shared HolyBreed)_hm_[cid],
-                                format!"Cid: %s must be HolySeed or HolyBreed, and it is a %s"(cid, typeid(_hm_[cid])));
+                debug if(_maps_filled_)
+                    foreach (cid; brans) {
+                        assert(cast(shared HolyBreed)_hm_[cid] || cast(shared HolyNeuron)_hm_[cid],
+                                format!"Cid: %s must be HolyNeuron, including HolySeed or HolyBreed, and it is a %s"
+                                        (cid, typeid(_hm_[cid])));
                     }
                 Cid[] b = brans;
             }
         else    //no: it is a single value
             static if // is it a concept descriptor?
-                    (is(Ta == CptDescriptor))
+                    (is(Tb == CptDescriptor))
             {  //yes: convert it to array of cids
-                debug if(_maps_fully_setup_)
-                    assert(cast(shared HolySeed)_hm_[acts.cid] || cast(shared HolyBreed)_hm_[acts.cid],
-                            format!"Cid: %s must be HolySeed or HolyBreed, and it is a %s."(acts.cid, acts.className));
+                debug if(_maps_filled_)
+                    assert(cast(shared HolyBreed)_hm_[brans.cid] || cast(shared HolyNeuron)_hm_[brans.cid],
+                            format!"Cid: %s must be HolyNeuron, including HolySeed or HolyBreed, and it is a %s."
+                                    (brans.cid, brans.className));
                 Cid[] b = [brans.cid];
             }
-            else
+            else//no: it is a cid; convert it an to array of cids
             {
-                debug if(_maps_fully_setup_)
-                    assert(cast(shared HolySeed)_hm_[acts] || cast(shared HolyBreed)_hm_[acts],
-                            format!"Cid: %s must be HolySeed or HolyBreed, and it is a %s."(acts, typeid(_hm_[acts])));
+                debug if(_maps_filled_)
+                    assert(cast(shared HolyBreed)_hm_[brans] || cast(shared HolyNeuron)_hm_[brans],
+                            format!"Cid: %s must be HolyNeuron, including HolySeed or HolyBreed, and it is a %s."
+                                    (brans, typeid(_hm_[brans])));
                 Cid[] b = [brans];
             }
 

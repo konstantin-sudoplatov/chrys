@@ -8,8 +8,9 @@ import attn_circle_thread: Caldron;
 /**
         Raise stop flag on a caldron.
 */
-@(1, StatCallType.none)
-void _stopAndWait_(){
+@(1, StatCallType.p0Cal)
+void _stopAndWait_(Caldron cald){
+
     writeln("In stop and wait");
 }
 
@@ -17,7 +18,7 @@ void _stopAndWait_(){
         Load a concept into the name space, if not loaded, and activate it.
 */
 @(2, StatCallType.rCid_p0Cal_p1Cidar_p2Obj)
-Cid activate_stat(Caldron nameSpace, Cid[] paramCids, Object extra)
+Cid activate_stat(Caldron cald, Cid[] paramCids, Object extra)
 {
     writeln("In activate_stat");
     return 0;
@@ -27,7 +28,7 @@ Cid activate_stat(Caldron nameSpace, Cid[] paramCids, Object extra)
         Load a concept into the name space, if not loaded, and activate it.
 */
 @(3, StatCallType.rCid_p0Cal_p1Cidar_p2Obj)
-Cid anactivate_stat(Caldron nameSpace, Cid[] paramCids, Object extra)
+Cid anactivate_stat(Caldron cald, Cid[] paramCids, Object extra)
 {
     writeln("In anactivate_stat");
     return 0;

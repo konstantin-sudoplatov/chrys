@@ -68,7 +68,7 @@ final class HolyAction: HolyDynamicConcept {
     /// Call static concept function
     void _do_() {
         _checkCid_!HolyStaticConcept(statActionCid_);
-        assert((cast(HolyStaticConcept)_hm_[statActionCid_])._callType_ == StatCallType.none,
+        assert((cast(HolyStaticConcept)_hm_[statActionCid_])._callType_ == StatCallType.p0Cal,
                 format!"Static concept: %s( cid:%s) in HolyAction must have StatCallType none and it has %s."
                       (_nm_[statActionCid_], statActionCid_, (cast(HolyStaticConcept)_hm_[statActionCid_])._callType_));
 

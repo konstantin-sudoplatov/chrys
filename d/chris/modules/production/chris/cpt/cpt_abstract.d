@@ -5,7 +5,7 @@ import std.conv, std.format;
 
 import global, tools;
 import interfaces;
-import cpt_concrete;
+import cpt_pile, cpt_actions;
 
 /// External runtime function, that creates new objects by their ClassInfo. No constructors are called. Very fast, much faster
 /// than manually allocating the object in the heap as new buf[], as it is done in the emplace function (and more economical, no

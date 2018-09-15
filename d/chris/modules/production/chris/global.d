@@ -7,16 +7,12 @@ import std.conv;
 
 import tools;
 import attn_dispatcher_thread, attn_circle_thread;
-import cpt_abstract, cpt_concrete;
+import cpt_abstract, cpt_pile, cpt_actions;
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
 /// Concept identifier is 4 bytes long at the moment.
 alias Cid = uint;
-
-/// Minimal debug level, the debug prints are set for, like "debug(DBG)"
-enum DBG = 1;
-enum DBG_1 = DBG + 1;
 
 /// Static cid range is from 1 to MAX_STATIC_CID;
 enum MIN_STATIC_CID = Cid(1);
@@ -97,7 +93,8 @@ enum StatConceptModules {
 
 /// Call types of the static concept (static concept is function).
 enum StatCallType {
-    none,                               // void function()
+    p0Cal,                              // void function(Caldron nameSpace)
+    p0Calp1Cid,                         // void function(Caldron nameSpace, Cid operandCid)
     rCid_p0Cal_p1Cidar_p2Obj,           // Cid function(Caldron nameSpace, Cid[] paramCids, Object extra)
     rCidar_p0Cal_p1Cidar_p2Obj,         // Cid[] function(Caldron nameSpace, Cid[] paramCids, Object extra)
 }
@@ -124,14 +121,15 @@ struct CptDescriptor {
 enum cd(T : HolyDynamicConcept, Cid cid)  = CptDescriptor(T.stringof, cid);
 
 /**
-        Retrieve a concept from the holy map by its enum constant and cast it from the HolyConcept to its original type, once
-    again, gotten from the enum constant (the ConceptDescriptor type).
+        Retrieve a concept from the holy map by its enum constant and cast it from the HolyConcept to its original type,
+    which is gotten from the enum constant (the CptDescriptor type). The scast template serves as a guard against silent
+    casting an object to null, if the cast happens to be illegal.
     Parameters:
         cd = constant descriptor of the enum, describing the concept
     Returns: the wanted concept casted to its original type.
 */
 auto cpt(alias cd)() {
-    return cast(type!("shared " ~ cd.className))_hm_[cd.cid];
+    return scast!(type!("shared " ~ cd.className))(_hm_[cd.cid]);
 }
 
 ///
@@ -614,15 +612,15 @@ private TempDynDescriptor[] createTempDynDescriptors_() {
     TempDynDescriptor[] dds;
 
     // Fill the named descriptors array
-    TempDynDescriptor sd;
+    TempDynDescriptor dd;
     static foreach(moduleName; [EnumMembers!CrankModules]) {
         static foreach(memberName; __traits(allMembers, mixin(moduleName))) {
             static if(mixin("is(" ~ memberName ~ "==enum)")) {
                 static foreach(enumElem; __traits(allMembers, mixin(memberName))) {
-                    sd.cid = mixin(memberName ~ "." ~ enumElem ~ ".cid");
-                    sd.name = enumElem;
-                    sd.class_name = mixin(memberName ~ "." ~ enumElem ~ ".className");
-                    dds ~= sd;
+                    dd.cid = mixin(memberName ~ "." ~ enumElem ~ ".cid");
+                    dd.name = enumElem;
+                    dd.class_name = mixin(memberName ~ "." ~ enumElem ~ ".className");
+                    dds ~= dd;
                 }
             }
         }
@@ -634,10 +632,10 @@ private TempDynDescriptor[] createTempDynDescriptors_() {
 
     // Check if cids in the array are unique.
     Cid lastCid = 0;
-    foreach(dd; dds) {
-        assert(dd.cid > lastCid, "cid: "~ to!string(dd.cid) ~ ", name: " ~ dd.name ~
+    foreach(d; dds) {
+        assert(d.cid > lastCid, "cid: "~ to!string(d.cid) ~ ", name: " ~ d.name ~
                 " - cids cannot be used multiple times.");
-        lastCid = dd.cid;
+        lastCid = d.cid;
     }
 
     return dds;

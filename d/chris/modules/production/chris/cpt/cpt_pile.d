@@ -1,9 +1,10 @@
-module cpt_concrete;
+module cpt_pile;
 import std.format;
 
 import global, tools;
 import cpt_abstract;
 import interfaces;
+import attn_circle_thread;
 
 /**
             Static concept.
@@ -42,69 +43,6 @@ final class StaticConcept: Concept {
 
     /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
     private this(immutable HolyStaticConcept holyStaticConcept) { super(holyStaticConcept); }
-}
-
-/**
-            Base for all holy actions. The action concept is an interface, bridge between the world of cids and dynamic concepts,
-    that knows nothing about the code and the static world, which is a big set of functions, that actually are the code.
-    All concrete descendants will have the "_act" suffix.
-*/
-final class HolyAction: HolyDynamicConcept {
-
-    /**
-                Constructor
-        Parameters:
-            cid = predefined concept identifier
-    */
-    this(Cid cid) { super(cid); }
-
-    /// Create live wrapper for the holy static concept.
-    override Action live_factory() const {
-        return new Action(cast(immutable)this);
-    }
-
-    //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-    /// Call static concept function
-    void _do_() {
-        _checkCid_!HolyStaticConcept(statActionCid_);
-        assert((cast(HolyStaticConcept)_hm_[statActionCid_])._callType_ == StatCallType.p0Cal,
-                format!"Static concept: %s( cid:%s) in HolyAction must have StatCallType none and it has %s."
-                      (_nm_[statActionCid_], statActionCid_, (cast(HolyStaticConcept)_hm_[statActionCid_])._callType_));
-
-        auto statCpt = (cast(HolyStaticConcept)_hm_[statActionCid_]);
-        (cast(void function())statCpt.fp)();
-    }
-
-    /// Getter
-    @property Cid _statActionCid_() {
-        return statActionCid_;
-    }
-
-    /// Setter
-    @property Cid _statActionCid_(Cid cid) {
-        debug _checkCid_!HolyStaticConcept(cid);
-        return statActionCid_ = cid;
-    }
-
-    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
-
-    // Static action.
-    private Cid statActionCid_;
-}
-
-/// Live.
-final class Action: DynamicConcept {
-
-    /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
-    private this(immutable HolyAction holyAction) { super(holyAction); }
-
-    //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-    /// Call static concept function
-    void _do_() {
-        (cast(shared HolyAction)holy)._do_;
-    }
 }
 
 /**
@@ -286,10 +224,10 @@ final class Breed: Premise {
 }
 
 /**
-            Uncontitional neuron.
+            An uncontitional neuron.
         It is a degenerate neuron, capable only of applying its effects without consulting any premises. Its activation is always 1.
  */
-class HolyUnconditionalNeuron: HolyNeuron {
+class HolyActionNeuron: HolyNeuron {
 
     /**
                 Constructor
@@ -299,8 +237,8 @@ class HolyUnconditionalNeuron: HolyNeuron {
     this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the holy static concept.
-    override UnconditionalNeuron live_factory() const {
-        return new UnconditionalNeuron(cast(immutable)this);
+    override ActionNeuron live_factory() const {
+        return new ActionNeuron(cast(immutable)this);
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -397,10 +335,10 @@ class HolyUnconditionalNeuron: HolyNeuron {
 }
 
 /// Live.
-class UnconditionalNeuron: Neuron, ActivationIfc {
+class ActionNeuron: Neuron, ActivationIfc {
 
     /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
-    private this(immutable HolyUnconditionalNeuron holyUnconditionalNeuron) { super(holyUnconditionalNeuron);}
+    private this(immutable HolyActionNeuron holyUnconditionalNeuron) { super(holyUnconditionalNeuron);}
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
@@ -409,7 +347,7 @@ class UnconditionalNeuron: Neuron, ActivationIfc {
         Returns: activation value
     */
     override float calculate_activation() {
-        return (cast(shared HolyUnconditionalNeuron)holy).calculate_activation;
+        return (cast(shared HolyActionNeuron)holy).calculate_activation;
     }
 
     /// Getter
@@ -424,18 +362,14 @@ class UnconditionalNeuron: Neuron, ActivationIfc {
 }
 
 /**
-            Seed.
-        Used for anonymous branching as apposed to the Breed. After a branch is started with seed there is no branch identifier
+            Seed. It is a special case of the action neuron.
+        It used for anonymous branching as apposed to the Breed. After a branch is started with seed there is no branch identifier
     left in the parent branch, so there is no way to communicate to it except waiting for a result concept or set of concepts,
     that the branch will send to the parent when it finishes.
 */
-final class HolySeed: HolyUnconditionalNeuron {
+final class HolySeed: HolyActionNeuron {
 
-    /**
-                Constructor
-        Parameters:
-            cid = predefined concept identifier
-    */
+    /// Constructor
     this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the holy static concept.
@@ -447,7 +381,7 @@ final class HolySeed: HolyUnconditionalNeuron {
 }
 
 /// Live.
-final class Seed: UnconditionalNeuron {
+final class Seed: ActionNeuron {
 
     /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
     private this(immutable HolySeed holySeed) { super(holySeed); }

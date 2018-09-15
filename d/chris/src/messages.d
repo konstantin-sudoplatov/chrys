@@ -12,7 +12,7 @@ immutable abstract class Msg {
     }
 
     /// Getter
-    @property immutable(Tid) sender_tid() immutable {
+    @property immutable(Tid) _senderTid_() immutable {
         return _senderTid;
     }
 
@@ -47,7 +47,7 @@ immutable class DispatcherSuppliesClientWithCircleTid: Msg {
     }
 
     /// Getter
-    @property Tid tid() immutable {
+    @property Tid _tid_() immutable {
         return cast()tid_;
     }
 
@@ -69,7 +69,7 @@ immutable class DispatcherSuppliesCircleWithClientTid: Msg {
     }
 
     /// Getter
-    @property Tid tid() immutable {
+    @property Tid _tid_() immutable {
         return cast()tid_;
     }
 
@@ -78,7 +78,7 @@ private:
 }
 
 /// Message to display on the console_thread, usually by an attention circle.
-immutable class CircleSaysToConsoleMsg: Msg {
+immutable class CircleSaysToUserMsg: Msg {
 
     /**
         Constructor.
@@ -91,7 +91,7 @@ immutable class CircleSaysToConsoleMsg: Msg {
     }
 
     /// Getter
-    @property string text() immutable {
+    @property string _text_() immutable {
         return text_;
     }
 
@@ -100,13 +100,13 @@ private:
 }
 
 /// Request for a new line from console_thread, usually by an attention circle.
-immutable class CircleListensToConsoleMsg: Msg {
+immutable class CircleListensToUserLineMsg: Msg {
     /// Constructor
     this() {super();}
 }
 
 /// Console sends a line of text to an attention circle
-immutable class ConsoleSaysToCircleMsg: Msg {
+immutable class UserSaysToCircleMsg: Msg {
 
     /**
         Constructor.
@@ -119,7 +119,7 @@ immutable class ConsoleSaysToCircleMsg: Msg {
     }
 
     /// Getter
-    @property string text() immutable {
+    @property string _text_() immutable {
         return text_;
     }
 

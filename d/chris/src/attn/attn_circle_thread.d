@@ -4,7 +4,7 @@ import std.conv;
 import std.format;
 
 import global, tools;
-import cpt_abstract, cpt_concrete;
+import cpt_abstract, cpt_pile, cpt_actions;
 import crank_pile;
 import messages;
 debug = 2;
@@ -60,6 +60,11 @@ class Caldron {
         return _cpt_(cd.cid);
     }
 
+    /// Request exiting from the reasoning_() function. This flag is lower on coming next StartReasoningMsg message.
+    void _requestStopAndWait_() {
+        stopAndWait_ = true;
+    }
+
     /// Send children the termination signal and wait their termination.
     void _terminateChildren_() {
         foreach (child; childCaldrons_)
@@ -96,11 +101,13 @@ class Caldron {
     */
     protected bool _msgProcessing(immutable Msg msg) {
 
-        if      // is it a request for starting reasoning?
-                (cast(StartReasoningMsg)msg)
-        {
+        if (cast(StartReasoningMsg)msg) {    // is it a request for starting reasoning?
+            // kick off the reasoning loop
             reasoning_;
             return true;
+        }
+        else if (cast(UserSaysToCircleMsg)msg) {
+
         }
         return false;
     }
@@ -130,7 +137,8 @@ class Caldron {
     /// The head of the branch. It is cid of the seed neuron.
     private Cid headCid_;
 
-    /// Stop and wait flag. Can be raised by actions.
+    /// Stop and wait flag. Can be raised by actions. It is lowered on entering the reasoning_() function, i.e. the StartReasoningMsg
+    /// will always lower it.
     private bool stopAndWait_ = false;
 
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
@@ -141,6 +149,7 @@ class Caldron {
        processing other events in the queue or waits if the event queue is empty.
      */
     private void reasoning_() {
+        stopAndWait_ = false;
         debug(2)
             logit(_seedName_ ~ ":");
         while(true) {
@@ -156,8 +165,14 @@ class Caldron {
             // Let the head be processed, determine effects and do the actions.
             auto effect = head.calculate_activation_and_get_effects;
             foreach(actCid; effect.actions) {
+                debug(2) {
+                    if (auto ps = actCid in _nm_)
+                        logit(format!"    action: %s"(_nm_[actCid]));
+                    else
+                        logit(format!"    action cid: %s, noname"(actCid));
+                }
                 Action act = cast(Action)_cpt_(actCid);
-                act._do_;
+                act._do_(this);
             }
 
             // May be stop
@@ -227,7 +242,7 @@ class AttentionCircle: Caldron {
         else if      // is it a Tid of the client sent by Dispatcher?
                 (auto m = cast(immutable DispatcherSuppliesCircleWithClientTid)msg)
         {   //yes: accept the Tid
-            clientTid_ = cast()m.sender_tid;
+            clientTid_ = cast()m._senderTid_;
             return true;
         }
         else

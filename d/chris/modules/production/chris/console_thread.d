@@ -40,7 +40,7 @@ debug {
         if
                 (gotMsg)
         {
-            attnCircleTid_ = (cast(immutable)msg).tid;
+            attnCircleTid_ = (cast(immutable)msg)._tid_;
             break;
         }
         else {
@@ -75,7 +75,7 @@ else {  // take the next line from user
         }
         else//no: the line is intended for the attention circle, send it there
         {
-            (cast()attnCircleTid_).send(new immutable ConsoleSaysToCircleMsg(s));
+            (cast()attnCircleTid_).send(new immutable UserSaysToCircleMsg(s));
         }
 
         // receive response from the attention circle/dispatcher

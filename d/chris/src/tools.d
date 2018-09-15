@@ -1,5 +1,6 @@
 module tools;
 import std.stdio;
+import std.format;
 
 /// Private exception of the project.
 class Crash: Exception {
@@ -39,6 +40,37 @@ class ClassA {
     this(int i) {
         x = i;
     }
+}
+
+/**
+        Safe cast. It will throw assert if the object cannot be casted.
+    Parameters:
+        T = type to cast to
+        o = object to cast
+    Return: casted object or an assert will happen
+*/
+T scast(T, S)(S o)
+    if ((is(T: Object) || is(T: shared Object) || is(T == interface))
+        && ((is(S: Object) || is(S: shared Object))))
+{
+    assert(cast(T)o, format!"Object %s cannot be casted to class(interface) %s"(typeid(o), T.stringof));
+    return cast(T)o;
+}
+///
+unittest {
+    debug {
+        A a = new A;
+        B b = new B;
+        scast!A(b);
+        scast!I(b);
+        //scast!I(a);   // will throw an assert
+        //scast!B(a);   // will throw an assert
+    }
+}
+debug { // test classes for the previous unittest
+    interface I {}
+    class A {}
+    class B: A, I {}
 }
 
 /**
@@ -227,7 +259,6 @@ unittest {
 */
 string dequalify_enums(enumList...)() {
     import global: CptDescriptor;
-//    string res = "enum : ConceptDesctriptor {\n";
     string res = "enum : CptDescriptor {\n";
     static foreach (enuM; enumList)     // each enum en in the list of enums
     {
@@ -242,7 +273,7 @@ string dequalify_enums(enumList...)() {
 unittest {
     import std.conv: asOriginalType;
     import global: CptDescriptor, cd, MAX_STATIC_CID;
-    import cpt_concrete: HolySeed, HolyBreed;
+    import cpt_pile: HolySeed, HolyBreed;
     enum CommonConcepts: CptDescriptor {
         chat_seed = cd!(HolySeed, 2_500_739_441),                  // this is the root branch of the chat
         do_not_know_what_it_is = cd!(HolySeed, 580_052_493),

@@ -7,7 +7,7 @@ import std.conv;
 
 import tools;
 import attn_dispatcher_thread, attn_circle_thread;
-import cpt_abstract, cpt_pile, cpt_actions;
+import cpt_abstract, cpt_pile, cpt_neurons, cpt_premises, cpt_actions;
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
@@ -66,7 +66,7 @@ unittest {
         T = type to check against
         cid = cid of a concept, that is checked
 */
-void _checkCid_(T: HolyConcept)(Cid cid) {
+void _checkCid_(T: SpiritConcept)(Cid cid) {
     debug if(_maps_filled_)
         assert(cast(T)_hm_[cid],
                 format!"Cid: %s, must be of type %s and it is of type %s."(cid, T.stringof, typeid(_hm_[cid])));
@@ -95,6 +95,7 @@ enum StatConceptModules {
 enum StatCallType {
     p0Cal,                              // void function(Caldron nameSpace)
     p0Calp1Cid,                         // void function(Caldron nameSpace, Cid operandCid)
+    p0Calp1Cidp2Cid,                    // void function(Caldron nameSpace, Cid firstoperandCid, Cid secondOperandCid)
     rCid_p0Cal_p1Cidar_p2Obj,           // Cid function(Caldron nameSpace, Cid[] paramCids, Object extra)
     rCidar_p0Cal_p1Cidar_p2Obj,         // Cid[] function(Caldron nameSpace, Cid[] paramCids, Object extra)
 }
@@ -118,7 +119,7 @@ struct CptDescriptor {
 }
 
 /// Enum template for declaring named dynamic concepts. Used in the crank modules.
-enum cd(T : HolyDynamicConcept, Cid cid)  = CptDescriptor(T.stringof, cid);
+enum cd(T : SpiritDynamicConcept, Cid cid)  = CptDescriptor(T.stringof, cid);
 
 /**
         Retrieve a concept from the holy map by its enum constant and cast it from the HolyConcept to its original type,
@@ -138,7 +139,7 @@ unittest {
     import crank_pile: CommonConcepts, Chat;
     mixin(dequalify_enums!(CommonConcepts, Chat));
 
-    assert(cpt!(chat_seed) is cast(shared HolySeed)_hm_[chat_seed.cid]);
+    assert(cpt!(chat_seed) is cast(shared SpSeed)_hm_[chat_seed.cid]);
 }
 
 /**
@@ -329,11 +330,11 @@ shared synchronized final pure nothrow class HolyMap {
         Parameters:
             cpt = shared concept to assign
     */
-    shared(HolyConcept) add(shared HolyConcept cpt)
+    shared(SpiritConcept) add(shared SpiritConcept cpt)
     in {
         assert(cpt !in this, "Cid " ~ to!string(cpt.cid) ~ " - this cid already exists in the holy map.");
         if      // dynamic?
-                (cast(shared HolyDynamicConcept)cpt)
+                (cast(shared SpiritDynamicConcept)cpt)
             if      // with preset cid?
                     (cpt.cid != 0)
                 assert(cpt.cid >= MIN_DYNAMIC_CID && cpt.cid <= MAX_DINAMIC_CID,
@@ -341,7 +342,7 @@ shared synchronized final pure nothrow class HolyMap {
                         to!string(MIN_DYNAMIC_CID) ~ ".." ~ to!string(MAX_DINAMIC_CID));
             else {} //no: dynamic concepts without cid are allowed, cid will be generated
         else if // static?
-                (cast(shared HolyStaticConcept)cpt)
+                (cast(shared SpStaticConcept)cpt)
         {
             assert(cpt.cid != 0, "Static concepts can't have zero cid. Their cids are initialized at construction.");
             assert(cpt.cid >= MIN_STATIC_CID && cpt.cid <= MAX_STATIC_CID,
@@ -380,7 +381,7 @@ shared synchronized final pure nothrow class HolyMap {
             cid = key
         Returns: shared concept
     */
-    shared(HolyConcept) opIndex(Cid cid) {
+    shared(SpiritConcept) opIndex(Cid cid) {
         return holyMap_[cid];
     }
 
@@ -394,7 +395,7 @@ shared synchronized final pure nothrow class HolyMap {
             cpt = concept to add
         Returns: assigned concept
     */
-    shared(HolyConcept) opIndexAssign(shared HolyConcept cpt) {
+    shared(SpiritConcept) opIndexAssign(shared SpiritConcept cpt) {
         return add(cpt);
     }
 
@@ -404,7 +405,7 @@ shared synchronized final pure nothrow class HolyMap {
             name = key
         Returns: shared concept
     */
-    shared(HolyConcept) opIndex(string name) {
+    shared(SpiritConcept) opIndex(string name) {
         assert(name in _nm_);
         return holyMap_[_nm_[name]];
     }
@@ -415,12 +416,12 @@ shared synchronized final pure nothrow class HolyMap {
             cid = cid of the concept.
         Returns: pointer to the concept or null
     */
-    shared(HolyConcept*) opBinaryRight(string op)(Cid cid) {
+    shared(SpiritConcept*) opBinaryRight(string op)(Cid cid) {
         return cid in holyMap_;
     }
 
     /// Ditto.
-    shared(HolyConcept*) opBinaryRight(string op)(shared HolyConcept cpt) {
+    shared(SpiritConcept*) opBinaryRight(string op)(shared SpiritConcept cpt) {
         return cpt.cid in holyMap_;
     }
 
@@ -469,7 +470,7 @@ shared synchronized final pure nothrow class HolyMap {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
-    private HolyConcept[Cid] holyMap_;       /// map concept/cid
+    private SpiritConcept[Cid] holyMap_;       /// map concept/cid
 
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
@@ -682,7 +683,7 @@ do {
     // Accept static concepts and their names from the statDescriptors_ enum
     foreach(sd; statDescriptors_) {
         assert(sd.cid !in hm, "Cid: " ~ to!string(sd.cid) ~ ". Cids cannot be reused.");
-        hm.add(new shared HolyStaticConcept(sd.cid, sd.fun_ptr, sd.call_type));
+        hm.add(new shared SpStaticConcept(sd.cid, sd.fun_ptr, sd.call_type));
         nm.add(sd.cid, sd.name);
     }
 

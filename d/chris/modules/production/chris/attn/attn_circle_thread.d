@@ -4,7 +4,7 @@ import std.conv;
 import std.format;
 
 import global, tools;
-import cpt_abstract, cpt_pile, cpt_actions;
+import cpt_abstract, cpt_pile, cpt_neurons, cpt_premises, cpt_actions;
 import crank_pile;
 import messages;
 debug = 2;
@@ -25,12 +25,16 @@ class Caldron {
                              on the conceptual level.
     */
     this(Cid seedCid, Cid parentBreedCid = 0) {
+
+        // Move own tid to the conceptual level
+        (cast(TidPrimitive)_cpt_(CommonConcepts.myTid_tidprim))._tid_ = thisTid;
+
         if(parentBreedCid) {
-            debug _checkCid_!HolyBreed(parentBreedCid);
+            debug _checkCid_!SpBreed(parentBreedCid);
             (cast(Breed)_cpt_(parentBreedCid))._tid_ = ownerTid;     // finish setting up the parent breed
             debug parentBreedCid_ = parentBreedCid;
         }
-        debug _checkCid_!HolySeed(seedCid);
+        debug _checkCid_!SpSeed(seedCid);
 
         headCid_ = seedCid_ = seedCid;
         thisTid.send(new immutable StartReasoningMsg);
@@ -46,7 +50,7 @@ class Caldron {
             cid = cid of the concept or its correspondig enum.
         Returns: the live concept object
     */
-    Concept _cpt_(Cid cid) {
+    final Concept _cpt_(Cid cid) {
         assert(cid in _hm_);
         if
                 (auto p = cid in lm_)
@@ -56,24 +60,24 @@ class Caldron {
     }
 
     /// Adapter
-    Concept _cpt_(CptDescriptor cd) {
+    final Concept _cpt_(CptDescriptor cd) {
         return _cpt_(cd.cid);
     }
 
     /// Request exiting from the reasoning_() function. This flag is lower on coming next StartReasoningMsg message.
-    void _requestStopAndWait_() {
+    final void _requestStopAndWait_() {
         stopAndWait_ = true;
     }
 
     /// Send children the termination signal and wait their termination.
-    void _terminateChildren_() {
+    final void _terminateChildren_() {
         foreach (child; childCaldrons_)
             child.send(new immutable TerminateAppMsg);
     }
 
     // Debug return the caldron seed's name, if exist, else word "noname" will be returned.
     debug {
-        string _seedName_() {
+        final string _seedName_() {
             if (auto nmp = seedCid_ in _nm_)
                 return *nmp;
             else
@@ -154,7 +158,7 @@ class Caldron {
             logit(_seedName_ ~ ":");
         while(true) {
             debug(3){
-                HolyConcept cpt = cast()_hm_[headCid_];
+                SpiritConcept cpt = cast()_hm_[headCid_];
                 logit(format!"    headCid_: %s, %s: %s"(headCid_, to!string(typeid(cpt)), _nm_[headCid_]));
             }
             else
@@ -241,8 +245,8 @@ class AttentionCircle: Caldron {
             return true;
         else if      // is it a Tid of the client sent by Dispatcher?
                 (auto m = cast(immutable DispatcherSuppliesCircleWithClientTid)msg)
-        {   //yes: accept the Tid
-            clientTid_ = cast()m._senderTid_;
+        {   //yes: accept the Tid and move it to the concept level
+            (cast(TidPrimitive)_cpt_(CommonConcepts.userThread_tidprim))._tid_ = cast()m._senderTid_;
             return true;
         }
         else
@@ -255,9 +259,6 @@ class AttentionCircle: Caldron {
     //
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
-
-    /// Tid of the correspondent's thread
-    private Tid clientTid_;
 
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
@@ -323,11 +324,11 @@ void caldron_thread_func(bool calledByDispatcher, Cid seedCid = 0, Cid parentBre
         {   // process it
             //Send the message to caldron
             if // processed by caldron?
-            (caldron_._msgProcessing(msg))
-            //yes: go for a new message
+                    (caldron_._msgProcessing(msg))
+                //yes: go for a new message
                 continue ;
             else if // is it a request for the circle termination?
-            (cast(TerminateAppMsg)msg)
+                    (cast(TerminateAppMsg)msg)
             {   //yes: terminate me and all my subthreads
                 debug(2)
                     logit("terminating caldron " ~ caldron_._seedName_);

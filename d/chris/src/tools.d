@@ -273,15 +273,16 @@ string dequalify_enums(enumList...)() {
 unittest {
     import std.conv: asOriginalType;
     import global: CptDescriptor, cd, MAX_STATIC_CID;
-    import cpt_pile: HolySeed, HolyBreed;
+    import cpt_neurons: SpSeed;
+    import cpt_premises: SpBreed;
     enum CommonConcepts: CptDescriptor {
-        chat_seed = cd!(HolySeed, 2_500_739_441),                  // this is the root branch of the chat
-        do_not_know_what_it_is = cd!(HolySeed, 580_052_493),
+        chat_seed = cd!(SpSeed, 2_500_739_441),                  // this is the root branch of the chat
+        do_not_know_what_it_is = cd!(SpSeed, 580_052_493),
     }
 
     enum Chat: CptDescriptor {
-        console_breed = cd!(HolyBreed, 4_021_308_401),
-        console_seed = cd!(HolySeed, 1_771_384_341),
+        console_breed = cd!(SpBreed, 4_021_308_401),
+        console_seed = cd!(SpSeed, 1_771_384_341),
     }
 
     // Declare enums with the same members as in the CommonConcepts and Chat
@@ -352,15 +353,31 @@ unittest {
 */
 }
 
+/// ANSI terminal colours
+enum TermColor: string {
+    none = null,
+    red = "31",
+    green = "32",
+    yelow = "33",
+    blue = "34",
+    magenta = "35",
+    cyan = "36",
+}
+
 /**
     Logging facility.
 Params:
     text = the text of the message
+    color = the color to change the output to
 */
-void logit(string text) {
+void logit(string text, TermColor colour = null) {
     import std.stdio: writeln, stdout;
 
-    writeln(text);
+    if (colour)
+        write("\x1b[" ~ colour ~ "m");      // make the colour green
+    write(text);
+    if (colour) write("\x1b[0m");           // clear the terminal settings
+    writeln;
     stdout.flush;
 }
 

@@ -5,7 +5,7 @@ import std.conv, std.format;
 
 import global, tools;
 import interfaces;
-import cpt_pile, cpt_actions;
+import cpt_pile, cpt_neurons, cpt_premises, cpt_actions;
 
 /// External runtime function, that creates new objects by their ClassInfo. No constructors are called. Very fast, much faster
 /// than manually allocating the object in the heap as new buf[], as it is done in the emplace function (and more economical, no
@@ -39,7 +39,7 @@ unittest {
 }
 
 /// Concept's attributes.
-enum HolyCptFlags: short {
+enum SpCptFlags: short {
 
     /// Static concept
     STATIC = 0x0001,
@@ -54,19 +54,19 @@ enum HolyCptFlags: short {
 
 /**
             Base for all concepts.
-    "Holy" means stable and storable as opposed to "Live" concepts, that are in a constant using and change and living only
+    "Spiritual" means stable and storable as opposed to "Live" concepts, that are in a constant using and change and living only
     in memory. All live concepts contain reference to its holy counterpart. There can be many sin instances that corresponds
     to only one holy partner, which is considered immutable by them.
 
     "shared" attribute is inherrited by successors and cannot be changed.
 */
-shared abstract class HolyConcept {
+shared abstract class SpiritConcept {
 
     /// Concept identifier.
     immutable Cid cid = 0;
 
     /// Attributes of the concept.
-    immutable HolyCptFlags flags =  cast(HolyCptFlags)0;
+    immutable SpCptFlags flags =  cast(SpCptFlags)0;
 
     /**
                 Constructor
@@ -87,12 +87,12 @@ shared abstract class HolyConcept {
         object in the its body.
         Returns: deep clone of itself
     */
-    shared(HolyConcept) _deep_copy_() const {
+    shared(SpiritConcept) _deep_copy_() const {
 
         void* copy = cast(void*)_d_newclass(this.classinfo);
         size_t size = this.classinfo.initializer.length;
         copy [8 .. size] = (cast(void *)this)[8 .. size];
-        return cast(shared HolyConcept)copy;
+        return cast(shared SpiritConcept)copy;
     }
 
     /**
@@ -123,10 +123,10 @@ shared abstract class HolyConcept {
     holy partners.
 */
 abstract class Concept {
-    immutable HolyConcept holy;
+    immutable SpiritConcept holy;
 
     /// Constructor
-    this(immutable HolyConcept holy) {
+    this(immutable SpiritConcept holy) {
         this.holy = holy;
     }
 
@@ -161,7 +161,7 @@ abstract class Concept {
 /**
             Base for all holy dynamic concepts.
 */
-abstract class HolyDynamicConcept: HolyConcept {
+abstract class SpiritDynamicConcept: SpiritConcept {
 
     /**
                 Constructor
@@ -172,7 +172,7 @@ abstract class HolyDynamicConcept: HolyConcept {
     */
     this(Cid cid) {
         super(cid);
-        cast()flags |= HolyCptFlags.PERM;       // all dynamic concepts are permanent until further notice
+        cast()flags |= SpCptFlags.PERM;       // all dynamic concepts are permanent until further notice
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -180,15 +180,15 @@ abstract class HolyDynamicConcept: HolyConcept {
 
 /// Ditto
 abstract class DynamicConcept: Concept {
-    this(immutable HolyDynamicConcept holyDynamicConcept) { super(holyDynamicConcept); }
+    this(immutable SpiritDynamicConcept holyDynamicConcept) { super(holyDynamicConcept); }
 }
 
 /**
-            Base for all holy primitives. They store data. Examples of primitives are a string, a number, a list of strings (log),
+            Base for all spirit primitives. They store data. Examples of primitives are a string, a number, a list of strings (log),
     a map of strings/cid (vocabulary) and so on.
     All concrete descendants will have the "_pri" suffix.
 */
-abstract class HolyPrimitive: HolyDynamicConcept {
+abstract class SpiritPrimitive: SpiritDynamicConcept {
 
     /**
                 Constructor
@@ -203,14 +203,14 @@ abstract class HolyPrimitive: HolyDynamicConcept {
 
 /// Ditto
 abstract class Primitive: DynamicConcept {
-    this(immutable HolyPrimitive holyPrimitive) { super(holyPrimitive); }
+    this(immutable SpiritPrimitive holyPrimitive) { super(holyPrimitive); }
 }
 
 /**
             Base for all premises.
     All concrete descendants will have the "_pre" suffix.
 */
-abstract class HolyPremise: HolyDynamicConcept {
+abstract class SpiritPremise: SpiritDynamicConcept {
 
     /**
                 Constructor
@@ -225,7 +225,7 @@ abstract class HolyPremise: HolyDynamicConcept {
 
 /// Ditto
 abstract class Premise: DynamicConcept, BinActivationIfc {
-    this(immutable HolyPremise holyPremise) { super(holyPremise); }
+    this(immutable SpiritPremise holyPremise) { super(holyPremise); }
 
     mixin BinActivationImpl!Premise;
 }
@@ -233,7 +233,7 @@ abstract class Premise: DynamicConcept, BinActivationIfc {
 /**
             Base for all neurons.
 */
-abstract class HolyNeuron: HolyDynamicConcept {
+abstract class SpiritNeuron: SpiritDynamicConcept {
 
     //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
@@ -261,10 +261,10 @@ abstract class HolyNeuron: HolyDynamicConcept {
     this(Cid cid) { super(cid); }
 
     /// Ditto.
-    override shared(HolyNeuron) _deep_copy_() const {
+    override shared(SpiritNeuron) _deep_copy_() const {
 
         // Take shallow copy
-        shared HolyNeuron clon = cast(shared HolyNeuron)super._deep_copy_;
+        shared SpiritNeuron clon = cast(shared SpiritNeuron)super._deep_copy_;
 
         // Make it deep.
         clon._effects = (cast()this)._effects.dup;
@@ -355,7 +355,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
                 Cid[] a;
                 foreach (cd; acts) {
                     debug if(_maps_filled_)
-                        assert(cast(shared HolyAction)_hm_[cd.cid],
+                        assert(cast(shared SpAction)_hm_[cd.cid],
                                 format!"Cid: %s must be an action, and it is a %s."(cd.cid, cd.className));
                     a ~= cd.cid;
                 }
@@ -364,7 +364,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
             {
                 debug if(_maps_filled_)
                     foreach (cid; acts) {
-                        assert(cast(shared HolyAction)_hm_[cid],
+                        assert(cast(shared SpAction)_hm_[cid],
                                 format!"Cid: %s must be an action, and it is a %s."(cid, typeid(_hm_[cid])));
                     }
                 Cid[] a = acts;
@@ -373,14 +373,14 @@ abstract class HolyNeuron: HolyDynamicConcept {
                     (is(Ta == CptDescriptor))
             {  //yes: convert it to array of cids
                 debug if(_maps_filled_)
-                    assert(cast(shared HolyAction)_hm_[acts.cid],
+                    assert(cast(shared SpAction)_hm_[acts.cid],
                             format!"Cid: %s must be an action, and it is a %s."(acts.cid, acts.className));
                 Cid[] a = [acts.cid];
             }
             else//no: it is a cid; convert it to an array of cids
             {
                 debug if(_maps_filled_)
-                    assert(cast(shared HolyAction)_hm_[acts],
+                    assert(cast(shared SpAction)_hm_[acts],
                             format!"Cid: %s must be an action, and it is a %s."(acts, typeid(_hm_[acts])));
                 Cid[] a = [acts];
             }
@@ -399,7 +399,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
                 Cid[] b;
                 foreach (cd; brans) {
                     debug if(_maps_filled_)
-                        assert(cast(shared HolyBreed)_hm_[cd.cid] || cast(shared HolyNeuron)_hm_[cd.cid],
+                        assert(cast(shared SpBreed)_hm_[cd.cid] || cast(shared SpiritNeuron)_hm_[cd.cid],
                                 format!"Cid: %s must be HolyNeuron, including HolySeed or HolyBreed, and it is a %s."
                                         (cd.cid, cd.className));
                     b ~= cd.cid;
@@ -409,7 +409,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
             {
                 debug if(_maps_filled_)
                     foreach (cid; brans) {
-                        assert(cast(shared HolyBreed)_hm_[cid] || cast(shared HolyNeuron)_hm_[cid],
+                        assert(cast(shared SpBreed)_hm_[cid] || cast(shared SpiritNeuron)_hm_[cid],
                                 format!"Cid: %s must be HolyNeuron, including HolySeed or HolyBreed, and it is a %s"
                                         (cid, typeid(_hm_[cid])));
                     }
@@ -420,7 +420,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
                     (is(Tb == CptDescriptor))
             {  //yes: convert it to array of cids
                 debug if(_maps_filled_)
-                    assert(cast(shared HolyBreed)_hm_[brans.cid] || cast(shared HolyNeuron)_hm_[brans.cid],
+                    assert(cast(shared SpBreed)_hm_[brans.cid] || cast(shared SpiritNeuron)_hm_[brans.cid],
                             format!"Cid: %s must be HolyNeuron, including HolySeed or HolyBreed, and it is a %s."
                                     (brans.cid, brans.className));
                 Cid[] b = [brans.cid];
@@ -428,7 +428,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
             else//no: it is a cid; convert it an to array of cids
             {
                 debug if(_maps_filled_)
-                    assert(cast(shared HolyBreed)_hm_[brans] || cast(shared HolyNeuron)_hm_[brans],
+                    assert(cast(shared SpBreed)_hm_[brans] || cast(shared SpiritNeuron)_hm_[brans],
                             format!"Cid: %s must be HolyNeuron, including HolySeed or HolyBreed, and it is a %s."
                                     (brans, typeid(_hm_[brans])));
                 Cid[] b = [brans];
@@ -560,7 +560,7 @@ abstract class HolyNeuron: HolyDynamicConcept {
 abstract class Neuron: DynamicConcept, ActivationIfc {
 
     /// Constructor
-    this(immutable HolyNeuron holyNeuron) { super(holyNeuron); }
+    this(immutable SpiritNeuron holyNeuron) { super(holyNeuron); }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
@@ -579,16 +579,16 @@ abstract class Neuron: DynamicConcept, ActivationIfc {
                 Calculate activation value and set up the activation_ variable.
         Returns: effects, corresponding calculated activation
     */
-    HolyNeuron.Effect calculate_activation_and_get_effects() {
+    SpiritNeuron.Effect calculate_activation_and_get_effects() {
 
-        return (cast(shared HolyNeuron)holy).select_effects(calculate_activation);
+        return (cast(shared SpiritNeuron)holy).select_effects(calculate_activation);
     }
 }
 
 /**
             Base for neurons, that take its decisions by pure logic on premises, as opposed to weighing them.
 */
-abstract class HolyLogicalNeuron: HolyNeuron, PremiseIfc {
+abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
 
     /**
                 Constructor
@@ -599,8 +599,8 @@ abstract class HolyLogicalNeuron: HolyNeuron, PremiseIfc {
     this(Cid cid) { super(cid); }
 
     /// Clone
-    override shared(HolyLogicalNeuron) _deep_copy_() const {
-        shared HolyLogicalNeuron cpt = cast(shared HolyLogicalNeuron)super._deep_copy_;
+    override shared(SpiritLogicalNeuron) _deep_copy_() const {
+        shared SpiritLogicalNeuron cpt = cast(shared SpiritLogicalNeuron)super._deep_copy_;
         cpt._premises = this._premises.dup;      // deep copy of premises
 
         return cpt;
@@ -616,14 +616,14 @@ abstract class HolyLogicalNeuron: HolyNeuron, PremiseIfc {
 
     //---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
 
-    mixin PremiseImpl!HolyLogicalNeuron;
+    mixin PremiseImpl!SpiritLogicalNeuron;
 }
 
 /// Ditto
 abstract class LogicalNeuron: Neuron, BinActivationIfc {
 
     /// Constructor
-    this (immutable HolyLogicalNeuron holyLogicalNeuron) { super(holyLogicalNeuron); }
+    this (immutable SpiritLogicalNeuron holyLogicalNeuron) { super(holyLogicalNeuron); }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
@@ -635,7 +635,7 @@ abstract class LogicalNeuron: Neuron, BinActivationIfc {
         Returns: activation value
     */
     override float calculate_activation() {
-        return _activation = (cast(shared HolyLogicalNeuron)holy).calculate_activation;
+        return _activation = (cast(shared SpiritLogicalNeuron)holy).calculate_activation;
     }
 
 }

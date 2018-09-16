@@ -23,19 +23,21 @@ enum CommonConcepts: CptDescriptor {
     //TODO: continue from here - fill in the breed and make a binop action to pass it to the stat concept.
     userThread_tidprim =
             cd!(SpTidPrimitive, 217_397_612),
-
-    // It stores Tid of the current caldron and is filled on the start of the caldron. You can always get your Tid using
-    // std.concurrency.thisTid(), but, if you need to send your Tid to another branch on the conceptual level use this.
-    myTid_tidprim =
-            cd!(SpTidPrimitive, 1_005_527_366),
+    //
+    //// It stores Tid of the current caldron and is filled on the start of the caldron. You can always get your Tid using
+    //// std.concurrency.thisTid(), but, if you need to send your Tid to another branch on the conceptual level use this.
+    //myTid_tidprim =
+    //        cd!(SpTidPrimitive, 1_005_527_366),
 }
 
 void _commonConcepts_() {
     mixin(dequalify_enums!(CommonConcepts));
 
-    /// Setup the stop and wait action
-    cpt!logCpt_unact._statActionCid_ = _statCid_!logConcept;
-    cpt!stopAndWait_act._statActionCid_ = _statCid_!_stopAndWait_;
+    // Setup the stop and wait action
+    cpt!logCpt_unact.statAction = _statCid_!logConcept;
+
+    // Setup the stop and wait action
+    cpt!stopAndWait_act.statAction = _statCid_!_stopAndWait_;
 }
 
 /// Chat branch enums
@@ -57,16 +59,14 @@ enum Chat: CptDescriptor {
 void _chatBranch_() {
     mixin(dequalify_enums!(CommonConcepts, Chat, Uline));    // anonymizes the concept enums, so we don't need use their full names.
 
-    // log the toString() of this concept
-    cpt!logCpt_unact._operand_ = chat_breed;
-
     // Setup the breed and seed
-    cpt!chat_breed._seed_ = chat_seed;
+    cpt!chat_breed.seed = chat_seed;
+cpt!logCpt_unact._operand_ = uline_breed;
     cpt!chat_seed.add_effects(logCpt_unact, [ulineHandShaker_actnrn, uline_breed]);
 
     // Handshake with user
     cpt!ulineHandShaker_actnrn.add_effects(chatSendsUserUlineTid_unact, ulineValve_andnrn);
-    cpt!chatSendsUserUlineTid_unact._statActionCid_ = _statCid_!sendConceptToBranch;
+    cpt!chatSendsUserUlineTid_unact.statAction = _statCid_!sendConceptToBranch;
     cpt!chatSendsUserUlineTid_unact._operand_ = uline_breed;
 
     // Wait on the user input
@@ -95,16 +95,15 @@ void _ulineBranch_() {
     mixin(dequalify_enums!(CommonConcepts, Uline, Chat));
 
     // Setup actions
-    cpt!activate_userInputPrem_unact._statActionCid_ = _statCid_!activateStat;
+    cpt!activate_userInputPrem_unact.statAction = _statCid_!activateStat;
     cpt!activate_userInputPrem_unact._operand_ = userInput_strprem;
-    cpt!anactivate_userInputPrem_unact._statActionCid_ = _statCid_!anactivateStat;
+    cpt!anactivate_userInputPrem_unact.statAction = _statCid_!anactivateStat;
     cpt!anactivate_userInputPrem_unact._operand_ = userInput_strprem;
 
     // Mate uline seed and breed. Make the parent chat breed known to the uline breed. In the process of creating uline
     // caldron the live instance of chat breed will be setup for it, so uline will be able to send messages to chat.
     // And vice versa, the uline breed will be set up in the chat name space.
-    cpt!uline_breed._seed_ = uline_seed;
-    cpt!uline_breed._parentBreed_ = chat_breed;
+    cpt!uline_breed.seed = uline_seed;
 
     // Setup the uline_seed
     cpt!uline_seed.add_effects(anactivate_userInputPrem_unact, userInput_valve_anrn);

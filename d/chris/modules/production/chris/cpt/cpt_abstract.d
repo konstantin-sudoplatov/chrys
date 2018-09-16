@@ -104,11 +104,7 @@ shared abstract class SpiritConcept {
     string toString() const {
         import std.format: format;
 
-        if      // is there a name to this concept?
-                (auto name = cid in _nm_)
-            return format!"cid: %s, name: %s"(cid, *name);
-        else
-            return format!"cid: %s"(cid);
+        return format!"(%s): %s(%s)"(typeid(this), cid, _nm_.name(cid));
     }
 }
 
@@ -123,11 +119,11 @@ shared abstract class SpiritConcept {
     holy partners.
 */
 abstract class Concept {
-    immutable SpiritConcept holy;
+    immutable SpiritConcept sp;
 
     /// Constructor
-    this(immutable SpiritConcept holy) {
-        this.holy = holy;
+    this(immutable SpiritConcept spirit) {
+        this.sp = spirit;
     }
 
     /**
@@ -146,15 +142,18 @@ abstract class Concept {
     }
 
     /// Getter
-    @property cid() {
-        return holy.cid;
+    @property cid() const {
+        return sp.cid;
     }
 
     /// Overrided default Object.toString()
     override string toString() const {
         import std.format: format;
+        import std.array: replace;
 
-        return (cast(shared)holy).toString;
+        string s = format!"%s(%s):\n"(_nm_.name(sp.cid), typeid(this));
+        s ~= format!"sp = %s"((cast(shared)sp).toString).replace("\n", "\n    ");
+        return s.replace("\n", "\n    ");
     }
 }
 
@@ -212,12 +211,7 @@ abstract class Primitive: DynamicConcept {
 */
 abstract class SpiritPremise: SpiritDynamicConcept {
 
-    /**
-                Constructor
-        Parameters:
-            Used for concepts with predefined cids.
-            cid = concept identifier
-    */
+    /// constructor
     this(Cid cid) { super(cid); }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -581,7 +575,7 @@ abstract class Neuron: DynamicConcept, ActivationIfc {
     */
     SpiritNeuron.Effect calculate_activation_and_get_effects() {
 
-        return (cast(shared SpiritNeuron)holy).select_effects(calculate_activation);
+        return (cast(shared SpiritNeuron)sp).select_effects(calculate_activation);
     }
 }
 
@@ -635,7 +629,7 @@ abstract class LogicalNeuron: Neuron, BinActivationIfc {
         Returns: activation value
     */
     override float calculate_activation() {
-        return _activation = (cast(shared SpiritLogicalNeuron)holy).calculate_activation;
+        return _activation = (cast(shared SpiritLogicalNeuron)sp).calculate_activation;
     }
 
 }

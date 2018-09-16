@@ -66,18 +66,18 @@ unittest {
         T = type to check against
         cid = cid of a concept, that is checked
 */
-void _checkCid_(T: SpiritConcept)(Cid cid) {
+void checkCid(T: SpiritConcept)(Cid cid) {
     debug if(_maps_filled_)
         assert(cast(T)_hm_[cid],
                 format!"Cid: %s, must be of type %s and it is of type %s."(cid, T.stringof, typeid(_hm_[cid])));
 }
 
 ///         Adapter for live concepts.
-void _checkCid_(T: Concept)(Caldron caldron, Cid cid) {
+void checkCid(T: Concept)(Caldron caldron, Cid cid) {
     debug if(_cranked_)
-        assert((cast(T)caldron._cpt_(cid)),
+        assert((cast(T)caldron.lcp(cid)),
                 format!"Cid: %s, must be of type %s and it is of type %s."
-                        (cid, T.stringof, typeid(caldron._cpt_(cid))));
+                        (cid, T.stringof, typeid(caldron.lcp(cid))));
 }
 
 // modules with static concepts
@@ -166,7 +166,7 @@ shared final pure nothrow class NameMap {
         Returns: pointer to name or null
     */
     const(string*) opBinaryRight(string op)(Cid cid) {
-        return cid in (cast()cross_);
+        return cid in cast()cross_;
     }
 
     /**
@@ -176,18 +176,20 @@ shared final pure nothrow class NameMap {
         Returns: pointer to cid or null
     */
     const(Cid*) opBinaryRight(string op)(string name) const {
-        return name in (cast()cross_);
+        return name in cast()cross_;
     }
 
     /**
             Get the cid of the concept by name.
         Parameters:
             name = name of the concept.
-        Returns: cid of the concept.
-        Throws: RangeError exception if the name is not found.
+        Returns: cid of the concept, 0 if not found
     */
-    const(Cid) cid(string name) const {
-        return (cast()cross_)[name];
+    nothrow const(Cid) cid(string name) const {
+        if (auto p = name in cast()cross_)
+            return *p;
+        else
+            return 0;
     }
 
     /// Ditto.
@@ -199,11 +201,13 @@ shared final pure nothrow class NameMap {
             Get the name of the concept by cid.
         Parameters:
             cid = cid of the concept
-        Returns: name of the concept.
-        Throws: RangeError exception if the cid is not found.
+        Returns: name of the concept or null if not found.
     */
     const(string) name(Cid  cid) const {
-        return (cast()cross_)[cid];
+        if (auto p = cid in cast()cross_)
+            return *p;
+        else
+            return null;
     }
 
     /// Ditto.

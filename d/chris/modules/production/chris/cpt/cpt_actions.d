@@ -42,13 +42,13 @@ class SpAction: SpiritDynamicConcept {
     }
 
     /// Getter
-    @property Cid _statActionCid_() {
+    @property Cid statAction() {
         return _statActionCid;
     }
 
     /// Setter
-    @property Cid _statActionCid_(Cid cid) {
-        debug _checkCid_!SpStaticConcept(cid);
+    @property Cid statAction(Cid cid) {
+        debug checkCid!SpStaticConcept(cid);
         return _statActionCid = cid;
     }
 
@@ -72,8 +72,8 @@ class Action: DynamicConcept {
             caldron = name space it which static concept function will be working.
     */
     void _do_(Caldron caldron) {
-        assert((cast(shared SpAction)holy)._statActionCid_ != 0, format!"Cid: %s, static action must be assigned."(this.cid));
-        (cast(shared SpAction)holy)._do_(caldron);
+        assert((cast(shared SpAction)sp).statAction != 0, format!"Cid: %s, static action must be assigned."(this.cid));
+        (cast(shared SpAction)sp)._do_(caldron);
     }
 }
 
@@ -113,13 +113,13 @@ class SpUnaryAction: SpAction {
 
     /// Setter
     @property Cid _operand_(Cid cid) {
-        _checkCid_!SpiritDynamicConcept(cid);
+        checkCid!SpiritDynamicConcept(cid);
         return operandCid_ = cid;
     }
 
     /// Adapter
     @property Cid _operand_(CptDescriptor cd) {
-        _checkCid_!SpiritDynamicConcept(cd.cid);
+        checkCid!SpiritDynamicConcept(cd.cid);
         return operandCid_ = cd.cid;
     }
 
@@ -175,13 +175,13 @@ class SpBinaryAction: SpAction {
 
     /// Setter
     @property Cid _firstOperand_(Cid cid) {
-        _checkCid_!SpiritDynamicConcept(cid);
+        checkCid!SpiritDynamicConcept(cid);
         return firstOperandCid_ = cid;
     }
 
     /// Adapter
     @property Cid _firstOperand_(CptDescriptor cd) {
-        _checkCid_!SpiritDynamicConcept(cd.cid);
+        checkCid!SpiritDynamicConcept(cd.cid);
         return firstOperandCid_ = cd.cid;
     }
 
@@ -192,13 +192,13 @@ class SpBinaryAction: SpAction {
 
     /// Setter
     @property Cid _secondOperand_(Cid cid) {
-        _checkCid_!SpiritDynamicConcept(cid);
+        checkCid!SpiritDynamicConcept(cid);
         return secondOperandCid_ = cid;
     }
 
     /// Adapter
     @property Cid _secondOperand_(CptDescriptor cd) {
-        _checkCid_!SpiritDynamicConcept(cd.cid);
+        checkCid!SpiritDynamicConcept(cd.cid);
         return secondOperandCid_ = cd.cid;
     }
 

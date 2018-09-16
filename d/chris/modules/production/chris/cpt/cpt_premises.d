@@ -31,55 +31,38 @@ import cpt_neurons: SpSeed;
         return new Breed(cast(immutable)this);
     }
 
+    override string toString() const {
+        string s = super.toString;
+        s ~= format!"\nseedCid_ = %s(%s)"
+                (seedCid_, _nm_.name(seedCid_));
+        return s;
+    }
+
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     /// Getter.
-    @property Cid _seed_() const {
+    @property Cid seed() const {
         return seedCid_;
     }
 
     /// Setter.
-    @property Cid _seed_(Cid seedCid) {
-        debug _checkCid_!SpSeed(seedCid);
+    @property Cid seed(Cid seedCid) {
+        debug checkCid!SpSeed(seedCid);
 
         return seedCid_ = seedCid;
     }
 
     /// Adapter.
-    @property Cid _seed_(CptDescriptor seedDesc) {
-        debug _checkCid_!SpSeed(seedDesc.cid);
+    @property Cid seed(CptDescriptor seedDesc) {
+        debug checkCid!SpSeed(seedDesc.cid);
 
         return seedCid_ = seedDesc.cid;
-    }
-
-    /// Getter.
-    @property Cid _parentBreed_() const {
-        return parentBreedCid_;
-    }
-
-    /// Setter.
-    @property Cid _parentBreed_(Cid parentBreedCid) {
-        debug _checkCid_!SpBreed(parentBreedCid);
-
-        return parentBreedCid_ = parentBreedCid;
-    }
-
-    /// Adapter.
-    @property Cid _parentBreed_(CptDescriptor parentBreedDesc) {
-        debug _checkCid_!SpBreed(parentBreedDesc.cid);
-
-        return parentBreedCid_ = parentBreedDesc.cid;
     }
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /// The seed of the branch.
     private Cid seedCid_;
-
-    /// Breed of the parent. It is incarnated in the new caldron name space when spawning the caldron.
-    /// If this field left 0, it's ok. That would be an anonymous caldron with no need for any ID, since there should be
-    // no messages from other caldrons.
-    private Cid parentBreedCid_;
 }
 
 /// Live.
@@ -87,19 +70,20 @@ final class Breed: Premise {
     import std.concurrency: Tid;
 
     /// The thread identifier.
-    Tid _tid_;
+    Tid tid;
 
     /// Private constructor. Use spiritual live_factory() instead.
     private this(immutable SpBreed spBreed) { super(spBreed); }
 
-    /// Getter.
-    const(Cid) _seed_() const {
-        return (cast(immutable SpBreed)holy)._seed_;
+    override string toString() const {
+        string s = super.toString;
+        s ~= format!"\ntid = %s"(cast()tid);
+        return s;
     }
 
     /// Getter.
-    const(Cid) _parentBreed_() const {
-        return (cast(immutable SpBreed)holy)._parentBreed_;
+    const(Cid) seed() const {
+        return (cast(immutable SpBreed)sp).seed;
     }
 }
 

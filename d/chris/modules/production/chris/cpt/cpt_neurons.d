@@ -130,7 +130,7 @@ class ActionNeuron: Neuron, ActivationIfc {
         Returns: activation value
     */
     override float calculate_activation() {
-        return (cast(shared SpActionNeuron)holy).calculate_activation;
+        return (cast(shared SpActionNeuron)sp).calculate_activation;
     }
 
     /// Getter
@@ -265,7 +265,7 @@ final class WeightNeuron: Neuron, EsquashActivationIfc {
         Returns: activation value
     */
     override float calculate_activation() {
-        return _activation = (cast(shared SpWeightNeuron)holy).calculate_activation;
+        return _activation = (cast(shared SpWeightNeuron)sp).calculate_activation;
     }
 }
 

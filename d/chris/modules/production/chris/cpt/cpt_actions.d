@@ -78,7 +78,7 @@ class Action: DynamicConcept {
 }
 
 /// Actions, that operate on only one concept. Examples: activate/anactivate concept.
-class SpUnaryAction: SpAction {
+final class SpUnaryAction: SpAction {
 
     /// Constructor
     this(Cid cid) { super(cid); }
@@ -106,19 +106,19 @@ class SpUnaryAction: SpAction {
         (cast(void function(Caldron, Cid))statCpt.fp)(caldron, operandCid_);
     }
 
-    /// Getter
-    @property Cid _operand_() {
-        return operandCid_;
-    }
+    ///// Getter
+    //@property Cid operand() {
+    //    return operandCid_;
+    //}
 
     /// Setter
-    @property Cid _operand_(Cid cid) {
+    @property Cid operand(Cid cid) {
         checkCid!SpiritDynamicConcept(cid);
         return operandCid_ = cid;
     }
 
     /// Adapter
-    @property Cid _operand_(CptDescriptor cd) {
+    @property Cid operand(CptDescriptor cd) {
         checkCid!SpiritDynamicConcept(cd.cid);
         return operandCid_ = cd.cid;
     }
@@ -130,7 +130,7 @@ class SpUnaryAction: SpAction {
 }
 
 /// Live.
-class UnaryAction: Action {
+final class UnaryAction: Action {
 
     /// Private constructor. Use live_factory() instead.
     private this(immutable SpUnaryAction spUnaryAction) { super(spUnaryAction); }
@@ -139,7 +139,7 @@ class UnaryAction: Action {
 
 /// Actions, that operate on two concepts. Examples: sending a message - the first operand breed of the correspondent,
 /// the second operand concept object to send.
-class SpBinaryAction: SpAction {
+final class SpBinaryAction: SpAction {
 
     /// Constructor
     this(Cid cid) { super(cid); }
@@ -168,36 +168,36 @@ class SpBinaryAction: SpAction {
         (cast(void function(Caldron, Cid, Cid))statCpt.fp)(caldron, firstOperandCid_, secondOperandCid_);
     }
 
-    /// Getter
-    @property Cid _firstOperand_() {
-        return firstOperandCid_;
-    }
+    ///// Getter
+    //@property Cid _firstOperand_() {
+    //    return firstOperandCid_;
+    //}
 
     /// Setter
-    @property Cid _firstOperand_(Cid cid) {
+    @property Cid firstOperand(Cid cid) {
         checkCid!SpiritDynamicConcept(cid);
         return firstOperandCid_ = cid;
     }
 
     /// Adapter
-    @property Cid _firstOperand_(CptDescriptor cd) {
+    @property Cid firstOperand(CptDescriptor cd) {
         checkCid!SpiritDynamicConcept(cd.cid);
         return firstOperandCid_ = cd.cid;
     }
 
-    /// Getter
-    @property Cid _secondOperand_() {
-        return secondOperandCid_;
-    }
+    ///// Getter
+    //@property Cid _secondOperand_() {
+    //    return secondOperandCid_;
+    //}
 
     /// Setter
-    @property Cid _secondOperand_(Cid cid) {
+    @property Cid secondOperand(Cid cid) {
         checkCid!SpiritDynamicConcept(cid);
         return secondOperandCid_ = cid;
     }
 
     /// Adapter
-    @property Cid _secondOperand_(CptDescriptor cd) {
+    @property Cid secondOperand(CptDescriptor cd) {
         checkCid!SpiritDynamicConcept(cd.cid);
         return secondOperandCid_ = cd.cid;
     }
@@ -212,12 +212,13 @@ class SpBinaryAction: SpAction {
 }
 
 /// Live.
-class BinaryAction: Action {
+final class BinaryAction: Action {
 
     /// Private constructor. Use live_factory() instead.
     private this(immutable SpBinaryAction spBinaryAction) { super(spBinaryAction); }
 
 }
+
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--

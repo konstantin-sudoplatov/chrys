@@ -7,7 +7,7 @@ import global, tools;
 import cpt_abstract, cpt_pile, cpt_neurons, cpt_premises, cpt_actions;
 import crank_pile;
 import messages;
-debug = 3;
+debug = 2;
 
 /**
             Main work horse of the system. It provides the room for doing reasoning on some branch.
@@ -22,14 +22,15 @@ class Caldron {
             breedOrSeedCid = breed or seed concept
     */
     this(Cid breedOrSeedCid) {
-        assert(cast(Seed)lcp(breedOrSeedCid) || cast(Breed)lcp(breedOrSeedCid),
+        assert(cast(Seed)this[breedOrSeedCid] || cast(Breed)this[breedOrSeedCid],
                 format!"Cid: %s, this concept must be of Seed or Breed type, not of %s."
-                        (breedOrSeedCid, typeid(lcp(breedOrSeedCid))));
+                        (breedOrSeedCid, typeid(this[breedOrSeedCid])));
 
         if      // is it a breed?
-                (auto breed = cast(Breed)lcp(breedOrSeedCid))
-        {   //yes: fill in the tid field and extract seed
+                (auto breed = cast(Breed)this[breedOrSeedCid])
+        {   //yes: setup the caldron's instance of breed and the caldron's head
             breed.tid = thisTid;
+            breed.activate;         // the local instance of the breed is setup and ready
             headCid_ = seedCid_ = breed.seed;
         }
         else//no: it is a seed, take it
@@ -42,14 +43,14 @@ class Caldron {
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     /**
-                Get live concept by cid.
+                Get live concept by cid, overload of the [] operator
             If concept is present in the live map, get it from there, if not, generate it based on the holy concept and put it
         in the live map.
         Parameters:
             cid = cid of the concept or its correspondig enum.
         Returns: the live concept object
     */
-    final Concept lcp(Cid cid) {
+    final Concept opIndex(Cid cid) {
         assert(cid in _hm_, format!"Cid %s(%s) is not in the holy map."(cid, _nm_.name(cid)));
         if
                 (auto p = cid in lm_)
@@ -58,9 +59,23 @@ class Caldron {
             return lm_[cid] = _hm_[cid].live_factory;
     }
 
+    /**
+            Assign a concept to the local map. Overload for the index assignment operation. Used for injection of concepts,
+        gotten via messages.
+        Parameters:
+            cpt = concept to assign
+        Usage:
+        ---
+        caldron[] = cpt
+        ---
+    */
+    final Concept opIndexAssign(Concept cpt) {
+        return lm_[cpt.cid] = cpt;
+    }
+
     /// Adapter
     final Concept lcp(CptDescriptor cd) {
-        return lcp(cd.cid);
+        return this[cd.cid];
     }
 
     /// Request exiting from the reasoning_() function. This flag is lower on coming next StartReasoningMsg message.
@@ -106,9 +121,18 @@ class Caldron {
     */
     protected bool _msgProcessing(immutable Msg msg) {
 
-        if (cast(StartReasoningMsg)msg) {    // is it a request for starting reasoning?
-            // kick off the reasoning loop
+        if      // is it a request for starting reasoning?
+                (cast(StartReasoningMsg)msg)
+        {   // kick off the reasoning loop
             reasoning_;
+            return true;
+        }
+        else if // A concept was posted by another caldron?
+                (auto m = cast(immutable SingleConceptPackageMsg)msg)
+        {   //yes: clone it and inject into the current name space (may be with overriding)
+            Concept cpt = m.cpt.clone;
+            this[] = cpt;       // inject
+            reasoning_;         // kick
             return true;
         }
         else if (cast(UserSaysToCircleMsg)msg) {
@@ -156,7 +180,7 @@ class Caldron {
         while(true) {
             debug(2) logit(format!"%s, headCid_: %s, %s"(caldName, headCid_, _nm_[headCid_]));
 
-            Neuron head = cast(Neuron)lcp(headCid_);
+            Neuron head = cast(Neuron)this[headCid_];
 
             // Let the head be processed, determine effects and do the actions.
             auto effect = head.calculate_activation_and_get_effects;
@@ -167,7 +191,7 @@ class Caldron {
                     else
                         logit(format!"%s, action cid: %s, noname"(caldName, actCid));
                 }
-                Action act = cast(Action)lcp(actCid);
+                Action act = cast(Action)this[actCid];
                 act._do_(this);
             }
 
@@ -182,10 +206,19 @@ class Caldron {
 
             // May be start new caldrons
             foreach(cid; effect.branches[1..$]) {
-                assert(cast(Seed)lcp(cid) || cast(Breed)lcp(cid),
+                assert(cast(Seed)this[cid] || cast(Breed)this[cid],
                         format!"Cid: %s, this concept must be of Seed or Breed type, not of %s."
-                                (cid, typeid(lcp(cid))));
-                childCaldrons_ ~= spawn(&caldron_thread_func, false, cid);
+                                (cid, typeid(this[cid])));
+                Tid tid = spawn(&caldron_thread_func, false, cid);
+                childCaldrons_ ~= tid;
+
+                // Mybe setup the host instance of breed
+                if      //is it a breed?
+                        (auto br = cast(Breed)this[cid])
+                {
+                    br.tid = tid;   // spawned Tid
+                    br.activate;    // bread concept is setup and ready
+                }
             }
         }
 
@@ -197,7 +230,7 @@ class Caldron {
     /// Ditto.
     private Concept cpt_(string name) {
         assert(name in _nm_ && _nm_[name] in _hm_);
-        return lcp(_nm_[name]);
+        return this[_nm_[name]];
     }
 }
 
@@ -213,6 +246,7 @@ class AttentionCircle: Caldron {
         // Setup chat_breed
         Breed breed = cast(Breed)lcp(Chat.chat_breed);
         breed.tid = thisTid;
+        breed.activate;         // the breed is setup and ready
         super(breed.cid);
     }
 
@@ -224,7 +258,7 @@ class AttentionCircle: Caldron {
         else if      // is it a Tid of the client sent by Dispatcher?
                 (auto m = cast(immutable DispatcherSuppliesCircleWithClientTid)msg)
         {   //yes: accept the Tid and move it to the concept level
-            (cast(TidPrimitive)lcp(CommonConcepts.userThread_tidprim))._tid_ = cast()m._senderTid_;
+            (cast(TidPrimitive)lcp(CommonConcepts.userThread_tidprim)).tid = cast()m.senderTid;
             return true;
         }
         else

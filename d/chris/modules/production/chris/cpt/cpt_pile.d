@@ -65,10 +65,16 @@ final class TidPrimitive: Primitive {
     import std.concurrency: Tid;
 
     /// The tid field
-    Tid _tid_;
+    Tid tid;
 
     /// Private constructor. Use spiritual live_factory() instead.
     private this(immutable SpTidPrimitive SpTidPrimitive) { super(SpTidPrimitive); }
+
+    override string toString() const {
+        string s = super.toString;
+        s ~= format!"\n    tid = %s"(cast()tid);
+        return s;
+    }
 
 }
 

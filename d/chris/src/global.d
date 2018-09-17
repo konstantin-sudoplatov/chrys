@@ -40,13 +40,13 @@ template type(string typeName) {
         cptName = name of the static concept function
     Returns: its cid (from the annotation) as int enum.
 */
-template _statCid_(alias cptName)
+template statCid(alias cptName)
     if      // annotation consists of two elements and their types are int and StatCallType?
             (__traits(getAttributes, cptName).length == 2 &&
             is(typeof(__traits(getAttributes, cptName)[0]) == int) &&
             is(typeof(__traits(getAttributes, cptName)[1]) == StatCallType))
 {   // extract the first element of annotation, which is cid
-    enum int _statCid_ = __traits(getAttributes, cptName)[0];
+    enum int statCid = __traits(getAttributes, cptName)[0];
 }
 
 ///
@@ -57,27 +57,29 @@ unittest {
     }
 
     const Cid cid = __traits(getAttributes, fun)[0];      // its cid
-    assert(_statCid_!fun == cid);    // check cid
+    assert(statCid!fun == cid);    // check cid
 }
 
 /**
-            Check up the type of cid. If check does not pass, an assert will stop the project.
+            Check up availability and type of a concept by its cid.
     Parameters:
         T = type to check against
         cid = cid of a concept, that is checked
 */
 void checkCid(T: SpiritConcept)(Cid cid) {
-    debug if(_maps_filled_)
+    debug if(_maps_filled_) {
+        assert(cid in _hm_, format!"Cid: %s(%s) do not exist in the holy map."(cid, _nm_.name(cid)));
         assert(cast(T)_hm_[cid],
                 format!"Cid: %s, must be of type %s and it is of type %s."(cid, T.stringof, typeid(_hm_[cid])));
+    }
 }
 
 ///         Adapter for live concepts.
 void checkCid(T: Concept)(Caldron caldron, Cid cid) {
     debug if(_cranked_)
-        assert((cast(T)caldron.lcp(cid)),
+        assert((cast(T)caldron[cid]),
                 format!"Cid: %s, must be of type %s and it is of type %s."
-                        (cid, T.stringof, typeid(caldron.lcp(cid))));
+                        (cid, T.stringof, typeid(caldron[cid])));
 }
 
 // modules with static concepts
@@ -194,7 +196,7 @@ shared final pure nothrow class NameMap {
 
     /// Ditto.
     const(Cid) opIndex(string name) const {
-        return cid(name);
+        return (cast()cross_)[name];
     }
 
     /**
@@ -212,7 +214,7 @@ shared final pure nothrow class NameMap {
 
     /// Ditto.
     const(string) opIndex(Cid cid) const {
-        return name(cid);
+        return (cast()cross_)[cid];
     }
 
     /*

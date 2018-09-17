@@ -121,7 +121,7 @@ class SpActionNeuron: SpiritNeuron {
 class ActionNeuron: Neuron, ActivationIfc {
 
     /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
-    private this(immutable SpActionNeuron holyUnconditionalNeuron) { super(holyUnconditionalNeuron);}
+    private this(immutable SpActionNeuron spUnconditionalNeuron) { super(spUnconditionalNeuron);}
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 

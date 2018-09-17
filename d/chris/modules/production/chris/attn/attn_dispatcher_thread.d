@@ -33,9 +33,9 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                 (msg)
         {   // process it
             if      // is that client's request for circle's Tid?
-                    (auto m = cast(immutable ClientRequestsCircleTidFromDisp)msg)
+                    (auto m = cast(immutable UserRequestsCaldronTidFromDisp)msg)
             {   //yes: create new attention circle thread and send back its Tid
-                Tid clientTid = cast()m._senderTid_();
+                Tid clientTid = cast()m.senderTid();
 
                 // Create and start an attention circle thread if it doesn't exist yet, send back its Tid.
                 Tid circleTid;

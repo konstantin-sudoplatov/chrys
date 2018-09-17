@@ -1,6 +1,8 @@
 module messages;
 import std.concurrency;
 
+import cpt_abstract;
+
 /// Common ancestor of all messages.
 /// Object must be created in the sender's thread, so that sender's tid was correctly set up. Do not create message objects beforehand!
 immutable abstract class Msg {
@@ -12,7 +14,7 @@ immutable abstract class Msg {
     }
 
     /// Getter
-    @property immutable(Tid) _senderTid_() immutable {
+    @property immutable(Tid) senderTid() immutable {
         return _senderTid;
     }
 
@@ -27,7 +29,7 @@ immutable class TerminateAppMsg: Msg {
 }
 
 /// Request for the attention dispatcher start an attention circle thread and send back its Tid.
-immutable class ClientRequestsCircleTidFromDisp: Msg {
+immutable class UserRequestsCaldronTidFromDisp: Msg {
     /// Constructor
     this() {super();}
 }
@@ -130,4 +132,20 @@ private:
 /// Request to caldron to start reasoning. May come from another caldron and sometimes from itself.
 immutable class StartReasoningMsg: Msg {
     this() {super();}
+}
+
+/// Used by caldrons to send live concepts to each other.
+immutable class SingleConceptPackageMsg: Msg {
+
+    this(Concept cpt) {
+        super();
+        cpt_ = cast(immutable)cpt;
+    }
+
+    /// Getter.
+    @property immutable(Concept) cpt() {
+        return cpt_;
+    }
+
+    private Concept cpt_;
 }

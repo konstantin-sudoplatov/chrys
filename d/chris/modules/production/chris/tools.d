@@ -370,17 +370,21 @@ Params:
     text = the text of the message
     color = the color to change the output to
 */
-void logit(string text, TermColor colour = null) {
+void logit(string text, TermColor color = null) {
     import std.stdio: writeln, stdout;
 
-    if (colour)
-        write("\x1b[" ~ colour ~ "m");      // make the colour green
+    if (color)
+        write("\x1b[" ~ color ~ "m");      // make the colour green
     write(text);
-    if (colour) write("\x1b[0m");           // clear the terminal settings
+    if (color) write("\x1b[0m");           // clear the terminal settings
     writeln;
     stdout.flush;
 }
 
+/// Adapter
+void logit(const Object o, TermColor color = null) {
+    logit((cast()o).toString, color);
+}
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 

@@ -5,6 +5,7 @@ import std.stdio;
 import global, tools;
 import interfaces;
 import attn_circle_thread: Caldron;
+import cpt_abstract, cpt_premises;
 
 /// Raise stop flag on a caldron.
 @(1, StatCallType.p0Cal)
@@ -20,11 +21,11 @@ void _stopAndWait_(Caldron cald){
 */
 @(2, StatCallType.p0Calp1Cid)
 void logConcept(Caldron cald, Cid operandCid) {
-    logit(cald.lcp(operandCid).toString, TermColor.blue);
+    logit(cald[operandCid].toString, TermColor.blue);
 }
 
 /**
-        Send user a Tid.
+        Send user a Tid. It supposed to be tid of the uline branch.
     Parameters:
         cld = caldron as a name space for cids.
         operandCid = a tid primitive, containing the Tid.
@@ -38,7 +39,7 @@ void sendTidToUser(Caldron cald, Cid operandCid) {
 @(4, StatCallType.p0Calp1Cid)
 void activateStat(Caldron cald, Cid operandCid)
 {
-    auto op = scast!BinActivationIfc(cald.lcp(operandCid));
+    auto op = scast!BinActivationIfc(cald[operandCid]);
     op.activate;
 }
 
@@ -46,18 +47,31 @@ void activateStat(Caldron cald, Cid operandCid)
 @(5, StatCallType.p0Calp1Cid)
 void anactivateStat(Caldron cald, Cid operandCid)
 {
-    auto op = scast!BinActivationIfc(cald.lcp(operandCid));
+    auto op = scast!BinActivationIfc(cald[operandCid]);
     op.anactivate;
 }
 
 /**
-        Send a branch concept object.
+        Send concept object to a branch. The concept is injected into the branch's name space. If there is already such a concept
+    in the branch name space, it will be overriden. The concept is treated by the receiving side like immutable, i.e before
+    injection it will be cloned.
     Parameters:
         cld = caldron as a name space for cids.
-        breedCid = breed of the branch to send the message to
-        loadCid = cid of a concept in the caldron's name space to send
+        breedCid = breed of the addressed branch as its identifier
+        loadCid = concept to send
 */
-@(6, StatCallType.p0Calp1Cid)
+@(6, StatCallType.p0Calp1Cidp2Cid)
 void sendConceptToBranch(Caldron cald, Cid breedCid, Cid loadCid) {
-//    assert(false, "not realized yet.");
+    import std.concurrency: Tid, send;
+    import messages: SingleConceptPackageMsg;
+    checkCid!Breed(cald, breedCid);
+    checkCid!Concept(cald, loadCid);
+
+    Breed br = cast(Breed)cald[breedCid];
+    try {
+        send(br.tid, new immutable SingleConceptPackageMsg(cald[loadCid]));
+    } catch(Exception e) {  // Something happened with the destination thread
+        // anactivate the destination thread breed
+        br.anactivate;
+    }
 }

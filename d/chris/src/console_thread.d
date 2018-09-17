@@ -31,7 +31,7 @@ debug {
 
     // Request creating an attention circle thread and receive its Tid
     do {
-        (cast()_attnDispTid_).send(new immutable ClientRequestsCircleTidFromDisp());
+        (cast()_attnDispTid_).send(new immutable UserRequestsCaldronTidFromDisp());
         DispatcherSuppliesClientWithCircleTid msg;
         bool gotMsg = receiveTimeout(
             msgTimeout.seconds,

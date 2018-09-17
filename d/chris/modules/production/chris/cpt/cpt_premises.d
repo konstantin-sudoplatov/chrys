@@ -77,7 +77,7 @@ final class Breed: Premise {
 
     override string toString() const {
         string s = super.toString;
-        s ~= format!"\ntid = %s"(cast()tid);
+        s ~= format!"\n    tid = %s"(cast()tid);
         return s;
     }
 

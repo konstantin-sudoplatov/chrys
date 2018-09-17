@@ -136,16 +136,16 @@ unittest {
 shared interface PremiseIfc {
 
     /// Add premises by cid.
-    void _addPremise_(Cid[] premCids);
+    void addPremise(Cid[] premCids);
 
     /// Add premise by cid.
-    void _addPremise_(Cid premCid);
+    void addPremise(Cid premCid);
 
     /// Adapter.
-    void _addPremise_(CptDescriptor[] premDescs);
+    void addPremise(CptDescriptor[] premDescs);
 
     /// Adapter.
-    void _addPremise_(CptDescriptor premDesc);
+    void addPremise(CptDescriptor premDesc);
 }
 
 /**
@@ -156,7 +156,7 @@ mixin template PremiseImpl(T : PremiseIfc) {
             this.stringof ~ `". Are you an imposter?`);
 
     /// Add premises by cid.
-    void _addPremise_(Cid[] premCids) {
+    void addPremise(Cid[] premCids) {
         foreach(cid; premCids)
             assert(cast(BinActivationIfc)_hm_[cid],
                     format!"Cid %s must implement BinActivationIfc. Check the class %s."(cid, typeid(_hm_[cid])));
@@ -165,7 +165,7 @@ mixin template PremiseImpl(T : PremiseIfc) {
     }
 
     /// Add premise by cid.
-    void _addPremise_(Cid premCid) {
+    void addPremise(Cid premCid) {
         assert(cast(BinActivationIfc)_hm_[premCid],
                 format!"Cid %s must implement BinActivationIfc. Check the class %s."(premCid, typeid(_hm_[premCid])));
 
@@ -173,17 +173,17 @@ mixin template PremiseImpl(T : PremiseIfc) {
     }
 
     /// Adapter.
-    void _addPremise_(CptDescriptor[] premDescs) {
+    void addPremise(CptDescriptor[] premDescs) {
         Cid[] cids;
         foreach(cd; premDescs)
             cids ~= cd.cid;
 
-        _addPremise_(cids);
+        addPremise(cids);
     }
 
     /// Adapter.
-    void _addPremise_(CptDescriptor premDesc) {
-        _addPremise_(premDesc.cid);
+    void addPremise(CptDescriptor premDesc) {
+        addPremise(premDesc.cid);
     }
 
     /// Array of premise cids.

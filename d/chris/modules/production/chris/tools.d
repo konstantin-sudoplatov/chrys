@@ -50,8 +50,8 @@ class ClassA {
     Return: casted object or an assert will happen
 */
 T scast(T, S)(S o)
-    if ((is(T: Object) || is(T: shared Object) || is(T == interface))
-        && ((is(S: Object) || is(S: shared Object))))
+    if ((is(T: Object) || is(T: shared Object) || is(T: immutable Object) || is(T == interface))
+        && ((is(S: Object) || is(S: shared Object) || is(S: immutable Object))))
 {
     assert(cast(T)o, format!"Object %s cannot be casted to class(interface) %s"(typeid(o), T.stringof));
     return cast(T)o;

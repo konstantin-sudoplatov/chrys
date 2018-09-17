@@ -135,6 +135,9 @@ unittest {
 */
 shared interface PremiseIfc {
 
+    /// Getter.
+    const(Cid[]) premises();
+
     /// Add premises by cid.
     void addPremise(Cid[] premCids);
 
@@ -155,10 +158,15 @@ mixin template PremiseImpl(T : PremiseIfc) {
     static assert (is(typeof(this) == T), `You introduced yourself as a "` ~ T.stringof ~ `" and you are a "` ~
             this.stringof ~ `". Are you an imposter?`);
 
+    /// Getter.
+    const(Cid[]) premises() const {
+        return cast(const Cid[])_premises;
+    }
+
     /// Add premises by cid.
     void addPremise(Cid[] premCids) {
         foreach(cid; premCids)
-            assert(cast(BinActivationIfc)_hm_[cid],
+            assert(cast(BinActivationIfc)_hm_[cid].live_factory,
                     format!"Cid %s must implement BinActivationIfc. Check the class %s."(cid, typeid(_hm_[cid])));
 
         _premises ~= premCids;
@@ -166,7 +174,7 @@ mixin template PremiseImpl(T : PremiseIfc) {
 
     /// Add premise by cid.
     void addPremise(Cid premCid) {
-        assert(cast(BinActivationIfc)_hm_[premCid],
+        assert(cast(BinActivationIfc)_hm_[premCid].live_factory,
                 format!"Cid %s must implement BinActivationIfc. Check the class %s."(premCid, typeid(_hm_[premCid])));
 
         _premises ~= premCid;

@@ -20,7 +20,7 @@ enum CommonConcepts: CptDescriptor {
     /// Not uline branch thread, not even a caldron. It is the thread that controls the console or http connection.
     /// The Tid is put in it on start of the chat caldron, and the primitive is valid only for chat branch,
     /// since the Tid field is stored in the live part of the concept.
-    userThread_tidprim = cd!(SpTidPrimitive, 217_397_612),
+    userThread_tidprem = cd!(SpTidPremise, 217_397_612),
 
     //
     //// It stores Tid of the current caldron and is filled on the start of the caldron. You can always get your Tid using
@@ -76,7 +76,7 @@ void _chatBranch_() {
     cpt!chat_seed.add_effects(null, [shakeHandsWithUline_actnrn, uline_breed]);
 
     // Handshake with uline
-cpt!logCpt_0_unact.operand = userThread_tidprim;
+cpt!logCpt_0_unact.operand = userThread_tidprem;
     cpt!shakeHandsWithUline_actnrn.add_effects(
         [
             logCpt_0_unact,
@@ -92,7 +92,7 @@ cpt!logCpt_0_unact.operand = userThread_tidprim;
     cpt!chatSendsUlineItsOwnBreed_binact.secondOperand = chat_breed;
     cpt!chatSendsUlineUserTid_binact.statAction = statCid!sendConceptToBranch;
     cpt!chatSendsUlineUserTid_binact.firstOperand = uline_breed;
-    cpt!chatSendsUlineUserTid_binact.secondOperand = userThread_tidprim;
+    cpt!chatSendsUlineUserTid_binact.secondOperand = userThread_tidprem;
 
     // Wait on the user input
     cpt!ulineValve_andnrn.add_effects(float.infinity, stopAndWait_act, null);
@@ -141,10 +141,10 @@ void _ulineBranch_() {
     cpt!uline_breed.seed = uline_seed;
 
     // Setup the uline_seed
-cpt!logCpt_1_unact.operand = userThread_tidprim;
+cpt!logCpt_1_unact.operand = userThread_tidprem;
     cpt!uline_seed.add_effects([logCpt_1_unact, anactivate_userInputPrem_unact], shakeHandsWithChat_anrn);
 
-//    cpt!shakeHandsWithChat_anrn.addPremise([chat_breed, userThread_tidprim]);
+    cpt!shakeHandsWithChat_anrn.addPremise([chat_breed, userThread_tidprem]);
 }
 
 

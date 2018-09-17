@@ -87,6 +87,38 @@ final class Breed: Premise {
     }
 }
 
+/**
+        Tid premise.
+*/
+final class SpTidPremise: SpiritPremise {
+
+    /// Constructor
+    this(Cid cid) { super(cid); }
+
+    /// Create live wrapper for the holy static concept.
+    override TidPremise live_factory() const {
+        return new TidPremise(cast(immutable)this);
+    }
+}
+
+/// Live.
+final class TidPremise: Premise {
+    import std.concurrency: Tid;
+
+    /// The tid field
+    Tid tid;
+
+    /// Private constructor. Use spiritual live_factory() instead.
+    private this(immutable SpTidPremise SpTidPremise) { super(SpTidPremise); }
+
+    override string toString() const {
+        string s = super.toString;
+        s ~= format!"\n    tid = %s"(cast()tid);
+        return s;
+    }
+
+}
+
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--

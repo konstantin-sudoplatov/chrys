@@ -6,6 +6,7 @@ import std.conv, std.format;
 import global, tools;
 import interfaces;
 import cpt_pile, cpt_neurons, cpt_premises, cpt_actions;
+import attn_circle_thread;
 
 /// External runtime function, that creates new objects by their ClassInfo. No constructors are called. Very fast, much faster
 /// than manually allocating the object in the heap as new buf[], as it is done in the emplace function (and more economical, no
@@ -277,12 +278,6 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-    /**
-                Calculate activation based on premises or lots.
-        Returns: activation value.
-    */
-    abstract float calculate_activation();
 
     /**
                 Get effects corresponding to given activation.
@@ -568,7 +563,7 @@ abstract class Neuron: DynamicConcept, ActivationIfc {
                 Calculate activation based on premises or lots.
         Returns: activation value. As a byproduct the _activation field is setup.
     */
-    abstract float calculate_activation();
+    abstract float calculate_activation(Caldron);
 
     /**
                 Calculate activation value and set up the activation_ variable.
@@ -579,9 +574,10 @@ abstract class Neuron: DynamicConcept, ActivationIfc {
                 Calculate activation value and set up the activation_ variable.
         Returns: effects, corresponding calculated activation
     */
-    SpiritNeuron.Effect calculate_activation_and_get_effects() {
-
-        return (cast(shared SpiritNeuron)sp).select_effects(calculate_activation);
+    SpiritNeuron.Effect calculate_activation_and_get_effects(Caldron cald)
+    {
+        assert(cald is attn_circle_thread.caldron);
+        return (cast(shared SpiritNeuron)sp).select_effects(calculate_activation(cald));
     }
 }
 
@@ -629,15 +625,6 @@ abstract class LogicalNeuron: Neuron, BinActivationIfc {
 
     // implementation of the interface
     mixin BinActivationImpl!LogicalNeuron;
-
-    /**
-                Calculate activation based on premises or lots.
-        Returns: activation value
-    */
-    override float calculate_activation() {
-        return _activation = (cast(shared SpiritLogicalNeuron)sp).calculate_activation;
-    }
-
 }
 
 

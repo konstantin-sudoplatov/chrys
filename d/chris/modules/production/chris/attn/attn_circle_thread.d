@@ -59,6 +59,11 @@ class Caldron {
             return lm_[cid] = _hm_[cid].live_factory;
     }
 
+    /// Adapter
+    final Concept opIndex(CptDescriptor cd) {
+        return this[cd.cid];
+    }
+
     /**
             Assign a concept to the local map. Overload for the index assignment operation. Used for injection of concepts,
         gotten via messages.
@@ -71,11 +76,6 @@ class Caldron {
     */
     final Concept opIndexAssign(Concept cpt) {
         return lm_[cpt.cid] = cpt;
-    }
-
-    /// Adapter
-    final Concept lcp(CptDescriptor cd) {
-        return this[cd.cid];
     }
 
     /// Request exiting from the reasoning_() function. This flag is lower on coming next StartReasoningMsg message.
@@ -183,7 +183,7 @@ class Caldron {
             Neuron head = cast(Neuron)this[headCid_];
 
             // Let the head be processed, determine effects and do the actions.
-            auto effect = head.calculate_activation_and_get_effects;
+            auto effect = head.calculate_activation_and_get_effects(this);
             foreach(actCid; effect.actions) {
                 debug(2) {
                     if (auto ps = actCid in _nm_)
@@ -244,7 +244,7 @@ class AttentionCircle: Caldron {
     this() {
 
         // Setup chat_breed
-        Breed breed = cast(Breed)lcp(Chat.chat_breed);
+        Breed breed = cast(Breed)this[Chat.chat_breed];
         breed.tid = thisTid;
         breed.activate;         // the breed is setup and ready
         super(breed.cid);
@@ -258,7 +258,7 @@ class AttentionCircle: Caldron {
         else if      // is it a Tid of the client sent by Dispatcher?
                 (auto m = cast(immutable DispatcherSuppliesCircleWithClientTid)msg)
         {   //yes: accept the Tid and move it to the concept level
-            (cast(TidPrimitive)lcp(CommonConcepts.userThread_tidprim)).tid = cast()m.senderTid;
+            (scast!(TidPremise)(this[CommonConcepts.userThread_tidprem])).tid = cast()m.senderTid;
             return true;
         }
         else
@@ -277,6 +277,9 @@ class AttentionCircle: Caldron {
     //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
 }
 
+/// The attention circle/caldron object, thead local.
+Caldron caldron;
+
 /**
         Thread function for caldrons and the attention circle.
     Parameters:
@@ -289,12 +292,12 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
     if      //is dispatcher spawning an attention circle?
             (calledByDispatcher)
     {   //yes: create attention circle
-        caldron_ = new AttentionCircle();
+        caldron = new AttentionCircle();
         assert(breedOrSeedCid == 0);
     }
     else//no: it was a caldron
     {
-        caldron_ = new Caldron(breedOrSeedCid);
+        caldron = new Caldron(breedOrSeedCid);
     }
 
     debug(2) {
@@ -332,15 +335,15 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
         {   // process it
             //Send the message to caldron
             if // processed by caldron?
-                    (caldron_._msgProcessing(msg))
+                    (caldron._msgProcessing(msg))
                 //yes: go for a new message
                 continue ;
             else if // is it a request for the circle termination?
                     (cast(TerminateAppMsg)msg)
             {   //yes: terminate me and all my subthreads
                 debug(2)
-                    logit("terminating caldron " ~ caldron_.caldName);
-                caldron_.terminateChildren;
+                    logit("terminating caldron " ~ caldron.caldName);
+                caldron.terminateChildren;
 
                 // terminate itself
                 goto FINISH_THREAD;
@@ -374,9 +377,6 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
 //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
 //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
-
-/// The attention circle/caldron object, thead local.
-private Caldron caldron_;
 
 //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 

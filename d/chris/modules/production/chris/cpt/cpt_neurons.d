@@ -5,6 +5,7 @@ import std.format;
 import global, tools;
 import interfaces;
 import cpt_abstract;
+import attn_circle_thread: Caldron;
 
 /**
             An uncontitional neuron.
@@ -25,14 +26,6 @@ class SpActionNeuron: SpiritNeuron {
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-    /**
-                Calculate activation based on premises or lots.
-        Returns: activation value.
-    */
-    override float calculate_activation() {
-        return 1;
-    }
 
     /**
                 Adding effects analogous to the holy neuron concept, except that the span is not needed in this case.
@@ -127,10 +120,10 @@ class ActionNeuron: Neuron, ActivationIfc {
 
     /**
                 Calculate activation based on premises or lots.
-        Returns: activation value
+        Returns: activation value.
     */
-    override float calculate_activation() {
-        return (cast(shared SpActionNeuron)sp).calculate_activation;
+    override float calculate_activation(Caldron cald) {
+        return 1;
     }
 
     /// Getter
@@ -188,25 +181,6 @@ final class SpAndNeuron: SpiritLogicalNeuron {
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-    /**
-                Calculate activation based on premises.
-        Returns: activation value. Activation is 1 if all premises are active, else it is -1. If list of premises is empty,
-                activation is 1.
-    */
-    override float calculate_activation() {
-        float res = 1;
-        foreach(pr; _premises) {
-            assert(cast(ActivationIfc)_hm_[pr],
-                    format!"Cid %s, ActivationIfs must be realised for %s"(pr, typeid(_hm_[pr])));
-            if ((cast(ActivationIfc)_hm_[pr]).activation <= 0) {
-                res = -1;
-                break ;
-            }
-        }
-
-        return res;
-    }
 }
 
 /// Live.
@@ -216,6 +190,25 @@ final class AndNeuron: LogicalNeuron {
     this (immutable SpAndNeuron holyAndNeuron) { super(holyAndNeuron); }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /**
+                Calculate activation based on premises.
+        Returns: activation value. Activation is 1 if all premises are active, else it is -1. If list of premises is empty,
+                activation is 1.
+    */
+    override float calculate_activation(Caldron cald) {
+        float res = 1;
+        foreach(pr; (scast!(immutable SpiritLogicalNeuron)(sp)).premises) {
+            assert(cast(ActivationIfc)cald[pr],
+                    format!"Cid %s, ActivationIfs must be realised for %s"(pr, typeid(cald[pr])));
+            if ((cast(ActivationIfc)cald[pr]).activation <= 0) {
+                res = -1;
+                break ;
+            }
+        }
+
+        return res;
+    }
 }
 
 /**
@@ -238,15 +231,6 @@ final class SpWeightNeuron: SpiritNeuron {
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-    /**
-                Calculate activation based on premises or lots.
-        Returns: activation value
-    */
-    override float calculate_activation() {
-        assert(true, "Not realized yet");
-        return float.nan;
-    }
 }
 
 /// Live.
@@ -264,8 +248,9 @@ final class WeightNeuron: Neuron, EsquashActivationIfc {
                 Calculate activation based on premises or lots.
         Returns: activation value
     */
-    override float calculate_activation() {
-        return _activation = (cast(shared SpWeightNeuron)sp).calculate_activation;
+    override float calculate_activation(Caldron cald) {
+        assert(true, "Not realized yet");
+        return float.nan;
     }
 }
 

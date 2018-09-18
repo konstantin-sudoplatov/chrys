@@ -7,7 +7,7 @@ import global, tools;
 import cpt_abstract, cpt_pile, cpt_neurons, cpt_premises, cpt_actions;
 import crank_pile;
 import messages;
-debug = 2;
+debug = 0;
 
 /**
             Main work horse of the system. It provides the room for doing reasoning on some branch.
@@ -89,16 +89,14 @@ class Caldron {
             child.send(new immutable TerminateAppMsg);
     }
 
-    // Debug return the caldron's name (based on the seed), if exist, else word "noname" will be returned.
-    debug {
-        final string caldName() {
-            import std.array: replace;
+    // Caldron's name (based on the seed), if exist, else "noname".
+    final string caldName() {
+        import std.array: replace;
 
-            if (auto nmp = seedCid_ in _nm_)
-                return (*nmp).replace("_seed", "");
-            else
-                return "noname";
-        }
+        if (auto nmp = seedCid_ in _nm_)
+            return (*nmp).replace("_seed", "");
+        else
+            return "noname";
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -124,19 +122,30 @@ class Caldron {
         if      // is it a request for starting reasoning?
                 (cast(StartReasoningMsg)msg)
         {   // kick off the reasoning loop
+            debug(3) logit(format!"%s, message StartReasoningMsg has come"(caldName));
             reasoning_;
             return true;
         }
         else if // A concept was posted by another caldron?
                 (auto m = cast(immutable SingleConceptPackageMsg)msg)
         {   //yes: clone it and inject into the current name space (may be with overriding)
-            Concept cpt = m.cpt.clone;
+            Concept cpt = m.load.clone;
+            debug(3) logit(format!"%s, message SingleConceptPackageMsg has come, load: %s(%,?s)"
+                    (caldName, _nm_.name(cpt.cid), '_', cpt.cid));
             this[] = cpt;       // inject
             reasoning_;         // kick
             return true;
         }
-        else if (cast(UserSaysToCircleMsg)msg) {
-
+        else if // new text line from user?
+                (auto m = cast(immutable UserTalksToCircleMsg)msg)
+        {   //yes: put the text into the userInput_strprem concept
+            debug(3) logit(format!"%s, message UserTalksToCircleMsg has come, text: %s"
+                    (caldName, m.text));
+            auto cpt = cast(StringPremise)this[Uline.userInput_strprem];
+            cpt.line = m.line;
+            cpt.activate;       // the premise is ready
+            reasoning_;         // kick
+            return true;
         }
         return false;
     }
@@ -176,21 +185,17 @@ class Caldron {
     private void reasoning_() {
         stopAndWait_ = false;
         debug(2)    // print the branch(seed) name
-            logit("entering " ~ caldName);
+            logit(caldName ~ ", entering");
         while(true) {
-            debug(2) logit(format!"%s, headCid_: %s, %s"(caldName, headCid_, _nm_[headCid_]));
-
+            // Put on the head
+            debug(2) logit(format!"%s, headCid_: %s(%,?s)"(caldName, _nm_.name(headCid_), '_', headCid_));
             Neuron head = cast(Neuron)this[headCid_];
 
             // Let the head be processed, determine effects and do the actions.
             auto effect = head.calculate_activation_and_get_effects(this);
             foreach(actCid; effect.actions) {
-                debug(2) {
-                    if (auto ps = actCid in _nm_)
-                        logit(format!"%s, action: %s"(caldName, _nm_[actCid]));
-                    else
-                        logit(format!"%s, action cid: %s, noname"(caldName, actCid));
-                }
+                debug(2)
+                    logit(format!"%s, action: %s(%,?s)"(caldName, _nm_.name(actCid), '_', actCid));
                 Action act = cast(Action)this[actCid];
                 act._do_(this);
             }
@@ -223,14 +228,12 @@ class Caldron {
         }
 
     STOP_AND_WAIT:
-    debug(2)
-        logit("leaving " ~ caldName);
-    }
-
-    /// Ditto.
-    private Concept cpt_(string name) {
-        assert(name in _nm_ && _nm_[name] in _hm_);
-        return this[_nm_[name]];
+        debug(2) {
+            if (stopAndWait_)
+                logit(caldName ~ ", leaving on stopAndWait_ flag");
+            else
+                logit(caldName ~ ", leaving on empty branches array");
+        }
     }
 }
 
@@ -250,15 +253,16 @@ class AttentionCircle: Caldron {
         super(breed.cid);
     }
 
-    /// Ditto.
     protected override bool _msgProcessing(immutable Msg msg) {
 
         if (super._msgProcessing(msg))
             return true;
         else if      // is it a Tid of the client sent by Dispatcher?
-                (auto m = cast(immutable DispatcherSuppliesCircleWithClientTid)msg)
-        {   //yes: accept the Tid and move it to the concept level
-            (scast!(TidPremise)(this[CommonConcepts.userThread_tidprem])).tid = cast()m.senderTid;
+                (auto m = cast(immutable DispatcherSuppliesCircleWithUserTid)msg)
+        {   //yes: wind up the userThread_tidprem concept
+            auto userThreadTidprem = (scast!(TidPremise)(this[CommonConcepts.userThread_tidprem]));
+            userThreadTidprem.tid = cast()m.tid;
+            userThreadTidprem.activate;
             return true;
         }
         else
@@ -308,9 +312,9 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
         else
             if      // is it a breeded branch?
                     (auto br = cast(shared SpBreed)_hm_[breedOrSeedCid])
-                s = format!"starting breeded branch %s(%s)"(br.seed, _nm_.name(br.seed));
+                s = format!"starting breeded branch %s(%s)"(_nm_.name(br.seed), br.seed);
             else
-                s = format!"starting seeded branch %s(%s)"(breedOrSeedCid, _nm_.name(breedOrSeedCid));
+                s = format!"starting seeded branch %s(%s)"(_nm_.name(breedOrSeedCid), breedOrSeedCid);
 
         logit(s);
     }
@@ -350,7 +354,7 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
             }
             else
             {  // unrecognized message of type Msg. Log it.
-                logit(format!"Unexpected message to the caldron thread: %s"(typeid(msg)));
+                logit(format!"Unexpected message to the caldron %s: %s"(caldron.caldName, typeid(msg)));
                 continue ;
             }
         }
@@ -362,7 +366,7 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
         else if
                 (var.hasValue)
         {  // unrecognized message of type Variant. Log it.
-            logit(format!"Unexpected message of type Variant to the caldron thread: %s"(var.toString));
+            logit(format!"Unexpected message of type Variant to the caldron %s: %s"(caldron.caldName, var.toString));
             continue;
         }
 

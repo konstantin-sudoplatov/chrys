@@ -20,27 +20,27 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
     import std.variant: Variant;
 
     // Get new line from user (separate treatment for the debug and release mode).
-debug {
-    // define a generator function as a series of lines, that user was supposed to enter.
-    auto r = new Generator!string({
-        yield("hello");
-        yield("world!");
-        yield("p");
-    });
-}
+    debug {
+        // define a generator function as a series of lines, that user was supposed to enter.
+        auto r = new Generator!string({
+            yield("hello");
+            yield("world!");
+            yield("p");
+        });
+    }
 
-    // Request creating an attention circle thread and receive its Tid
+    // Request creation of an attention circle thread and receive its Tid
     do {
-        (cast()_attnDispTid_).send(new immutable UserRequestsCaldronTidFromDisp());
-        DispatcherSuppliesClientWithCircleTid msg;
+        send(cast()_attnDispTid_, new immutable UserRequestsCircleTid());
+        CircleSuppliesUserWithItsTid msg;
         bool gotMsg = receiveTimeout(
             msgTimeout.seconds,
-            (immutable DispatcherSuppliesClientWithCircleTid m) { msg = cast()m; }
+            (immutable CircleSuppliesUserWithItsTid m) { msg = cast()m; }
         );
         if
                 (gotMsg)
         {
-            attnCircleTid_ = (cast(immutable)msg)._tid_;
+            attnCircleTid_ = (cast(immutable)msg).tid;
             break;
         }
         else {
@@ -57,14 +57,14 @@ debug {
         write("> "); stdout.flush;
 
         // get line from user
-debug { // take the next line from generator
-        string s = r.front;
-        r.popFront;
-        writeln(s); stdout.flush;
-}
-else {  // take the next line from user
-        string s = readln.strip;        // read line from console and strip whitespaces including \ln
-}
+        debug { // take the next line from generator
+                string s = r.front;
+                r.popFront;
+                writeln(s); stdout.flush;
+        }
+        else {  // take the next line from user
+                string s = readln.strip;        // read line from console and strip whitespaces including \ln
+        }
 
         // Analize and forward line
         if      // termination of the application was requested?
@@ -75,14 +75,14 @@ else {  // take the next line from user
         }
         else//no: the line is intended for the attention circle, send it there
         {
-            (cast()attnCircleTid_).send(new immutable UserSaysToCircleMsg(s));
+            (cast()attnCircleTid_).send(new immutable UserTalksToCircleMsg(s));
         }
 
         // receive response from the attention circle/dispatcher
         bool gotMsg = receiveTimeout(
-        msgTimeout.seconds,
-        (immutable Msg m){ msg = cast()m; },
-        (Variant v) { var = v; }
+            msgTimeout.seconds,
+            (immutable Msg m){ msg = cast()m; },
+            (Variant v) { var = v; }
         );
 
         // Analize message
@@ -90,12 +90,23 @@ else {  // take the next line from user
         (gotMsg)
         {
             if      // it was Msg class?
-            (msg)
+                    (msg)
             {   //yes: analize it
-                // TODO: catch requests for the next line from console and lines from the circle
+                if      // is circle ready to take the next line?
+                        (cast(immutable CircleListensToUserMsg)msg)
+                {
+                    continue;
+                }
+                else if // has cirle anything to tell to user?
+                        (auto m = cast(immutable CircleTalksToUserMsg)msg)
+                {
+                    writeln(m.line); stdout.flush;
+                }
+                else
+                    logit(format!"Unexpected message of Msg type in console thread: %s"(msg));
             }
             else {  //no: that was variant. Log an error, continue
-                logit(format!"Unexpected message in console thread: %s"(var.toString));
+                logit(format!"Unexpected message of Variable type in console thread: %s"(var.toString));
             }
         }
         else {  //no: log it, continue

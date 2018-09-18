@@ -33,8 +33,7 @@ import cpt_neurons: SpSeed;
 
     override string toString() const {
         string s = super.toString;
-        s ~= format!"\nseedCid_ = %s(%s)"
-                (seedCid_, _nm_.name(seedCid_));
+        s ~= format!"\n    seedCid_ = %s(%,?s)"(_nm_.name(seedCid_), '_', seedCid_);
         return s;
     }
 
@@ -117,6 +116,58 @@ final class TidPremise: Premise {
         return s;
     }
 
+}
+
+/**
+            Peg premise.
+*/
+final class SpPegPremise: SpiritPremise {
+
+    /// Constructor
+    this(Cid cid) { super(cid); }
+
+    /// Create live wrapper for the holy static concept.
+    override PegPremise live_factory() const {
+        return new PegPremise(cast(immutable)this);
+    }
+}
+
+/// Live.
+final class PegPremise: Premise {
+
+    /// Private constructor. Use spiritual live_factory() instead.
+    private this(immutable SpPegPremise holyPegPremise) { super(holyPegPremise); }
+}
+
+/**
+            String premise.
+    The string field is in the live part.
+*/
+final class SpStringPremise: SpiritPremise {
+
+    /**
+                Constructor
+        Parameters:
+            cid = predefined concept identifier
+    */
+    this(Cid cid) { super(cid); }
+
+    /// Create live wrapper for the holy static concept.
+    override StringPremise live_factory() const {
+        return new StringPremise(cast(immutable)this);
+    }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+}
+
+/// Live.
+final class StringPremise: Premise {
+
+    /// The string field
+    string line;
+
+    /// Private constructor. Use spiritual live_factory() instead.
+    private this(immutable SpStringPremise holyStringPremise) { super(holyStringPremise); }
 }
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***

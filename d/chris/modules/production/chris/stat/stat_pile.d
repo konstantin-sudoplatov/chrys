@@ -30,9 +30,16 @@ void logConcept(Caldron cald, Cid operandCid) {
         cld = caldron as a name space for cids.
         operandCid = a tid primitive, containing the Tid.
 */
-@(3, StatCallType.p0Calp1Cid)
-void sendTidToUser(Caldron cald, Cid operandCid) {
-    assert(false, "not realized yet.");
+@(3, StatCallType.p0Calp1Cidp2Cid)
+void sendTidToUser(Caldron cald, Cid userTidPremCid, Cid ulineBreedCid) {
+    import std.concurrency: Tid, send;
+    import messages: CircleSuppliesUserWithItsTid;
+    checkCid!TidPremise(cald, userTidPremCid);
+    checkCid!Breed(cald, ulineBreedCid);
+
+    auto userTidPrem = cast(TidPremise)cald[userTidPremCid];
+    auto ulineBreed = cast(Breed)cald[ulineBreedCid];
+    send(userTidPrem.tid, new immutable CircleSuppliesUserWithItsTid(ulineBreed.tid));
 }
 
 /// Load a concept into the name space, if not loaded, and activate it.

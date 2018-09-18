@@ -105,7 +105,7 @@ shared abstract class SpiritConcept {
     string toString() const {
         import std.format: format;
 
-        return format!"(%s): %s(%s)"(typeid(this), cid, _nm_.name(cid));
+        return format!"%s(%s): %,3?s"(_nm_.name(cid), typeid(this), '_', cid);
     }
 }
 
@@ -142,19 +142,21 @@ abstract class Concept {
         return cpt;
     }
 
-    /// Getter
-    @property cid() const {
-        return sp.cid;
-    }
-
     /// Overrided default Object.toString()
     override string toString() const {
         import std.format: format;
         import std.array: replace;
 
-        string s = format!"%s(%s):\n"(_nm_.name(sp.cid), typeid(this));
-        s ~= format!"sp = %s"((cast(shared)sp).toString).replace("\n", "\n    ");
-        return s.replace("\n", "\n    ");
+        string s = format!"%s(%s):"(_nm_.name(sp.cid), typeid(this));
+        s ~= format!"\nsp = %s"((cast(shared)sp).toString).replace("\n", "\n    ");
+        return s;
+    }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /// Getter
+    @property cid() const {
+        return sp.cid;
     }
 }
 
@@ -277,6 +279,13 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         return clon;
     }
 
+    override string toString() const {
+        string s = super.toString;
+        s ~= format!"\n    effects_: %s"(_effects);
+
+        return s;
+    }
+
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     /**
@@ -286,7 +295,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         Returns:
             the Effect struct as the Voldemort value.
     */
-    final Effect select_effects(float activation) {
+    final Effect selectEffects(float activation) {
         assert(activation !is float.nan);
 
         // find and return the span
@@ -306,7 +315,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
             upperBound = higher boundary of the span, including. The lower boundary of the span is the upper bound of the
                          previous span, excluding, or -float.infinity, if it is the first span.
     */
-    final void add_effects(float upperBound, Cid[] actions, Cid[] branches)
+    final void addEffects(float upperBound, Cid[] actions, Cid[] branches)
     in {
         if(_effects.length > 0)
             assert(upperBound > _effects[$-1].upperBound,
@@ -330,7 +339,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
             acts = Actions. It can be null, a single cid, an array of cids, single CptDescriptor, an array of CptDescriptors.
             brans = Branches. It can be null, a single cid, an array of cids, single CptDescriptor, an array of CptDescriptors.
     */
-    void add_effects(Tu: float, Ta, Tb)(Tu upperBound, Ta acts, Tb brans)
+    void addEffects(Tu: float, Ta, Tb)(Tu upperBound, Ta acts, Tb brans)
     if
             ((isOf!(Ta, Cid) || isArrayOf!(Ta, Cid) || isOf!(Ta, CptDescriptor) || isArrayOf!(Ta, CptDescriptor))
                                                     &&
@@ -429,7 +438,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
                 Cid[] b = [brans];
             }
 
-        add_effects(upperBound, a, b);
+        addEffects(upperBound, a, b);
     }
 
     /**
@@ -438,7 +447,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
             activation = activation value to select span.
             actCids = array of cids of appended actions.
     */
-    final void append_actions(float activation, Cid[] actCids)
+    final void appendActions(float activation, Cid[] actCids)
     in {
         assert(_effects.length > 0, "First add then append.");
         foreach(act; actCids) {
@@ -461,22 +470,22 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         }
     }
 
-    /// Ditto.
-    final void append_actions(float activation, Cid actCid) {
-        append_actions(activation, [actCid]);
+    /// Adapter.
+    final void appendActions(float activation, Cid actCid) {
+        appendActions(activation, [actCid]);
     }
 
-    /// Ditto.
-    final void append_actions(float activation, CptDescriptor actDesc) {
-        append_actions(activation, [actDesc.cid]);
+    /// Adapter.
+    final void appendActions(float activation, CptDescriptor actDesc) {
+        appendActions(activation, [actDesc.cid]);
     }
 
-    /// Ditto.
-    final void append_actions(float activation, CptDescriptor[] actDescs) {
+    /// Adapter.
+    final void appendActions(float activation, CptDescriptor[] actDescs) {
         Cid[] actCids;
         foreach(ad; actDescs)
             actCids ~= ad.cid;
-        append_actions(activation, actCids);
+        appendActions(activation, actCids);
     }
 
     /**
@@ -485,7 +494,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
             activation = activation value to select span.
             branchCids = array of cids of appended branches.
     */
-    final void append_branches(float activation, Cid[] branchCids)
+    final void appendBranches(float activation, Cid[] branchCids)
     in {
         assert(_effects.length > 0, "First add then append.");
         foreach(br; branchCids) {
@@ -508,28 +517,21 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     }
 
     /// Ditto.
-    final void append_branches(float activation, Cid branchCid) {
-        append_branches(activation, [branchCid]);
+    final void appendBranches(float activation, Cid branchCid) {
+        appendBranches(activation, [branchCid]);
     }
 
     /// Ditto.
-    final void append_branches(float activation, CptDescriptor branchDesc) {
-        append_branches(activation, [branchDesc.cid]);
+    final void appendBranches(float activation, CptDescriptor branchDesc) {
+        appendBranches(activation, [branchDesc.cid]);
     }
 
     /// Ditto.
-    final void append_branches(float activation, CptDescriptor[] branchDescs) {
+    final void appendBranches(float activation, CptDescriptor[] branchDescs) {
         Cid[] brCids;
         foreach(ad; branchDescs)
             brCids ~= ad.cid;
-        append_branches(activation, brCids);
-    }
-
-    override string toString() const {
-        string s = super.toString;
-        s ~= format!"\neffects_: %s"(_effects);
-
-        return s;
+        appendBranches(activation, brCids);
     }
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
@@ -577,7 +579,7 @@ abstract class Neuron: DynamicConcept, ActivationIfc {
     SpiritNeuron.Effect calculate_activation_and_get_effects(Caldron cald)
     {
         assert(cald is attn_circle_thread.caldron);
-        return (cast(shared SpiritNeuron)sp).select_effects(calculate_activation(cald));
+        return (cast(shared SpiritNeuron)sp).selectEffects(calculate_activation(cald));
     }
 }
 
@@ -602,15 +604,17 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
         return cpt;
     }
 
+    override string toString() const {
+        auto s = super.toString;
+        s ~= "\n    premises: [";
+        foreach(pr; _premises) {
+            s ~= format!"\n        %s(%,?s)"(_nm_.name(pr), '_', pr);
+        }
+        s ~= "\n    ]";
+        return s;
+    }
+
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
-    //
-    //                                 Protected
-    //
-    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
-
-    //---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
 
     mixin PremiseImpl!SpiritLogicalNeuron;
 }
@@ -620,6 +624,12 @@ abstract class LogicalNeuron: Neuron, BinActivationIfc {
 
     /// Constructor
     this (immutable SpiritLogicalNeuron holyLogicalNeuron) { super(holyLogicalNeuron); }
+
+    override string toString() const {
+        auto s = super.toString;
+        s ~= format!"\n    _activation = %s"(_activation);
+        return s;
+    }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 

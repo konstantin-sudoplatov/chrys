@@ -41,15 +41,21 @@ class SpAction: SpiritDynamicConcept {
         (cast(void function(Caldron))statCpt.fp)(caldron);
     }
 
+    /// Full setup
+    void load(Cid statAction) {
+        checkCid!SpStaticConcept(statAction);
+        _statActionCid = statAction;
+    }
+
     /// Getter
     @property Cid statAction() {
         return _statActionCid;
     }
 
     /// Setter
-    @property Cid statAction(Cid cid) {
-        debug checkCid!SpStaticConcept(cid);
-        return _statActionCid = cid;
+    @property Cid statAction(Cid statActionCid) {
+        debug checkCid!SpStaticConcept(statActionCid);
+        return _statActionCid = statActionCid;
     }
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
@@ -106,10 +112,13 @@ final class SpUnaryAction: SpAction {
         (cast(void function(Caldron, Cid))statCpt.fp)(caldron, operandCid_);
     }
 
-    ///// Getter
-    //@property Cid operand() {
-    //    return operandCid_;
-    //}
+    /// Full setup
+    void load(Cid statAction, CptDescriptor operand) {
+        checkCid!SpStaticConcept(statAction);
+        _statActionCid = statAction;
+        checkCid!SpiritDynamicConcept(operand.cid);
+        operandCid_ = operand.cid;
+    }
 
     /// Setter
     @property Cid operand(Cid cid) {
@@ -168,10 +177,15 @@ final class SpBinaryAction: SpAction {
         (cast(void function(Caldron, Cid, Cid))statCpt.fp)(caldron, firstOperandCid_, secondOperandCid_);
     }
 
-    ///// Getter
-    //@property Cid _firstOperand_() {
-    //    return firstOperandCid_;
-    //}
+    /// Full setup
+    void load(Cid statAction, CptDescriptor firstOperand, CptDescriptor secondOperand) {
+        checkCid!SpStaticConcept(statAction);
+        _statActionCid = statAction;
+        checkCid!SpiritDynamicConcept(firstOperand.cid);
+        firstOperandCid_ = firstOperand.cid;
+        checkCid!SpiritDynamicConcept(secondOperand.cid);
+        secondOperandCid_ = secondOperand.cid;
+    }
 
     /// Setter
     @property Cid firstOperand(Cid cid) {
@@ -184,11 +198,6 @@ final class SpBinaryAction: SpAction {
         checkCid!SpiritDynamicConcept(cd.cid);
         return firstOperandCid_ = cd.cid;
     }
-
-    ///// Getter
-    //@property Cid _secondOperand_() {
-    //    return secondOperandCid_;
-    //}
 
     /// Setter
     @property Cid secondOperand(Cid cid) {

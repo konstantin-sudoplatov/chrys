@@ -28,15 +28,16 @@ immutable class TerminateAppMsg: Msg {
     this() {super();}
 }
 
-/// Request for the attention dispatcher start an attention circle thread and send back its Tid.
-immutable class UserRequestsCaldronTidFromDisp: Msg {
+/// Request for the attention dispatcher start an attention circle thread and send back its Tid. Actually, it is be the
+/// circle's branch uline, that will send back its Tid.
+immutable class UserRequestsCircleTid: Msg {
     /// Constructor
     this() {super();}
 }
 
-/// In response to the client request dispatcher creates an attention circle thread and gives back its Tid.
-/// If the circle exists already, it just returns its Tid.
-immutable class DispatcherSuppliesClientWithCircleTid: Msg {
+/// In response to the client request dispatcher creates an attention circle thread and that thread sends user its tid.
+/// Actually, it is be the circle's branch uline, that will send back its Tid.
+immutable class CircleSuppliesUserWithItsTid: Msg {
 
     /**
         Constructor.
@@ -49,7 +50,7 @@ immutable class DispatcherSuppliesClientWithCircleTid: Msg {
     }
 
     /// Getter
-    @property Tid _tid_() immutable {
+    @property Tid tid() immutable {
         return cast()tid_;
     }
 
@@ -58,7 +59,7 @@ private:
 }
 
 /// In response to the client request dispatcher creates an attention circle thread and sends it the client Tid.
-immutable class DispatcherSuppliesCircleWithClientTid: Msg {
+immutable class DispatcherSuppliesCircleWithUserTid: Msg {
 
     /**
         Constructor.
@@ -71,7 +72,7 @@ immutable class DispatcherSuppliesCircleWithClientTid: Msg {
     }
 
     /// Getter
-    @property Tid _tid_() immutable {
+    @property Tid tid() immutable {
         return cast()tid_;
     }
 
@@ -80,53 +81,53 @@ private:
 }
 
 /// Message to display on the console_thread, usually by an attention circle.
-immutable class CircleSaysToUserMsg: Msg {
+immutable class CircleTalksToUserMsg: Msg {
 
     /**
         Constructor.
         Parameters:
-            text - line of text to send
+            line - line of text to send
     */
-    this(string text) {
+    this(string line) {
         super();
-        text_ = text;
+        line_ = line;
     }
 
     /// Getter
-    @property string _text_() immutable {
-        return text_;
+    @property string line() immutable {
+        return line_;
     }
 
 private:
-    string text_;   // text to display
+    string line_;   // text to display
 }
 
 /// Request for a new line from console_thread, usually by an attention circle.
-immutable class CircleListensToUserLineMsg: Msg {
+immutable class CircleListensToUserMsg: Msg {
     /// Constructor
     this() {super();}
 }
 
 /// Console sends a line of text to an attention circle
-immutable class UserSaysToCircleMsg: Msg {
+immutable class UserTalksToCircleMsg: Msg {
 
     /**
         Constructor.
         Parameters:
             text - line of text to send
     */
-    this(string text) {
+    this(string line) {
         super();
-        text_ = text;
+        line_ = line;
     }
 
     /// Getter
-    @property string _text_() immutable {
-        return text_;
+    @property string line() immutable {
+        return line_;
     }
 
 private:
-    string text_;   // text to send
+    string line_;   // text to send
 }
 
 /// Request to caldron to start reasoning. May come from another caldron and sometimes from itself.
@@ -137,15 +138,15 @@ immutable class StartReasoningMsg: Msg {
 /// Used by caldrons to send live concepts to each other.
 immutable class SingleConceptPackageMsg: Msg {
 
-    this(Concept cpt) {
+    this(Concept load) {
         super();
-        cpt_ = cast(immutable)cpt;
+        load_ = cast(immutable)load;
     }
 
     /// Getter.
-    @property immutable(Concept) cpt() {
-        return cpt_;
+    @property immutable(Concept) load() {
+        return load_;
     }
 
-    private Concept cpt_;
+    private Concept load_;
 }

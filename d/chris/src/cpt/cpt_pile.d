@@ -78,58 +78,6 @@ final class TidPrimitive: Primitive {
 
 }
 
-/**
-            Peg premise.
-*/
-final class SpPegPremise: SpiritPremise {
-
-    /// Constructor
-    this(Cid cid) { super(cid); }
-
-    /// Create live wrapper for the holy static concept.
-    override PegPremise live_factory() const {
-        return new PegPremise(cast(immutable)this);
-    }
-}
-
-/// Live.
-final class PegPremise: Premise {
-
-    /// Private constructor. Use spiritual live_factory() instead.
-    private this(immutable SpPegPremise holyPegPremise) { super(holyPegPremise); }
-}
-
-/**
-            String premise.
-    The string field is in the live part.
-*/
-final class SpStringPremise: SpiritPremise {
-
-    /**
-                Constructor
-        Parameters:
-            cid = predefined concept identifier
-    */
-    this(Cid cid) { super(cid); }
-
-    /// Create live wrapper for the holy static concept.
-    override StringPremise live_factory() const {
-        return new StringPremise(cast(immutable)this);
-    }
-
-    //---***---***---***---***---***--- functions ---***---***---***---***---***--
-}
-
-/// Live.
-final class StringPremise: Premise {
-
-    /// The string field
-    string _str_;
-
-    /// Private constructor. Use spiritual live_factory() instead.
-    private this(immutable SpStringPremise holyStringPremise) { super(holyStringPremise); }
-}
-
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 

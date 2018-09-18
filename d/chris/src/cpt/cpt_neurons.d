@@ -33,8 +33,8 @@ class SpActionNeuron: SpiritNeuron {
             act = either Action or Action[] or Cid or Cid[]
             bran = either Neuron or Neuron[] or Cid or Cid[]
     */
-    void add_effects(Ta, Tb)(Ta act, Tb bran) {
-        super.add_effects(float.infinity, act, bran);
+    void addEffects(Ta, Tb)(Ta act, Tb bran) {
+        super.addEffects(float.infinity, act, bran);
     }
 
     /**
@@ -42,35 +42,35 @@ class SpActionNeuron: SpiritNeuron {
         Parameters:
             actCids = array of cids of appended actions.
     */
-    final void add_actions(Cid[] actCids) {
+    final void addActions(Cid[] actCids) {
         if(_effects.length == 0)
-            add_effects(actCids, null);
+            addEffects(actCids, null);
         else
-            super.append_actions(float.infinity, actCids);
+            super.appendActions(float.infinity, actCids);
     }
 
     /// Adapter.
-    final void add_actions(Cid actCid) {
+    final void addActions(Cid actCid) {
         if(_effects.length == 0)
-            add_effects(actCid, null);
+            addEffects(actCid, null);
         else
-            super.append_actions(float.infinity, actCid);
+            super.appendActions(float.infinity, actCid);
     }
 
     /// Adapter.
-    final void add_actions(CptDescriptor actDesc) {
+    final void addActions(CptDescriptor actDesc) {
         if(_effects.length == 0)
-            add_effects(actDesc, null);
+            addEffects(actDesc, null);
         else
-            super.append_actions(float.infinity, actDesc);
+            super.appendActions(float.infinity, actDesc);
     }
 
     /// Adapter.
-    final void add_actions(CptDescriptor[] actDescs) {
+    final void addActions(CptDescriptor[] actDescs) {
         if(_effects.length == 0)
-            add_effects(actDescs, null);
+            addEffects(actDescs, null);
         else
-            super.append_actions(float.infinity, actDescs);
+            super.appendActions(float.infinity, actDescs);
     }
 
     /**
@@ -78,35 +78,35 @@ class SpActionNeuron: SpiritNeuron {
         Parameters:
             branchCids = array of cids of appended branches.
     */
-    final void add_branches(Cid[] branchCids) {
+    final void addBranches(Cid[] branchCids) {
         if(_effects.length == 0)
-            add_effects(branchCids, null);
+            addEffects(branchCids, null);
         else
-            super.append_branches(float.infinity, branchCids);
+            super.appendBranches(float.infinity, branchCids);
     }
 
     /// Adapter.
-    final void add_branches(Cid branchCid) {
+    final void addBranches(Cid branchCid) {
         if(_effects.length == 0)
-            add_effects(branchCid, null);
+            addEffects(branchCid, null);
         else
-            super.append_branches(float.infinity, branchCid);
+            super.appendBranches(float.infinity, branchCid);
     }
 
     /// Adapter.
-    final void add_branches(CptDescriptor branchDesc) {
+    final void addBranches(CptDescriptor branchDesc) {
         if(_effects.length == 0)
-            add_effects(branchDesc, null);
+            addEffects(branchDesc, null);
         else
-            super.append_branches(float.infinity, branchDesc);
+            super.appendBranches(float.infinity, branchDesc);
     }
 
     /// Adapter.
-    final void add_branches(CptDescriptor[] branchDescs) {
+    final void addBranches(CptDescriptor[] branchDescs) {
         if(_effects.length == 0)
-            add_effects(branchDescs, null);
+            addEffects(branchDescs, null);
         else
-            super.append_branches(float.infinity, branchDescs);
+            super.appendBranches(float.infinity, branchDescs);
     }
 }
 
@@ -203,10 +203,13 @@ final class AndNeuron: LogicalNeuron {
                     format!"Cid %s, ActivationIfs must be realised for %s"(pr, typeid(cald[pr])));
             if ((cast(ActivationIfc)cald[pr]).activation <= 0) {
                 res = -1;
-                break ;
+                anactivate;
+                goto FINISH;
             }
         }
+        activate;
 
+    FINISH:
         return res;
     }
 }

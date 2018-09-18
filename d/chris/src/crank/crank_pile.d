@@ -14,6 +14,12 @@ enum CommonConcepts: CptDescriptor {
     logCpt_1_unact = cd!(SpUnaryAction, 1_005_527_366),
     logCpt_2_unact = cd!(SpUnaryAction, 122_016_958),
 
+    /// Increase debug level maximum to 3
+    increaseDebugLevel_act = cd!(SpAction, 3_426_667_410),
+
+    /// Decrease debug level maximum to 3
+    decreaseDebugLevel_act = cd!(SpAction, 3_926_428_957),
+
     /// call current Caldron._requestStopAndWait_(), can be used by all caldrons
     stopAndWait_act = cd!(SpAction, 580_052_493),
 
@@ -32,12 +38,16 @@ void _commonConcepts_() {
     cpt!logCpt_1_unact.statAction = statCid!logConcept;
     cpt!logCpt_2_unact.statAction = statCid!logConcept;
 
+    // Setup controlling the debug level
+    cpt!increaseDebugLevel_act.load(statCid!incrementDebugLevel);
+    cpt!decreaseDebugLevel_act.load(statCid!decrementDebugLevel);
+
     // Setup the stop and wait action
     cpt!stopAndWait_act.statAction = statCid!_stopAndWait_;
 }
 
 /// Chat branch enums
-/// , , 3426667410, 3926428957, 805124526, 2996929904
+/// 805124526, 2996929904, 2279163875, 2025623255, 1321617741, 3525361282, 3520033260
 enum Chat: CptDescriptor {
 
     /// This is the root branch of the attention circle, is set up in the attention circle constructor.
@@ -69,7 +79,13 @@ void _chatBranch_() {
 
     // Setup the breed and seed
     cpt!chat_breed.seed = chat_seed;
-    cpt!chat_seed.addEffects(null, [chatShakesHandsWithUline_actnrn, uline_breed]);
+    cpt!chat_seed.addEffects(
+        null,
+        [
+            chatShakesHandsWithUline_actnrn,
+            uline_breed
+        ]
+    );
 
     // Handshake with uline
     cpt!chatShakesHandsWithUline_actnrn.addEffects(
@@ -142,11 +158,6 @@ void _ulineBranch_() {
         userThread_tidprem
     ]);
     cpt!ulineShakesHandsWithChat_anrn.addEffects(
-        0,
-        stopAndWait_act,
-        null
-    );
-    cpt!ulineShakesHandsWithChat_anrn.addEffects(
         float.infinity,
         [   // acts
             ulineSendsUserItsTid_binact,
@@ -156,11 +167,6 @@ void _ulineBranch_() {
     cpt!ulineSendsUserItsTid_binact.load(statCid!sendTidToUser, userThread_tidprem, uline_breed);
 
     // User input valve. The handshake is over. Now, wait for user input and send it to chat, in cycle.
-    cpt!userInputValve_anrn.addEffects(
-        0,
-        stopAndWait_act,
-        null
-    );
 }
 
 

@@ -358,7 +358,7 @@ enum TermColor: string {
     none = null,
     red = "31",
     green = "32",
-    yelow = "33",
+    yellow = "33",
     blue = "34",
     magenta = "35",
     cyan = "36",

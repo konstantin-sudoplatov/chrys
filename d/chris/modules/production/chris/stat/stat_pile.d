@@ -20,8 +20,30 @@ void _stopAndWait_(Caldron cald){
         operandCid = a concept from the caldron's name space to print out
 */
 @(2, StatCallType.p0Calp1Cid)
-void logConcept(Caldron cald, Cid operandCid) {
-    logit(cald[operandCid].toString, TermColor.blue);
+void logConcept(Caldron cald, Cid conceptCid) {
+    logit(cald[conceptCid].toString, TermColor.blue);
+}
+
+/**
+        Increment debug level, but not more than 3.
+    Parameters:
+        cld = caldron as a name space for cids.
+*/
+@(3, StatCallType.p0Cal)
+void incrementDebugLevel(Caldron cald) {
+    import attn_circle_thread: dynDebug;
+    if (dynDebug < 3 ) ++dynDebug;
+}
+
+/**
+        Decrement debug level, but not less than 0.
+    Parameters:
+        cld = caldron as a name space for cids.
+*/
+@(4, StatCallType.p0Cal)
+void decrementDebugLevel(Caldron cald) {
+    import attn_circle_thread: dynDebug;
+    if (dynDebug < 0 ) --dynDebug;
 }
 
 /**
@@ -30,7 +52,7 @@ void logConcept(Caldron cald, Cid operandCid) {
         cld = caldron as a name space for cids.
         operandCid = a tid primitive, containing the Tid.
 */
-@(3, StatCallType.p0Calp1Cidp2Cid)
+@(5, StatCallType.p0Calp1Cidp2Cid)
 void sendTidToUser(Caldron cald, Cid userTidPremCid, Cid ulineBreedCid) {
     import std.concurrency: Tid, send;
     import messages: CircleSuppliesUserWithItsTid;
@@ -43,7 +65,7 @@ void sendTidToUser(Caldron cald, Cid userTidPremCid, Cid ulineBreedCid) {
 }
 
 /// Load a concept into the name space, if not loaded, and activate it.
-@(4, StatCallType.p0Calp1Cid)
+@(6, StatCallType.p0Calp1Cid)
 void activateStat(Caldron cald, Cid operandCid)
 {
     auto op = scast!BinActivationIfc(cald[operandCid]);
@@ -51,7 +73,7 @@ void activateStat(Caldron cald, Cid operandCid)
 }
 
 /// Load a concept into the name space, if not loaded, and activate it.
-@(5, StatCallType.p0Calp1Cid)
+@(7, StatCallType.p0Calp1Cid)
 void anactivateStat(Caldron cald, Cid operandCid)
 {
     auto op = scast!BinActivationIfc(cald[operandCid]);
@@ -67,7 +89,7 @@ void anactivateStat(Caldron cald, Cid operandCid)
         breedCid = breed of the addressed branch as its identifier
         loadCid = concept to send
 */
-@(6, StatCallType.p0Calp1Cidp2Cid)
+@(8, StatCallType.p0Calp1Cidp2Cid)
 void sendConceptToBranch(Caldron cald, Cid breedCid, Cid loadCid) {
     import std.concurrency: Tid, send;
     import messages: SingleConceptPackageMsg;

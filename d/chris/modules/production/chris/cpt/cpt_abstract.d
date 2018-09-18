@@ -295,8 +295,23 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         Returns:
             the Effect struct as the Voldemort value.
     */
-    final Effect selectEffects(float activation) {
-        assert(activation !is float.nan);
+    final Effect selectEffects(float activation)
+    in {
+        import std.math: isNaN;
+        if      // cutoff is off and there are effects?
+                (!isNaN(cutoff_) && _effects.length)
+            assert(_effects[0].upperBound > cutoff_,
+                    format!"Cutoff overlaps first span: %s(cutoff) >= %s(upper bound of the first span)"
+                    (cutoff_, _effects[0].upperBound));
+
+        if(_effects.length)
+            foreach(i, ef; _effects[1..$])
+                assert(_effects[i+1].upperBound > _effects[i].upperBound, "Spans overlap.");
+    }
+    do {
+        if      // is cutoff on and activation in the cutoff span? (if cutoff nan, then result is false)
+                (activation <= cutoff_)
+            return Effect(cutoff_, null, null);
 
         // find and return the span
         foreach(eff; _effects) {
@@ -317,10 +332,16 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     */
     final void addEffects(float upperBound, Cid[] actions, Cid[] branches)
     in {
+        import std.math: isNaN;
         if(_effects.length > 0)
             assert(upperBound > _effects[$-1].upperBound,
                     format!"The upper bound %s must be bigger than the upper bound of the previous span, which is %s"
                             (upperBound, _effects[$-1].upperBound));
+        else
+            if (!isNaN(cutoff_))
+                assert(upperBound > cutoff_,
+                        format!"Span must not overlap cutoff. Cutoff = %s, upperBound = %s"(cutoff_, upperBound));
+
         foreach(act; actions)
             assert(act > MAX_STATIC_CID,
                     format!"The action cid %s is laying within the static concept range, which is not allowed."(act));
@@ -470,6 +491,21 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         }
     }
 
+    /// Getter.
+    @property float cutoff() {
+        return cutoff_;
+    }
+
+    /// Setter.
+    @property void cutoff(float coff) {
+        cutoff_ = coff;
+    }
+
+    /// Do not use cutoff.
+    void disableCutoff() {
+        cutoff_ = float.nan;
+    }
+
     /// Adapter.
     final void appendActions(float activation, Cid actCid) {
         appendActions(activation, [actCid]);
@@ -548,9 +584,10 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     /// is null or empty, it means no change of branch.
     protected Effect[] _effects;
 
-    //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-    //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
+    /// If activation <= cutoff then result of the selectEffects() function is automatically Effect(cutoff, null, null),
+    /// which means action stopAndWait and no branches. This allows to get rid of the first span from -infinity to 0, which
+    /// is most oftenly used as antiactive span.
+    private float cutoff_ = 0;
 }
 
 /// Ditto

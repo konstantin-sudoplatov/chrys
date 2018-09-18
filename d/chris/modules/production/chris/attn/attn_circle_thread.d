@@ -7,7 +7,6 @@ import global, tools;
 import cpt_abstract, cpt_pile, cpt_neurons, cpt_premises, cpt_actions;
 import crank_pile;
 import messages;
-debug = 0;
 
 /**
             Main work horse of the system. It provides the room for doing reasoning on some branch.
@@ -122,7 +121,8 @@ class Caldron {
         if      // is it a request for starting reasoning?
                 (cast(StartReasoningMsg)msg)
         {   // kick off the reasoning loop
-            debug(3) logit(format!"%s, message StartReasoningMsg has come"(caldName));
+            if (dynDebug >= 1)
+                logit(format!"%s, message StartReasoningMsg has come"(caldName), TermColor.yellow);
             reasoning_;
             return true;
         }
@@ -130,8 +130,9 @@ class Caldron {
                 (auto m = cast(immutable SingleConceptPackageMsg)msg)
         {   //yes: clone it and inject into the current name space (may be with overriding)
             Concept cpt = m.load.clone;
-            debug(3) logit(format!"%s, message SingleConceptPackageMsg has come, load: %s(%,?s)"
-                    (caldName, _nm_.name(cpt.cid), '_', cpt.cid));
+            if (dynDebug >= 1)
+                logit(format!"%s, message SingleConceptPackageMsg has come, load: %s(%,?s)"
+                        (caldName, _nm_.name(cpt.cid), '_', cpt.cid), TermColor.yellow);
             this[] = cpt;       // inject
             reasoning_;         // kick
             return true;
@@ -139,8 +140,9 @@ class Caldron {
         else if // new text line from user?
                 (auto m = cast(immutable UserTalksToCircleMsg)msg)
         {   //yes: put the text into the userInput_strprem concept
-            debug(3) logit(format!"%s, message UserTalksToCircleMsg has come, text: %s"
-                    (caldName, m.text));
+            if (dynDebug >= 1)
+                logit(format!"%s, message UserTalksToCircleMsg has come, text: %s"
+                        (caldName, m.text), TermColor.yellow);
             auto cpt = cast(StringPremise)this[Uline.userInput_strprem];
             cpt.line = m.line;
             cpt.activate;       // the premise is ready
@@ -184,18 +186,19 @@ class Caldron {
      */
     private void reasoning_() {
         stopAndWait_ = false;
-        debug(2)    // print the branch(seed) name
-            logit(caldName ~ ", entering");
+        if (dynDebug >= 1)
+            logit(caldName ~ ", entering", TermColor.green);
         while(true) {
             // Put on the head
-            debug(2) logit(format!"%s, headCid_: %s(%,?s)"(caldName, _nm_.name(headCid_), '_', headCid_));
+            if (dynDebug >= 1)
+                logit(format!"%s, headCid_: %s(%,?s)"(caldName, _nm_.name(headCid_), '_', headCid_), TermColor.green);
             Neuron head = cast(Neuron)this[headCid_];
 
             // Let the head be processed, determine effects and do the actions.
             auto effect = head.calculate_activation_and_get_effects(this);
             foreach(actCid; effect.actions) {
-                debug(2)
-                    logit(format!"%s, action: %s(%,?s)"(caldName, _nm_.name(actCid), '_', actCid));
+                if (dynDebug >= 1)
+                    logit(format!"%s, action: %s(%,?s)"(caldName, _nm_.name(actCid), '_', actCid), TermColor.green);
                 Action act = cast(Action)this[actCid];
                 act._do_(this);
             }
@@ -228,11 +231,11 @@ class Caldron {
         }
 
     STOP_AND_WAIT:
-        debug(2) {
+        if (dynDebug >= 1) {
             if (stopAndWait_)
-                logit(caldName ~ ", leaving on stopAndWait_ flag");
+                logit(caldName ~ ", leaving on stopAndWait_ flag", TermColor.green);
             else
-                logit(caldName ~ ", leaving on empty branches array");
+                logit(caldName ~ ", leaving on empty branches array", TermColor.green);
         }
     }
 }
@@ -284,6 +287,9 @@ class AttentionCircle: Caldron {
 /// The attention circle/caldron object, thead local.
 Caldron caldron;
 
+/// The debug level switch, controlled from the conceptual level.
+int dynDebug = 0;
+
 /**
         Thread function for caldrons and the attention circle.
     Parameters:
@@ -304,7 +310,7 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
         caldron = new Caldron(breedOrSeedCid);
     }
 
-    debug(2) {
+    if (dynDebug >= 1) {
         string s;
         if      // is it a circle thread?
                 (calledByDispatcher)
@@ -316,7 +322,7 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
             else
                 s = format!"starting seeded branch %s(%s)"(_nm_.name(breedOrSeedCid), breedOrSeedCid);
 
-        logit(s);
+        logit(s, TermColor.yellow);
     }
 
     // Receive messages in a cycle
@@ -345,7 +351,7 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
             else if // is it a request for the circle termination?
                     (cast(TerminateAppMsg)msg)
             {   //yes: terminate me and all my subthreads
-                debug(2)
+                if (dynDebug >= 1)
                     logit("terminating caldron " ~ caldron.caldName);
                 caldron.terminateChildren;
 
@@ -354,7 +360,7 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
             }
             else
             {  // unrecognized message of type Msg. Log it.
-                logit(format!"Unexpected message to the caldron %s: %s"(caldron.caldName, typeid(msg)));
+                logit(format!"Unexpected message to the caldron %s: %s"(caldron.caldName, typeid(msg)), TermColor.yellow);
                 continue ;
             }
         }
@@ -366,7 +372,8 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
         else if
                 (var.hasValue)
         {  // unrecognized message of type Variant. Log it.
-            logit(format!"Unexpected message of type Variant to the caldron %s: %s"(caldron.caldName, var.toString));
+            logit(format!"Unexpected message of type Variant to the caldron %s: %s"
+                    (caldron.caldName, var.toString), TermColor.yellow);
             continue;
         }
 

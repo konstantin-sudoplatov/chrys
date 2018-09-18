@@ -4,6 +4,7 @@ import std.conv: asOriginalType;
 import global, tools;
 import cpt_neurons;
 import crank_pile;
+import attn_circle_thread;
 
 enum OtherConcepts {
     another_test_concept_name = cd!(SpActionNeuron, 258_455_509),

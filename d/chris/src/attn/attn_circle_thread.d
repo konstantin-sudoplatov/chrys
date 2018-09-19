@@ -4,6 +4,7 @@ import std.conv;
 import std.format;
 
 import global, tools;
+import interfaces;
 import cpt_abstract, cpt_pile, cpt_neurons, cpt_premises, cpt_actions;
 import crank_pile;
 import messages;
@@ -123,6 +124,26 @@ class Caldron {
         {   // kick off the reasoning loop
             if (dynDebug >= 1)
                 logit(format!"%s, message StartReasoningMsg has come"(caldName), TermColor.yellow);
+
+            reasoning_;
+            return true;
+        }
+        else if // is it a request for setting activation?
+                (auto m = cast(immutable IbrSetActivationMsg)msg)
+        {
+            if(dynDebug >= 1)
+                logit(format!"%s, message IbrSetActivationMsg has come, %s.activation = %s"
+                        (caldName, _nm_[m.destConceptCid], m.activation));
+
+            if      // is it bin activation?
+                    (auto cpt = cast(BinActivationIfc)this[m.destConceptCid])
+                if(m.activation > 0)
+                    cpt.activate;
+                else
+                    cpt.anactivate;
+            else    //no: it is esquash
+                (cast(EsquashActivationIfc)this[m.destConceptCid]).activation = m.activation;
+
             reasoning_;
             return true;
         }
@@ -133,6 +154,7 @@ class Caldron {
             if (dynDebug >= 1)
                 logit(format!"%s, message SingleConceptPackageMsg has come, load: %s(%,?s)"
                         (caldName, _nm_.name(cpt.cid), '_', cpt.cid), TermColor.yellow);
+
             this[] = cpt;       // inject
             reasoning_;         // kick
             return true;
@@ -143,6 +165,7 @@ class Caldron {
             if (dynDebug >= 1)
                 logit(format!"%s, message UserTalksToCircleMsg has come, text: %s"
                         (caldName, m.text), TermColor.yellow);
+
             auto cpt = cast(StringPremise)this[Uline.userInput_strprem];
             cpt.line = m.line;
             cpt.activate;       // the premise is ready
@@ -200,7 +223,7 @@ class Caldron {
                 if (dynDebug >= 1)
                     logit(format!"%s, action: %s(%,?s)"(caldName, _nm_.name(actCid), '_', actCid), TermColor.green);
                 Action act = cast(Action)this[actCid];
-                act._do_(this);
+                act.run(this);
             }
 
             // May be stop

@@ -32,7 +32,7 @@ class SpAction: SpiritDynamicConcept {
         Parameters:
             caldron = name space it which static concept function will be working.
     */
-    void _do_(Caldron caldron) {
+    void run(Caldron caldron) {
         assert((cast(SpStaticConcept)_hm_[_statActionCid])._callType_ == StatCallType.p0Cal,
                 format!"Static concept: %s( cid:%s) in HolyAction must have StatCallType none and it has %s."
                       (_nm_[_statActionCid], _statActionCid, (cast(SpStaticConcept)_hm_[_statActionCid])._callType_));
@@ -77,9 +77,10 @@ class Action: DynamicConcept {
         Parameters:
             caldron = name space it which static concept function will be working.
     */
-    void _do_(Caldron caldron) {
+    void run(Caldron caldron) {
         assert((cast(shared SpAction)sp).statAction != 0, format!"Cid: %s, static action must be assigned."(this.cid));
-        (cast(shared SpAction)sp)._do_(caldron);
+
+        (cast(shared SpAction)sp).run(caldron);
     }
 }
 
@@ -101,7 +102,7 @@ final class SpUnaryAction: SpAction {
         Parameters:
             caldron = name space it which static concept function will be working.
     */
-    override void _do_(Caldron caldron) {
+    override void run(Caldron caldron) {
         assert((cast(SpStaticConcept)_hm_[_statActionCid])._callType_ == StatCallType.p0Calp1Cid,
                 format!"Static concept: %s( cid:%s) in HolyAction must have StatCallType p0Calp1Cid and it has %s."
                       (typeid(_nm_[this._statActionCid]), _statActionCid,
@@ -165,11 +166,11 @@ final class SpBinaryAction: SpAction {
         Parameters:
             caldron = name space it which static concept function will be working.
     */
-    override void _do_(Caldron caldron) {
-        assert((cast(SpStaticConcept)_hm_[_statActionCid])._callType_ == StatCallType.p0Calp1Cidp2Cid,
+    override void run(Caldron caldron) {
+        assert((cast(SpStaticConcept)_hm_[statAction])._callType_ == StatCallType.p0Calp1Cidp2Cid,
                 format!"Static concept: %s( cid:%s) in HolyAction must have StatCallType p0Calp1Cidp2Cid and it has %s."
-                      (typeid(_nm_[this._statActionCid]), _statActionCid,
-                      (cast(SpStaticConcept)_hm_[_statActionCid])._callType_));
+                      (typeid(_nm_[this.statAction]), statAction,
+                      (cast(SpStaticConcept)_hm_[statAction])._callType_));
 
         auto statCpt = (cast(SpStaticConcept)_hm_[_statActionCid]);
         assert(firstOperandCid_ != 0, "Operand must be assigned.");
@@ -180,6 +181,7 @@ final class SpBinaryAction: SpAction {
     /// Full setup
     void load(Cid statAction, CptDescriptor firstOperand, CptDescriptor secondOperand) {
         checkCid!SpStaticConcept(statAction);
+
         _statActionCid = statAction;
         checkCid!SpiritDynamicConcept(firstOperand.cid);
         firstOperandCid_ = firstOperand.cid;
@@ -240,8 +242,25 @@ final class SpSetActivation: SpAction {
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
-    override void _do_(Caldron caldron) {
+    override void run(Caldron caldron) {
 
+        SpStaticConcept statCpt = cast(SpStaticConcept)_hm_[_statActionCid];
+        if      // isn't the destination breed setup?
+                (destBreedCid_ == 0)
+        {   // no: do it locally
+            assert((cast(SpStaticConcept)_hm_[statAction])._callType_ == StatCallType.p0Calp1Cidp2Float,
+                format!"Static concept: %s( cid:%s) in HolyAction must have StatCallType p0Calp1Cidp2Float and it has %s."
+                      (typeid(_nm_[this.statAction]), statAction, (cast(SpStaticConcept)_hm_[statAction])._callType_));
+
+            (cast(void function(Caldron, Cid, float))statCpt.fp)(caldron, destConceptCid_, activation_);
+        }
+        else {  //yes: do it remotely
+            assert((cast(SpStaticConcept)_hm_[statAction])._callType_ == StatCallType.p0Calp1Cidp2Cidp3Float,
+                format!"Static concept: %s( cid:%s) in HolyAction must have StatCallType p0Calp1Cidp2Cidp3Float and it has %s."
+                      (typeid(_nm_[this.statAction]), statAction, (cast(SpStaticConcept)_hm_[statAction])._callType_));
+
+            (cast(void function(Caldron, Cid, Cid, float))statCpt.fp)(caldron, destBreedCid_, destConceptCid_, activation_);
+        }
     }
 
     /**
@@ -250,8 +269,11 @@ final class SpSetActivation: SpAction {
             destConceptCid = concept to set activation
             activation = activation value
     */
-    void load(Cid destConceptCid, float activation) {
-        destConceptCid_ = destConceptCid;
+    void load(Cid statAction, CptDescriptor destConcept, float activation) {
+        checkCid!SpStaticConcept(statAction);
+
+        _statActionCid = statAction;
+        destConceptCid_ = destConcept.cid;
         activation_ = activation;
     }
 
@@ -262,11 +284,13 @@ final class SpSetActivation: SpAction {
             destConceptCid = concept to set activation
             activation = activation value
     */
-    void load(Cid destBreedCid, Cid destConceptCid, float activation) {
-        checkCid!SpBreed(destBreedCid);
+    void load(Cid statAction, CptDescriptor destBreed, CptDescriptor destConcept, float activation) {
+        checkCid!SpStaticConcept(statAction);
+        checkCid!SpBreed(destBreed.cid);
 
-        destBreedCid_ = destBreedCid;
-        destConceptCid_ = destConceptCid;
+        _statActionCid = statAction;
+        destBreedCid_ = destBreed.cid;
+        destConceptCid_ = destConcept.cid;
         activation_ = activation;
     }
 

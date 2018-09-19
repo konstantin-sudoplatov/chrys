@@ -127,10 +127,10 @@ enum Uline {
     userInputValve_anrn = cd!(SpAndNeuron, 732_066_873),
 
     /// activate user input string premise
-    activateUserInputPrem_unact = cd!(SpUnaryAction, 2_228_223_070),
+    activateUserInputPrem_unact = cd!(SpSetActivation, 2_228_223_070),
 
     /// anactivate user input string premise
-    anactivateUserInputPrem_unact = cd!(SpUnaryAction, 1_733_678_366),
+    anactivateUserInputPrem_unact = cd!(SpSetActivation, 1_733_678_366),
 
 }
 
@@ -146,9 +146,9 @@ void _ulineBranch_() {
     cpt!uline_breed.seed = uline_seed;
 
     // Setup the uline_seed
+    cpt!anactivateUserInputPrem_unact.load(statCid!setActivation_stat, userInput_strprem, -1);
     cpt!uline_seed.addEffects(
-//        anactivateUserInputPrem_unact,      // act
-        null,
+        anactivateUserInputPrem_unact,      // act
         ulineShakesHandsWithChat_anrn       // branch
     );
 

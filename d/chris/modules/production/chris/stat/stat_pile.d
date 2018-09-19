@@ -81,17 +81,17 @@ void setActivation_stat(Caldron cald, Cid conceptCid, float activation)
             format!("Destination concept %s must imlement one of the activation interfaces (except ActivationIfc)," ~
              "which it doesn't.")(typeid(cald[conceptCid])));
     if      // is it binary activation?
-            (auto op = cast(BinActivationIfc)cald[conceptCid])
+            (auto cpt = cast(BinActivationIfc)cald[conceptCid])
         if(activation > 0)
         {
             assert(activation == 1, format!"activation for BinActivationIfc can only be 1 or -1, but it is %s"
                     (activation));
-            op.activate;
+            cpt.activate;
         }
         else {
             assert(activation == -1, format!"activation for BinActivationIfc can only be 1 or -1, but it is %s"
                     (activation));
-            op.anactivate;
+            cpt.anactivate;
         }
     else    //no: it is esquash
         (cast(EsquashActivationIfc)cald[conceptCid]).activation = activation;

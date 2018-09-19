@@ -46,7 +46,7 @@ template statCid(alias cptName)
             is(typeof(__traits(getAttributes, cptName)[0]) == int) &&
             is(typeof(__traits(getAttributes, cptName)[1]) == StatCallType))
 {   // extract the first element of annotation, which is cid
-    enum int statCid = __traits(getAttributes, cptName)[0];
+    enum Cid statCid = __traits(getAttributes, cptName)[0];
 }
 
 ///

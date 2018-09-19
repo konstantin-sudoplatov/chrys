@@ -258,6 +258,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
 
     override string toString() const {
         string s = super.toString;
+        s ~= format!"\n    cutoff_ = %s"(cutoff_);
         s ~= format!"\n    effects_: %s"(_effects);
 
         return s;
@@ -301,8 +302,34 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         return Effect(float.infinity, null, null);
     }
 
+    /// Getter.
+    @property float cutoff() {
+        return cutoff_;
+    }
+
     /**
-                Add actions and branches for a new span of the activation values.
+            Set new value for cutoff. Setting float.nan disables it.
+        Parameters:
+            cutoff = new value for cutoff
+    */
+    @property void cutoff(float cutoff) {
+        debug if(_effects.length >= 0) assert(cutoff < _effects[0].upperBound,
+                format!"cutoff (%s) must be less then the upper bound of the first span (%s)"
+                (cutoff, _effects[0].upperBound));
+        cutoff_ = cutoff;
+    }
+
+    /// Disable cutoff.
+    void disableCutoff() {
+        cutoff_ = float.nan;
+    }
+
+    /**
+                Add actions and branches for a new span of the activation values. If cutoff is enabled, which is the default,
+            the the number of spans is bigger by one, than defined in the effects array, the first dummy span of
+        Effect(cutoff, null, null) ocupies the region [-float.infinity, cutoff]. You can disable cutoff in three ways:
+        1. the function disableCutoff(); 2. the property neuron.cutoff = float.nan; 3. defining the first span with the
+        upperBound <= cutoff.
         Parameters:
             upperBound = higher boundary of the span, including. The lower boundary of the span is the upper bound of the
                          previous span, excluding, or -float.infinity, if it is the first span.
@@ -310,14 +337,11 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     final void addEffects(float upperBound, Cid[] actions, Cid[] branches)
     in {
         import std.math: isNaN;
-        if(_effects.length > 0)
+        if      // is it not the first span assignment?
+                (_effects.length > 0)
             assert(upperBound > _effects[$-1].upperBound,
                     format!"The upper bound %s must be bigger than the upper bound of the previous span, which is %s"
                             (upperBound, _effects[$-1].upperBound));
-        else
-            if (!isNaN(cutoff_))
-                assert(upperBound > cutoff_,
-                        format!"Span must not overlap cutoff. Cutoff = %s, upperBound = %s"(cutoff_, upperBound));
 
         foreach(act; actions)
             assert(act > MAX_STATIC_CID,
@@ -328,6 +352,10 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     }
     do {
         _effects ~= cast(shared)Effect(upperBound, actions, branches);
+        if      // is the firsts span overlapping the cutoff?
+                (_effects[0].upperBound <= cutoff_)
+            //yes: disable cutoff
+            cutoff_ = float.nan;
     }
 
     /**
@@ -650,40 +678,3 @@ abstract class LogicalNeuron: Neuron, BinActivationIfc {
     // implementation of the interface
     mixin BinActivationImpl!LogicalNeuron;
 }
-
-
-
-//---***---***---***---***---***--- types ---***---***---***---***---***---***
-
-//---***---***---***---***---***--- data ---***---***---***---***---***--
-
-/**
-        Constructor
-*/
-//this(){}
-
-//---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-//~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
-//
-//                                 Protected
-//
-//~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
-protected:
-//---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
-
-//---$$$---$$$---$$$---$$$---$$$--- functions ---$$$---$$$---$$$---$$$---$$$---
-
-//---$$$---$$$---$$$---$$$---$$$--- types ---$$$---$$$---$$$---$$$---$$$---
-
-//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-//
-//                                  Private
-//
-//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-private:
-//---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
-
-//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-//---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--

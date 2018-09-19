@@ -36,7 +36,7 @@ class Caldron {
             headCid_ = seedCid_ = breedOrSeedCid;
 
         // Kick off the reasoning cycle
-        thisTid.send(new immutable StartReasoningMsg);
+        thisTid.send(new immutable IbrStartReasoningMsg);
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -119,7 +119,7 @@ class Caldron {
     protected bool _msgProcessing(immutable Msg msg) {
 
         if      // is it a request for starting reasoning?
-                (cast(StartReasoningMsg)msg)
+                (cast(IbrStartReasoningMsg)msg)
         {   // kick off the reasoning loop
             if (dynDebug >= 1)
                 logit(format!"%s, message StartReasoningMsg has come"(caldName), TermColor.yellow);
@@ -127,7 +127,7 @@ class Caldron {
             return true;
         }
         else if // A concept was posted by another caldron?
-                (auto m = cast(immutable SingleConceptPackageMsg)msg)
+                (auto m = cast(immutable IbrSingleConceptPackageMsg)msg)
         {   //yes: clone it and inject into the current name space (may be with overriding)
             Concept cpt = m.load.clone;
             if (dynDebug >= 1)

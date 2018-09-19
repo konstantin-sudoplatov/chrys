@@ -9,9 +9,8 @@ import attn_circle_thread: Caldron;
 /**
         Test function
 */
-@(15, StatCallType.rCidar_p0Cal_p1Cidar_p2Obj)
-Cid[] subpile_test_stat(Caldron nameSpace, Cid[] paramCids, Object extra)
+@(15, StatCallType.p0Calp1Cid)
+void subpile_test_stat(Caldron nameSpace, Cid paramCid)
 {
 writeln("In subpile_test_stat");
-    return [0];
 }

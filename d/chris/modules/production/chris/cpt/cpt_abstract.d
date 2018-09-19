@@ -186,29 +186,6 @@ abstract class DynamicConcept: Concept {
 }
 
 /**
-            Base for all spirit primitives. They store data. Examples of primitives are a string, a number, a list of strings (log),
-    a map of strings/cid (vocabulary) and so on.
-    All concrete descendants will have the "_pri" suffix.
-*/
-abstract class SpiritPrimitive: SpiritDynamicConcept {
-
-    /**
-                Constructor
-        Parameters:
-            Used for concepts with predefined cids.
-            cid = concept identifier
-    */
-    this(Cid cid) { super(cid); }
-
-    //---***---***---***---***---***--- functions ---***---***---***---***---***--
-}
-
-/// Ditto
-abstract class Primitive: DynamicConcept {
-    this(immutable SpiritPrimitive holyPrimitive) { super(holyPrimitive); }
-}
-
-/**
             Base for all premises.
     All concrete descendants will have the "_pre" suffix.
 */

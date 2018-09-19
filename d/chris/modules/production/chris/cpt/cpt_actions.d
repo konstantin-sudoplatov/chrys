@@ -3,7 +3,7 @@ import std.stdio;
 import std.format;
 
 import global, tools;
-import cpt_abstract, cpt_pile;
+import cpt_abstract, cpt_pile, cpt_premises;
 import attn_circle_thread;
 
 /**
@@ -225,7 +225,68 @@ final class BinaryAction: Action {
 
     /// Private constructor. Use live_factory() instead.
     private this(immutable SpBinaryAction spBinaryAction) { super(spBinaryAction); }
+}
 
+/// Sets activation value in the local and remote branches.
+final class SpSetActivation: SpAction {
+
+    /// Constructor
+    this(Cid cid) { super(cid); }
+
+    /// Create live wrapper for the holy static concept.
+    override SetActivation live_factory() const {
+        return new SetActivation(cast(immutable)this);
+    }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    override void _do_(Caldron caldron) {
+
+    }
+
+    /**
+            Set activation for a concept in the current namespace.
+        Parameters:
+            destConceptCid = concept to set activation
+            activation = activation value
+    */
+    void load(Cid destConceptCid, float activation) {
+        destConceptCid_ = destConceptCid;
+        activation_ = activation;
+    }
+
+    /**
+            Set activation for a concept in the remote namespace.
+        Parameters:
+            destBreedCid = destination branch
+            destConceptCid = concept to set activation
+            activation = activation value
+    */
+    void load(Cid destBreedCid, Cid destConceptCid, float activation) {
+        checkCid!SpBreed(destBreedCid);
+
+        destBreedCid_ = destBreedCid;
+        destConceptCid_ = destConceptCid;
+        activation_ = activation;
+    }
+
+    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+    // Defines destination. If the destination is the current branch, this field remains 0.
+    private Cid destBreedCid_;
+
+    // Destination concept. It must implement one of the forms of the ActivationIfc interface.
+    private Cid destConceptCid_;
+
+    // Activation value. It must be +1/-1 for bin activation or a arbitrary value for esquash.
+    private float activation_;
+}
+
+/// Live.
+final class SetActivation: Action {
+
+    /// Private constructor. Use live_factory() instead.
+    private this(immutable SpSetActivation spSetActivation) { super(spSetActivation); }
 }
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***

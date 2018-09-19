@@ -52,9 +52,7 @@ template statCid(alias cptName)
 ///
 unittest {
 
-    @(1, StatCallType.rCid_p0Cal_p1Cidar_p2Obj) static Cid fun(Caldron spaceName, Cid[] cid, Object extra) {
-        return 0;
-    }
+    @(1, StatCallType.p0Calp1Cid) static void fun(Caldron spaceName, Cid cid) {}
 
     const Cid cid = __traits(getAttributes, fun)[0];      // its cid
     assert(statCid!fun == cid);    // check cid
@@ -75,7 +73,9 @@ void checkCid(T: SpiritConcept)(Cid cid) {
 }
 
 ///         Adapter for live concepts.
-void checkCid(T: Concept)(Caldron caldron, Cid cid) {
+void checkCid(T)(Caldron caldron, Cid cid)
+    if(is(T: Concept) || is(T == interface))
+{
     debug if(_cranked_)
         assert((cast(T)caldron[cid]),
                 format!"Cid: %s, must be of type %s and it is of type %s."
@@ -97,9 +97,9 @@ enum StatConceptModules {
 enum StatCallType {
     p0Cal,                              // void function(Caldron nameSpace)
     p0Calp1Cid,                         // void function(Caldron nameSpace, Cid operandCid)
+    p0Calp1Cidp2Float,                  // void function(Caldron nameSpace, Cid conceptCid, float activationValue)
+    p0Calp1Cidp2Cidp3Float,             // void function(Caldron nameSpace, Cid branchBreedCid, Cid conceptCid, float activationValue)
     p0Calp1Cidp2Cid,                    // void function(Caldron nameSpace, Cid firstoperandCid, Cid secondOperandCid)
-    rCid_p0Cal_p1Cidar_p2Obj,           // Cid function(Caldron nameSpace, Cid[] paramCids, Object extra)
-    rCidar_p0Cal_p1Cidar_p2Obj,         // Cid[] function(Caldron nameSpace, Cid[] paramCids, Object extra)
 }
 
 // modules with dynamic concept names and cranks
@@ -782,19 +782,18 @@ unittest {
     import attn_circle_thread: Caldron;
 
     // Stat concept to make a test call
-    @(1, StatCallType.rCid_p0Cal_p1Cidar_p2Obj) static Cid fun(Caldron spaceName, Cid[] cid, Object extra) {
-        assert(spaceName is null && cid is null && extra is null);
-        return 0;
+    @(1, StatCallType.p0Calp1Cid) static void fun(Caldron spaceName, Cid cid) {
+        assert(spaceName is null && cid ==0);
     }
 
     // extract the descriptor, cid and name from concept's annotation and declaration
     const TempStatDescriptor sd =
             TempStatDescriptor(__traits(getAttributes, fun)[0], "fun", &fun, __traits(getAttributes, fun)[1]);
-    assert(sd.call_type == StatCallType.rCid_p0Cal_p1Cidar_p2Obj);
+    assert(sd.call_type == StatCallType.p0Calp1Cid);
 
     // use the descriptor form the map to call the concept.
-    auto fp = cast(Cid function(Caldron, Cid[], Object))sd.fun_ptr;
-    fp(null, null, null);
+    auto fp = cast(void function(Caldron, Cid))sd.fun_ptr;
+    fp(null, 0);
 }
 
 /// Info about static concept descriptor (it's all you need to call that function) and also this structure is used to

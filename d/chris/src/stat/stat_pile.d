@@ -1,15 +1,18 @@
 /// Unsorted static concepts
 module stat_pile;
 import std.stdio;
+import std.format;
+import std.concurrency;
 
 import global, tools;
 import interfaces;
+import messages;
 import attn_circle_thread: Caldron;
 import cpt_abstract, cpt_premises;
 
 /// Raise stop flag on a caldron.
 @(1, StatCallType.p0Cal)
-void _stopAndWait_(Caldron cald){
+void stopAndWait_stat(Caldron cald){
     cald.requestStopAndWait;
 }
 
@@ -20,7 +23,7 @@ void _stopAndWait_(Caldron cald){
         operandCid = a concept from the caldron's name space to print out
 */
 @(2, StatCallType.p0Calp1Cid)
-void logConcept(Caldron cald, Cid conceptCid) {
+void logConcept_stat(Caldron cald, Cid conceptCid) {
     logit(cald[conceptCid].toString, TermColor.blue);
 }
 
@@ -30,7 +33,7 @@ void logConcept(Caldron cald, Cid conceptCid) {
         cld = caldron as a name space for cids.
 */
 @(3, StatCallType.p0Cal)
-void incrementDebugLevel(Caldron cald) {
+void incrementDebugLevel_stat(Caldron cald) {
     import attn_circle_thread: dynDebug;
     if (dynDebug < 3 ) ++dynDebug;
 }
@@ -41,7 +44,7 @@ void incrementDebugLevel(Caldron cald) {
         cld = caldron as a name space for cids.
 */
 @(4, StatCallType.p0Cal)
-void decrementDebugLevel(Caldron cald) {
+void decrementDebugLevel_stat(Caldron cald) {
     import attn_circle_thread: dynDebug;
     if (dynDebug < 0 ) --dynDebug;
 }
@@ -53,7 +56,7 @@ void decrementDebugLevel(Caldron cald) {
         operandCid = a tid primitive, containing the Tid.
 */
 @(5, StatCallType.p0Calp1Cidp2Cid)
-void sendTidToUser(Caldron cald, Cid userTidPremCid, Cid ulineBreedCid) {
+void sendTidToUser_stat(Caldron cald, Cid userTidPremCid, Cid ulineBreedCid) {
     import std.concurrency: Tid, send;
     import messages: CircleSuppliesUserWithItsTid;
     checkCid!TidPremise(cald, userTidPremCid);
@@ -64,20 +67,50 @@ void sendTidToUser(Caldron cald, Cid userTidPremCid, Cid ulineBreedCid) {
     send(userTidPrem.tid, new immutable CircleSuppliesUserWithItsTid(ulineBreed.tid));
 }
 
-/// Load a concept into the name space, if not loaded, and activate it.
-@(6, StatCallType.p0Calp1Cid)
-void activateStat(Caldron cald, Cid operandCid)
+/**
+            Set activation for a concept in the current space name.
+    Parameters:
+        cald = current caldron
+        conceptCid = concept in the current name space to set activation
+        activation = activation value
+*/
+@(6, StatCallType.p0Calp1Cidp2Float)
+void setActivation_stat(Caldron cald, Cid conceptCid, float activation)
 {
-    auto op = scast!BinActivationIfc(cald[operandCid]);
-    op.activate;
+    assert(cast(BinActivationIfc)cald[conceptCid] || cast(EsquashActivationIfc)cald[conceptCid],
+            format!("Destination concept %s must imlement one of the activation interfaces (except ActivationIfc)," ~
+             "which it doesn't.")(typeid(cald[conceptCid])));
+    if      // is it binary activation?
+            (auto op = cast(BinActivationIfc)cald[conceptCid])
+        if(activation > 0)
+        {
+            assert(activation == 1, format!"activation for BinActivationIfc can only be 1 or -1, but it is %s"
+                    (activation));
+            op.activate;
+        }
+        else {
+            assert(activation == -1, format!"activation for BinActivationIfc can only be 1 or -1, but it is %s"
+                    (activation));
+            op.anactivate;
+        }
+    else    //no: it is esquash
+        (cast(EsquashActivationIfc)cald[conceptCid]).activation = activation;
 }
 
-/// Load a concept into the name space, if not loaded, and activate it.
-@(7, StatCallType.p0Calp1Cid)
-void anactivateStat(Caldron cald, Cid operandCid)
+/**
+            Set activation for a concept in another space name.
+    Parameters:
+        cald = current caldron
+        branchBreedCid = destination caldron breed
+        conceptCid = concept to set activation
+        activation = activation value
+*/
+@(7, StatCallType.p0Calp1Cidp2Cidp3Float)
+void setActivationInBranch_stat(Caldron cald, Cid branchBreedCid, Cid conceptCid, float activation)
 {
-    auto op = scast!BinActivationIfc(cald[operandCid]);
-    op.anactivate;
+    checkCid!BinActivationIfc(cald, conceptCid);
+    auto br = scast!(Breed)(cald[branchBreedCid]);
+    send(br.tid, new immutable IbrSetActivationMsg(conceptCid, activation));
 }
 
 /**
@@ -90,15 +123,13 @@ void anactivateStat(Caldron cald, Cid operandCid)
         loadCid = concept to send
 */
 @(8, StatCallType.p0Calp1Cidp2Cid)
-void sendConceptToBranch(Caldron cald, Cid breedCid, Cid loadCid) {
-    import std.concurrency: Tid, send;
-    import messages: SingleConceptPackageMsg;
+void sendConceptToBranch_stat(Caldron cald, Cid breedCid, Cid loadCid) {
     checkCid!Breed(cald, breedCid);
     checkCid!Concept(cald, loadCid);
 
     Breed br = cast(Breed)cald[breedCid];
     try {
-        send(br.tid, new immutable SingleConceptPackageMsg(cald[loadCid]));
+        send(br.tid, new immutable IbrSingleConceptPackageMsg(cald[loadCid]));
     } catch(Exception e) {  // Something happened with the destination thread
         // anactivate the destination thread breed
         br.anactivate;

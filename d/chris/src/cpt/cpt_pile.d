@@ -45,39 +45,6 @@ final class StaticConcept: Concept {
     private this(immutable SpStaticConcept holyStaticConcept) { super(holyStaticConcept); }
 }
 
-/**
-        Tid primitive.
-    The field tid_ is in the live part.
-*/
-final class SpTidPrimitive: SpiritPrimitive {
-
-    /// Constructor
-    this(Cid cid) { super(cid); }
-
-    /// Create live wrapper for the holy static concept.
-    override TidPrimitive live_factory() const {
-        return new TidPrimitive(cast(immutable)this);
-    }
-}
-
-/// Live.
-final class TidPrimitive: Primitive {
-    import std.concurrency: Tid;
-
-    /// The tid field
-    Tid tid;
-
-    /// Private constructor. Use spiritual live_factory() instead.
-    private this(immutable SpTidPrimitive SpTidPrimitive) { super(SpTidPrimitive); }
-
-    override string toString() const {
-        string s = super.toString;
-        s ~= format!"\n    tid = %s"(cast()tid);
-        return s;
-    }
-
-}
-
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 

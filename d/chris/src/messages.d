@@ -1,6 +1,7 @@
 module messages;
 import std.concurrency;
 
+import tools, global;
 import cpt_abstract;
 
 /// Common ancestor of all messages.
@@ -130,13 +131,13 @@ private:
     string line_;   // text to send
 }
 
-/// Request to caldron to start reasoning. May come from another caldron and sometimes from itself.
-immutable class StartReasoningMsg: Msg {
+/// Interbranching. Request to caldron to start reasoning. May come from another caldron and sometimes from itself.
+immutable class IbrStartReasoningMsg: Msg {
     this() {super();}
 }
 
-/// Used by caldrons to send live concepts to each other.
-immutable class SingleConceptPackageMsg: Msg {
+/// Interbranching. Used by caldrons to send live concepts to each other.
+immutable class IbrSingleConceptPackageMsg: Msg {
 
     this(Concept load) {
         super();
@@ -149,4 +150,30 @@ immutable class SingleConceptPackageMsg: Msg {
     }
 
     private Concept load_;
+}
+
+/// Interbranching. Used by a caldron to set an activation value for a concept in given caldron.
+immutable class IbrSetActivationMsg: Msg {
+
+    this(Cid destConceptCid, float activation) {
+        super();
+        destConceptCid_ = destConceptCid;
+        activation_ = activation;
+    }
+
+    /// Getter.
+    @property Cid destConceptCid() {
+        return destConceptCid_;
+    }
+
+    /// Getter.
+    @property float activation() {
+        return activation_;
+    }
+
+    /// Breed of the destination caldron
+    private Cid destConceptCid_;
+
+    /// Activation
+    private float activation_;
 }

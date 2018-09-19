@@ -34,16 +34,16 @@ void _commonConcepts_() {
     mixin(dequalify_enums!(CommonConcepts));
 
     // Setup the stop and wait action
-    cpt!logCpt_0_unact.statAction = statCid!logConcept;
-    cpt!logCpt_1_unact.statAction = statCid!logConcept;
-    cpt!logCpt_2_unact.statAction = statCid!logConcept;
+    cpt!logCpt_0_unact.statAction = statCid!logConcept_stat;
+    cpt!logCpt_1_unact.statAction = statCid!logConcept_stat;
+    cpt!logCpt_2_unact.statAction = statCid!logConcept_stat;
 
     // Setup controlling the debug level
-    cpt!increaseDebugLevel_act.load(statCid!incrementDebugLevel);
-    cpt!decreaseDebugLevel_act.load(statCid!decrementDebugLevel);
+    cpt!increaseDebugLevel_act.load(statCid!incrementDebugLevel_stat);
+    cpt!decreaseDebugLevel_act.load(statCid!decrementDebugLevel_stat);
 
     // Setup the stop and wait action
-    cpt!stopAndWait_act.statAction = statCid!_stopAndWait_;
+    cpt!stopAndWait_act.statAction = statCid!stopAndWait_stat;
 }
 
 /// Chat branch enums
@@ -97,8 +97,8 @@ void _chatBranch_() {
     );
 
     // actions
-    cpt!chatSendsUlineItsOwnBreed_binact.load(statCid!sendConceptToBranch, uline_breed, chat_breed);
-    cpt!chatSendsUlineUserTid_binact.load(statCid!sendConceptToBranch, uline_breed, userThread_tidprem);
+    cpt!chatSendsUlineItsOwnBreed_binact.load(statCid!sendConceptToBranch_stat, uline_breed, chat_breed);
+    cpt!chatSendsUlineUserTid_binact.load(statCid!sendConceptToBranch_stat, uline_breed, userThread_tidprem);
 
     // Wait on the user input
     cpt!ulineValve_andnrn.addEffects(float.infinity, stopAndWait_act, null);
@@ -139,21 +139,22 @@ void _ulineBranch_() {
     mixin(dequalify_enums!(CommonConcepts, Uline, Chat));
 
     // Load actions
-    cpt!activateUserInputPrem_unact.load(statCid!activateStat, userInput_strprem);
-    cpt!anactivateUserInputPrem_unact.load(statCid!anactivateStat, userInput_strprem);
+    //cpt!activateUserInputPrem_unact.load(statCid!setActivation_stat, userInput_strprem);
+    //cpt!anactivateUserInputPrem_unact.load(statCid!anactivate_stat, userInput_strprem);
 
     // Mate uline seed and breed.
     cpt!uline_breed.seed = uline_seed;
 
     // Setup the uline_seed
     cpt!uline_seed.addEffects(
-        anactivateUserInputPrem_unact,      // act
+//        anactivateUserInputPrem_unact,      // act
+        null,
         ulineShakesHandsWithChat_anrn       // branch
     );
 
     // Handshaker. The chat breed and the user thread tid will be sent by the chat branch, wait for them.
     // The uline breed will be set up in the chat name space.
-    cpt!ulineShakesHandsWithChat_anrn.addPremise([
+    cpt!ulineShakesHandsWithChat_anrn.addPremises([
         chat_breed,
         userThread_tidprem
     ]);
@@ -164,9 +165,10 @@ void _ulineBranch_() {
         ],
         userInputValve_anrn
     );
-    cpt!ulineSendsUserItsTid_binact.load(statCid!sendTidToUser, userThread_tidprem, uline_breed);
+    cpt!ulineSendsUserItsTid_binact.load(statCid!sendTidToUser_stat, userThread_tidprem, uline_breed);
 
     // User input valve. The handshake is over. Now, wait for user input and send it to chat, in cycle.
+    cpt!userInputValve_anrn.addPremises(userInput_strprem);
 }
 
 

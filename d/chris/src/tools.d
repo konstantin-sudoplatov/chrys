@@ -356,12 +356,14 @@ unittest {
 /// ANSI terminal colours
 enum TermColor: string {
     none = null,
-    red = "31",
-    green = "32",
-    yellow = "33",
-    blue = "34",
-    magenta = "35",
-    cyan = "36",
+    black = "0;30",
+    red = "1;31",
+    green = "1;32",
+    brown = "1;33",
+    blue = "1;34",
+    purple = "1;35",
+    cyan = "1;36",
+    gray = "1;30",
 }
 
 /**

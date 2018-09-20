@@ -14,7 +14,7 @@ import attn_circle_thread;
 final class SpStaticConcept: SpiritConcept {
 
     immutable void* fp;                     /// function pointer to the static concept function
-    immutable StatCallType _callType_;       /// call type of the static concept function
+    immutable StatCallType callType;       /// call type of the static concept function
 
     /**
                 Constructor
@@ -27,7 +27,7 @@ final class SpStaticConcept: SpiritConcept {
         super(cid);
         cast()flags |= SpCptFlags.STATIC;
         cast()this.fp = cast(immutable)fp;
-        cast()_callType_ = callType;
+        cast()this.callType = callType;
     }
 
     /// Create live wrapper for the holy static concept.

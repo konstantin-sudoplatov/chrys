@@ -303,7 +303,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     }
 
     /// Getter.
-    @property float cutoff() {
+    final @property float cutoff() {
         return cutoff_;
     }
 
@@ -312,7 +312,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         Parameters:
             cutoff = new value for cutoff
     */
-    @property void cutoff(float cutoff) {
+    final @property void cutoff(float cutoff) {
         debug if(_effects.length >= 0) assert(cutoff < _effects[0].upperBound,
                 format!"cutoff (%s) must be less then the upper bound of the first span (%s)"
                 (cutoff, _effects[0].upperBound));
@@ -320,7 +320,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     }
 
     /// Disable cutoff.
-    void disableCutoff() {
+    final void disableCutoff() {
         cutoff_ = float.nan;
     }
 
@@ -494,21 +494,6 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
                 break;
             }
         }
-    }
-
-    /// Getter.
-    @property float cutoff() {
-        return cutoff_;
-    }
-
-    /// Setter.
-    @property void cutoff(float coff) {
-        cutoff_ = coff;
-    }
-
-    /// Do not use cutoff.
-    void disableCutoff() {
-        cutoff_ = float.nan;
     }
 
     /// Adapter.

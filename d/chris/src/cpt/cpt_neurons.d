@@ -18,7 +18,10 @@ class SpActionNeuron: SpiritNeuron {
         Parameters:
             cid = predefined concept identifier
     */
-    this(Cid cid) { super(cid); }
+    this(Cid cid) {
+        super(cid);
+        this.disableCutoff;
+    }
 
     /// Create live wrapper for the holy static concept.
     override ActionNeuron live_factory() const {

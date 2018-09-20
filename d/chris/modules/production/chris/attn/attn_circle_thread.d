@@ -123,7 +123,7 @@ class Caldron {
                 (cast(IbrStartReasoningMsg)msg)
         {   // kick off the reasoning loop
             if (dynDebug >= 1)
-                logit(format!"%s, message StartReasoningMsg has come"(caldName), TermColor.yellow);
+                logit(format!"%s, message StartReasoningMsg has come"(caldName), TermColor.brown);
 
             reasoning_;
             return true;
@@ -133,7 +133,7 @@ class Caldron {
         {
             if(dynDebug >= 1)
                 logit(format!"%s, message IbrSetActivationMsg has come, %s.activation = %s"
-                        (caldName, _nm_[m.destConceptCid], m.activation));
+                        (caldName, _nm_[m.destConceptCid], m.activation), TermColor.brown);
 
             if      // is it bin activation?
                     (auto cpt = cast(BinActivationIfc)this[m.destConceptCid])
@@ -149,27 +149,25 @@ class Caldron {
         }
         else if // A concept was posted by another caldron?
                 (auto m = cast(immutable IbrSingleConceptPackageMsg)msg)
-        {   //yes: clone it and inject into the current name space (may be with overriding)
-            Concept cpt = m.load.clone;
+        {   //yes: it's already a clone, inject into the current name space (may be with overriding)
             if (dynDebug >= 1)
                 logit(format!"%s, message SingleConceptPackageMsg has come, load: %s(%,?s)"
-                        (caldName, _nm_.name(cpt.cid), '_', cpt.cid), TermColor.yellow);
+                        (caldName, _nm_.name(m.load.cid), '_', m.load.cid), TermColor.brown);
 
-            this[] = cpt;       // inject
-            reasoning_;         // kick
+            this[] = cast()m.load;      // inject
+            reasoning_;                 // kick off
             return true;
         }
         else if // new text line from user?
                 (auto m = cast(immutable UserTalksToCircleMsg)msg)
         {   //yes: put the text into the userInput_strprem concept
             if (dynDebug >= 1)
-                logit(format!"%s, message UserTalksToCircleMsg has come, text: %s"
-                        (caldName, m.text), TermColor.yellow);
+                logit(format!"%s, message UserTalksToCircleMsg has come, text: %s"(caldName, m.line), TermColor.brown);
 
-            auto cpt = cast(StringPremise)this[Uline.userInput_strprem];
+            auto cpt = scast!StringPremise(this[CommonConcepts.userInputLine_strprem]);
             cpt.line = m.line;
             cpt.activate;       // the premise is ready
-            reasoning_;         // kick
+            reasoning_;         // kick off
             return true;
         }
         return false;
@@ -345,7 +343,7 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
             else
                 s = format!"starting seeded branch %s(%s)"(_nm_.name(breedOrSeedCid), breedOrSeedCid);
 
-        logit(s, TermColor.yellow);
+        logit(s, TermColor.brown);
     }
 
     // Receive messages in a cycle
@@ -383,7 +381,7 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
             }
             else
             {  // unrecognized message of type Msg. Log it.
-                logit(format!"Unexpected message to the caldron %s: %s"(caldron.caldName, typeid(msg)), TermColor.yellow);
+                logit(format!"Unexpected message to the caldron %s: %s"(caldron.caldName, typeid(msg)), TermColor.brown);
                 continue ;
             }
         }
@@ -396,7 +394,7 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
                 (var.hasValue)
         {  // unrecognized message of type Variant. Log it.
             logit(format!"Unexpected message of type Variant to the caldron %s: %s"
-                    (caldron.caldName, var.toString), TermColor.yellow);
+                    (caldron.caldName, var.toString), TermColor.brown);
             continue;
         }
 

@@ -97,9 +97,10 @@ enum StatConceptModules {
 enum StatCallType {
     p0Cal,                              // void function(Caldron nameSpace)
     p0Calp1Cid,                         // void function(Caldron nameSpace, Cid operandCid)
-    p0Calp1Cidp2Float,                  // void function(Caldron nameSpace, Cid conceptCid, float activationValue)
-    p0Calp1Cidp2Cidp3Float,             // void function(Caldron nameSpace, Cid branchBreedCid, Cid conceptCid, float activationValue)
     p0Calp1Cidp2Cid,                    // void function(Caldron nameSpace, Cid firstoperandCid, Cid secondOperandCid)
+    p0Calp1Cidp2Int,                    // void function(Caldron nameSpace, Cid conceptCid, int intValue)
+    p0Calp1Cidp2Float,                  // void function(Caldron nameSpace, Cid conceptCid, float floatValue)
+    p0Calp1Cidp2Cidp3Float,             // void function(Caldron nameSpace, Cid branchBreedCid, Cid conceptCid, float floatValue)
 }
 
 // modules with dynamic concept names and cranks

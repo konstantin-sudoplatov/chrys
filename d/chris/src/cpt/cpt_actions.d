@@ -11,6 +11,7 @@ import attn_circle_thread;
     that knows nothing about the code and the static world, which is a big set of functions, that actually are the code.
     All concrete descendants will have the "_act" suffix.
 */
+alias SA = SpAction;       /// SA - spirit action
 class SpAction: SpiritDynamicConcept {
 
     /**
@@ -33,27 +34,27 @@ class SpAction: SpiritDynamicConcept {
             caldron = name space it which static concept function will be working.
     */
     void run(Caldron caldron) {
-        assert((cast(SpStaticConcept)_hm_[_statActionCid])._callType_ == StatCallType.p0Cal,
-                format!"Static concept: %s( cid:%s) in HolyAction must have StatCallType none and it has %s."
-                      (_nm_[_statActionCid], _statActionCid, (cast(SpStaticConcept)_hm_[_statActionCid])._callType_));
+        assert((cast(SpStaticConcept)_hm_[_statActionCid]).callType == StatCallType.p0Cal,
+                format!"Static concept: %s( cid:%s) in SpAction must have StatCallType none and it has %s."
+                      (_nm_[_statActionCid], _statActionCid, (cast(SpStaticConcept)_hm_[_statActionCid]).callType));
 
         auto statCpt = (cast(SpStaticConcept)_hm_[_statActionCid]);
         (cast(void function(Caldron))statCpt.fp)(caldron);
     }
 
     /// Full setup
-    void load(Cid statAction) {
+    final void load(Cid statAction) {
         checkCid!SpStaticConcept(statAction);
         _statActionCid = statAction;
     }
 
     /// Getter
-    @property Cid statAction() {
+    final @property Cid statAction() {
         return _statActionCid;
     }
 
     /// Setter
-    @property Cid statAction(Cid statActionCid) {
+    final @property Cid statAction(Cid statActionCid) {
         debug checkCid!SpStaticConcept(statActionCid);
         return _statActionCid = statActionCid;
     }
@@ -85,6 +86,7 @@ class Action: DynamicConcept {
 }
 
 /// Actions, that operate on only one concept. Examples: activate/anactivate concept.
+alias SA_Cid = SpUnaryAction;       /// SA - spirit action, Cid - p0Calp1Cid
 final class SpUnaryAction: SpAction {
 
     /// Constructor
@@ -102,15 +104,14 @@ final class SpUnaryAction: SpAction {
         Parameters:
             caldron = name space it which static concept function will be working.
     */
-    override void run(Caldron caldron) {
-        assert((cast(SpStaticConcept)_hm_[_statActionCid])._callType_ == StatCallType.p0Calp1Cid,
-                format!"Static concept: %s( cid:%s) in HolyAction must have StatCallType p0Calp1Cid and it has %s."
-                      (typeid(_nm_[this._statActionCid]), _statActionCid,
-                      (cast(SpStaticConcept)_hm_[_statActionCid])._callType_));
+    final override void run(Caldron caldron) {
+        auto statAct = (scast!SpStaticConcept(_hm_[_statActionCid]));
+        assert(statAct.callType == StatCallType.p0Calp1Cid,
+                format!"Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cid and it has %s."
+                        (typeid(statAct), _statActionCid, statAct.callType));
+        checkCid!DynamicConcept(caldron, _operandCid);
 
-        auto statCpt = (cast(SpStaticConcept)_hm_[_statActionCid]);
-        assert(operandCid_ != 0, "Operand must be assigned.");
-        (cast(void function(Caldron, Cid))statCpt.fp)(caldron, operandCid_);
+        (cast(void function(Caldron, Cid))statAct.fp)(caldron, _operandCid);
     }
 
     /// Full setup
@@ -118,25 +119,19 @@ final class SpUnaryAction: SpAction {
         checkCid!SpStaticConcept(statAction);
         _statActionCid = statAction;
         checkCid!SpiritDynamicConcept(operand.cid);
-        operandCid_ = operand.cid;
+        _operandCid = operand.cid;
     }
 
-    /// Setter
-    @property Cid operand(Cid cid) {
-        checkCid!SpiritDynamicConcept(cid);
-        return operandCid_ = cid;
-    }
-
-    /// Adapter
-    @property Cid operand(CptDescriptor cd) {
-        checkCid!SpiritDynamicConcept(cd.cid);
-        return operandCid_ = cd.cid;
+    /// Partial setup, only operand
+    void load(CptDescriptor operand) {
+        checkCid!SpiritDynamicConcept(operand.cid);
+        _operandCid = operand.cid;
     }
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /// Cid of a concept to operate on
-    private Cid operandCid_;
+    protected Cid _operandCid;
 }
 
 /// Live.
@@ -149,6 +144,7 @@ final class UnaryAction: Action {
 
 /// Actions, that operate on two concepts. Examples: sending a message - the first operand breed of the correspondent,
 /// the second operand concept object to send.
+alias SA_CidCid = SpBinaryAction;       /// SA - spirit action, CidCid - p0Calp1Cidp2Cid
 final class SpBinaryAction: SpAction {
 
     /// Constructor
@@ -166,16 +162,15 @@ final class SpBinaryAction: SpAction {
         Parameters:
             caldron = name space it which static concept function will be working.
     */
-    override void run(Caldron caldron) {
-        assert((cast(SpStaticConcept)_hm_[statAction])._callType_ == StatCallType.p0Calp1Cidp2Cid,
-                format!"Static concept: %s( cid:%s) in HolyAction must have StatCallType p0Calp1Cidp2Cid and it has %s."
-                      (typeid(_nm_[this.statAction]), statAction,
-                      (cast(SpStaticConcept)_hm_[statAction])._callType_));
+    final override void run(Caldron caldron) {
+        auto statAct = (scast!SpStaticConcept(_hm_[_statActionCid]));
+        assert(statAct.callType == StatCallType.p0Calp1Cidp2Cid,
+                format!"Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Cid and it has %s."
+                        (typeid(statAct), _statActionCid, statAct.callType));
+        checkCid!DynamicConcept(caldron, _firstOperandCid);
+        checkCid!DynamicConcept(caldron, _secondOperandCid);
 
-        auto statCpt = (cast(SpStaticConcept)_hm_[_statActionCid]);
-        assert(firstOperandCid_ != 0, "Operand must be assigned.");
-        assert(secondOperandCid_ != 0, "Operand must be assigned.");
-        (cast(void function(Caldron, Cid, Cid))statCpt.fp)(caldron, firstOperandCid_, secondOperandCid_);
+        (cast(void function(Caldron, Cid, Cid))statAct.fp)(caldron, _firstOperandCid, _secondOperandCid);
     }
 
     /// Full setup
@@ -184,42 +179,26 @@ final class SpBinaryAction: SpAction {
 
         _statActionCid = statAction;
         checkCid!SpiritDynamicConcept(firstOperand.cid);
-        firstOperandCid_ = firstOperand.cid;
+        _firstOperandCid = firstOperand.cid;
         checkCid!SpiritDynamicConcept(secondOperand.cid);
-        secondOperandCid_ = secondOperand.cid;
+        _secondOperandCid = secondOperand.cid;
     }
 
-    /// Setter
-    @property Cid firstOperand(Cid cid) {
-        checkCid!SpiritDynamicConcept(cid);
-        return firstOperandCid_ = cid;
-    }
-
-    /// Adapter
-    @property Cid firstOperand(CptDescriptor cd) {
-        checkCid!SpiritDynamicConcept(cd.cid);
-        return firstOperandCid_ = cd.cid;
-    }
-
-    /// Setter
-    @property Cid secondOperand(Cid cid) {
-        checkCid!SpiritDynamicConcept(cid);
-        return secondOperandCid_ = cid;
-    }
-
-    /// Adapter
-    @property Cid secondOperand(CptDescriptor cd) {
-        checkCid!SpiritDynamicConcept(cd.cid);
-        return secondOperandCid_ = cd.cid;
+    /// Partial setup, without the static action
+    void load(CptDescriptor firstOperand, CptDescriptor secondOperand) {
+        checkCid!SpiritDynamicConcept(firstOperand.cid);
+        _firstOperandCid = firstOperand.cid;
+        checkCid!SpiritDynamicConcept(secondOperand.cid);
+        _secondOperandCid = secondOperand.cid;
     }
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /// Cid of the first concept
-    private Cid firstOperandCid_;
+    protected Cid _firstOperandCid;
 
     /// Cid of the second concept
-    private Cid secondOperandCid_;
+    protected Cid _secondOperandCid;
 }
 
 /// Live.
@@ -229,121 +208,206 @@ final class BinaryAction: Action {
     private this(immutable SpBinaryAction spBinaryAction) { super(spBinaryAction); }
 }
 
-/// Sets activation value in the local and remote branches.
-final class SpSetActivation: SpAction {
+/// Action, that involves a concept and a float value
+alias SA_CidFloat = SpUnaryFloatAction;     /// SA - spirit action, CidFloat - p0Calp1Cidp2Float
+class SpUnaryFloatAction: SpAction {
 
     /// Constructor
     this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the holy static concept.
-    override SetActivation live_factory() const {
-        return new SetActivation(cast(immutable)this);
+    override UnaryFloatAction live_factory() const {
+        return new UnaryFloatAction(cast(immutable)this);
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
-    override void run(Caldron caldron) {
+    /// Run the static action.
+    final override void run(Caldron caldron) {
+        auto statAct = (scast!SpStaticConcept(_hm_[_statActionCid]));
+        assert(statAct.callType == StatCallType.p0Calp1Cidp2Float,
+                format!"Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Float and it has %s."
+                        (typeid(statAct), _statActionCid, statAct.callType));
+        checkCid!DynamicConcept(caldron, _p1Cid);
 
-        SpStaticConcept statCpt = cast(SpStaticConcept)_hm_[_statActionCid];
-        if      // isn't the destination breed setup?
-                (destBreedCid_ == 0)
-        {   // no: do it locally
-            assert((cast(SpStaticConcept)_hm_[statAction])._callType_ == StatCallType.p0Calp1Cidp2Float,
-                format!"Static concept: %s( cid:%s) in HolyAction must have StatCallType p0Calp1Cidp2Float and it has %s."
-                      (typeid(_nm_[this.statAction]), statAction, (cast(SpStaticConcept)_hm_[statAction])._callType_));
-
-            (cast(void function(Caldron, Cid, float))statCpt.fp)(caldron, destConceptCid_, activation_);
-        }
-        else {  //yes: do it remotely
-            assert((cast(SpStaticConcept)_hm_[statAction])._callType_ == StatCallType.p0Calp1Cidp2Cidp3Float,
-                format!"Static concept: %s( cid:%s) in HolyAction must have StatCallType p0Calp1Cidp2Cidp3Float and it has %s."
-                      (typeid(_nm_[this.statAction]), statAction, (cast(SpStaticConcept)_hm_[statAction])._callType_));
-
-            (cast(void function(Caldron, Cid, Cid, float))statCpt.fp)(caldron, destBreedCid_, destConceptCid_, activation_);
-        }
+        (cast(void function(Caldron, Cid, float))statAct.fp)(caldron, _p1Cid, _p2Float);
     }
 
     /**
-            Set activation for a concept in the current namespace.
+            Set float value for a concept in the current namespace.
         Parameters:
-            destConceptCid = concept to set activation
-            activation = activation value
+            statActionCid = static action to perform
+            p1 = concept, that takes the float value
+            p2 = float value
     */
-    void load(Cid statAction, CptDescriptor destConcept, float activation) {
-        checkCid!SpStaticConcept(statAction);
+    void load(Cid statActionCid, CptDescriptor p1, float p2) {
+        checkCid!SpStaticConcept(statActionCid);
+        checkCid!SpiritDynamicConcept(p1.cid);
 
-        _statActionCid = statAction;
-        destConceptCid_ = destConcept.cid;
-        activation_ = activation;
+        _statActionCid = statActionCid;
+        _p1Cid = p1.cid;
+        _p2Float = p2;
     }
 
-    /**
-            Set activation for a concept in the remote namespace.
-        Parameters:
-            destBreedCid = destination branch
-            destConceptCid = concept to set activation
-            activation = activation value
-    */
-    void load(Cid statAction, CptDescriptor destBreed, CptDescriptor destConcept, float activation) {
-        checkCid!SpStaticConcept(statAction);
-        checkCid!SpBreed(destBreed.cid);
+    /// Partial setup, without the static action
+    void load(CptDescriptor p1, float p2) {
+        checkCid!SpiritDynamicConcept(p1.cid);
 
-        _statActionCid = statAction;
-        destBreedCid_ = destBreed.cid;
-        destConceptCid_ = destConcept.cid;
-        activation_ = activation;
+        _p1Cid = p1.cid;
+        _p2Float = p2;
     }
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
-    // Defines destination. If the destination is the current branch, this field remains 0.
-    private Cid destBreedCid_;
+    // Parameter 1 - a concept cid.
+    protected Cid _p1Cid;
 
-    // Destination concept. It must implement one of the forms of the ActivationIfc interface.
-    private Cid destConceptCid_;
-
-    // Activation value. It must be +1/-1 for bin activation or a arbitrary value for esquash.
-    private float activation_;
+    // Parameter 2 - a float value
+    protected float _p2Float;
 }
 
 /// Live.
-final class SetActivation: Action {
+class UnaryFloatAction: Action {
 
     /// Private constructor. Use live_factory() instead.
-    private this(immutable SpSetActivation spSetActivation) { super(spSetActivation); }
+    private this(immutable SpUnaryFloatAction spUnaryFloatAction) { super(spUnaryFloatAction); }
 }
 
-//---***---***---***---***---***--- types ---***---***---***---***---***---***
+/// Action, that involves two concepts and a float value
+alias SA_CidCidFloat = SpBinaryFloatAction;     /// SA - spirit action, CidCidFloat stands for p0Calp1Cidp2Cidp3Float
+class SpBinaryFloatAction: SpAction {
 
-//---***---***---***---***---***--- data ---***---***---***---***---***--
+    /// Constructor
+    this(Cid cid) { super(cid); }
 
-/**
-        Constructor
-*/
-//this(){}
+    /// Create live wrapper for the holy static concept.
+    override BinaryFloatAction live_factory() const {
+        return new BinaryFloatAction(cast(immutable)this);
+    }
 
-//---***---***---***---***---***--- functions ---***---***---***---***---***--
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
-//~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
-//
-//                                 Protected
-//
-//~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
-protected:
-//---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
+    /// Run the static action.
+    final override void run(Caldron caldron) {
+        auto statAct = (scast!SpStaticConcept(_hm_[_statActionCid]));
+        assert(statAct.callType == StatCallType.p0Calp1Cidp2Cidp3Float,
+                format!"Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Cidp3Float and it has %s."
+                        (typeid(statAct), _statActionCid, statAct.callType));
+        checkCid!DynamicConcept(caldron, _p1Cid);
+        checkCid!DynamicConcept(caldron, _p2Cid);
 
-//---$$$---$$$---$$$---$$$---$$$--- functions ---$$$---$$$---$$$---$$$---$$$---
+        (cast(void function(Caldron, Cid, Cid, float))statAct.fp)(caldron, _p1Cid, _p2Cid, _p3Float);
+    }
 
-//---$$$---$$$---$$$---$$$---$$$--- types ---$$$---$$$---$$$---$$$---$$$---
+    /**
+            Set float value for a concept in the current namespace.
+        Parameters:
+            statActionCid = static action to perform
+            p1 = first concept
+            p2 = second concept
+            p3 = float value
+    */
+    void load(Cid statActionCid, CptDescriptor p1, CptDescriptor p2, float p3) {
+        checkCid!SpStaticConcept(statActionCid);
+        checkCid!SpiritDynamicConcept(p1.cid);
+        checkCid!SpiritDynamicConcept(p2.cid);
 
-//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-//
-//                                  Private
-//
-//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-private:
-//---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+        _statActionCid = statActionCid;
+        _p1Cid = p1.cid;
+        _p2Cid = p2.cid;
+        _p3Float = p3;
+    }
 
-//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
+    /// Partial setup, without the static action
+    void load(CptDescriptor p1, CptDescriptor p2, float p3) {
+        checkCid!SpiritDynamicConcept(p1.cid);
+        checkCid!SpiritDynamicConcept(p2.cid);
 
-//---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
+        _p1Cid = p1.cid;
+        _p2Cid = p2.cid;
+        _p3Float = p3;
+    }
+
+    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+    // Parameter 1 - a concept cid.
+    protected Cid _p1Cid;
+
+    // Parameter 2 - a concept cid.
+    protected Cid _p2Cid;
+
+    // Parameter 2 - a float value
+    protected float _p3Float;
+}
+
+/// Live.
+class BinaryFloatAction: Action {
+
+    /// Private constructor. Use live_factory() instead.
+    private this(immutable SpBinaryFloatAction spBinaryFloatAction) { super(spBinaryFloatAction); }
+}
+
+/// Action, that involves a concept and a float value
+alias SA_CidInt = SpUnaryIntAction;         /// SA - spirit action, CidInt - p0Calp1Cidp2Int
+class SpUnaryIntAction: SpAction {
+
+    /// Constructor
+    this(Cid cid) { super(cid); }
+
+    /// Create live wrapper for the holy static concept.
+    override UnaryIntAction live_factory() const {
+        return new UnaryIntAction(cast(immutable)this);
+    }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /// Run the static action.
+    final override void run(Caldron caldron) {
+        auto statAct = (scast!SpStaticConcept(_hm_[_statActionCid]));
+        assert(statAct.callType == StatCallType.p0Calp1Cidp2Int,
+                format!"Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Int and it has %s."
+                        (typeid(statAct), _statActionCid, statAct.callType));
+        checkCid!DynamicConcept(caldron, _p1Cid);
+
+        (cast(void function(Caldron, Cid, int))statAct.fp)(caldron, _p1Cid, _p2Int);
+    }
+
+    /**
+            Set int value for a concept in the current namespace.
+        Parameters:
+            statActionCid = static action to perform
+            p1 = concept, that takes the int value
+            p2 = int value
+    */
+    void load(Cid statActionCid, CptDescriptor p1, int p2) {
+        checkCid!SpStaticConcept(statActionCid);
+        checkCid!SpiritDynamicConcept(p1.cid);
+
+        _statActionCid = statActionCid;
+        _p1Cid = p1.cid;
+        _p2Int = p2;
+    }
+
+    /// Partial setup, without the static action
+    void load(CptDescriptor p1, int p2) {
+        checkCid!SpiritDynamicConcept(p1.cid);
+
+        _p1Cid = p1.cid;
+        _p2Int = p2;
+    }
+
+    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+    // Parameter 1 - a concept cid.
+    protected Cid _p1Cid;
+
+    // Parameter 2 - a float value
+    protected int _p2Int;
+}
+
+/// Live.
+class UnaryIntAction: Action {
+
+    /// Private constructor. Use live_factory() instead.
+    private this(immutable SpUnaryIntAction spUnaryIntAction) { super(spUnaryIntAction); }
+}

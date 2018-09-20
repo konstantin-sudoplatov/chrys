@@ -10,15 +10,18 @@ import stat_pile;
 enum CommonConcepts: CptDescriptor {
 
     // Service concepts
-    logCpt_0_unact = cd!(SpUnaryAction, 246_390_338),
-    logCpt_1_unact = cd!(SpUnaryAction, 1_005_527_366),
-    logCpt_2_unact = cd!(SpUnaryAction, 122_016_958),
+    logCpt_0_unact = cd!(SpUnaryAction, 246_390_338),       // log a concept, using concept.toString()
+    logCpt_1_unact = cd!(SpUnaryAction, 1_005_527_366),     // ditto
+    logCpt_2_unact = cd!(SpUnaryAction, 122_016_958),       // ditto
+    zond_0_actnrn = cd!(SpActionNeuron, 2_279_163_875),     // test action neuron to inject into different points of workflow
+    zond_1_actnrn = cd!(SpActionNeuron, 2_025_623_255),     // ditto
+    zond_2_actnrn = cd!(SpActionNeuron, 1_321_617_741),     // ditto
 
-    /// Increase debug level maximum to 3
-    increaseDebugLevel_act = cd!(SpAction, 3_426_667_410),
 
-    /// Decrease debug level maximum to 3
-    decreaseDebugLevel_act = cd!(SpAction, 3_926_428_957),
+    /// Controlling the debug level inside the caldron
+    setDebugLevel_0_act = cd!(SpAction, 3_426_667_410),
+    setDebugLevel_1_act = cd!(SpAction, 805_124_526),
+    setDebugLevel_2_act = cd!(SpAction, 2_996_929_904),
 
     /// call current Caldron._requestStopAndWait_(), can be used by all caldrons
     stopAndWait_act = cd!(SpAction, 580_052_493),
@@ -28,9 +31,16 @@ enum CommonConcepts: CptDescriptor {
     /// The Tid is put in it on start of the chat caldron, and the primitive is valid only for chat branch,
     /// since the Tid field is stored in the live part of the concept.
     userThread_tidprem = cd!(SpTidPremise, 217_397_612),
+
+    /// line of text from the user, string premise.
+    userInputLine_strprem = cd!(SpStringPremise, 3_622_010_989),
+
+    /// anactivate user input string premise
+    anactivateUserInputLine_unact = cd!(SA_Cid, 1_733_678_366),
 }
 
-void _commonConcepts_() {
+/// Setup common concepts.
+void commonConcepts() {
     mixin(dequalify_enums!(CommonConcepts));
 
     // Setup the stop and wait action
@@ -39,15 +49,19 @@ void _commonConcepts_() {
     cpt!logCpt_2_unact.statAction = statCid!logConcept_stat;
 
     // Setup controlling the debug level
-    cpt!increaseDebugLevel_act.load(statCid!incrementDebugLevel_stat);
-    cpt!decreaseDebugLevel_act.load(statCid!decrementDebugLevel_stat);
+    cpt!setDebugLevel_0_act.load(statCid!setDebugLevel_0_stat);
+    cpt!setDebugLevel_1_act.load(statCid!setDebugLevel_1_stat);
+    cpt!setDebugLevel_2_act.load(statCid!setDebugLevel_2_stat);
 
     // Setup the stop and wait action
     cpt!stopAndWait_act.statAction = statCid!stopAndWait_stat;
+
+    // Setup activation of the user input premise
+    cpt!anactivateUserInputLine_unact.load(statCid!anactivate_stat, userInputLine_strprem);
 }
 
 /// Chat branch enums
-/// 805124526, 2996929904, 2279163875, 2025623255, 1321617741, 3525361282, 3520033260
+/// , 3525361282, 3520033260
 enum Chat: CptDescriptor {
 
     /// This is the root branch of the attention circle, is set up in the attention circle constructor.
@@ -59,53 +73,64 @@ enum Chat: CptDescriptor {
     /// Setting up the uline branch (see actions below)
     /// After chat starts the uline branch, it sends user its own breed. Also it sends uline Tid of the user thread
     /// (console or http), so that uline could talk to user.
-    chatShakesHandsWithUline_actnrn = cd!(SpActionNeuron, 3_996_466_002),
+    shakeHandsWithUline_chat_actnrn = cd!(SpActionNeuron, 3_996_466_002),
 
     /// The action for the handshaker. After chat starts the uline branch, it sends user its own breed.
-    chatSendsUlineItsOwnBreed_binact = cd!(SpBinaryAction, 553_436_801),
+    sendUlineChatBreed_chat_binact = cd!(SpBinaryAction, 553_436_801),
 
     /// The action for the handshaker. It sends uline Tid of the user thread (console or http), so that uline could be able
     /// to talk to the user.
-    chatSendsUlineUserTid_binact = cd!(SpBinaryAction, 3_408_832_589),
+    sendUlineUserTid_chat_binact = cd!(SpBinaryAction, 3_408_832_589),
 
-    /// A valve for waiting for a line of text from uline, which it gets from user.
-    ulineValve_andnrn = cd!(SpAndNeuron, 497_144_117),
-
+    /// A valve for waiting for a line of text from uline, which it gets from user with tools
+    valveOnUlineInput_chat_andnrn = cd!(SpAndNeuron, 497_144_117),
+    activateRemotely_readyForUlineInput_chat_binact = cd!(SpBinaryAction, 3_702_223_557),
 }
 
 /// Setup the chat branch.
-void _chatBranch_() {
+void chatBranch() {
     mixin(dequalify_enums!(CommonConcepts, Chat, Uline));    // anonymizes the concept enums, so we don't need use their full names.
 
     // Setup the breed and seed
-    cpt!chat_breed.seed = chat_seed;
+    cpt!chat_breed.load(chat_seed);
     cpt!chat_seed.addEffects(
+        //[   // acts
+        //],
         null,
-        [
-            chatShakesHandsWithUline_actnrn,
-            uline_breed
+        [   // brans
+            shakeHandsWithUline_chat_actnrn,    // handshake with uline
+            uline_breed                         // start uline branch
         ]
     );
 
     // Handshake with uline
-    cpt!chatShakesHandsWithUline_actnrn.addEffects(
+    cpt!sendUlineChatBreed_chat_binact.load(statCid!sendConceptToBranch_stat, uline_breed, chat_breed);
+    cpt!sendUlineUserTid_chat_binact.load(statCid!sendConceptToBranch_stat, uline_breed, userThread_tidprem);
+    cpt!shakeHandsWithUline_chat_actnrn.addEffects(
         [   // acts
-            chatSendsUlineItsOwnBreed_binact,       // give uline own breed
-            chatSendsUlineUserTid_binact            // give uline user's Tid
+            sendUlineChatBreed_chat_binact,       // give uline own breed
+            sendUlineUserTid_chat_binact,           // give uline user's Tid
+            activateRemotely_readyForUlineInput_chat_binact,    // tell to uline send the next line
         ],
-        ulineValve_andnrn
+        valveOnUlineInput_chat_andnrn
     );
 
-    // actions
-    cpt!chatSendsUlineItsOwnBreed_binact.load(statCid!sendConceptToBranch_stat, uline_breed, chat_breed);
-    cpt!chatSendsUlineUserTid_binact.load(statCid!sendConceptToBranch_stat, uline_breed, userThread_tidprem);
-
     // Wait on the user input
-    cpt!ulineValve_andnrn.addEffects(float.infinity, stopAndWait_act, null);
+    cpt!activateRemotely_readyForUlineInput_chat_binact.
+            load(statCid!activateRemotely_stat, uline_breed, chatReadyForUlineInputPeg_uline_pegprem);
+    cpt!valveOnUlineInput_chat_andnrn.addPremises(userInputLine_strprem);
+    cpt!valveOnUlineInput_chat_andnrn.addEffects(
+        float.infinity,
+        [
+            anactivateUserInputLine_unact,
+            activateRemotely_readyForUlineInput_chat_binact
+        ],
+        null
+    );
 }
 
 // User line branch enums
-/// , , 1439958318, 1079824511, 4278173576
+/// , , , , , 1439958318, 1079824511, 4278173576
 enum Uline {
 
     /// uline branch identifier
@@ -115,27 +140,24 @@ enum Uline {
     uline_seed = cd!(SpSeed, 1_771_384_341),
 
     /// wait until chat sends its breed and user's tid.
-    ulineShakesHandsWithChat_anrn = cd!(SpAndNeuron, 226_154_664),
+    shakeHandsWithChat_uline_anrn = cd!(SpAndNeuron, 226_154_664),
 
     /// After the handshaking with chat uline has user tid and can send back its own
-    ulineSendsUserItsTid_binact = cd!(SpBinaryAction, 2_277_726_710),
-
-    /// line of text from the user, string premise.
-    userInput_strprem = cd!(SpStringPremise, 3_622_010_989),
+    sendUserUlineTid_uline_binact = cd!(SpBinaryAction, 2_277_726_710),
 
     /// wait neuron. Wait on it for the next line of text from user.
-    userInputValve_anrn = cd!(SpAndNeuron, 732_066_873),
+    userInputValve_uline_andnrn = cd!(SpAndNeuron, 732_066_873),
 
-    /// activate user input string premise
-    activateUserInputPrem_unact = cd!(SpSetActivation, 2_228_223_070),
+    /// Flag for uline to feed the next input from user to chat and anactivation action for it
+    chatReadyForUlineInputPeg_uline_pegprem = cd!(SpPegPremise, 1_456_194_005),
+    anactivateChatReadyForUlineInputPeg_uline_unact = cd!(SpUnaryAction, 409_329_855),
 
-    /// anactivate user input string premise
-    anactivateUserInputPrem_unact = cd!(SpSetActivation, 1_733_678_366),
-
+    /// Send user line premise to chat (together with the activation value)
+    sendUserInputLineToChat_binact = cd!(SpBinaryAction, 3_447_310_214),
 }
 
 /// Setup the uline branch.
-void _ulineBranch_() {
+void ulineBranch() {
     mixin(dequalify_enums!(CommonConcepts, Uline, Chat));
 
     // Load actions
@@ -143,32 +165,45 @@ void _ulineBranch_() {
     //cpt!anactivateUserInputPrem_unact.load(statCid!anactivate_stat, userInput_strprem);
 
     // Mate uline seed and breed.
-    cpt!uline_breed.seed = uline_seed;
+    cpt!uline_breed.load(uline_seed);
 
     // Setup the uline_seed
-    cpt!anactivateUserInputPrem_unact.load(statCid!setActivation_stat, userInput_strprem, -1);
     cpt!uline_seed.addEffects(
-        anactivateUserInputPrem_unact,      // act
-        ulineShakesHandsWithChat_anrn       // branch
+        null,
+        shakeHandsWithChat_uline_anrn       // branch
     );
 
     // Handshaker. The chat breed and the user thread tid will be sent by the chat branch, wait for them.
     // The uline breed will be set up in the chat name space.
-    cpt!ulineShakesHandsWithChat_anrn.addPremises([
+    cpt!sendUserUlineTid_uline_binact.load(statCid!sendTidToUser_stat, userThread_tidprem, uline_breed);
+    cpt!shakeHandsWithChat_uline_anrn.addPremises([
         chat_breed,
         userThread_tidprem
     ]);
-    cpt!ulineShakesHandsWithChat_anrn.addEffects(
+    cpt!shakeHandsWithChat_uline_anrn.addEffects(
         float.infinity,
         [   // acts
-            ulineSendsUserItsTid_binact,
+            sendUserUlineTid_uline_binact,
         ],
-        userInputValve_anrn
+        userInputValve_uline_andnrn
     );
-    cpt!ulineSendsUserItsTid_binact.load(statCid!sendTidToUser_stat, userThread_tidprem, uline_breed);
 
-    // User input valve. The handshake is over. Now, wait for user input and send it to chat, in cycle.
-    cpt!userInputValve_anrn.addPremises(userInput_strprem);
+    // User input valve. The handshake is over. Now, wait for user input and send it to chat, in a cycle.
+    cpt!sendUserInputLineToChat_binact.load(statCid!sendConceptToBranch_stat, chat_breed, userInputLine_strprem);
+    cpt!anactivateChatReadyForUlineInputPeg_uline_unact.load(statCid!anactivate_stat, chatReadyForUlineInputPeg_uline_pegprem);
+    cpt!userInputValve_uline_andnrn.addPremises([
+        userInputLine_strprem,
+        chatReadyForUlineInputPeg_uline_pegprem
+    ]);
+    cpt!userInputValve_uline_andnrn.addEffects(
+        float.infinity,
+        [
+            sendUserInputLineToChat_binact,
+            anactivateChatReadyForUlineInputPeg_uline_unact,
+            anactivateUserInputLine_unact
+        ],
+        null
+    );
 }
 
 

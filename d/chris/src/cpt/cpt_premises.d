@@ -39,23 +39,14 @@ import cpt_neurons: SpSeed;
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
+    void load(CptDescriptor seedDsc) {
+        checkCid!SpSeed(seedDsc.cid);
+        seedCid_ = seedDsc.cid;
+    }
+
     /// Getter.
     @property Cid seed() const {
         return seedCid_;
-    }
-
-    /// Setter.
-    @property Cid seed(Cid seedCid) {
-        debug checkCid!SpSeed(seedCid);
-
-        return seedCid_ = seedCid;
-    }
-
-    /// Adapter.
-    @property Cid seed(CptDescriptor seedDesc) {
-        debug checkCid!SpSeed(seedDesc.cid);
-
-        return seedCid_ = seedDesc.cid;
     }
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
@@ -115,7 +106,6 @@ final class TidPremise: Premise {
         s ~= format!"\n    tid = %s"(cast()tid);
         return s;
     }
-
 }
 
 /**
@@ -168,6 +158,12 @@ final class StringPremise: Premise {
 
     /// Private constructor. Use spiritual live_factory() instead.
     private this(immutable SpStringPremise holyStringPremise) { super(holyStringPremise); }
+
+    override string toString() const {
+        string s = super.toString;
+        s ~= format!"\n    line = %s"(line);
+        return s;
+    }
 }
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***

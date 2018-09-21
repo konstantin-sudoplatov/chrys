@@ -388,6 +388,196 @@ void logit(const Object o, TermColor color = null) {
     logit((cast()o).toString, color);
 }
 
+/// Two-sided stack and queue like in Java, based, also like in Java, on a cyclic buffer.
+struct Deque(T) {
+    import core.exception: RangeError;
+    /// Constructor
+    this(long reserve){
+        cBuf_.reserve(reserve);
+        capacity_ = cBuf_.capacity;
+        cBuf_.length = capacity_;
+    }
+
+    /// Show internal representation of the queue
+    string toInnerString(){
+        string s = typeid(this).toString;
+        s ~= format!"\n    length_ = %s"(length_);
+        s ~= format!"\n    capacity_ = %s"(capacity_);
+        s ~= format!"\n    head_ = %s"(head_);
+        s ~= format!"\n    tail_ = %s"(tail_);
+        s ~= format!"\n    cBuf.length = %s, cBuf.capacity = %s"(cBuf_.length, cBuf_.capacity);
+        s ~= format!"\n    cBuf: %s"(cBuf_);
+        return s;
+    }
+
+    /// Getter
+    @property size_t capacity() { return capacity_; }
+
+    /// Add an element to the end of the queue.
+    alias push = pushTail;
+    T pushTail(T el) {
+        if(length_ == capacity_) reallocateIncreasing_;
+        ++tail_;
+        if(tail_ == capacity_) tail_ = 0;
+        cBuf_[tail_] = el;
+        ++length_;
+        return el;
+    }
+
+    /// Add an element to the head of the queue.
+    T pushHead(T el) {
+        if(length_ == capacity_) reallocateIncreasing_;
+        --head_;
+        if(head_ == -1) head_ = capacity_ - 1;
+        cBuf_[head_] = el;
+        ++length_;
+        return el;
+    }
+
+    /// Add an element to the end of the queue.
+    alias pop = popTail;
+    T popTail() {
+        if(length_ == 0)
+            throw new RangeError;
+        else
+            if(length_ < capacity_>>2 ) reallocateDecreasing_;
+        T el = cBuf_[tail_];
+        --tail_;
+        if(tail_ == 0) tail_ = capacity_ - 1;
+        --length_;
+        return el;
+    }
+
+
+
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+    //
+    //                                  Private
+    //
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+    private:
+    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+        T[] cBuf_;        /// Cyclic buffer.
+        long head_;       /// index of the first element
+        long tail_ = -1;  /// index of the last element
+        long length_;     /// number of element in the queue
+        long capacity_;   /// current capacity of the buffer. It has the same value as cBuf.capacity, but faster.
+
+    /**
+                Calculate real index in the buffer.
+        Parameters:
+            virtIndex = index counted relative to the head. It can be positive, negavive and not limited by the size
+                        of the buffer.
+    */
+    long actualIndex_(long virtIndex) {
+        const long ind = head_ + virtIndex;
+        if(ind >= 0)
+            return ind%capacity_;
+        else
+            return ind%capacity_ + capacity_;
+    }
+
+    /// Add space to the buffer
+    void reallocateIncreasing_() {
+        cBuf_.reserve(capacity_ + 1);
+        capacity_ = cBuf_.capacity;
+        cBuf_.length = capacity_;       // initialize free array space
+
+        // May be move the content to the end
+        if      // is tail before head?
+                (tail_ < head_ && length_ != 0)
+        {   // move data to the end, probably with overlapping
+            import std.algorithm.mutation: copy;
+            const long howMany = length_ - tail_ - 1;
+            const long toWhere = capacity_ - howMany;
+            copy(cBuf_[head_..head_+howMany], cBuf_[toWhere..capacity_]);
+            head_ = toWhere;
+        }
+    }
+
+    /// Free space from the buffer
+    void reallocateDecreasing_() {
+        long newCapacity = capacity_ >> 1;
+        if      // is the high part of the array free?
+                (head_ < capacity_ && tail_ < capacity_)
+        {   // reallocate in place
+            cBuf_.reserve(newCapacity);
+            capacity_ = cBuf_.capacity;
+            cBuf_.length = capacity_;       // initialize free array space
+        }
+        {   // reallocate with copying
+            T[] newBuf;
+            newBuf.reserve(newCapacity);
+            if
+                    (head_ <= tail_)
+            {   // place all elements from the beggining
+                newBuf[0..length_] = cBuf_[head_..head_+length_];
+                cBuf_ = newBuf;
+                head_ = 0;
+                tail_ = length_ - 1;
+            }
+            {   // place elements from head_ to the capacity_ of the old array from the end of the new one
+                const long howMany = capacity_ - head_;
+                const long newHead = newCapacity - howMany;
+                newBuf[0..tail_+1] = cBuf_[0..tail_+1];
+
+                newBuf[newHead..newCapacity] = cBuf_[head_..capacity_];
+                head_ = newHead;
+            }
+            capacity_ = newCapacity;
+        }
+
+        // May be move the content to the end
+        if      // is tail before head?
+                (tail_ < head_ && length_ != 0)
+        {   // move data to the end, probably with overlapping
+            import std.algorithm.mutation: copy;
+            const long howMany = length_ - tail_ - 1;
+            const long toWhere = capacity_ - howMany;
+            copy(cBuf_[head_..head_+howMany], cBuf_[toWhere..capacity_]);
+            head_ = toWhere;
+        }
+    }
+
+    invariant{
+        assert(cBuf_.capacity == capacity_);
+    }
+}
+
+unittest {
+    Deque!int deq = Deque!int(1);
+    deq.pushTail(0);
+    deq.pushTail(1);
+    deq.pushTail(2);
+    deq.pushTail(3);
+    deq.pushTail(4);
+    logit(deq.toInnerString, TermColor.purple);
+    deq.pushHead(5);
+    logit(deq.toInnerString, TermColor.purple);
+    deq.pushTail(6);
+    logit(deq.toInnerString, TermColor.purple);
+    deq.pushHead(7);
+    deq.pushHead(8);
+    deq.pushHead(9);
+    deq.pushHead(10);
+    logit(deq.toInnerString, TermColor.purple);
+    deq.pushTail(11);
+    deq.pushTail(12);
+    deq.pushTail(13);
+    deq.pushTail(14);
+    deq.pushTail(15);
+    logit(deq.toInnerString, TermColor.purple);
+
+    foreach(i; 1..10) deq.pop;
+    logit(deq.toInnerString, TermColor.purple);
+}
+
+
+
+
+
+
+
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--

@@ -388,6 +388,121 @@ void logit(const Object o, TermColor color = null) {
     logit((cast()o).toString, color);
 }
 
+/// Two-sided stack and queue like in Java, based, also like in Java, on a cyclic buffer.
+struct Deque(T) {
+
+    /// Constructor
+    this(long reserve){
+        cBuf_.reserve(reserve);
+        capacity_ = cBuf_.capacity;
+        cBuf_.length = capacity_;
+    }
+
+    /// Show internal representation of the queue
+    string toInnerString(){
+        string s = typeid(this).toString;
+        s ~= format!"\n    length_ = %s"(length_);
+        s ~= format!"\n    capacity_ = %s"(capacity_);
+        s ~= format!"\n    head_ = %s"(head_);
+        s ~= format!"\n    tail_ = %s"(tail_);
+        s ~= format!"\n    cBuf.length = %s, cBuf.capacity = %s"(cBuf_.length, cBuf_.capacity);
+        s ~= format!"\n    cBuf: %s"(cBuf_);
+        return s;
+    }
+
+    /// Getter
+    @property size_t capacity() { return capacity_; }
+
+    /// Add an element to the end of the queue.
+    void pushTail(T el) {
+if(tail_ == 4) {
+    long i = length_;
+}
+        if (length_ == capacity_) reallocateIncreasing_;
+        tail_ = actualIndex_(tail_ + 1);
+        cBuf_[tail_] = el;
+        ++length_;
+    }
+
+    /// Add an element to the head of the queue.
+    void pushHead(T el) {
+        if (length_ == capacity_) reallocateIncreasing_;
+        head_ = actualIndex_(head_ - 1);
+        cBuf_[head_] = el;
+        ++length_;
+    }
+
+
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+    //
+    //                                  Private
+    //
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+    private:
+    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+        T[] cBuf_;        /// Cyclic buffer.
+        long head_;       /// index of the first element
+        long tail_ = -1;  /// index of the last element
+        long length_;     /// number of element in the queue
+        long capacity_;   /// current capacity of the buffer. It has the same value as cBuf.capacity, but faster.
+
+    /**
+                Calculate real index in the buffer.
+        Parameters:
+            virtIndex = index counted relative to the head. It can be positive, negavive and not limited by the size
+                        of the buffer.
+    */
+    long actualIndex_(long virtIndex) {
+        long ind = head_ + virtIndex;
+        if(ind >= 0)
+            return ind%capacity_;
+        else
+            return ind%capacity_ + capacity_;
+    }
+
+    /// Add space to the buffer
+    void reallocateIncreasing_() {
+        cBuf_.reserve(capacity_ + 1);
+        capacity_ = cBuf_.capacity;
+        cBuf_.length = capacity_;       // initialize free array space
+
+        // May be move the content to the end
+        if      // is tail before head?
+                (tail_ < head_ && length_ != 0)
+        {   // move data to the end, probably with overlapping
+            import std.algorithm.mutation: copy;
+            const long howMany = length_ - tail_ - 1;
+            const long toWhere = capacity_ - howMany;
+            copy(cBuf_[head_..head_+howMany], cBuf_[toWhere..capacity_]);
+            head_ = toWhere;
+        }
+    }
+
+    invariant{
+        assert(cBuf_.capacity == capacity_);
+    }
+}
+
+unittest {
+    Deque!int deq = Deque!int(1);
+    deq.pushTail(0);
+    deq.pushTail(1);
+    deq.pushTail(2);
+    deq.pushTail(3);
+    deq.pushTail(4);
+    logit(deq.toInnerString, TermColor.purple);
+    deq.pushHead(5);
+    logit(deq.toInnerString, TermColor.purple);
+    deq.pushTail(6);
+    logit(deq.toInnerString, TermColor.purple);
+}
+
+
+
+
+
+
+
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--

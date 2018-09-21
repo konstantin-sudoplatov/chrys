@@ -390,7 +390,7 @@ void logit(const Object o, TermColor color = null) {
 
 /// Two-sided stack and queue like in Java, based, also like in Java, on a cyclic buffer.
 struct Deque(T) {
-
+    import core.exception: RangeError;
     /// Constructor
     this(long reserve){
         cBuf_.reserve(reserve);
@@ -414,23 +414,60 @@ struct Deque(T) {
     @property size_t capacity() { return capacity_; }
 
     /// Add an element to the end of the queue.
-    void pushTail(T el) {
-if(tail_ == 4) {
-    long i = length_;
-}
-        if (length_ == capacity_) reallocateIncreasing_;
-        tail_ = actualIndex_(tail_ + 1);
+    alias push = pushBack;
+    T pushBack(T el) {
+        if(length_ == capacity_) reallocateIncreasing_;
+        ++tail_;
+        if(tail_ == capacity_) tail_ = 0;
         cBuf_[tail_] = el;
         ++length_;
+        return el;
     }
 
     /// Add an element to the head of the queue.
-    void pushHead(T el) {
-        if (length_ == capacity_) reallocateIncreasing_;
-        head_ = actualIndex_(head_ - 1);
+    T pushHead(T el) {
+        if(length_ == capacity_) reallocateIncreasing_;
+        --head_;
+        if(head_ == -1) head_ = capacity_ - 1;
         cBuf_[head_] = el;
         ++length_;
+        return el;
     }
+
+    /// Take out an element from the end of the queue.
+    alias pop = popTail;
+    T popTail() {
+        if(length_ == 0)
+            throw new RangeError;
+        else
+            if(length_ < (capacity_>>2))
+                reallocateDecreasing_;
+        T el = cBuf_[tail_];
+        --tail_;
+        --length_;
+        if(tail_ < 0 && length_ != 0)
+                tail_ = capacity_ - 1;
+        return el;
+    }
+
+    /// Take out an element from the front of the queue.
+    T popHead() {
+        if(length_ == 0)
+            throw new RangeError;
+        else
+            if(length_ < (capacity_>>2))
+                reallocateDecreasing_;
+        T el = cBuf_[head_];
+        ++head_;
+        --length_;
+        if(head_ == capacity_) {
+            head_ = 0;
+            if(length_ == 0)
+                tail_ = -1;
+        }
+        return el;
+    }
+
 
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
@@ -453,7 +490,7 @@ if(tail_ == 4) {
                         of the buffer.
     */
     long actualIndex_(long virtIndex) {
-        long ind = head_ + virtIndex;
+        const long ind = head_ + virtIndex;
         if(ind >= 0)
             return ind%capacity_;
         else
@@ -478,6 +515,38 @@ if(tail_ == 4) {
         }
     }
 
+    /// Free space from the buffer
+    void reallocateDecreasing_() {
+        long newReserve = capacity_ >> 1;
+        assert(length_ <= newReserve, format!"%s elements cannot fit into array[%s]."(length_, newReserve));
+
+        // reallocate and copy
+        T[] newBuf;
+        newBuf.reserve(newReserve);
+        long newCapacity = newBuf.capacity;
+        newBuf.length = newCapacity;    // initialize
+        if
+                (head_ <= tail_)
+        {   // place all elements from the beggining
+            newBuf[0..length_] = cBuf_[head_..head_+length_];
+            cBuf_ = newBuf;
+            head_ = 0;
+            tail_ = length_ - 1;
+        }
+        else {
+            // copy first tail_ elements
+            newBuf[0..tail_+1] = cBuf_[0..tail_+1];
+
+            // place elements from head_ to the capacity_ of the old array from the end of the new one
+            const long howMany = capacity_ - head_;
+            const long newHead = newCapacity - howMany;
+            newBuf[newHead..newCapacity] = cBuf_[head_..capacity_];
+            cBuf_ = newBuf;
+            head_ = newHead;
+        }
+        capacity_ = newCapacity;
+    }
+
     invariant{
         assert(cBuf_.capacity == capacity_);
     }
@@ -485,15 +554,26 @@ if(tail_ == 4) {
 
 unittest {
     Deque!int deq = Deque!int(1);
-    deq.pushTail(0);
-    deq.pushTail(1);
-    deq.pushTail(2);
-    deq.pushTail(3);
-    deq.pushTail(4);
+    deq.pushBack(0);
+    deq.pushBack(1);
+    deq.pushBack(2);
+    deq.pushBack(3);
+    deq.pushBack(4);
+    deq.pushBack(5);
+    deq.pushBack(6);
+    deq.pushBack(7);
+    deq.pushBack(8);
+    deq.pushBack(9);
+    deq.pushBack(10);
+    deq.pushBack(11);
+    deq.pushBack(12);
+    deq.pushBack(13);
+    deq.pushBack(14);
+    deq.pushBack(15);
     logit(deq.toInnerString, TermColor.purple);
-    deq.pushHead(5);
-    logit(deq.toInnerString, TermColor.purple);
-    deq.pushTail(6);
+
+    foreach(i; 1..5) deq.pop;
+    foreach(i; 1..6) deq.popFront;
     logit(deq.toInnerString, TermColor.purple);
 }
 

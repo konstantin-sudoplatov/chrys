@@ -414,8 +414,8 @@ struct Deque(T) {
     @property size_t capacity() { return capacity_; }
 
     /// Add an element to the end of the queue.
-    alias push = pushTail;
-    T pushTail(T el) {
+    alias push = pushBack;
+    T pushBack(T el) {
         if(length_ == capacity_) reallocateIncreasing_;
         ++tail_;
         if(tail_ == capacity_) tail_ = 0;
@@ -425,7 +425,7 @@ struct Deque(T) {
     }
 
     /// Add an element to the head of the queue.
-    T pushHead(T el) {
+    T pushFront(T el) {
         if(length_ == capacity_) reallocateIncreasing_;
         --head_;
         if(head_ == -1) head_ = capacity_ - 1;
@@ -434,17 +434,37 @@ struct Deque(T) {
         return el;
     }
 
-    /// Add an element to the end of the queue.
-    alias pop = popTail;
-    T popTail() {
+    /// Take out an element from the end of the queue.
+    alias pop = popBack;
+    T popBack() {
         if(length_ == 0)
             throw new RangeError;
         else
-            if(length_ < capacity_>>2 ) reallocateDecreasing_;
+            if(length_ < (capacity_>>2))
+                reallocateDecreasing_;
         T el = cBuf_[tail_];
         --tail_;
-        if(tail_ == 0) tail_ = capacity_ - 1;
         --length_;
+        if(tail_ < 0 && length_ != 0)
+                tail_ = capacity_ - 1;
+        return el;
+    }
+
+    /// Take out an element from the front of the queue.
+    T popFront() {
+        if(length_ == 0)
+            throw new RangeError;
+        else
+            if(length_ < (capacity_>>2))
+                reallocateDecreasing_;
+        T el = cBuf_[head_];
+        ++head_;
+        --length_;
+        if(head_ == capacity_) {
+            head_ = 0;
+            if(length_ == 0)
+                tail_ = -1;
+        }
         return el;
     }
 
@@ -471,10 +491,10 @@ struct Deque(T) {
     */
     long actualIndex_(long virtIndex) {
         const long ind = head_ + virtIndex;
-        if(ind >= 0)
-            return ind%capacity_;
+        if(virtIndex >= 0)
+            return head_ + virtIndex%length_;
         else
-            return ind%capacity_ + capacity_;
+            return ind%length_ + length_;
     }
 
     /// Add space to the buffer
@@ -497,46 +517,43 @@ struct Deque(T) {
 
     /// Free space from the buffer
     void reallocateDecreasing_() {
-        long newCapacity = capacity_ >> 1;
-        if      // is the high part of the array free?
-                (head_ < capacity_ && tail_ < capacity_)
-        {   // reallocate in place
-            cBuf_.reserve(newCapacity);
-            capacity_ = cBuf_.capacity;
-            cBuf_.length = capacity_;       // initialize free array space
-        }
-        {   // reallocate with copying
-            T[] newBuf;
-            newBuf.reserve(newCapacity);
-            if
-                    (head_ <= tail_)
-            {   // place all elements from the beggining
-                newBuf[0..length_] = cBuf_[head_..head_+length_];
-                cBuf_ = newBuf;
-                head_ = 0;
-                tail_ = length_ - 1;
-            }
-            {   // place elements from head_ to the capacity_ of the old array from the end of the new one
-                const long howMany = capacity_ - head_;
-                const long newHead = newCapacity - howMany;
-                newBuf[0..tail_+1] = cBuf_[0..tail_+1];
+        long newReserve = capacity_ >> 1;
+        assert(length_ <= newReserve, format!"%s elements cannot fit into array[%s]."(length_, newReserve));
 
-                newBuf[newHead..newCapacity] = cBuf_[head_..capacity_];
-                head_ = newHead;
-            }
-            capacity_ = newCapacity;
+        // reallocate and copy
+        T[] newBuf;
+        newBuf.reserve(newReserve);
+        long newCapacity = newBuf.capacity;
+        newBuf.length = newCapacity;    // initialize
+        if
+                (head_ <= tail_)
+        {   // place all elements from the beggining
+            newBuf[0..length_] = cBuf_[head_..head_+length_];
+            cBuf_ = newBuf;
+            head_ = 0;
+            tail_ = length_ - 1;
         }
+        else {
+            // copy first tail_ elements
+            newBuf[0..tail_+1] = cBuf_[0..tail_+1];
 
-        // May be move the content to the end
-        if      // is tail before head?
-                (tail_ < head_ && length_ != 0)
-        {   // move data to the end, probably with overlapping
-            import std.algorithm.mutation: copy;
-            const long howMany = length_ - tail_ - 1;
-            const long toWhere = capacity_ - howMany;
-            copy(cBuf_[head_..head_+howMany], cBuf_[toWhere..capacity_]);
-            head_ = toWhere;
+            // place elements from head_ to the capacity_ of the old array from the end of the new one
+            const long howMany = capacity_ - head_;
+            const long newHead = newCapacity - howMany;
+            newBuf[newHead..newCapacity] = cBuf_[head_..capacity_];
+            cBuf_ = newBuf;
+            head_ = newHead;
         }
+        capacity_ = newCapacity;
+    }
+
+    /**
+            Index operator overload.
+        Parameters:
+            ind = index
+    */
+    T opIndex(size_t ind) {
+        return(cBuf_[actualIndex_(ind)]);
     }
 
     invariant{
@@ -546,30 +563,18 @@ struct Deque(T) {
 
 unittest {
     Deque!int deq = Deque!int(1);
-    deq.pushTail(0);
-    deq.pushTail(1);
-    deq.pushTail(2);
-    deq.pushTail(3);
-    deq.pushTail(4);
-    logit(deq.toInnerString, TermColor.purple);
-    deq.pushHead(5);
-    logit(deq.toInnerString, TermColor.purple);
-    deq.pushTail(6);
-    logit(deq.toInnerString, TermColor.purple);
-    deq.pushHead(7);
-    deq.pushHead(8);
-    deq.pushHead(9);
-    deq.pushHead(10);
-    logit(deq.toInnerString, TermColor.purple);
-    deq.pushTail(11);
-    deq.pushTail(12);
-    deq.pushTail(13);
-    deq.pushTail(14);
-    deq.pushTail(15);
+    deq.pushBack(0);
+    deq.pushBack(1);
+    deq.pushBack(2);
+    deq.pushBack(3);
+    deq.pushBack(4);
+    deq.pushBack(5);
     logit(deq.toInnerString, TermColor.purple);
 
-    foreach(i; 1..10) deq.pop;
+    foreach(i; 1..3) deq.pop;
+    foreach(i; 1..2) deq.popFront;
     logit(deq.toInnerString, TermColor.purple);
+    mixin("deq[0], deq[2], deq[-1]".w);
 }
 
 

@@ -1,22 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="1e6f13b7-b9cd-4af9-969e-5956d8669eca" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chris" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/attn/attn_circle_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/attn/attn_circle_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/crank/crank_pile.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/crank/crank_pile.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/global.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/global.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/messages.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/messages.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/stat/stat_pile.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/stat/stat_pile.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/attn/attn_circle_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/attn/attn_circle_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/chris.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/console_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/console_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/crank/crank_pile.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/crank/crank_pile.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/global.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/global.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/messages.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/messages.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stat/stat_pile.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/stat/stat_pile.d" afterDir="false" />
-    </list>
+    <list default="true" id="1e6f13b7-b9cd-4af9-969e-5956d8669eca" name="Default Changelist" comment="" />
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
     <option name="SHOW_DIALOG" value="false" />
@@ -180,8 +165,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/stat/stat_pile.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="455">
-              <caret line="168" column="47" lean-forward="true" selection-start-line="168" selection-start-column="47" selection-end-line="168" selection-end-column="47" />
+            <state relative-caret-position="1652">
+              <caret line="168" column="47" selection-start-line="168" selection-start-column="47" selection-end-line="168" selection-end-column="47" />
               <folding>
                 <element signature="e#639#640#0" expanded="true" />
                 <element signature="e#694#695#0" expanded="true" />
@@ -677,12 +662,12 @@
       <window_info id="Favorites" order="6" sideWeight="0.500994" side_tool="true" weight="0.18729989" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32704404" />
-      <window_info active="true" anchor="bottom" x="2" y="641" width="1916" height="427" id="Run" order="2" type="WINDOWED" visible="true" weight="0.359375" />
+      <window_info anchor="bottom" x="2" y="641" width="1916" height="427" id="Run" order="2" type="WINDOWED" weight="0.359375" />
       <window_info anchor="bottom" x="2" y="720" width="1916" height="350" id="Debug" order="3" type="WINDOWED" visible="true" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4994664" weight="0.32708332" />
-      <window_info anchor="bottom" x="2" y="422" width="1916" height="654" id="Terminal" order="7" type="WINDOWED" visible="true" weight="0.5387841" />
+      <window_info active="true" anchor="bottom" x="20" y="388" width="1912" height="627" id="Terminal" order="7" type="WINDOWED" visible="true" weight="0.5387841" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50053364" side_tool="true" weight="0.32809225" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32916668" />
       <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.4994664" weight="0.32914045" />
@@ -1160,8 +1145,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/stat/stat_pile.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="455">
-          <caret line="168" column="47" lean-forward="true" selection-start-line="168" selection-start-column="47" selection-end-line="168" selection-end-column="47" />
+        <state relative-caret-position="1652">
+          <caret line="168" column="47" selection-start-line="168" selection-start-column="47" selection-end-line="168" selection-end-column="47" />
           <folding>
             <element signature="e#639#640#0" expanded="true" />
             <element signature="e#694#695#0" expanded="true" />

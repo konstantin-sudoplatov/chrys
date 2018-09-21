@@ -94,13 +94,13 @@ enum StatConceptModules {
 }
 
 /// Call types of the static concept (static concept is function).
-enum StatCallType {
-    p0Cal,                              // void function(Caldron nameSpace)
-    p0Calp1Cid,                         // void function(Caldron nameSpace, Cid operandCid)
-    p0Calp1Cidp2Cid,                    // void function(Caldron nameSpace, Cid firstoperandCid, Cid secondOperandCid)
-    p0Calp1Cidp2Int,                    // void function(Caldron nameSpace, Cid conceptCid, int intValue)
-    p0Calp1Cidp2Float,                  // void function(Caldron nameSpace, Cid conceptCid, float floatValue)
-    p0Calp1Cidp2Cidp3Float,             // void function(Caldron nameSpace, Cid branchBreedCid, Cid conceptCid, float floatValue)
+enum StatCallType: string {
+    p0Cal = "void function(Caldron)",                              // void function(Caldron nameSpace)
+    p0Calp1Cid = "void function(Caldron, Cid)",                         // void function(Caldron nameSpace, Cid operandCid)
+    p0Calp1Cidp2Cid = "void function(Caldron, Cid, Cid)",                    // void function(Caldron nameSpace, Cid firstoperandCid, Cid secondOperandCid)
+    p0Calp1Cidp2Int = "void function(Caldron, Cid, int)",                    // void function(Caldron nameSpace, Cid conceptCid, int intValue)
+    p0Calp1Cidp2Float = "void function(Caldron, Cid, float)",                  // void function(Caldron nameSpace, Cid conceptCid, float floatValue)
+    p0Calp1Cidp2Cidp3Float = "void function(Caldron, Cid, Cid, float)",             // void function(Caldron nameSpace, Cid branchBreedCid, Cid conceptCid, float floatValue)
 }
 
 // modules with dynamic concept names and cranks
@@ -521,6 +521,7 @@ debug {
     Spawn the key threads (console_thread, attention dispatcher), capture their Tids.
 */
 shared static this() {
+
     // Initialize random generator
     rnd_ = Random(unpredictableSeed);
 
@@ -583,7 +584,7 @@ private static typeof(Random(unpredictableSeed())) rnd_;
     Returns: array of static concept descriptors.
 */
 private TempStatDescriptor[] createTempStatDescriptors_() {
-
+import std.stdio;
     // Declare named static descriptor array
     TempStatDescriptor[] sds;
 
@@ -595,8 +596,10 @@ private TempStatDescriptor[] createTempStatDescriptors_() {
                 sd.cid = __traits(getAttributes, mixin(memberName))[0];
                 sd.name = memberName;
                 sd.fun_ptr = mixin("&" ~ memberName);
+                static assert(is(typeof(mixin("&" ~ memberName)) == type!(__traits(getAttributes, mixin(memberName))[1])),
+                        memberName ~ ": annotated type " ~ __traits(getAttributes, mixin(memberName))[1] ~
+                        " doesn't match with real type " ~ typeof(mixin("&" ~ memberName)).stringof);
                 sd.call_type = __traits(getAttributes, mixin(memberName))[1];
-
                 sds ~= sd;
             }
         }
@@ -605,6 +608,14 @@ private TempStatDescriptor[] createTempStatDescriptors_() {
     // Sort it
     import std.algorithm.sorting: sort;
     sds.sort;
+
+    // Check if cids in the array are unique.
+    Cid lastCid = 0;
+    foreach(st; sds) {
+        assert(st.cid > lastCid, "cid: "~ to!string(st.cid) ~ ", name: " ~ st.name ~
+                " - cids cannot be used multiple times.");
+        lastCid = st.cid;
+    }
 
     return sds;
 }

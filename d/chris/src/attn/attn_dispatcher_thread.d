@@ -33,7 +33,7 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                 (msg)
         {   // process it
             if      // is that client's request for circle's Tid?
-                    (auto m = cast(immutable UserRequestsCircleTid)msg)
+                    (auto m = cast(immutable UserRequestsCircleTid_msg)msg)
             {   //yes: create new attention circle thread and send back its Tid
                 Tid clientTid = cast()m.senderTid();
 
@@ -46,17 +46,17 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                 }
                 else {  //no: create the circle, tell him the client's Tid and put the pair in the circle register
                     circleTid = spawn(&caldron_thread_func, true, 0);
-                    circleTid.send(new immutable DispatcherSuppliesCircleWithUserTid(clientTid));
+                    circleTid.send(new immutable DispatcherSuppliesCircleWithUserTid_msg(clientTid));
                     circleRegister_[clientTid] = circleTid;
                 }
                 continue;
             }
             else if // TerminateAppMsg message has come?
-                    (cast(TerminateAppMsg)msg) // || var.hasValue)
+                    (cast(TerminateApp_msg)msg) // || var.hasValue)
             {   //yes: terminate me and all my subthreads
                 // send terminating message to all circles
                 foreach(cir; circleRegister_.byValue){
-                    cir.send(new immutable TerminateAppMsg);
+                    cir.send(new immutable TerminateApp_msg);
                 }
 
                 // terminate itself

@@ -37,7 +37,7 @@ class Caldron {
             headCid_ = seedCid_ = breedOrSeedCid;
 
         // Kick off the reasoning cycle
-        thisTid.send(new immutable IbrStartReasoningMsg);
+        thisTid.send(new immutable IbrStartReasoning_msg);
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -86,7 +86,7 @@ class Caldron {
     /// Send children the termination signal and wait their termination.
     final void terminateChildren() {
         foreach (child; childCaldrons_)
-            child.send(new immutable TerminateAppMsg);
+            child.send(new immutable TerminateApp_msg);
     }
 
     // Caldron's name (based on the seed), if exist, else "noname".
@@ -120,7 +120,7 @@ class Caldron {
     protected bool _msgProcessing(immutable Msg msg) {
 
         if      // is it a request for starting reasoning?
-                (cast(IbrStartReasoningMsg)msg)
+                (cast(IbrStartReasoning_msg)msg)
         {   // kick off the reasoning loop
             if (dynDebug >= 1)
                 logit(format!"%s, message StartReasoningMsg has come"(caldName), TermColor.brown);
@@ -129,7 +129,7 @@ class Caldron {
             return true;
         }
         else if // is it a request for setting activation?
-                (auto m = cast(immutable IbrSetActivationMsg)msg)
+                (auto m = cast(immutable IbrSetActivation_msg)msg)
         {
             if(dynDebug >= 1)
                 logit(format!"%s, message IbrSetActivationMsg has come, %s.activation = %s"
@@ -148,7 +148,7 @@ class Caldron {
             return true;
         }
         else if // A concept was posted by another caldron?
-                (auto m = cast(immutable IbrSingleConceptPackageMsg)msg)
+                (auto m = cast(immutable IbrSingleConceptPackage_msg)msg)
         {   //yes: it's already a clone, inject into the current name space (may be with overriding)
             if (dynDebug >= 1)
                 logit(format!"%s, message SingleConceptPackageMsg has come, load: %s(%,?s)"
@@ -159,7 +159,7 @@ class Caldron {
             return true;
         }
         else if // new text line from user?
-                (auto m = cast(immutable UserTalksToCircleMsg)msg)
+                (auto m = cast(immutable UserTalksToCircle_msg)msg)
         {   //yes: put the text into the userInput_strprem concept
             if (dynDebug >= 1)
                 logit(format!"%s, message UserTalksToCircleMsg has come, text: %s"(caldName, m.line), TermColor.brown);
@@ -282,7 +282,7 @@ class AttentionCircle: Caldron {
         if (super._msgProcessing(msg))
             return true;
         else if      // is it a Tid of the client sent by Dispatcher?
-                (auto m = cast(immutable DispatcherSuppliesCircleWithUserTid)msg)
+                (auto m = cast(immutable DispatcherSuppliesCircleWithUserTid_msg)msg)
         {   //yes: wind up the userThread_tidprem concept
             auto userThreadTidprem = (scast!(TidPremise)(this[CommonConcepts.userThread_tidprem]));
             userThreadTidprem.tid = cast()m.tid;
@@ -370,7 +370,7 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
                 //yes: go for a new message
                 continue ;
             else if // is it a request for the circle termination?
-                    (cast(TerminateAppMsg)msg)
+                    (cast(TerminateApp_msg)msg)
             {   //yes: terminate me and all my subthreads
                 if (dynDebug >= 1)
                     logit("terminating caldron " ~ caldron.caldName);

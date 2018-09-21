@@ -85,6 +85,7 @@ enum Chat: CptDescriptor {
     /// A valve for waiting for a line of text from uline, which it gets from user with tools
     valveOnUlineInput_chat_andnrn = cd!(SpAndNeuron, 497_144_117),
     activateRemotely_readyForUlineInput_chat_binact = cd!(SpBinaryAction, 3_702_223_557),
+
 }
 
 /// Setup the chat branch.
@@ -108,7 +109,6 @@ void chatBranch() {
     cpt!sendUlineUserTid_chat_binact.load(statCid!sendConceptToBranch_stat, uline_breed, userThread_tidprem);
     cpt!shakeHandsWithUline_chat_actnrn.addEffects(
         [   // acts
-setDebugLevel_1_act,
             sendUlineChatBreed_chat_binact,       // give uline own breed
             sendUlineUserTid_chat_binact,           // give uline user's Tid
             activateRemotely_readyForUlineInput_chat_binact,    // tell to uline send the next line
@@ -131,7 +131,7 @@ setDebugLevel_1_act,
 }
 
 // User line branch enums
-/// , , , , , 1439958318, 1079824511, 4278173576
+/// , , , , , , 1079824511, 4278173576
 enum Uline {
 
     /// uline branch identifier
@@ -155,6 +155,9 @@ enum Uline {
 
     /// Send user line premise to chat (together with the activation value)
     sendUserInputLineToChat_binact = cd!(SpBinaryAction, 3_447_310_214),
+
+    /// Send user a prompt for the next input
+    sendUserRequestForNextLine_unact = cd!(SpUnaryAction, 1_439_958_318),
 }
 
 /// Setup the uline branch.
@@ -192,6 +195,7 @@ void ulineBranch() {
     // User input valve. The handshake is over. Now, wait for user input and send it to chat, in a cycle.
     cpt!sendUserInputLineToChat_binact.load(statCid!sendConceptToBranch_stat, chat_breed, userInputLine_strprem);
     cpt!anactivateChatReadyForUlineInputPeg_uline_unact.load(statCid!anactivate_stat, chatReadyForUlineInputPeg_uline_pegprem);
+    cpt!sendUserRequestForNextLine_unact.load(statCid!requestUserInput, userThread_tidprem);
     cpt!userInputValve_uline_andnrn.addPremises([
         userInputLine_strprem,
         chatReadyForUlineInputPeg_uline_pegprem
@@ -201,7 +205,8 @@ void ulineBranch() {
         [
             sendUserInputLineToChat_binact,
             anactivateChatReadyForUlineInputPeg_uline_unact,
-            anactivateUserInputLine_unact
+            anactivateUserInputLine_unact,
+            sendUserRequestForNextLine_unact,
         ],
         null
     );

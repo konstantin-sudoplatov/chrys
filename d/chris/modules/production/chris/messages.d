@@ -24,21 +24,21 @@ protected:
 }
 
 /// Request for termination of application, usually from console_thread, after that from the main thread over all the structure.
-immutable class TerminateAppMsg: Msg {
+immutable class TerminateApp_msg: Msg {
     /// Constructor
     this() {super();}
 }
 
 /// Request for the attention dispatcher start an attention circle thread and send back its Tid. Actually, it is be the
 /// circle's branch uline, that will send back its Tid.
-immutable class UserRequestsCircleTid: Msg {
+immutable class UserRequestsCircleTid_msg: Msg {
     /// Constructor
     this() {super();}
 }
 
 /// In response to the client request dispatcher creates an attention circle thread and that thread sends user its tid.
 /// Actually, it is be the circle's branch uline, that will send back its Tid.
-immutable class CircleSuppliesUserWithItsTid: Msg {
+immutable class CircleSuppliesUserWithItsTid_msg: Msg {
 
     /**
         Constructor.
@@ -60,7 +60,7 @@ private:
 }
 
 /// In response to the client request dispatcher creates an attention circle thread and sends it the client Tid.
-immutable class DispatcherSuppliesCircleWithUserTid: Msg {
+immutable class DispatcherSuppliesCircleWithUserTid_msg: Msg {
 
     /**
         Constructor.
@@ -82,7 +82,7 @@ private:
 }
 
 /// Message to display on the console_thread, usually by an attention circle.
-immutable class CircleTalksToUserMsg: Msg {
+immutable class CircleTalksToUser_msg: Msg {
 
     /**
         Constructor.
@@ -104,13 +104,13 @@ private:
 }
 
 /// Request for a new line from console_thread, usually by an attention circle.
-immutable class CircleListensToUserMsg: Msg {
+immutable class CircleListensToUser_msg: Msg {
     /// Constructor
     this() {super();}
 }
 
 /// Console sends a line of text to an attention circle
-immutable class UserTalksToCircleMsg: Msg {
+immutable class UserTalksToCircle_msg: Msg {
 
     /**
         Constructor.
@@ -132,12 +132,12 @@ private:
 }
 
 /// Interbranching. Request to caldron to start reasoning. May come from another caldron and sometimes from itself.
-immutable class IbrStartReasoningMsg: Msg {
+immutable class IbrStartReasoning_msg: Msg {
     this() {super();}
 }
 
 /// Interbranching. Used by caldrons to send live concepts to each other.
-immutable class IbrSingleConceptPackageMsg: Msg {
+immutable class IbrSingleConceptPackage_msg: Msg {
 
     this(Concept load) {
         super();
@@ -153,7 +153,7 @@ immutable class IbrSingleConceptPackageMsg: Msg {
 }
 
 /// Interbranching. Used by a caldron to set an activation value for a concept in given caldron.
-immutable class IbrSetActivationMsg: Msg {
+immutable class IbrSetActivation_msg: Msg {
 
     this(Cid destConceptCid, float activation) {
         super();

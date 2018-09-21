@@ -31,11 +31,11 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
 
     // Request creation of an attention circle thread and receive its Tid
     do {
-        send(cast()_attnDispTid_, new immutable UserRequestsCircleTid());
-        CircleSuppliesUserWithItsTid msg;
+        send(cast()_attnDispTid_, new immutable UserRequestsCircleTid_msg());
+        CircleSuppliesUserWithItsTid_msg msg;
         bool gotMsg = receiveTimeout(
             msgTimeout.seconds,
-            (immutable CircleSuppliesUserWithItsTid m) { msg = cast()m; }
+            (immutable CircleSuppliesUserWithItsTid_msg m) { msg = cast()m; }
         );
         if
                 (gotMsg)
@@ -70,12 +70,12 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
         if      // termination of the application was requested?
                 (s == "p" || s == "п")
         {   //yes: send termination request to the main thread and finish ours.
-            (cast()_mainTid_).send(new immutable TerminateAppMsg());
+            (cast()_mainTid_).send(new immutable TerminateApp_msg());
             goto FINISH_THREAD;
         }
         else//no: the line is intended for the attention circle, send it there
         {
-            (cast()attnCircleTid_).send(new immutable UserTalksToCircleMsg(s));
+            (cast()attnCircleTid_).send(new immutable UserTalksToCircle_msg(s));
         }
 
         // receive response from the attention circle/dispatcher
@@ -93,12 +93,12 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
                     (msg)
             {   //yes: analize it
                 if      // is circle ready to take the next line?
-                        (cast(immutable CircleListensToUserMsg)msg)
+                        (cast(immutable CircleListensToUser_msg)msg)
                 {
                     continue;
                 }
                 else if // has cirle anything to tell to user?
-                        (auto m = cast(immutable CircleTalksToUserMsg)msg)
+                        (auto m = cast(immutable CircleTalksToUser_msg)msg)
                 {
                     writeln(m.line); stdout.flush;
                 }

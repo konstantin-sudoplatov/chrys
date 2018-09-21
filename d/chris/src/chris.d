@@ -22,12 +22,12 @@ void main()
 {
     // Wait for messages from the key threads. Thematically applicable only requests for termination or rethrown exceptions.
     while(true) {
-        TerminateAppMsg termMsg;
+        TerminateApp_msg termMsg;
         Throwable ex;
 
         Variant var;
         receive(
-            (immutable TerminateAppMsg m){termMsg = cast()m;},
+            (immutable TerminateApp_msg m){termMsg = cast()m;},
             (shared Throwable e){ex = cast()e;},
             (Variant v) {var = v;}
         );
@@ -35,7 +35,7 @@ void main()
         if      // TerminateAppMsg message has come?
                 (termMsg) // || var.hasValue)
         {   //yes: terminate other subthreads, terminate application
-            (cast()_attnDispTid_).send(new immutable TerminateAppMsg());
+            (cast()_attnDispTid_).send(new immutable TerminateApp_msg());
             goto TERMINATE_APPLICATION;
         }
         else if // has one of the thead thrown an exception?

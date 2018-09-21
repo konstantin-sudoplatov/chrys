@@ -2,11 +2,9 @@
 module stat_pile;
 import std.stdio;
 import std.format;
-import std.concurrency;
 
 import global, tools;
 import interfaces;
-import messages;
 import attn_circle_thread: Caldron;
 import cpt_abstract, cpt_premises;
 
@@ -61,12 +59,60 @@ void setDebugLevel_0_stat(Caldron cld) {
 }
 
 /**
+        Send user a Tid. It supposed to be tid of the uline branch.
+    Parameters:
+        cld = caldron as a name space for cids.
+        operandCid = a tid primitive, containing the user Tid.
+*/
+@(6, StatCallType.p0Calp1Cidp2Cid)
+void sendTidToUser_stat(Caldron cld, Cid userTidPremCid, Cid ulineBreedCid) {
+    import std.concurrency: Tid, send;
+    import messages: CircleSuppliesUserWithItsTid_msg;
+    checkCid!TidPremise(cld, userTidPremCid);
+    checkCid!Breed(cld, ulineBreedCid);
+
+    auto userTidPrem = cast(TidPremise)cld[userTidPremCid];
+    auto ulineBreed = cast(Breed)cld[ulineBreedCid];
+    send(userTidPrem.tid, new immutable CircleSuppliesUserWithItsTid_msg(ulineBreed.tid));
+}
+
+/**
+            Send user a message, telling him that the circle waits next line from him.
+    Parameters:
+        cld = caldron as a name space for cids.
+        operandCid = a tid primitive, containing the user Tid.
+*/
+@(7, StatCallType.p0Calp1Cid)
+void requestUserInput(Caldron cld, Cid userTidPremCid) {
+    import std.concurrency: Tid, send;
+    import messages: CircleListensToUser_msg;
+    Tid tid = scast!TidPremise(cld[userTidPremCid]).tid;
+    send(tid, new immutable CircleListensToUser_msg);
+}
+
+/**
+            Send the user thread a line of text to dispay on the screen.
+    Parameters:
+        cld = caldron as a name space for cids.
+        operandCid = a tid primitive, containing the user Tid.
+        stringPremCid = string premise, containing the text
+*/
+@(8, StatCallType.p0Calp1Cidp2Cid)
+void sendUserOutput(Caldron cld, Cid userTidPremCid, Cid stringPremCid) {
+    import std.concurrency: Tid, send;
+    import messages: CircleTalksToUser_msg;
+    Tid tid = scast!TidPremise(cld[userTidPremCid]).tid;
+    string s = scast!StringPremise(cld[stringPremCid]).line;
+    send(tid, new immutable CircleTalksToUser_msg(s));
+}
+
+/**
             Activate a concept in own name space
     Parameters:
         cld = current caldron
         cptCid = concept to activate
 */
-@(6, StatCallType.p0Calp1Cid)
+@(9, StatCallType.p0Calp1Cid)
 void activate_stat(Caldron cld, Cid cptCid) {
     (scast!BinActivationIfc(cld[cptCid])).activate;
 }
@@ -77,7 +123,7 @@ void activate_stat(Caldron cld, Cid cptCid) {
         cld = current caldron
         cptCid = concept to anactivate
 */
-@(7, StatCallType.p0Calp1Cid)
+@(10, StatCallType.p0Calp1Cid)
 void anactivate_stat(Caldron cld, Cid cptCid) {
     (scast!BinActivationIfc(cld[cptCid])).anactivate;
 }
@@ -89,11 +135,13 @@ void anactivate_stat(Caldron cld, Cid cptCid) {
         destBreedCid = breed of the destination branch
         cptCid = concept to activate
 */
-@(8, StatCallType.p0Calp1Cidp2Cid)
+@(11, StatCallType.p0Calp1Cidp2Cid)
 void activateRemotely_stat(Caldron cld, Cid destBreedCid, Cid cptCid) {
+    import std.concurrency: Tid, send;
+    import messages: IbrSetActivation_msg;
     checkCid!BinActivationIfc(cld, cptCid);
     auto br = scast!Breed(cld[destBreedCid]);
-    send(br.tid, new immutable IbrSetActivationMsg(cptCid, +1));
+    send(br.tid, new immutable IbrSetActivation_msg(cptCid, +1));
 }
 
 /**
@@ -103,29 +151,13 @@ void activateRemotely_stat(Caldron cld, Cid destBreedCid, Cid cptCid) {
         destBreedCid = breed of the destination branch
         cptCid = concept to anactivate
 */
-@(9, StatCallType.p0Calp1Cidp2Cid)
+@(12, StatCallType.p0Calp1Cidp2Cid)
 void anactivateRemotely_stat(Caldron cld, Cid destBreedCid, Cid cptCid) {
+    import std.concurrency: Tid, send;
+    import messages: IbrSetActivation_msg;
     checkCid!BinActivationIfc(cld, cptCid);
     auto br = scast!Breed(cld[destBreedCid]);
-    send(br.tid, new immutable IbrSetActivationMsg(cptCid, -1));
-}
-
-/**
-        Send user a Tid. It supposed to be tid of the uline branch.
-    Parameters:
-        cld = caldron as a name space for cids.
-        operandCid = a tid primitive, containing the Tid.
-*/
-@(10, StatCallType.p0Calp1Cidp2Cid)
-void sendTidToUser_stat(Caldron cld, Cid userTidPremCid, Cid ulineBreedCid) {
-    import std.concurrency: Tid, send;
-    import messages: CircleSuppliesUserWithItsTid;
-    checkCid!TidPremise(cld, userTidPremCid);
-    checkCid!Breed(cld, ulineBreedCid);
-
-    auto userTidPrem = cast(TidPremise)cld[userTidPremCid];
-    auto ulineBreed = cast(Breed)cld[ulineBreedCid];
-    send(userTidPrem.tid, new immutable CircleSuppliesUserWithItsTid(ulineBreed.tid));
+    send(br.tid, new immutable IbrSetActivation_msg(cptCid, -1));
 }
 
 /**
@@ -138,14 +170,16 @@ void sendTidToUser_stat(Caldron cld, Cid userTidPremCid, Cid ulineBreedCid) {
         breedCid = breed of the addressed branch as its identifier
         loadCid = concept to send
 */
-@(11, StatCallType.p0Calp1Cidp2Cid)
+@(13, StatCallType.p0Calp1Cidp2Cid)
 void sendConceptToBranch_stat(Caldron cld, Cid breedCid, Cid loadCid) {
+    import std.concurrency: Tid, send;
+    import messages: IbrSingleConceptPackage_msg;
     checkCid!Breed(cld, breedCid);
     checkCid!Concept(cld, loadCid);
 
     Breed br = cast(Breed)cld[breedCid];
     try {
-        send(br.tid, new immutable IbrSingleConceptPackageMsg(cld[loadCid].clone));
+        send(br.tid, new immutable IbrSingleConceptPackage_msg(cld[loadCid].clone));
     } catch(Exception e) {  // Something happened with the destination thread
         // anactivate the destination thread breed
         br.anactivate;

@@ -391,11 +391,26 @@ void logit(const Object o, TermColor color = null) {
 /// Two-sided stack and queue like in Java, based, also like in Java, on a cyclic buffer.
 struct Deque(T) {
     import core.exception: RangeError;
+
     /// Constructor
     this(long reserve){
         cBuf_.reserve(reserve);
         capacity_ = cBuf_.capacity;
         cBuf_.length = capacity_;
+    }
+
+    /// Postblit constructor. If we don't have the deep copy, the "foreach" statement will mutate our struct, (see
+    /// the "help GC" comment) because it uses a copy of the input range to go through (not the save() member function).
+    this(this) {
+        cBuf_ = cBuf_.dup;
+    }
+
+    string toString() const {
+        if(empty) return "[]";
+        string s = format!"[%s"(this[0]);
+        for(int i = 1; i < length_; i++)
+            s ~= format!", %s"(this[i]);
+        return s ~ "]";
     }
 
     /// Show internal representation of the queue
@@ -410,54 +425,25 @@ struct Deque(T) {
         return s;
     }
 
-    /// Getter
-    @property size_t capacity() { return capacity_; }
-
-    /// Add an element to the end of the queue.
-    alias push = pushBack;
-    T pushBack(T el) {
-        if(length_ == capacity_) reallocateIncreasing_;
-        ++tail_;
-        if(tail_ == capacity_) tail_ = 0;
-        cBuf_[tail_] = el;
-        ++length_;
-        return el;
+    /// Test for emptiness of the queue. Part of the input range interface.
+    bool empty() const {
+        return length_ == 0;
     }
 
-    /// Add an element to the head of the queue.
-    T pushFront(T el) {
-        if(length_ == capacity_) reallocateIncreasing_;
-        --head_;
-        if(head_ == -1) head_ = capacity_ - 1;
-        cBuf_[head_] = el;
-        ++length_;
-        return el;
+    /// Take the first element of the queue. Part of the input range interface.
+    T front() const {
+        return cBuf_[head_];
     }
 
-    /// Take out an element from the end of the queue.
-    alias pop = popBack;
-    T popBack() {
+    /// Take out an element from the front of the queue. Part of the input range interface.
+    void popFront() {
         if(length_ == 0)
             throw new RangeError;
         else
             if(length_ < (capacity_>>2))
                 reallocateDecreasing_;
-        T el = cBuf_[tail_];
-        --tail_;
-        --length_;
-        if(tail_ < 0 && length_ != 0)
-                tail_ = capacity_ - 1;
-        return el;
-    }
 
-    /// Take out an element from the front of the queue.
-    T popFront() {
-        if(length_ == 0)
-            throw new RangeError;
-        else
-            if(length_ < (capacity_>>2))
-                reallocateDecreasing_;
-        T el = cBuf_[head_];
+        cBuf_[head_] = T.init;  // help GC (if elements contain refs to objects on the heap)
         ++head_;
         --length_;
         if(head_ == capacity_) {
@@ -465,10 +451,71 @@ struct Deque(T) {
             if(length_ == 0)
                 tail_ = -1;
         }
-        return el;
+    }
+
+    /// For forward range interface.
+    auto save() {
+        auto s = this;
+        s.cBuf_ = cBuf_.dup;
+        return s;
     }
 
 
+    /// Take the last element of the queue. Part of the bidirectional range interface.
+    T back() const {
+        return cBuf_[tail_];
+    }
+
+    /// Take out an element from the end of the queue. Part of the bidirectional range interface.
+    void popBack() {
+        if(length_ == 0)
+            throw new RangeError;
+        else
+            if(length_ < (capacity_>>2))
+                reallocateDecreasing_;
+
+        cBuf_[tail_] = T.init;  // help GC (if elements contain refs to objects on the heap)
+        --tail_;
+        --length_;
+        if(tail_ == -1 && length_ != 0)
+            tail_ = capacity_ - 1;
+    }
+
+    /**
+            Index operator overload. Part of the random access range interface.
+        Parameters:
+            ind = index of the element in the queue (relative to the head of the queue).
+    */
+    T opIndex(size_t i) const {
+        return cBuf_[actualIndex_(cast(long)i)];
+    }
+
+    /// Get number of element in the queue.
+    size_t length() const {
+        return length_;
+    }
+
+    /// Get current size of the buffer.
+    size_t capacity() { return capacity_; }
+
+    /// Add an element to the end of the queue.
+    alias add = addBack;
+    void addBack(T el) {
+        if(length_ == capacity_) reallocateIncreasing_;
+        ++tail_;
+        if(tail_ == capacity_) tail_ = 0;
+        cBuf_[tail_] = el;
+        ++length_;
+    }
+
+    /// Add an element to the head of the queue.
+    void addFront(T el) {
+        if(length_ == capacity_) reallocateIncreasing_;
+        --head_;
+        if(head_ == -1) head_ = capacity_ - 1;
+        cBuf_[head_] = el;
+        ++length_;
+    }
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
     //
@@ -486,38 +533,63 @@ struct Deque(T) {
     /**
                 Calculate real index in the buffer.
         Parameters:
-            virtIndex = index counted relative to the head. It can be positive, negavive and not limited by the size
-                        of the buffer.
+            queInd = index relative to the head of the queue.
+        throws: RangeError
     */
-    long actualIndex_(long virtIndex) {
-        const long ind = head_ + virtIndex;
-        if(virtIndex >= 0)
-            return head_ + virtIndex%length_;
-        else
-            return ind%length_ + length_;
+    long actualIndex_(long queInd) const {
+        if(queInd < 0 || queInd > length_)
+            throw new RangeError;
+
+        const long bufInd = head_ + queInd;     // index relative to the beginning of the buffer
+        return bufInd >= capacity_? bufInd - capacity_: bufInd;
     }
 
     /// Add space to the buffer
-    void reallocateIncreasing_() {
-        cBuf_.reserve(capacity_ + 1);
-        capacity_ = cBuf_.capacity;
-        cBuf_.length = capacity_;       // initialize free array space
+    //void reallocateIncreasing_() {
+    //    cBuf_.reserve(capacity_ + 1);
+    //    capacity_ = cBuf_.capacity;
+    //    cBuf_.length = capacity_;       // initialize free array space
+    //
+    //    // May be move the content to the end
+    //    if      // is tail before head?
+    //            (tail_ < head_ && length_ != 0)
+    //    {   // move data to the end, probably with overlapping
+    //        import std.algorithm.mutation: copy;
+    //        const long howMany = length_ - tail_ - 1;
+    //        const long toWhere = capacity_ - howMany;
+    //        copy(cBuf_[head_..head_+howMany], cBuf_[toWhere..capacity_]);
+    //        head_ = toWhere;
+    //    }
+    //}
 
-        // May be move the content to the end
+    /// Add space to the buffer
+    void reallocateIncreasing_() {
+        // reallocate
+        T[] newBuf;
+        newBuf.reserve(capacity_ + 1);
+        const long newCapacity = newBuf.capacity;
+        newBuf.length = newCapacity;
+
+        // Copy
         if      // is tail before head?
                 (tail_ < head_ && length_ != 0)
         {   // move data to the end, probably with overlapping
-            import std.algorithm.mutation: copy;
-            const long howMany = length_ - tail_ - 1;
-            const long toWhere = capacity_ - howMany;
-            copy(cBuf_[head_..head_+howMany], cBuf_[toWhere..capacity_]);
-            head_ = toWhere;
+            newBuf[0..capacity_-head_] = cBuf_[head_..capacity_];
+            newBuf[capacity_-head_..capacity_-head_+tail_+1] = cBuf_[0..tail_+1];
         }
+        else {
+            newBuf[0..length_] = cBuf_[head_..tail_+1];
+        }
+
+        cBuf_ = newBuf;
+        head_ = 0;
+        tail_ = length_ - 1;
+        capacity_ = newCapacity;
     }
 
     /// Free space from the buffer
     void reallocateDecreasing_() {
-        long newReserve = capacity_ >> 1;
+        const long newReserve = capacity_ >> 1;
         assert(length_ <= newReserve, format!"%s elements cannot fit into array[%s]."(length_, newReserve));
 
         // reallocate and copy
@@ -547,15 +619,6 @@ struct Deque(T) {
         capacity_ = newCapacity;
     }
 
-    /**
-            Index operator overload.
-        Parameters:
-            ind = index
-    */
-    T opIndex(size_t ind) {
-        return(cBuf_[actualIndex_(ind)]);
-    }
-
     invariant{
         assert(cBuf_.capacity == capacity_);
     }
@@ -563,18 +626,29 @@ struct Deque(T) {
 
 unittest {
     Deque!int deq = Deque!int(1);
-    deq.pushBack(0);
-    deq.pushBack(1);
-    deq.pushBack(2);
-    deq.pushBack(3);
-    deq.pushBack(4);
-    deq.pushBack(5);
-    logit(deq.toInnerString, TermColor.purple);
+    foreach(i; 0..7) deq.addBack(i);
+    assert(deq.toString == "[0, 1, 2, 3, 4, 5, 6]");
+    assert(format!"%s"(deq.cBuf_) == "[0, 1, 2, 3, 4, 5, 6]");
+    assert(deq[6] == 6);
+    assert(deq.capacity == 7);
 
-    foreach(i; 1..3) deq.pop;
-    foreach(i; 1..2) deq.popFront;
+    foreach(i; 1..4) deq.popFront;
+    deq.addBack(7);
+    assert(deq.toString == "[3, 4, 5, 6, 7]");
+    assert(format!"%s"(deq.cBuf_) == "[7, 0, 0, 3, 4, 5, 6]");
+    assert(deq[4] == 7);
+
+    foreach(i; 1..4) deq.popBack;
+    foreach_reverse (i; -2..3) deq.addFront(i);
+    assert(deq.toString == "[-2, -1, 0, 1, 2, 3, 4]");
+    assert(format!"%s"(deq.cBuf_) == "[0, 1, 2, 3, 4, -2, -1]");
+    assert(deq[0] == -2);
+
+    deq.addFront(-3);
+
+    import std.stdio;
+    writefln(format!"deq = %s"(deq));
     logit(deq.toInnerString, TermColor.purple);
-    mixin("deq[0], deq[2], deq[-1]".w);
 }
 
 

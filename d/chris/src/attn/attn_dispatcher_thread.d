@@ -74,6 +74,9 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
         else if // has come an unexpected message?
                 (var.hasValue)
         {   // log it
+            if(var.type == typeid(OwnerTerminated))
+                send(thisTid, new immutable TerminateApp_msg);
+
             logit(format!"Unexpected message of type Variant to the attention dispatcher thread: %s"(var.toString));
             continue;
         }

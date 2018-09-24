@@ -2,8 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e6f13b7-b9cd-4af9-969e-5956d8669eca" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chris" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/production/chris/attn/attn_dispatcher_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/attn/attn_dispatcher_thread.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/production/chris/global.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/global.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/production/chris/tools.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/tools.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/global.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/global.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/tools.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools.d" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
@@ -12,135 +17,6 @@
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
-  </component>
-  <component name="DockManager">
-    <window id="2">
-      <content type="file-editors">
-        <state>
-          <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-            <file pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/src/messages.d">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="760">
-                    <caret line="155" column="42" selection-start-line="155" selection-start-column="42" selection-end-line="155" selection-end-column="42" />
-                    <folding>
-                      <element signature="e#1626#1627#0" expanded="true" />
-                      <element signature="e#1659#1660#0" expanded="true" />
-                      <element signature="e#2102#2103#0" expanded="true" />
-                      <element signature="e#2135#2136#0" expanded="true" />
-                      <element signature="e#2529#2530#0" expanded="true" />
-                      <element signature="e#2557#2558#0" expanded="true" />
-                      <element signature="e#3104#3105#0" expanded="true" />
-                      <element signature="e#3132#3133#0" expanded="true" />
-                      <element signature="e#3637#3638#0" expanded="true" />
-                      <element signature="e#3665#3666#0" expanded="true" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-            <file pinned="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/src/interfaces.d">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="5220">
-                    <caret line="269" selection-start-line="269" selection-end-line="269" />
-                    <folding>
-                      <element signature="e#1593#1594#0" expanded="true" />
-                      <element signature="e#1641#1642#0" expanded="true" />
-                      <element signature="e#1698#1699#0" expanded="true" />
-                      <element signature="e#1732#1733#0" expanded="true" />
-                      <element signature="e#1790#1791#0" expanded="true" />
-                      <element signature="e#1828#1829#0" expanded="true" />
-                      <element signature="e#2929#2930#0" expanded="true" />
-                      <element signature="e#2973#2974#0" expanded="true" />
-                      <element signature="e#3020#3021#0" expanded="true" />
-                      <element signature="e#3054#3055#0" expanded="true" />
-                      <element signature="e#3106#3107#0" expanded="true" />
-                      <element signature="e#3144#3145#0" expanded="true" />
-                      <element signature="e#3279#3280#0" expanded="true" />
-                      <element signature="e#3318#3319#0" expanded="true" />
-                      <element signature="e#4546#4547#0" expanded="true" />
-                      <element signature="e#4595#4596#0" expanded="true" />
-                      <element signature="e#5445#5446#0" expanded="true" />
-                      <element signature="e#5486#5487#0" expanded="true" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-          </leaf>
-        </state>
-      </content>
-    </window>
-    <window id="1">
-      <content type="file-editors">
-        <state>
-          <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-            <file pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/src/global.d">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="343">
-                    <caret line="124" selection-start-line="124" selection-end-line="124" />
-                    <folding>
-                      <element signature="e#5399#5400#0" expanded="true" />
-                      <element signature="e#5467#5468#0" expanded="true" />
-                      <element signature="e#6290#6291#0" expanded="true" />
-                      <element signature="e#6334#6335#0" expanded="true" />
-                      <element signature="e#6539#6540#0" expanded="true" />
-                      <element signature="e#6581#6582#0" expanded="true" />
-                      <element signature="e#6794#6795#0" expanded="true" />
-                      <element signature="e#6837#6838#0" expanded="true" />
-                      <element signature="e#7228#7229#0" expanded="true" />
-                      <element signature="e#7271#7272#0" expanded="true" />
-                      <element signature="e#7660#7661#0" expanded="true" />
-                      <element signature="e#7702#7703#0" expanded="true" />
-                      <element signature="e#7806#7807#0" expanded="true" />
-                      <element signature="e#7858#7859#0" expanded="true" />
-                      <element signature="e#7964#7965#0" expanded="true" />
-                      <element signature="e#8015#8016#0" expanded="true" />
-                      <element signature="e#8968#8969#0" expanded="true" />
-                      <element signature="e#9005#9006#0" expanded="true" />
-                      <element signature="e#11379#11380#0" expanded="true" />
-                      <element signature="e#11417#11418#0" expanded="true" />
-                      <element signature="e#13417#13418#0" expanded="true" />
-                      <element signature="e#13460#13461#0" expanded="true" />
-                      <element signature="e#13668#13669#0" expanded="true" />
-                      <element signature="e#13704#13705#0" expanded="true" />
-                      <element signature="e#14043#14044#0" expanded="true" />
-                      <element signature="e#14074#14075#0" expanded="true" />
-                      <element signature="e#14544#14545#0" expanded="true" />
-                      <element signature="e#14582#14583#0" expanded="true" />
-                      <element signature="e#14678#14679#0" expanded="true" />
-                      <element signature="e#14720#14721#0" expanded="true" />
-                      <element signature="e#15281#15282#0" expanded="true" />
-                      <element signature="e#15312#15313#0" expanded="true" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-            <file pinned="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/src/crank/crank_pile.d">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="3360">
-                    <caret line="168" column="89" selection-start-line="168" selection-start-column="89" selection-end-line="168" selection-end-column="89" />
-                  </state>
-                </provider>
-              </entry>
-            </file>
-            <file pinned="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="900">
-                    <caret line="45" column="17" selection-start-line="45" selection-start-column="17" selection-end-line="45" selection-end-column="17" />
-                  </state>
-                </provider>
-              </entry>
-            </file>
-          </leaf>
-        </state>
-      </content>
-    </window>
   </component>
   <component name="FUSProjectUsageTrigger">
     <session id="76674309">
@@ -177,7 +53,7 @@
           <entry key="cpt_neurons" value="1" />
           <entry key="cpt_templates" value="1" />
           <entry key="crank_subcrank_subpile" value="1" />
-          <entry key="d" value="462" />
+          <entry key="d" value="466" />
           <entry key="global" value="2" />
           <entry key="live" value="7" />
           <entry key="names" value="1" />
@@ -190,7 +66,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="D file" value="461" />
+          <entry key="D file" value="465" />
           <entry key="PLAIN_TEXT" value="27" />
           <entry key="Properties" value="2" />
           <entry key="Scratch" value="1" />
@@ -198,13 +74,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="d" value="135958" />
+          <entry key="d" value="140681" />
           <entry key="vmoptions" value="95" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="D file" value="135958" />
+          <entry key="D file" value="140681" />
           <entry key="PLAIN_TEXT" value="95" />
         </counts>
       </usages-collector>
@@ -216,34 +92,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cpt/cpt_abstract.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="10020">
-              <caret line="515" selection-start-line="515" selection-end-line="515" />
-              <folding>
-                <element signature="e#2458#2459#0" expanded="true" />
-                <element signature="e#2488#2489#0" expanded="true" />
-                <element signature="e#4354#4355#0" expanded="true" />
-                <element signature="e#4386#4387#0" expanded="true" />
-                <element signature="e#5328#5329#0" expanded="true" />
-                <element signature="e#5357#5358#0" expanded="true" />
-                <element signature="e#6105#6106#0" expanded="true" />
-                <element signature="e#6134#6135#0" expanded="true" />
-                <element signature="e#9857#9858#0" expanded="true" />
-                <element signature="e#9887#9888#0" expanded="true" />
-                <element signature="e#10396#10397#0" expanded="true" />
-                <element signature="e#10431#10432#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/tools.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-543">
-              <caret line="580" column="38" selection-start-line="580" selection-start-column="38" selection-end-line="580" selection-end-column="38" />
+            <state relative-caret-position="541">
+              <caret line="961" lean-forward="true" selection-start-line="961" selection-end-line="961" />
               <folding>
                 <element signature="e#3327#3328#0" expanded="true" />
                 <element signature="e#3363#3364#0" expanded="true" />
@@ -259,22 +112,108 @@
                 <element signature="e#4552#4553#0" expanded="true" />
                 <element signature="e#4679#4680#0" expanded="true" />
                 <element signature="e#4714#4715#0" expanded="true" />
-                <element signature="e#11488#11489#0" expanded="true" />
-                <element signature="e#11528#11529#0" expanded="true" />
-                <element signature="e#11847#11848#0" expanded="true" />
-                <element signature="e#11880#11881#0" expanded="true" />
-                <element signature="e#12919#12920#0" expanded="true" />
-                <element signature="e#12954#12955#0" expanded="true" />
-                <element signature="e#13057#13058#0" expanded="true" />
-                <element signature="e#13092#13093#0" expanded="true" />
-                <element signature="e#13860#13861#0" expanded="true" />
-                <element signature="e#13895#13896#0" expanded="true" />
-                <element signature="e#14615#14616#0" expanded="true" />
-                <element signature="e#14670#14671#0" expanded="true" />
-                <element signature="e#14743#14744#0" expanded="true" />
-                <element signature="e#14773#14774#0" expanded="true" />
-                <element signature="e#14838#14839#0" expanded="true" />
-                <element signature="e#14858#14859#0" expanded="true" />
+                <element signature="e#12143#12144#0" expanded="true" />
+                <element signature="e#12176#12177#0" expanded="true" />
+                <element signature="e#12980#12981#0" expanded="true" />
+                <element signature="e#13015#13016#0" expanded="true" />
+                <element signature="e#13118#13119#0" expanded="true" />
+                <element signature="e#13153#13154#0" expanded="true" />
+                <element signature="e#14008#14009#0" expanded="true" />
+                <element signature="e#14043#14044#0" expanded="true" />
+                <element signature="e#15399#15400#0" expanded="true" />
+                <element signature="e#15429#15430#0" expanded="true" />
+                <element signature="e#15494#15495#0" expanded="true" />
+                <element signature="e#15514#15515#0" expanded="true" />
+                <element signature="e#22905#22906#0" expanded="true" />
+                <element signature="e#22940#22941#0" expanded="true" />
+                <element signature="e#23043#23044#0" expanded="true" />
+                <element signature="e#23078#23079#0" expanded="true" />
+                <element signature="e#24100#24101#0" expanded="true" />
+                <element signature="e#24135#24136#0" expanded="true" />
+                <element signature="e#25660#25661#0" expanded="true" />
+                <element signature="e#25690#25691#0" expanded="true" />
+                <element signature="e#25755#25756#0" expanded="true" />
+                <element signature="e#25775#25776#0" expanded="true" />
+                <element signature="e#26538#26539#0" expanded="true" />
+                <element signature="e#26574#26575#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="341">
+              <caret line="61" column="35" selection-start-line="61" selection-start-column="35" selection-end-line="61" selection-end-column="35" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/console_thread.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="417">
+              <caret line="98" column="17" selection-start-line="98" selection-start-column="17" selection-end-line="98" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/chris.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="190">
+              <caret line="22" selection-start-line="22" selection-end-line="22" />
+              <folding>
+                <element signature="e#801#802#0" expanded="true" />
+                <element signature="e#820#821#0" expanded="true" />
+                <element signature="e#855#856#0" expanded="true" />
+                <element signature="e#869#870#0" expanded="true" />
+                <element signature="e#896#897#0" expanded="true" />
+                <element signature="e#905#906#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/global.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="719">
+              <caret line="554" selection-start-line="554" selection-end-line="554" />
+              <folding>
+                <element signature="e#5399#5400#0" expanded="true" />
+                <element signature="e#5467#5468#0" expanded="true" />
+                <element signature="e#6290#6291#0" expanded="true" />
+                <element signature="e#6334#6335#0" expanded="true" />
+                <element signature="e#6539#6540#0" expanded="true" />
+                <element signature="e#6581#6582#0" expanded="true" />
+                <element signature="e#6794#6795#0" expanded="true" />
+                <element signature="e#6837#6838#0" expanded="true" />
+                <element signature="e#7228#7229#0" expanded="true" />
+                <element signature="e#7271#7272#0" expanded="true" />
+                <element signature="e#7660#7661#0" expanded="true" />
+                <element signature="e#7702#7703#0" expanded="true" />
+                <element signature="e#7806#7807#0" expanded="true" />
+                <element signature="e#7858#7859#0" expanded="true" />
+                <element signature="e#7964#7965#0" expanded="true" />
+                <element signature="e#8015#8016#0" expanded="true" />
+                <element signature="e#8968#8969#0" expanded="true" />
+                <element signature="e#9005#9006#0" expanded="true" />
+                <element signature="e#11379#11380#0" expanded="true" />
+                <element signature="e#11417#11418#0" expanded="true" />
+                <element signature="e#13417#13418#0" expanded="true" />
+                <element signature="e#13460#13461#0" expanded="true" />
+                <element signature="e#13668#13669#0" expanded="true" />
+                <element signature="e#13704#13705#0" expanded="true" />
+                <element signature="e#14043#14044#0" expanded="true" />
+                <element signature="e#14074#14075#0" expanded="true" />
+                <element signature="e#14544#14545#0" expanded="true" />
+                <element signature="e#14582#14583#0" expanded="true" />
+                <element signature="e#14678#14679#0" expanded="true" />
+                <element signature="e#14720#14721#0" expanded="true" />
+                <element signature="e#15281#15282#0" expanded="true" />
+                <element signature="e#15312#15313#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -328,7 +267,6 @@
         <option value="$PROJECT_DIR$/src/global_data.d" />
         <option value="$PROJECT_DIR$/src/stat/substat/subpile.d" />
         <option value="$PROJECT_DIR$/src/stat/pile.d" />
-        <option value="$PROJECT_DIR$/src/chris.d" />
         <option value="$PROJECT_DIR$/src/cpt/holy.d" />
         <option value="$PROJECT_DIR$/src/cpt/names.d" />
         <option value="$PROJECT_DIR$/src/crank/names.d" />
@@ -341,8 +279,6 @@
         <option value="$PROJECT_DIR$/src/common_types.d" />
         <option value="$PROJECT_DIR$/src/cpt/cpt_concrete.d" />
         <option value="$PROJECT_DIR$/src/cpt/spt_premises.d" />
-        <option value="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" />
-        <option value="$PROJECT_DIR$/src/console_thread.d" />
         <option value="$PROJECT_DIR$/src/crank/subcrank/crank_subcrank_subpile.d" />
         <option value="$PROJECT_DIR$/src/interfaces.d" />
         <option value="$PROJECT_DIR$/src/stat/substat/stat_substat_subpile.d" />
@@ -354,8 +290,11 @@
         <option value="$PROJECT_DIR$/src/attn/attn_circle_thread.d" />
         <option value="$PROJECT_DIR$/src/messages.d" />
         <option value="$PROJECT_DIR$/src/crank/crank_pile.d" />
-        <option value="$PROJECT_DIR$/src/global.d" />
         <option value="$PROJECT_DIR$/src/stat/stat_pile.d" />
+        <option value="$PROJECT_DIR$/src/chris.d" />
+        <option value="$PROJECT_DIR$/src/global.d" />
+        <option value="$PROJECT_DIR$/src/console_thread.d" />
+        <option value="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" />
         <option value="$PROJECT_DIR$/src/tools.d" />
       </list>
     </option>
@@ -394,23 +333,33 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+      <pane id="PackagesPane">
+        <subPane>
           <expand>
             <path>
-              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
+              <item name="chris" type="616d4139:PackageViewModuleNode" />
             </path>
             <path>
-              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
+              <item name="chris" type="616d4139:PackageViewModuleNode" />
+              <item name="attn" type="1f31426a:PackageElementNode" />
             </path>
             <path>
-              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="cpt" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
+              <item name="chris" type="616d4139:PackageViewModuleNode" />
+              <item name="cpt" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
+              <item name="chris" type="616d4139:PackageViewModuleNode" />
+              <item name="stat" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
+              <item name="chris" type="616d4139:PackageViewModuleNode" />
+              <item name="stat" type="1f31426a:PackageElementNode" />
+              <item name="substat" type="1f31426a:PackageElementNode" />
             </path>
           </expand>
           <select />
@@ -438,44 +387,23 @@
           <select />
         </subPane>
       </pane>
-      <pane id="PackagesPane">
-        <subPane>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
           <expand>
             <path>
-              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chris" type="616d4139:PackageViewModuleNode" />
+              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
             </path>
             <path>
-              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chris" type="616d4139:PackageViewModuleNode" />
-              <item name="attn" type="1f31426a:PackageElementNode" />
+              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
             <path>
-              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chris" type="616d4139:PackageViewModuleNode" />
-              <item name="cpt" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chris" type="616d4139:PackageViewModuleNode" />
-              <item name="crank" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chris" type="616d4139:PackageViewModuleNode" />
-              <item name="crank" type="1f31426a:PackageElementNode" />
-              <item name="subcrank" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chris" type="616d4139:PackageViewModuleNode" />
-              <item name="stat" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chris" type="616d4139:PackageViewModuleNode" />
-              <item name="stat" type="1f31426a:PackageElementNode" />
-              <item name="substat" type="1f31426a:PackageElementNode" />
+              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="cpt" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
           </expand>
           <select />
@@ -717,11 +645,11 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="1920" y="0" width="1920" height="1080" extended-state="6" />
+    <frame x="-2" y="-3" width="1924" height="1087" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48008385" visible="true" weight="0.19797225" />
-      <window_info x="1944" y="563" width="330" height="781" id="Structure" order="1" sideWeight="0.5199161" side_tool="true" visible="true" weight="0.19797225" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.47708333" visible="true" weight="0.18924618" />
+      <window_info x="1944" y="563" width="330" height="781" id="Structure" order="1" sideWeight="0.5229167" side_tool="true" visible="true" weight="0.18924618" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
@@ -729,12 +657,12 @@
       <window_info id="Favorites" order="6" sideWeight="0.500994" side_tool="true" weight="0.18729989" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32704404" />
-      <window_info anchor="bottom" x="0" y="655" width="1920" height="402" id="Run" order="2" type="WINDOWED" visible="true" weight="0.359375" />
-      <window_info anchor="bottom" x="2" y="720" width="1912" height="329" id="Debug" order="3" weight="0.39937106" />
+      <window_info anchor="bottom" x="2" y="641" width="1904" height="435" id="Run" order="2" type="WINDOWED" visible="true" weight="0.359375" />
+      <window_info anchor="bottom" x="2" y="720" width="1912" height="329" id="Debug" order="3" weight="0.39895833" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4994664" weight="0.32708332" />
-      <window_info active="true" anchor="bottom" x="0" y="321" width="1920" height="759" id="Terminal" order="7" type="WINDOWED" visible="true" weight="0.5387841" />
+      <window_info active="true" anchor="bottom" x="21" y="464" width="1899" height="616" id="Terminal" order="7" type="WINDOWED" visible="true" weight="0.5387841" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50053364" side_tool="true" weight="0.32809225" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32916668" />
       <window_info anchor="bottom" id="Messages" order="10" sideWeight="0.4994664" weight="0.32914045" />
@@ -907,13 +835,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/chris.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-362">
-          <caret line="1" column="7" selection-start-line="1" selection-start-column="7" selection-end-line="1" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/cpt/cpt_templates.d" />
     <entry file="file:///usr/include/dmd/druntime/import/core/thread.d">
       <provider selected="true" editor-type-id="text-editor">
@@ -935,13 +856,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="300">
           <caret line="521" column="24" selection-start-line="521" selection-start-column="20" selection-end-line="521" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/console_thread.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="360">
-          <caret line="95" column="67" selection-start-line="95" selection-start-column="67" selection-end-line="95" selection-end-column="67" />
         </state>
       </provider>
     </entry>
@@ -1089,10 +1003,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/crank/crank_pile.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="3360">
+          <caret line="168" column="89" selection-start-line="168" selection-start-column="89" selection-end-line="168" selection-end-column="89" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/global.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="343">
-          <caret line="124" selection-start-line="124" selection-end-line="124" />
+        <state relative-caret-position="719">
+          <caret line="554" selection-start-line="554" selection-end-line="554" />
           <folding>
             <element signature="e#5399#5400#0" expanded="true" />
             <element signature="e#5467#5468#0" expanded="true" />
@@ -1130,24 +1051,39 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/crank/crank_pile.d">
+    <entry file="file://$PROJECT_DIR$/src/chris.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3360">
-          <caret line="168" column="89" selection-start-line="168" selection-start-column="89" selection-end-line="168" selection-end-column="89" />
+        <state relative-caret-position="190">
+          <caret line="22" selection-start-line="22" selection-end-line="22" />
+          <folding>
+            <element signature="e#801#802#0" expanded="true" />
+            <element signature="e#820#821#0" expanded="true" />
+            <element signature="e#855#856#0" expanded="true" />
+            <element signature="e#869#870#0" expanded="true" />
+            <element signature="e#896#897#0" expanded="true" />
+            <element signature="e#905#906#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/console_thread.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="417">
+          <caret line="98" column="17" selection-start-line="98" selection-start-column="17" selection-end-line="98" selection-end-column="17" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="900">
-          <caret line="45" column="17" selection-start-line="45" selection-start-column="17" selection-end-line="45" selection-end-column="17" />
+        <state relative-caret-position="341">
+          <caret line="61" column="35" selection-start-line="61" selection-start-column="35" selection-end-line="61" selection-end-column="35" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/tools.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-543">
-          <caret line="580" column="38" selection-start-line="580" selection-start-column="38" selection-end-line="580" selection-end-column="38" />
+        <state relative-caret-position="541">
+          <caret line="961" lean-forward="true" selection-start-line="961" selection-end-line="961" />
           <folding>
             <element signature="e#3327#3328#0" expanded="true" />
             <element signature="e#3363#3364#0" expanded="true" />
@@ -1163,22 +1099,30 @@
             <element signature="e#4552#4553#0" expanded="true" />
             <element signature="e#4679#4680#0" expanded="true" />
             <element signature="e#4714#4715#0" expanded="true" />
-            <element signature="e#11488#11489#0" expanded="true" />
-            <element signature="e#11528#11529#0" expanded="true" />
-            <element signature="e#11847#11848#0" expanded="true" />
-            <element signature="e#11880#11881#0" expanded="true" />
-            <element signature="e#12919#12920#0" expanded="true" />
-            <element signature="e#12954#12955#0" expanded="true" />
-            <element signature="e#13057#13058#0" expanded="true" />
-            <element signature="e#13092#13093#0" expanded="true" />
-            <element signature="e#13860#13861#0" expanded="true" />
-            <element signature="e#13895#13896#0" expanded="true" />
-            <element signature="e#14615#14616#0" expanded="true" />
-            <element signature="e#14670#14671#0" expanded="true" />
-            <element signature="e#14743#14744#0" expanded="true" />
-            <element signature="e#14773#14774#0" expanded="true" />
-            <element signature="e#14838#14839#0" expanded="true" />
-            <element signature="e#14858#14859#0" expanded="true" />
+            <element signature="e#12143#12144#0" expanded="true" />
+            <element signature="e#12176#12177#0" expanded="true" />
+            <element signature="e#12980#12981#0" expanded="true" />
+            <element signature="e#13015#13016#0" expanded="true" />
+            <element signature="e#13118#13119#0" expanded="true" />
+            <element signature="e#13153#13154#0" expanded="true" />
+            <element signature="e#14008#14009#0" expanded="true" />
+            <element signature="e#14043#14044#0" expanded="true" />
+            <element signature="e#15399#15400#0" expanded="true" />
+            <element signature="e#15429#15430#0" expanded="true" />
+            <element signature="e#15494#15495#0" expanded="true" />
+            <element signature="e#15514#15515#0" expanded="true" />
+            <element signature="e#22905#22906#0" expanded="true" />
+            <element signature="e#22940#22941#0" expanded="true" />
+            <element signature="e#23043#23044#0" expanded="true" />
+            <element signature="e#23078#23079#0" expanded="true" />
+            <element signature="e#24100#24101#0" expanded="true" />
+            <element signature="e#24135#24136#0" expanded="true" />
+            <element signature="e#25660#25661#0" expanded="true" />
+            <element signature="e#25690#25691#0" expanded="true" />
+            <element signature="e#25755#25756#0" expanded="true" />
+            <element signature="e#25775#25776#0" expanded="true" />
+            <element signature="e#26538#26539#0" expanded="true" />
+            <element signature="e#26574#26575#0" expanded="true" />
           </folding>
         </state>
       </provider>

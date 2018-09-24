@@ -521,7 +521,6 @@ debug {
     Spawn the key threads (console_thread, attention dispatcher), capture their Tids.
 */
 shared static this() {
-
     // Initialize random generator
     rnd_ = Random(unpredictableSeed);
 

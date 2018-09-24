@@ -2,7 +2,7 @@ module tools;
 import std.stdio;
 import std.format;
 
-/// Private exception of the project.
+/// Private exception for the project.
 class Crash: Exception {
     @nogc @safe pure nothrow
             this(string msg, string file = __FILE__, size_t line = __LINE__, Throwable nextInChain = null)
@@ -17,8 +17,8 @@ class Crash: Exception {
 }
 
 /**
-        Convert name of type represented as a string to real type. Don't forget, the type you a trying to instantiate must
-    exist, i.e. to be imported or to be a basic type.
+        Convert type represented by a string to real type. Don't forget, the type you a trying to instantiate must
+    exist, i.e. to be imported or to be the basic type.
     Parameters:
         typeName = name of type
 */
@@ -34,7 +34,7 @@ unittest {
     type!"int" i;
     assert(is(typeof(i) == int));
 }
-/// test class for previous unittest
+/// test class for the previous unittest
 class ClassA {
     int x;
     this(int i) {
@@ -43,11 +43,12 @@ class ClassA {
 }
 
 /**
-        Safe cast. It will throw assert if the object cannot be casted.
+        Safe cast. It will throw an assertion if the object cannot be casted as opposed to silent returning null by the
+    cast operator (for classes).
     Parameters:
         T = type to cast to
         o = object to cast
-    Return: casted object or an assert will happen
+    Return: casted object or assert happens
 */
 T scast(T, S)(S o)
     if ((is(T: Object) || is(T: shared Object) || is(T: immutable Object) || is(T == interface))
@@ -388,278 +389,11 @@ void logit(const Object o, TermColor color = null) {
     logit((cast()o).toString, color);
 }
 
-/// Two-sided stack and queue like in Java, based, also like in Java, on a cyclic buffer. ArrayDeque means that the cyclic
-/// buffer is implemented as a dynamic array, which means that it reallocates only with capacity offered by compiler. Currently
-/// it is powers of two. Moreover there is no way to trim off the unused space, if you know that the buffer is not going
-/// to grow further. If you need those features, use the Deque implementation, which uses pure binary buffer instead.
-struct ArrayDeque(T) {
-    import core.exception: RangeError;
-
-    @disable this();
-
-    /// Constructor
-    this(long reserve){
-        assert(reserve > 0);
-        cBuf_.reserve(reserve);
-        capacity_ = cBuf_.capacity;
-        cBuf_.length = capacity_;
-    }
-
-    /// Postblit constructor. If we don't have the deep copy, the "foreach" statement will mutate our struct, (see
-    /// the "help GC" comment) because it uses a copy of the input range to go through (not the save() member function).
-    this(this) {
-        cBuf_ = cBuf_.dup;
-    }
-
-    string toString() const {
-        if(empty) return "[]";
-        string s = format!"[%s"(this[0]);
-        for(int i = 1; i < length_; i++)
-            s ~= format!", %s"(this[i]);
-        return s ~ "]";
-    }
-
-    /// Show internal representation of the queue
-    string toInnerString(){
-        string s = typeid(this).toString;
-        s ~= format!"\n    length_ = %s"(length_);
-        s ~= format!"\n    capacity_ = %s"(capacity_);
-        s ~= format!"\n    head_ = %s"(head_);
-        s ~= format!"\n    tail_ = %s"(tail_);
-        s ~= format!"\n    cBuf_.length = %s, cBuf_.capacity = %s"(cBuf_.length, cBuf_.capacity);
-        s ~= format!"\n    cBuf_: %s"(cBuf_);
-        return s;
-    }
-
-    /// Test for emptiness of the queue. Part of the input range interface.
-    bool empty() const {
-        return length_ == 0;
-    }
-
-    /// Take the first element of the queue. Part of the input range interface.
-    T front() const {
-        return cBuf_[head_];
-    }
-
-    /// Take out an element from the front of the queue. Part of the input range interface.
-    T popFront() {
-        if(length_ == 0)
-            throw new RangeError;
-
-        // pop
-        T el = cBuf_[head_];
-        cBuf_[head_] = T.init;  // help GC (if elements contain refs to objects on the heap)
-        ++head_;
-        --length_;
-        if(head_ == capacity_) {
-            head_ = 0;
-            if(length_ == 0)
-                tail_ = -1;
-        }
-
-        // May be reallocate decreasing
-        if(length_ < (capacity_>>2))
-            reallocate_(capacity_ >> 1);
-
-        return el;
-    }
-
-    /// For forward range interface.
-    auto save() {
-        auto s = this;
-        s.cBuf_ = cBuf_.dup;
-        return s;
-    }
-
-    /// Nullify the buffer.
-    void clear() {
-        cBuf_ = new T[1];
-        capacity_ = 1;
-        head_ = 0;
-        tail_ = -1;
-        length_ = 0;
-    }
-
-    /// Take the last element of the queue. Part of the bidirectional range interface.
-    T back() const {
-        return cBuf_[tail_];
-    }
-
-    /// Take out an element from the end of the queue. Part of the bidirectional range interface.
-    alias pop = popBack;
-    T popBack() {
-        if(length_ == 0)
-            throw new RangeError;
-
-        // Pop
-        T el = cBuf_[tail_];
-        cBuf_[tail_] = T.init;  // help GC (if elements contain refs to objects on the heap)
-        --tail_;
-        --length_;
-        if(tail_ == -1 && length_ != 0)
-            tail_ = capacity_ - 1;
-
-        // May be reallocate decreasing
-        if(length_ < (capacity_>>2))
-            reallocate_(capacity_ >> 1);
-
-        return el;
-    }
-
-    /**
-            Index operator overload. Part of the random access range interface.
-        Parameters:
-            ind = index of the element in the queue (relative to the head of the queue).
-    */
-    T opIndex(size_t i) const {
-        assert(i >=0 && i < length_);
-        return cBuf_[actualIndex_(cast(long)i)];
-    }
-
-    /// Get number of element in the queue.
-    size_t length() const {
-        return length_;
-    }
-
-    /// Get current size of the buffer.
-    size_t capacity() { return capacity_; }
-
-    /// Add an element to the end of the queue.
-    alias add = addBack;
-    void addBack(T el) {
-        if(length_ == capacity_) reallocate_(capacity_ + 1);
-        ++tail_;
-        if(tail_ == capacity_) tail_ = 0;
-        cBuf_[tail_] = el;
-        ++length_;
-    }
-
-    /// Add an element to the head of the queue.
-    void addFront(T el) {
-        if(length_ == capacity_) reallocate_(capacity_ + 1);
-        --head_;
-        if(head_ == -1) head_ = capacity_ - 1;
-        cBuf_[head_] = el;
-        ++length_;
-    }
-
-    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-    //
-    //                                  Private
-    //
-    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-    private:
-    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
-        T[] cBuf_ = [];   /// Cyclic buffer.
-        long head_;       /// index of the first element
-        long tail_ = -1;  /// index of the last element
-        long length_;     /// number of element in the queue
-        long capacity_;   /// current capacity of the buffer. It has the same value as cBuf.capacity, but faster.
-
-    //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-    /**
-                Calculate real index in the buffer.
-        Parameters:
-            queInd = index relative to the head of the queue.
-        throws: RangeError
-    */
-    long actualIndex_(long queInd) const {
-        if(queInd < 0 || queInd > length_)
-            throw new RangeError;
-
-        const long bufInd = head_ + queInd;     // index relative to the beginning of the buffer
-        return bufInd >= capacity_? bufInd - capacity_: bufInd;
-    }
-
-    /**
-                Reallocate the buffer and copy data to it from the old one. All the data will be arranged from the beginning
-        of the buffer, the head before the tail.
-    */
-    void reallocate_(long newReserve) {
-        assert(length_ > 0);    // no buffer initializing with this function. cBuf_ is initialized on construction.
-        assert(length_ <= newReserve, format!"%s elements cannot fit into array[%s]."(length_, newReserve));
-
-        // allocate
-        T[] newBuf;
-        newBuf.reserve(newReserve);
-        const long newCapacity = newBuf.capacity;
-        newBuf.length = newCapacity;    // initialize
-
-        // copy
-        if      // is tail before head?
-                (tail_ < head_)
-        {   // move data to the end, probably with overlapping
-            newBuf[0..capacity_-head_] = cBuf_[head_..capacity_];
-            newBuf[capacity_-head_..capacity_-head_+tail_+1] = cBuf_[0..tail_+1];
-        }
-        else {
-            newBuf[0..length_] = cBuf_[head_..tail_+1];
-        }
-
-        cBuf_ = newBuf;
-        head_ = 0;
-        tail_ = length_ - 1;
-        capacity_ = newCapacity;
-    }
-
-    invariant{
-        assert(cBuf_.capacity == capacity_);
-    }
-}
-
-unittest {
-    ArrayDeque!int deq = ArrayDeque!int(1);
-
-    foreach(i; 0..7) deq.addBack(i);
-    assert(deq.toString == "[0, 1, 2, 3, 4, 5, 6]");
-    assert(format!"%s"(deq.cBuf_) == "[0, 1, 2, 3, 4, 5, 6]");
-    assert(deq[6] == 6);
-    assert(deq.capacity == 7);
-
-    foreach(i; 1..4) deq.popFront;
-    deq.addBack(7);
-    assert(deq.toString == "[3, 4, 5, 6, 7]");
-    assert(format!"%s"(deq.cBuf_) == "[7, 0, 0, 3, 4, 5, 6]");
-    assert(deq[4] == 7);
-
-    foreach(i; 1..4) deq.popBack;
-    foreach_reverse (i; -2..3) deq.addFront(i);
-    assert(deq.toString == "[-2, -1, 0, 1, 2, 3, 4]");
-    assert(format!"%s"(deq.cBuf_) == "[0, 1, 2, 3, 4, -2, -1]");
-    assert(deq[0] == -2);
-
-    deq.addFront(-3);
-    deq.addFront(-4);
-    assert(deq.toString == "[-4, -3, -2, -1, 0, 1, 2, 3, 4]");
-    assert(format!"%s"(deq.cBuf_) == "[-2, -1, 0, 1, 2, 3, 4, 0, 0, 0, 0, 0, 0, -4, -3]");
-
-    foreach(i; 5..12)
-        deq.addBack(i);
-    assert(deq.toString == "[-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]");
-    assert(format!"%s"(deq.cBuf_) == "[-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]");
-
-    deq.addFront(-5);
-    deq.addFront(-6);
-    assert(deq.toString == "[-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]");
-    assert(format!"%s"(deq.cBuf_) == "[-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, -6, -5]");
-
-    foreach(i; 0..12)
-        deq.popBack;
-    assert(deq.toString == "[-6, -5, -4, -3, -2, -1]");
-    assert(format!"%s"(deq.cBuf_) == "[-6, -5, -4, -3, -2, -1, 0, 0, 0, 0, 0, 0, 0, 0, 0]");
-
-    foreach(i; -6..-2)
-        deq.popFront;
-    assert(deq.toString == "[-2, -1]");
-    assert(format!"%s"(deq.cBuf_) == "[-2, -1, 0, 0, 0, 0, 0]");
-}
-
 /// Two-sided stack and queue like in Java, based, also like in Java, on a cyclic buffer. This implementation, unlike the
 /// dynamic arrays, for example, allows you to control the extention size in which the buffer grows and shrinks, and also
 /// you can free unused space with the thim() function. The structure takes 48 bytes of space at initialization compared to
 /// 16 of the dynamic array, but if you need a storage for a big array of data, it is going to be more efficient.
-struct Deque(T) {
+struct DequeImpl(T) {
     import core.exception: RangeError;
 
     @disable this();
@@ -909,7 +643,7 @@ struct Deque(T) {
 }
 
 unittest {
-    auto deq = Deque!int(3);
+    auto deq = DequeImpl!int(3);
 
     foreach(i; 0..5) deq.addBack(i);
     foreach_reverse(i; -2..0) deq.addFront(i);
@@ -959,8 +693,16 @@ unittest {
 //logit(deq.toInnerString, TermColor.purple);
 }
 
+template Deque(T)
+//if(is(T: Object) || is(T P: P*) || is(T: T[]))
+if(is(T : P*, P))
+{
+    pragma(msg, T);
+}
 
-
+unittest{
+    Deque!(int*);
+}
 
 
 

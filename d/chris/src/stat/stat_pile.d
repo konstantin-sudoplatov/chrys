@@ -185,3 +185,21 @@ void sendConceptToBranch_stat(Caldron cld, Cid breedCid, Cid loadCid) {
         br.anactivate;
     }
 }
+
+/**
+            Move the last in queue line from a string buffer to a string premise.
+    Parameters:
+        bufPrem = string queue premise to take lines from
+        strPrem = string premise to put the line in
+*/
+@(14, StatCallType.p0Calp1Cidp2Cid)
+void getUserInputLineFromBuffer_stat(Caldron cld, Cid bufPrem, Cid strPrem) {
+    checkCid!(BinActivationIfc)(cld, bufPrem);
+    checkCid!(BinActivationIfc)(cld, strPrem);
+    auto uBuf = scast!StringQueuePremise(cld[bufPrem]);
+    assert(!uBuf.empty && uBuf.activation == 1, "Must not get called if the user buffer is empty.");
+    auto uline = scast!StringPremise(cld[strPrem]);
+    uline.line = uBuf.pull;
+    uline.activate;
+    if(uBuf.empty) uBuf.anactivate;
+}

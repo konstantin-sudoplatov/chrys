@@ -389,10 +389,10 @@ void logit(const Object o, TermColor color = null) {
     logit((cast()o).toString, color);
 }
 
-/// Adapter for the RawDeque to prevent bloating in case it contains pointers
+/// Adapter for the RawDeque to prevent bloating in case it is a container for pointers
 struct Deque(T : T*)
 {
-    auto deq = RawDeque!(void*)();
+    auto deq = DequeImpl!(void*)();
     alias deq this;
 
     T* front() { return cast(T*)deq.front; }
@@ -414,10 +414,10 @@ unittest{
     assert(*deq[0] == 1);
 }
 
-/// Adapter for the RawDeque to prevent bloating in case it contains objects
+/// Adapter for the RawDeque to prevent bloating in case it is a container for objects
 struct Deque(T : Object)
 {
-    auto deq = RawDeque!(Object)();
+    auto deq = DequeImpl!(Object)();
     alias deq this;
 
     T front() { return cast(T)deq.front; }
@@ -439,7 +439,7 @@ unittest{
 
 /// All the rest of types are forwarded to the RawDeque template for instantiation as it is
 template Deque(T){
-    alias Deque = RawDeque!T;
+    alias Deque = DequeImpl!T;
 }
 ///
 unittest{
@@ -452,8 +452,11 @@ unittest{
 /// Two-sided stack and queue like in Java, based, also like in Java, on a cyclic buffer. This implementation, unlike the
 /// dynamic arrays, for example, allows you to control the extention size in which the buffer grows and shrinks, and also
 /// you can free unused space with the thim() function. The structure takes 48 bytes of space at initialization compared to
-/// 16 of the dynamic array, but if you need a storage for a big array of data, it is going to be more efficient.
-private struct RawDeque(T) {
+/// 16 of the dynamic array, but if you need a storage for a big array of data, it is going to be more efficient. BR
+/// Note: When use the foreach statement remember, that the struct is deep copyed before ising it by foreach. It cannot be
+/// avoid because consuming the range is a destructive action for the buffer, taken out elements are replaced by nulls
+/// to let the GC free them. So, it would be resource consuming for big buffers. To scan it use the for statement instead.
+private struct DequeImpl(T) {
     import core.exception: RangeError;
 
     /**
@@ -514,12 +517,13 @@ private struct RawDeque(T) {
         return length_ == 0;
     }
 
-    /// Take the first element of the queue. Part of the input range interface.
+    /// Get the first element of the queue without taking it out. Part of the input range interface.
     T front() {
         return cBuf_[head_];
     }
 
     /// Take out an element from the front of the queue. Part of the input range interface.
+    alias pull = popFront;
     T popFront() {
         if(length_ == 0)
             throw new RangeError;
@@ -698,7 +702,7 @@ private struct RawDeque(T) {
 }
 
 unittest {
-    auto deq = RawDeque!int();
+    auto deq = DequeImpl!int();
 
     foreach(i; 0..5) deq.pushBack(i);
     foreach_reverse(i; -2..0) deq.pushFront(i);

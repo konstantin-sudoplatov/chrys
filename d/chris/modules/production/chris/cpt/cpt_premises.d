@@ -142,7 +142,7 @@ final class SpStringPremise: SpiritPremise {
     */
     this(Cid cid) { super(cid); }
 
-    /// Create live wrapper for the holy static concept.
+    /// Create live wrapper for the spirit static concept.
     override StringPremise live_factory() const {
         return new StringPremise(cast(immutable)this);
     }
@@ -153,11 +153,11 @@ final class SpStringPremise: SpiritPremise {
 /// Live.
 final class StringPremise: Premise {
 
-    /// The string field
+    /// The string
     string line;
 
     /// Private constructor. Use spiritual live_factory() instead.
-    private this(immutable SpStringPremise holyStringPremise) { super(holyStringPremise); }
+    private this(immutable SpStringPremise spStringPremise) { super(spStringPremise); }
 
     override string toString() const {
         string s = super.toString;
@@ -166,6 +166,33 @@ final class StringPremise: Premise {
     }
 }
 
+/**
+            Queue premise. This concept is capable of accumulating a queue of strings. For example, when messages from
+    user come, they may be coming faster than they get processed. In that case such queue will help.
+*/
+final class SpStringQueuePremise: SpiritPremise {
+
+    /// Constructor.
+    this(Cid cid) { super(cid); }
+
+    /// Create live wrapper for the spirit static concept.
+    override StringQueuePremise live_factory() const {return new StringQueuePremise(cast(immutable)this); }
+}
+
+/// Live.
+final class StringQueuePremise: Premise {
+
+    /// The queue
+    Deque!string deque;
+    alias deque this;
+
+    /// Private constructor. Use spiritual live_factory() instead.
+    private this(immutable SpStringQueuePremise spStrQuePrem) { super(spStrQuePrem); }
+
+    override string toString() const {
+        return format!"\n    deq = %s"(deque.toString);
+    }
+}
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--

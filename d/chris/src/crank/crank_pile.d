@@ -131,8 +131,11 @@ void chatBranch() {
 }
 
 // User line branch enums
-/// , , , , , , 1079824511, 4278173576
+/// , 643414724, 2821656862, 3589523171, 145413872 , 4278173576
 enum Uline {
+
+    /// in this buffer the attention circle thread puts user lines of text, where they wait to get processed
+    userInputBuffer_uline_strqprem = cd!(SpStringQueuePremise, 1_079_824_511),
 
     /// uline branch identifier
     uline_breed = cd!(SpBreed, 4_021_308_401),
@@ -153,20 +156,20 @@ enum Uline {
     chatReadyForUlineInputPeg_uline_pegprem = cd!(SpPegPremise, 1_456_194_005),
     anactivateChatReadyForUlineInputPeg_uline_unact = cd!(SpUnaryAction, 409_329_855),
 
+    /// Call stat action of moving line from buffer to string peg.
+    moveLineFromUserInuputBufferToUserInputLine_uline_binact = cd!(SpBinaryAction, 2_949_480_003),
+
     /// Send user line premise to chat (together with the activation value)
-    sendUserInputLineToChat_binact = cd!(SpBinaryAction, 3_447_310_214),
+    sendUserInputLineToChat_uline_binact = cd!(SpBinaryAction, 3_447_310_214),
 
     /// Send user a prompt for the next input
-    sendUserRequestForNextLine_unact = cd!(SpUnaryAction, 1_439_958_318),
+    sendUserRequestForNextLine_uline_unact = cd!(SpUnaryAction, 1_439_958_318),
 }
 
 /// Setup the uline branch.
 void ulineBranch() {
     mixin(dequalify_enums!(CommonConcepts, Uline, Chat));
 
-    // Load actions
-    //cpt!activateUserInputPrem_unact.load(statCid!setActivation_stat, userInput_strprem);
-    //cpt!anactivateUserInputPrem_unact.load(statCid!anactivate_stat, userInput_strprem);
 
     // Mate uline seed and breed.
     cpt!uline_breed.load(uline_seed);
@@ -193,20 +196,23 @@ void ulineBranch() {
     );
 
     // User input valve. The handshake is over. Now, wait for user input and send it to chat, in a cycle.
-    cpt!sendUserInputLineToChat_binact.load(statCid!sendConceptToBranch_stat, chat_breed, userInputLine_strprem);
+    cpt!moveLineFromUserInuputBufferToUserInputLine_uline_binact.load(statCid!getUserInputLineFromBuffer_stat,
+            userInputBuffer_uline_strqprem, userInputLine_strprem);
+    cpt!sendUserInputLineToChat_uline_binact.load(statCid!sendConceptToBranch_stat, chat_breed, userInputLine_strprem);
     cpt!anactivateChatReadyForUlineInputPeg_uline_unact.load(statCid!anactivate_stat, chatReadyForUlineInputPeg_uline_pegprem);
-    cpt!sendUserRequestForNextLine_unact.load(statCid!requestUserInput, userThread_tidprem);
+    cpt!sendUserRequestForNextLine_uline_unact.load(statCid!requestUserInput, userThread_tidprem);
     cpt!userInputValve_uline_andnrn.addPremises([
-        userInputLine_strprem,
+        userInputBuffer_uline_strqprem,
         chatReadyForUlineInputPeg_uline_pegprem
     ]);
     cpt!userInputValve_uline_andnrn.addEffects(
         float.infinity,
         [
-            sendUserInputLineToChat_binact,
+            moveLineFromUserInuputBufferToUserInputLine_uline_binact,
+            sendUserInputLineToChat_uline_binact,
             anactivateChatReadyForUlineInputPeg_uline_unact,
             anactivateUserInputLine_unact,
-            sendUserRequestForNextLine_unact,
+            sendUserRequestForNextLine_uline_unact,
         ],
         null
     );

@@ -164,8 +164,8 @@ class Caldron {
             if (dynDebug >= 1)
                 logit(format!"%s, message UserTalksToCircleMsg has come, text: %s"(caldName, m.line), TermColor.brown);
 
-            auto cpt = scast!StringPremise(this[CommonConcepts.userInputLine_strprem]);
-            cpt.line = m.line;
+            auto cpt = scast!StringQueuePremise(this[Uline.userInputBuffer_uline_strqprem]);
+            cpt.push(m.line);
             cpt.activate;       // the premise is ready
             reasoning_;         // kick off
             return true;

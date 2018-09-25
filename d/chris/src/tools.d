@@ -392,7 +392,7 @@ void logit(const Object o, TermColor color = null) {
 /// Adapter for the RawDeque to prevent bloating in case it is a container for pointers
 struct Deque(T : T*)
 {
-    auto deq = RawDeque!(void*)();
+    auto deq = DequeImpl!(void*)();
     alias deq this;
 
     T* front() { return cast(T*)deq.front; }
@@ -417,7 +417,7 @@ unittest{
 /// Adapter for the RawDeque to prevent bloating in case it is a container for objects
 struct Deque(T : Object)
 {
-    auto deq = RawDeque!(Object)();
+    auto deq = DequeImpl!(Object)();
     alias deq this;
 
     T front() { return cast(T)deq.front; }
@@ -439,7 +439,7 @@ unittest{
 
 /// All the rest of types are forwarded to the RawDeque template for instantiation as it is
 template Deque(T){
-    alias Deque = RawDeque!T;
+    alias Deque = DequeImpl!T;
 }
 ///
 unittest{
@@ -456,7 +456,7 @@ unittest{
 /// Note: When use the foreach statement remember, that the struct is deep copyed before ising it by foreach. It cannot be
 /// avoid because consuming the range is a destructive action for the buffer, taken out elements are replaced by nulls
 /// to let the GC free them. So, it would be resource consuming for big buffers. To scan it use the for statement instead.
-private struct RawDeque(T) {
+private struct DequeImpl(T) {
     import core.exception: RangeError;
 
     /**
@@ -517,12 +517,13 @@ private struct RawDeque(T) {
         return length_ == 0;
     }
 
-    /// Take the first element of the queue. Part of the input range interface.
+    /// Get the first element of the queue without taking it out. Part of the input range interface.
     T front() {
         return cBuf_[head_];
     }
 
     /// Take out an element from the front of the queue. Part of the input range interface.
+    alias pull = popFront;
     T popFront() {
         if(length_ == 0)
             throw new RangeError;
@@ -701,7 +702,7 @@ private struct RawDeque(T) {
 }
 
 unittest {
-    auto deq = RawDeque!int();
+    auto deq = DequeImpl!int();
 
     foreach(i; 0..5) deq.pushBack(i);
     foreach_reverse(i; -2..0) deq.pushFront(i);

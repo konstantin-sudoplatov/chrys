@@ -389,14 +389,75 @@ void logit(const Object o, TermColor color = null) {
     logit((cast()o).toString, color);
 }
 
+/// Adapter for the RawDeque to prevent bloating in case it is a container for pointers
+struct Deque(T : T*)
+{
+    auto deq = RawDeque!(void*)();
+    alias deq this;
+
+    T* front() { return cast(T*)deq.front; }
+    T* popFront() {return cast(T*)deq.popFront; }
+    T* back() { return cast(T*)deq.back; }
+    T* popBack() {return cast(T*)deq.popBack; }
+    T* opIndex(size_t ind) { return cast(T*)deq.opIndex(ind); }
+}
+///
+unittest{
+    Deque!(int*) deq;
+
+    int i0 = -1;
+    deq.push(&i0);      // it is a deq.deq.push, thanks to the alias this
+    int i1 = 1;
+    deq.push(&i1);
+    assert(*deq[0] == -1 && *deq[1] == 1);
+    deq[0] = &i1;
+    assert(*deq[0] == 1);
+}
+
+/// Adapter for the RawDeque to prevent bloating in case it is a container for objects
+struct Deque(T : Object)
+{
+    auto deq = RawDeque!(Object)();
+    alias deq this;
+
+    T front() { return cast(T)deq.front; }
+    T popFront() {return cast(T)deq.popFront; }
+    T back() { return cast(T)deq.back; }
+    T popBack() {return cast(T)deq.popBack; }
+    T opIndex(size_t ind) { return cast(T)deq.opIndex(ind); }
+}
+///
+unittest{
+    Deque!(ClassA) deq;     // as a test used ClassA from the test of the type template
+
+    deq.push(new ClassA(-1));      // it is a deq.deq.push, thanks to the alias this
+    deq.push(new ClassA(1));
+    assert(deq[0].x == -1 && deq[1].x == 1);
+    deq[0] = new ClassA(42);
+    assert(deq.popFront.x == 42);
+}
+
+/// All the rest of types are forwarded to the RawDeque template for instantiation as it is
+template Deque(T){
+    alias Deque = RawDeque!T;
+}
+///
+unittest{
+    Deque!(short) deq;
+
+    deq.push(1); deq.push(2); deq.push(3);
+    assert(deq.popFront == 1 && deq.popFront == 2 && deq.popFront == 3);
+}
+
 /// Two-sided stack and queue like in Java, based, also like in Java, on a cyclic buffer. This implementation, unlike the
 /// dynamic arrays, for example, allows you to control the extention size in which the buffer grows and shrinks, and also
 /// you can free unused space with the thim() function. The structure takes 48 bytes of space at initialization compared to
-/// 16 of the dynamic array, but if you need a storage for a big array of data, it is going to be more efficient.
-struct DequeImpl(T) {
+/// 16 of the dynamic array, but if you need a storage for a big array of data, it is going to be more efficient. BR
+/// Note: When use the foreach statement remember, that the struct is deep copyed before ising it by foreach. It cannot be
+/// avoid because consuming the range is a destructive action for the buffer, taken out elements are replaced by nulls
+/// to let the GC free them. So, it would be resource consuming for big buffers. To scan it use the for statement instead.
+private struct RawDeque(T) {
     import core.exception: RangeError;
-
-    @disable this();
 
     /**
             Constructor.
@@ -405,8 +466,6 @@ struct DequeImpl(T) {
     */
     this(long extent){
         assert(extent > 0);
-        cBuf_ = cast(T*)new T[extent];
-        capacity_ = extent;
         extent_ = extent;
     }
 
@@ -420,9 +479,9 @@ struct DequeImpl(T) {
 
     string toString() const {
         if(empty) return "[]";
-        string s = format!"[%s"(this[0]);
+        string s = format!"[%s"((cast()this)[0]);
         for(int i = 1; i < length_; i++)
-            s ~= format!", %s"(this[i]);
+            s ~= format!", %s"((cast()this)[i]);
         return s ~ "]";
     }
 
@@ -459,7 +518,7 @@ struct DequeImpl(T) {
     }
 
     /// Take the first element of the queue. Part of the input range interface.
-    T front() const {
+    T front() {
         return cBuf_[head_];
     }
 
@@ -496,7 +555,7 @@ struct DequeImpl(T) {
     }
 
     /// Take the last element of the queue. Part of the bidirectional range interface.
-    T back() const {
+    T back() {
         return cBuf_[tail_];
     }
 
@@ -527,7 +586,7 @@ struct DequeImpl(T) {
             ind = index of the element in the queue (relative to the head of the queue).
         Throws: the RangeError exception.
     */
-    T opIndex(size_t ind) const {
+    T opIndex(size_t ind) {
         if(ind < 0 || ind >= length_) throw new RangeError;
         return cBuf_[actualIndex_(cast(long)ind)];
     }
@@ -553,8 +612,8 @@ struct DequeImpl(T) {
     size_t capacity() { return capacity_; }
 
     /// Add an element to the end of the queue.
-    alias add = addBack;
-    void addBack(T el) {
+    alias push = pushBack;
+    void pushBack(T el) {
         if(length_ == capacity_) reallocate_;
         ++tail_;
         if(tail_ == capacity_) tail_ = 0;
@@ -563,7 +622,7 @@ struct DequeImpl(T) {
     }
 
     /// Add an element to the head of the queue.
-    void addFront(T el) {
+    void pushFront(T el) {
         if(length_ == capacity_) reallocate_;
         --head_;
         if(head_ == -1) head_ = capacity_ - 1;
@@ -585,7 +644,6 @@ struct DequeImpl(T) {
         reallocate_(length_);
     }
 
-
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
     //
     //                                  Private
@@ -598,7 +656,7 @@ struct DequeImpl(T) {
         long tail_ = -1;    /// index of the last element
         long length_;       /// number of element in the queue
         long capacity_;     /// current capacity of the buffer. It has the same value as cBuf.capacity, but faster.
-        immutable long extent_;       /// by this value capacity is increased.
+        immutable long extent_ = 3;       /// by this value capacity is increased.
 
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
@@ -643,37 +701,37 @@ struct DequeImpl(T) {
 }
 
 unittest {
-    auto deq = DequeImpl!int(3);
+    auto deq = RawDeque!int();
 
-    foreach(i; 0..5) deq.addBack(i);
-    foreach_reverse(i; -2..0) deq.addFront(i);
+    foreach(i; 0..5) deq.pushBack(i);
+    foreach_reverse(i; -2..0) deq.pushFront(i);
     assert(deq.toString == "[-2, -1, 0, 1, 2, 3, 4]");
 
     const deq1 = deq.save;
     deq.clear;
     assert(deq1.toString == "[-2, -1, 0, 1, 2, 3, 4]");
 
-    foreach(i; 0..7) deq.addBack(i);
+    foreach(i; 0..7) deq.pushBack(i);
     assert(deq.toString == "[0, 1, 2, 3, 4, 5, 6]");
 
     foreach(i; 1..4) deq.popFront;
-    deq.addBack(7);
+    deq.pushBack(7);
     assert(deq.toString == "[3, 4, 5, 6, 7]");
 
     foreach(i; 1..4) deq.popBack;
-    foreach_reverse (i; -2..3) deq.addFront(i);
+    foreach_reverse (i; -2..3) deq.pushFront(i);
     assert(deq.toString == "[-2, -1, 0, 1, 2, 3, 4]");
 
-    deq.addFront(-3);
-    deq.addFront(-4);
+    deq.pushFront(-3);
+    deq.pushFront(-4);
     assert(deq.toString == "[-4, -3, -2, -1, 0, 1, 2, 3, 4]");
 
     foreach(i; 5..12)
-        deq.addBack(i);
+        deq.pushBack(i);
     assert(deq.toString == "[-4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]");
 
-    deq.addFront(-5);
-    deq.addFront(-6);
+    deq.pushFront(-5);
+    deq.pushFront(-6);
     assert(deq.toString == "[-6, -5, -4, -3, -2, -1, 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]");
 
     foreach(i; 0..12)
@@ -692,19 +750,6 @@ unittest {
 //import std.stdio; writefln("deq = %s", deq);
 //logit(deq.toInnerString, TermColor.purple);
 }
-
-template Deque(T)
-//if(is(T: Object) || is(T P: P*) || is(T: T[]))
-if(is(T : P*, P))
-{
-    pragma(msg, T);
-}
-
-unittest{
-    Deque!(int*);
-}
-
-
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 

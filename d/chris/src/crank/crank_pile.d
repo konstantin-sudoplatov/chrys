@@ -1,7 +1,7 @@
 /// Dynamic concept names
 module crank_pile;
 
-import global, tools;
+import global, tools_pile;
 import cpt_pile, cpt_neurons, cpt_premises, cpt_actions;
 import stat_pile;
 

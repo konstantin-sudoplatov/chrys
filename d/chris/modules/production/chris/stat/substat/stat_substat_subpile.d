@@ -1,7 +1,7 @@
 module stat_substat_subpile;
 import std.stdio;
 
-import global, tools;
+import global, tools_pile;
 import attn_circle_thread: Caldron;
 
 

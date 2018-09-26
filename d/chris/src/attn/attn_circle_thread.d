@@ -3,7 +3,7 @@ import core.thread, std.concurrency;
 import std.conv;
 import std.format;
 
-import global, tools;
+import global, tools_pile;
 import interfaces;
 import cpt_abstract, cpt_pile, cpt_neurons, cpt_premises, cpt_actions;
 import crank_pile;

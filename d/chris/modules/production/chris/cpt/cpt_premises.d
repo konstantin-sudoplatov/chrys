@@ -2,7 +2,7 @@ module cpt_premises;
 import std.stdio;
 import std.format;
 
-import global, tools;
+import global, tools_pile;
 import interfaces;
 import cpt_abstract;
 

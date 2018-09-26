@@ -3,7 +3,7 @@ module stat_pile;
 import std.stdio;
 import std.format;
 
-import global, tools;
+import global, tools_pile;
 import interfaces;
 import attn_circle_thread: Caldron;
 import cpt_abstract, cpt_premises;

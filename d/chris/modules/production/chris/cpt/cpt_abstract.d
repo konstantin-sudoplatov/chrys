@@ -3,7 +3,7 @@
 module cpt_abstract;
 import std.conv, std.format;
 
-import global, tools;
+import global, tools_pile;
 import interfaces;
 import cpt_pile, cpt_neurons, cpt_premises, cpt_actions;
 import attn_circle_thread;

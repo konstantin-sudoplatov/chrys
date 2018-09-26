@@ -1,4 +1,4 @@
-module tools;
+module tools_pile;
 import std.stdio;
 import std.format;
 
@@ -337,7 +337,7 @@ stdout.flush;
 
 ///
 unittest {
-    import tools: w;
+    import tools_pile: w;
     string s = "Purpose of life";
     int k = 42;
     int* p = &k;

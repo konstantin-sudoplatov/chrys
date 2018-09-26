@@ -1,7 +1,7 @@
 module messages;
 import std.concurrency;
 
-import tools, global;
+import tools_pile, global;
 import cpt_abstract;
 
 /// Common ancestor of all messages.

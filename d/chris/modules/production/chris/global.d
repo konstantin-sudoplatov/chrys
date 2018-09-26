@@ -5,7 +5,7 @@ import std.traits;
 import std.format;
 import std.conv;
 
-import tools;
+import tools_pile;
 import attn_dispatcher_thread, attn_circle_thread;
 import cpt_abstract, cpt_pile, cpt_neurons, cpt_premises, cpt_actions;
 
@@ -152,7 +152,7 @@ unittest {
     the rest lifetime, it is not synchronized.
 */
 shared final pure nothrow class NameMap {
-    import tools: CrossMap;
+    import tools_pile: CrossMap;
 
     /**
                 Check the length of the map.
@@ -288,7 +288,7 @@ unittest {
     //import std.stdio: writeln;
     //writeln(nm.names);     // will produce ["firstCpt", "secondCpt"]
 
-        // Makes the program crash with code -4. A bug in DMD, obviously. In the tools.d module analogous code works just fine.
+        // Makes the program crash with code -4. A bug in DMD, obviously. In the tools_pile.d module analogous code works just fine.
     // throws RangeError on non-existent key
     //import core.exception: RangeError;
     //try {

@@ -2,7 +2,7 @@ module cpt_actions;
 import std.stdio;
 import std.format;
 
-import global, tools;
+import global, tools_pile;
 import cpt_abstract, cpt_pile, cpt_premises;
 import attn_circle_thread;
 

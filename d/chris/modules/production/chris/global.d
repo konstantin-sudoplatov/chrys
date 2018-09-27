@@ -24,6 +24,85 @@ enum MIN_TEMP_CID = MAX_STATIC_CID + 1;
 enum MAX_TEMP_CID = MIN_DYNAMIC_CID - 1;
 static assert(MAX_TEMP_CID >= MIN_TEMP_CID);
 
+// modules with static concepts
+import stat_pile;
+import stat_substat_subpile;
+
+/// Full list of modules, that contain static concept functions. This list is used at compile time to gather together all static
+/// concepts and put them in the holy map and their names and cids in the name map.
+enum StatConceptModules {
+    pile = "stat_pile",
+    subpile = "stat_substat_subpile"
+}
+
+/// Call types of the static concept (static concept is function).
+enum StatCallType: string {
+    p0Cal = "void function(Caldron)",                              // void function(Caldron nameSpace)
+    p0Calp1Cid = "void function(Caldron, Cid)",                         // void function(Caldron nameSpace, Cid operandCid)
+    p0Calp1Cidp2Cid = "void function(Caldron, Cid, Cid)",                    // void function(Caldron nameSpace, Cid firstoperandCid, Cid secondOperandCid)
+    p0Calp1Cidp2Int = "void function(Caldron, Cid, int)",                    // void function(Caldron nameSpace, Cid conceptCid, int intValue)
+    p0Calp1Cidp2Float = "void function(Caldron, Cid, float)",                  // void function(Caldron nameSpace, Cid conceptCid, float floatValue)
+    p0Calp1Cidp2Cidp3Float = "void function(Caldron, Cid, Cid, float)",             // void function(Caldron nameSpace, Cid branchBreedCid, Cid conceptCid, float floatValue)
+}
+
+// modules with dynamic concept names and cranks
+import crank_pile;
+import crank_subcrank_subpile;
+
+/// Full list of modules, that contain dynamic concept names.This list is used at compile time to gather together all dynamic
+///// concept names along with cids and put them in the name map.
+enum CrankModules {
+    pile = "crank_pile",
+    subpile = "crank_subcrank_subpile"
+}
+
+/**
+    Spawn the key threads (console_thread, attention dispatcher), capture their Tids.
+*/
+shared static this() {
+    // Initialize random generator
+    rnd_ = Random(unpredictableSeed);
+
+    // Create and initialize the key shared structures
+    _nm_ = new shared NameMap;
+    _hm_ = new shared HolyMap;
+    fillInConceptMaps_(_hm_, _nm_);     // static concepts from the stat modules, dynamic concept names from the crank modules
+    debug
+        _maps_filled_ = true;
+
+    // Crank the system. System must be cranked befor spawning any circle threads since they use the chat_seed concept to start.
+    runCranks_;     // create and setup manually programed dynamic concepts
+    import std.stdio: writefln;
+    writefln("Some free dynamic cids: %s", _hm_.generate_some_cids(5));
+
+    // Remove from the name map entries not related to the concepts.
+    cleanupNotUsedNames;
+    _hm_.rehash;
+    _nm_.rehash;
+    debug
+        _cranked_ = true;
+
+    // Capture Tid of the main thread.
+    _mainTid_ = cast(immutable)thisTid;
+
+    // Spawn the attention dispatcher thread.
+    _attnDispTid_ = cast(immutable)spawn(&attention_dispatcher_thread_func);
+
+    // Spawn the console thread thread.
+    import console_thread: console_thread_func;
+    spawn(&console_thread_func);
+}
+
+/// Structure of the crank enums.
+struct CptDescriptor {
+    string className;      // named concept's class
+    Cid cid;                // named concept's cid
+//    alias cid this;         // the enum's value by default is cid
+}
+
+/// Enum template for declaring named dynamic concepts. Used in the crank modules.
+enum cd(T : SpiritDynamicConcept, Cid cid)  = CptDescriptor(T.stringof, cid);
+
 /**
         Convert name of type represented as a string to real type. Don't forget, the type you a trying to instantiate must
     exist, i.e. to be imported or to be a basic type.
@@ -81,48 +160,6 @@ void checkCid(T)(Caldron caldron, Cid cid)
                 format!"Cid: %s, must be of type %s and it is of type %s."
                         (cid, T.stringof, typeid(caldron[cid])));
 }
-
-// modules with static concepts
-import stat_pile;
-import stat_substat_subpile;
-
-/// Full list of modules, that contain static concept functions. This list is used at compile time to gather together all static
-/// concepts and put them in the holy map and their names and cids in the name map.
-enum StatConceptModules {
-    pile = "stat_pile",
-    subpile = "stat_substat_subpile"
-}
-
-/// Call types of the static concept (static concept is function).
-enum StatCallType: string {
-    p0Cal = "void function(Caldron)",                              // void function(Caldron nameSpace)
-    p0Calp1Cid = "void function(Caldron, Cid)",                         // void function(Caldron nameSpace, Cid operandCid)
-    p0Calp1Cidp2Cid = "void function(Caldron, Cid, Cid)",                    // void function(Caldron nameSpace, Cid firstoperandCid, Cid secondOperandCid)
-    p0Calp1Cidp2Int = "void function(Caldron, Cid, int)",                    // void function(Caldron nameSpace, Cid conceptCid, int intValue)
-    p0Calp1Cidp2Float = "void function(Caldron, Cid, float)",                  // void function(Caldron nameSpace, Cid conceptCid, float floatValue)
-    p0Calp1Cidp2Cidp3Float = "void function(Caldron, Cid, Cid, float)",             // void function(Caldron nameSpace, Cid branchBreedCid, Cid conceptCid, float floatValue)
-}
-
-// modules with dynamic concept names and cranks
-import crank_pile;
-import crank_subcrank_subpile;
-
-/// Full list of modules, that contain dynamic concept names.This list is used at compile time to gather together all dynamic
-///// concept names along with cids and put them in the name map.
-enum CrankModules {
-    pile = "crank_pile",
-    subpile = "crank_subcrank_subpile"
-}
-
-/// Structure of the crank enums.
-struct CptDescriptor {
-    string className;      // named concept's class
-    Cid cid;                // named concept's cid
-//    alias cid this;         // the enum's value by default is cid
-}
-
-/// Enum template for declaring named dynamic concepts. Used in the crank modules.
-enum cd(T : SpiritDynamicConcept, Cid cid)  = CptDescriptor(T.stringof, cid);
 
 /**
         Retrieve a concept from the holy map by its enum constant and cast it from the HolyConcept to its original type,
@@ -516,43 +553,6 @@ debug {
 }
 
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-/**
-    Spawn the key threads (console_thread, attention dispatcher), capture their Tids.
-*/
-shared static this() {
-    // Initialize random generator
-    rnd_ = Random(unpredictableSeed);
-
-    // Create and initialize the key shared structures
-    _nm_ = new shared NameMap;
-    _hm_ = new shared HolyMap;
-    fillInConceptMaps_(_hm_, _nm_);     // static concepts from the stat modules, dynamic concept names from the crank modules
-    debug
-        _maps_filled_ = true;
-
-    // Crank the system. System must be cranked befor spawning any circle threads since they use the chat_seed concept to start.
-    runCranks_;     // create and setup manually programed dynamic concepts
-    import std.stdio: writefln;
-    writefln("Some free dynamic cids: %s", _hm_.generate_some_cids(5));
-
-    // Remove from the name map entries not related to the concepts.
-    cleanupNotUsedNames;
-    _hm_.rehash;
-    _nm_.rehash;
-    debug
-        _cranked_ = true;
-
-    // Capture Tid of the main thread.
-    _mainTid_ = cast(immutable)thisTid;
-
-    // Spawn the attention dispatcher thread.
-    _attnDispTid_ = cast(immutable)spawn(&attention_dispatcher_thread_func);
-
-    // Spawn the console thread thread.
-    import console_thread: console_thread_func;
-    spawn(&console_thread_func);
-}
 
 //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 //

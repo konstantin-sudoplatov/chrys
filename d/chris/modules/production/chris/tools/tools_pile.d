@@ -3,18 +3,14 @@ import std.stdio;
 import std.format;
 
 /// Private exception for the project.
-class Crash: Exception {
-    @nogc @safe pure nothrow
-            this(string msg, string file = __FILE__, size_t line = __LINE__, Throwable nextInChain = null)
-    {
-        super(msg, file, line, nextInChain);
-    }
-
-    @nogc @safe pure nothrow this(string msg, Throwable nextInChain, string file = __FILE__, size_t line = __LINE__)
-    {
-        super(msg, file, line, nextInChain);
-    }
-}
+//class Crash: Error {
+//    @nogc @safe pure nothrow this(string file = __FILE__, size_t line = __LINE__, Throwable nextInChain = null)
+//            { super("", file, line, nextInChain); }
+//
+//    @nogc @safe pure nothrow
+//            this(string msg, string file = __FILE__, size_t line = __LINE__, Throwable nextInChain = null)
+//            { super(msg, file, line, nextInChain); }
+//}
 
 /**
         Convert type represented by a string to real type. Don't forget, the type you a trying to instantiate must
@@ -390,16 +386,16 @@ void logit(const Object o, TermColor color = null) {
 }
 
 /// Adapter for the RawDeque to prevent bloating in case it is a container for pointers
-struct Deque(T : T*)
+struct Deque(E : E*, Sz = uint)
 {
-    auto deq = DequeImpl!(void*)();
+    auto deq = DequeImpl!(void*, Sz)();
     alias deq this;
 
-    T* front() { return cast(T*)deq.front; }
-    T* popFront() {return cast(T*)deq.popFront; }
-    T* back() { return cast(T*)deq.back; }
-    T* popBack() {return cast(T*)deq.popBack; }
-    T* opIndex(size_t ind) { return cast(T*)deq.opIndex(ind); }
+    E* front() { return cast(E*)deq.front; }
+    E* popFront() {return cast(E*)deq.popFront; }
+    E* back() { return cast(E*)deq.back; }
+    E* popBack() {return cast(E*)deq.popBack; }
+    E* opIndex(size_t ind) { return cast(E*)deq.opIndex(ind); }
 }
 ///
 unittest{
@@ -415,16 +411,16 @@ unittest{
 }
 
 /// Adapter for the RawDeque to prevent bloating in case it is a container for objects
-struct Deque(T : Object)
+struct Deque(E : Object, Sz = uint)
 {
-    auto deq = DequeImpl!(Object)();
+    auto deq = DequeImpl!(Object, Sz)();
     alias deq this;
 
-    T front() { return cast(T)deq.front; }
-    T popFront() {return cast(T)deq.popFront; }
-    T back() { return cast(T)deq.back; }
-    T popBack() {return cast(T)deq.popBack; }
-    T opIndex(size_t ind) { return cast(T)deq.opIndex(ind); }
+    E front() { return cast(E)deq.front; }
+    E popFront() {return cast(E)deq.popFront; }
+    E back() { return cast(E)deq.back; }
+    E popBack() {return cast(E)deq.popBack; }
+    E opIndex(size_t ind) { return cast(E)deq.opIndex(ind); }
 }
 ///
 unittest{
@@ -438,8 +434,8 @@ unittest{
 }
 
 /// All the rest of types are forwarded to the RawDeque template for instantiation as it is
-template Deque(T){
-    alias Deque = DequeImpl!T;
+template Deque(E, Sz = uint){
+    alias Deque = DequeImpl!(E, Sz);
 }
 ///
 unittest{
@@ -449,14 +445,21 @@ unittest{
     assert(deq.popFront == 1 && deq.popFront == 2 && deq.popFront == 3);
 }
 
-/// Two-sided stack and queue like in Java, based, also like in Java, on a cyclic buffer. This implementation, unlike the
-/// dynamic arrays, for example, allows you to control the extention size in which the buffer grows and shrinks, and also
-/// you can free unused space with the thim() function. The structure takes 48 bytes of space at initialization compared to
-/// 16 of the dynamic array, but if you need a storage for a big array of data, it is going to be more efficient. BR
-/// Note: When use the foreach statement remember, that the struct is deep copyed before ising it by foreach. It cannot be
-/// avoid because consuming the range is a destructive action for the buffer, taken out elements are replaced by nulls
-/// to let the GC free them. So, it would be resource consuming for big buffers. To scan it use the for statement instead.
-private struct DequeImpl(T) {
+/**
+            Two-sided stack and queue like in Java, based, also like in Java, on a cyclic buffer. This implementation, unlike the
+        dynamic arrays, for example, allows you to control the extention size in which the buffer grows and shrinks, and also
+    you can free unused space with the thim() function. The structure takes 48 bytes of space at initialization compared to
+    16 of the dynamic array, but if you need a storage for a big array of data, it is going to be more efficient. BR
+        Note: When use the foreach statement remember, that the struct is deep copyed before ising it by foreach. It cannot be
+    avoid because consuming the range is a destructive action for the buffer, taken out elements are replaced by nulls
+    to let the GC free them. So, it would be resource consuming for big buffers. To scan it use the for statement instead.
+        Parameters:
+            E = type of elements
+            Sz = type of internal pointers. They determine the maximum size of the buffer.
+*/
+private struct DequeImpl(E, Sz=uint)
+    if(is(Sz == ubyte) || is(Sz == ushort) || is (Sz == uint) || is(Sz == ulong))
+{
     import core.exception: RangeError;
 
     /**
@@ -464,7 +467,7 @@ private struct DequeImpl(T) {
         Parameters:
             extent = both initial number of elements ond number of elements by which the buffer will be extended.
     */
-    this(long extent){
+    this(Sz extent){
         assert(extent > 0);
         extent_ = extent;
     }
@@ -472,7 +475,8 @@ private struct DequeImpl(T) {
     /// Postblit constructor. If we don't have the deep copy, the "foreach" statement will mutate our struct, (see
     /// the "help GC" comment) because it uses a copy of the input range to go through (not the save() member function).
     this(this) {
-        auto newBuf = cast(T*)new T[capacity_];
+        import core.memory: GC;
+        auto newBuf = cast(E*)GC.malloc(E.sizeof * capacity);
         newBuf[0..capacity_] = cBuf_[0..capacity_];
         cBuf_ = newBuf;
     }
@@ -518,19 +522,19 @@ private struct DequeImpl(T) {
     }
 
     /// Get the first element of the queue without taking it out. Part of the input range interface.
-    T front() {
+    E front() {
         return cBuf_[head_];
     }
 
     /// Take out an element from the front of the queue. Part of the input range interface.
     alias pull = popFront;
-    T popFront() {
+    E popFront() {
         if(length_ == 0)
             throw new RangeError;
 
         // pop
-        T el = cBuf_[head_];
-        cBuf_[head_] = T.init;  // help GC (if elements contain refs to objects on the heap)
+        E el = cBuf_[head_];
+        cBuf_[head_] = E.init;  // help GC (if elements contain refs to objects on the heap)
         ++head_;
         --length_;
         if(head_ == capacity_) {
@@ -540,43 +544,44 @@ private struct DequeImpl(T) {
         }
 
         // May be reallocate decreasing
-        const long slim = capacity_ - 2*extent_;    // the slimming limit. if length_ is less, then reallocate
-        if(length_ < slim) reallocate_;
+        auto slim = capacity_ - 2*extent_;    // the slimming limit. if reached reallocate
+        if(length_ == slim) reallocate_;
 
         return el;
     }
 
     /// For forward range interface.
     auto save() {
+        import core.memory: GC;
         auto s = this;
-        auto newBuf = cast(T*)new T[capacity_];
+        auto newBuf = cast(E*)GC.malloc(E.sizeof * capacity_);
         newBuf[0..capacity_] = cBuf_[0..capacity_];
         cBuf_ = newBuf;
         return s;
     }
 
     /// Take the last element of the queue. Part of the bidirectional range interface.
-    T back() {
+    E back() {
         return cBuf_[tail_];
     }
 
     /// Take out an element from the end of the queue. Part of the bidirectional range interface.
     alias pop = popBack;
-    T popBack() {
+    E popBack() {
         if(length_ == 0)
             throw new RangeError;
 
         // Pop
-        T el = cBuf_[tail_];
-        cBuf_[tail_] = T.init;  // help GC (if elements contain refs to objects on the heap)
+        E el = cBuf_[tail_];
+        cBuf_[tail_] = E.init;  // help GC (if elements contain refs to objects on the heap)
         --tail_;
         --length_;
         if(tail_ == -1 && length_ != 0)
             tail_ = capacity_ - 1;
 
         // May be reallocate decreasing
-        const long slim = capacity_ - 2*extent_;    // the slimming limit. if length_ is less, then reallocate
-        if(length_ < slim) reallocate_;
+        auto slim = capacity_ - 2*extent_;    // the slimming limit. if reached reallocate
+        if(length_ == slim) reallocate_;
 
         return el;
     }
@@ -587,9 +592,9 @@ private struct DequeImpl(T) {
             ind = index of the element in the queue (relative to the head of the queue).
         Throws: the RangeError exception.
     */
-    T opIndex(size_t ind) {
-        if(ind < 0 || ind >= length_) throw new RangeError;
-        return cBuf_[actualIndex_(cast(long)ind)];
+    E opIndex(size_t ind) {
+        if(ind >= length_) throw new RangeError;
+        return cBuf_[actualIndex_(cast(Sz)ind)];
     }
 
     /**
@@ -599,41 +604,45 @@ private struct DequeImpl(T) {
             ind = idex of the element from the head of the queue.
         Throws: the RangeError exception.
     */
-    void opIndexAssign(T value, size_t ind) {
-        if(ind < 0 || ind >= length_) throw new RangeError;
-        cBuf_[actualIndex_(cast(long)ind)] = value;
+    void opIndexAssign(E value, size_t ind) {
+        if(ind >= length_) throw new RangeError;
+        cBuf_[actualIndex_(cast(Sz)ind)] = value;
     }
 
     /// Get number of element in the queue.
-    size_t length() const {
+    Sz length() const {
         return length_;
     }
 
     /// Get current size of the buffer.
-    size_t capacity() { return capacity_; }
+    Sz capacity() { return capacity_; }
 
     /// Add an element to the end of the queue.
     alias push = pushBack;
-    void pushBack(T el) {
+    void pushBack(E el) {
         if(length_ == capacity_) reallocate_;
         ++tail_;
+        assert(tail_ < Sz.max);
         if(tail_ == capacity_) tail_ = 0;
         cBuf_[tail_] = el;
+        assert(length_ < Sz.max);
         ++length_;
     }
 
     /// Add an element to the head of the queue.
-    void pushFront(T el) {
+    void pushFront(E el) {
         if(length_ == capacity_) reallocate_;
         --head_;
         if(head_ == -1) head_ = capacity_ - 1;
+        assert(length_ < Sz.max);
         cBuf_[head_] = el;
         ++length_;
     }
 
     /// Nullify the buffer.
     void clear() {
-        cBuf_ = cast(T*)new T[extent_];
+        import core.memory: GC;
+        cBuf_ = cast(E*)GC.malloc(E.sizeof * extent_);
         capacity_ = extent_;
         head_ = 0;
         tail_ = -1;
@@ -652,12 +661,12 @@ private struct DequeImpl(T) {
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
     private:
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
-        T* cBuf_;           /// Cyclic buffer.
-        long head_;         /// index of the first element
-        long tail_ = -1;    /// index of the last element
-        long length_;       /// number of element in the queue
-        long capacity_;     /// current capacity of the buffer. It has the same value as cBuf.capacity, but faster.
-        immutable long extent_ = 3;       /// by this value capacity is increased.
+        E* cBuf_;           /// Cyclic buffer.
+        Sz head_;         /// index of the first element
+        Sz tail_ = -1;    /// index of the last element
+        Sz length_;       /// number of element in the queue
+        Sz capacity_;     /// current capacity of the buffer. It has the same value as cBuf.capacity, but faster.
+        immutable Sz extent_ = 3;       /// by this value capacity is increased.
 
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
@@ -667,12 +676,13 @@ private struct DequeImpl(T) {
             queInd = index relative to the head of the queue.
         throws: RangeError
     */
-    long actualIndex_(long queInd) const {
-        if(queInd < 0 || queInd > length_)
+    Sz actualIndex_(Sz queInd) const {
+        if(queInd > length_)
             throw new RangeError;
 
-        const long bufInd = head_ + queInd;     // index relative to the beginning of the buffer
-        return bufInd >= capacity_? bufInd - capacity_: bufInd;
+        const ulong bufInd = cast(ulong)head_ + cast(ulong)queInd;     // index relative to the beginning of the buffer
+        assert(bufInd < Sz.max);
+        return cast(Sz)(bufInd >= capacity_? bufInd - capacity_: bufInd);
     }
 
     /**
@@ -681,11 +691,18 @@ private struct DequeImpl(T) {
         Parameters:
             newCapacity = new size of the buffer. If not specified, then it will be the current length plus extent.
     */
-    void reallocate_(long newCapacity = 0) {
+    void reallocate_(Sz newCapacity = 0) {
+        import core.memory: GC;
 
-        if(newCapacity == 0) newCapacity = length_ + extent_;
+        // Allocate. We don't use new T[], because we want the size of the buffer match PRESIZELY the newCapacity, not the
+        // power of 2.
+        if(newCapacity == 0) {
+            assert(length_ + extent_ < Sz.max);
+            newCapacity = length_ + extent_;
+        }
+        E* newBuf = cast(E*) GC.malloc(E.sizeof * newCapacity);
 
-        T* newBuf = cast(T*)new T[newCapacity];
+        // Copy
         if(tail_ >= head_) {
             newBuf[0..length_] = cBuf_[head_..tail_+1];
         }

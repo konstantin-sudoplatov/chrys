@@ -4,7 +4,7 @@ import std.concurrency, core.thread;
 import std.variant;
 import std.format;
 
-import tools_pile;
+import tools_pile, tools_db;
 import global;
 import messages;
 
@@ -20,6 +20,11 @@ version(unittest) {
 */
 void main()
 {
+    // Connect to the data base
+    connectToDb;
+    scope(exit)
+        disconnectFromDb;
+
     // Wait for messages from the key threads. Thematically applicable only requests for termination or rethrown exceptions.
     while(true) {
         TerminateApp_msg termMsg;

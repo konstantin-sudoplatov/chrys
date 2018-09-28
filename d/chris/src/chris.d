@@ -4,7 +4,8 @@ import std.concurrency, core.thread;
 import std.variant;
 import std.format;
 
-import tools_pile, tools_db;
+import common;
+import tools_pile;
 import global;
 import messages;
 import attn_dispatcher_thread;

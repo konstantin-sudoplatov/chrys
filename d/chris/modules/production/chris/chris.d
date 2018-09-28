@@ -7,6 +7,7 @@ import std.format;
 import tools_pile, tools_db;
 import global;
 import messages;
+import attn_dispatcher_thread;
 
 // Show in console_thread, that it is the unittest mode
 version(unittest) {
@@ -20,9 +21,23 @@ version(unittest) {
 */
 void main()
 {
+    version(unittest)
+        if(auto b=true) return;
+
+    // Connect to the data base
     connectToDb;
     scope(exit)
         disconnectFromDb;
+
+    // Capture Tid of the main thread.
+    cast()_mainTid_ = thisTid;
+
+    // Spawn the attention dispatcher thread.
+    cast()_attnDispTid_ = spawn(&attention_dispatcher_thread_func);
+
+    // Spawn the console thread thread.
+    import console_thread: console_thread_func;
+    spawn(&console_thread_func);
 
     // Wait for messages from the key threads. Thematically applicable only requests for termination or rethrown exceptions.
     while(true) {

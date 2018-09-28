@@ -13,6 +13,8 @@ sourceFiles "/usr/lib/x86_64-linux-gnu/libpq.so"        // if you want static bi
 targetType "executable"
 targetPath "bin"
 sourcePaths "src"
+
 configuration "unittest" {
     mainSourceFile "src/chris.d"
 }
+

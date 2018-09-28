@@ -56,6 +56,24 @@ enum CrankModules {
     subpile = "crank_subcrank_subpile"
 }
 
+//---***---***---***---***---***--- data ---***---***---***---***---***--
+
+//      Key threads of the project. The console thead will be spawned, but we don't need to remember its Tid. The circle
+// knows it, it's enough.
+const shared Tid _mainTid_;         /// Tid of the main thread
+const shared Tid _attnDispTid_;     /// Attention dispatcher thread Tid
+
+// Key shared data structures
+shared string[Cid] _nm_;        /// name/seed map
+shared HolyMap _hm_;        /// The map of holy(stable and storrable and shared) concepts.
+debug {
+    // set to true after the maps are filled in with names,cids and references to the concept objects
+    immutable bool _maps_filled_;
+
+    // set to true after the cranking is finished and the maps rehashed
+    immutable bool _cranked_;
+}
+
 /**
     Spawn the key threads (console_thread, attention dispatcher), capture their Tids.
 */
@@ -64,7 +82,6 @@ shared static this() {
     rnd_ = Random(unpredictableSeed);
 
     // Create and initialize the key shared structures
-    _nm_ = new shared NameMap;
     _hm_ = new shared HolyMap;
     fillInConceptMaps_(_hm_, _nm_);     // static concepts from the stat modules, dynamic concept names from the crank modules
     debug
@@ -81,24 +98,9 @@ shared static this() {
     _nm_.rehash;
     debug
         _cranked_ = true;
-
-    // Capture Tid of the main thread.
-    _mainTid_ = cast(immutable)thisTid;
-
-    // Spawn the attention dispatcher thread.
-    _attnDispTid_ = cast(immutable)spawn(&attention_dispatcher_thread_func);
-
-    // Spawn the console thread thread.
-    import console_thread: console_thread_func;
-    spawn(&console_thread_func);
 }
 
-/// Structure of the crank enums.
-struct CptDescriptor {
-    string className;      // named concept's class
-    Cid cid;                // named concept's cid
-//    alias cid this;         // the enum's value by default is cid
-}
+//---***---***---***---***---***--- functions ---***---***---***---***---***--
 
 /// Enum template for declaring named dynamic concepts. Used in the crank modules.
 enum cd(T : SpiritDynamicConcept, Cid cid)  = CptDescriptor(T.stringof, cid);
@@ -130,7 +132,6 @@ template statCid(alias cptName)
 
 ///
 unittest {
-
     @(1, StatCallType.p0Calp1Cid) static void fun(Caldron spaceName, Cid cid) {}
 
     const Cid cid = __traits(getAttributes, fun)[0];      // its cid
@@ -145,7 +146,7 @@ unittest {
 */
 void checkCid(T: SpiritConcept)(Cid cid) {
     debug if(_maps_filled_) {
-        assert(cid in _hm_, format!"Cid: %s(%s) do not exist in the holy map."(cid, _nm_.name(cid)));
+        assert(cid in _hm_, format!"Cid: %s(%s) do not exist in the holy map."(cid, _nm_[cid]));
         assert(cast(T)_hm_[cid],
                 format!"Cid: %s, must be of type %s and it is of type %s."(cid, T.stringof, typeid(_hm_[cid])));
     }
@@ -182,163 +183,170 @@ unittest {
     assert(cpt!(chat_seed) is cast(shared SpSeed)_hm_[chat_seed.cid]);
 }
 
-/**
-            It is a two-way map of concept name/cid. The concepts are both static and dynamic. Here are gathered all
-    of the concepts which have names, that are known to the compiler, i.e. can be manipulated directly from the code.
-    Since this object is changed only in this module constructor (only this thread) and is immutable throughout all
-    the rest lifetime, it is not synchronized.
-*/
-shared final pure nothrow class NameMap {
-    import tools_pile: CrossMap;
-
-    /**
-                Check the length of the map.
-            Returns: number of pairs in the map.
-    */
-    auto length() {
-        return (cast()cross_).length;
-    }
-
-    /**
-                Overload for "in".
-        Parameters:
-            cid = cid of the concept.
-        Returns: pointer to name or null
-    */
-    const(string*) opBinaryRight(string op)(Cid cid) {
-        return cid in cast()cross_;
-    }
-
-    /**
-                Overload for "in".
-        Parameters:
-            name = name of the concept.
-        Returns: pointer to cid or null
-    */
-    const(Cid*) opBinaryRight(string op)(string name) const {
-        return name in cast()cross_;
-    }
-
-    /**
-            Get the cid of the concept by name.
-        Parameters:
-            name = name of the concept.
-        Returns: cid of the concept, 0 if not found
-    */
-    nothrow const(Cid) cid(string name) const {
-        if (auto p = name in cast()cross_)
-            return *p;
-        else
-            return 0;
-    }
-
-    /// Ditto.
-    const(Cid) opIndex(string name) const {
-        return (cast()cross_)[name];
-    }
-
-    /**
-            Get the name of the concept by cid.
-        Parameters:
-            cid = cid of the concept
-        Returns: name of the concept or null if not found.
-    */
-    const(string) name(Cid  cid) const {
-        if (auto p = cid in cast()cross_)
-            return *p;
-        else
-            return null;
-    }
-
-    /// Ditto.
-    const(string) opIndex(Cid cid) const {
-        return (cast()cross_)[cid];
-    }
-
-    /*
-            Get the range of the cids.
-        Returns: range of cids.
-    */
-    auto cids() {
-        return (cast()cross_).seconds_by_key;
-    }
-
-    /*
-            Get a range of the namess.
-        Returns: range of names.
-    */
-    auto names() {
-        return (cast()cross_).firsts_by_key;
-    }
-
-    /**
-            Add a pair cid/name.
-        Parameters:
-            cid = cid of the concept
-            name = name of the concept
-    */
-    void add(Cid cid, string name) {
-        assert(name !in this && cid !in this, "Keys are already in the map. We won't want to have assimetric maps.");     // if not, we risk having assimetric maps.
-        (cast()cross_).add(cid, name);
-        assert(name in this && cid in this);
-    }
-
-    /**
-            Remove pair cid/name. If there is no such a pair, nothing happens.
-        Parameters:
-            cid = cid of the concept
-            name = name of the concept
-    */
-    void remove(Cid cid, string name) {
-        assert((name !in this && cid !in this) || (name in this && cid in this));
-        (cast()cross_).remove(cid, name);
-        assert(name !in this && cid !in this);
-    }
-
-    /**
-                Rebuild associative arrays to make them more efficient.
-    */
-    void rehash() {
-        (cast()cross_).rehash;
-    }
-
-    private:
-    CrossMap!(Cid, string) cross_;   // we use the cross map implementation, adding interface pass-through methods, to make it readable
+/// Structure of the crank enums.
+struct CptDescriptor {
+    string className;      // named concept's class
+    Cid cid;                // named concept's cid
+//    alias cid this;         // the enum's value by default is cid
 }
+
+///**
+//            It is a two-way map of concept name/cid. The concepts are both static and dynamic. Here are gathered all
+//    of the concepts which have names, that are known to the compiler, i.e. can be manipulated directly from the code.
+//    Since this object is changed only in this module constructor (only this thread) and is immutable throughout all
+//    the rest lifetime, it is not synchronized.
+//*/
+//shared final pure nothrow class NameMap {
+//    import tools_pile: CrossMap;
+//
+//    /**
+//                Check the length of the map.
+//            Returns: number of pairs in the map.
+//    */
+//    auto length() {
+//        return (cast()cross_).length;
+//    }
+//
+//    /**
+//                Overload for "in".
+//        Parameters:
+//            cid = cid of the concept.
+//        Returns: pointer to name or null
+//    */
+//    const(string*) opBinaryRight(string op)(Cid cid) {
+//        return cid in cast()cross_;
+//    }
+//
+//    /**
+//                Overload for "in".
+//        Parameters:
+//            name = name of the concept.
+//        Returns: pointer to cid or null
+//    */
+//    const(Cid*) opBinaryRight(string op)(string name) const {
+//        return name in cast()cross_;
+//    }
+//
+//    /**
+//            Get the cid of the concept by name.
+//        Parameters:
+//            name = name of the concept.
+//        Returns: cid of the concept, 0 if not found
+//    */
+//    nothrow const(Cid) cid(string name) const {
+//        if (auto p = name in cast()cross_)
+//            return *p;
+//        else
+//            return 0;
+//    }
+//
+//    /// Ditto.
+//    const(Cid) opIndex(string name) const {
+//        return (cast()cross_)[name];
+//    }
+//
+//    /**
+//            Get the name of the concept by cid.
+//        Parameters:
+//            cid = cid of the concept
+//        Returns: name of the concept or null if not found.
+//    */
+//    const(string) name(Cid  cid) const {
+//        if (auto p = cid in cast()cross_)
+//            return *p;
+//        else
+//            return null;
+//    }
+//
+//    /// Ditto.
+//    const(string) opIndex(Cid cid) const {
+//        return (cast()cross_)[cid];
+//    }
+//
+//    /*
+//            Get the range of the cids.
+//        Returns: range of cids.
+//    */
+//    auto cids() {
+//        return (cast()cross_).seconds_by_key;
+//    }
+//
+//    /*
+//            Get a range of the namess.
+//        Returns: range of names.
+//    */
+//    auto names() {
+//        return (cast()cross_).firsts_by_key;
+//    }
+//
+//    /**
+//            Add a pair cid/name.
+//        Parameters:
+//            cid = cid of the concept
+//            name = name of the concept
+//    */
+//    void add(Cid cid, string name) {
+//        assert(name !in this && cid !in this, "Keys are already in the map. We won't want to have assimetric maps.");     // if not, we risk having assimetric maps.
+//        (cast()cross_).add(cid, name);
+//        assert(name in this && cid in this);
+//    }
+//
+//    /**
+//            Remove pair cid/name. If there is no such a pair, nothing happens.
+//        Parameters:
+//            cid = cid of the concept
+//            name = name of the concept
+//    */
+//    void remove(Cid cid, string name) {
+//        assert((name !in this && cid !in this) || (name in this && cid in this));
+//        (cast()cross_).remove(cid, name);
+//        assert(name !in this && cid !in this);
+//    }
+//
+//    /**
+//                Rebuild associative arrays to make them more efficient.
+//    */
+//    void rehash() {
+//        (cast()cross_).rehash;
+//    }
+//
+//    private:
+//    CrossMap!(Cid, string) cross_;   // we use the cross map implementation, adding interface pass-through methods, to make it readable
+//}
 
 ///
-unittest {
-    shared NameMap nm = new shared NameMap;
-    nm.add(1, "firstCpt");
-    assert(nm.length == 1);
-    assert("firstCpt" in nm);
-    assert(1 in nm);
-
-    import std.array: array;
-    import std.algorithm.iteration: sum, joiner;
-    //  cm.add(1, "secondCpt");       // this will produce an error, because 1 is in the cross already. We won't want to end up with assimetric maps.
-    nm.add(2, "secondCpt");
-    assert(nm.name(2) == "secondCpt");
-    assert(nm.cid("secondCpt") == 2);
-    assert(nm.cids.sum == 3);
-    assert(nm.names.joiner.array.length == 17);
-    //import std.stdio: writeln;
-    //writeln(nm.names);     // will produce ["firstCpt", "secondCpt"]
-
-        // Makes the program crash with code -4. A bug in DMD, obviously. In the tools_pile.d module analogous code works just fine.
-    // throws RangeError on non-existent key
-    //import core.exception: RangeError;
-    //try {
-    //    int cid = nm.cid("three");
-    //} catch(RangeError e) {
-    //    assert(e.msg == "Range violation");
-    //}
-
-    nm.remove(1, "firstCpt");
-    assert(nm.length == 1);
-    nm.remove(1, "firstCpt");  // nothing happens
-    assert(nm.length == 1);
-}
+//unittest {
+//    shared NameMap nm = new shared NameMap;
+//    nm.add(1, "firstCpt");
+//    assert(nm.length == 1);
+//    assert("firstCpt" in nm);
+//    assert(1 in nm);
+//
+//    import std.array: array;
+//    import std.algorithm.iteration: sum, joiner;
+//    //  cm.add(1, "secondCpt");       // this will produce an error, because 1 is in the cross already. We won't want to end up with assimetric maps.
+//    nm.add(2, "secondCpt");
+//    assert(nm.name(2) == "secondCpt");
+//    assert(nm.cid("secondCpt") == 2);
+//    assert(nm.cids.sum == 3);
+//    assert(nm.names.joiner.array.length == 17);
+//    //import std.stdio: writeln;
+//    //writeln(nm.names);     // will produce ["firstCpt", "secondCpt"]
+//
+//        // Makes the program crash with code -4. A bug in DMD, obviously. In the tools_pile.d module analogous code works just fine.
+//    // throws RangeError on non-existent key
+//    //import core.exception: RangeError;
+//    //try {
+//    //    int cid = nm.cid("three");
+//    //} catch(RangeError e) {
+//    //    assert(e.msg == "Range violation");
+//    //}
+//
+//    nm.remove(1, "firstCpt");
+//    assert(nm.length == 1);
+//    nm.remove(1, "firstCpt");  // nothing happens
+//    assert(nm.length == 1);
+//}
 
 /**
             Holy concepts map. It is a wrapper for actual associative array.
@@ -443,16 +451,16 @@ shared synchronized final pure nothrow class HolyMap {
         return add(cpt);
     }
 
-    /**
-                Get concept by name.
-        Parameters:
-            name = key
-        Returns: shared concept
-    */
-    shared(SpiritConcept) opIndex(string name) {
-        assert(name in _nm_);
-        return holyMap_[_nm_[name]];
-    }
+    ///**
+    //            Get concept by name.
+    //    Parameters:
+    //        name = key
+    //    Returns: shared concept
+    //*/
+    //shared(SpiritConcept) opIndex(string name) {
+    //    assert(name in _nm_);
+    //    return holyMap_[_nm_[name]];
+    //}
 
     /**
                 Overload for "in".
@@ -533,26 +541,6 @@ shared synchronized final pure nothrow class HolyMap {
 
     //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
 }
-
-//---***---***---***---***---***--- data ---***---***---***---***---***--
-
-//      Key threads of the project. The console thead will be spawned, but we don't need to remember its Tid. The circle
-// knows it, it's enough.
-immutable Tid _mainTid_;         /// Tid of the main thread
-immutable Tid _attnDispTid_;     /// Attention dispatcher thread Tid
-
-// Key shared data structures
-shared NameMap _nm_;        /// name/seed two-way map
-shared HolyMap _hm_;        /// The map of holy(stable and storrable and shared) concepts.
-debug {
-    // set to true after the maps are filled in with names,cids and references to the concept objects
-    immutable bool _maps_filled_;
-
-    // set to true after the cranking is finished and the maps rehashed
-    immutable bool _cranked_;
-}
-
-//---***---***---***---***---***--- functions ---***---***---***---***---***--
 
 //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 //
@@ -689,7 +677,7 @@ private Cid[] findUnusedStatCids_() {
     Parameters:
         hm = holy map to fill
 */
-private void fillInConceptMaps_(shared HolyMap hm, shared NameMap nm)
+private void fillInConceptMaps_(shared HolyMap hm, shared string[Cid] nm)
 out{
     assert(hm.length == statDescriptors_.length + dynDescriptors_.length);
     assert(nm.length == statDescriptors_.length + dynDescriptors_.length);
@@ -701,7 +689,7 @@ do {
     foreach(sd; statDescriptors_) {
         assert(sd.cid !in hm, "Cid: " ~ to!string(sd.cid) ~ ". Cids cannot be reused.");
         hm.add(new shared SpStaticConcept(sd.cid, sd.fun_ptr, sd.call_type));
-        nm.add(sd.cid, sd.name);
+        nm[sd.cid] = sd.name;
     }
 
     // report static cids usage
@@ -710,8 +698,8 @@ do {
 
     // Accept dynamic concept names from the dynDescriptors_ enum
     foreach(dd; dynDescriptors_) {
-        assert(dd.cid !in nm && dd.name !in nm);
-        nm.add(dd.cid, dd.name);
+        assert(dd.cid !in nm);
+        nm[dd.cid] = dd.name;
     }
 
     // Create dynamic concepts based on the dynDescriptors_ enum
@@ -751,7 +739,7 @@ private void cleanupNotUsedNames() {
     alias Entry = Tuple!(Cid, "cid", string, "name");
     Entry[] orphans;
     Entry orphan;
-    foreach(cid; _nm_.cids)
+    foreach(cid; (cast()_nm_).byKey)
         if      //is not cid in the holy map?
                 (cid !in _hm_)
         {
@@ -763,7 +751,7 @@ private void cleanupNotUsedNames() {
 
     // Remove orphans
     foreach(orph; orphans)
-        _nm_.remove(orph.cid, orph.name);
+        _nm_.remove(orph.cid);
 }
 
 //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--

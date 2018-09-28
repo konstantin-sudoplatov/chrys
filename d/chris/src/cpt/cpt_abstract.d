@@ -105,7 +105,7 @@ shared abstract class SpiritConcept {
     string toString() const {
         import std.format: format;
 
-        return format!"%s(%s): %,3?s"(_nm_.name(cid), typeid(this), '_', cid);
+        return format!"%s(%s): %,3?s"(_nm_[cid], typeid(this), '_', cid);
     }
 }
 
@@ -147,7 +147,7 @@ abstract class Concept {
         import std.format: format;
         import std.array: replace;
 
-        string s = format!"%s(%s):"(_nm_.name(sp.cid), typeid(this));
+        string s = format!"%s(%s):"(_nm_[sp.cid], typeid(this));
         s ~= format!"\nsp = %s"((cast(shared)sp).toString).replace("\n", "\n    ");
         return s;
     }
@@ -635,7 +635,7 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
         auto s = super.toString;
         s ~= "\n    premises: [";
         foreach(pr; _premises) {
-            s ~= format!"\n        %s(%,?s)"(_nm_.name(pr), '_', pr);
+            s ~= format!"\n        %s(%,?s)"(_nm_[pr], '_', pr);
         }
         s ~= "\n    ]";
         return s;

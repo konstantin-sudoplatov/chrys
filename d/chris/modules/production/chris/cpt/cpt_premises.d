@@ -33,7 +33,7 @@ import cpt_neurons: SpSeed;
 
     override string toString() const {
         string s = super.toString;
-        s ~= format!"\n    seedCid_ = %s(%,?s)"(_nm_.name(seedCid_), '_', seedCid_);
+        s ~= format!"\n    seedCid_ = %s(%,?s)"(_nm_[seedCid_], '_', seedCid_);
         return s;
     }
 

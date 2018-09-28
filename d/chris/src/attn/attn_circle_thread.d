@@ -51,7 +51,7 @@ class Caldron {
         Returns: the live concept object
     */
     final Concept opIndex(Cid cid) {
-        assert(cid in _hm_, format!"Cid %s(%s) is not in the holy map."(cid, _nm_.name(cid)));
+        assert(cid in _hm_, format!"Cid %s(%s) is not in the holy map."(cid, _nm_[cid]));
         if
                 (auto p = cid in lm_)
             return *p;
@@ -152,7 +152,7 @@ class Caldron {
         {   //yes: it's already a clone, inject into the current name space (may be with overriding)
             if (dynDebug >= 1)
                 logit(format!"%s, message SingleConceptPackageMsg has come, load: %s(%,?s)"
-                        (caldName, _nm_.name(m.load.cid), '_', m.load.cid), TermColor.brown);
+                        (caldName, _nm_[m.load.cid], '_', m.load.cid), TermColor.brown);
 
             this[] = cast()m.load;      // inject
             reasoning_;                 // kick off
@@ -212,14 +212,14 @@ class Caldron {
         while(true) {
             // Put on the head
             if (dynDebug >= 1)
-                logit(format!"%s, headCid_: %s(%,?s)"(caldName, _nm_.name(headCid_), '_', headCid_), TermColor.green);
+                logit(format!"%s, headCid_: %s(%,?s)"(caldName, _nm_[headCid_], '_', headCid_), TermColor.green);
             Neuron head = cast(Neuron)this[headCid_];
 
             // Let the head be processed, determine effects and do the actions.
             auto effect = head.calculate_activation_and_get_effects(this);
             foreach(actCid; effect.actions) {
                 if (dynDebug >= 1)
-                    logit(format!"%s, action: %s(%,?s)"(caldName, _nm_.name(actCid), '_', actCid), TermColor.green);
+                    logit(format!"%s, action: %s(%,?s)"(caldName, _nm_[actCid], '_', actCid), TermColor.green);
                 Action act = cast(Action)this[actCid];
                 act.run(this);
             }
@@ -339,9 +339,9 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
         else
             if      // is it a breeded branch?
                     (auto br = cast(shared SpBreed)_hm_[breedOrSeedCid])
-                s = format!"starting breeded branch %s(%s)"(_nm_.name(br.seed), br.seed);
+                s = format!"starting breeded branch %s(%s)"(_nm_[br.seed], br.seed);
             else
-                s = format!"starting seeded branch %s(%s)"(_nm_.name(breedOrSeedCid), breedOrSeedCid);
+                s = format!"starting seeded branch %s(%s)"(_nm_[breedOrSeedCid], breedOrSeedCid);
 
         logit(s, TermColor.brown);
     }

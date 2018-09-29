@@ -1,0 +1,12 @@
+<component name="libraryTable">
+  <library name="chrislib" type="DLangLib">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/chrislib" />
+    </CLASSES>
+    <JAVADOC />
+    <LIBRARY_FILE>
+      <root url="file://$PROJECT_DIR$/chrislib" />
+    </LIBRARY_FILE>
+    <SOURCES />
+  </library>
+</component>

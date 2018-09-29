@@ -1,4 +1,4 @@
-module common;
+module db.common;
 import std.exception;
 import std.string;
 import std.conv;

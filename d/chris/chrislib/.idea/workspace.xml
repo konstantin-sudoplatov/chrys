@@ -2,13 +2,36 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="99192121-a0e8-4c1f-b796-335d5e3d9cb1" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/chris_chrislib__master.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/chris_chrislib__master2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/chris_chrislib__master3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/chris_chrislib__master4.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/chris_chrislib__master5.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/chris_chrislib__master6.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/chris_chrislib__master7.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/derelict_pq_4_0_0_alpha_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/derelict_pq_4_0_0_alpha_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/derelict_pq_4_0_0_alpha_23.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/derelict_pq_4_0_0_alpha_24.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/derelict_pq_4_0_0_alpha_25.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/derelict_util_3_0_0_beta_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/derelict_util_3_0_0_beta_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/derelict_util_3_0_0_beta_23.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/derelict_util_3_0_0_beta_24.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../.idea/libraries/derelict_util_3_0_0_beta_25.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/chris" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chris.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../chris.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_pq_4_0_0_alpha_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_util_3_0_0_beta_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/libchrislib.a" beforeDir="false" afterPath="$PROJECT_DIR$/lib/libchrislib.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/app.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/db/common.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/common.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../dub.sdl" beforeDir="false" afterPath="$PROJECT_DIR$/../dub.sdl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../dub.selections.json" beforeDir="false" afterPath="$PROJECT_DIR$/../dub.selections.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../modules/production/chris/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/../modules/production/chris/chris.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../modules/production/chris/tools/tools_db.d" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../src/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/../src/chris.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../src/tools/tools_db.d" beforeDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -21,8 +44,9 @@
     <session id="-1804113899">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.3" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.opened" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -49,25 +73,12 @@
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/app.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="10" selection-start-line="10" selection-end-line="10" />
-              <folding>
-                <element signature="e#43#44#0" expanded="true" />
-                <element signature="e#74#75#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/db/common.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="6" column="22" lean-forward="true" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+            <state relative-caret-position="34">
+              <caret line="2" column="18" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -84,28 +95,26 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="width" value="1920" />
-    <option name="height" value="1074" />
+  <component name="MavenProjectNavigator">
+    <treeState>
+      <expand />
+      <select />
+    </treeState>
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="172" />
+    <option name="width" value="1744" />
+    <option name="height" value="1076" />
+  </component>
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+    <ConfirmationsSetting value="1" id="Add" />
+  </component>
   <component name="ProjectView">
     <navigator currentView="PackagesPane" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
       <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="chrislib" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chrislib" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="PackagesPane">
         <subPane>
           <expand>
@@ -118,6 +127,22 @@
               <item name="chrislib" type="616d4139:PackageViewModuleNode" />
               <item name="db" type="1f31426a:PackageElementNode" />
             </path>
+            <path>
+              <item name="chrislib" type="58d84e3e:PackageViewProjectNode" />
+              <item name="chrislib" type="616d4139:PackageViewModuleNode" />
+              <item name="Libraries" type="5c3f07af:PackageViewLibrariesNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="chrislib" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chrislib" type="462c0819:PsiDirectoryNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -125,7 +150,10 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/.dub/packages/derelict-pq-4.0.0-alpha.2/derelict-pq/lib" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="D Tools" />
   </component>
   <component name="RunDashboard">
@@ -140,7 +168,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Build with DUB.Run DUB">
+  <component name="RunManager" selected="Build with DUB.Unittest Dub">
     <configuration name="Run D App" type="DlangRunAppConfiguration" factoryName="Run D App" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="chrislib" />
       <option name="additionalParams" />
@@ -253,9 +281,9 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Run DUB" type="DlangRunDubConfiguration" factoryName="Build with DUB" show_console_on_std_err="false" show_console_on_std_out="false">
+    <configuration name="Debug Dub" type="DlangRunDubConfiguration" factoryName="Build with DUB" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="chrislib" />
-      <option name="additionalParams" />
+      <option name="additionalParams" value="--build=debug" />
       <option name="buildMode" value="0" />
       <option name="cbCombined" value="false" />
       <option name="cbCoverage" value="false" />
@@ -270,14 +298,43 @@
       </option>
       <option name="generalDubOptions" value="1" />
       <option name="quiet" value="false" />
-      <option name="tfArch" />
-      <option name="tfBuild" />
-      <option name="tfCompiler" />
-      <option name="tfConfig" />
-      <option name="tfDebug" />
-      <option name="tfMainFile" />
+      <option name="tfArch" value="" />
+      <option name="tfBuild" value="" />
+      <option name="tfCompiler" value="" />
+      <option name="tfConfig" value="" />
+      <option name="tfDebug" value="" />
+      <option name="tfMainFile" value="" />
       <option name="verbose" value="false" />
-      <option name="workingDir" />
+      <option name="workingDir" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Unittest Dub" type="DlangRunDubConfiguration" factoryName="Build with DUB" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="chrislib" />
+      <option name="additionalParams" value="" />
+      <option name="buildMode" value="0" />
+      <option name="cbCombined" value="false" />
+      <option name="cbCoverage" value="false" />
+      <option name="cbForce" value="false" />
+      <option name="cbForceRemove" value="false" />
+      <option name="cbNoDeps" value="false" />
+      <option name="cbParallel" value="false" />
+      <option name="cbRdmd" value="false" />
+      <option name="cbTempBuild" value="false" />
+      <option name="envVars">
+        <map />
+      </option>
+      <option name="generalDubOptions" value="2" />
+      <option name="quiet" value="false" />
+      <option name="tfArch" value="" />
+      <option name="tfBuild" value="" />
+      <option name="tfCompiler" value="" />
+      <option name="tfConfig" value="" />
+      <option name="tfDebug" value="" />
+      <option name="tfMainFile" value="" />
+      <option name="verbose" value="false" />
+      <option name="workingDir" value="" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -311,10 +368,41 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="release DUB" type="DlangRunDubConfiguration" factoryName="Build with DUB" show_console_on_std_err="false" show_console_on_std_out="false">
+      <module name="chrislib" />
+      <option name="additionalParams" value="--build=release" />
+      <option name="buildMode" value="0" />
+      <option name="cbCombined" value="false" />
+      <option name="cbCoverage" value="false" />
+      <option name="cbForce" value="false" />
+      <option name="cbForceRemove" value="false" />
+      <option name="cbNoDeps" value="false" />
+      <option name="cbParallel" value="false" />
+      <option name="cbRdmd" value="false" />
+      <option name="cbTempBuild" value="false" />
+      <option name="envVars">
+        <map />
+      </option>
+      <option name="generalDubOptions" value="0" />
+      <option name="quiet" value="false" />
+      <option name="tfArch" value="" />
+      <option name="tfBuild" value="" />
+      <option name="tfCompiler" value="" />
+      <option name="tfConfig" value="" />
+      <option name="tfDebug" value="" />
+      <option name="tfMainFile" value="" />
+      <option name="verbose" value="false" />
+      <option name="workingDir" value="" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <list>
-      <item itemvalue="Run DMD Compiler.Compile with DMD" />
+      <item itemvalue="Build with DUB.release DUB" />
+      <item itemvalue="Build with DUB.Unittest Dub" />
+      <item itemvalue="Build with DUB.Debug Dub" />
       <item itemvalue="Run D App.Run D App" />
-      <item itemvalue="Build with DUB.Run DUB" />
+      <item itemvalue="Run DMD Compiler.Compile with DMD" />
     </list>
   </component>
   <component name="TaskManager">
@@ -328,37 +416,42 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-3" width="1924" height="1087" extended-state="6" />
+    <frame x="172" y="0" width="1744" height="1076" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info id="Designer" />
-      <window_info id="Favorites" side_tool="true" />
-      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.24986821" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4984326" visible="true" weight="0.18826264" />
+      <window_info id="Structure" order="1" sideWeight="0.5015674" side_tool="true" visible="true" weight="0.18826264" />
+      <window_info id="Designer" order="2" />
+      <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.32916668" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32842106" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Palette&#9;" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" x="183" y="377" width="1721" height="322" id="Maven Projects" order="9" side_tool="true" type="WINDOWED" weight="0.32924336" />
+      <window_info anchor="bottom" auto_hide="true" x="195" y="416" width="1698" height="244" id="Ant Build" order="10" side_tool="true" type="WINDOWED" weight="0.24948876" />
+      <window_info anchor="bottom" id="Event Log" order="11" side_tool="true" />
+      <window_info anchor="bottom" id="Messages" order="12" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="1" weight="0.25" />
+      <window_info anchor="right" id="Palette&#9;" order="2" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
+  <component name="antWorkspaceConfiguration">
+    <option name="IS_AUTOSCROLL_TO_SOURCE" value="false" />
+    <option name="FILTER_TARGETS" value="false" />
+  </component>
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/src/app.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
+        <state relative-caret-position="200">
           <caret line="10" selection-start-line="10" selection-end-line="10" />
           <folding>
             <element signature="e#43#44#0" expanded="true" />
@@ -369,17 +462,76 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/db/common.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="6" column="22" lean-forward="true" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+        <state relative-caret-position="34">
+          <caret line="2" column="18" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
         </state>
       </provider>
     </entry>
   </component>
   <component name="masterDetails">
     <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>1.8</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>chrislib</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
       <state key="ProjectJDKs.UI">
         <settings>
           <last-edited>DMD64 D Compiler v2.081.1</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>derelict-pq-4.0.0-alpha.2</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

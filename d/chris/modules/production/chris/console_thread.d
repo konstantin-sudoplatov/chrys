@@ -5,8 +5,10 @@ import std.string;
 import std.concurrency;
 import core.thread;
 
+import global_types;
+
 import tools_pile;
-import global;
+import global_data;
 import messages;
 
 enum msgTimeout = 1;    // seconds

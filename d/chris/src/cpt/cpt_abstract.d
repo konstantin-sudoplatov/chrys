@@ -3,9 +3,11 @@
 module cpt_abstract;
 import std.conv, std.format;
 
-import global, tools_pile;
+import global_types;
+
+import global_data, tools_pile;
 import interfaces;
-import cpt_pile, cpt_neurons, cpt_premises, cpt_actions;
+import cpt_stat, cpt_neurons, cpt_premises, cpt_actions;
 import attn_circle_thread;
 
 /// External runtime function, that creates new objects by their ClassInfo. No constructors are called. Very fast, much faster

@@ -1,7 +1,8 @@
 module interfaces;
 import std.format;
 
-import global;
+import global_types;
+import global_data;
 
 /// Base activation interface. Does not have an implementation.
 abstract interface ActivationIfc {

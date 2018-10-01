@@ -1,0 +1,84 @@
+module cpt_stat;
+import std.format;
+
+import global_types;
+
+import global_data, tools_pile;
+import cpt_abstract;
+import interfaces;
+import attn_circle_thread;
+
+/**
+            Static concept.
+    Actually, it is immutable since all fields are immutable. Making the class or constructor immutable, however would introduce
+    unneccessary complexity in the code, that uses this class.
+*/
+final class SpStaticConcept: SpiritConcept {
+
+    immutable void* fp;                     /// function pointer to the static concept function
+    immutable StatCallType callType;       /// call type of the static concept function
+
+    /**
+                Constructor
+        Parameters:
+            cid = Concept identifier. Must lay in the range of static concepts.
+            fp = function pointer to the static concept function
+            callType = call type of the static concept function
+    */
+    this(Cid cid, void* fp, StatCallType callType){
+        super(cid);
+        cast()flags |= SpCptFlags.STATIC;
+        cast()this.fp = cast(immutable)fp;
+        cast()this.callType = callType;
+    }
+
+    /// Create live wrapper for the holy static concept.
+    override StaticConcept live_factory() const {
+        return new StaticConcept(cast(immutable)this);
+    }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+}
+
+/// Live wrapper for the HolyConcept class
+final class StaticConcept: Concept {
+
+    /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
+    private this(immutable SpStaticConcept holyStaticConcept) { super(holyStaticConcept); }
+}
+
+
+//---***---***---***---***---***--- types ---***---***---***---***---***---***
+
+//---***---***---***---***---***--- data ---***---***---***---***---***--
+
+/**
+        Constructor
+*/
+//this(){}
+
+//---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+//~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+//
+//                                 Protected
+//
+//~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+protected:
+//---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
+
+//---$$$---$$$---$$$---$$$---$$$--- functions ---$$$---$$$---$$$---$$$---$$$---
+
+//---$$$---$$$---$$$---$$$---$$$--- types ---$$$---$$$---$$$---$$$---$$$---
+
+//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+//
+//                                  Private
+//
+//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+private:
+//---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
+
+//---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--

@@ -2,7 +2,9 @@ module cpt_neurons;
 import std.stdio;
 import std.format;
 
-import global, tools_pile;
+import global_types;
+
+import global_data, tools_pile;
 import interfaces;
 import cpt_abstract;
 import attn_circle_thread: Caldron;

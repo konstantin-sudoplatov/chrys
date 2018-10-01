@@ -4,9 +4,10 @@ import std.concurrency, core.thread;
 import std.variant;
 import std.format;
 
-import db.db_pile;
+import global_types, db.db_pile;
+
 import tools_pile;
-import global;
+import global_data;
 import messages;
 import attn_dispatcher_thread;
 

@@ -2,10 +2,12 @@ module attn_dispatcher_thread;
 import std.concurrency;
 import std.format;
 
+import global_types;
+
 import tools_pile;
-import global;
+import global_data;
 import messages;
-import crank_pile;
+import crank_main;
 import attn_circle_thread;
 
 /**

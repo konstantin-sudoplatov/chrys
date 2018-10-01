@@ -1,9 +1,9 @@
 module crank_subcrank_subpile;
 import std.conv: asOriginalType;
 
-import global, tools_pile;
+import global_data, crank_registry;
 import cpt_neurons;
-import crank_pile;
+import crank_main;
 import attn_circle_thread;
 
 enum OtherConcepts {

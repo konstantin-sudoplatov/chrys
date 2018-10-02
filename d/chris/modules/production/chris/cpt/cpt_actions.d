@@ -4,7 +4,7 @@ import std.format;
 
 import global_types;
 
-import global_data, tools_pile;
+import global_data;
 import cpt_abstract, cpt_stat, cpt_premises;
 import attn_circle_thread;
 
@@ -36,11 +36,11 @@ class SpAction: SpiritDynamicConcept {
             caldron = name space it which static concept function will be working.
     */
     void run(Caldron caldron) {
-        assert((cast(SpStaticConcept)_hm_[_statActionCid]).callType == StatCallType.p0Cal,
+        assert((cast(SpStaticConcept)_sm_[_statActionCid]).callType == StatCallType.p0Cal,
                 format!"Static concept: %s( cid:%s) in SpAction must have StatCallType none and it has %s."
-                      (_nm_[_statActionCid], _statActionCid, (cast(SpStaticConcept)_hm_[_statActionCid]).callType));
+                      (_nm_[_statActionCid], _statActionCid, (cast(SpStaticConcept)_sm_[_statActionCid]).callType));
 
-        auto statCpt = (cast(SpStaticConcept)_hm_[_statActionCid]);
+        auto statCpt = (cast(SpStaticConcept)_sm_[_statActionCid]);
         (cast(void function(Caldron))statCpt.fp)(caldron);
     }
 
@@ -107,7 +107,7 @@ final class SpUnaryAction: SpAction {
             caldron = name space it which static concept function will be working.
     */
     final override void run(Caldron caldron) {
-        auto statAct = (scast!SpStaticConcept(_hm_[_statActionCid]));
+        auto statAct = (scast!SpStaticConcept(_sm_[_statActionCid]));
         assert(statAct.callType == StatCallType.p0Calp1Cid,
                 format!"Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cid and it has %s."
                         (typeid(statAct), _statActionCid, statAct.callType));
@@ -165,7 +165,7 @@ final class SpBinaryAction: SpAction {
             caldron = name space it which static concept function will be working.
     */
     final override void run(Caldron caldron) {
-        auto statAct = (scast!SpStaticConcept(_hm_[_statActionCid]));
+        auto statAct = (scast!SpStaticConcept(_sm_[_statActionCid]));
         assert(statAct.callType == StatCallType.p0Calp1Cidp2Cid,
                 format!"Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Cid and it has %s."
                         (typeid(statAct), _statActionCid, statAct.callType));
@@ -226,7 +226,7 @@ class SpUnaryFloatAction: SpAction {
 
     /// Run the static action.
     final override void run(Caldron caldron) {
-        auto statAct = (scast!SpStaticConcept(_hm_[_statActionCid]));
+        auto statAct = (scast!SpStaticConcept(_sm_[_statActionCid]));
         assert(statAct.callType == StatCallType.p0Calp1Cidp2Float,
                 format!"Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Float and it has %s."
                         (typeid(statAct), _statActionCid, statAct.callType));
@@ -291,7 +291,7 @@ class SpBinaryFloatAction: SpAction {
 
     /// Run the static action.
     final override void run(Caldron caldron) {
-        auto statAct = (scast!SpStaticConcept(_hm_[_statActionCid]));
+        auto statAct = (scast!SpStaticConcept(_sm_[_statActionCid]));
         assert(statAct.callType == StatCallType.p0Calp1Cidp2Cidp3Float,
                 format!"Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Cidp3Float and it has %s."
                         (typeid(statAct), _statActionCid, statAct.callType));
@@ -365,7 +365,7 @@ class SpUnaryIntAction: SpAction {
 
     /// Run the static action.
     final override void run(Caldron caldron) {
-        auto statAct = (scast!SpStaticConcept(_hm_[_statActionCid]));
+        auto statAct = (scast!SpStaticConcept(_sm_[_statActionCid]));
         assert(statAct.callType == StatCallType.p0Calp1Cidp2Int,
                 format!"Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Int and it has %s."
                         (typeid(statAct), _statActionCid, statAct.callType));

@@ -6,7 +6,6 @@ import std.format;
 
 import global_types, db.db_pile;
 
-import tools_pile;
 import global_data;
 import messages;
 import attn_dispatcher_thread;

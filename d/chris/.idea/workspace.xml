@@ -4,10 +4,14 @@
     <list default="true" id="1e6f13b7-b9cd-4af9-969e-5956d8669eca" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chris" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chris.iml" beforeDir="false" afterPath="$PROJECT_DIR$/chris.iml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chrislib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/global_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/classes/production/chrislib/global_types.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/tools/data_struct.d" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/classes/production/chrislib/tools/data_struct.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/tools/tools.data_struct.d" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/chrislib/lib/libchris_chrislib.a" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/lib/libchris_chrislib.a" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chrislib/lib/libchrislib.a" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/lib/libchrislib.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/src/global_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/src/global_types.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/src/tools/data_struct.d" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/src/tools/data_struct.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/production/chris/attn/attn_circle_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/attn/attn_circle_thread.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/production/chris/attn/attn_dispatcher_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/attn/attn_dispatcher_thread.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/production/chris/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/chris.d" afterDir="false" />
@@ -15,16 +19,12 @@
       <change beforePath="$PROJECT_DIR$/modules/production/chris/cpt/cpt_abstract.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/cpt/cpt_abstract.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/production/chris/cpt/cpt_actions.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/cpt/cpt_actions.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/production/chris/cpt/cpt_neurons.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/cpt/cpt_neurons.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/cpt/cpt_pile.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/cpt/cpt_premises.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/cpt/cpt_premises.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/crank/crank_pile.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/crank/subcrank/crank_subcrank_subpile.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/crank/subcrank/crank_subcrank_subpile.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/global.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/production/chris/cpt/cpt_stat.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/cpt/cpt_stat.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/production/chris/global_data.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/global_data.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/production/chris/interfaces.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/interfaces.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/production/chris/messages.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/messages.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/stat/stat_pile.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/production/chris/stat/stat_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/stat/stat_registry.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/production/chris/stat/substat/stat_substat_subpile.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/stat/substat/stat_substat_subpile.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/tools/tools_pile.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/tools/tools_pile.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/attn/attn_circle_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/attn/attn_circle_thread.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/chris.d" afterDir="false" />
@@ -32,16 +32,12 @@
       <change beforePath="$PROJECT_DIR$/src/cpt/cpt_abstract.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/cpt_abstract.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cpt/cpt_actions.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/cpt_actions.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cpt/cpt_neurons.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/cpt_neurons.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpt/cpt_pile.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/cpt_stat.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpt/cpt_premises.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/cpt_premises.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/crank/crank_pile.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/crank/crank_main.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/crank/subcrank/crank_subcrank_subpile.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/crank/subcrank/crank_subcrank_subpile.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/global.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpt/cpt_stat.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/cpt_stat.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/global_data.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/global_data.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/interfaces.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/interfaces.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/messages.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/messages.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stat/stat_pile.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/stat/stat_main.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stat/stat_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/stat/stat_registry.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/stat/substat/stat_substat_subpile.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/stat/substat/stat_substat_subpile.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/tools/tools_pile.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools/tools_pile.d" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -54,7 +50,7 @@
     <session id="76674309">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="51" />
+          <entry key="project.closed" value="54" />
           <entry key="project.open.time.0" value="2" />
           <entry key="project.open.time.1" value="10" />
           <entry key="project.open.time.10" value="9" />
@@ -66,12 +62,12 @@
           <entry key="project.open.time.19" value="1" />
           <entry key="project.open.time.2" value="4" />
           <entry key="project.open.time.3" value="1" />
-          <entry key="project.open.time.5" value="1" />
+          <entry key="project.open.time.5" value="3" />
           <entry key="project.open.time.6" value="2" />
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="9" />
           <entry key="project.open.time.9" value="14" />
-          <entry key="project.opened" value="66" />
+          <entry key="project.opened" value="68" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -86,7 +82,7 @@
           <entry key="cpt_templates" value="1" />
           <entry key="crank_registry" value="1" />
           <entry key="crank_subcrank_subpile" value="1" />
-          <entry key="d" value="541" />
+          <entry key="d" value="551" />
           <entry key="db" value="1" />
           <entry key="global" value="2" />
           <entry key="live" value="7" />
@@ -102,7 +98,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="D file" value="540" />
+          <entry key="D file" value="550" />
           <entry key="PLAIN_TEXT" value="32" />
           <entry key="Properties" value="2" />
           <entry key="Scratch" value="1" />
@@ -110,13 +106,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="d" value="149559" />
+          <entry key="d" value="149579" />
           <entry key="vmoptions" value="95" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="D file" value="149559" />
+          <entry key="D file" value="149579" />
           <entry key="PLAIN_TEXT" value="95" />
         </counts>
       </usages-collector>
@@ -127,93 +123,7 @@
     <favorites_list name="chris" />
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/tools/tools_pile.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="56">
-              <caret line="5" selection-start-line="5" selection-end-line="5" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/stat/stat_registry.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="35" selection-start-line="35" selection-end-line="35" />
-              <folding>
-                <element signature="e#5171#5172#0" expanded="true" />
-                <element signature="e#5223#5224#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/crank/crank_main.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/crank/subcrank/crank_subcrank_subpile.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
-              <caret line="3" column="34" selection-start-line="3" selection-start-column="34" selection-end-line="3" selection-end-column="34" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/stat/stat_main.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="7" column="18" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/global_data.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="343">
-              <caret line="27" column="73" selection-start-line="27" selection-start-column="73" selection-end-line="27" selection-end-column="73" />
-              <folding>
-                <element signature="e#5256#5257#0" expanded="true" />
-                <element signature="e#5324#5325#0" expanded="true" />
-                <element signature="e#6836#6837#0" expanded="true" />
-                <element signature="e#6874#6875#0" expanded="true" />
-                <element signature="e#8874#8875#0" expanded="true" />
-                <element signature="e#8917#8918#0" expanded="true" />
-                <element signature="e#9125#9126#0" expanded="true" />
-                <element signature="e#9161#9162#0" expanded="true" />
-                <element signature="e#9500#9501#0" expanded="true" />
-                <element signature="e#9531#9532#0" expanded="true" />
-                <element signature="e#9751#9752#0" expanded="true" />
-                <element signature="e#9789#9790#0" expanded="true" />
-                <element signature="e#9885#9886#0" expanded="true" />
-                <element signature="e#9927#9928#0" expanded="true" />
-                <element signature="e#10488#10489#0" expanded="true" />
-                <element signature="e#10519#10520#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/crank/crank_registry.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-76">
-              <caret line="14" column="46" selection-start-line="14" selection-start-column="46" selection-end-line="14" selection-end-column="46" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-    </leaf>
+    <leaf />
   </component>
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
@@ -271,32 +181,32 @@
         <option value="$PROJECT_DIR$/src/tools.d" />
         <option value="$PROJECT_DIR$/src/tools/tools_db.d" />
         <option value="$PROJECT_DIR$/src/global.d" />
-        <option value="$PROJECT_DIR$/src/attn/attn_circle_thread.d" />
-        <option value="$PROJECT_DIR$/src/messages.d" />
-        <option value="$PROJECT_DIR$/src/cpt/cpt_abstract.d" />
         <option value="$PROJECT_DIR$/src/interfaces.d" />
         <option value="$PROJECT_DIR$/src/cpt/cpt_pile.d" />
-        <option value="$PROJECT_DIR$/src/cpt/cpt_neurons.d" />
         <option value="$PROJECT_DIR$/src/cpt/cpt_premises.d" />
-        <option value="$PROJECT_DIR$/src/cpt/cpt_actions.d" />
         <option value="$PROJECT_DIR$/src/crank/crank_pile.d" />
         <option value="$PROJECT_DIR$/src/stat/stat_pile.d" />
-        <option value="$PROJECT_DIR$/src/stat/substat/stat_substat_subpile.d" />
-        <option value="$PROJECT_DIR$/src/cpt/cpt_stat.d" />
-        <option value="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" />
-        <option value="$PROJECT_DIR$/src/chris.d" />
-        <option value="$PROJECT_DIR$/src/console_thread.d" />
         <option value="$PROJECT_DIR$/src/tools/tools_pile.d" />
-        <option value="$PROJECT_DIR$/src/stat/stat_registry.d" />
         <option value="$PROJECT_DIR$/src/stat/stat_main.d" />
         <option value="$PROJECT_DIR$/src/crank/crank_main.d" />
         <option value="$PROJECT_DIR$/src/crank/subcrank/crank_subcrank_subpile.d" />
         <option value="$PROJECT_DIR$/src/crank/crank_registry.d" />
+        <option value="$PROJECT_DIR$/src/stat/stat_registry.d" />
         <option value="$PROJECT_DIR$/src/global_data.d" />
+        <option value="$PROJECT_DIR$/src/cpt/cpt_abstract.d" />
+        <option value="$PROJECT_DIR$/src/cpt/cpt_stat.d" />
+        <option value="$PROJECT_DIR$/src/cpt/cpt_neurons.d" />
+        <option value="$PROJECT_DIR$/src/cpt/cpt_actions.d" />
+        <option value="$PROJECT_DIR$/src/stat/substat/stat_substat_subpile.d" />
+        <option value="$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d" />
+        <option value="$PROJECT_DIR$/src/messages.d" />
+        <option value="$PROJECT_DIR$/src/attn/attn_circle_thread.d" />
+        <option value="$PROJECT_DIR$/src/chris.d" />
+        <option value="$PROJECT_DIR$/src/console_thread.d" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="width" value="1920" />
     <option name="height" value="1074" />
   </component>
@@ -370,10 +280,27 @@
               <item name="stat" type="1f31426a:PackageElementNode" />
               <item name="substat" type="1f31426a:PackageElementNode" />
             </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
             <path>
-              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chris" type="616d4139:PackageViewModuleNode" />
-              <item name="tools" type="1f31426a:PackageElementNode" />
+              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
+            <path>
+              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="cpt" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
           </expand>
           <select />
@@ -396,28 +323,6 @@
               <item name="chris" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="crank" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-            </path>
-            <path>
-              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="cpt" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
           </expand>
           <select />
@@ -455,7 +360,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Build with DUB.Release DUB">
+  <component name="RunManager" selected="Build with DUB.Unittest Dub">
     <configuration name="Run D App" type="DlangRunAppConfiguration" factoryName="Run D App" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="chris" />
       <option name="additionalParams" />
@@ -664,10 +569,9 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-2" y="-3" width="1924" height="1087" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.47291666" visible="true" weight="0.18924618" />
-      <window_info x="1944" y="563" width="330" height="781" id="Structure" order="1" sideWeight="0.52708334" side_tool="true" visible="true" weight="0.18924618" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.47083333" visible="true" weight="0.18924618" />
+      <window_info x="1944" y="563" width="330" height="781" id="Structure" order="1" sideWeight="0.52916664" side_tool="true" visible="true" weight="0.18924618" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
@@ -675,7 +579,7 @@
       <window_info id="Favorites" order="6" sideWeight="0.51221997" side_tool="true" weight="0.1995731" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32604167" />
-      <window_info active="true" anchor="bottom" x="2" y="597" width="1916" height="479" id="Run" order="2" type="WINDOWED" visible="true" weight="0.359375" />
+      <window_info anchor="bottom" x="2" y="597" width="1916" height="479" id="Run" order="2" type="WINDOWED" weight="0.359375" />
       <window_info anchor="bottom" x="2" y="720" width="1912" height="329" id="Debug" order="3" weight="0.39895833" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -924,62 +828,7 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/chrislib/src/db/common.d" />
-    <entry file="file://$PROJECT_DIR$/src/global.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="456">
-          <caret line="39" column="31" selection-start-line="39" selection-start-column="31" selection-end-line="39" selection-end-column="31" />
-          <folding>
-            <element signature="e#5584#5585#0" expanded="true" />
-            <element signature="e#5652#5653#0" expanded="true" />
-            <element signature="e#12115#12116#0" expanded="true" />
-            <element signature="e#12153#12154#0" expanded="true" />
-            <element signature="e#14153#14154#0" expanded="true" />
-            <element signature="e#14196#14197#0" expanded="true" />
-            <element signature="e#14404#14405#0" expanded="true" />
-            <element signature="e#14440#14441#0" expanded="true" />
-            <element signature="e#14779#14780#0" expanded="true" />
-            <element signature="e#14810#14811#0" expanded="true" />
-            <element signature="e#15300#15301#0" expanded="true" />
-            <element signature="e#15338#15339#0" expanded="true" />
-            <element signature="e#15434#15435#0" expanded="true" />
-            <element signature="e#15476#15477#0" expanded="true" />
-            <element signature="e#16037#16038#0" expanded="true" />
-            <element signature="e#16068#16069#0" expanded="true" />
-            <element signature="e#25844#25845#0" expanded="true" />
-            <element signature="e#25896#25897#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/attn/attn_circle_thread.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="7" column="18" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
-          <folding>
-            <element signature="e#2299#2300#0" expanded="true" />
-            <element signature="e#2334#2335#0" expanded="true" />
-            <element signature="e#2669#2670#0" expanded="true" />
-            <element signature="e#2710#2711#0" expanded="true" />
-            <element signature="e#2866#2867#0" expanded="true" />
-            <element signature="e#2901#2902#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/messages.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="5" column="30" selection-start-line="5" selection-start-column="30" selection-end-line="5" selection-end-column="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_abstract.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="7" column="18" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/global.d" />
     <entry file="file://$PROJECT_DIR$/src/interfaces.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="76">
@@ -987,93 +836,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_neurons.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="6" column="18" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/cpt/cpt_premises.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
           <caret line="6" column="18" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_actions.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="6" column="18" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/stat/substat/stat_substat_subpile.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="5" column="18" selection-start-line="5" selection-start-column="18" selection-end-line="5" selection-end-column="18" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_stat.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="29" column="22" selection-start-line="29" selection-start-column="22" selection-end-line="29" selection-end-column="22" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
-          <folding>
-            <element signature="e#752#753#0" expanded="true" />
-            <element signature="e#767#768#0" expanded="true" />
-            <element signature="e#802#803#0" expanded="true" />
-            <element signature="e#816#817#0" expanded="true" />
-            <element signature="e#842#843#0" expanded="true" />
-            <element signature="e#851#852#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/chris.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="6" column="21" selection-start-line="6" selection-start-column="21" selection-end-line="6" selection-end-column="21" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/console_thread.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="13" column="34" selection-start-line="13" selection-start-column="34" selection-end-line="13" selection-end-column="34" />
-          <folding>
-            <element signature="e#1383#1384#0" expanded="true" />
-            <element signature="e#1400#1401#0" expanded="true" />
-            <element signature="e#2920#2921#0" expanded="true" />
-            <element signature="e#2937#2938#0" expanded="true" />
-            <element signature="e#2964#2965#0" expanded="true" />
-            <element signature="e#2975#2976#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tools/tools_pile.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="56">
-          <caret line="5" selection-start-line="5" selection-end-line="5" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/stat/stat_registry.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="35" selection-start-line="35" selection-end-line="35" />
-          <folding>
-            <element signature="e#5171#5172#0" expanded="true" />
-            <element signature="e#5223#5224#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -1105,10 +871,22 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/tools/tools_pile.d" />
+    <entry file="file://$PROJECT_DIR$/src/stat/stat_registry.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="247">
+          <caret line="13" column="39" selection-start-line="13" selection-start-column="39" selection-end-line="13" selection-end-column="39" />
+          <folding>
+            <element signature="e#5171#5172#0" expanded="true" />
+            <element signature="e#5223#5224#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/global_data.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="343">
-          <caret line="27" column="73" selection-start-line="27" selection-start-column="73" selection-end-line="27" selection-end-column="73" />
+        <state relative-caret-position="171">
+          <caret line="9" selection-start-line="9" selection-end-line="9" />
           <folding>
             <element signature="e#5256#5257#0" expanded="true" />
             <element signature="e#5324#5325#0" expanded="true" />
@@ -1127,6 +905,84 @@
             <element signature="e#10488#10489#0" expanded="true" />
             <element signature="e#10519#10520#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_stat.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" column="18" selection-start-line="5" selection-start-column="18" selection-end-line="5" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_neurons.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="6" column="18" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_actions.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="6" column="18" selection-start-line="6" selection-start-column="18" selection-end-line="6" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/stat/substat/stat_substat_subpile.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" column="18" selection-start-line="5" selection-start-column="18" selection-end-line="5" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/messages.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" column="7" selection-start-line="5" selection-start-column="7" selection-end-line="5" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/attn/attn_circle_thread.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="7" column="18" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/console_thread.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="9" selection-start-line="9" selection-end-line="9" />
+          <folding>
+            <element signature="e#1383#1384#0" expanded="true" />
+            <element signature="e#1400#1401#0" expanded="true" />
+            <element signature="e#2920#2921#0" expanded="true" />
+            <element signature="e#2937#2938#0" expanded="true" />
+            <element signature="e#2964#2965#0" expanded="true" />
+            <element signature="e#2975#2976#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chris.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="304">
+          <caret line="16" selection-start-line="12" selection-end-line="16" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_abstract.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="7" column="18" selection-start-line="7" selection-start-column="18" selection-end-line="7" selection-end-column="18" />
         </state>
       </provider>
     </entry>

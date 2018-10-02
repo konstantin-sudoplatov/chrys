@@ -2,6 +2,11 @@ module global_types;
 
 import std.format;
 
+// Show in console_thread, that it is the unittest mode
+version(unittest) {
+    pragma(msg, "Unittest");
+}
+
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
 /// Concept identifier

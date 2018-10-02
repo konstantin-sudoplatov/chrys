@@ -7,7 +7,6 @@ import std.conv;
 
 import global_types;
 
-import tools_pile;
 import stat_registry, stat_main;
 import crank_registry;
 import attn_dispatcher_thread, attn_circle_thread;
@@ -34,7 +33,7 @@ const shared Tid _attnDispTid_;     /// Attention dispatcher thread Tid
 
 // Key shared data structures
 shared string[Cid] _nm_;        /// name/seed map
-shared HolyMap _hm_;        /// The map of holy(stable and storrable and shared) concepts.
+shared SpiritMap _sm_;        /// The map of holy(stable and storrable and shared) concepts.
 debug {
     // set to true after the maps are filled in with names,cids and references to the concept objects
     immutable bool _maps_filled_;
@@ -51,19 +50,19 @@ shared static this() {
     rnd_ = Random(unpredictableSeed);
 
     // Create and initialize the key shared structures
-    _hm_ = new shared HolyMap;
-    fillInConceptMaps_(_hm_, _nm_);     // static concepts from the stat modules, dynamic concept names from the crank modules
+    _sm_ = new shared SpiritMap;
+    fillInConceptMaps_(_sm_, _nm_);     // static concepts from the stat modules, dynamic concept names from the crank modules
     debug
         _maps_filled_ = true;
 
     // Crank the system. System must be cranked befor spawning any circle threads since they use the chat_seed concept to start.
     runCranks;     // create and setup manually programed dynamic concepts
     import std.stdio: writefln;
-    writefln("Some free dynamic cids: %s", _hm_.generate_some_cids(5));
+    writefln("Some free dynamic cids: %s", _sm_.generate_some_cids(5));
 
     // Remove from the name map entries not related to the concepts.
     cleanupNotUsedNames;
-    _hm_.rehash;
+    _sm_.rehash;
     _nm_.rehash;
     debug
         _cranked_ = true;
@@ -105,9 +104,9 @@ unittest {
 */
 void checkCid(T: SpiritConcept)(Cid cid) {
     debug if(_maps_filled_) {
-        assert(cid in _hm_, format!"Cid: %s(%s) do not exist in the holy map."(cid, _nm_[cid]));
-        assert(cast(T)_hm_[cid],
-                format!"Cid: %s, must be of type %s and it is of type %s."(cid, T.stringof, typeid(_hm_[cid])));
+        assert(cid in _sm_, format!"Cid: %s(%s) do not exist in the holy map."(cid, _nm_[cid]));
+        assert(cast(T)_sm_[cid],
+                format!"Cid: %s, must be of type %s and it is of type %s."(cid, T.stringof, typeid(_sm_[cid])));
     }
 }
 
@@ -130,7 +129,7 @@ void checkCid(T)(Caldron caldron, Cid cid)
     Returns: the wanted concept casted to its original type.
 */
 auto cpt(alias cd)() {
-    return scast!(type!("shared " ~ cd.className))(_hm_[cd.cid]);
+    return scast!(type!("shared " ~ cd.className))(_sm_[cd.cid]);
 }
 
 ///
@@ -139,7 +138,7 @@ unittest {
     import crank_main: CommonConcepts, Chat;
     mixin(dequalify_enums!(CommonConcepts, Chat));
 
-    assert(cpt!(chat_seed) is cast(shared SpSeed)_hm_[chat_seed.cid]);
+    assert(cpt!(chat_seed) is cast(shared SpSeed)_sm_[chat_seed.cid]);
 }
 
 //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
@@ -158,7 +157,7 @@ struct CptDescriptor {
     help, because this way we could get away with changes to only interface methods for the real map.
 */
 import std.random;
-shared synchronized final pure nothrow class HolyMap {
+shared synchronized final pure nothrow class SpiritMap {
 
     //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
@@ -352,7 +351,7 @@ private static typeof(Random(unpredictableSeed())) rnd_;
     Parameters:
         hm = holy map to fill
 */
-private void fillInConceptMaps_(shared HolyMap hm, shared string[Cid] nm)
+private void fillInConceptMaps_(shared SpiritMap hm, shared string[Cid] nm)
 out{
     assert(hm.length == statDescriptors.length + dynDescriptors.length);
     assert(nm.length == statDescriptors.length + dynDescriptors.length);
@@ -379,7 +378,7 @@ do {
 
     // Create dynamic concepts based on the dynDescriptors_ enum
     static foreach(dd; dynDescriptors) {
-        _hm_[] = mixin("new shared " ~ dd.class_name ~ "(" ~ to!string(dd.cid) ~ ")");
+        _sm_[] = mixin("new shared " ~ dd.class_name ~ "(" ~ to!string(dd.cid) ~ ")");
     }
 }
 
@@ -395,7 +394,7 @@ private void cleanupNotUsedNames() {
     Entry orphan;
     foreach(cid; (cast()_nm_).byKey)
         if      //is not cid present in the holy map?
-                (cid !in _hm_)
+                (cid !in _sm_)
         {
             orphan.cid = cid;
             orphan.name =_nm_[cid];

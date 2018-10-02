@@ -11,6 +11,11 @@ subConfiguration "derelict-pq" "derelict-pq-static"     // comment out and add t
 sourceFiles "/usr/lib/x86_64-linux-gnu/libpq.so"        // if you want static binding with dynamic linking instead of dynamic binding
 
 targetType "library"
+//targetType "executable"
 targetPath "lib"
 sourcePaths "src/"
 importPaths "src/"
+
+configuration "unittest" {
+    mainSourceFile "src/proba.d"
+}

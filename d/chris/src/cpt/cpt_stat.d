@@ -3,7 +3,7 @@ import std.format;
 
 import global_types;
 
-import global_data, tools_pile;
+import global_data;
 import cpt_abstract;
 import interfaces;
 import attn_circle_thread;

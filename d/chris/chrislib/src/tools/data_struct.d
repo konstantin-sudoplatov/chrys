@@ -2,6 +2,8 @@ module tools.data_struct;
 import std.stdio;
 import std.format;
 
+import global_types;
+
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--
@@ -164,7 +166,7 @@ unittest {
     cm.rehash;
 }
 
-/// Adapter for the RawDeque to prevent bloating in case it is a container for pointers
+/// Adapter for the DequeImpl to prevent bloating in case it is a container for pointers
 struct Deque(E : E*, Sz = uint)
 {
     auto deq = DequeImpl!(void*, Sz)();
@@ -189,7 +191,7 @@ unittest{
     assert(*deq[0] == 1);
 }
 
-/// Adapter for the RawDeque to prevent bloating in case it is a container for objects
+/// Adapter for the DequeImpl to prevent bloating in case it is a container for objects
 struct Deque(E : Object, Sz = uint)
 {
     auto deq = DequeImpl!(Object, Sz)();
@@ -212,7 +214,7 @@ unittest{
     assert(deq.popFront.x == 42);
 }
 
-/// All the rest of types are forwarded to the RawDeque template for instantiation as it is
+/// All the rest of types are forwarded to the DequeImpl template to instantiate as is
 template Deque(E, Sz = uint){
     alias Deque = DequeImpl!(E, Sz);
 }
@@ -224,14 +226,85 @@ unittest{
     assert(deq.popFront == 1 && deq.popFront == 2 && deq.popFront == 3);
 }
 
+
+/// Adapter for the ArrayListImpl to prevent bloating in case it is a container for pointers
+struct ArrayList(E : E*, Sz = uint)
+{
+    auto arl = ArrayListImpl!(void*, Sz)();
+    alias arl this;
+
+    E* front() { return cast(E*)arl.front; }
+    E* popFront() {return cast(E*)arl.popFront; }
+    E* opIndex(size_t ind) { return cast(E*)arl.opIndex(ind); }
+}
+///
+unittest{
+    ArrayList!(int*) arl;
+
+    int i0 = -1;
+    arl.push(&i0);      // it is a deq.deq.push, thanks to the alias this
+    int i1 = 1;
+    arl.push(&i1);
+    assert(*arl[0] == -1 && *arl[1] == 1);
+    arl[0] = &i1;
+    assert(*arl[0] == 1);
+}
+
+/// Adapter for the ArrayList to prevent bloating in case it is a container for objects
+struct ArrayList(E : Object, Sz = uint)
+{
+    auto arl = ArrayListImpl!(Object, Sz)();
+    alias arl this;
+
+    E front() { return cast(E)arl.front; }
+    E popFront() {return cast(E)arl.popFront; }
+    E opIndex(size_t ind) { return cast(E)arl.opIndex(ind); }
+}
+///
+unittest{
+    ArrayList!(ClassA) arl;     // as a test used ClassA from the test of the type template
+
+    arl.push(new ClassA(-1));      // it is a deq.deq.push, thanks to the alias this
+    arl.push(new ClassA(1));
+    assert(arl[0].x == -1 && arl[1].x == 1);
+    arl[1] = new ClassA(42);
+    assert(arl.popFront.x == 42);
+}
+
+/// All the rest of types are forwarded to the ArrayListImpl template to instantiate as is
+template ArrayList(E, Sz = uint){
+    alias ArrayList = ArrayListImpl!(E, Sz);
+}
+///
+unittest{
+    ArrayList!(short) arl;
+
+    arl.push(1); arl.push(2); arl.push(3);
+    assert(arl.popFront == 3 && arl.popFront == 2 && arl.popFront == 1);
+}
+
+
+//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+//
+//                                  Private
+//
+//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+
+//---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
+
+//---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
+
 /**
-            Two-sided stack and queue like in Java, based, also like in Java, on a cyclic buffer. This implementation, unlike the
-        dynamic arrays, for example, allows you to control the extention size in which the buffer grows and shrinks, and also
-    you can free unused space with the thim() function. The structure takes 48 bytes of space at initialization compared to
-    16 of the dynamic array, but if you need a storage for a big array of data, it is going to be more efficient. BR
-        Note: When use the foreach statement remember, that the struct is deep copyed before ising it by foreach. It cannot be
-    avoid because consuming the range is a destructive action for the buffer, taken out elements are replaced by nulls
-    to let the GC free them. So, it would be resource consuming for big buffers. To scan it use the for statement instead.
+            Two-sided stack and queue like in Java, based, also like in Java, on a cyclic buffer. This implementation,
+    unlike the dynamic arrays gives you more granular control on the buffer size. You can free unused space with
+    the thim() function and you can reserve exact size of space. Also, extents are not 100% of the current size, but only 50%.
+    And the buffer shrinks when elements are removed.  The structure takes 40 (24 for uint) bytes at initialization compared to
+    16 for the dynamic arrays, but if you need a storage for a big array of data, it is going to be more efficient. BR
+        Note: When use the foreach statement remember, that the struct is duplicated before ising it by foreach. It cannot be
+    avoided because consuming the range is a destructive action for the buffer, because taken out elements are replaced by nulls
+    to let the GC free them. So, it would be resource consuming for big buffers. The for statement will be more efficient.
         Parameters:
             E = type of elements
             Sz = type of internal pointers. They determine the maximum size of the buffer.
@@ -241,17 +314,7 @@ private struct DequeImpl(E, Sz=uint)
 {
     import core.exception: RangeError;
 
-    /**
-            Constructor.
-        Parameters:
-            extent = both initial number of elements ond number of elements by which the buffer will be extended.
-    */
-    this(Sz extent){
-        assert(extent > 0);
-        extent_ = extent;
-    }
-
-    /// Postblit constructor. If we don't have the deep copy, the "foreach" statement will mutate our struct, (see
+    /// Postblit constructor. If we don't duplicate the list, the "foreach" statement will mutate our struct, (see
     /// the "help GC" comment) because it uses a copy of the input range to go through (not the save() member function).
     this(this) {
         import core.memory: GC;
@@ -323,7 +386,7 @@ private struct DequeImpl(E, Sz=uint)
         }
 
         // May be reallocate decreasing
-        auto slim = capacity_ - 2*extent_;    // the slimming limit. if reached reallocate
+        const slim = (capacity_>>>1) - 5;    // the slimming limit. if reached reallocate
         if(length_ == slim) reallocate_;
 
         return el;
@@ -331,12 +394,7 @@ private struct DequeImpl(E, Sz=uint)
 
     /// For forward range interface.
     auto save() {
-        import core.memory: GC;
-        auto s = this;
-        auto newBuf = cast(E*)GC.malloc(E.sizeof * capacity_);
-        newBuf[0..capacity_] = cBuf_[0..capacity_];
-        cBuf_ = newBuf;
-        return s;
+        return this;
     }
 
     /// Take the last element of the queue. Part of the bidirectional range interface.
@@ -359,7 +417,7 @@ private struct DequeImpl(E, Sz=uint)
             tail_ = capacity_ - 1;
 
         // May be reallocate decreasing
-        auto slim = capacity_ - 2*extent_;    // the slimming limit. if reached reallocate
+        const slim = (capacity_>>>1) - 5;    // the slimming limit. if reached reallocate
         if(length_ == slim) reallocate_;
 
         return el;
@@ -394,7 +452,9 @@ private struct DequeImpl(E, Sz=uint)
     }
 
     /// Get current size of the buffer.
-    Sz capacity() { return capacity_; }
+    Sz capacity() {
+        return capacity_;
+    }
 
     /// Add an element to the end of the queue.
     alias push = pushBack;
@@ -418,11 +478,16 @@ private struct DequeImpl(E, Sz=uint)
         ++length_;
     }
 
+    /// Allocate exactly given number of elements.
+    void reserve(uint capacity) {
+        assert(capacity >= length_);
+        reallocate_(capacity);
+    }
+
     /// Nullify the buffer.
     void clear() {
-        import core.memory: GC;
-        cBuf_ = cast(E*)GC.malloc(E.sizeof * extent_);
-        capacity_ = extent_;
+        cBuf_ = null;
+        capacity_ = 0;
         head_ = 0;
         tail_ = -1;
         length_ = 0;
@@ -440,12 +505,11 @@ private struct DequeImpl(E, Sz=uint)
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
     private:
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
-        E* cBuf_;           /// Cyclic buffer.
+        E* cBuf_;         /// Cyclic buffer.
         Sz head_;         /// index of the first element
         Sz tail_ = -1;    /// index of the last element
         Sz length_;       /// number of element in the queue
-        Sz capacity_;     /// current capacity of the buffer. It has the same value as cBuf.capacity, but faster.
-        immutable Sz extent_ = 3;       /// by this value capacity is increased.
+        Sz capacity_;     /// current capacity of the buffer
 
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
@@ -465,20 +529,24 @@ private struct DequeImpl(E, Sz=uint)
     }
 
     /**
-                Reallocate the buffer and copy data to it from the old one. All the data will be arranged from the beginning
+                Reallocate the buffer and copy data to it. All data will be arranged from the beginning
         of the buffer, the head before the tail.
         Parameters:
-            newCapacity = new size of the buffer. If not specified, then it will be the current length plus extent.
+            newCapacity = new size of the buffer. If not specified, then it will be the current length plus a half.
     */
-    void reallocate_(Sz newCapacity = 0) {
+    void reallocate_(ulong newCapacity = 0) {
         import core.memory: GC;
 
-        // Allocate. We don't use new T[], because we want the size of the buffer match PRESIZELY the newCapacity, not the
+        // Allocate. We don't use new T[], because we want the size of the buffer match PRESIZELY the newCapacity, not just the
         // power of 2.
         if(newCapacity == 0) {
-            assert(length_ + extent_ < Sz.max);
-            newCapacity = length_ + extent_;
+            if(length_ < 15)
+                newCapacity = length_ + 5;
+            else
+                newCapacity = cast(ulong)length_ + (length_>>>1);
+            assert(newCapacity < Sz.max);
         }
+        assert(newCapacity >= length_ && newCapacity > 0);
         E* newBuf = cast(E*) GC.malloc(E.sizeof * newCapacity);
 
         // Copy
@@ -493,7 +561,7 @@ private struct DequeImpl(E, Sz=uint)
         cBuf_ = newBuf;
         head_ = 0;
         tail_ = length_ - 1;
-        capacity_ = newCapacity;
+        capacity_ = cast(Sz)newCapacity;
     }
 }
 
@@ -547,23 +615,233 @@ unittest {
 //import std.stdio; writefln("deq = %s", deq);
 //logit(deq.toInnerString, TermColor.purple);
 }
+/**
+            List based on a buffer. This implementation, unlike the dynamic arrays gives you more granular control on the
+    buffer size. You can free unused space with the thim() function and you can reserve exact size of space. Also, extents
+    are not 100% of the current size, but only 50%. And the buffer shrinks when elements are removed. It can also be used
+    as a stack and imlpements a range. BR
+        Note: When use the foreach statement remember, that the struct is duplicated before ising it by foreach. It cannot be
+    avoided because consuming the range is a destructive action for the buffer, because taken out elements are replaced by nulls
+    to let the GC free them. So, it would be resource consuming for big buffers. The for statement will be more efficient.
+        Parameters:
+            E = type of elements
+            Sz = type of internal pointers. They determine the maximum size of the buffer.
+*/
+private struct ArrayListImpl(E, Sz=uint)
+    if(is(Sz == ubyte) || is(Sz == ushort) || is (Sz == uint) || is(Sz == ulong))
+{
+    import core.exception: RangeError;
 
-//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-//
-//                                  Private
-//
-//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+    E* buf;             /// buffer.
+    alias buf this;     // allow all not overloaded operations on the buffer
 
-//---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+    /// Postblit constructor. If we don't duplicate the list, the "foreach" statement will mutate our struct, (see
+    /// the "help GC" comment) because it uses a copy of the input range to go through (not the save() member function).
+    this(this) {
+        import core.memory: GC;
+        auto newBuf = cast(E*)GC.malloc(E.sizeof * length_);
+        newBuf[0..length_] = buf[0..length_];
+        buf = newBuf;
+        capacity_ = length_;
+    }
+
+    string toString() const {
+        if(empty) return "[]";
+        string s = format!"[%s"((cast()this)[0]);
+        for(int i = 1; i < length_; i++)
+            s ~= format!", %s"((cast()this)[i]);
+        return s ~ "]";
+    }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /// Test for emptiness of the list. Part of the input range interface.
+    bool empty() const {
+        return length_ == 0;
+    }
+
+    /// Get the last element of the list without taking it out. Part of the input range interface.
+    E front() {
+        return buf[length_-1];
+    }
+
+    /// Take out an element from the end of the list. Part of the input range interface.
+    alias pop = popFront;
+    E popFront() {
+        if(length_ == 0)
+            throw new RangeError;
+
+        // pop
+        --length_;
+        E el = buf[length_];
+        buf[length_] = E.init;  // help GC (if elements contain refs to objects on the heap)
+
+        // May be reallocate decreasing
+        const slim = (capacity_>>>1) - 5;    // the slimming limit. if reached reallocate
+        if(length_ == slim) reallocate_;
+
+        return el;
+    }
+
+    /// For forward range interface.
+    auto save() {
+        return this;
+    }
+
+    /**
+            Index operator overload. Part of the random access range interface.
+        Parameters:
+            ind = index of the element in the queue (relative to the head of the queue).
+        Throws: the RangeError exception.
+    */
+    E opIndex(size_t ind) {
+        if(ind >= length_) throw new RangeError;
+        return buf[ind];
+    }
+
+    /**
+            Index assignment overloading.
+        Parameters:
+            value = value to assign
+            ind = idex of the element from the head of the queue.
+        Throws: the RangeError exception.
+    */
+    void opIndexAssign(E value, size_t ind) {
+        if(ind >= length_) throw new RangeError;
+        buf[ind] = value;
+    }
+
+    /**
+            "~=" operator overloading.
+        Parameters:
+            el = element to add to the list
+    */
+    void opOpAssign(string op)(E el) {
+        static assert(op == "~");
+        push(el);
+    }
+
+    /// Ditto.
+    void opOpAssign(string op)(E[] el) {
+        static assert(op == "~");
+        foreach(e; el) push(e);
+    }
+
+    /// Get number of element in the queue.
+    Sz length() const {
+        return length_;
+    }
+
+    /// Get current size of the buffer.
+    Sz capacity() {
+        return capacity_;
+    }
+
+    /// Add an element to the end of the list
+    void push(E el) {
+        if(length_ == capacity_) reallocate_;
+        assert(length_ < Sz.max);
+        buf[length_] = el;
+        ++length_;
+    }
+
+    /// Allocate exactly given number of elements.
+    void reserve(uint capacity) {
+        assert(capacity >= length_);
+        reallocate_(capacity);
+    }
+
+    /// Nullify the buffer.
+    void clear() {
+        buf = null;
+        capacity_ = 0;
+        length_ = 0;
+    }
+
+    /// Free all unused space, i.e. make length be equal capacity.
+    void trim() {
+        reallocate_(length_);
+    }
+
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+    //
+    //                                  Private
+    //
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+    private:
+    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+        Sz length_;         /// number of element in the list
+        Sz capacity_;       /// current capacity of the buffer
+
+    //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
+
+    /**
+                Reallocate the buffer and copy data to it.
+        Parameters:
+            newCapacity = new size of the buffer. If not specified, then it will be the current length plus a half.
+    */
+    void reallocate_(ulong newCapacity = 0) {
+        import core.memory: GC;
+
+        // Allocate. We don't use new T[], because we want the size of the buffer match PRESIZELY the newCapacity, not just the
+        // power of 2.
+        if(newCapacity == 0) {
+            if(length_ < 15)
+                newCapacity = length_ + 5;
+            else
+                newCapacity = cast(ulong)length_ + (length_>>>1);
+            assert(newCapacity < Sz.max);
+        }
+        assert(newCapacity >= length_ && newCapacity > 0);
+        E* newBuf = cast(E*)GC.malloc(E.sizeof * newCapacity);
+
+        // Copy
+        newBuf[0..length_] = buf[0..length_];
+        buf = newBuf;
+        capacity_ = cast(Sz)newCapacity;
+    }
+}
+
+unittest{
+    ArrayListImpl!int arl;
+
+    foreach(i; 0..30) arl.push(i);
+    assert(arl.length == 30 && arl[29] == 29);
+
+    foreach_reverse(i; 9..29) arl.pop;
+    assert(arl.length == 10 && arl[9] == 9);
+
+    arl[9] = 8;
+    assert(arl[9] == 8);
+    assert(arl.toString == "[0, 1, 2, 3, 4, 5, 6, 7, 8, 8]");
+
+    foreach(i; arl) {}
+    assert(arl.length == 10 && arl.toString == "[0, 1, 2, 3, 4, 5, 6, 7, 8, 8]");
+
+    foreach(i; arl.save) {}
+    assert(arl.length == 10 && arl.toString == "[0, 1, 2, 3, 4, 5, 6, 7, 8, 8]");
+
+    arl.clear;
+    arl ~= 0;
+    arl ~= 1;
+    assert(arl.toString == "[0, 1]");
+
+    ArrayListImpl!int arl1;
+    arl1 ~= [2, 3];
+    assert(arl1.toString == "[2, 3]");
+
+    // test a not overloaded operation
+    arl1[0..2] = arl[0..2];
+    assert(arl1.toString == "[0, 1]");
+
+//writeln(lar1);
+//logit(deq.toInnerString, TermColor.purple);
+}
 
 /// test class for unittests
-private class ClassA {
+version(unittest) private class ClassA {
     int x;
     this(int i) {
         x = i;
     }
 }
-
-//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-//---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--

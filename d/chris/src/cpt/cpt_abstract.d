@@ -5,7 +5,7 @@ import std.conv, std.format;
 
 import global_types;
 
-import global_data, tools_pile;
+import global_data;
 import interfaces;
 import cpt_stat, cpt_neurons, cpt_premises, cpt_actions;
 import attn_circle_thread;
@@ -387,7 +387,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
                 Cid[] a;
                 foreach (cd; acts) {
                     debug if(_maps_filled_)
-                        assert(cast(shared SpAction)_hm_[cd.cid],
+                        assert(cast(shared SpAction)_sm_[cd.cid],
                                 format!"Cid: %s must be an action, and it is a %s."(cd.cid, cd.className));
                     a ~= cd.cid;
                 }
@@ -396,8 +396,8 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
             {
                 debug if(_maps_filled_)
                     foreach (cid; acts) {
-                        assert(cast(shared SpAction)_hm_[cid],
-                                format!"Cid: %s must be an action, and it is a %s."(cid, typeid(_hm_[cid])));
+                        assert(cast(shared SpAction)_sm_[cid],
+                                format!"Cid: %s must be an action, and it is a %s."(cid, typeid(_sm_[cid])));
                     }
                 Cid[] a = acts;
             }
@@ -405,15 +405,15 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
                     (is(Ta == CptDescriptor))
             {  //yes: convert it to array of cids
                 debug if(_maps_filled_)
-                    assert(cast(shared SpAction)_hm_[acts.cid],
+                    assert(cast(shared SpAction)_sm_[acts.cid],
                             format!"Cid: %s must be an action, and it is a %s."(acts.cid, acts.className));
                 Cid[] a = [acts.cid];
             }
             else//no: it is a cid; convert it to an array of cids
             {
                 debug if(_maps_filled_)
-                    assert(cast(shared SpAction)_hm_[acts],
-                            format!"Cid: %s must be an action, and it is a %s."(acts, typeid(_hm_[acts])));
+                    assert(cast(shared SpAction)_sm_[acts],
+                            format!"Cid: %s must be an action, and it is a %s."(acts, typeid(_sm_[acts])));
                 Cid[] a = [acts];
             }
 
@@ -431,7 +431,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
                 Cid[] b;
                 foreach (cd; brans) {
                     debug if(_maps_filled_)
-                        assert(cast(shared SpBreed)_hm_[cd.cid] || cast(shared SpiritNeuron)_hm_[cd.cid],
+                        assert(cast(shared SpBreed)_sm_[cd.cid] || cast(shared SpiritNeuron)_sm_[cd.cid],
                                 format!"Cid: %s must be HolyNeuron, including HolySeed or HolyBreed, and it is a %s."
                                         (cd.cid, cd.className));
                     b ~= cd.cid;
@@ -441,9 +441,9 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
             {
                 debug if(_maps_filled_)
                     foreach (cid; brans) {
-                        assert(cast(shared SpBreed)_hm_[cid] || cast(shared SpiritNeuron)_hm_[cid],
+                        assert(cast(shared SpBreed)_sm_[cid] || cast(shared SpiritNeuron)_sm_[cid],
                                 format!"Cid: %s must be HolyNeuron, including HolySeed or HolyBreed, and it is a %s"
-                                        (cid, typeid(_hm_[cid])));
+                                        (cid, typeid(_sm_[cid])));
                     }
                 Cid[] b = brans;
             }
@@ -452,7 +452,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
                     (is(Tb == CptDescriptor))
             {  //yes: convert it to array of cids
                 debug if(_maps_filled_)
-                    assert(cast(shared SpBreed)_hm_[brans.cid] || cast(shared SpiritNeuron)_hm_[brans.cid],
+                    assert(cast(shared SpBreed)_sm_[brans.cid] || cast(shared SpiritNeuron)_sm_[brans.cid],
                             format!"Cid: %s must be HolyNeuron, including HolySeed or HolyBreed, and it is a %s."
                                     (brans.cid, brans.className));
                 Cid[] b = [brans.cid];
@@ -460,9 +460,9 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
             else//no: it is a cid; convert it an to array of cids
             {
                 debug if(_maps_filled_)
-                    assert(cast(shared SpBreed)_hm_[brans] || cast(shared SpiritNeuron)_hm_[brans],
+                    assert(cast(shared SpBreed)_sm_[brans] || cast(shared SpiritNeuron)_sm_[brans],
                             format!"Cid: %s must be HolyNeuron, including HolySeed or HolyBreed, and it is a %s."
-                                    (brans, typeid(_hm_[brans])));
+                                    (brans, typeid(_sm_[brans])));
                 Cid[] b = [brans];
             }
 
@@ -481,8 +481,8 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         foreach(act; actCids) {
             assert(act > MAX_STATIC_CID,
                     format!"The action cid %s is laying within the static concept range, which is not allowed."(act));
-            assert(act in _hm_, format!"Cid %s must be present in the holy map"(act));
-            assert(cast(Seed)_hm_[act] || cast(Breed)_hm_[act],
+            assert(act in _sm_, format!"Cid %s must be present in the holy map"(act));
+            assert(cast(Seed)_sm_[act] || cast(Breed)_sm_[act],
                     format!"Cid %s - must be the Seed or Breed concept"(act));
         }
     }
@@ -528,8 +528,8 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         foreach(br; branchCids) {
             assert(br > MAX_STATIC_CID,
                     format!"The action cid %s is laying within the static concept range, which is not allowed."(br));
-            assert(br in _hm_, format!"Cid %s must be present in the holy map"(br));
-            assert(cast(Seed)_hm_[br] || cast(Breed)_hm_[br], format!"Cid %s - must be the Seed or Breed concept"(br));
+            assert(br in _sm_, format!"Cid %s must be present in the holy map"(br));
+            assert(cast(Seed)_sm_[br] || cast(Breed)_sm_[br], format!"Cid %s - must be the Seed or Breed concept"(br));
         }
     }
     do {

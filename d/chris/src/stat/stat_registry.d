@@ -10,8 +10,8 @@ import attn_circle_thread;
 import stat_main;
 import stat_substat_subpile;
 
-/// Full list of modules, that contain static concept functions. This list is used at compile time to gather together all static
-/// concepts and put them in the holy map and their names and cids in the name map.
+/// Full list of modules, that contain static concept functions. This list is used at compile time to gather all static
+/// concepts and put them in the spirit map and their names and cids in the name map.
 enum StatConceptModules {
     pile = "stat_main",
     subpile = "stat_substat_subpile"
@@ -26,11 +26,6 @@ enum unusedStaticCids = findUnusedStatCids_;
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--
-
-/**
-        Constructor
-*/
-//this(){}
 
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
 

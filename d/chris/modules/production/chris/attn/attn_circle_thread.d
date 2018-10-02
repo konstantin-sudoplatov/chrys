@@ -5,7 +5,7 @@ import std.format;
 
 import global_types;
 
-import global_data, tools_pile;
+import global_data;
 import interfaces;
 import cpt_abstract, cpt_stat, cpt_neurons, cpt_premises, cpt_actions;
 import crank_main;
@@ -53,12 +53,12 @@ class Caldron {
         Returns: the live concept object
     */
     final Concept opIndex(Cid cid) {
-        assert(cid in _hm_, format!"Cid %s(%s) is not in the holy map."(cid, _nm_[cid]));
+        assert(cid in _sm_, format!"Cid %s(%s) is not in the holy map."(cid, _nm_[cid]));
         if
                 (auto p = cid in lm_)
             return *p;
         else
-            return lm_[cid] = _hm_[cid].live_factory;
+            return lm_[cid] = _sm_[cid].live_factory;
     }
 
     /// Adapter
@@ -340,7 +340,7 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
             s = "starting the attention circle thread";
         else
             if      // is it a breeded branch?
-                    (auto br = cast(shared SpBreed)_hm_[breedOrSeedCid])
+                    (auto br = cast(shared SpBreed)_sm_[breedOrSeedCid])
                 s = format!"starting breeded branch %s(%s)"(_nm_[br.seed], br.seed);
             else
                 s = format!"starting seeded branch %s(%s)"(_nm_[breedOrSeedCid], breedOrSeedCid);

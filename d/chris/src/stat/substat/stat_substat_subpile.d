@@ -3,7 +3,7 @@ import std.stdio;
 
 import global_types;
 
-import global_data, tools_pile;
+import global_data;
 import attn_circle_thread: Caldron;
 
 

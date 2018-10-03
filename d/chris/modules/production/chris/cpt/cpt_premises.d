@@ -4,7 +4,7 @@ import std.format;
 
 import global_types;
 
-import global_data, tools.data_struct;
+import global_data, handy_data_structs;
 import interfaces;
 import cpt_abstract;
 

@@ -2,41 +2,13 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e6f13b7-b9cd-4af9-969e-5956d8669eca" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/chris_chrislib__master.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/chris_chrislib__master2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/chris_chrislib__master3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/chris_chrislib__master4.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/chris_chrislib__master5.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/chris_chrislib__master6.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_pq_4_0_0_alpha_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_pq_4_0_0_alpha_22.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_pq_4_0_0_alpha_23.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_pq_4_0_0_alpha_24.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_util_3_0_0_beta_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_util_3_0_0_beta_22.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_util_3_0_0_beta_23.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_util_3_0_0_beta_24.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chris" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_22.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_23.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_24.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_25.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_26.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_27.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_22.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_23.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_24.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_25.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_26.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_27.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/chrislib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/chrislib.iml" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/chrislib.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/db/db_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/classes/production/chrislib/db/db_main.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chrislib/lib/libchris_chrislib.a" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/lib/libchris_chrislib.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/lib/libchrislib.a" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/lib/libchrislib.a" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chrislib/src/db/db_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/src/db/db_main.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/production/chris/global_data.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/global_data.d" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -53,8 +25,9 @@
           <entry key="project.open.time.0" value="2" />
           <entry key="project.open.time.1" value="11" />
           <entry key="project.open.time.10" value="9" />
-          <entry key="project.open.time.11" value="6" />
-          <entry key="project.open.time.13" value="3" />
+          <entry key="project.open.time.11" value="7" />
+          <entry key="project.open.time.12" value="1" />
+          <entry key="project.open.time.13" value="4" />
           <entry key="project.open.time.14" value="1" />
           <entry key="project.open.time.16" value="1" />
           <entry key="project.open.time.17" value="1" />
@@ -66,7 +39,7 @@
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="9" />
           <entry key="project.open.time.9" value="14" />
-          <entry key="project.opened" value="69" />
+          <entry key="project.opened" value="72" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -81,7 +54,7 @@
           <entry key="cpt_templates" value="1" />
           <entry key="crank_registry" value="1" />
           <entry key="crank_subcrank_subpile" value="1" />
-          <entry key="d" value="553" />
+          <entry key="d" value="555" />
           <entry key="db" value="1" />
           <entry key="global" value="2" />
           <entry key="live" value="7" />
@@ -97,7 +70,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="D file" value="552" />
+          <entry key="D file" value="554" />
           <entry key="PLAIN_TEXT" value="32" />
           <entry key="Properties" value="2" />
           <entry key="Scratch" value="1" />
@@ -105,13 +78,13 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="d" value="149590" />
+          <entry key="d" value="149602" />
           <entry key="vmoptions" value="95" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="D file" value="149590" />
+          <entry key="D file" value="149602" />
           <entry key="PLAIN_TEXT" value="95" />
         </counts>
       </usages-collector>
@@ -126,7 +99,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/console_thread.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1387">
+            <state relative-caret-position="1460">
               <caret line="73" column="24" selection-start-line="73" selection-start-column="24" selection-end-line="73" selection-end-column="24" />
             </state>
           </provider>
@@ -135,7 +108,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cpt/cpt_abstract.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
+            <state relative-caret-position="100">
               <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
             </state>
           </provider>
@@ -144,17 +117,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cpt/cpt_actions.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="76">
+            <state relative-caret-position="80">
               <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cpt/cpt_premises.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="6" column="38" selection-start-line="6" selection-start-column="38" selection-end-line="6" selection-end-column="38" />
+            <state relative-caret-position="160">
+              <caret line="8" column="20" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
             </state>
           </provider>
         </entry>
@@ -162,7 +135,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/stat/substat/stat_substat_subpile.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="57">
+            <state relative-caret-position="60">
               <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
             </state>
           </provider>
@@ -171,8 +144,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/chris.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="532">
-              <caret line="28" column="16" selection-start-line="28" selection-start-column="16" selection-end-line="28" selection-end-column="16" />
+            <state relative-caret-position="660">
+              <caret line="33" column="29" selection-start-line="33" selection-start-column="22" selection-end-line="33" selection-end-column="29" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/global_data.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="571">
+              <caret line="68" column="1" selection-start-line="68" selection-start-column="1" selection-end-line="68" selection-end-column="1" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file:///usr/include/dmd/phobos/std/random.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="14340">
+              <caret line="717" selection-start-line="717" selection-end-line="717" />
             </state>
           </provider>
         </entry>
@@ -245,7 +236,6 @@
         <option value="$PROJECT_DIR$/src/crank/subcrank/crank_subcrank_subpile.d" />
         <option value="$PROJECT_DIR$/src/crank/crank_registry.d" />
         <option value="$PROJECT_DIR$/src/stat/stat_registry.d" />
-        <option value="$PROJECT_DIR$/src/global_data.d" />
         <option value="$PROJECT_DIR$/src/cpt/cpt_abstract.d" />
         <option value="$PROJECT_DIR$/src/cpt/cpt_stat.d" />
         <option value="$PROJECT_DIR$/src/cpt/cpt_neurons.d" />
@@ -257,12 +247,13 @@
         <option value="$PROJECT_DIR$/src/console_thread.d" />
         <option value="$PROJECT_DIR$/src/chris.d" />
         <option value="$PROJECT_DIR$/src/cpt/cpt_premises.d" />
+        <option value="$PROJECT_DIR$/src/global_data.d" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="179" />
-    <option name="width" value="1737" />
+  <component name="ProjectFrameBounds">
+    <option name="x" value="174" />
+    <option name="width" value="1746" />
     <option name="height" value="1076" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -296,28 +287,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-            </path>
-            <path>
-              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="cpt" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="PackagesPane">
         <subPane>
           <expand>
@@ -356,6 +325,28 @@
               <item name="chris" type="616d4139:PackageViewModuleNode" />
               <item name="stat" type="1f31426a:PackageElementNode" />
               <item name="substat" type="1f31426a:PackageElementNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
+            <path>
+              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="cpt" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
           </expand>
           <select />
@@ -415,7 +406,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Build with DUB.Release DUB">
+  <component name="RunManager" selected="Build with DUB.Debug Dub">
     <configuration name="Run D App" type="DlangRunAppConfiguration" factoryName="Run D App" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="chris" />
       <option name="additionalParams" />
@@ -623,10 +614,11 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-3" width="1924" height="1085" extended-state="6" />
+    <frame x="174" y="0" width="1746" height="1076" extended-state="0" />
+    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5375" visible="true" weight="0.20137058" />
-      <window_info x="1944" y="563" width="330" height="781" id="Structure" order="1" sideWeight="0.4625" side_tool="true" visible="true" weight="0.20137058" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.53382665" visible="true" weight="0.23167849" />
+      <window_info x="1944" y="563" width="330" height="781" id="Structure" order="1" sideWeight="0.46617335" side_tool="true" visible="true" weight="0.23167849" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
@@ -635,7 +627,7 @@
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32604167" />
       <window_info anchor="bottom" x="2" y="597" width="1916" height="479" id="Run" order="2" type="WINDOWED" weight="0.359375" />
-      <window_info anchor="bottom" x="2" y="720" width="1912" height="329" id="Debug" order="3" weight="0.39895833" />
+      <window_info anchor="bottom" x="2" y="720" width="1912" height="329" id="Debug" order="3" weight="0.39852008" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4994664" weight="0.32708332" />
@@ -685,14 +677,35 @@
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="gdb">
+          <url>file://$PROJECT_DIR$/src/chris.d</url>
+          <line>33</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
     <watches-manager>
       <configuration name="DlangRunDubConfiguration">
-        <watch expression="_maps_fully_setup_" language="D" />
+        <watch expression="i" language="D" />
       </configuration>
     </watches-manager>
   </component>
   <component name="debuggerHistoryManager">
+    <expressions id="evaluateCodeFragment">
+      <expression>
+        <expression-string>thisTid</expression-string>
+        <language-id>D</language-id>
+        <evaluation-mode>CODE_FRAGMENT</evaluation-mode>
+      </expression>
+    </expressions>
     <expressions id="watch">
+      <expression>
+        <expression-string>i</expression-string>
+        <language-id>D</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
       <expression>
         <expression-string>_maps_fully_setup_</expression-string>
         <language-id>D</language-id>
@@ -738,21 +751,31 @@
         <language-id>D</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
+    </expressions>
+    <expressions id="evaluateExpression">
       <expression>
-        <expression-string>typeid(msg)</expression-string>
+        <expression-string>i</expression-string>
+        <language-id>D</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>_sm_</expression-string>
+        <language-id>D</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>rnd_</expression-string>
+        <language-id>D</language-id>
+        <evaluation-mode>EXPRESSION</evaluation-mode>
+      </expression>
+      <expression>
+        <expression-string>thisTid</expression-string>
         <language-id>D</language-id>
         <evaluation-mode>EXPRESSION</evaluation-mode>
       </expression>
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file:///usr/include/dmd/druntime/import/core/time.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="308">
-          <caret line="1896" column="6" selection-start-line="1896" selection-start-column="6" selection-end-line="1896" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/include/dmd/phobos/std/variant.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="887">
@@ -917,35 +940,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="247">
           <caret line="13" column="39" selection-start-line="13" selection-start-column="39" selection-end-line="13" selection-end-column="39" />
-          <folding>
-            <element signature="e#5171#5172#0" expanded="true" />
-            <element signature="e#5223#5224#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/global_data.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="9" selection-start-line="9" selection-end-line="9" />
-          <folding>
-            <element signature="e#5256#5257#0" expanded="true" />
-            <element signature="e#5324#5325#0" expanded="true" />
-            <element signature="e#6836#6837#0" expanded="true" />
-            <element signature="e#6874#6875#0" expanded="true" />
-            <element signature="e#8874#8875#0" expanded="true" />
-            <element signature="e#8917#8918#0" expanded="true" />
-            <element signature="e#9125#9126#0" expanded="true" />
-            <element signature="e#9161#9162#0" expanded="true" />
-            <element signature="e#9500#9501#0" expanded="true" />
-            <element signature="e#9531#9532#0" expanded="true" />
-            <element signature="e#9751#9752#0" expanded="true" />
-            <element signature="e#9789#9790#0" expanded="true" />
-            <element signature="e#9885#9886#0" expanded="true" />
-            <element signature="e#9927#9928#0" expanded="true" />
-            <element signature="e#10488#10489#0" expanded="true" />
-            <element signature="e#10519#10520#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -977,48 +971,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/console_thread.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1387">
-          <caret line="73" column="24" selection-start-line="73" selection-start-column="24" selection-end-line="73" selection-end-column="24" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_abstract.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_actions.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/stat/substat/stat_substat_subpile.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/chris.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="532">
-          <caret line="28" column="16" selection-start-line="28" selection-start-column="16" selection-end-line="28" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_premises.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="6" column="38" selection-start-line="6" selection-start-column="38" selection-end-line="6" selection-end-column="38" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/messages.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="57">
@@ -1030,6 +982,62 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="4636">
           <caret line="270" selection-start-line="270" selection-end-line="270" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/console_thread.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1460">
+          <caret line="73" column="24" selection-start-line="73" selection-start-column="24" selection-end-line="73" selection-end-column="24" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_abstract.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="100">
+          <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_actions.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="80">
+          <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_premises.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="160">
+          <caret line="8" column="20" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/stat/substat/stat_substat_subpile.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="60">
+          <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chris.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="660">
+          <caret line="33" column="29" selection-start-line="33" selection-start-column="22" selection-end-line="33" selection-end-column="29" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/dmd/phobos/std/random.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="14340">
+          <caret line="717" selection-start-line="717" selection-end-line="717" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/global_data.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="571">
+          <caret line="68" column="1" selection-start-line="68" selection-start-column="1" selection-end-line="68" selection-end-column="1" />
         </state>
       </provider>
     </entry>

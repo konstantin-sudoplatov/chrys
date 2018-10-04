@@ -25,25 +25,6 @@ enum DbCreds {
 shared static this() {
     // Add shared library /usr/lib/x_86-64-linux-gnu/libpq.so
 //    DerelictPQ.load();
-
-//
-//    PGconn * connection = connectToDb();
-//
-//    PGresult  *       result;
-//    result = PQexec(connection, `select * from concepts limit 3`);
-//
-//    PQprintOpt        options;
-//    options.header    = 0;              /* Ask for column headers            */
-//    options.aligment     = 1;           /* Pad short columns for alignment   */
-//    options.html3 = 0;
-//    options.fieldSep  = cast(char*)"|"; /* Use a pipe as the field separator */
-//
-//    {
-//        import core.stdc.stdio: stdout;
-//        PQprint(stdout, result, &options);
-//    }
-//
-//    disconnectFromDb(connection);
 }
 
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -102,9 +83,7 @@ struct TableParams {
     */
     static string getParam(string name) {
         PGresult* res;
-        scope(exit) PQclear(res);
-        char* pc = cast(char*)name.toStringz;
-        char** paramValues = &pc;
+        char** paramValues = [cast(char*)name.toStringz].ptr;
         res = PQexecPrepared(
             conn_,
             getParam_stmt,
@@ -112,12 +91,49 @@ struct TableParams {
             paramValues,
             null,
             null,
-            0
+            0       // result as a string
         );
         assert(PQresultStatus(res) == PGRES_TUPLES_OK, to!string(PQerrorMessage(conn_)));
         assert(PQntuples(res) == 1, format!"Found %s records for parameter: %s"(PQntuples(res), name));
+        scope(exit) PQclear(res);
 
-        return to!string(cast(char*)PQgetvalue(res, 0, 0));
+        char* pc = cast(char*)PQgetvalue(res, 0, 0);
+        if      // not empty string?
+                (*pc != 0)
+            return to!string(pc);
+        else //no: make difference betwee the null and empty string
+            if(PQgetisnull(res, 0, 0))
+                return null;
+            else
+                return "";
+    }
+
+    /**
+            Set parameter's value. Setting the null value is legal. Exactly one record must be updated, else an assertion
+        is thrown.
+        Parameters:
+            name = name of the parameter
+            value = value to set, can be null
+    */
+    static void setParam(string name, string value) {
+        PGresult* res;
+
+        char* pcValue;
+        pcValue = value is null? null: cast(char*)value.toStringz;
+        char** paramValues = [cast(char*)name.toStringz, pcValue].ptr;
+        res = PQexecPrepared(
+            conn_,
+            setParam_stmt,
+            2,      // nParams
+            paramValues,
+            null,
+            null,
+            0       // result as a string
+        );
+        assert(PQresultStatus(res) == PGRES_COMMAND_OK, to!string(PQerrorMessage(conn_)));
+        string sTuplesAffected = to!string(PQcmdTuples(res));
+        assert(sTuplesAffected == "1", format!"Updated %s records for parameter: %s"(sTuplesAffected, name));
+        scope(exit) PQclear(res);
     }
 
     /// Prepare all statements, whose names a present in the enum
@@ -137,7 +153,7 @@ struct TableParams {
         res = PQprepare(
             conn_,
             setParam_stmt,
-            format!"update %s set value=$1 where name=$2"(paramsTable).toStringz,
+            format!"update %s set value=$2 where name=$1"(paramsTable).toStringz,
             0,
             null
         );
@@ -174,7 +190,9 @@ unittest {
 
     //TableParams.getParam("_cur_ver_");
     TableParams.prepare;
-writeln(TableParams.getParam("_cur_ver_"));
+TableParams.setParam("_stale_ver_", "1");
+writeln(TableParams.getParam("_stale_ver_"));
+writeln(TableParams.getParam("_stale_ver_") is null);
     disconnectFromDb;
 }
 

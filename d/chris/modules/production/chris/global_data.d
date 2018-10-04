@@ -48,7 +48,7 @@ debug {
 shared static this() {
     // Initialize random generator
     rnd_ = Random(unpredictableSeed);
-
+int i = 1;
     // Create and initialize the key shared structures
     _sm_ = new shared SpiritMap;
     fillInConceptMaps_(_sm_, _nm_);     // static concepts from the stat modules, dynamic concept names from the crank modules

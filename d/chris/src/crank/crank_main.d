@@ -1,6 +1,8 @@
 /// Dynamic concept names
 module crank_main;
 
+import common_tools;
+
 import global_data, crank_registry;
 import cpt_stat, cpt_neurons, cpt_premises, cpt_actions;
 import stat_main;

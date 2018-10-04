@@ -2,7 +2,7 @@ module cpt_neurons;
 import std.stdio;
 import std.format;
 
-import global_types;
+import common_tools;
 
 import global_data;
 import interfaces;

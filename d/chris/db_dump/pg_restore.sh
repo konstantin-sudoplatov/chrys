@@ -1,5 +1,2 @@
 #!/bin/sh
-export PGDATABASE=chris
-export PGUSER=chris
-export PGPASSWORD=chris
-pg_restore -c chris.dmp
+sudo -u postgres pg_restore -Ccv -d postgres chris.dmp

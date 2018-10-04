@@ -2,7 +2,7 @@ module crank_registry;
 import std.traits;
 import std.conv;
 
-import global_types;
+import common_tools;
 
 import global_data;
 import cpt_stat;
@@ -81,7 +81,7 @@ string dequalify_enums(enumList...)() {
 
 unittest {
     import std.conv: asOriginalType;
-    import global_data: CptDescriptor, cd;
+    import global_data: CptDescriptor;
     import cpt_neurons: SpSeed;
     import cpt_premises: SpBreed;
     enum CommonConcepts: CptDescriptor {

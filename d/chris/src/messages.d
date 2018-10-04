@@ -1,7 +1,7 @@
 module messages;
 import std.concurrency;
 
-import global_types;
+import common_tools;
 
 import global_data;
 import cpt_abstract;

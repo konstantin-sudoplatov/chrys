@@ -4,7 +4,7 @@ import std.concurrency, core.thread;
 import std.variant;
 import std.format;
 
-import global_types, db.db_main;
+import common_tools, db.db_main;
 
 import global_data;
 import messages;

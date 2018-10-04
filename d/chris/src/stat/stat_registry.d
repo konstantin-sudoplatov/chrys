@@ -2,8 +2,7 @@ module stat_registry;
 import std.traits;
 import std.conv;
 
-import global_types;
-
+import global_data;
 import attn_circle_thread;
 
 // modules with static concepts

@@ -5,7 +5,7 @@ import std.string;
 import std.concurrency;
 import core.thread;
 
-import global_types;
+import common_tools;
 
 import global_data;
 import messages;

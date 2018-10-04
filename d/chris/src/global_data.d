@@ -5,12 +5,41 @@ import std.traits;
 import std.format;
 import std.conv;
 
-import global_types;
+import common_tools;
 
 import stat_registry, stat_main;
 import crank_registry;
 import attn_dispatcher_thread, attn_circle_thread;
 import cpt_abstract, cpt_stat, cpt_neurons, cpt_premises, cpt_actions;
+
+/// Concept identifier
+alias Cid = uint;
+
+/// Static cid range is from 1 to MAX_STATIC_CID;
+enum MIN_STATIC_CID = Cid(1);
+enum MAX_STATIC_CID = Cid(1_000_000);
+enum MIN_DYNAMIC_CID = Cid(2_000_000);
+enum MAX_DINAMIC_CID = Cid.max;
+static assert(MIN_DYNAMIC_CID > MAX_STATIC_CID);
+enum MIN_TEMP_CID = MAX_STATIC_CID + 1;
+enum MAX_TEMP_CID = MIN_DYNAMIC_CID - 1;
+static assert(MAX_TEMP_CID >= MIN_TEMP_CID);
+
+/// Call types of the static concept (static concept is a function).
+enum StatCallType: string {
+    p0Cal = "void function(Caldron)",                              // void function(Caldron nameSpace)
+    p0Calp1Cid = "void function(Caldron, Cid)",                         // void function(Caldron nameSpace, Cid operandCid)
+    p0Calp1Cidp2Cid = "void function(Caldron, Cid, Cid)",                    // void function(Caldron nameSpace, Cid firstoperandCid, Cid secondOperandCid)
+    p0Calp1Cidp2Int = "void function(Caldron, Cid, int)",                    // void function(Caldron nameSpace, Cid conceptCid, int intValue)
+    p0Calp1Cidp2Float = "void function(Caldron, Cid, float)",                  // void function(Caldron nameSpace, Cid conceptCid, float floatValue)
+    p0Calp1Cidp2Cidp3Float = "void function(Caldron, Cid, Cid, float)",             // void function(Caldron nameSpace, Cid branchBreedCid, Cid conceptCid, float floatValue)
+}
+
+/// Structure of the crank enums.
+struct CptDescriptor {
+    string className;      // named concept's class
+    Cid cid;                // named concept's cid
+}
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
@@ -142,12 +171,6 @@ unittest {
 }
 
 //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-/// Structure of the crank enums.
-struct CptDescriptor {
-    string className;      // named concept's class
-    Cid cid;                // named concept's cid
-}
 
 /**
             Holy concepts map. It is a wrapper for actual associative array.

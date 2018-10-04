@@ -2,7 +2,7 @@ module handy_data_structs;
 import std.stdio;
 import std.format;
 
-import global_types;
+import common_tools;
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 

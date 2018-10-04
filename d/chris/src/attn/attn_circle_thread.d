@@ -3,7 +3,7 @@ import core.thread, std.concurrency;
 import std.conv;
 import std.format;
 
-import global_types;
+import common_tools;
 
 import global_data;
 import interfaces;

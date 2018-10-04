@@ -2,7 +2,7 @@ module attn_dispatcher_thread;
 import std.concurrency;
 import std.format;
 
-import global_types;
+import common_tools;
 
 import global_data;
 import messages;

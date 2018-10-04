@@ -2,24 +2,41 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e6f13b7-b9cd-4af9-969e-5956d8669eca" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/chris_chrislib__master.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/chris_chrislib__master2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/chris_chrislib__master3.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/chris_chrislib__master4.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/chris_chrislib__master5.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/chris_chrislib__master6.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_pq_4_0_0_alpha_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_pq_4_0_0_alpha_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_pq_4_0_0_alpha_23.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_pq_4_0_0_alpha_24.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_util_3_0_0_beta_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_util_3_0_0_beta_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_util_3_0_0_beta_23.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_util_3_0_0_beta_24.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chris" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_23.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_24.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_25.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_26.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_27.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_23.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_24.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_25.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_26.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_27.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/chrislib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chrislib/chrislib.iml" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/chrislib.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/db/db_pile.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/global_types.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/tools/data_struct.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/lib/libchris_chrislib.a" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/lib/libchris_chrislib.a" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/chrislib/lib/libchrislib.a" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/lib/libchrislib.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/src/db/db_pile.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/src/global_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/src/global_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/src/proba.d" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/src/proba.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/src/tools/data_struct.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dub.sdl" beforeDir="false" afterPath="$PROJECT_DIR$/dub.sdl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/chris.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/cpt/cpt_premises.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/cpt/cpt_premises.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/chris.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpt/cpt_premises.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/cpt_premises.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/src/db/db_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/src/db/db_main.d" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -28,45 +45,13 @@
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
-  <component name="DockManager">
-    <window id="2">
-      <content type="file-editors">
-        <state>
-          <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-            <file pinned="false" current-in-tab="true">
-              <entry file="file://$PROJECT_DIR$/src/messages.d">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="60">
-                    <caret line="3" column="7" selection-start-line="3" selection-start-column="7" selection-end-line="3" selection-end-column="7" />
-                  </state>
-                </provider>
-              </entry>
-            </file>
-            <file pinned="false" current-in-tab="false">
-              <entry file="file://$PROJECT_DIR$/src/interfaces.d">
-                <provider selected="true" editor-type-id="text-editor">
-                  <state relative-caret-position="5220">
-                    <caret line="270" selection-start-line="270" selection-end-line="270" />
-                    <folding>
-                      <element signature="e#5445#5446#0" expanded="true" />
-                      <element signature="e#5486#5487#0" expanded="true" />
-                    </folding>
-                  </state>
-                </provider>
-              </entry>
-            </file>
-          </leaf>
-        </state>
-      </content>
-    </window>
-  </component>
   <component name="FUSProjectUsageTrigger">
     <session id="76674309">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="54" />
+          <entry key="project.closed" value="55" />
           <entry key="project.open.time.0" value="2" />
-          <entry key="project.open.time.1" value="10" />
+          <entry key="project.open.time.1" value="11" />
           <entry key="project.open.time.10" value="9" />
           <entry key="project.open.time.11" value="6" />
           <entry key="project.open.time.13" value="3" />
@@ -81,7 +66,7 @@
           <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="9" />
           <entry key="project.open.time.9" value="14" />
-          <entry key="project.opened" value="68" />
+          <entry key="project.opened" value="69" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -96,7 +81,7 @@
           <entry key="cpt_templates" value="1" />
           <entry key="crank_registry" value="1" />
           <entry key="crank_subcrank_subpile" value="1" />
-          <entry key="d" value="551" />
+          <entry key="d" value="553" />
           <entry key="db" value="1" />
           <entry key="global" value="2" />
           <entry key="live" value="7" />
@@ -112,7 +97,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="D file" value="550" />
+          <entry key="D file" value="552" />
           <entry key="PLAIN_TEXT" value="32" />
           <entry key="Properties" value="2" />
           <entry key="Scratch" value="1" />
@@ -141,7 +126,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/console_thread.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1440">
+            <state relative-caret-position="1387">
               <caret line="73" column="24" selection-start-line="73" selection-start-column="24" selection-end-line="73" selection-end-column="24" />
             </state>
           </provider>
@@ -150,7 +135,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cpt/cpt_abstract.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="100">
+            <state relative-caret-position="95">
               <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
             </state>
           </provider>
@@ -159,7 +144,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cpt/cpt_actions.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="80">
+            <state relative-caret-position="76">
               <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
             </state>
           </provider>
@@ -168,7 +153,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/cpt/cpt_premises.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="120">
+            <state relative-caret-position="114">
               <caret line="6" column="38" selection-start-line="6" selection-start-column="38" selection-end-line="6" selection-end-column="38" />
             </state>
           </provider>
@@ -177,7 +162,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/stat/substat/stat_substat_subpile.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
+            <state relative-caret-position="57">
               <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
             </state>
           </provider>
@@ -186,7 +171,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/chris.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="560">
+            <state relative-caret-position="532">
               <caret line="28" column="16" selection-start-line="28" selection-start-column="16" selection-end-line="28" selection-end-column="16" />
             </state>
           </provider>
@@ -275,7 +260,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="1">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="179" />
     <option name="width" value="1737" />
     <option name="height" value="1076" />
@@ -311,6 +296,28 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
+            <path>
+              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+            <path>
+              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+              <item name="cpt" type="9f88c78c:ScopeViewTreeModel$FileNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="PackagesPane">
         <subPane>
           <expand>
@@ -376,28 +383,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-            </path>
-            <path>
-              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-            <path>
-              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-              <item name="cpt" type="9f88c78c:ScopeViewTreeModel$FileNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="AndroidView" />
     </panes>
   </component>
@@ -430,7 +415,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Build with DUB.Unittest Dub">
+  <component name="RunManager" selected="Build with DUB.Release DUB">
     <configuration name="Run D App" type="DlangRunAppConfiguration" factoryName="Run D App" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="chris" />
       <option name="additionalParams" />
@@ -638,11 +623,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="179" y="0" width="1737" height="1076" extended-state="0" />
-    <editor active="true" />
+    <frame x="-2" y="-3" width="1924" height="1085" extended-state="6" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.53894734" visible="true" weight="0.22353637" />
-      <window_info x="1944" y="563" width="330" height="781" id="Structure" order="1" sideWeight="0.46105263" side_tool="true" visible="true" weight="0.22353637" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5375" visible="true" weight="0.20137058" />
+      <window_info x="1944" y="563" width="330" height="781" id="Structure" order="1" sideWeight="0.4625" side_tool="true" visible="true" weight="0.20137058" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
@@ -650,7 +634,7 @@
       <window_info id="Favorites" order="6" sideWeight="0.51221997" side_tool="true" weight="0.1995731" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32604167" />
-      <window_info active="true" anchor="bottom" x="0" y="597" width="1920" height="479" id="Run" order="2" type="WINDOWED" visible="true" weight="0.359375" />
+      <window_info anchor="bottom" x="2" y="597" width="1916" height="479" id="Run" order="2" type="WINDOWED" weight="0.359375" />
       <window_info anchor="bottom" x="2" y="720" width="1912" height="329" id="Debug" order="3" weight="0.39895833" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -900,17 +884,6 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/chrislib/src/db/common.d" />
     <entry file="file://$PROJECT_DIR$/src/global.d" />
-    <entry file="file://$PROJECT_DIR$/src/interfaces.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="5220">
-          <caret line="270" selection-start-line="270" selection-end-line="270" />
-          <folding>
-            <element signature="e#5445#5446#0" expanded="true" />
-            <element signature="e#5486#5487#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/stat/stat_main.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
@@ -990,31 +963,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_actions.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="80">
-          <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/stat/substat/stat_substat_subpile.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="114">
           <caret line="6" selection-start-line="6" selection-end-line="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/messages.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
-          <caret line="3" column="7" selection-start-line="3" selection-start-column="7" selection-end-line="3" selection-end-column="7" />
         </state>
       </provider>
     </entry>
@@ -1027,29 +979,57 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/console_thread.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1440">
+        <state relative-caret-position="1387">
           <caret line="73" column="24" selection-start-line="73" selection-start-column="24" selection-end-line="73" selection-end-column="24" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cpt/cpt_abstract.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
+        <state relative-caret-position="95">
           <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_actions.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/stat/substat/stat_substat_subpile.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="57">
+          <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/chris.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="560">
+        <state relative-caret-position="532">
           <caret line="28" column="16" selection-start-line="28" selection-start-column="16" selection-end-line="28" selection-end-column="16" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cpt/cpt_premises.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="120">
+        <state relative-caret-position="114">
           <caret line="6" column="38" selection-start-line="6" selection-start-column="38" selection-end-line="6" selection-end-column="38" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/messages.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="57">
+          <caret line="3" column="7" selection-start-line="3" selection-start-column="7" selection-end-line="3" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/interfaces.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4636">
+          <caret line="270" selection-start-line="270" selection-end-line="270" />
         </state>
       </provider>
     </entry>

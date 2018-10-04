@@ -16,6 +16,6 @@ targetPath "lib"
 sourcePaths "src/"
 importPaths "src/"
 
-configuration "unittest" {
-    mainSourceFile "src/proba.d"
-}
+//configuration "unittest" {
+//    mainSourceFile "src/proba.d"
+//}

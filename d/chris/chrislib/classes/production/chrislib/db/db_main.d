@@ -52,20 +52,23 @@ void disconnectFromDb(PGconn* conn) {
         Convert a numeric (one of int or float types) from native little endianess to the big endian form.
     Parameters:
         arg = a variable to convert
-    Returns: bytes in the reverse order as a static array.
+    Returns: bytes in the reverse order as an initial type.
 */
 static import std.traits;
-byte[T.sizeof] toBigEndian(T)(T arg) if(std.traits.isNumeric!T) {
-    byte[T.sizeof] res;
+T invertEndianess(T)(T arg) if(std.traits.isNumeric!T) {
+    union Res {
+        byte[T.sizeof] bar;
+        T t;
+    }
+    Res res;
     for(int i, j = T.sizeof-1; i < T.sizeof; ++i, --j)
-        res[j] = (cast(byte*)&arg)[i];
+        res.bar[j] = (cast(byte*)&arg)[i];
 
-    return res;
+    return res.t;
 }
 ///
 unittest{
-    byte[4] b = toBigEndian(0x01020304);
-    assert(*(cast(int*)&b) == 0x04030201);
+    assert(invertEndianess(0x01020304) == 0x04030201);
 }
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
@@ -112,8 +115,8 @@ struct TableParams {
             null,
             0       // result as a string
         );
-        assert(PQresultStatus(res) == PGRES_TUPLES_OK, to!string(PQerrorMessage(conn_)));
-        assert(PQntuples(res) == 1, format!"Found %s records for parameter: %s"(PQntuples(res), name));
+        enforce(PQresultStatus(res) == PGRES_TUPLES_OK, to!string(PQerrorMessage(conn_)));
+        enforce(PQntuples(res) == 1, format!"Found %s records for parameter: %s"(PQntuples(res), name));
         scope(exit) PQclear(res);
 
         char* pc = cast(char*)PQgetvalue(res, 0, 0);
@@ -149,9 +152,9 @@ struct TableParams {
             null,
             0       // result as a string
         );
-        assert(PQresultStatus(res) == PGRES_COMMAND_OK, to!string(PQerrorMessage(conn_)));
+        enforce(PQresultStatus(res) == PGRES_COMMAND_OK, to!string(PQerrorMessage(conn_)));
         string sTuplesAffected = to!string(PQcmdTuples(res));
-        assert(sTuplesAffected == "1", format!"Updated %s records for parameter: %s"(sTuplesAffected, name));
+        enforce(sTuplesAffected == "1", format!"Updated %s records for parameter: %s"(sTuplesAffected, name));
         PQclear(res);
     }
 
@@ -166,7 +169,7 @@ struct TableParams {
             0,
             null
         );
-        assert(PQresultStatus(res) == PGRES_COMMAND_OK, to!string(PQerrorMessage(conn_)));
+        enforce(PQresultStatus(res) == PGRES_COMMAND_OK, to!string(PQerrorMessage(conn_)));
         PQclear(res);
 
         res = PQprepare(
@@ -176,7 +179,7 @@ struct TableParams {
             0,
             null
         );
-        assert(PQresultStatus(res) == PGRES_COMMAND_OK, to!string(PQerrorMessage(conn_)));
+        enforce(PQresultStatus(res) == PGRES_COMMAND_OK, to!string(PQerrorMessage(conn_)));
         PQclear(res);
     }
 

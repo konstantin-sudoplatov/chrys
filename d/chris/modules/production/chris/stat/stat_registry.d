@@ -44,8 +44,8 @@ enum unusedStaticCids = findUnusedStatCids_;
     Parameters:
         typeName = name of type
 */
-template type_(string typeName) {
-    mixin("alias type_ = " ~ typeName ~ ";");
+private template type(string typeName) {
+    mixin("alias type = " ~ typeName ~ ";");
 }
 
 /**
@@ -54,7 +54,7 @@ template type_(string typeName) {
     Returns: array of static concept descriptors.
 */
 private TempStatDescriptor[] createTempStatDescriptors_() {
-import std.stdio;
+
     // Declare named static descriptor array
     TempStatDescriptor[] sds;
 
@@ -66,7 +66,7 @@ import std.stdio;
                 sd.cid = __traits(getAttributes, mixin(memberName))[0];
                 sd.name = memberName;
                 sd.fun_ptr = mixin("&" ~ memberName);
-                static assert(is(typeof(mixin("&" ~ memberName)) == type_!(__traits(getAttributes, mixin(memberName))[1])),
+                static assert(is(typeof(mixin("&"~memberName))== type!(__traits(getAttributes, mixin(memberName))[1])),
                         memberName ~ ": annotated type " ~ __traits(getAttributes, mixin(memberName))[1] ~
                         " doesn't match with real type " ~ typeof(mixin("&" ~ memberName)).stringof);
                 sd.call_type = __traits(getAttributes, mixin(memberName))[1];

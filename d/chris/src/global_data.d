@@ -414,7 +414,7 @@ do {
 }
 
 /**
-            Remove from the name map all entries that don't have related entry in the holy map.
+            Remove from the name map all entries that don't have related entry in the spirit map.
 */
 private void cleanupNotUsedNames() {
     import std.typecons: Tuple;

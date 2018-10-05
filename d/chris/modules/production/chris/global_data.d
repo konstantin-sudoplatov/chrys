@@ -61,6 +61,7 @@ template type(string typeName) {
     mixin("alias type = " ~ typeName ~ ";");
 }
 
+
 //---***---***---***---***---***--- data ---***---***---***---***---***--
 
 //      Key threads of the project. The console thead will be spawned, but we don't need to remember its Tid. The circle
@@ -414,7 +415,7 @@ do {
 }
 
 /**
-            Remove from the name map all entries that don't have related entry in the holy map.
+            Remove from the name map all entries that don't have related entry in the spirit map.
 */
 private void cleanupNotUsedNames() {
     import std.typecons: Tuple;

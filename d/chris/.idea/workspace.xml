@@ -2,20 +2,40 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e6f13b7-b9cd-4af9-969e-5956d8669eca" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/chrislib.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chris" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/db/db_concept.d" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/classes/production/chrislib/db/db_concept.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/db/db_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/classes/production/chrislib/db/db_main.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/proba.d" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/classes/production/chrislib/proba.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/lib/libchris_chrislib.a" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/lib/libchris_chrislib.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/src/db/db_concept.d" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/src/db/db_concept.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/src/db/db_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/src/db/db_main.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/src/proba.d" beforeDir="false" afterPath="$PROJECT_DIR$/chrislib/src/proba.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chris.iml" beforeDir="false" afterPath="$PROJECT_DIR$/chris.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.gitignore" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_2.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/source.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/source1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/misc.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/chrislib.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/common_tools.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/db/db_concept.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/db/db_main.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/handy_data_structs.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/proba.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/project_parameters.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/dub.sdl" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/dub.selections.json" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/lib/libchris_chrislib.a" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/lib/libchrislib.a" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/src/common_tools.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/src/db/db_concept.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/src/db/db_main.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/src/handy_data_structs.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/src/proba.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrislib/src/project_parameters.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/dub.sdl" beforeDir="false" afterPath="$PROJECT_DIR$/dub.sdl" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/modules/production/chris/global_data.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/global_data.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/stat/stat_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/stat/stat_registry.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/global_data.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/global_data.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/stat/stat_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/stat/stat_registry.d" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -61,7 +81,7 @@
           <entry key="cpt_templates" value="1" />
           <entry key="crank_registry" value="1" />
           <entry key="crank_subcrank_subpile" value="1" />
-          <entry key="d" value="589" />
+          <entry key="d" value="590" />
           <entry key="db" value="1" />
           <entry key="global" value="2" />
           <entry key="live" value="7" />
@@ -77,7 +97,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="D file" value="588" />
+          <entry key="D file" value="589" />
           <entry key="PLAIN_TEXT" value="32" />
           <entry key="Properties" value="2" />
           <entry key="Scratch" value="1" />
@@ -104,10 +124,19 @@
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/chrilib/src/common_tools.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="513">
+              <caret line="27" column="33" lean-forward="true" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/global_data.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="347">
-              <caret line="395" column="35" selection-start-line="395" selection-start-column="35" selection-end-line="395" selection-end-column="35" />
+            <state relative-caret-position="152">
+              <caret line="8" column="12" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
               <folding>
                 <element signature="e#7008#7009#0" expanded="true" />
                 <element signature="e#7076#7077#0" expanded="true" />
@@ -170,7 +199,7 @@
         <entry file="file://$PROJECT_DIR$/src/stat/stat_registry.d">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="342">
-              <caret line="51" column="57" lean-forward="true" selection-start-line="51" selection-start-column="57" selection-end-line="51" selection-end-column="57" />
+              <caret line="51" column="57" selection-start-line="51" selection-start-column="57" selection-end-line="51" selection-end-column="57" />
               <folding>
                 <element signature="e#5180#5181#0" expanded="true" />
                 <element signature="e#5232#5233#0" expanded="true" />
@@ -272,7 +301,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="174" />
+    <option name="x" value="68" />
     <option name="width" value="1746" />
     <option name="height" value="1076" />
   </component>
@@ -401,7 +430,7 @@
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535044027140" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="D" />
     <property name="full.screen.before.presentation.mode" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/chrislib" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -637,7 +666,7 @@
     <frame x="-2" y="-3" width="1924" height="1085" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.53382665" visible="true" weight="0.20980495" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.53382665" visible="true" weight="0.20980495" />
       <window_info x="1944" y="563" width="330" height="781" id="Structure" order="1" sideWeight="0.46770832" side_tool="true" weight="0.20980495" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -646,7 +675,7 @@
       <window_info id="Favorites" order="6" sideWeight="0.51221997" side_tool="true" weight="0.1995731" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32604167" />
-      <window_info active="true" anchor="bottom" x="2" y="595" width="1916" height="481" id="Run" order="2" type="WINDOWED" visible="true" weight="0.359375" />
+      <window_info anchor="bottom" x="2" y="595" width="1916" height="481" id="Run" order="2" type="WINDOWED" visible="true" weight="0.359375" />
       <window_info anchor="bottom" x="2" y="720" width="1912" height="329" id="Debug" order="3" weight="0.39852008" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -787,7 +816,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/cpt/base_concepts.d" />
     <entry file="file://$PROJECT_DIR$/src/cpt/cpt_holy.d" />
     <entry file="file://$PROJECT_DIR$/src/cpt/cpt_holy_abstract.d" />
     <entry file="file://$PROJECT_DIR$/src/cpt/cpt_live_abstract.d" />
@@ -1032,7 +1060,7 @@
     <entry file="file://$PROJECT_DIR$/src/stat/stat_registry.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="342">
-          <caret line="51" column="57" lean-forward="true" selection-start-line="51" selection-start-column="57" selection-end-line="51" selection-end-column="57" />
+          <caret line="51" column="57" selection-start-line="51" selection-start-column="57" selection-end-line="51" selection-end-column="57" />
           <folding>
             <element signature="e#5180#5181#0" expanded="true" />
             <element signature="e#5232#5233#0" expanded="true" />
@@ -1049,8 +1077,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/global_data.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="347">
-          <caret line="395" column="35" selection-start-line="395" selection-start-column="35" selection-end-line="395" selection-end-column="35" />
+        <state relative-caret-position="152">
+          <caret line="8" column="12" selection-start-line="8" selection-start-column="12" selection-end-line="8" selection-end-column="12" />
           <folding>
             <element signature="e#7008#7009#0" expanded="true" />
             <element signature="e#7076#7077#0" expanded="true" />
@@ -1069,6 +1097,13 @@
             <element signature="e#12079#12080#0" expanded="true" />
             <element signature="e#12110#12111#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chrilib/src/common_tools.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="27" column="33" lean-forward="true" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
         </state>
       </provider>
     </entry>
@@ -1159,7 +1194,7 @@
       </state>
       <state key="ProjectLibrariesConfigurable.UI">
         <settings>
-          <last-edited>chrislib</last-edited>
+          <last-edited>chrilib</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

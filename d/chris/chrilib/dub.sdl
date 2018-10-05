@@ -1,0 +1,21 @@
+name "chrilib"
+description "Library for the Chris project"
+authors "su"
+copyright "Copyright © 2018, su"
+license "proprietary"
+
+// Add binding to the libpq Postgres library. Static and dynamic binding (with libpq.so) work well, but static linking with libpq.a did
+// not work for me, don't know why. 26.09.18, su.
+dependency "derelict-pq" version="~>4.0.0-alpha.2"
+subConfiguration "derelict-pq" "derelict-pq-static"     // comment out and add the "DerelictPQ.load();" in the source code
+sourceFiles "/usr/lib/x86_64-linux-gnu/libpq.so"        // if you want static binding with dynamic linking instead of dynamic binding
+
+targetType "library"
+//targetType "executable"
+targetPath "lib"
+sourcePaths "src/"
+importPaths "src/"
+
+//configuration "unittest" {
+//    mainSourceFile "src/proba.d"
+//}

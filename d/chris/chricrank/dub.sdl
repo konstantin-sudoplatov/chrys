@@ -1,0 +1,10 @@
+name "chricrank"
+description "Independent subpackage for Chris"
+authors "su"
+copyright "Copyright © 2018, su"
+license "proprietary"
+
+targetType "executable"
+targetPath "bin"
+sourcePaths "src"
+importPaths "../chrilib/src/"

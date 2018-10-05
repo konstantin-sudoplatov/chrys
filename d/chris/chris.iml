@@ -9,5 +9,6 @@
     <orderEntry type="library" name="chris:chrislib-~master" level="project" />
     <orderEntry type="library" name="derelict-pq-4.0.0-alpha.2" level="project" />
     <orderEntry type="library" name="derelict-util-3.0.0-beta.2" level="project" />
+    <orderEntry type="library" name="chrilib" level="project" />
   </component>
 </module>

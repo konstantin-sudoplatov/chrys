@@ -8,10 +8,10 @@ targetType "executable"
 targetPath "bin"
 sourcePaths "src"
 
-dependency "chris:chrislib" version="*"
-subPackage "chrislib/"
+dependency "chris:chrilib" version="*"
+subPackage "chrilib/"
 subPackage {
-    name "chrislib"
+    name "chrilib"
 }
 
 configuration "unittest" {

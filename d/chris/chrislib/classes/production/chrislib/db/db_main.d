@@ -48,30 +48,27 @@ void disconnectFromDb(PGconn* conn) {
     PQfinish(conn);
 }
 
-//---***---***---***---***---***--- types ---***---***---***---***---***---***
-/// Concept version
-alias Cvr = ushort;
-
-
 /**
-        Concept version control struct. BR
-    It contains a raw version field, which is the part of each concept. Zero value of that field is quite legal and it
-    means that the concept is of the _min_ver_ version, the oldest valid version that cannot be removed yet.
+        Convert a numeric (one of int or float types) from native little endianess to the big endian form.
+    Parameters:
+        arg = a variable to convert
+    Returns: bytes in the reverse order as a static array.
 */
-shared synchronized class ConceptVersion {
+static import std.traits;
+byte[T.sizeof] toBigEndian(T)(T arg) if(std.traits.isNumeric!T) {
+    byte[T.sizeof] res;
+    for(int i, j = T.sizeof-1; i < T.sizeof; ++i, --j)
+        res[j] = (cast(byte*)&arg)[i];
 
-    /// The newest availabale version to use. This is the latest version commited by the tutor. If the _cur_ver_ rolled over the
-    /// Cvr.max and became the lesser number than all other versions, it stil must not reach the _stale_ver_, or an assertion
-    /// exception will be thrown.
-    private static Cvr _cur_ver_;
-
-    /// Minimal currently used version. If a concept has version 0 it means this version. All versions older than that
-    /// they are stale and may be removed.
-    private static Cvr _min_ver_;
-
-    /// Minimum stale version. Stale versions are less than _min_ver_ and so should be removed.
-    private static Cvr _stale_ver_;
+    return res;
 }
+///
+unittest{
+    byte[4] b = toBigEndian(0x01020304);
+    assert(*(cast(int*)&b) == 0x04030201);
+}
+
+//---***---***---***---***---***--- types ---***---***---***---***---***---***
 
 /// All we need to control the params table.
 struct TableParams {
@@ -85,7 +82,7 @@ struct TableParams {
     enum tableName = "params";
 
     /// Table fields
-    enum {
+    enum Fld {
         name = "name",      // parameter name
         value = "value",    // parameter value
         description = "description"     // description of the parameter
@@ -165,7 +162,7 @@ struct TableParams {
         res = PQprepare(
             conn_,
             getParam_stmt,
-            format!"select %s from %s where %s=$1"(value, tableName, name).toStringz,
+            format!"select %s from %s where %s=$1"(Fld.value, tableName, Fld.name).toStringz,
             0,
             null
         );
@@ -175,7 +172,7 @@ struct TableParams {
         res = PQprepare(
             conn_,
             setParam_stmt,
-            format!"update %s set %s=$2 where %s=$1"(tableName, value, name).toStringz,
+            format!"update %s set %s=$2 where %s=$1"(tableName, Fld.value, Fld.name).toStringz,
             0,
             null
         );

@@ -5,25 +5,13 @@ import std.traits;
 import std.format;
 import std.conv;
 
+public import project_parameters;
 import common_tools;
 
 import stat_registry, stat_main;
 import crank_registry;
 import attn_dispatcher_thread, attn_circle_thread;
 import cpt_abstract, cpt_stat, cpt_neurons, cpt_premises, cpt_actions;
-
-/// Concept identifier
-alias Cid = uint;
-
-/// Static cid range is from 1 to MAX_STATIC_CID;
-enum MIN_STATIC_CID = Cid(1);
-enum MAX_STATIC_CID = Cid(1_000_000);
-enum MIN_DYNAMIC_CID = Cid(2_000_000);
-enum MAX_DINAMIC_CID = Cid.max;
-static assert(MIN_DYNAMIC_CID > MAX_STATIC_CID);
-enum MIN_TEMP_CID = MAX_STATIC_CID + 1;
-enum MAX_TEMP_CID = MIN_DYNAMIC_CID - 1;
-static assert(MAX_TEMP_CID >= MIN_TEMP_CID);
 
 /// Call types of the static concept (static concept is a function).
 enum StatCallType: string {
@@ -33,6 +21,26 @@ enum StatCallType: string {
     p0Calp1Cidp2Int = "void function(Caldron, Cid, int)",                    // void function(Caldron nameSpace, Cid conceptCid, int intValue)
     p0Calp1Cidp2Float = "void function(Caldron, Cid, float)",                  // void function(Caldron nameSpace, Cid conceptCid, float floatValue)
     p0Calp1Cidp2Cidp3Float = "void function(Caldron, Cid, Cid, float)",             // void function(Caldron nameSpace, Cid branchBreedCid, Cid conceptCid, float floatValue)
+}
+
+/**
+        Concept version control struct. BR
+    It contains a raw version field, which is the part of each concept. Zero value of that field is quite legal and it
+    means that the concept is of the _min_ver_ version, the oldest valid version that cannot be removed yet.
+*/
+shared synchronized class ConceptVersion {
+
+    /// The newest availabale version to use. This is the latest version commited by the tutor. If the _cur_ver_ rolled over the
+    /// Cvr.max and became the lesser number than all other versions, it stil must not reach the _stale_ver_, or an assertion
+    /// exception will be thrown.
+    private static Cvr _cur_ver_;
+
+    /// Minimal currently used version. If a concept has version 0 it means this version. All versions older than that
+    /// they are stale and may be removed.
+    private static Cvr _min_ver_;
+
+    /// Minimum stale version. Stale versions are less than _min_ver_ and so should be removed.
+    private static Cvr _stale_ver_;
 }
 
 /// Structure of the crank enums.

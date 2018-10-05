@@ -3,6 +3,8 @@ import std.format, std.string, std.conv;
 import derelict.pq.pq;
 import db.db_main;
 
+import project_parameters;
+
 //---***---***---***---***---***--- data ---***---***---***---***---***--
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
@@ -14,7 +16,7 @@ struct TableConcepts {
     enum tableName = "concepts";
 
     /// Table fields
-    enum {
+    enum Fld {
         cid = "cid",
         ver = "ver",        // version of the concept
         shallow = "shallow",// shallow copy of the concept
@@ -43,22 +45,22 @@ struct TableConcepts {
             shallow = byte array of the shallow copy of the concept object
             deep = byte array of the serialized fields, which are referencies and must be deep copied.
     */
-//    void addConcept(uint cid, ushort ver, byte[] shallow, byte[] deep) {
-    void addConcept(uint cid) {
+    void addConcept(Cid cid, Cvr ver, byte[] shallow, byte[] deep) {
         PGresult* res;
 
-//        char** paramValues = [cast(char*)&cid, cast(char*)&ver, cast(char*)shallow.ptr, cast(char*)deep.ptr].ptr;
-        char** paramValues = [cast(char*)&cid].ptr;
+        char** paramValues = [
+            cast(char*)toBigEndian(cid).ptr,
+            cast(char*)toBigEndian(ver).ptr,
+            cast(char*)shallow.ptr,
+            cast(char*)deep.ptr
+        ].ptr;
         res = PQexecPrepared(
             conn_,
             addConcept_stmt,
-//            4,      // nParams
-            1,      // nParams
+            4,      // nParams
             paramValues,
-            //null,
-            [4].ptr,
-            //null,
-            [1].ptr,
+            (cast(int[])[Cid.sizeof, Cvr.sizeof, shallow.length, deep.length]).ptr,
+            (cast(int[])[1, 1, 1, 1]).ptr,
             0       // result as a string
         );
         assert(PQresultStatus(res) == PGRES_COMMAND_OK, to!string(PQerrorMessage(conn_)));
@@ -72,8 +74,8 @@ struct TableConcepts {
         res = PQprepare(
             conn_,
             addConcept_stmt,
-//            format!"insert into %s (%s, %s, %s, %s) values($1::int4, $2::int2, $3, $4)"(tableName, cid, ver, shallow, deep).toStringz,
-            "insert into cpts (cid) values($1::int)".toStringz,
+            format!"insert into %s (%s, %s, %s, %s) values($1, $2, $3, $4)"
+                    (tableName, Fld.cid, Fld.ver, Fld.shallow, Fld.deep).toStringz,
             0,
             null
         );
@@ -88,10 +90,8 @@ unittest {
     PGconn* conn = connectToDb;
     auto tc = TableConcepts(conn);
     tc.prepare;
-
 //    tc.addConcept(1, 10, cast(byte[])[1,2,3,4,5], cast(byte[])[6,7,8,9,10,11]);
-    tc.addConcept(1);
-
+//    tc.addConcept(2, 10, cast(byte[])[1,2,3,4,5], null);
     disconnectFromDb(conn);
 }
 

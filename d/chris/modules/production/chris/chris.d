@@ -26,9 +26,9 @@ void main()
         if(auto b=true) return;
 
     // Connect to the data base
-    connectToDb;
-    scope(exit)
-        disconnectFromDb;
+    //connectToDb;
+    //scope(exit)
+    //    disconnectFromDb;
 
     // Capture Tid of the main thread.
     cast()_mainTid_ = thisTid;

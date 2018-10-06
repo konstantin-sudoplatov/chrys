@@ -2,40 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="99192121-a0e8-4c1f-b796-335d5e3d9cb1" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../.idea/libraries/chrislib.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/chris" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../chris.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_22.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/libraries/derelict_util_3_0_0_beta_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/libraries/derelict_util_3_0_0_beta_22.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/libraries/source.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/libraries/source1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/chrislib.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/classes/production/chrislib/common_tools.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/classes/production/chrislib/db/db_concept.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/classes/production/chrislib/db/db_main.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/classes/production/chrislib/handy_data_structs.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/classes/production/chrislib/proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/classes/production/chrislib/project_parameters.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/dub.sdl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/dub.selections.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/lib/libchris_chrislib.a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/lib/libchrislib.a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/src/common_tools.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/src/db/db_concept.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/src/db/db_main.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/src/handy_data_structs.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/src/proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/src/project_parameters.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dub.sdl" beforeDir="false" afterPath="$PROJECT_DIR$/../dub.sdl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../modules/production/chris/global_data.d" beforeDir="false" afterPath="$PROJECT_DIR$/../modules/production/chris/global_data.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chricrank/chriscrank.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/chriscrank.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_pq_4_0_0_alpha_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_util_3_0_0_beta_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/source.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/libraries/source1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/lib/chrilib-test-library" beforeDir="false" afterPath="$PROJECT_DIR$/lib/chrilib-test-library" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -91,6 +65,16 @@
           <entry key="project.opened" value="1" />
         </counts>
       </usages-collector>
+      <usages-collector id="statistics.file.extensions.open">
+        <counts>
+          <entry key="d" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.types.open">
+        <counts>
+          <entry key="D file" value="1" />
+        </counts>
+      </usages-collector>
     </session>
   </component>
   <component name="FavoritesManager">
@@ -98,7 +82,7 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/common_tools.d">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="304">
@@ -107,11 +91,11 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/db/db_main.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1292">
-              <caret line="70" selection-start-line="70" selection-end-line="70" />
+            <state relative-caret-position="285">
+              <caret line="109" column="18" lean-forward="true" selection-start-line="109" selection-start-column="18" selection-end-line="109" selection-end-column="18" />
             </state>
           </provider>
         </entry>
@@ -186,7 +170,7 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="68" />
     <option name="width" value="1746" />
     <option name="height" value="1076" />
@@ -210,12 +194,6 @@
               <item name="chrilib" type="58d84e3e:PackageViewProjectNode" />
               <item name="chrislib" type="616d4139:PackageViewModuleNode" />
               <item name="Libraries" type="5c3f07af:PackageViewLibrariesNode" />
-            </path>
-            <path>
-              <item name="chrilib" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chrislib" type="616d4139:PackageViewModuleNode" />
-              <item name="Libraries" type="5c3f07af:PackageViewLibrariesNode" />
-              <item name="derelict" type="1f31426a:PackageElementNode" />
             </path>
           </expand>
           <select />
@@ -241,10 +219,10 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
     <property name="project.structure.last.edited" value="Libraries" />
-    <property name="project.structure.proportion" value="0.0" />
-    <property name="project.structure.side.proportion" value="0.0" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="D Tools" />
   </component>
   <component name="RecentsManager">
@@ -517,8 +495,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1080" extended-state="7" />
-    <editor active="true" />
+    <frame x="0" y="0" width="1920" height="1080" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" sideWeight="0.44583333" visible="true" weight="0.1555087" />
       <window_info id="Structure" order="1" sideWeight="0.5541667" side_tool="true" visible="true" weight="0.1555087" />
@@ -581,13 +558,6 @@
     <entry file="file://$PROJECT_DIR$/src/db/db.db_main.d" />
     <entry file="file://$PROJECT_DIR$/src/tools/data_struct.d" />
     <entry file="file://$PROJECT_DIR$/src/interfaces.d" />
-    <entry file="file://$USER_HOME$/.dub/packages/derelict-pq-4.0.0-alpha.2/derelict-pq/source/derelict/pq/dynload.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="279">
-          <caret line="311" column="17" selection-start-line="311" selection-start-column="17" selection-end-line="311" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$USER_HOME$/.dub/packages/derelict-pq-4.0.0-alpha.2/derelict-pq/source/derelict/pq/types.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="308">
@@ -644,13 +614,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/db/db_main.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1292">
-          <caret line="70" selection-start-line="70" selection-end-line="70" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/db/db_concept.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="5529">
@@ -673,6 +636,20 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="38">
           <caret line="2" column="18" selection-start-line="2" selection-start-column="18" selection-end-line="2" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.dub/packages/derelict-pq-4.0.0-alpha.2/derelict-pq/source/derelict/pq/dynload.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="279">
+          <caret line="281" column="22" selection-start-line="281" selection-start-column="22" selection-end-line="281" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/db/db_main.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="285">
+          <caret line="109" column="18" lean-forward="true" selection-start-line="109" selection-start-column="18" selection-end-line="109" selection-end-column="18" />
         </state>
       </provider>
     </entry>

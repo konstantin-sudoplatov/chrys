@@ -2,40 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="9442950e-0933-4b57-bcb4-1f0598f4c80c" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../.idea/libraries/chrislib.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/../bin/chris" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../chris.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_22.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/libraries/derelict_util_3_0_0_beta_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/libraries/derelict_util_3_0_0_beta_22.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/libraries/source.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/libraries/source1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/chrislib.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/classes/production/chrislib/common_tools.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/classes/production/chrislib/db/db_concept.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/classes/production/chrislib/db/db_main.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/classes/production/chrislib/handy_data_structs.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/classes/production/chrislib/proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/classes/production/chrislib/project_parameters.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/dub.sdl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/dub.selections.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/lib/libchris_chrislib.a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/lib/libchrislib.a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/src/common_tools.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/src/db/db_concept.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/src/db/db_main.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/src/handy_data_structs.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/src/proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrislib/src/project_parameters.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../dub.sdl" beforeDir="false" afterPath="$PROJECT_DIR$/../dub.sdl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../modules/production/chris/global_data.d" beforeDir="false" afterPath="$PROJECT_DIR$/../modules/production/chris/global_data.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chriscrank.iml" beforeDir="false" afterPath="$PROJECT_DIR$/chriscrank.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/.idea/libraries/derelict_pq_4_0_0_alpha_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/.idea/libraries/derelict_util_3_0_0_beta_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/.idea/libraries/source.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/.idea/libraries/source1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/lib/chrilib-test-library" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/lib/chrilib-test-library" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -138,7 +112,10 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../chrilib/src" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="D Tools" />
   </component>
   <component name="RunDashboard">
@@ -341,8 +318,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-3" width="1924" height="1087" extended-state="7" />
-    <editor active="true" />
+    <frame x="-2" y="-3" width="1924" height="1087" extended-state="6" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22614655" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -383,9 +359,68 @@
   </component>
   <component name="masterDetails">
     <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>DMD64 D Compiler v2.082.0</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>chriscrank</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
       <state key="ProjectJDKs.UI">
         <settings>
           <last-edited>DMD64 D Compiler v2.081.1</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>lib</last-edited>
           <splitter-proportions>
             <option name="proportions">
               <list>

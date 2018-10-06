@@ -2,40 +2,14 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e6f13b7-b9cd-4af9-969e-5956d8669eca" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/chrislib.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chris" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chris.iml" beforeDir="false" afterPath="$PROJECT_DIR$/chris.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_pq_4_0_0_alpha_22.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/derelict_util_3_0_0_beta_22.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/source.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/libraries/source1.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/chrislib.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/common_tools.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/db/db_concept.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/db/db_main.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/handy_data_structs.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/classes/production/chrislib/project_parameters.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/dub.sdl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/dub.selections.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/lib/libchris_chrislib.a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/lib/libchrislib.a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/src/common_tools.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/src/db/db_concept.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/src/db/db_main.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/src/handy_data_structs.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/src/proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrislib/src/project_parameters.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/dub.sdl" beforeDir="false" afterPath="$PROJECT_DIR$/dub.sdl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/modules/production/chris/global_data.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/global_data.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chricrank/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chricrank/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chricrank/chriscrank.iml" beforeDir="false" afterPath="$PROJECT_DIR$/chricrank/chriscrank.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrilib/.idea/libraries/derelict_pq_4_0_0_alpha_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrilib/.idea/libraries/derelict_util_3_0_0_beta_22.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrilib/.idea/libraries/source.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrilib/.idea/libraries/source1.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrilib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chrilib/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrilib/lib/chrilib-test-library" beforeDir="false" afterPath="$PROJECT_DIR$/chrilib/lib/chrilib-test-library" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -126,8 +100,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/chrilib/src/common_tools.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="513">
-              <caret line="27" column="33" lean-forward="true" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
+            <state relative-caret-position="171">
+              <caret line="9" column="78" lean-forward="true" selection-start-line="9" selection-start-column="78" selection-end-line="9" selection-end-column="78" />
             </state>
           </provider>
         </entry>
@@ -430,7 +404,7 @@
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535044027140" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="D" />
     <property name="full.screen.before.presentation.mode" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/src" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/chrilib/src" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -664,7 +638,6 @@
   </component>
   <component name="ToolWindowManager">
     <frame x="-2" y="-3" width="1924" height="1085" extended-state="6" />
-    <editor active="true" />
     <layout>
       <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.53382665" visible="true" weight="0.20980495" />
       <window_info x="1944" y="563" width="330" height="781" id="Structure" order="1" sideWeight="0.46770832" side_tool="true" weight="0.20980495" />
@@ -1102,8 +1075,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/chrilib/src/common_tools.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="27" column="33" lean-forward="true" selection-start-line="27" selection-start-column="33" selection-end-line="27" selection-end-column="33" />
+        <state relative-caret-position="171">
+          <caret line="9" column="78" lean-forward="true" selection-start-line="9" selection-start-column="78" selection-end-line="9" selection-end-column="78" />
         </state>
       </provider>
     </entry>

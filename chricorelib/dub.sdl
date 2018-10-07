@@ -1,0 +1,26 @@
+name "chricorelib"
+description "Main code base."
+authors "su"
+copyright "Copyright © 2018, su"
+license "proprietary"
+
+sourcePaths "src"
+importPaths "src"
+targetPath "bin"
+
+dependency "chrigloblib" version="*"
+dependency "chricranklib" version="*"
+dependency "christatlib" version="*"
+
+configuration "release" {
+    targetType "library"
+}
+
+configuration "debug" {
+    targetType "executable"
+}
+
+configuration "unittest" {
+    targetType "executable"
+    mainSourceFile "src/co_proba.d"
+}

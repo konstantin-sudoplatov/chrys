@@ -1,0 +1,14 @@
+.dub
+docs.json
+__dummy.html
+docs/
+chrislib.so
+chrislib.dylib
+chrislib.dll
+chrislib.a
+chrislib.lib
+chrislib-test-*
+*.exe
+*.o
+*.obj
+*.lst

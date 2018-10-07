@@ -1,0 +1,24 @@
+name "chricrank"
+description "Cranking the project."
+authors "su"
+copyright "Copyright © 2018, su"
+license "proprietary"
+
+sourcePaths "src"
+importPaths "src"
+targetPath "bin"
+
+dependency "chrigloblib" version="*"
+
+configuration "release" {
+    targetType "executable"
+}
+
+configuration "debug" {
+    targetType "executable"
+}
+
+configuration "unittest" {
+    targetType "executable"
+    mainSourceFile "src/crank.d"
+}

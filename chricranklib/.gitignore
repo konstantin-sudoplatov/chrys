@@ -1,0 +1,14 @@
+.dub
+docs.json
+__dummy.html
+docs/
+chricranklib.so
+chricranklib.dylib
+chricranklib.dll
+chricranklib.a
+chricranklib.lib
+chricranklib-test-*
+*.exe
+*.o
+*.obj
+*.lst

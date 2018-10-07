@@ -1,0 +1,20 @@
+name "chris"
+description "Run project"
+authors "su"
+copyright "Copyright © 2018, su"
+license "proprietary"
+
+targetType "executable"
+sourcePaths "src"
+importPaths "src"
+targetPath "bin"
+
+dependency "chricorelib" version="*"
+
+configuration "debug" {
+    dependency "chrigloblib" version="*"
+}
+
+configuration "unittest" {
+    dependency "chrigloblib" version="*"
+}

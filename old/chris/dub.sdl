@@ -1,0 +1,20 @@
+name "chris"
+description "A minimal D application."
+authors "su"
+copyright "Copyright © 2018, su"
+license "proprietary"
+
+targetType "executable"
+targetPath "bin"
+sourcePaths "src"
+
+dependency "chris:chrilib" version="*"
+subPackage "chrilib/"
+subPackage {
+    name "chrilib"
+}
+
+configuration "unittest" {
+    mainSourceFile "src/chris.d"
+}
+

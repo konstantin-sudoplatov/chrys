@@ -1,0 +1,8 @@
+{
+	"fileVersion": 1,
+	"versions": {
+		"chricranklib": "~master",
+		"chrigloblib": "~master",
+		"christatlib": "~master"
+	}
+}

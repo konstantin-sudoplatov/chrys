@@ -9,12 +9,17 @@ sourcePaths "src"
 importPaths "src"
 targetPath "bin"
 
-dependency "chricorelib" version="*"
+dependency "chrilib" version="*"
+
+configuration "release" {
+    targetType "executable"    
+}
 
 configuration "debug" {
-    dependency "chrigloblib" version="*"
+    targetType "executable"
 }
 
 configuration "unittest" {
-    dependency "chrigloblib" version="*"
+    targetType "executable"
+    mainSourceFile "src/chris.d"
 }

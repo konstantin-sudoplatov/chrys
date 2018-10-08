@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="8774b1c0-0bdb-42dc-9ffb-234d9d42a39c" name="Default Changelist" comment="">
+    <list default="true" id="20fa5edd-9ad6-4b45-8535-74fbc6df3ba3" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../chricorelib/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricorelib/.idea/misc.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricorelib/.idea/modules.xml" beforeDir="false" />
@@ -14,12 +14,12 @@
       <change beforePath="$PROJECT_DIR$/../chricorelib/dub.sdl" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricorelib/dub.selections.json" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricorelib/src/co_proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/bin/chricrank" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chricrank" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/classes/production/chricrank/crank.d" beforeDir="false" afterPath="$PROJECT_DIR$/classes/production/chricrank/crank.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dub.sdl" beforeDir="false" afterPath="$PROJECT_DIR$/dub.sdl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dub.selections.json" beforeDir="false" afterPath="$PROJECT_DIR$/dub.selections.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/crank.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/crank.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chricrank/bin/chricrank" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/bin/chricrank" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chricrank/classes/production/chricrank/crank.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/classes/production/chricrank/crank.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chricrank/dub.sdl" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/dub.sdl" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chricrank/dub.selections.json" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/dub.selections.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chricrank/src/crank.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/src/crank.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricranklib/.gitignore" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricranklib/.idea/libraries/chricorelib__master.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricranklib/.idea/libraries/chrigloblib__master.xml" beforeDir="false" />
@@ -80,63 +80,114 @@
     <option name="LAST_RESOLUTION" value="IGNORE" />
   </component>
   <component name="FUSProjectUsageTrigger">
-    <session id="644794683">
+    <session id="2038296931">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="2" />
-          <entry key="project.open.time.0" value="2" />
-          <entry key="project.open.time.2" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.open.time.0" value="1" />
+          <entry key="project.opened" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="d" value="1" />
+          <entry key="d" value="5" />
+          <entry key="global_data" value="1" />
           <entry key="sdl" value="1" />
+          <entry key="tools" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="D file" value="1" />
-          <entry key="PLAIN_TEXT" value="1" />
+          <entry key="D file" value="5" />
+          <entry key="PLAIN_TEXT" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="d" value="38" />
-          <entry key="sdl" value="17" />
+          <entry key="d" value="1080" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="D file" value="38" />
-          <entry key="PLAIN_TEXT" value="17" />
+          <entry key="D file" value="1080" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+    <leaf>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dub.sdl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="260">
-              <caret line="13" column="26" selection-start-line="13" selection-start-column="26" selection-end-line="13" selection-end-column="26" />
+            <state relative-caret-position="300">
+              <caret line="15" selection-start-line="15" selection-end-line="15" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/db/db_concept_table.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="26" selection-start-column="26" selection-end-column="26" />
+              <folding>
+                <element signature="e#738#739#0" expanded="true" />
+                <element signature="e#766#767#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/crank.d">
+        <entry file="file://$PROJECT_DIR$/src/db/db_main.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-3180">
+              <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/global_data.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1260">
+              <caret line="63" selection-start-line="63" selection-end-line="63" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/tools.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="257">
+              <caret line="1000" column="19" selection-start-line="1000" selection-start-column="19" selection-end-line="1000" selection-end-column="19" />
+              <folding>
+                <element signature="e#3701#3702#0" expanded="true" />
+                <element signature="e#3741#3742#0" expanded="true" />
+                <element signature="e#31700#31701#0" expanded="true" />
+                <element signature="e#31729#31730#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/base_proba.d">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="180">
-              <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+              <caret line="9" column="19" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
             </state>
           </provider>
         </entry>
       </file>
     </leaf>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="D Language Module" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$/.." />
@@ -145,15 +196,20 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$PROJECT_DIR$/dub.sdl" />
-        <option value="$PROJECT_DIR$/src/crank.d" />
+        <option value="$PROJECT_DIR$/src/base_proba.d" />
+        <option value="$PROJECT_DIR$/src/global_data.d" />
+        <option value="$PROJECT_DIR$/src/tools.d" />
+        <option value="$PROJECT_DIR$/src/db/db_concept_table.d" />
+        <option value="$PROJECT_DIR$/src/db/db_main.d" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="1920" />
     <option name="width" value="1920" />
     <option name="height" value="1080" />
   </component>
-  <component name="ProjectLevelVcsManager" settingsEditedManually="true">
+  <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectView">
@@ -161,24 +217,29 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
             <path>
-              <item name="chricrank" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chricrank" type="462c0819:PsiDirectoryNode" />
+              <item name="chribaselib" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chribaselib" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
       <pane id="PackagesPane">
         <subPane>
           <expand>
             <path>
-              <item name="chricrank" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chricrank" type="616d4139:PackageViewModuleNode" />
+              <item name="chribaselib" type="58d84e3e:PackageViewProjectNode" />
+              <item name="chribaselib" type="616d4139:PackageViewModuleNode" />
+            </path>
+            <path>
+              <item name="chribaselib" type="58d84e3e:PackageViewProjectNode" />
+              <item name="chribaselib" type="616d4139:PackageViewModuleNode" />
+              <item name="db" type="1f31426a:PackageElementNode" />
             </path>
           </expand>
           <select />
@@ -187,7 +248,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../old/chris/chrilib" />
     <property name="settings.editor.selected.configurable" value="D Tools" />
   </component>
   <component name="RunDashboard">
@@ -204,7 +265,7 @@
   </component>
   <component name="RunManager" selected="Build with DUB.Unittest Dub">
     <configuration name="Run D App" type="DlangRunAppConfiguration" factoryName="Run D App" show_console_on_std_err="false" show_console_on_std_out="false">
-      <module name="chricrank" />
+      <module name="chribaselib" />
       <option name="additionalParams" />
       <option name="envVars">
         <map />
@@ -226,7 +287,7 @@
       </method>
     </configuration>
     <configuration name="Compile with DMD" type="DlangRunDmdConfiguration" factoryName="Run DMD Compiler" show_console_on_std_err="false" show_console_on_std_out="false">
-      <module name="chricrank" />
+      <module name="chribaselib" />
       <option name="addSymbolicDebugInfo" value="false" />
       <option name="addSymbolicDebugInfoC" value="false" />
       <option name="allowDeprecated" value="false" />
@@ -316,7 +377,7 @@
       </method>
     </configuration>
     <configuration name="Debug Dub" type="DlangRunDubConfiguration" factoryName="Build with DUB" show_console_on_std_err="false" show_console_on_std_out="false">
-      <module name="chricrank" />
+      <module name="chribaselib" />
       <option name="additionalParams" value="--build=debug --config=debug" />
       <option name="buildMode" value="0" />
       <option name="cbCombined" value="false" />
@@ -345,7 +406,7 @@
       </method>
     </configuration>
     <configuration name="Release DUB" type="DlangRunDubConfiguration" factoryName="Build with DUB" show_console_on_std_err="false" show_console_on_std_out="false">
-      <module name="chricrank" />
+      <module name="chribaselib" />
       <option name="additionalParams" value="--build=release --config=release" />
       <option name="buildMode" value="0" />
       <option name="cbCombined" value="false" />
@@ -359,7 +420,7 @@
       <option name="envVars">
         <map />
       </option>
-      <option name="generalDubOptions" value="1" />
+      <option name="generalDubOptions" value="0" />
       <option name="quiet" value="false" />
       <option name="tfArch" value="" />
       <option name="tfBuild" value="" />
@@ -374,7 +435,7 @@
       </method>
     </configuration>
     <configuration name="Unittest Dub" type="DlangRunDubConfiguration" factoryName="Build with DUB" show_console_on_std_err="false" show_console_on_std_out="false">
-      <module name="chricrank" />
+      <module name="chribaselib" />
       <option name="additionalParams" value="--build=unittest --config=unittest" />
       <option name="buildMode" value="0" />
       <option name="cbCombined" value="false" />
@@ -440,46 +501,87 @@
     </list>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1080" extended-state="6" />
+    <frame x="1920" y="0" width="1920" height="1080" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info id="Favorites" order="0" side_tool="true" />
-      <window_info id="Designer" order="1" />
-      <window_info content_ui="combo" id="Project" order="2" visible="true" weight="0.18516542" />
-      <window_info id="Structure" order="3" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Messages" order="0" />
-      <window_info anchor="bottom" id="Terminal" order="1" />
-      <window_info anchor="bottom" id="Event Log" order="2" side_tool="true" />
-      <window_info anchor="bottom" id="Message" order="3" />
-      <window_info anchor="bottom" id="Find" order="4" />
-      <window_info anchor="bottom" id="Version Control" order="5" />
-      <window_info active="true" anchor="bottom" x="0" y="770" width="1920" height="310" id="Run" order="6" type="WINDOWED" visible="true" weight="0.32914045" />
-      <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
-      <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
-      <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="10" />
-      <window_info anchor="right" id="Maven Projects" order="0" />
-      <window_info anchor="right" id="Palette&#9;" order="1" />
-      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="2" type="SLIDING" weight="0.4" />
-      <window_info anchor="right" id="Ant Build" order="3" weight="0.25" />
-      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="4" weight="0.25" />
+      <window_info id="Designer" />
+      <window_info id="Favorites" side_tool="true" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2497332" />
+      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
+      <window_info anchor="bottom" id="Version Control" />
+      <window_info anchor="bottom" id="Terminal" />
+      <window_info anchor="bottom" id="Event Log" side_tool="true" />
+      <window_info anchor="bottom" id="Messages" />
+      <window_info anchor="bottom" id="Message" order="0" />
+      <window_info anchor="bottom" id="Find" order="1" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32914045" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
+      <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
+      <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
+      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="right" id="Palette&#9;" />
+      <window_info anchor="right" id="Maven Projects" />
+      <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
+      <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
+      <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/dub.sdl">
+    <entry file="file://$PROJECT_DIR$/src/base_proba.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="260">
-          <caret line="13" column="26" selection-start-line="13" selection-start-column="26" selection-end-line="13" selection-end-column="26" />
+        <state relative-caret-position="180">
+          <caret line="9" column="19" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/crank.d">
+    <entry file="file://$PROJECT_DIR$/src/global_data.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="9" lean-forward="true" selection-start-line="9" selection-end-line="9" />
+        <state relative-caret-position="1260">
+          <caret line="63" selection-start-line="63" selection-end-line="63" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tools.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="257">
+          <caret line="1000" column="19" selection-start-line="1000" selection-start-column="19" selection-end-line="1000" selection-end-column="19" />
+          <folding>
+            <element signature="e#3701#3702#0" expanded="true" />
+            <element signature="e#3741#3742#0" expanded="true" />
+            <element signature="e#31700#31701#0" expanded="true" />
+            <element signature="e#31729#31730#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/db/db_concept.d">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dub.sdl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="300">
+          <caret line="15" selection-start-line="15" selection-end-line="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/db/db_concept_table.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="26" selection-start-column="26" selection-end-column="26" />
+          <folding>
+            <element signature="e#738#739#0" expanded="true" />
+            <element signature="e#766#767#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/db/db_main.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-3180">
+          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
         </state>
       </provider>
     </entry>

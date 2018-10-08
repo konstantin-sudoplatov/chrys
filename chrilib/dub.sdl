@@ -1,5 +1,5 @@
-name "chricrank"
-description "Cranking the project."
+name "chrilib"
+description "Main code base."
 authors "su"
 copyright "Copyright © 2018, su"
 license "proprietary"
@@ -8,10 +8,10 @@ sourcePaths "src"
 importPaths "src"
 targetPath "bin"
 
-dependency "chrilib" version="*"
+dependency "chribaselib" version="*"
 
 configuration "release" {
-    targetType "executable"
+    targetType "library"
 }
 
 configuration "debug" {
@@ -20,5 +20,5 @@ configuration "debug" {
 
 configuration "unittest" {
     targetType "executable"
-    mainSourceFile "src/crank.d"
+    mainSourceFile "src/chri_proba.d"
 }

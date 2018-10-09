@@ -139,7 +139,7 @@ private struct TempStatDescriptor {
 
 ///
 unittest {
-    import attn_circle_thread: Caldron;
+    import attn.attn_circle_thread: Caldron;
 
     // Stat concept to make a test call
     @(1, StatCallType.p0Calp1Cid) static void fun(Caldron spaceName, Cid cid) {

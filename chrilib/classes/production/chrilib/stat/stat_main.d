@@ -1,9 +1,11 @@
 /// Unsorted static concepts
 module stat.stat_main;
 
-import project_params;
+import project_params, tools;
 
+import chri_types;
 import stat.stat_types;
+import cpt.cpt_interfaces, cpt.cpt_abstract, cpt.cpt_premises;
 import attn.attn_circle_thread;
 
 
@@ -31,7 +33,7 @@ void logConcept_stat(Caldron cld, Cid conceptCid) {
 */
 @(3, StatCallType.p0Cal)
 void setDebugLevel_1_stat(Caldron cld) {
-    import attn_circle_thread: dynDebug;
+    import attn.attn_circle_thread: dynDebug;
     dynDebug = 1;
 }
 
@@ -42,7 +44,7 @@ void setDebugLevel_1_stat(Caldron cld) {
 */
 @(4, StatCallType.p0Cal)
 void setDebugLevel_2_stat(Caldron cld) {
-    import attn_circle_thread: dynDebug;
+    import attn.attn_circle_thread: dynDebug;
     dynDebug = 2;
 }
 
@@ -53,7 +55,7 @@ void setDebugLevel_2_stat(Caldron cld) {
 */
 @(5, StatCallType.p0Cal)
 void setDebugLevel_0_stat(Caldron cld) {
-    import attn_circle_thread: dynDebug;
+    import attn.attn_circle_thread: dynDebug;
     dynDebug = 0;
 }
 

@@ -1,4 +1,4 @@
-module db.db_main;
+module db_main;
 import std.exception;
 import std.string, std.conv, std.format;
 version(unittest) import std.stdio;

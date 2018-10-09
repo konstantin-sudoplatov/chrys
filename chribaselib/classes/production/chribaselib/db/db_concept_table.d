@@ -1,8 +1,8 @@
-module db.db_concept_table;
+module db_concept_table;
 import std.exception;
 import std.format, std.string, std.conv;
 import derelict.pq.pq;
-import db.db_main;
+import db_main;
 
 import project_params, tools;
 

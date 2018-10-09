@@ -1,4 +1,5 @@
 module stat.substat.substat_subpile;
+import std.stdio;
 
 import project_params;
 

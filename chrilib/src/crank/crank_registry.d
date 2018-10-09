@@ -48,48 +48,6 @@ void runCranks() {
         fp();
 }
 
-/**
-                Roll a list of Cid enums into a single anonymous enum of type Cid. CTFE.
-        The result of this function is supposed to be mixined into a function that use those enums.
-    Used simplification of writing the crank functions. Nested "with" statement can be as well use instead of that
-    mixin, but this implementation seems to looke cleaner. Do not forget to use imports for the source enums.
-    Parameters:
-        enumList = list of enums of type Cid
-    Returns: string, containing the resulting enum statement, ready to be mixed in the code.
-*/
-string dequalify_enums(enumList...)() {
-    string res = "enum : CptDescriptor {\n";
-    static foreach (enuM; enumList)     // each enum en in the list of enums
-    {
-        static assert(is(enuM == enum) && is(enuM: CptDescriptor));
-        static foreach(enEl; __traits(allMembers, enuM))         // each enum element
-            res ~= "    " ~ enEl ~ " = " ~ enuM.stringof ~ "." ~ enEl ~ ",\n";
-    }
-
-    return res ~ "}\n";
-}
-
-unittest {
-    import std.conv: asOriginalType;
-    import global_data: CptDescriptor;
-    import cpt_neurons: SpSeed;
-    import cpt_premises: SpBreed;
-    enum CommonConcepts: CptDescriptor {
-        chat_seed = cd!(SpSeed, 2_500_739_441),                  // this is the root branch of the chat
-        do_not_know_what_it_is = cd!(SpSeed, 580_052_493),
-    }
-
-    enum Chat: CptDescriptor {
-        console_breed = cd!(SpBreed, 4_021_308_401),
-        console_seed = cd!(SpSeed, 1_771_384_341),
-    }
-
-    // Declare enums with the same members as in the CommonConcepts and Chat
-    mixin(dequalify_enums!(CommonConcepts, Chat));
-    assert(chat_seed == CommonConcepts.chat_seed);
-    assert(do_not_know_what_it_is == CommonConcepts.do_not_know_what_it_is);
-}
-
 //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
 //
 //                                  Private

@@ -2,6 +2,8 @@
 	"fileVersion": 1,
 	"versions": {
 		"chribaselib": "~master",
-		"chrilib": "~master"
+		"chrilib": "~master",
+		"derelict-pq": "4.0.0-alpha.2",
+		"derelict-util": "3.0.0-beta.2"
 	}
 }

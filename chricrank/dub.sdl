@@ -20,5 +20,5 @@ configuration "debug" {
 
 configuration "unittest" {
     targetType "executable"
-    mainSourceFile "src/crank.d"
+    mainSourceFile "src/chricrank.d"
 }

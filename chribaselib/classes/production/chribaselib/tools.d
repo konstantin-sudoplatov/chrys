@@ -19,6 +19,7 @@ T scast(T, S)(S o)
         && (is(S: Object) || is(S: shared Object) || is(S: immutable Object)))
 {
     assert(cast(T)o, format!"Object %s cannot be casted to class(interface) %s"(typeid(o), T.stringof));
+import std.stdio; writefln("file = %s, line = %s",__FILE__, __LINE__);
     return cast(T)o;
 }
 ///

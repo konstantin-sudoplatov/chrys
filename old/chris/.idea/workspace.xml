@@ -2,22 +2,31 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e6f13b7-b9cd-4af9-969e-5956d8669eca" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../../chricorelib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chricorelib/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chricorelib/bin/chricorelib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chricorelib/bin/libchricorelib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../../chricorelib/bin/libchricorelib.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chribaselib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chribaselib/bin/chribaselib" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/bin/chribaselib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chribaselib/bin/libchribaselib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/bin/libchribaselib.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chribaselib/classes/production/chribaselib/db/db_concept_table.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/classes/production/chribaselib/db/db_concept_table.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chribaselib/classes/production/chribaselib/global_data.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chribaselib/classes/production/chribaselib/tools.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/classes/production/chribaselib/tools.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chribaselib/src/db/db_concept_table.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/src/db/db_concept_table.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chribaselib/src/global_data.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chribaselib/src/tools.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/src/tools.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chricrank/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chricrank/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chricrank/classes/production/chricrank/crank.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chricrank/classes/production/chricrank/crank.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chricrank/src/crank.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chricrank/src/crank.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chricranklib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chricranklib/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chricranklib/bin/libchricranklib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../../chricranklib/bin/libchricranklib.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrigloblib/bin/chrigloblib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrigloblib/bin/libchrigloblib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrigloblib/bin/libchrigloblib.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chris/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chris/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chris/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/../../chris/bin/chris" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../christatlib/bin/libchristatlib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../../christatlib/bin/libchristatlib.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../d/chris/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../d/chris/chricrank/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../d/chris/chrilib/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/bin/chrilib" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/bin/chrilib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/bin/libchrilib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/bin/libchrilib.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/chrilib.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/chrilib.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/chri_proba.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/chri_proba.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cribaselib/.idea/cribaselib.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cribaselib/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cribaselib/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../cribaselib/.idea/workspace.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrilib/lib/libchris_chrilib.a" beforeDir="false" afterPath="$PROJECT_DIR$/chrilib/lib/libchris_chrilib.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/modules/production/chris/messages.d" beforeDir="false" afterPath="$PROJECT_DIR$/modules/production/chris/messages.d" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -102,25 +111,35 @@
     <session id="-755707414">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
+          <entry key="project.closed" value="4" />
           <entry key="project.open.time.0" value="2" />
           <entry key="project.open.time.1" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.open.time.3" value="1" />
+          <entry key="project.open.time.8" value="1" />
+          <entry key="project.opened" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="d" value="1" />
+          <entry key="d" value="14" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
+          <entry key="D file" value="14" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.file.extensions.edit">
+        <counts>
+          <entry key="d" value="1" />
+        </counts>
+      </usages-collector>
+      <usages-collector id="statistics.vcs.git.usages" />
+      <usages-collector id="statistics.file.types.edit">
+        <counts>
           <entry key="D file" value="1" />
         </counts>
       </usages-collector>
-      <usages-collector id="statistics.file.extensions.edit" />
-      <usages-collector id="statistics.vcs.git.usages" />
-      <usages-collector id="statistics.file.types.edit" />
     </session>
   </component>
   <component name="FavoritesManager">
@@ -128,56 +147,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cpt/cpt_abstract.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="100">
-              <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cpt/cpt_premises.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="160">
-              <caret line="8" column="20" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/stat/substat/stat_substat_subpile.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="60">
-              <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/chris.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="19" column="68" selection-start-line="19" selection-start-column="68" selection-end-line="19" selection-end-column="68" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/stat/stat_registry.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="11" selection-start-column="11" selection-end-column="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/global_data.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3200">
-              <caret line="160" selection-start-line="160" selection-end-line="160" />
+            <state relative-caret-position="403">
+              <caret line="170" lean-forward="true" selection-start-line="158" selection-end-line="170" />
               <folding>
                 <element signature="e#6990#6991#0" expanded="true" />
                 <element signature="e#7058#7059#0" expanded="true" />
@@ -187,19 +161,46 @@
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dub.sdl">
+        <entry file="file://$PROJECT_DIR$/src/cpt/cpt_actions.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="400">
-              <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
+            <state relative-caret-position="76">
+              <caret line="109" column="26" lean-forward="true" selection-start-line="109" selection-start-column="26" selection-end-line="109" selection-end-column="26" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/stat/stat_main.d">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/messages.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="95">
-              <caret line="5" column="12" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
+            <state relative-caret-position="19">
+              <caret line="1" column="23" lean-forward="true" selection-start-line="1" selection-start-column="23" selection-end-line="1" selection-end-column="23" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/crank/crank_main.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="570">
+              <caret line="45" column="17" selection-start-line="45" selection-start-column="17" selection-end-line="45" selection-end-column="17" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/chricrank/classes/production/chriscrank/crank_registry.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="996">
+              <caret line="68" column="7" selection-start-line="68" selection-start-column="7" selection-end-line="68" selection-end-column="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/crank/crank_registry.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="76">
+              <caret line="4" column="19" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
             </state>
           </provider>
         </entry>
@@ -207,8 +208,26 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/attn/attn_circle_thread.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="100">
-              <caret line="5" column="15" selection-start-line="5" selection-start-column="15" selection-end-line="5" selection-end-column="15" />
+            <state relative-caret-position="456">
+              <caret line="168" column="39" lean-forward="true" selection-start-line="168" selection-start-column="39" selection-end-line="168" selection-end-column="39" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cpt/cpt_premises.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="627">
+              <caret line="188" column="12" lean-forward="true" selection-start-line="188" selection-start-column="12" selection-end-line="188" selection-end-column="12" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/chricrank/src/crank_main.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="310">
+              <caret line="139" column="4" selection-start-line="139" selection-start-column="4" selection-end-line="139" selection-end-column="4" />
             </state>
           </provider>
         </entry>
@@ -216,7 +235,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cpt/interfaces.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="800">
+            <state relative-caret-position="760">
               <caret line="40" column="15" selection-start-line="40" selection-start-column="15" selection-end-line="40" selection-end-column="15" />
             </state>
           </provider>
@@ -298,15 +317,15 @@
         <option value="$PROJECT_DIR$/src/crank/crank_registry.d" />
         <option value="$PROJECT_DIR$/src/stat/substat/stat_substat_subpile.d" />
         <option value="$PROJECT_DIR$/src/console_thread.d" />
-        <option value="$PROJECT_DIR$/src/messages.d" />
         <option value="$PROJECT_DIR$/src/chris.d" />
         <option value="$PROJECT_DIR$/src/stat/stat_registry.d" />
         <option value="$PROJECT_DIR$/src/global_data.d" />
+        <option value="$PROJECT_DIR$/src/messages.d" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="width" value="1920" />
+    <option name="width" value="1918" />
     <option name="height" value="1080" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
@@ -383,6 +402,17 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -405,17 +435,6 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="AndroidView" />
     </panes>
   </component>
@@ -423,7 +442,7 @@
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535044027140" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="D" />
     <property name="full.screen.before.presentation.mode" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../chrilib" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -656,11 +675,11 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1080" extended-state="6" />
+    <frame x="-2" y="-3" width="1924" height="1087" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5317125" visible="true" weight="0.1782284" />
-      <window_info x="1944" y="563" width="330" height="781" id="Structure" order="1" sideWeight="0.46770832" side_tool="true" weight="0.20980495" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.53020835" visible="true" weight="0.17817606" />
+      <window_info x="1944" y="563" width="330" height="781" id="Structure" order="1" sideWeight="0.46979168" side_tool="true" visible="true" weight="0.17817606" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
@@ -668,7 +687,7 @@
       <window_info id="Favorites" order="6" sideWeight="0.51221997" side_tool="true" weight="0.1995731" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32604167" />
-      <window_info active="true" anchor="bottom" x="3840" y="663" width="1920" height="413" id="Run" order="2" type="WINDOWED" visible="true" weight="0.359375" />
+      <window_info anchor="bottom" x="2" y="808" width="562" height="136" id="Run" order="2" type="WINDOWED" weight="0.359375" />
       <window_info anchor="bottom" x="2" y="720" width="1912" height="329" id="Debug" order="3" weight="0.39852008" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -809,8 +828,6 @@
     </expressions>
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_holy.d" />
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_holy_abstract.d" />
     <entry file="file://$PROJECT_DIR$/src/cpt/cpt_live_abstract.d" />
     <entry file="file://$PROJECT_DIR$/src/cpt/cpt_live.d" />
     <entry file="file://$PROJECT_DIR$/src/cpt/cpt_templates.d" />
@@ -848,13 +865,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="105811">
           <caret line="6187" column="12" selection-start-line="6187" selection-start-column="12" selection-end-line="6187" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file:///usr/include/dmd/phobos/std/traits.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-35087">
-          <caret line="286" column="38" selection-start-line="286" selection-start-column="38" selection-end-line="286" selection-end-column="38" />
         </state>
       </provider>
     </entry>
@@ -920,25 +930,11 @@
     <entry file="file://$PROJECT_DIR$/chrislib/src/db/common.d" />
     <entry file="file://$PROJECT_DIR$/src/global.d" />
     <entry file="file://$PROJECT_DIR$/src/tools/tools_pile.d" />
-    <entry file="file:///usr/include/dmd/phobos/std/random.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="14340">
-          <caret line="717" selection-start-line="717" selection-end-line="717" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/interfaces.d" />
     <entry file="file://$PROJECT_DIR$/src/attn/attn_dispatcher_thread.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="76">
           <caret line="4" column="19" selection-start-line="4" selection-start-column="7" selection-end-line="4" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_actions.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="80">
-          <caret line="4" column="20" selection-start-line="4" selection-start-column="20" selection-end-line="4" selection-end-column="20" />
         </state>
       </provider>
     </entry>
@@ -949,45 +945,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/crank/crank_main.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="3" column="19" selection-start-line="3" selection-start-column="19" selection-end-line="3" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/crank/crank_registry.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="4" column="19" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/messages.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="22" selection-start-line="22" selection-end-line="22" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/cpt/cpt_neurons.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="627">
           <caret line="252" column="19" selection-start-line="252" selection-start-column="19" selection-end-line="252" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_stat.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="15" column="12" selection-start-line="15" selection-start-column="12" selection-end-line="15" selection-end-column="12" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/chrilib/src/common_tools.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="171">
-          <caret line="9" column="78" lean-forward="true" selection-start-line="9" selection-start-column="78" selection-end-line="9" selection-end-column="78" />
         </state>
       </provider>
     </entry>
@@ -998,31 +959,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_abstract.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="5" column="20" selection-start-line="5" selection-start-column="20" selection-end-line="5" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_premises.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="8" column="20" selection-start-line="8" selection-start-column="20" selection-end-line="8" selection-end-column="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/stat/substat/stat_substat_subpile.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="60">
+        <state relative-caret-position="57">
           <caret line="3" column="20" selection-start-line="3" selection-start-column="20" selection-end-line="3" selection-end-column="20" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/chris.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
+        <state>
           <caret line="19" column="68" selection-start-line="19" selection-start-column="68" selection-end-line="19" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/dmd/phobos/std/traits.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="6145" column="10" selection-start-line="6145" selection-start-column="10" selection-end-line="6145" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/dmd/phobos/std/random.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="4205">
+          <caret line="721" column="10" lean-forward="true" selection-start-line="721" selection-start-column="10" selection-end-line="721" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_abstract.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="2983">
+          <caret line="163" selection-start-line="42" selection-end-line="163" />
         </state>
       </provider>
     </entry>
@@ -1033,35 +1001,17 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/global_data.d">
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_stat.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3200">
-          <caret line="160" selection-start-line="160" selection-end-line="160" />
-          <folding>
-            <element signature="e#6990#6991#0" expanded="true" />
-            <element signature="e#7058#7059#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/attn/attn_circle_thread.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="100">
-          <caret line="5" column="15" selection-start-line="5" selection-start-column="15" selection-end-line="5" selection-end-column="15" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/interfaces.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="800">
-          <caret line="40" column="15" selection-start-line="40" selection-start-column="15" selection-end-line="40" selection-end-column="15" />
+        <state relative-caret-position="285">
+          <caret line="15" column="12" selection-start-line="15" selection-start-column="12" selection-end-line="15" selection-end-column="12" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/dub.sdl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="400">
-          <caret line="20" lean-forward="true" selection-start-line="20" selection-end-line="20" />
+        <state relative-caret-position="380">
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
         </state>
       </provider>
     </entry>
@@ -1069,6 +1019,87 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="95">
           <caret line="5" column="12" selection-start-line="5" selection-start-column="12" selection-end-line="5" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/interfaces.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="760">
+          <caret line="40" column="15" selection-start-line="40" selection-start-column="15" selection-end-line="40" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/messages.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="1" column="23" lean-forward="true" selection-start-line="1" selection-start-column="23" selection-end-line="1" selection-end-column="23" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chricrank/src/crank_main.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="310">
+          <caret line="139" column="4" selection-start-line="139" selection-start-column="4" selection-end-line="139" selection-end-column="4" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_premises.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="627">
+          <caret line="188" column="12" lean-forward="true" selection-start-line="188" selection-start-column="12" selection-end-line="188" selection-end-column="12" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/attn/attn_circle_thread.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="456">
+          <caret line="168" column="39" lean-forward="true" selection-start-line="168" selection-start-column="39" selection-end-line="168" selection-end-column="39" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_actions.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="109" column="26" lean-forward="true" selection-start-line="109" selection-start-column="26" selection-end-line="109" selection-end-column="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chrilib/src/common_tools.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="42" column="2" selection-start-line="42" selection-start-column="2" selection-end-line="42" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/crank/crank_main.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="570">
+          <caret line="45" column="17" selection-start-line="45" selection-start-column="17" selection-end-line="45" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chricrank/classes/production/chriscrank/crank_registry.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="996">
+          <caret line="68" column="7" selection-start-line="68" selection-start-column="7" selection-end-line="68" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/crank/crank_registry.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="4" column="19" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/global_data.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="403">
+          <caret line="170" lean-forward="true" selection-start-line="158" selection-end-line="170" />
+          <folding>
+            <element signature="e#6990#6991#0" expanded="true" />
+            <element signature="e#7058#7059#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

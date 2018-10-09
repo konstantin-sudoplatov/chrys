@@ -4,7 +4,7 @@ import std.format, std.string, std.conv;
 import derelict.pq.pq;
 import db.db_main;
 
-import global_data, tools;
+import project_params, tools;
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--
 

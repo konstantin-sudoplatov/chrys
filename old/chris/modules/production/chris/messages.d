@@ -1,11 +1,6 @@
 module messages;
 import std.concurrency;
 
-import common_tools;
-
-import global_data;
-import cpt_abstract;
-
 /// Common ancestor of all messages.
 /// Object must be created in the sender's thread, so that sender's tid was correctly set up. Do not create message objects beforehand!
 immutable abstract class Msg {

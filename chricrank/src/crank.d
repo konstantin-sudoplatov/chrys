@@ -1,9 +1,14 @@
 module crank;
 import std.stdio;
-import chri_proba;
+import tools;
+
+class A {}
+
+class B: A {}
 
 void main()
 {
-	writeln("In crank.");
-	chri_test;
+
+	A a = new B;
+	scast!B(a);
 }

@@ -2,75 +2,31 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="20fa5edd-9ad6-4b45-8535-74fbc6df3ba3" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../chricorelib/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricorelib/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricorelib/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricorelib/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricorelib/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricorelib/bin/chricorelib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricorelib/bin/libchricorelib.a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricorelib/chricorelib.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricorelib/classes/production/chricorelib/co_proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricorelib/dub.sdl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricorelib/dub.selections.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricorelib/src/co_proba.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/chribaselib" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chribaselib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/libchribaselib.a" beforeDir="false" afterPath="$PROJECT_DIR$/bin/libchribaselib.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/production/chribaselib/db/db_concept_table.d" beforeDir="false" afterPath="$PROJECT_DIR$/classes/production/chribaselib/db/db_concept_table.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/production/chribaselib/global_data.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/production/chribaselib/tools.d" beforeDir="false" afterPath="$PROJECT_DIR$/classes/production/chribaselib/tools.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/db/db_concept_table.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/db_concept_table.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/global_data.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/tools.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/tools.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/bin/chricrank" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/bin/chricrank" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricrank/classes/production/chricrank/crank.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/classes/production/chricrank/crank.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/dub.sdl" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/dub.sdl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/dub.selections.json" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/dub.selections.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricrank/src/crank.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/src/crank.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricranklib/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricranklib/.idea/libraries/chricorelib__master.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricranklib/.idea/libraries/chrigloblib__master.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricranklib/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricranklib/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricranklib/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricranklib/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricranklib/bin/chricranklib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricranklib/bin/libchricranklib.a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricranklib/chricranklib.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricranklib/classes/production/chricranklib/cr_proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricranklib/dub.sdl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricranklib/dub.selections.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricranklib/src/cr_proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrigloblib/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrigloblib/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrigloblib/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrigloblib/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrigloblib/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrigloblib/bin/chrigloblib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrigloblib/bin/libchrigloblib.a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrigloblib/chrigloblib.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrigloblib/classes/production/chrigloblib/gl_proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrigloblib/classes/production/globlib/gl_proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrigloblib/dub.sdl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrigloblib/libgloblib.a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrigloblib/src/gl_proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/bin/chris" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/classes/production/chris/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/classes/production/chris/chris.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/dub.sdl" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/dub.sdl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/dub.selections.json" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/dub.selections.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/src/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/src/chris.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../christatlib/.gitignore" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../christatlib/.idea/libraries/chrigloblib__master.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../christatlib/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../christatlib/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../christatlib/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../christatlib/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../christatlib/bin/christatlib" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../christatlib/bin/libchristatlib.a" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../christatlib/christatlib.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../christatlib/classes/production/christatlib/st_proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../christatlib/dub.sdl" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../christatlib/dub.selections.json" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../christatlib/src/st_proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../d/chris/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../d/chris/chricrank/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../d/chris/chrilib/.idea/workspace.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/bin/chrilib" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/bin/chrilib" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/bin/libchrilib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/bin/libchrilib.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/chrilib.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/chrilib.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/chri_proba.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/chri_proba.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cribaselib/.idea/cribaselib.iml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cribaselib/.idea/modules.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cribaselib/.idea/vcs.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../cribaselib/.idea/workspace.xml" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../old/chris/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../old/chris/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../old/chris/chrilib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../old/chris/chrilib/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../old/chris/chrilib/lib/libchris_chrilib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../old/chris/chrilib/lib/libchris_chrilib.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../old/chris/modules/production/chris/messages.d" beforeDir="false" afterPath="$PROJECT_DIR$/../old/chris/modules/production/chris/messages.d" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -83,43 +39,46 @@
     <session id="2038296931">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
+          <entry key="project.closed" value="1" />
           <entry key="project.open.time.0" value="1" />
-          <entry key="project.opened" value="1" />
+          <entry key="project.open.time.1" value="2" />
+          <entry key="project.opened" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="d" value="5" />
+          <entry key="d" value="6" />
           <entry key="global_data" value="1" />
+          <entry key="primary_types" value="1" />
           <entry key="sdl" value="1" />
           <entry key="tools" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="D file" value="5" />
-          <entry key="PLAIN_TEXT" value="3" />
+          <entry key="D file" value="6" />
+          <entry key="PLAIN_TEXT" value="4" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="d" value="1080" />
+          <entry key="d" value="1259" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="D file" value="1080" />
+          <entry key="D file" value="1259" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.vcs.git.usages" />
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/dub.sdl">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="300">
+            <state relative-caret-position="285">
               <caret line="15" selection-start-line="15" selection-end-line="15" />
             </state>
           </provider>
@@ -128,44 +87,112 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/db/db_concept_table.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state>
-              <caret column="26" selection-start-column="26" selection-end-column="26" />
-              <folding>
-                <element signature="e#738#739#0" expanded="true" />
-                <element signature="e#766#767#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="95">
+              <caret line="5" selection-start-line="5" selection-end-line="5" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/db/db_main.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="114">
+              <caret line="6" selection-start-line="6" selection-end-line="6" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/project_params.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="361">
+              <caret line="19" selection-start-line="19" selection-end-line="19" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/db/db_main.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="-3180">
-              <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/global_data.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1260">
-              <caret line="63" selection-start-line="63" selection-end-line="63" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/tools.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="257">
-              <caret line="1000" column="19" selection-start-line="1000" selection-start-column="19" selection-end-line="1000" selection-end-column="19" />
+            <state relative-caret-position="399">
+              <caret line="21" column="68" selection-start-line="21" selection-start-column="68" selection-end-line="21" selection-end-column="68" />
               <folding>
-                <element signature="e#3701#3702#0" expanded="true" />
-                <element signature="e#3741#3742#0" expanded="true" />
-                <element signature="e#31700#31701#0" expanded="true" />
-                <element signature="e#31729#31730#0" expanded="true" />
+                <element signature="e#3772#3773#0" expanded="true" />
+                <element signature="e#3812#3813#0" expanded="true" />
+                <element signature="e#5653#5654#0" expanded="true" />
+                <element signature="e#5681#5682#0" expanded="true" />
+                <element signature="e#5701#5702#0" expanded="true" />
+                <element signature="e#5731#5732#0" expanded="true" />
+                <element signature="e#5747#5748#0" expanded="true" />
+                <element signature="e#5774#5775#0" expanded="true" />
+                <element signature="e#5793#5794#0" expanded="true" />
+                <element signature="e#5822#5823#0" expanded="true" />
+                <element signature="e#5851#5852#0" expanded="true" />
+                <element signature="e#5886#5887#0" expanded="true" />
+                <element signature="e#6345#6346#0" expanded="true" />
+                <element signature="e#6372#6373#0" expanded="true" />
+                <element signature="e#6391#6392#0" expanded="true" />
+                <element signature="e#6420#6421#0" expanded="true" />
+                <element signature="e#6435#6436#0" expanded="true" />
+                <element signature="e#6461#6462#0" expanded="true" />
+                <element signature="e#6479#6480#0" expanded="true" />
+                <element signature="e#6507#6508#0" expanded="true" />
+                <element signature="e#6535#6536#0" expanded="true" />
+                <element signature="e#6569#6570#0" expanded="true" />
+                <element signature="e#7425#7426#0" expanded="true" />
+                <element signature="e#7453#7454#0" expanded="true" />
+                <element signature="e#7473#7474#0" expanded="true" />
+                <element signature="e#7503#7504#0" expanded="true" />
+                <element signature="e#7532#7533#0" expanded="true" />
+                <element signature="e#7567#7568#0" expanded="true" />
+                <element signature="e#8038#8039#0" expanded="true" />
+                <element signature="e#8065#8066#0" expanded="true" />
+                <element signature="e#8084#8085#0" expanded="true" />
+                <element signature="e#8113#8114#0" expanded="true" />
+                <element signature="e#8141#8142#0" expanded="true" />
+                <element signature="e#8175#8176#0" expanded="true" />
+                <element signature="e#9406#9407#0" expanded="true" />
+                <element signature="e#9442#9443#0" expanded="true" />
+                <element signature="e#9617#9618#0" expanded="true" />
+                <element signature="e#9656#9657#0" expanded="true" />
+                <element signature="e#9833#9834#0" expanded="true" />
+                <element signature="e#9872#9873#0" expanded="true" />
+                <element signature="e#10135#10136#0" expanded="true" />
+                <element signature="e#10172#10173#0" expanded="true" />
+                <element signature="e#10432#10433#0" expanded="true" />
+                <element signature="e#10469#10470#0" expanded="true" />
+                <element signature="e#10595#10596#0" expanded="true" />
+                <element signature="e#10631#10632#0" expanded="true" />
+                <element signature="e#10758#10759#0" expanded="true" />
+                <element signature="e#10793#10794#0" expanded="true" />
+                <element signature="e#16792#16793#0" expanded="true" />
+                <element signature="e#16827#16828#0" expanded="true" />
+                <element signature="e#16945#16946#0" expanded="true" />
+                <element signature="e#16980#16981#0" expanded="true" />
+                <element signature="e#17729#17730#0" expanded="true" />
+                <element signature="e#17756#17757#0" expanded="true" />
+                <element signature="e#17859#17860#0" expanded="true" />
+                <element signature="e#17894#17895#0" expanded="true" />
+                <element signature="e#19363#19364#0" expanded="true" />
+                <element signature="e#19393#19394#0" expanded="true" />
+                <element signature="e#19454#19455#0" expanded="true" />
+                <element signature="e#19486#19487#0" expanded="true" />
+                <element signature="e#20489#20490#0" expanded="true" />
+                <element signature="e#20525#20526#0" expanded="true" />
+                <element signature="e#26635#26636#0" expanded="true" />
+                <element signature="e#26670#26671#0" expanded="true" />
+                <element signature="e#26786#26787#0" expanded="true" />
+                <element signature="e#26823#26824#0" expanded="true" />
+                <element signature="e#27428#27429#0" expanded="true" />
+                <element signature="e#27455#27456#0" expanded="true" />
+                <element signature="e#28573#28574#0" expanded="true" />
+                <element signature="e#28603#28604#0" expanded="true" />
+                <element signature="e#28664#28665#0" expanded="true" />
+                <element signature="e#28696#28697#0" expanded="true" />
+                <element signature="e#29261#29262#0" expanded="true" />
+                <element signature="e#29297#29298#0" expanded="true" />
+                <element signature="e#31761#31762#0" expanded="true" />
+                <element signature="e#31790#31791#0" expanded="true" />
               </folding>
             </state>
           </provider>
@@ -174,7 +201,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/base_proba.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="180">
+            <state relative-caret-position="171">
               <caret line="9" column="19" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
             </state>
           </provider>
@@ -198,15 +225,16 @@
         <option value="$PROJECT_DIR$/dub.sdl" />
         <option value="$PROJECT_DIR$/src/base_proba.d" />
         <option value="$PROJECT_DIR$/src/global_data.d" />
-        <option value="$PROJECT_DIR$/src/tools.d" />
-        <option value="$PROJECT_DIR$/src/db/db_concept_table.d" />
         <option value="$PROJECT_DIR$/src/db/db_main.d" />
+        <option value="$PROJECT_DIR$/src/project_params.d" />
+        <option value="$PROJECT_DIR$/src/db/db_concept_table.d" />
+        <option value="$PROJECT_DIR$/src/primary_types.d" />
+        <option value="$PROJECT_DIR$/src/tools.d" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="1920" />
-    <option name="width" value="1920" />
+  <component name="ProjectFrameBounds" extendedState="5">
+    <option name="width" value="1918" />
     <option name="height" value="1080" />
   </component>
   <component name="ProjectLevelVcsManager">
@@ -217,18 +245,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="chribaselib" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chribaselib" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="PackagesPane">
         <subPane>
           <expand>
@@ -245,10 +261,22 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="chribaselib" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chribaselib" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../old/chris/chrilib" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../chricrank" />
     <property name="settings.editor.selected.configurable" value="D Tools" />
   </component>
   <component name="RunDashboard">
@@ -500,88 +528,166 @@
       <item itemvalue="Run DMD Compiler.Compile with DMD" />
     </list>
   </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="20fa5edd-9ad6-4b45-8535-74fbc6df3ba3" name="Default Changelist" comment="" />
+      <created>1539029701485</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1539029701485</updated>
+    </task>
+    <servers />
+  </component>
   <component name="ToolWindowManager">
-    <frame x="1920" y="0" width="1920" height="1080" extended-state="6" />
+    <frame x="0" y="0" width="1918" height="1080" extended-state="5" />
     <editor active="true" />
     <layout>
-      <window_info id="Designer" />
-      <window_info id="Favorites" side_tool="true" />
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.2497332" />
-      <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
-      <window_info anchor="bottom" id="Version Control" />
-      <window_info anchor="bottom" id="Terminal" />
-      <window_info anchor="bottom" id="Event Log" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4976599" visible="true" weight="0.19989423" />
+      <window_info id="Structure" order="1" sideWeight="0.5023401" side_tool="true" visible="true" weight="0.19989423" />
+      <window_info id="Designer" order="2" />
+      <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32914045" />
+      <window_info active="true" anchor="bottom" id="Run" order="2" visible="true" weight="0.32738718" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
-      <window_info anchor="right" id="Palette&#9;" />
-      <window_info anchor="right" id="Maven Projects" />
+      <window_info anchor="bottom" id="Version Control" order="7" />
+      <window_info anchor="bottom" id="Terminal" order="8" />
+      <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
+      <window_info anchor="bottom" id="Messages" order="10" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
+      <window_info anchor="right" id="Palette&#9;" order="3" />
+      <window_info anchor="right" id="Maven Projects" order="4" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
     <option name="myLimit" value="2678400000" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/base_proba.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="180">
-          <caret line="9" column="19" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/global_data.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1260">
-          <caret line="63" selection-start-line="63" selection-end-line="63" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/tools.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="257">
-          <caret line="1000" column="19" selection-start-line="1000" selection-start-column="19" selection-end-line="1000" selection-end-column="19" />
-          <folding>
-            <element signature="e#3701#3702#0" expanded="true" />
-            <element signature="e#3741#3742#0" expanded="true" />
-            <element signature="e#31700#31701#0" expanded="true" />
-            <element signature="e#31729#31730#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/db/db_concept.d">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
+    <entry file="file://$PROJECT_DIR$/src/db/db_concept.d" />
+    <entry file="file://$PROJECT_DIR$/src/global_data.d" />
+    <entry file="file://$PROJECT_DIR$/src/primary_types.d" />
     <entry file="file://$PROJECT_DIR$/dub.sdl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
+        <state relative-caret-position="285">
           <caret line="15" selection-start-line="15" selection-end-line="15" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/db/db_concept_table.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state>
-          <caret column="26" selection-start-column="26" selection-end-column="26" />
-          <folding>
-            <element signature="e#738#739#0" expanded="true" />
-            <element signature="e#766#767#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="95">
+          <caret line="5" selection-start-line="5" selection-end-line="5" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/db/db_main.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3180">
-          <caret line="6" lean-forward="true" selection-start-line="6" selection-end-line="6" />
+        <state relative-caret-position="114">
+          <caret line="6" selection-start-line="6" selection-end-line="6" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/project_params.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="19" selection-start-line="19" selection-end-line="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/base_proba.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="171">
+          <caret line="9" column="19" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/tools.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="399">
+          <caret line="21" column="68" selection-start-line="21" selection-start-column="68" selection-end-line="21" selection-end-column="68" />
+          <folding>
+            <element signature="e#3772#3773#0" expanded="true" />
+            <element signature="e#3812#3813#0" expanded="true" />
+            <element signature="e#5653#5654#0" expanded="true" />
+            <element signature="e#5681#5682#0" expanded="true" />
+            <element signature="e#5701#5702#0" expanded="true" />
+            <element signature="e#5731#5732#0" expanded="true" />
+            <element signature="e#5747#5748#0" expanded="true" />
+            <element signature="e#5774#5775#0" expanded="true" />
+            <element signature="e#5793#5794#0" expanded="true" />
+            <element signature="e#5822#5823#0" expanded="true" />
+            <element signature="e#5851#5852#0" expanded="true" />
+            <element signature="e#5886#5887#0" expanded="true" />
+            <element signature="e#6345#6346#0" expanded="true" />
+            <element signature="e#6372#6373#0" expanded="true" />
+            <element signature="e#6391#6392#0" expanded="true" />
+            <element signature="e#6420#6421#0" expanded="true" />
+            <element signature="e#6435#6436#0" expanded="true" />
+            <element signature="e#6461#6462#0" expanded="true" />
+            <element signature="e#6479#6480#0" expanded="true" />
+            <element signature="e#6507#6508#0" expanded="true" />
+            <element signature="e#6535#6536#0" expanded="true" />
+            <element signature="e#6569#6570#0" expanded="true" />
+            <element signature="e#7425#7426#0" expanded="true" />
+            <element signature="e#7453#7454#0" expanded="true" />
+            <element signature="e#7473#7474#0" expanded="true" />
+            <element signature="e#7503#7504#0" expanded="true" />
+            <element signature="e#7532#7533#0" expanded="true" />
+            <element signature="e#7567#7568#0" expanded="true" />
+            <element signature="e#8038#8039#0" expanded="true" />
+            <element signature="e#8065#8066#0" expanded="true" />
+            <element signature="e#8084#8085#0" expanded="true" />
+            <element signature="e#8113#8114#0" expanded="true" />
+            <element signature="e#8141#8142#0" expanded="true" />
+            <element signature="e#8175#8176#0" expanded="true" />
+            <element signature="e#9406#9407#0" expanded="true" />
+            <element signature="e#9442#9443#0" expanded="true" />
+            <element signature="e#9617#9618#0" expanded="true" />
+            <element signature="e#9656#9657#0" expanded="true" />
+            <element signature="e#9833#9834#0" expanded="true" />
+            <element signature="e#9872#9873#0" expanded="true" />
+            <element signature="e#10135#10136#0" expanded="true" />
+            <element signature="e#10172#10173#0" expanded="true" />
+            <element signature="e#10432#10433#0" expanded="true" />
+            <element signature="e#10469#10470#0" expanded="true" />
+            <element signature="e#10595#10596#0" expanded="true" />
+            <element signature="e#10631#10632#0" expanded="true" />
+            <element signature="e#10758#10759#0" expanded="true" />
+            <element signature="e#10793#10794#0" expanded="true" />
+            <element signature="e#16792#16793#0" expanded="true" />
+            <element signature="e#16827#16828#0" expanded="true" />
+            <element signature="e#16945#16946#0" expanded="true" />
+            <element signature="e#16980#16981#0" expanded="true" />
+            <element signature="e#17729#17730#0" expanded="true" />
+            <element signature="e#17756#17757#0" expanded="true" />
+            <element signature="e#17859#17860#0" expanded="true" />
+            <element signature="e#17894#17895#0" expanded="true" />
+            <element signature="e#19363#19364#0" expanded="true" />
+            <element signature="e#19393#19394#0" expanded="true" />
+            <element signature="e#19454#19455#0" expanded="true" />
+            <element signature="e#19486#19487#0" expanded="true" />
+            <element signature="e#20489#20490#0" expanded="true" />
+            <element signature="e#20525#20526#0" expanded="true" />
+            <element signature="e#26635#26636#0" expanded="true" />
+            <element signature="e#26670#26671#0" expanded="true" />
+            <element signature="e#26786#26787#0" expanded="true" />
+            <element signature="e#26823#26824#0" expanded="true" />
+            <element signature="e#27428#27429#0" expanded="true" />
+            <element signature="e#27455#27456#0" expanded="true" />
+            <element signature="e#28573#28574#0" expanded="true" />
+            <element signature="e#28603#28604#0" expanded="true" />
+            <element signature="e#28664#28665#0" expanded="true" />
+            <element signature="e#28696#28697#0" expanded="true" />
+            <element signature="e#29261#29262#0" expanded="true" />
+            <element signature="e#29297#29298#0" expanded="true" />
+            <element signature="e#31761#31762#0" expanded="true" />
+            <element signature="e#31790#31791#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

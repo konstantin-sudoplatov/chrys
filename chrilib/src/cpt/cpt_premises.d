@@ -3,7 +3,7 @@ import std.format;
 
 import project_params, tools;
 
-import chri_data, chri_types;
+import chri_shared;
 import cpt.cpt_abstract;
 import crank.crank_types;
 
@@ -40,7 +40,7 @@ import cpt.cpt_neurons: SpSeed;
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
-    void load(CptDescriptor seedDsc) {
+    void load(DcpDescriptor seedDsc) {
         checkCid!SpSeed(seedDsc.cid);
         seedCid_ = seedDsc.cid;
     }

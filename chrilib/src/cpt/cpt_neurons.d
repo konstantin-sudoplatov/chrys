@@ -62,7 +62,7 @@ class SpActionNeuron: SpiritNeuron {
     }
 
     /// Adapter.
-    final void addActions(CptDescriptor actDesc) {
+    final void addActions(DcpDescriptor actDesc) {
         if(_effects.length == 0)
             addEffects(actDesc, null);
         else
@@ -70,7 +70,7 @@ class SpActionNeuron: SpiritNeuron {
     }
 
     /// Adapter.
-    final void addActions(CptDescriptor[] actDescs) {
+    final void addActions(DcpDescriptor[] actDescs) {
         if(_effects.length == 0)
             addEffects(actDescs, null);
         else
@@ -98,7 +98,7 @@ class SpActionNeuron: SpiritNeuron {
     }
 
     /// Adapter.
-    final void addBranches(CptDescriptor branchDesc) {
+    final void addBranches(DcpDescriptor branchDesc) {
         if(_effects.length == 0)
             addEffects(branchDesc, null);
         else
@@ -106,7 +106,7 @@ class SpActionNeuron: SpiritNeuron {
     }
 
     /// Adapter.
-    final void addBranches(CptDescriptor[] branchDescs) {
+    final void addBranches(DcpDescriptor[] branchDescs) {
         if(_effects.length == 0)
             addEffects(branchDescs, null);
         else

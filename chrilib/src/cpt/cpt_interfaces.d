@@ -3,9 +3,9 @@ import std.format;
 
 import project_params;
 
-import chri_data;
+import chri_shared;
 import crank.crank_types;
-//import chri_data;
+//import chri_shared;
 
 /// Base activation interface. Does not have an implementation.
 abstract interface ActivationIfc {
@@ -149,10 +149,10 @@ shared interface PremiseIfc {
     void addPremises(Cid premCid);
 
     /// Adapter.
-    void addPremises(CptDescriptor[] premDescs);
+    void addPremises(DcpDescriptor[] premDescs);
 
     /// Adapter.
-    void addPremises(CptDescriptor premDesc);
+    void addPremises(DcpDescriptor premDesc);
 }
 
 /**
@@ -185,7 +185,7 @@ mixin template PremiseImpl(T : PremiseIfc) {
     }
 
     /// Adapter.
-    void addPremises(CptDescriptor[] premDescs) {
+    void addPremises(DcpDescriptor[] premDescs) {
         Cid[] cids;
         foreach(cd; premDescs)
             cids ~= cd.cid;
@@ -194,7 +194,7 @@ mixin template PremiseImpl(T : PremiseIfc) {
     }
 
     /// Adapter.
-    void addPremises(CptDescriptor premDesc) {
+    void addPremises(DcpDescriptor premDesc) {
         addPremises(premDesc.cid);
     }
 

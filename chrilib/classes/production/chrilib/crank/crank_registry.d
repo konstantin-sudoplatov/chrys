@@ -16,7 +16,7 @@ enum CrankModules {
 
 /// Manifest constant array of descriptors (cids, names) of all of the named dynamic concepts of the project. Remember, that most
 /// of the dynamic concepts are supposed to be unnamed in the sence, that they are not directly visible to the code.
-enum dynDescriptors = createTempDynDescriptors_();
+enum dynDescriptors = createDescriptors_();
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--
 
@@ -28,46 +28,27 @@ enum dynDescriptors = createTempDynDescriptors_();
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
 /**
-            Extract all of the crank functions from crank modules and run them. The functions run in order as modules
+        Extract all of the crank functions from crank modules and run them. The functions run in order as modules
     are defined in the CrankModules enum and then in the order of definition functions in the modules.
 */
 void runCranks() {
 
     // Fill in fps with addresses of the crank functions
-    //void function()[] fps;      // array of the pointers of functions
-    //static foreach(modul; [EnumMembers!CrankModules])
-    //    static foreach(modMbr; __traits(allMembers, mixin(modul)))
-    //        static if      // is the member of module a function?
-    //                (__traits(isStaticFunction, mixin(modMbr)))
-    //        {   //yes: generate a call of it
-    //            fps ~= mixin("&" ~ modMbr);
-    //        }
-    //
-    //// Run the crank functions
-    //foreach(fp; fps)
-    //    fp();
-}
-
-unittest{
-    //void function()[] fps;      // array of the pointers of functions
-    //static foreach(modul; [EnumMembers!CrankModules])
-    //    static foreach(modMbr; __traits(allMembers, mixin(modul)))
-    //        static if      // is the member of module a function?
-    //                (__traits(isStaticFunction, mixin(modMbr)))
-    //        {   //yes: generate a call of it
-    //            fps ~= mixin("&" ~ modMbr);
-    //        }
-
-//    static foreach(modul; [EnumMembers!CrankModules])
-        static foreach(modMbr; __traits(allMembers, mixin("crank.subcrank.subcrank_subpile"))){
-            pragma(msg, modMbr);
+    void function()[] fps;      // array of the pointers of functions
+    static foreach(modul; [EnumMembers!CrankModules])
+        static foreach(modMbr; __traits(allMembers, mixin(modul)))
+            // filter out members that do not process (packet names cpt, stat, attn) and pick static functions
             static if      // is the member of module a function?
-                    (__traits(isStaticFunction, mixin(modMbr))){
-
+                    (__traits(isStaticFunction, __traits(getMember, mixin(modul), modMbr)))
+            {   //yes: generate a call of it
+                fps ~= mixin("&" ~ modMbr);
             }
-        }
 
+    // Run the crank functions
+    foreach(fp; fps)
+        fp();
 }
+
 //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
 //
 //                                  Private
@@ -83,13 +64,13 @@ unittest{
     Used to create the manifest constant arrays DynDescriptors_.
     Returns: array of static concept descriptors.
 */
-private TempDynDescriptor[] createTempDynDescriptors_() {
+private DynDescriptor[] createDescriptors_() {
 
     // Declare named static descriptor array
-    TempDynDescriptor[] dds;
+    DynDescriptor[] dds;
 
     // Fill the named descriptors array
-    TempDynDescriptor dd;
+    DynDescriptor dd;
     static foreach(moduleName; [EnumMembers!CrankModules]) {
         static foreach(memberName; __traits(allMembers, mixin(moduleName))) {
             static if(mixin("is(" ~ memberName ~ "==enum)")) {
@@ -123,13 +104,13 @@ private TempDynDescriptor[] createTempDynDescriptors_() {
 /// Info about static concept descriptor (it's all you need to call that function) and also this structure is used to
 /// gather together name/cid pairs for dynamic concepts. Arrays of this structures will be stored as enums at compile
 /// time for following processing them to fill in the holy and name maps.
-private struct TempDynDescriptor {
+private struct DynDescriptor {
     Cid cid;                        /// cid of the concept
     string name;                    /// concept's name
     string class_name;              /// concept's class name - will be used for creating the concept object
 
     /// Reload opCmp to make it sortable on cid (not nescessary, actually, since cid is the first field in the structure).
-    int opCmp(ref const TempDynDescriptor s) const {
+    int opCmp(ref const DynDescriptor s) const {
         if(cid < s.cid)
             return -1;
         else if(cid > s.cid)

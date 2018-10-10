@@ -3,7 +3,7 @@ import std.format;
 
 import project_params, tools;
 
-import chri_data, chri_types;
+import chri_shared;
 import cpt.cpt_abstract, cpt.cpt_stat;
 import attn.attn_circle_thread;
 import stat.stat_types, crank.crank_types;
@@ -117,7 +117,7 @@ final class SpUnaryAction: SpAction {
     }
 
     /// Full setup
-    void load(Cid statAction, CptDescriptor operand) {
+    void load(Cid statAction, DcpDescriptor operand) {
         checkCid!SpStaticConcept(statAction);
         _statActionCid = statAction;
         checkCid!SpiritDynamicConcept(operand.cid);
@@ -125,7 +125,7 @@ final class SpUnaryAction: SpAction {
     }
 
     /// Partial setup, only operand
-    void load(CptDescriptor operand) {
+    void load(DcpDescriptor operand) {
         checkCid!SpiritDynamicConcept(operand.cid);
         _operandCid = operand.cid;
     }
@@ -176,7 +176,7 @@ final class SpBinaryAction: SpAction {
     }
 
     /// Full setup
-    void load(Cid statAction, CptDescriptor firstOperand, CptDescriptor secondOperand) {
+    void load(Cid statAction, DcpDescriptor firstOperand, DcpDescriptor secondOperand) {
         checkCid!SpStaticConcept(statAction);
 
         _statActionCid = statAction;
@@ -187,7 +187,7 @@ final class SpBinaryAction: SpAction {
     }
 
     /// Partial setup, without the static action
-    void load(CptDescriptor firstOperand, CptDescriptor secondOperand) {
+    void load(DcpDescriptor firstOperand, DcpDescriptor secondOperand) {
         checkCid!SpiritDynamicConcept(firstOperand.cid);
         _firstOperandCid = firstOperand.cid;
         checkCid!SpiritDynamicConcept(secondOperand.cid);
@@ -242,7 +242,7 @@ class SpUnaryFloatAction: SpAction {
             p1 = concept, that takes the float value
             p2 = float value
     */
-    void load(Cid statActionCid, CptDescriptor p1, float p2) {
+    void load(Cid statActionCid, DcpDescriptor p1, float p2) {
         checkCid!SpStaticConcept(statActionCid);
         checkCid!SpiritDynamicConcept(p1.cid);
 
@@ -252,7 +252,7 @@ class SpUnaryFloatAction: SpAction {
     }
 
     /// Partial setup, without the static action
-    void load(CptDescriptor p1, float p2) {
+    void load(DcpDescriptor p1, float p2) {
         checkCid!SpiritDynamicConcept(p1.cid);
 
         _p1Cid = p1.cid;
@@ -309,7 +309,7 @@ class SpBinaryFloatAction: SpAction {
             p2 = second concept
             p3 = float value
     */
-    void load(Cid statActionCid, CptDescriptor p1, CptDescriptor p2, float p3) {
+    void load(Cid statActionCid, DcpDescriptor p1, DcpDescriptor p2, float p3) {
         checkCid!SpStaticConcept(statActionCid);
         checkCid!SpiritDynamicConcept(p1.cid);
         checkCid!SpiritDynamicConcept(p2.cid);
@@ -321,7 +321,7 @@ class SpBinaryFloatAction: SpAction {
     }
 
     /// Partial setup, without the static action
-    void load(CptDescriptor p1, CptDescriptor p2, float p3) {
+    void load(DcpDescriptor p1, DcpDescriptor p2, float p3) {
         checkCid!SpiritDynamicConcept(p1.cid);
         checkCid!SpiritDynamicConcept(p2.cid);
 
@@ -381,7 +381,7 @@ class SpUnaryIntAction: SpAction {
             p1 = concept, that takes the int value
             p2 = int value
     */
-    void load(Cid statActionCid, CptDescriptor p1, int p2) {
+    void load(Cid statActionCid, DcpDescriptor p1, int p2) {
         checkCid!SpStaticConcept(statActionCid);
         checkCid!SpiritDynamicConcept(p1.cid);
 
@@ -391,7 +391,7 @@ class SpUnaryIntAction: SpAction {
     }
 
     /// Partial setup, without the static action
-    void load(CptDescriptor p1, int p2) {
+    void load(DcpDescriptor p1, int p2) {
         checkCid!SpiritDynamicConcept(p1.cid);
 
         _p1Cid = p1.cid;

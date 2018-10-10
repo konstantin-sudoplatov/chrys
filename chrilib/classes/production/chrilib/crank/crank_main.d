@@ -9,7 +9,7 @@ import attn.attn_circle_thread;
 import stat.stat_types, stat.stat_main;
 
 /// Dynamic concept names.
-enum CommonConcepts: CptDescriptor {
+enum CommonConcepts: DcpDescriptor {
 
     // Service concepts
     logCpt_0_unact = cd!(SpUnaryAction, 246_390_338),       // log a concept, using concept.toString()
@@ -64,7 +64,7 @@ void commonConcepts() {
 
 /// Chat branch enums
 /// , 3525361282, 3520033260
-enum Chat: CptDescriptor {
+enum Chat: DcpDescriptor {
 
     /// This is the root branch of the attention circle, is set up in the attention circle constructor.
     chat_breed = cd!(SpBreed, 1_719_007_030),

@@ -7,8 +7,9 @@ import std.format;
 
 /**
         Safe cast. It will throw an assertion if the object cannot be casted as opposed to silent returning null by the
-    cast operator (for classes). Don't forget, the type you a trying to cast to must exist, i.e. be defined or imported.
-    So, sometimes you will need to copy-paste this template in your module.
+    cast operator (for classes). Unlike the "type" template, you don't need to worry about having proper types declared around
+    this template. Types that a passed as parameters to template are self sufficient. They appear in the template as if
+    they were declared in the parameter line. (In the type template parameter is string, so it cannot declare a type);
     Parameters:
         T = type to cast to
         o = object to cast
@@ -19,7 +20,6 @@ T scast(T, S)(S o)
         && (is(S: Object) || is(S: shared Object) || is(S: immutable Object)))
 {
     assert(cast(T)o, format!"Object %s cannot be casted to class(interface) %s"(typeid(o), T.stringof));
-import std.stdio; writefln("file = %s, line = %s",__FILE__, __LINE__);
     return cast(T)o;
 }
 ///

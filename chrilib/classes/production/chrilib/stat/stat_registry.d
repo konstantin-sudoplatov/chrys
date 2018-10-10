@@ -18,7 +18,7 @@ enum StatConceptModules {
 }
 
 /// Manifest constant array of descriptors (cids, names, pointers, call types) of all the static concepts of the project.
-enum statDescriptors = createTempStatDescriptors_;
+enum statDescriptors = createStatDescriptors_;
 
 /// Manifest constant array of gaps in the static cids sequense, used for the static concepts.
 enum unusedStaticCids = findUnusedStatCids_;
@@ -50,17 +50,16 @@ private template type(string typeName) {
 }
 
 /**
-        Create array of static concept descriptors, CTFE.
-    Used to create the manifest constant arrays StatDescriptors_.
+        Create array of static concept descriptors, CTFE. Used to create the manifest constant array statDescriptors.
     Returns: array of static concept descriptors.
 */
-private TempStatDescriptor[] createTempStatDescriptors_() {
+private StatDescriptor[] createStatDescriptors_() {
 
     // Declare named static descriptor array
-    TempStatDescriptor[] sds;
+    StatDescriptor[] sds;
 
     // Fill the named descriptors array
-    TempStatDescriptor sd;
+    StatDescriptor sd;
     static foreach(modul; [EnumMembers!StatConceptModules]) {
         static foreach(memberName; __traits(allMembers, mixin(modul))) {
             static if(__traits(isStaticFunction, __traits(getMember, mixin(modul), memberName))) {
@@ -120,14 +119,14 @@ private Cid[] findUnusedStatCids_() {
 /// Info about static concept descriptor (it's all you need to call that function). This structure is used to
 /// gather together name/cid pairs for dynamic concepts. Arrays of this structures will be stored as enums at compile
 /// time for following processing them to fill in the holy and name maps.
-private struct TempStatDescriptor {
+private struct StatDescriptor {
     Cid cid;                        /// cid of the concept
     string name;                    /// concept's name
     void* fun_ptr;                  /// pointer to the function
     StatCallType call_type;         /// call аgreement for the function
 
     /// Reload opCmp to make it sortable on cid (not nescessary, actually, since cid is the first field in the structure).
-    int opCmp(ref const TempStatDescriptor s) const {
+    int opCmp(ref const StatDescriptor s) const {
         if(cid < s.cid)
             return -1;
         else if(cid > s.cid)
@@ -147,8 +146,8 @@ unittest {
     }
 
     // extract the descriptor, cid and name from concept's annotation and declaration
-    const TempStatDescriptor sd =
-            TempStatDescriptor(__traits(getAttributes, fun)[0], "fun", &fun, __traits(getAttributes, fun)[1]);
+    const StatDescriptor sd =
+            StatDescriptor(__traits(getAttributes, fun)[0], "fun", &fun, __traits(getAttributes, fun)[1]);
     assert(sd.call_type == StatCallType.p0Calp1Cid);
 
     // use the descriptor form the map to call the concept.

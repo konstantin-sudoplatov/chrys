@@ -3,7 +3,7 @@ module stat.stat_main;
 
 import project_params, tools;
 
-import chri_types;
+import chri_shared;
 import stat.stat_types;
 import cpt.cpt_interfaces, cpt.cpt_abstract, cpt.cpt_premises;
 import attn.attn_circle_thread;
@@ -32,7 +32,7 @@ void logConcept_stat(Caldron cld, Cid conceptCid) {
         cld = caldron as a name space for cids (not used here)
 */
 @(3, StatCallType.p0Cal)
-void setDebugLevel_1_stat(Caldron cld) {
+void setDebugLevel_1_stat(Caldron ) {
     import attn.attn_circle_thread: dynDebug;
     dynDebug = 1;
 }
@@ -43,7 +43,7 @@ void setDebugLevel_1_stat(Caldron cld) {
         cld = caldron as a name space for cids (not used here)
 */
 @(4, StatCallType.p0Cal)
-void setDebugLevel_2_stat(Caldron cld) {
+void setDebugLevel_2_stat(Caldron ) {
     import attn.attn_circle_thread: dynDebug;
     dynDebug = 2;
 }
@@ -54,7 +54,7 @@ void setDebugLevel_2_stat(Caldron cld) {
         cld = caldron as a name space for cids (not used here)
 */
 @(5, StatCallType.p0Cal)
-void setDebugLevel_0_stat(Caldron cld) {
+void setDebugLevel_0_stat(Caldron ) {
     import attn.attn_circle_thread: dynDebug;
     dynDebug = 0;
 }

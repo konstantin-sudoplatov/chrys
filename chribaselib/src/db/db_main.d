@@ -1,4 +1,4 @@
-module db_main;
+module db.db_main;
 import std.exception;
 import std.string, std.conv, std.format;
 version(unittest) import std.stdio;
@@ -22,10 +22,10 @@ enum DbCreds {
 /**
         Static constructor
 */
-shared static this() {
-    // Add shared library /usr/lib/x_86-64-linux-gnu/libpq.so
+//shared static this() {
+    // Add shared library /usr/lib/x_86-64-linux-gnu/libpq.so (In case of dynamic binding.)
 //    DerelictPQ.load();
-}
+//}
 
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
 

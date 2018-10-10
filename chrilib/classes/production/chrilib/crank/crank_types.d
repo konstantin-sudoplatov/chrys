@@ -3,7 +3,7 @@ import std.format;
 
 import project_params, tools;
 
-import chri_data;
+import chri_shared;
 import attn.attn_circle_thread;
 import cpt.cpt_abstract, cpt.cpt_actions, cpt.cpt_premises, cpt.cpt_neurons;
 import stat.stat_types;
@@ -42,10 +42,10 @@ template type(string typeName) {
 //}
 
 /// Enum template for declaring named dynamic concepts. Used in the crank modules.
-enum cd(T : SpiritDynamicConcept, Cid cid)  = CptDescriptor(T.stringof, cid);
+enum cd(T : SpiritDynamicConcept, Cid cid)  = DcpDescriptor(T.stringof, cid);
 
 /**
-        Retrieve a concept from the holy map by its enum constant and cast it from the HolyConcept to its original type,
+        Retrieve a concept from the spirit map by its enum and cast it from the SpiritConcept to its original type,
     which is gotten from the enum constant (the CptDescriptor type). The scast template serves as a guard against silent
     casting an object to null, if the cast happens to be illegal.
     Parameters:
@@ -74,14 +74,14 @@ unittest {
     Returns: string, containing the resulting enum statement, ready to be mixed in the code.
 */
 string dequalify_enums(enumList...)() {
-    string res = "enum : CptDescriptor {\n";
+    string res = "enum : DcpDescriptor {\n";
     static foreach (enuM; enumList)     // each enum en in the list of enums
     {
-        static assert(is(enuM == enum) && is(enuM: CptDescriptor));
-        static foreach(enEl; __traits(allMembers, enuM))         // each enum element
-            res ~= "    " ~ enEl ~ " = " ~ enuM.stringof ~ "." ~ enEl ~ ",\n";
+        static assert(is(enuM == enum) && is(enuM: DcpDescriptor));
+        static foreach(enEl; __traits(allMembers, enuM)) {         // each enum element
+            res ~= format!"    %s = %s.%s,\n"(enEl, enuM.stringof, enEl);
+        }
     }
-
     return res ~ "}\n";
 }
 
@@ -89,12 +89,12 @@ unittest {
     import std.conv: asOriginalType;
     import cpt.cpt_neurons: SpSeed;
     import cpt.cpt_premises: SpBreed;
-    enum CommonConcepts: CptDescriptor {
+    enum CommonConcepts: DcpDescriptor {
         chat_seed = cd!(SpSeed, 2_500_739_441),                  // this is the root branch of the chat
         do_not_know_what_it_is = cd!(SpSeed, 580_052_493),
     }
 
-    enum Chat: CptDescriptor {
+    enum Chat: DcpDescriptor {
         console_breed = cd!(SpBreed, 4_021_308_401),
         console_seed = cd!(SpSeed, 1_771_384_341),
     }
@@ -108,7 +108,7 @@ unittest {
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
 /// Structure of the crank enums.
-struct CptDescriptor {
+struct DcpDescriptor {
     string className;      // named concept's class
     Cid cid;                // named concept's cid
 }

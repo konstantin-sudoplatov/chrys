@@ -5,10 +5,10 @@ import std.format;
 
 import project_params, tools;
 
-import chri_data;
+import chri_shared;
 import attn.attn_circle_thread;
 import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_interfaces;
-import crank.crank_types: CptDescriptor;
+import crank.crank_types: DcpDescriptor;
 
 /// External runtime function, that creates a new object by its ClassInfo. No constructors are called. Very fast, much faster
 /// than manually allocating the object on the heap as new buf[], as it is done in the emplace function. Used in the
@@ -369,9 +369,9 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     */
     void addEffects(Tu: float, Ta, Tb)(Tu upperBound, Ta acts, Tb brans)
     if
-            ((isOf!(Ta, Cid) || isArrayOf!(Ta, Cid) || isOf!(Ta, CptDescriptor) || isArrayOf!(Ta, CptDescriptor))
+            ((isOf!(Ta, Cid) || isArrayOf!(Ta, Cid) || isOf!(Ta, DcpDescriptor) || isArrayOf!(Ta, DcpDescriptor))
                                                     &&
-            (isOf!(Tb, Cid) || isArrayOf!(Tb, Cid) || isOf!(Tb, CptDescriptor) || isArrayOf!(Tb, CptDescriptor)))
+            (isOf!(Tb, Cid) || isArrayOf!(Tb, Cid) || isOf!(Tb, DcpDescriptor) || isArrayOf!(Tb, DcpDescriptor)))
     {
         // convert act to Cid[]
         static if      // is array of actions null?
@@ -382,7 +382,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         else static if   // is Ta an array?
                 (is(Ta T : T[]))
             static if // is it array of the concept descriptors?
-                    (is(T == CptDescriptor))
+                    (is(T == DcpDescriptor))
             {   //yes: convert it into array of cids
                 Cid[] a;
                 foreach (cd; acts) {
@@ -402,7 +402,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
                 Cid[] a = acts;
             }
         else static if // is it a concept descriptor?
-                    (is(Ta == CptDescriptor))
+                    (is(Ta == DcpDescriptor))
             {  //yes: convert it to array of cids
                 debug if(_maps_filled_)
                     assert(cast(shared SpAction)_sm_[acts.cid],
@@ -426,7 +426,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         else static if   // is Tb an array?
                 (is(Tb TT : TT[]))
             static if // is it array of the concept descriptors?
-                    (is(TT == CptDescriptor))
+                    (is(TT == DcpDescriptor))
             {   //yes: convert it into array of cids
                 Cid[] b;
                 foreach (cd; brans) {
@@ -449,7 +449,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
             }
         else    //no: it is a single value
             static if // is it a concept descriptor?
-                    (is(Tb == CptDescriptor))
+                    (is(Tb == DcpDescriptor))
             {  //yes: convert it to array of cids
                 debug if(_maps_filled_)
                     assert(cast(shared SpBreed)_sm_[brans.cid] || cast(shared SpiritNeuron)_sm_[brans.cid],
@@ -504,12 +504,12 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     }
 
     /// Adapter.
-    final void appendActions(float activation, CptDescriptor actDesc) {
+    final void appendActions(float activation, DcpDescriptor actDesc) {
         appendActions(activation, [actDesc.cid]);
     }
 
     /// Adapter.
-    final void appendActions(float activation, CptDescriptor[] actDescs) {
+    final void appendActions(float activation, DcpDescriptor[] actDescs) {
         Cid[] actCids;
         foreach(ad; actDescs)
             actCids ~= ad.cid;
@@ -550,12 +550,12 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     }
 
     /// Ditto.
-    final void appendBranches(float activation, CptDescriptor branchDesc) {
+    final void appendBranches(float activation, DcpDescriptor branchDesc) {
         appendBranches(activation, [branchDesc.cid]);
     }
 
     /// Ditto.
-    final void appendBranches(float activation, CptDescriptor[] branchDescs) {
+    final void appendBranches(float activation, DcpDescriptor[] branchDescs) {
         Cid[] brCids;
         foreach(ad; branchDescs)
             brCids ~= ad.cid;

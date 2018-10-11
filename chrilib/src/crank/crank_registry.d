@@ -3,9 +3,7 @@ import std.traits, std.conv;
 
 import project_params;
 
-// modules with dynamic concept names and cranks
-import crank.crank_types, crank.crank_main;
-import crank.subcrank.subcrank_subpile;
+import crank.crank_types;
 
 /// Full list of modules, that contain dynamic concept names. This list is used at compile time to gather together all dynamic
 /// concept names along with cids and put them in the name map.
@@ -13,6 +11,15 @@ enum CrankModules {
     pile = "crank.crank_main",
     subpile = "crank.subcrank.subcrank_subpile"
 }
+// Import those modules. Unfortunately, this code seems to work after, not before the code, that uses these imports. Forced
+// to import them manually.
+//static foreach(modul; [EnumMembers!CrankModules]) {
+//    mixin("import " ~ modul ~ ";");
+//}
+
+// Import those modules.
+import crank.crank_main;
+import crank.subcrank.subcrank_subpile;
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--
 
@@ -36,6 +43,7 @@ DynDescriptor[] createDynDescriptors() {
     // Fill the named descriptors array
     DynDescriptor dd;
     static foreach(moduleName; [EnumMembers!CrankModules]) {
+//        mixin("import " ~ moduleName ~ ";");  // does not work. why?
         static foreach(memberName; __traits(allMembers, mixin(moduleName))) {
             static if(mixin("is(" ~ memberName ~ "==enum)")) {
                 static foreach(enumElem; __traits(allMembers, mixin(memberName))) {

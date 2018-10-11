@@ -12,7 +12,7 @@ import attn.attn_circle_thread;
     Actually, it is immutable since all fields are immutable. Making the class or constructor immutable, however would introduce
     unneccessary complexity in the code, that uses this class.
 */
-final class SpStaticConcept: SpiritConcept {
+@(0) final class SpStaticConcept: SpiritConcept {
 
     immutable void* fp;                     /// function pointer to the static concept function
     immutable StatCallType callType;       /// call type of the static concept function

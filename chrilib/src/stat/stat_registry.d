@@ -6,16 +6,16 @@ import project_params;
 import stat.stat_types;
 import attn.attn_circle_thread;
 
-// modules with static concepts
-import stat.stat_main;
-import stat.substat.substat_subpile;
-
 /// Full list of modules, that contain static concept functions. This list is used at compile time to gather all static
 /// concepts and put them in the spirit map and their names and cids in the name map.
 enum StatConceptModules {
     pile = "stat.stat_main",
     subpile = "stat.substat.substat_subpile"
 }
+
+// Import those modules
+import stat.stat_main;
+import stat.substat.substat_subpile;
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 

@@ -89,10 +89,8 @@ private void loadConceptMaps_(ref shared SpiritMap sm, ref immutable string[Cid]
         cast()nm[dd.cid] = dd.name;
     }
 
-mixin("_sm_.length, _nm_.length".w);
     // Create dynamic concepts based on the dynDescriptors_ enum
     static foreach(dd; createDynDescriptors) {
         sm.add(mixin("new " ~ dd.class_name ~ "(" ~ to!string(dd.cid) ~ ")"));
     }
-mixin("_sm_.length, _nm_.length".w);
 }

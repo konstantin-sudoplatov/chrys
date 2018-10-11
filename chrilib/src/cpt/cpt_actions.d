@@ -15,6 +15,7 @@ import crank.crank_types: DcpDescriptor;
     All concrete descendants will have the "_act" suffix.
 */
 alias SA = SpAction;       /// SA - spirit action
+@(1)    // Class identifier - clid
 class SpAction: SpiritDynamicConcept {
 
     /**
@@ -90,7 +91,7 @@ class Action: DynamicConcept {
 
 /// Actions, that operate on only one concept. Examples: activate/anactivate concept.
 alias SA_Cid = SpUnaryAction;       /// SA - spirit action, Cid - p0Calp1Cid
-final class SpUnaryAction: SpAction {
+@(2) final class SpUnaryAction: SpAction {
 
     /// Constructor
     this(Cid cid) { super(cid); }
@@ -148,7 +149,7 @@ final class UnaryAction: Action {
 /// Actions, that operate on two concepts. Examples: sending a message - the first operand breed of the correspondent,
 /// the second operand concept object to send.
 alias SA_CidCid = SpBinaryAction;       /// SA - spirit action, CidCid - p0Calp1Cidp2Cid
-final class SpBinaryAction: SpAction {
+@(3) final class SpBinaryAction: SpAction {
 
     /// Constructor
     this(Cid cid) { super(cid); }
@@ -213,7 +214,7 @@ final class BinaryAction: Action {
 
 /// Action, that involves a concept and a float value
 alias SA_CidFloat = SpUnaryFloatAction;     /// SA - spirit action, CidFloat - p0Calp1Cidp2Float
-class SpUnaryFloatAction: SpAction {
+@(4) class SpUnaryFloatAction: SpAction {
 
     /// Constructor
     this(Cid cid) { super(cid); }
@@ -278,7 +279,7 @@ class UnaryFloatAction: Action {
 
 /// Action, that involves two concepts and a float value
 alias SA_CidCidFloat = SpBinaryFloatAction;     /// SA - spirit action, CidCidFloat stands for p0Calp1Cidp2Cidp3Float
-class SpBinaryFloatAction: SpAction {
+@(5) class SpBinaryFloatAction: SpAction {
 
     /// Constructor
     this(Cid cid) { super(cid); }
@@ -352,7 +353,7 @@ class BinaryFloatAction: Action {
 
 /// Action, that involves a concept and a float value
 alias SA_CidInt = SpUnaryIntAction;         /// SA - spirit action, CidInt - p0Calp1Cidp2Int
-class SpUnaryIntAction: SpAction {
+@(6) class SpUnaryIntAction: SpAction {
 
     /// Constructor
     this(Cid cid) { super(cid); }

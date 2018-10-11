@@ -16,7 +16,7 @@ import crank.crank_types: DcpDescriptor;
     to a child to send it messages. This concept will be that handler. After the new branch started, its tid will be put
     in the tid_ field of the live part.
 */
-final class SpBreed: SpiritPremise {
+@(11) final class SpBreed: SpiritPremise {
 import cpt.cpt_neurons: SpSeed;
     /**
                 Constructor
@@ -81,7 +81,7 @@ final class Breed: Premise {
 /**
         Tid premise.
 */
-final class SpTidPremise: SpiritPremise {
+@(12)final class SpTidPremise: SpiritPremise {
 
     /// Constructor
     this(Cid cid) { super(cid); }
@@ -112,7 +112,7 @@ final class TidPremise: Premise {
 /**
             Peg premise.
 */
-final class SpPegPremise: SpiritPremise {
+@(13)final class SpPegPremise: SpiritPremise {
 
     /// Constructor
     this(Cid cid) { super(cid); }
@@ -134,7 +134,7 @@ final class PegPremise: Premise {
             String premise.
     The string field is in the live part.
 */
-final class SpStringPremise: SpiritPremise {
+@(14)final class SpStringPremise: SpiritPremise {
 
     /**
                 Constructor
@@ -171,7 +171,7 @@ final class StringPremise: Premise {
             Queue premise. This concept is capable of accumulating a queue of strings. For example, when messages from
     user come, they may be coming faster than they get processed. In that case such queue will help.
 */
-final class SpStringQueuePremise: SpiritPremise {
+@(15)final class SpStringQueuePremise: SpiritPremise {
 
     /// Constructor.
     this(Cid cid) { super(cid); }

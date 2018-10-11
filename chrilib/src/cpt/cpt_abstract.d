@@ -15,32 +15,6 @@ import crank.crank_types: DcpDescriptor;
 /// SpiritConcept.clone() method.
 private extern (C) Object _d_newclass (ClassInfo info);
 
-/**
-        Test for an array of a given type.
-    Parameters:
-        S = type to test
-        T = type of array element
-*/
-enum bool isArrayOf(S, T) = is(S : T[]);
-///
-unittest {
-    assert(isArrayOf!(int[], int));
-    assert(!isArrayOf!(int[], long));
-}
-
-/**
-        Test for a given type.
-    Parameters:
-        S = type to test
-        T = type to test against
-*/
-enum bool isOf(S, T) = is(S == T);
-///
-unittest {
-    assert(isOf!(shared int, shared int));
-    assert(isOf!(int[], int[]));
-}
-
 /// Concept's attributes.
 enum SpCptFlags: short {
 
@@ -63,7 +37,9 @@ enum SpCptFlags: short {
 
     "shared" attribute is inherrited by successors and cannot be changed.
 */
-shared abstract class SpiritConcept {
+abstract class SpiritConcept {
+    import derelict.pq.pq;
+    import db.db_main, db.db_concepts_table;
 
     /// Concept identifier.
     immutable Cid cid = 0;
@@ -90,12 +66,12 @@ shared abstract class SpiritConcept {
         object in the its body.
         Returns: deep clone of itself
     */
-    shared(SpiritConcept) _deep_copy_() const {
+    SpiritConcept _deep_copy_() const {
 
         void* copy = cast(void*)_d_newclass(this.classinfo);
         size_t size = this.classinfo.initializer.length;
         copy [8 .. size] = (cast(void *)this)[8 .. size];
-        return cast(shared SpiritConcept)copy;
+        return cast(SpiritConcept)copy;
     }
 
     /**
@@ -104,11 +80,43 @@ shared abstract class SpiritConcept {
     abstract Concept live_factory() const;
 
     /// Cannot override Object.toString with shared function, so live with it.
-    string toString() const {
+    override string toString() const {
         import std.format: format;
 
         return format!"%s(%s): %,3?s"(_nm_[cid], typeid(this), '_', cid);
     }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /// Connect to the database.
+    static void openDatabase() {
+        assert(!con_, "Db must be closed.");
+        con_ = connectToDb;
+        cptTbl_ = new ConceptsTable(con_);
+    }
+
+    /// Diskonnect from the database.
+    static void closeDatabase() {
+        assert(con_, "DB must be open.");
+        disconnectFromDb(con_);
+        con_ = null;
+        cptTbl_ = null;
+    }
+
+    /**
+            Factory for creating concepts based on the serialization from the database.
+    */
+    static SpiritConcept retreive(Cid cid, Cvr ver) {
+        auto cpData = cptTbl_.getConcept(cid, ver);
+        assert(false, "Not finished");
+    }
+
+    //---***---***---***---***---***--- private ---***---***---***---***---***--
+
+    /// Pointer to connection.
+    private static PGconn* con_;
+
+    private static ConceptsTable* cptTbl_;
 }
 
 /**
@@ -122,11 +130,11 @@ shared abstract class SpiritConcept {
     holy partners.
 */
 abstract class Concept {
-    immutable SpiritConcept sp;
+    immutable SpiritConcept spirit;
 
     /// Constructor
     this(immutable SpiritConcept spirit) {
-        this.sp = spirit;
+        this.spirit = spirit;
     }
 
     /**
@@ -149,8 +157,8 @@ abstract class Concept {
         import std.format: format;
         import std.array: replace;
 
-        string s = format!"%s(%s):"(_nm_[sp.cid], typeid(this));
-        s ~= format!"\nsp = %s"((cast(shared)sp).toString).replace("\n", "\n    ");
+        string s = format!"%s(%s):"(_nm_[spirit.cid], typeid(this));
+        s ~= format!"\nsp = %s"(spirit.toString).replace("\n", "\n    ");
         return s;
     }
 
@@ -158,7 +166,7 @@ abstract class Concept {
 
     /// Getter
     @property cid() const {
-        return sp.cid;
+        return spirit.cid;
     }
 }
 
@@ -243,13 +251,13 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     this(Cid cid) { super(cid); }
 
     /// Ditto.
-    override shared(SpiritNeuron) _deep_copy_() const {
+    override SpiritNeuron _deep_copy_() const {
 
         // Take shallow copy
-        shared SpiritNeuron clon = cast(shared SpiritNeuron)super._deep_copy_;
+        SpiritNeuron clon = cast(SpiritNeuron)super._deep_copy_;
 
         // Make it deep.
-        clon._effects = (cast()this)._effects.dup;
+        clon._effects = (cast(Effect[])this._effects).dup;
         foreach(int i, eff; clon._effects) {
             clon._effects[i].branches = _effects[i].branches.dup;
             clon._effects[i].actions = _effects[i].actions.dup;
@@ -297,7 +305,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         foreach(eff; _effects) {
             if      // activation fits the span?
                     (activation <= eff.upperBound)
-            return cast()eff;
+            return eff;
         }
 
         // not found, return null effects
@@ -353,7 +361,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
                     format!"The action cid %s is laying within the static concept range, which is not allowed."(br));
     }
     do {
-        _effects ~= cast(shared)Effect(upperBound, actions, branches);
+        _effects ~= Effect(upperBound, actions, branches);
         if      // is the firsts span overlapping the cutoff?
                 (_effects[0].upperBound <= cutoff_)
             //yes: disable cutoff
@@ -608,7 +616,7 @@ abstract class Neuron: DynamicConcept, ActivationIfc {
     SpiritNeuron.Effect calculate_activation_and_get_effects(Caldron cald)
     {
         assert(cald is attn.attn_circle_thread.caldron);
-        return (cast(shared SpiritNeuron)sp).selectEffects(calculate_activation(cald));
+        return (cast(SpiritNeuron)spirit).selectEffects(calculate_activation(cald));
     }
 }
 
@@ -626,8 +634,8 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
     this(Cid cid) { super(cid); }
 
     /// Clone
-    override shared(SpiritLogicalNeuron) _deep_copy_() const {
-        shared SpiritLogicalNeuron cpt = cast(shared SpiritLogicalNeuron)super._deep_copy_;
+    override SpiritLogicalNeuron _deep_copy_() const {
+        SpiritLogicalNeuron cpt = cast(SpiritLogicalNeuron)super._deep_copy_;
         cpt._premises = this._premises.dup;      // deep copy of premises
 
         return cpt;

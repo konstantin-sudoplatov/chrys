@@ -40,6 +40,51 @@ version(unittest) { // test classes for the previous unittest
 }
 
 /**
+        Convert name of type represented as a string to real type. Don't forget, the type you a trying to instantiate must
+    exist, i.e. be defined or imported or to be a basic type. So, sometimes you will need to copy-paste this template in
+    your module.
+    Parameters:
+        typeName = name of type
+*/
+template type(string typeName) {
+    mixin("alias type = " ~ typeName ~ ";");
+}
+
+///
+unittest {
+    auto a = new type!"ClassA"(42);
+    assert(a.x == 42);
+
+    assert(is(type!"int" == int));
+}
+
+/**
+        Test for a given type.
+    Parameters:
+        S = type to test
+        T = type to test against
+*/
+enum bool isOf(S, T) = is(S == T);
+///
+unittest {
+    assert(isOf!(shared int, shared int));
+    assert(isOf!(int[], int[]));
+}
+
+/**
+        Test for an array of a given type.
+    Parameters:
+        S = type to test
+        T = type of array element
+*/
+enum bool isArrayOf(S, T) = is(S : T[]);
+///
+unittest {
+    assert(isArrayOf!(int[], int));
+    assert(!isArrayOf!(int[], long));
+}
+
+/**
         Tool for pretty output of variables and expressions. It is a CTFE function, used for creating a string, that is
     going to be mixined into the code. Converts a list of expressions into a block of code, which writelns those exps.
 
@@ -158,24 +203,6 @@ Object clone (Object srcObject)
 }
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
-
-/**
-        Convert name of type represented as a string to real type. Don't forget, the type you a trying to instantiate must
-    exist, i.e. be defined or imported or to be a basic type. So, sometimes you will need to copy-paste this template in
-    your module.
-    Parameters:
-        typeName = name of type
-*/
-template type(string typeName) {
-    mixin("alias type = " ~ typeName ~ ";");
-}
-///
-unittest {
-    auto a = new type!"ClassA"(42);
-    assert(a.x == 42);
-
-    assert(is(type!"int" == int));
-}
 
 /// Adapter for the DequeImpl to prevent bloating in case it is a container for pointers
 struct Deque(E : E*, Sz = uint)

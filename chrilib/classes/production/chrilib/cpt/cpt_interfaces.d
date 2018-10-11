@@ -4,7 +4,7 @@ import std.format;
 import project_params;
 
 import chri_shared;
-import crank.crank_types;
+import crank.crank_types: DcpDescriptor;
 //import chri_shared;
 
 /// Base activation interface. Does not have an implementation.
@@ -137,7 +137,7 @@ unittest {
     Note: the interface must be "shared" for it would be overrided by shared functions. Else it causes strange errors
           "not implemented interface functions".
 */
-shared interface PremiseIfc {
+interface PremiseIfc {
 
     /// Getter.
     const(Cid[]) premises();

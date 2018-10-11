@@ -17,43 +17,17 @@ enum StatConceptModules {
     subpile = "stat.substat.substat_subpile"
 }
 
-/// Manifest constant array of descriptors (cids, names, pointers, call types) of all the static concepts of the project.
-enum statDescriptors = createStatDescriptors_;
-
-/// Manifest constant array of gaps in the static cids sequense, used for the static concepts.
-enum unusedStaticCids = findUnusedStatCids_;
-
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--
 
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
-//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-//
-//                                  Private
-//
-//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-
-//---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
-
-//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-/**
-        Convert name of type represented as a string to real type. Don't forget, the type you a trying to instantiate must
-    exist, i.e. be imported or be a basic type.
-    Parameters:
-        typeName = name of type
-*/
-private template type(string typeName) {
-    mixin("alias type = " ~ typeName ~ ";");
-}
-
 /**
         Create array of static concept descriptors, CTFE. Used to create the manifest constant array statDescriptors.
     Returns: array of static concept descriptors.
 */
-private StatDescriptor[] createStatDescriptors_() {
+StatDescriptor[] createStatDescriptors() {
 
     // Declare named static descriptor array
     StatDescriptor[] sds;
@@ -91,17 +65,17 @@ private StatDescriptor[] createStatDescriptors_() {
 }
 
 /**
-        Create enum array of unused cids, CTFE.
+        Create array of unused cids.
     Parameters:
         descArray = either statDecsriptors_ or DynDescriptors_
     Returns: array of free cids
 */
-private Cid[] findUnusedStatCids_() {
+Cid[] findUnusedStatCids() {
     Cid[] unusedCids;
 
     // find unused cids
     Cid lastCid = 0;
-    foreach(sd; statDescriptors) {
+    foreach(sd; createStatDescriptors) {
         assert(sd.cid > lastCid, "cid " ~ to!string(sd.cid) ~ ": cids cannot be used multiple times.");
         if
             (sd.cid > lastCid + 1)
@@ -112,6 +86,26 @@ private Cid[] findUnusedStatCids_() {
     }
 
     return unusedCids;
+}
+
+//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+//
+//                                  Private
+//
+//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+
+//---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
+
+/**
+        Convert name of type represented as a string to real type. Don't forget, the type you a trying to instantiate must
+    exist, i.e. be imported or be a basic type.
+    Parameters:
+        typeName = name of type
+*/
+private template type(string typeName) {
+    mixin("alias type = " ~ typeName ~ ";");
 }
 
 //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--

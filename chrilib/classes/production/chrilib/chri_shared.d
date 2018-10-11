@@ -9,7 +9,7 @@ import attn.attn_circle_thread;
 //---***---***---***---***---***--- data ---***---***---***---***---***--
 
 // Key shared data structures
-shared string[Cid] _nm_;        /// name/seed map
+immutable string[Cid] _nm_;   /// name/seed map
 shared SpiritMap _sm_;        /// The map of holy(stable and storrable and shared) concepts.
 debug {
     // set to true after the maps are filled in with names,cids and references to the concept objects
@@ -68,7 +68,7 @@ void cleanupNotUsedNames() {
     // Remove orphans
     foreach(orph; orphans) {
         logit(format!"Removing from _nm_ name: %s, cid %s is not in the _sm_"(orph.name, orph.cid), TermColor.red);
-        _nm_.remove(orph.cid);
+        (cast()_nm_).remove(orph.cid);
     }
 }
 
@@ -82,7 +82,7 @@ void cleanupNotUsedNames() {
     help, because this way we could get away with changes to only interface methods for the real map.
 */
 import std.random;
-shared synchronized final pure nothrow class SpiritMap {
+synchronized final pure nothrow class SpiritMap {
 
     //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
@@ -111,7 +111,7 @@ shared synchronized final pure nothrow class SpiritMap {
         Parameters:
             cpt = shared concept to assign
     */
-    shared(SpiritConcept) add(shared SpiritConcept cpt)
+    SpiritConcept add(SpiritConcept cpt)
     in {
         assert(cpt !in this, "Cid " ~ to!string(cpt.cid) ~ " - this cid already exists in the holy map.");
         if      // dynamic?
@@ -141,7 +141,7 @@ shared synchronized final pure nothrow class SpiritMap {
             cast()cpt.cid = generateDynamicCid_;
 
         // put the pair in the map
-        spiritMap_[cpt.cid] = cpt;
+        spiritMap_[cpt.cid] = cast(shared)cpt;
 
         return cpt;
     }
@@ -160,24 +160,10 @@ shared synchronized final pure nothrow class SpiritMap {
                 Get concept by cid, an overload for the index operation.
         Parameters:
             cid = key
-        Returns: shared concept
+        Returns: concept
     */
-    shared(SpiritConcept) opIndex(Cid cid) {
-        return spiritMap_[cid];
-    }
-
-    /**
-                Add concept to the map, an overload for the index assignment operation.
-            Example of usage:
-        ---
-            _hm_[] = cpt;
-        ---
-        Parameters:
-            cpt = concept to add
-        Returns: assigned concept
-    */
-    shared(SpiritConcept) opIndexAssign(shared SpiritConcept cpt) {
-        return add(cpt);
+    SpiritConcept opIndex(Cid cid) {
+        return cast()spiritMap_[cid];
     }
 
     /**
@@ -186,13 +172,13 @@ shared synchronized final pure nothrow class SpiritMap {
             cid = cid of the concept.
         Returns: pointer to the concept or null
     */
-    shared(SpiritConcept*) opBinaryRight(string op)(Cid cid) {
-        return cid in spiritMap_;
+    SpiritConcept* opBinaryRight(string op)(Cid cid) {
+        return cast(SpiritConcept*)(cid in spiritMap_);
     }
 
     /// Ditto.
-    shared(SpiritConcept*) opBinaryRight(string op)(shared SpiritConcept cpt) {
-        return cpt.cid in spiritMap_;
+    SpiritConcept* opBinaryRight(string op)(SpiritConcept cpt) {
+        return cast(SpiritConcept*)(cpt.cid in spiritMap_);
     }
 
     /**

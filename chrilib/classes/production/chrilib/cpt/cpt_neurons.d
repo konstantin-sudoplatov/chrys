@@ -5,7 +5,7 @@ import project_params, tools;
 
 import cpt.cpt_abstract;
 import attn.attn_circle_thread;
-import crank.crank_types;
+import crank.crank_types: DcpDescriptor;
 import cpt.cpt_interfaces;
 
 /**
@@ -202,7 +202,7 @@ final class AndNeuron: LogicalNeuron {
     */
     override float calculate_activation(Caldron cald) {
         float res = 1;
-        foreach(pr; (scast!(immutable SpiritLogicalNeuron)(sp)).premises) {
+        foreach(pr; (scast!(immutable SpiritLogicalNeuron)(spirit)).premises) {
             assert(cast(ActivationIfc)cald[pr],
                     format!"Cid %s, ActivationIfs must be realised for %s"(pr, typeid(cald[pr])));
             if ((cast(ActivationIfc)cald[pr]).activation <= 0) {

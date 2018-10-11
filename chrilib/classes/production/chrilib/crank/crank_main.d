@@ -1,7 +1,7 @@
 /// Dynamic concept names
 module crank.crank_main;
 
-import project_params;
+import project_params, tools;
 
 import crank.crank_types, crank.crank_registry;
 import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises;

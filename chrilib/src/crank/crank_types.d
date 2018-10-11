@@ -23,24 +23,6 @@ template type(string typeName) {
     mixin("alias type = " ~ typeName ~ ";");
 }
 
-/**
-        Safe cast. It will throw an assertion if the object cannot be casted as opposed to silent returning null by the
-    cast operator (for classes). Don't forget, the type you a trying to cast to must exist, i.e. be defined or imported.
-    So, sometimes you will need to copy-paste this template in your module.
-    Parameters:
-        T = type to cast to
-        o = object to cast
-    Return: casted object or an assert happens if the object cannot be casted
-*/
-//T scast(T, S)(S o)
-//    if ((is(T: Object) || is(T: shared Object) || is(T: immutable Object) || is(T == interface))
-//        && (is(S: Object) || is(S: shared Object) || is(S: immutable Object)))
-//{
-//    assert(cast(T)o, format!"Object %s cannot be casted to class(interface) %s"(typeid(o), T.stringof));
-//import std.stdio; writefln("file = %s, line = %s",__FILE__, __LINE__);
-//    return cast(T)o;
-//}
-
 /// Enum template for declaring named dynamic concepts. Used in the crank modules.
 enum cd(T : SpiritDynamicConcept, Cid cid)  = DcpDescriptor(T.stringof, cid);
 
@@ -53,7 +35,7 @@ enum cd(T : SpiritDynamicConcept, Cid cid)  = DcpDescriptor(T.stringof, cid);
     Returns: the wanted concept casted to its original type.
 */
 auto cp(alias cd)() {
-    return scast!(type!("shared " ~ cd.className))(_sm_[cd.cid]);
+    return scast!(type!(cd.className))(_sm_[cd.cid]);
 }
 
 ///

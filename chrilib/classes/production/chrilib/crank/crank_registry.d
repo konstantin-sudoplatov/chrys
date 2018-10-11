@@ -14,10 +14,6 @@ enum CrankModules {
     subpile = "crank.subcrank.subcrank_subpile"
 }
 
-/// Manifest constant array of descriptors (cids, names) of all of the named dynamic concepts of the project. Remember, that most
-/// of the dynamic concepts are supposed to be unnamed in the sence, that they are not directly visible to the code.
-enum dynDescriptors = createDescriptors_();
-
 //---***---***---***---***---***--- data ---***---***---***---***---***--
 
 /**
@@ -28,43 +24,11 @@ enum dynDescriptors = createDescriptors_();
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
 /**
-        Extract all of the crank functions from crank modules and run them. The functions run in order as modules
-    are defined in the CrankModules enum and then in the order of definition functions in the modules.
-*/
-void runCranks() {
-
-    // Fill in fps with addresses of the crank functions
-    void function()[] fps;      // array of the pointers of functions
-    static foreach(modul; [EnumMembers!CrankModules])
-        static foreach(modMbr; __traits(allMembers, mixin(modul)))
-            // filter out members that do not process (packet names cpt, stat, attn) and pick static functions
-            static if      // is the member of module a function?
-                    (__traits(isStaticFunction, __traits(getMember, mixin(modul), modMbr)))
-            {   //yes: generate a call of it
-                fps ~= mixin("&" ~ modMbr);
-            }
-
-    // Run the crank functions
-    foreach(fp; fps)
-        fp();
-}
-
-//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-//
-//                                  Private
-//
-//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-
-//---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
-
-//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-/**
         Create array of name/cid pairs packed into the TempDynDescriptor struct, CTFE.
     Used to create the manifest constant arrays DynDescriptors_.
     Returns: array of static concept descriptors.
 */
-private DynDescriptor[] createDescriptors_() {
+DynDescriptor[] createDynDescriptors() {
 
     // Declare named static descriptor array
     DynDescriptor[] dds;
@@ -98,6 +62,38 @@ private DynDescriptor[] createDescriptors_() {
 
     return dds;
 }
+
+/**
+        Extract all of the crank functions from crank modules and run them. The functions run in order as modules
+    are defined in the CrankModules enum and then in the order of definition functions in the modules.
+*/
+void runCranks() {
+
+    // Fill in fps with addresses of the crank functions
+    void function()[] fps;      // array of the pointers of functions
+    static foreach(modul; [EnumMembers!CrankModules])
+        static foreach(modMbr; __traits(allMembers, mixin(modul)))
+            // filter out members that do not process (packet names cpt, stat, attn) and pick static functions
+            static if      // is the member of module a function?
+                    (__traits(isStaticFunction, __traits(getMember, mixin(modul), modMbr)))
+            {   //yes: generate a call of it
+                fps ~= mixin("&" ~ modMbr);
+            }
+
+    // Run the crank functions
+    foreach(fp; fps)
+        fp();
+}
+
+//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+//
+//                                  Private
+//
+//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+
+//---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
 //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
 

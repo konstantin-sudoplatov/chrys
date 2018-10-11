@@ -5,7 +5,8 @@ import project_params, tools;
 
 import chri_shared;
 import cpt.cpt_abstract, cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_actions, cpt.cpt_interfaces;
-import crank.crank_types, crank.crank_main;
+import crank.crank_types: DcpDescriptor;
+import crank.crank_main;
 import messages;
 
 /**
@@ -42,8 +43,8 @@ class Caldron {
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     /**
-                Get live concept by cid, overload of the [] operator
-            If concept is present in the live map, get it from there, if not, generate it based on the holy concept and put it
+            Get live concept by cid, overload of the [] operator
+        If concept is present in the live map, get it from there, if not, generate it based on the holy concept and put it
         in the live map.
         Parameters:
             cid = cid of the concept or its correspondig enum.
@@ -337,7 +338,7 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
             s = "starting the attention circle thread";
         else
             if      // is it a breeded branch?
-                    (auto br = cast(shared SpBreed)_sm_[breedOrSeedCid])
+                    (auto br = cast(SpBreed)_sm_[breedOrSeedCid])
                 s = format!"starting breeded branch %s(%s)"(_nm_[br.seed], br.seed);
             else
                 s = format!"starting seeded branch %s(%s)"(_nm_[breedOrSeedCid], breedOrSeedCid);

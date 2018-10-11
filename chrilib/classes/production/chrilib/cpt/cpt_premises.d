@@ -5,7 +5,7 @@ import project_params, tools;
 
 import chri_shared;
 import cpt.cpt_abstract;
-import crank.crank_types;
+import crank.crank_types: DcpDescriptor;
 
 /**
             Branch identifier.
@@ -74,7 +74,7 @@ final class Breed: Premise {
 
     /// Getter.
     const(Cid) seed() const {
-        return (cast(immutable SpBreed)sp).seed;
+        return (cast(immutable SpBreed)spirit).seed;
     }
 }
 

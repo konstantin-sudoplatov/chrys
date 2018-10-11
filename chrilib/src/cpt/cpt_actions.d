@@ -6,7 +6,8 @@ import project_params, tools;
 import chri_shared;
 import cpt.cpt_abstract, cpt.cpt_stat;
 import attn.attn_circle_thread;
-import stat.stat_types, crank.crank_types;
+import stat.stat_types;
+import crank.crank_types: DcpDescriptor;
 
 /**
             Base for all holy actions. The action concept is an interface, bridge between the world of cids and dynamic concepts,
@@ -70,8 +71,8 @@ class SpAction: SpiritDynamicConcept {
 /// Live.
 class Action: DynamicConcept {
 
-    /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
-    private this(immutable SpAction holyAction) { super(holyAction); }
+    /// Private constructor. Use SpiritConcept.live_factory() instead.
+    private this(immutable SpAction spAction) { super(spAction); }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
@@ -81,9 +82,9 @@ class Action: DynamicConcept {
             caldron = name space it which static concept function will be working.
     */
     void run(Caldron caldron) {
-        assert((cast(shared SpAction)sp).statAction != 0, format!"Cid: %s, static action must be assigned."(this.cid));
+        assert((cast(SpAction)spirit).statAction != 0, format!"Cid: %s, static action must be assigned."(this.cid));
 
-        (cast(shared SpAction)sp).run(caldron);
+        (cast(SpAction)spirit).run(caldron);
     }
 }
 

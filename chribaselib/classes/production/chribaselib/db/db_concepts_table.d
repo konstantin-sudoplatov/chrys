@@ -1,4 +1,4 @@
-module db.db_concept_table;
+module db.db_concepts_table;
 import std.exception;
 import std.format, std.string, std.conv;
 import derelict.pq.pq;
@@ -11,7 +11,7 @@ import project_params, tools;
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
 /// All we need to control the concepts table.
-struct TableConcepts {
+struct ConceptsTable {
 
     /// Name of the concept table
     enum tableName = "concepts";
@@ -26,7 +26,9 @@ struct TableConcepts {
 
     @disable this();
     this(PGconn* conn) {
+        assert(conn);
         conn_ = conn;
+        prepare;
     }
 
     /// Prepared statement's names
@@ -284,13 +286,12 @@ struct TableConcepts {
         PQclear(res);
     }
 
-    private PGconn* conn_;      /// Connection
+    private PGconn* conn_;      /// Pointer to the connection pointer
 }
 
 unittest {
     PGconn* conn = connectToDb;
-    auto tc = TableConcepts(conn);
-    tc.prepare;
+    auto tc = ConceptsTable(conn);
 
     // Delete to clean up possible remnants
     tc.deleteConcept(0, 10);

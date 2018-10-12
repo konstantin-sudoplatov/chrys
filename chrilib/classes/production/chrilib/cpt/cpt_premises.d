@@ -4,7 +4,7 @@ import std.format;
 import project_params, tools;
 
 import chri_shared;
-import cpt.cpt_abstract;
+import cpt.cpt_types, cpt.cpt_abstract;
 import crank.crank_types: DcpDescriptor;
 
 /**

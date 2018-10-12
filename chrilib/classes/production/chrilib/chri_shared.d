@@ -251,23 +251,3 @@ synchronized final pure nothrow class SpiritMap {
         return cid;
     }
 }
-
-/**
-        Concept version control struct. BR
-    It contains a raw version field, which is the part of each concept. Zero value of that field is quite legal and it
-    means that the concept is of the _min_ver_ version, the oldest valid version that cannot be removed yet.
-*/
-shared synchronized class ConceptVersion {
-
-    /// The newest availabale version to use. This is the latest version commited by the tutor. If the _cur_ver_ rolled over the
-    /// Cvr.max and became the lesser number than all other versions, it stil must not reach the _stale_ver_, or an assertion
-    /// exception will be thrown.
-    private static Cvr _cur_ver_;
-
-    /// Minimal currently used version. If a concept has version 0 it means this version. All versions older than that
-    /// they are stale and may be removed.
-    private static Cvr _min_ver_;
-
-    /// Minimum stale version. Stale versions are less than _min_ver_ and so should be removed.
-    private static Cvr _stale_ver_;
-}

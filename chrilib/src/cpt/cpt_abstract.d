@@ -5,7 +5,7 @@ import std.format;
 
 import project_params, tools;
 
-import cpt_types;
+import cpt.cpt_types;
 import chri_shared;
 import attn.attn_circle_thread;
 import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_interfaces;

@@ -3,7 +3,7 @@ import std.format;
 
 import project_params, tools;
 
-import cpt.cpt_abstract;
+import cpt.cpt_types, cpt.cpt_abstract;
 import attn.attn_circle_thread;
 import crank.crank_types: DcpDescriptor;
 import cpt.cpt_interfaces;

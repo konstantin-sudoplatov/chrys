@@ -18,8 +18,9 @@ struct ConceptsTable {
 
     /// Table fields
     enum Fld {
-        cid = "cid",
+        cid = "cid",        // concept identifier
         ver = "ver",        // version of the concept
+        clid = "clid",
         shallow = "shallow",// shallow copy of the concept
         deep = "deep"       // deep copy fields
     }
@@ -33,7 +34,7 @@ struct ConceptsTable {
 
     /// Prepared statement's names
     enum {
-        addConcept_stmt = "addConcept_stmt",            // insert into table new concept
+        insertConcept_stmt = "addConcept_stmt",         // insert into table new concept
         deleteConcept_stmt = "deleteConcept_stmt",      // remove from the table concept with given cid+ver
         getConcept_stmt = "getConcept_stmt",            // get concept by cid+ver
         updateConcept_stmt = "updateConcept_stmt",      // update concept with given cid+ver
@@ -45,28 +46,31 @@ struct ConceptsTable {
         Parameters:
             cid = cid
             ver = version of the concept
+            clid = class identifier
             shallow = byte array of the shallow copy of the concept object
             deep = byte array of the serialized fields, which are referencies and must be deep copied.
         Throws: enforce, for a duplicate key, for example.
     */
-    void addConcept(Cid cid, Cvr ver, byte[] shallow, byte[] deep) {
+    void insertConcept(Cid cid, Cvr ver, Clid clid, byte[] shallow, byte[] deep) {
         PGresult* res;
 
         Cid c = invertEndianess(cid);
         Cvr v = invertEndianess(ver);
+        Clid cl = invertEndianess(clid);
         char** paramValues = [
             cast(char*)&c,
             cast(char*)&v,
+            cast(char*)&cl,
             cast(char*)shallow.ptr,
             cast(char*)deep.ptr
         ].ptr;
         res = PQexecPrepared(
             conn_,
-            addConcept_stmt,
-            4,      // nParams
+            insertConcept_stmt,
+            5,      // nParams
             paramValues,
-            (cast(int[])[Cid.sizeof, Cvr.sizeof, shallow.length, deep.length]).ptr,
-            (cast(int[])[1, 1, 1, 1]).ptr,
+            (cast(int[])[Cid.sizeof, Cvr.sizeof, Clid.sizeof, shallow.length, deep.length]).ptr,
+            (cast(int[])[1, 1, 1, 1, 1]).ptr,
             0       // result as a string
         );
         enforce(PQresultStatus(res) == PGRES_COMMAND_OK, to!string(PQerrorMessage(conn_)));
@@ -102,11 +106,12 @@ struct ConceptsTable {
     }
 
     /**
-            Get a concept's shallow and deep parts from the table.
+            Get a concept's clid, shallow and deep parts from the table.
         Parameters:
             cid = cid
             ver = version of the concept
-        Returns: (shallow, deep) byte arrays as voldemort type. If there is no such concept (null, null) will be returned.
+        Returns: (clid, shallow, deep) as (Clid, byte[], byte[]). If there is no such concept (Clid.max, null, null)
+            will be returned.
     */
     auto getConcept(Cid cid, Cvr ver) {
         PGresult* res;
@@ -131,56 +136,65 @@ struct ConceptsTable {
         scope(exit) PQclear(res);
 
         struct Result {
+            Clid clid = Clid.max;
             byte[] shallow;
             byte[] deep;
         }
-        Result cs;   // result
+        Result rs;   // result
         if      // is there such concept?
                 (PQntuples(res) != 0)
         {
+            // get the clid
+            rs.clid = invertEndianess(*cast(Clid*)PQgetvalue(res, 0, 0));
+
             // get the shallow
-            int len = PQgetlength(res, 0, 0);
-            cs.shallow.length = len;
-            cs.shallow[0..len] = (cast(byte*)PQgetvalue(res, 0, 0))[0..len];
+            int len = PQgetlength(res, 0, 1);
+            rs.shallow.length = len;
+            rs.shallow[0..len] = (cast(byte*)PQgetvalue(res, 0, 1))[0..len];
 
             // get the deep
-            len = PQgetlength(res, 0, 1);
+            len = PQgetlength(res, 0, 2);
             if(len) {
-                cs.deep.length = len;
-                cs.deep[0..len] = (cast(byte*)PQgetvalue(res, 0, 1))[0..len];
+                rs.deep.length = len;
+                rs.deep[0..len] = (cast(byte*)PQgetvalue(res, 0, 2))[0..len];
             }
         }
 
-        return cs;
+        return rs;
     }
 
     /**
-            Update shallow and deep parts of a concept in the table.
+            Update shallow and deep parts of a concept in the table. There is no optimization for the case if we need only
+        partial update, i.e. if we need to update only clid we still update the shallow and deep fields. Such optimization
+        is, of course, possible.
         Parameters:
             cid = cid
             ver = version of the concept
+            clid = class identifier
             shallow = byte array of the shallow copy of the concept object
             deep = byte array of the serialized fields, which are referencies and must be deep copied.
         Throws: enforce, if there is no record to update, for example.
     */
-    void updateConcept(Cid cid, Cvr ver, byte[] shallow, byte[] deep) {
+    void updateConcept(Cid cid, Cvr ver, Clid clid, byte[] shallow, byte[] deep) {
         PGresult* res;
 
         Cid c = invertEndianess(cid);
         Cvr v = invertEndianess(ver);
+        Clid cl = invertEndianess(clid);
         char** paramValues = [
             cast(char*)&c,
             cast(char*)&v,
+            cast(char*)&cl,
             cast(char*)shallow.ptr,
             cast(char*)deep.ptr
         ].ptr;
         res = PQexecPrepared(
             conn_,
             updateConcept_stmt,
-            4,      // nParams
+            5,      // nParams
             paramValues,
-            (cast(int[])[Cid.sizeof, Cvr.sizeof, shallow.length, deep.length]).ptr,
-            (cast(int[])[1, 1, 1, 1]).ptr,
+            (cast(int[])[Cid.sizeof, Cvr.sizeof, Clid.sizeof, shallow.length, deep.length]).ptr,
+            (cast(int[])[1, 1, 1, 1, 1]).ptr,
             0       // result as a string
         );
         enforce(PQresultStatus(res) == PGRES_COMMAND_OK, to!string(PQerrorMessage(conn_)));
@@ -230,9 +244,9 @@ struct ConceptsTable {
         // Add concept
         res = PQprepare(
             conn_,
-            addConcept_stmt,
-            format!"insert into %s (%s, %s, %s, %s) values($1, $2, $3, $4)"
-                    (tableName, Fld.cid, Fld.ver, Fld.shallow, Fld.deep).toStringz,
+            insertConcept_stmt,
+            format!"insert into %s (%s, %s, %s, %s, %s) values($1, $2, $3, $4, $5)"
+                    (tableName, Fld.cid, Fld.ver, Fld.clid, Fld.shallow, Fld.deep).toStringz,
             0,
             null
         );
@@ -254,8 +268,8 @@ struct ConceptsTable {
         res = PQprepare(
             conn_,
             getConcept_stmt,
-            format!"select %s, %s from %s where %s=$1 and %s=$2"
-                    (Fld.shallow, Fld.deep, tableName, Fld.cid, Fld.ver).toStringz,
+            format!"select %s, %s, %s from %s where %s=$1 and %s=$2"
+                    (Fld.clid, Fld.shallow, Fld.deep, tableName, Fld.cid, Fld.ver).toStringz,
             0,
             null
         );
@@ -266,8 +280,8 @@ struct ConceptsTable {
         res = PQprepare(
             conn_,
             updateConcept_stmt,
-            format!"update %s set %s=$3, %s=$4 where %s=$1 and %s=$2"
-                    (tableName, Fld.shallow, Fld.deep, Fld.cid, Fld.ver).toStringz,
+            format!"update %s set %s=$3, %s=$4, %s=$5 where %s=$1 and %s=$2"
+                    (tableName, Fld.clid, Fld.shallow, Fld.deep, Fld.cid, Fld.ver).toStringz,
             0,
             null
         );
@@ -290,37 +304,42 @@ struct ConceptsTable {
 }
 
 unittest {
+    import std.stdio: writeln, writefln;
+
     PGconn* conn = connectToDb;
-    auto tc = ConceptsTable(conn);
+    auto ct = ConceptsTable(conn);
 
     // Delete to clean up possible remnants
-    tc.deleteConcept(0, 10);
-    tc.deleteConcept(0, 20);
+    ct.deleteConcept(0, 10);
+    ct.deleteConcept(0, 20);
 
     // Add test concept
-    tc.addConcept(0, 10, cast(byte[])[1,2,3,4,5], cast(byte[])[6,7,8,9,10,11]);
-//    tc.addConcept(0, 10, cast(byte[])[1,2,3,4,5], cast(byte[])[6,7,8,9,10,11]);   // throws an exception
-    tc.addConcept(0, 20, cast(byte[])[1,2,3,4,5], null);
+    ct.insertConcept(0, 10, 42, cast(byte[])[1,2,3,4,5], cast(byte[])[6,7,8,9,10,11]);
+//    tc.insertConcept(0, 10, 42, cast(byte[])[1,2,3,4,5], cast(byte[])[6,7,8,9,10,11]);   // reinserting throws an exception
+    ct.insertConcept(0, 20, 42, cast(byte[])[1,2,3,4,5], null);
 
     // Get
-    assert(to!string(tc.getConcept(0, 10).shallow) == "[1, 2, 3, 4, 5]"
-            && to!string(tc.getConcept(0, 10).deep) == "[6, 7, 8, 9, 10, 11]");
-    assert(to!string(tc.getConcept(0, 20).shallow) == "[1, 2, 3, 4, 5]" && tc.getConcept(0, 20).deep is null);
+    assert(ct.getConcept(0, 10).clid == 42);
+    assert(to!string(ct.getConcept(0, 10).shallow) == "[1, 2, 3, 4, 5]"
+            && to!string(ct.getConcept(0, 10).deep) == "[6, 7, 8, 9, 10, 11]");
+    assert(to!string(ct.getConcept(0, 20).shallow) == "[1, 2, 3, 4, 5]" && ct.getConcept(0, 20).deep is null);
 
     // Update
-    tc.updateConcept(0, 10, cast(byte[])[1,2,3], null);
-    assert(to!string(tc.getConcept(0, 10).shallow) == "[1, 2, 3]" && tc.getConcept(0, 10).deep is null);
-    tc.updateConcept(0, 20, cast(byte[])[1,2,3], cast(byte[])[10,11]);
-    assert(to!string(tc.getConcept(0, 20).shallow) == "[1, 2, 3]" && to!string(tc.getConcept(0, 20).deep) =="[10, 11]");
-//    tc.updateConcept(0, 30, cast(byte[])[1,2,3], cast(byte[])[10,11]);    // throws exception, because there is no such concept
+    ct.updateConcept(0, 10, Clid.max, cast(byte[])[1,2,3], null);
+    assert(ct.getConcept(0, 10).clid == Clid.max && to!string(ct.getConcept(0, 10).shallow) == "[1, 2, 3]" &&
+            ct.getConcept(0, 10).deep is null);
+    ct.updateConcept(0, 20, Clid.max, cast(byte[])[1,2,3], cast(byte[])[10,11]);
+    assert(ct.getConcept(0, 20).clid == cast(Clid)-1 && to!string(ct.getConcept(0, 20).shallow) == "[1, 2, 3]" &&
+            to!string(ct.getConcept(0, 20).deep) =="[10, 11]");
+//    tc.updateConcept(0, 30, 42, cast(byte[])[1,2,3], cast(byte[])[10,11]);    // throws exception, since there is no such concept
 
     // Find versions
-    assert(to!string(tc.findConceptVersions(0)) == "[10, 20]");
+    assert(to!string(ct.findConceptVersions(0)) == "[10, 20]");
 
     // Clean up
-    tc.deleteConcept(0, 10);
-    tc.deleteConcept(0, 20);
-    assert(tc.findConceptVersions(0) is null);
+    ct.deleteConcept(0, 10);
+    ct.deleteConcept(0, 20);
+    assert(ct.findConceptVersions(0) is null);
 
     disconnectFromDb(conn);
 }

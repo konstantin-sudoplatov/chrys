@@ -4,7 +4,7 @@ import std.format;
 import project_params, tools;
 
 import stat.stat_types;
-import cpt.cpt_abstract;
+import cpt.cpt_types, cpt.cpt_abstract;
 import attn.attn_circle_thread;
 
 /**

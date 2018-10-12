@@ -8,7 +8,7 @@ import std.format;
 import project_params, tools;
 
 import chri_shared;
-import cpt.cpt_abstract, cpt.cpt_stat;
+import cpt.cpt_types, cpt.cpt_abstract, cpt.cpt_stat;
 import attn.attn_circle_thread;
 import stat.stat_types;
 import crank.crank_types: DcpDescriptor;

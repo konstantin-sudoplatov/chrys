@@ -4,7 +4,7 @@ import std.format;
 import project_params, tools;
 
 import stat.stat_types;
-import cpt.cpt_abstract;
+import cpt.cpt_types, cpt.cpt_abstract;
 import attn.attn_circle_thread;
 
 /**
@@ -26,7 +26,7 @@ import attn.attn_circle_thread;
     */
     this(Cid cid, void* fp, StatCallType callType){
         super(cid, spClid!SpStaticConcept);
-        
+
         cast()flags |= SpCptFlags.STATIC;
         cast()this.fp = cast(immutable)fp;
         cast()this.callType = callType;

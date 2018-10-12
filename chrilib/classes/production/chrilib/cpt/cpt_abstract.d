@@ -5,39 +5,11 @@ import std.format;
 
 import project_params, tools;
 
+import cpt.cpt_types;
 import chri_shared;
 import attn.attn_circle_thread;
 import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_interfaces;
 import crank.crank_types: DcpDescriptor;
-
-/// External runtime function, that creates a new object by its ClassInfo. No constructors are called. Very fast, much faster
-/// than manually allocating the object on the heap as new buf[], as it is done in the emplace function. Used in the
-/// SpiritConcept.clone() method.
-private extern (C) Object _d_newclass (ClassInfo info);
-
-/// Concept's attributes.
-enum SpCptFlags: short {
-
-    /// Static concept
-    STATIC = 0x0001,
-
-    /// Temporary dynamic concept. Heavily uses its live part, since it is thread local. Even its holy part is not designed
-    /// to be stored in the DB, if only to collect the usage info.
-    TEMP = 0x0002,
-
-    /// Permanent dynamic concept. The holy part is stored in the DB and constitutes the knoledge base.
-    PERM = 0x0004,
-}
-
-/// Take clid from annotation of the spirit concept class and make it a enum. Designed to be used in the class constructor.
-template spClid(T: SpiritConcept)
-    if(__traits(getAttributes, T).length == 1 && is(typeof(__traits(getAttributes, T)[0]) == int) &&
-            __traits(getAttributes, T)[0] >= 0)
-{
-    enum :Clid {
-        spClid = __traits(getAttributes, T)[0]
-    }
-}
 
 /**
             Base for all concepts.

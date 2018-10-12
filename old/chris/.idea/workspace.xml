@@ -3,27 +3,42 @@
   <component name="ChangeListManager">
     <list default="true" id="1e6f13b7-b9cd-4af9-969e-5956d8669eca" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../../chribaselib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chribaselib/bin/chribaselib" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/bin/chribaselib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chribaselib/bin/libchribaselib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/bin/libchribaselib.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chribaselib/classes/production/chribaselib/base_proba.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/classes/production/chribaselib/base_proba.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chribaselib/classes/production/chribaselib/tools.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/classes/production/chribaselib/tools.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chribaselib/src/base_proba.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/src/base_proba.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chribaselib/src/project_params.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/src/project_params.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chribaselib/src/tools.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/src/tools.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chricrank/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chricrank/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chricrank/bin/chricrank" beforeDir="false" afterPath="$PROJECT_DIR$/../../chricrank/bin/chricrank" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chricrank/classes/production/chricrank/chricrank.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chricrank/classes/production/chricrank/chricrank.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/bin/chrilib" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/bin/chrilib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/bin/libchrilib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/bin/libchrilib.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/attn/attn_circle_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/attn/attn_circle_thread.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/chri_shared.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/chri_shared.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_abstract.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_abstract.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_actions.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_actions.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_neurons.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_neurons.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_premises.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_premises.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_registry.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_stat.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_stat.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/crank/crank_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/crank/crank_main.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/crank/crank_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/crank/crank_registry.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/stat/stat_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/stat/stat_registry.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/src/attn/attn_circle_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/src/attn/attn_circle_thread.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/src/chri_shared.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/src/chri_shared.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/src/cpt/cpt_abstract.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/src/cpt/cpt_abstract.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/src/cpt/cpt_actions.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/src/cpt/cpt_actions.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/src/cpt/cpt_neurons.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/src/cpt/cpt_neurons.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/src/cpt/cpt_premises.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/src/cpt/cpt_premises.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/src/cpt/cpt_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/src/cpt/cpt_registry.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/src/cpt/cpt_stat.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/src/cpt/cpt_stat.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/src/crank/crank_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/src/crank/crank_main.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/src/crank/crank_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/src/crank/crank_registry.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/src/stat/stat_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/src/stat/stat_registry.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/global_data.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/global_data.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrilib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/chrilib/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -108,7 +123,7 @@
     <session id="-755707414">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="6" />
+          <entry key="project.closed" value="7" />
           <entry key="project.open.time.0" value="3" />
           <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.16" value="1" />
@@ -119,12 +134,12 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="d" value="17" />
+          <entry key="d" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="D file" value="17" />
+          <entry key="D file" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -145,11 +160,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/global_data.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="440">
-              <caret line="22" column="72" selection-start-line="22" selection-start-column="72" selection-end-line="22" selection-end-column="72" />
+            <state relative-caret-position="687">
+              <caret line="416" column="97" selection-start-line="416" selection-start-column="97" selection-end-line="416" selection-end-column="97" />
               <folding>
                 <element signature="e#6990#6991#0" expanded="true" />
                 <element signature="e#7058#7059#0" expanded="true" />
@@ -158,10 +173,19 @@
           </provider>
         </entry>
       </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/cpt/cpt_abstract.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="1520">
+              <caret line="121" column="18" lean-forward="true" selection-start-line="121" selection-start-column="18" selection-end-line="121" selection-end-column="18" />
+            </state>
+          </provider>
+        </entry>
+      </file>
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/crank/crank_registry.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="80">
+            <state relative-caret-position="-2098">
               <caret line="4" column="19" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
             </state>
           </provider>
@@ -170,7 +194,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/chris.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
+            <state relative-caret-position="361">
               <caret line="19" column="68" selection-start-line="19" selection-start-column="68" selection-end-line="19" selection-end-column="68" />
             </state>
           </provider>
@@ -259,10 +283,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="3840" />
-    <option name="width" value="1920" />
-    <option name="height" value="1080" />
+  <component name="ProjectFrameBounds" extendedState="4">
+    <option name="width" value="1912" />
+    <option name="height" value="1078" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -378,7 +401,7 @@
     <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1535044027140" />
     <property name="com.intellij.ide.scratch.LRUPopupBuilder$1/New Scratch File" value="D" />
     <property name="full.screen.before.presentation.mode" value="true" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../../chricrank" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/chrilib" />
     <property name="project.structure.last.edited" value="Libraries" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -611,11 +634,11 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="3840" y="0" width="1920" height="1080" extended-state="7" />
+    <frame x="0" y="0" width="1912" height="1078" extended-state="4" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5262055" visible="true" weight="0.17982924" />
-      <window_info x="1944" y="563" width="330" height="781" id="Structure" order="1" sideWeight="0.47379455" side_tool="true" visible="true" weight="0.17982924" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5267576" visible="true" weight="0.17771883" />
+      <window_info x="1944" y="563" width="330" height="781" id="Structure" order="1" sideWeight="0.4732424" side_tool="true" visible="true" weight="0.17771883" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
@@ -909,13 +932,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_abstract.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2983">
-          <caret line="163" selection-start-line="42" selection-end-line="163" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/stat/stat_registry.d">
       <provider selected="true" editor-type-id="text-editor">
         <state>
@@ -1016,8 +1032,8 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/global_data.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
-          <caret line="22" column="72" selection-start-line="22" selection-start-column="72" selection-end-line="22" selection-end-column="72" />
+        <state relative-caret-position="687">
+          <caret line="416" column="97" selection-start-line="416" selection-start-column="97" selection-end-line="416" selection-end-column="97" />
           <folding>
             <element signature="e#6990#6991#0" expanded="true" />
             <element signature="e#7058#7059#0" expanded="true" />
@@ -1027,15 +1043,22 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/crank/crank_registry.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="80">
+        <state relative-caret-position="-2098">
           <caret line="4" column="19" selection-start-line="4" selection-start-column="19" selection-end-line="4" selection-end-column="19" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/chris.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
+        <state relative-caret-position="361">
           <caret line="19" column="68" selection-start-line="19" selection-start-column="68" selection-end-line="19" selection-end-column="68" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_abstract.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1520">
+          <caret line="121" column="18" lean-forward="true" selection-start-line="121" selection-start-column="18" selection-end-line="121" selection-end-column="18" />
         </state>
       </provider>
     </entry>

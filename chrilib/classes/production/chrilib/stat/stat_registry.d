@@ -13,14 +13,6 @@ enum StatConceptModules {
     subpile = "stat.substat.substat_subpile"
 }
 
-// Import those modules
-import stat.stat_main;
-import stat.substat.substat_subpile;
-
-//---***---***---***---***---***--- types ---***---***---***---***---***---***
-
-//---***---***---***---***---***--- data ---***---***---***---***---***--
-
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
 /**
@@ -34,9 +26,10 @@ StatDescriptor[] createStatDescriptors() {
 
     // Fill the named descriptors array
     StatDescriptor sd;
-    static foreach(modul; [EnumMembers!StatConceptModules]) {
-        static foreach(memberName; __traits(allMembers, mixin(modul))) {
-            static if(__traits(isStaticFunction, __traits(getMember, mixin(modul), memberName))) {
+    static foreach(moduleName; [EnumMembers!StatConceptModules]) {
+        mixin("import " ~ moduleName ~ ";");
+        static foreach(memberName; __traits(allMembers, mixin(moduleName))) {
+            static if(__traits(isStaticFunction, __traits(getMember, mixin(moduleName), memberName))) {
                 sd.cid = __traits(getAttributes, mixin(memberName))[0];
                 sd.name = memberName;
                 sd.fun_ptr = mixin("&" ~ memberName);

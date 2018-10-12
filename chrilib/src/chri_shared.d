@@ -3,20 +3,25 @@ import std.conv, std.format;
 
 import project_params, tools;
 
-import cpt.cpt_abstract, cpt.cpt_stat;
+import cpt.cpt_registry, cpt.cpt_abstract, cpt.cpt_stat;
 import attn.attn_circle_thread;
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--
 
 // Key shared data structures
-immutable string[Cid] _nm_;   /// name/seed map
 shared SpiritMap _sm_;        /// The map of holy(stable and storrable and shared) concepts.
+immutable string[Cid] _nm_;   /// name/seed map
+immutable TypeInfo_Class[] _sp_cl_reg_;  /// Spirit concept classes registry (classinfo by clid).
 debug {
     // set to true after the maps are filled in with names,cids and references to the concept objects
     immutable bool _maps_filled_;
 
     // set to true after the cranking is finished and the maps rehashed
     immutable bool _cranked_;
+}
+
+shared static this() {
+    _sp_cl_reg_ = cast(immutable)createSpiritClassesRegistry;
 }
 
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -245,24 +250,4 @@ synchronized final pure nothrow class SpiritMap {
 
         return cid;
     }
-}
-
-/**
-        Concept version control struct. BR
-    It contains a raw version field, which is the part of each concept. Zero value of that field is quite legal and it
-    means that the concept is of the _min_ver_ version, the oldest valid version that cannot be removed yet.
-*/
-shared synchronized class ConceptVersion {
-
-    /// The newest availabale version to use. This is the latest version commited by the tutor. If the _cur_ver_ rolled over the
-    /// Cvr.max and became the lesser number than all other versions, it stil must not reach the _stale_ver_, or an assertion
-    /// exception will be thrown.
-    private static Cvr _cur_ver_;
-
-    /// Minimal currently used version. If a concept has version 0 it means this version. All versions older than that
-    /// they are stale and may be removed.
-    private static Cvr _min_ver_;
-
-    /// Minimum stale version. Stale versions are less than _min_ver_ and so should be removed.
-    private static Cvr _stale_ver_;
 }

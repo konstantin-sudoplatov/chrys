@@ -25,7 +25,8 @@ import attn.attn_circle_thread;
             callType = call type of the static concept function
     */
     this(Cid cid, void* fp, StatCallType callType){
-        super(cid);
+        super(cid, spClid!SpStaticConcept);
+        
         cast()flags |= SpCptFlags.STATIC;
         cast()this.fp = cast(immutable)fp;
         cast()this.callType = callType;

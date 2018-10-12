@@ -11,22 +11,6 @@ enum CrankModules {
     pile = "crank.crank_main",
     subpile = "crank.subcrank.subcrank_subpile"
 }
-// Import those modules. Unfortunately, this code seems to work after, not before the code, that uses these imports. Forced
-// to import them manually.
-//static foreach(modul; [EnumMembers!CrankModules]) {
-//    mixin("import " ~ modul ~ ";");
-//}
-
-// Import those modules.
-import crank.crank_main;
-import crank.subcrank.subcrank_subpile;
-
-//---***---***---***---***---***--- data ---***---***---***---***---***--
-
-/**
-        Constructor
-*/
-//this(){}
 
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
@@ -43,7 +27,7 @@ DynDescriptor[] createDynDescriptors() {
     // Fill the named descriptors array
     DynDescriptor dd;
     static foreach(moduleName; [EnumMembers!CrankModules]) {
-//        mixin("import " ~ moduleName ~ ";");  // does not work. why?
+        mixin("import " ~ moduleName ~ ";");
         static foreach(memberName; __traits(allMembers, mixin(moduleName))) {
             static if(mixin("is(" ~ memberName ~ "==enum)")) {
                 static foreach(enumElem; __traits(allMembers, mixin(memberName))) {
@@ -79,14 +63,15 @@ void runCranks() {
 
     // Fill in fps with addresses of the crank functions
     void function()[] fps;      // array of the pointers of functions
-    static foreach(modul; [EnumMembers!CrankModules])
-        static foreach(modMbr; __traits(allMembers, mixin(modul)))
-            // filter out members that do not process (packet names cpt, stat, attn) and pick static functions
-            static if      // is the member of module a function?
-                    (__traits(isStaticFunction, __traits(getMember, mixin(modul), modMbr)))
+    static foreach(moduleName; [EnumMembers!CrankModules]) {
+        mixin("import " ~ moduleName ~ ";");
+        static foreach (modMbr; __traits(allMembers, mixin(moduleName)))
+            static if // is the member of module a function?
+            (__traits(isStaticFunction, __traits(getMember, mixin(moduleName), modMbr)))
             {   //yes: generate a call of it
                 fps ~= mixin("&" ~ modMbr);
             }
+    }
 
     // Run the crank functions
     foreach(fp; fps)

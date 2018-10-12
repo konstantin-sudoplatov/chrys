@@ -29,6 +29,16 @@ enum SpCptFlags: short {
     PERM = 0x0004,
 }
 
+/// Take clid from annotation of the spirit concept class and make it a enum. Designed to be used in the class constructor.
+template spClid(T: SpiritConcept)
+    if(__traits(getAttributes, T).length == 1 && is(typeof(__traits(getAttributes, T)[0]) == int) &&
+            __traits(getAttributes, T)[0] >= 0)
+{
+    enum :Clid {
+        spClid = __traits(getAttributes, T)[0]
+    }
+}
+
 /**
             Base for all concepts.
     "Spiritual" means stable and storable as opposed to "Live" concepts, that are in a constant using and change and living only
@@ -44,6 +54,9 @@ abstract class SpiritConcept {
     /// Concept identifier.
     immutable Cid cid = 0;
 
+    /// Spirit concept class identifier
+    immutable Clid clid;
+
     /// Attributes of the concept.
     immutable SpCptFlags flags =  cast(SpCptFlags)0;
 
@@ -52,9 +65,11 @@ abstract class SpiritConcept {
             Used for concepts with predefined cids.
         Parameters:
             cid = Concept identifier.
+            clid = concept class identifier
     */
-    this(Cid cid) {
+    this(Cid cid, Clid clid) {
         this.cid = cid;
+        this.clid = clid;
     }
 
     /**
@@ -181,9 +196,10 @@ abstract class SpiritDynamicConcept: SpiritConcept {
         Parameters:
             cid = Concept identifier. Can be a preassigned value or 0. If it is 0, then actual value is generated when you
                   add the concept to the holy map.
+            clid = Concept class identifier.
     */
-    this(Cid cid) {
-        super(cid);
+    this(Cid cid, Clid clid) {
+        super(cid, clid);
         cast()flags |= SpCptFlags.PERM;       // all dynamic concepts are permanent until further notice
     }
 
@@ -202,7 +218,7 @@ abstract class DynamicConcept: Concept {
 abstract class SpiritPremise: SpiritDynamicConcept {
 
     /// constructor
-    this(Cid cid) { super(cid); }
+    this(Cid cid, Clid clid) { super(cid, clid); }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 }
@@ -247,8 +263,9 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         Parameters:
             Used for concepts with predefined cids.
             cid = concept identifier
+            clid = Concept class identifier.
     */
-    this(Cid cid) { super(cid); }
+    this(Cid cid, Clid clid) { super(cid, clid); }
 
     /// Ditto.
     override SpiritNeuron _deep_copy_() const {
@@ -395,7 +412,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
                 Cid[] a;
                 foreach (cd; acts) {
                     debug if(_maps_filled_)
-                        assert(cast(shared SpAction)_sm_[cd.cid],
+                        assert(cast(shared SpA)_sm_[cd.cid],
                                 format!"Cid: %s must be an action, and it is a %s."(cd.cid, cd.className));
                     a ~= cd.cid;
                 }
@@ -404,7 +421,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
             {
                 debug if(_maps_filled_)
                     foreach (cid; acts) {
-                        assert(cast(shared SpAction)_sm_[cid],
+                        assert(cast(shared SpA)_sm_[cid],
                                 format!"Cid: %s must be an action, and it is a %s."(cid, typeid(_sm_[cid])));
                     }
                 Cid[] a = acts;
@@ -413,14 +430,14 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
                     (is(Ta == DcpDescriptor))
             {  //yes: convert it to array of cids
                 debug if(_maps_filled_)
-                    assert(cast(shared SpAction)_sm_[acts.cid],
+                    assert(cast(shared SpA)_sm_[acts.cid],
                             format!"Cid: %s must be an action, and it is a %s."(acts.cid, acts.className));
                 Cid[] a = [acts.cid];
             }
             else//no: it is a cid; convert it to an array of cids
             {
                 debug if(_maps_filled_)
-                    assert(cast(shared SpAction)_sm_[acts],
+                    assert(cast(shared SpA)_sm_[acts],
                             format!"Cid: %s must be an action, and it is a %s."(acts, typeid(_sm_[acts])));
                 Cid[] a = [acts];
             }
@@ -630,8 +647,9 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
         Parameters:
             Used for concepts with predefined cids.
             cid = concept identifier
+            clid = Concept class identifier.
     */
-    this(Cid cid) { super(cid); }
+    this(Cid cid, Clid clid) { super(cid, clid); }
 
     /// Clone
     override SpiritLogicalNeuron _deep_copy_() const {

@@ -220,7 +220,7 @@ class Caldron {
             foreach(actCid; effect.actions) {
                 if (dynDebug >= 1)
                     logit(format!"%s, action: %s(%,?s)"(caldName, _nm_[actCid], '_', actCid), TermColor.green);
-                Action act = cast(Action)this[actCid];
+                A act = cast(A)this[actCid];
                 act.run(this);
             }
 

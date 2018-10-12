@@ -12,21 +12,21 @@ import stat.stat_types, stat.stat_main;
 enum CommonConcepts: DcpDescriptor {
 
     // Service concepts
-    logCpt_0_unact = cd!(SpUnaryAction, 246_390_338),       // log a concept, using concept.toString()
-    logCpt_1_unact = cd!(SpUnaryAction, 1_005_527_366),     // ditto
-    logCpt_2_unact = cd!(SpUnaryAction, 122_016_958),       // ditto
+    logCpt_0_unact = cd!(SpA_Cid, 246_390_338),       // log a concept, using concept.toString()
+    logCpt_1_unact = cd!(SpA_Cid, 1_005_527_366),     // ditto
+    logCpt_2_unact = cd!(SpA_Cid, 122_016_958),       // ditto
     zond_0_actnrn = cd!(SpActionNeuron, 2_279_163_875),     // test action neuron to inject into different points of workflow
     zond_1_actnrn = cd!(SpActionNeuron, 2_025_623_255),     // ditto
     zond_2_actnrn = cd!(SpActionNeuron, 1_321_617_741),     // ditto
 
 
     /// Controlling the debug level inside the caldron
-    setDebugLevel_0_act = cd!(SpAction, 3_426_667_410),
-    setDebugLevel_1_act = cd!(SpAction, 805_124_526),
-    setDebugLevel_2_act = cd!(SpAction, 2_996_929_904),
+    setDebugLevel_0_act = cd!(SpA, 3_426_667_410),
+    setDebugLevel_1_act = cd!(SpA, 805_124_526),
+    setDebugLevel_2_act = cd!(SpA, 2_996_929_904),
 
     /// call current Caldron._requestStopAndWait_(), can be used by all caldrons
-    stopAndWait_act = cd!(SpAction, 580_052_493),
+    stopAndWait_act = cd!(SpA, 580_052_493),
 
     /// It is a very special and narrow case of concept. We have in it Tid of the thread, that maintains dialog with user.
     /// Not uline branch thread, not even a caldron. It is the thread that controls the console or http connection.
@@ -38,7 +38,7 @@ enum CommonConcepts: DcpDescriptor {
     userInputLine_strprem = cd!(SpStringPremise, 3_622_010_989),
 
     /// anactivate user input string premise
-    anactivateUserInputLine_unact = cd!(SA_Cid, 1_733_678_366),
+    anactivateUserInputLine_unact = cd!(SpA_Cid, 1_733_678_366),
 }
 
 /// Setup common concepts.
@@ -78,15 +78,15 @@ enum Chat: DcpDescriptor {
     shakeHandsWithUline_chat_actnrn = cd!(SpActionNeuron, 3_996_466_002),
 
     /// The action for the handshaker. After chat starts the uline branch, it sends user its own breed.
-    sendUlineChatBreed_chat_binact = cd!(SpBinaryAction, 553_436_801),
+    sendUlineChatBreed_chat_binact = cd!(SpA_CidCid, 553_436_801),
 
     /// The action for the handshaker. It sends uline Tid of the user thread (console or http), so that uline could be able
     /// to talk to the user.
-    sendUlineUserTid_chat_binact = cd!(SpBinaryAction, 3_408_832_589),
+    sendUlineUserTid_chat_binact = cd!(SpA_CidCid, 3_408_832_589),
 
     /// A valve for waiting for a line of text from uline, which it gets from user with tools
     valveOnUlineInput_chat_andnrn = cd!(SpAndNeuron, 497_144_117),
-    activateRemotely_readyForUlineInput_chat_binact = cd!(SpBinaryAction, 3_702_223_557),
+    activateRemotely_readyForUlineInput_chat_binact = cd!(SpA_CidCid, 3_702_223_557),
 
 }
 
@@ -149,23 +149,23 @@ enum Uline {
     shakeHandsWithChat_uline_anrn = cd!(SpAndNeuron, 226_154_664),
 
     /// After the handshaking with chat uline has user tid and can send back its own
-    sendUserUlineTid_uline_binact = cd!(SpBinaryAction, 2_277_726_710),
+    sendUserUlineTid_uline_binact = cd!(SpA_CidCid, 2_277_726_710),
 
     /// wait neuron. Wait on it for the next line of text from user.
     userInputValve_uline_andnrn = cd!(SpAndNeuron, 732_066_873),
 
     /// Flag for uline to feed the next input from user to chat and anactivation action for it
     chatReadyForUlineInputPeg_uline_pegprem = cd!(SpPegPremise, 1_456_194_005),
-    anactivateChatReadyForUlineInputPeg_uline_unact = cd!(SpUnaryAction, 409_329_855),
+    anactivateChatReadyForUlineInputPeg_uline_unact = cd!(SpA_Cid, 409_329_855),
 
     /// Call stat action of moving line from buffer to string peg.
-    moveLineFromUserInuputBufferToUserInputLine_uline_binact = cd!(SpBinaryAction, 2_949_480_003),
+    moveLineFromUserInuputBufferToUserInputLine_uline_binact = cd!(SpA_CidCid, 2_949_480_003),
 
     /// Send user line premise to chat (together with the activation value)
-    sendUserInputLineToChat_uline_binact = cd!(SpBinaryAction, 3_447_310_214),
+    sendUserInputLineToChat_uline_binact = cd!(SpA_CidCid, 3_447_310_214),
 
     /// Send user a prompt for the next input
-    sendUserRequestForNextLine_uline_unact = cd!(SpUnaryAction, 1_439_958_318),
+    sendUserRequestForNextLine_uline_unact = cd!(SpA_Cid, 1_439_958_318),
 }
 
 /// Setup the uline branch.

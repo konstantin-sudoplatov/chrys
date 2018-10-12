@@ -3,20 +3,25 @@ import std.conv, std.format;
 
 import project_params, tools;
 
-import cpt.cpt_abstract, cpt.cpt_stat;
+import cpt.cpt_registry, cpt.cpt_abstract, cpt.cpt_stat;
 import attn.attn_circle_thread;
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--
 
 // Key shared data structures
-immutable string[Cid] _nm_;   /// name/seed map
 shared SpiritMap _sm_;        /// The map of holy(stable and storrable and shared) concepts.
+immutable string[Cid] _nm_;   /// name/seed map
+immutable TypeInfo_Class[] _sp_cl_reg_;  /// Spirit concept classes registry (classinfo by clid).
 debug {
     // set to true after the maps are filled in with names,cids and references to the concept objects
     immutable bool _maps_filled_;
 
     // set to true after the cranking is finished and the maps rehashed
     immutable bool _cranked_;
+}
+
+shared static this() {
+    _sp_cl_reg_ = cast(immutable)createSpiritClassesRegistry;
 }
 
 //---***---***---***---***---***--- functions ---***---***---***---***---***--

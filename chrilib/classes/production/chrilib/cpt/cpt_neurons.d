@@ -19,8 +19,8 @@ import cpt.cpt_interfaces;
         Parameters:
             cid = predefined concept identifier
     */
-    this(Cid cid) {
-        super(cid);
+    this(Cid cid, Clid clid = spClid!SpActionNeuron) {
+        super(cid, clid);
         this.disableCutoff;
     }
 
@@ -150,7 +150,7 @@ class ActionNeuron: Neuron, ActivationIfc {
 @(8) final class SpSeed: SpActionNeuron {
 
     /// Constructor
-    this(Cid cid) { super(cid); }
+    this(Cid cid) { super(cid, spClid!SpSeed); }
 
     /// Create live wrapper for the holy static concept.
     override Seed live_factory() const {
@@ -177,7 +177,7 @@ final class Seed: ActionNeuron {
         Parameters:
             cid = predefined concept identifier
     */
-    this(Cid cid) { super(cid); }
+    this(Cid cid) { super(cid, spClid!SpAndNeuron); }
 
     // Create live wrapper for the holy static concept.
     override AndNeuron live_factory() const {
@@ -228,9 +228,7 @@ final class AndNeuron: LogicalNeuron {
         Parameters:
             cid = predefined concept identifier
     */
-    this(Cid cid) {
-        super(cid);
-    }
+    this(Cid cid) { super(cid, spClid!SpWeightNeuron); }
 
     /// Create live wrapper for the holy static concept.
     override WeightNeuron live_factory() const {
@@ -260,38 +258,3 @@ final class WeightNeuron: Neuron, EsquashActivationIfc {
         return float.nan;
     }
 }
-
-//---***---***---***---***---***--- types ---***---***---***---***---***---***
-
-//---***---***---***---***---***--- data ---***---***---***---***---***--
-
-/**
-        Constructor
-*/
-//this(){}
-
-//---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-//~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
-//
-//                                 Protected
-//
-//~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
-protected:
-//---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
-
-//---$$$---$$$---$$$---$$$---$$$--- functions ---$$$---$$$---$$$---$$$---$$$---
-
-//---$$$---$$$---$$$---$$$---$$$--- types ---$$$---$$$---$$$---$$$---$$$---
-
-//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-//
-//                                  Private
-//
-//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-private:
-//---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
-
-//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-//---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--

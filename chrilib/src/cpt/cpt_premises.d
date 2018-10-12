@@ -17,14 +17,15 @@ import crank.crank_types: DcpDescriptor;
     in the tid_ field of the live part.
 */
 @(11) final class SpBreed: SpiritPremise {
-import cpt.cpt_neurons: SpSeed;
+    import cpt.cpt_neurons: SpSeed;
+
     /**
                 Constructor
         Parameters:
             cid = predefined concept identifier
     */
     this(Cid cid) {
-        super(cid);
+        super(cid, spClid!SpBreed);
     }
 
     /// Create live wrapper for the holy static concept.
@@ -81,10 +82,10 @@ final class Breed: Premise {
 /**
         Tid premise.
 */
-@(12)final class SpTidPremise: SpiritPremise {
+@(12) final class SpTidPremise: SpiritPremise {
 
     /// Constructor
-    this(Cid cid) { super(cid); }
+    this(Cid cid) { super(cid, spClid!SpTidPremise); }
 
     /// Create live wrapper for the holy static concept.
     override TidPremise live_factory() const {
@@ -112,10 +113,10 @@ final class TidPremise: Premise {
 /**
             Peg premise.
 */
-@(13)final class SpPegPremise: SpiritPremise {
+@(13) final class SpPegPremise: SpiritPremise {
 
     /// Constructor
-    this(Cid cid) { super(cid); }
+    this(Cid cid) { super(cid, spClid!SpPegPremise); }
 
     /// Create live wrapper for the holy static concept.
     override PegPremise live_factory() const {
@@ -141,7 +142,7 @@ final class PegPremise: Premise {
         Parameters:
             cid = predefined concept identifier
     */
-    this(Cid cid) { super(cid); }
+    this(Cid cid) { super(cid, spClid!SpStringPremise); }
 
     /// Create live wrapper for the spirit static concept.
     override StringPremise live_factory() const {
@@ -174,7 +175,7 @@ final class StringPremise: Premise {
 @(15)final class SpStringQueuePremise: SpiritPremise {
 
     /// Constructor.
-    this(Cid cid) { super(cid); }
+    this(Cid cid) { super(cid, spClid!SpStringQueuePremise); }
 
     /// Create live wrapper for the spirit static concept.
     override StringQueuePremise live_factory() const {return new StringQueuePremise(cast(immutable)this); }
@@ -194,37 +195,3 @@ final class StringQueuePremise: Premise {
         return format!"\n    deq = %s"(deque.toString);
     }
 }
-//---***---***---***---***---***--- types ---***---***---***---***---***---***
-
-//---***---***---***---***---***--- data ---***---***---***---***---***--
-
-/**
-        Constructor
-*/
-//this(){}
-
-//---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-//~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
-//
-//                                 Protected
-//
-//~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
-protected:
-//---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
-
-//---$$$---$$$---$$$---$$$---$$$--- functions ---$$$---$$$---$$$---$$$---$$$---
-
-//---$$$---$$$---$$$---$$$---$$$--- types ---$$$---$$$---$$$---$$$---$$$---
-
-//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-//
-//                                  Private
-//
-//===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
-private:
-//---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
-
-//---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-//---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--

@@ -1,5 +1,5 @@
 module base_proba;
-import std.stdio;
+import std.stdio: writeln, writefln;
 
 // Show in console that it is the unittest mode
 version(unittest) {
@@ -8,28 +8,11 @@ version(unittest) {
 
 // We need an executable in debug and unittest modes in order to run the Gnu Debugger on.
 debug void main() {
+    import std.stdio, std.algorithm;
 
-    foreach(i; 0..3)
-        writeln(aaa[i]().hello);
-    writeln(aaa.ptr);
-}
+    double[char] bids = ['A': 37.50,
+                         'B': 38.11,
+                         'C': 36.12];
 
-static immutable A function()[3] aaa = [()=> new A, ()=> new B, ()=> new C];
-
-
-//@(1, aaa)
-class A {
-    string hello() {
-        return "hello from A";
-    }
-}
-class B: A {
-    override string hello() {
-        return "hello from B";
-    }
-}
-class C: A {
-    override string hello() {
-        return "hello from C";
-    }
+    bids.byValue.reduce!(min, max).writeln;
 }

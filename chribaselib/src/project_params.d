@@ -8,6 +8,9 @@ alias Cid = uint;
 /// Concept version type
 alias Cvr = ushort;
 
+/// Spirit concept class identifier
+alias Clid = ushort;
+
 /// Static cid range is from 1 to MAX_STATIC_CID;
 enum MIN_STATIC_CID = Cid(1);
 enum MAX_STATIC_CID = Cid(1_000_000);

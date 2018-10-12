@@ -26,8 +26,8 @@ T scast(T, S)(S o)
 unittest {
     debug {
         //A a = new A;
-        B b = new B;
-        scast!A(b);
+        ClB b = new ClB;
+        scast!ClA(b);
         scast!I(b);
         //scast!I(a);   // will throw an assert
         //scast!B(a);   // will throw an assert
@@ -35,8 +35,8 @@ unittest {
 }
 version(unittest) { // test classes for the previous unittest
     interface I {}
-    class A {}
-    class B: A, I {}
+    class ClA {}
+    class ClB: ClA, I {}
 }
 
 /**

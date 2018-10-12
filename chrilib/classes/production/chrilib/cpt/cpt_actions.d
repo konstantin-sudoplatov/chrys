@@ -1,3 +1,7 @@
+/**
+        The action concept is an interface, bridge between the world of cids and dynamic concepts,
+    that knows nothing about the code and the static world, which is a big set of functions, that actually are the code.
+*/
 module cpt.cpt_actions;
 import std.format;
 
@@ -9,25 +13,20 @@ import attn.attn_circle_thread;
 import stat.stat_types;
 import crank.crank_types: DcpDescriptor;
 
-/**
-            Base for all holy actions. The action concept is an interface, bridge between the world of cids and dynamic concepts,
-    that knows nothing about the code and the static world, which is a big set of functions, that actually are the code.
-    All concrete descendants will have the "_act" suffix.
-*/
-alias SA = SpAction;       /// SA - spirit action
-@(1)    // Class identifier - clid
-class SpAction: SpiritDynamicConcept {
+/// Spirit Action. Runs a static concept function with signature p0Cal.
+@(1) class SpA: SpiritDynamicConcept {
 
     /**
                 Constructor
         Parameters:
             cid = predefined concept identifier
+            clid = class identifier
     */
-    this(Cid cid) { super(cid); }
+    this(Cid cid, Clid clid = spClid!SpA ) { super(cid, clid); }
 
     /// Create live wrapper for the holy static concept.
-    override Action live_factory() const {
-        return new Action(cast(immutable)this);
+    override A live_factory() const {
+        return new A(cast(immutable)this);
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -70,10 +69,10 @@ class SpAction: SpiritDynamicConcept {
 }
 
 /// Live.
-class Action: DynamicConcept {
+class A: DynamicConcept {
 
     /// Private constructor. Use SpiritConcept.live_factory() instead.
-    private this(immutable SpAction spAction) { super(spAction); }
+    private this(immutable SpA spAction) { super(spAction); }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
@@ -83,22 +82,22 @@ class Action: DynamicConcept {
             caldron = name space it which static concept function will be working.
     */
     void run(Caldron caldron) {
-        assert((cast(SpAction)spirit).statAction != 0, format!"Cid: %s, static action must be assigned."(this.cid));
+        assert((cast(SpA)spirit).statAction != 0, format!"Cid: %s, static action must be assigned."(this.cid));
 
-        (cast(SpAction)spirit).run(caldron);
+        (cast(SpA)spirit).run(caldron);
     }
 }
 
-/// Actions, that operate on only one concept. Examples: activate/anactivate concept.
-alias SA_Cid = SpUnaryAction;       /// SA - spirit action, Cid - p0Calp1Cid
-@(2) final class SpUnaryAction: SpAction {
+/// SpA - spirit action, Cid - p0Calp1Cid
+/// Action, that operate on only one concept. Examples: activate/anactivate concept.
+@(2) final class SpA_Cid: SpA {
 
     /// Constructor
-    this(Cid cid) { super(cid); }
+    this(Cid cid) { super(cid, spClid!SpA_Cid); }
 
     /// Create live wrapper for the holy static concept.
-    override UnaryAction live_factory() const {
-        return new UnaryAction(cast(immutable)this);
+    override A_Cid live_factory() const {
+        return new A_Cid(cast(immutable)this);
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -139,24 +138,24 @@ alias SA_Cid = SpUnaryAction;       /// SA - spirit action, Cid - p0Calp1Cid
 }
 
 /// Live.
-final class UnaryAction: Action {
+final class A_Cid: A {
 
     /// Private constructor. Use live_factory() instead.
-    private this(immutable SpUnaryAction spUnaryAction) { super(spUnaryAction); }
+    private this(immutable SpA_Cid spUnaryAction) { super(spUnaryAction); }
 
 }
 
+/// SpA - spirit action, CidCid - p0Calp1Cidp2Cid
 /// Actions, that operate on two concepts. Examples: sending a message - the first operand breed of the correspondent,
 /// the second operand concept object to send.
-alias SA_CidCid = SpBinaryAction;       /// SA - spirit action, CidCid - p0Calp1Cidp2Cid
-@(3) final class SpBinaryAction: SpAction {
+@(3) final class SpA_CidCid: SpA {
 
     /// Constructor
-    this(Cid cid) { super(cid); }
+    this(Cid cid) { super(cid, spClid!SpA_CidCid); }
 
     /// Create live wrapper for the holy static concept.
-    override BinaryAction live_factory() const {
-        return new BinaryAction(cast(immutable)this);
+    override A_CidCid live_factory() const {
+        return new A_CidCid(cast(immutable)this);
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -206,22 +205,22 @@ alias SA_CidCid = SpBinaryAction;       /// SA - spirit action, CidCid - p0Calp1
 }
 
 /// Live.
-final class BinaryAction: Action {
+final class A_CidCid: A {
 
     /// Private constructor. Use live_factory() instead.
-    private this(immutable SpBinaryAction spBinaryAction) { super(spBinaryAction); }
+    private this(immutable SpA_CidCid spBinaryAction) { super(spBinaryAction); }
 }
 
-/// Action, that involves a concept and a float value
-alias SA_CidFloat = SpUnaryFloatAction;     /// SA - spirit action, CidFloat - p0Calp1Cidp2Float
-@(4) class SpUnaryFloatAction: SpAction {
+/// SpA - spirit action, CidFloat - p0Calp1Cidp2Float
+/// Action, that works on a concept and a float value
+@(4) final class SpA_CidFloat: SpA {
 
     /// Constructor
-    this(Cid cid) { super(cid); }
+    this(Cid cid) { super(cid, spClid!SpA_CidFloat); }
 
     /// Create live wrapper for the holy static concept.
-    override UnaryFloatAction live_factory() const {
-        return new UnaryFloatAction(cast(immutable)this);
+    override A_CidFloat live_factory() const {
+        return new A_CidFloat(cast(immutable)this);
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -271,22 +270,22 @@ alias SA_CidFloat = SpUnaryFloatAction;     /// SA - spirit action, CidFloat - p
 }
 
 /// Live.
-class UnaryFloatAction: Action {
+final class A_CidFloat: A {
 
     /// Private constructor. Use live_factory() instead.
-    private this(immutable SpUnaryFloatAction spUnaryFloatAction) { super(spUnaryFloatAction); }
+    private this(immutable SpA_CidFloat spUnaryFloatAction) { super(spUnaryFloatAction); }
 }
 
+/// SpA - spirit action, CidCidFloat stands for p0Calp1Cidp2Cidp3Float
 /// Action, that involves two concepts and a float value
-alias SA_CidCidFloat = SpBinaryFloatAction;     /// SA - spirit action, CidCidFloat stands for p0Calp1Cidp2Cidp3Float
-@(5) class SpBinaryFloatAction: SpAction {
+@(5) final class SpA_CidCidFloat: SpA {
 
     /// Constructor
-    this(Cid cid) { super(cid); }
+    this(Cid cid) { super(cid, spClid!SpA_CidCidFloat); }
 
     /// Create live wrapper for the holy static concept.
-    override BinaryFloatAction live_factory() const {
-        return new BinaryFloatAction(cast(immutable)this);
+    override A_CidCidFloat live_factory() const {
+        return new A_CidCidFloat(cast(immutable)this);
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -345,22 +344,22 @@ alias SA_CidCidFloat = SpBinaryFloatAction;     /// SA - spirit action, CidCidFl
 }
 
 /// Live.
-class BinaryFloatAction: Action {
+final class A_CidCidFloat: A {
 
     /// Private constructor. Use live_factory() instead.
-    private this(immutable SpBinaryFloatAction spBinaryFloatAction) { super(spBinaryFloatAction); }
+    private this(immutable SpA_CidCidFloat spBinaryFloatAction) { super(spBinaryFloatAction); }
 }
 
+/// SpA - spirit action, CidInt - p0Calp1Cidp2Int
 /// Action, that involves a concept and a float value
-alias SA_CidInt = SpUnaryIntAction;         /// SA - spirit action, CidInt - p0Calp1Cidp2Int
-@(6) class SpUnaryIntAction: SpAction {
+@(6) final class SpA_CidInt: SpA {
 
     /// Constructor
-    this(Cid cid) { super(cid); }
+    this(Cid cid) { super(cid, spClid!SpA_CidInt); }
 
     /// Create live wrapper for the holy static concept.
-    override UnaryIntAction live_factory() const {
-        return new UnaryIntAction(cast(immutable)this);
+    override A_CidInt live_factory() const {
+        return new A_CidInt(cast(immutable)this);
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -410,8 +409,8 @@ alias SA_CidInt = SpUnaryIntAction;         /// SA - spirit action, CidInt - p0C
 }
 
 /// Live.
-class UnaryIntAction: Action {
+final class A_CidInt: A {
 
     /// Private constructor. Use live_factory() instead.
-    private this(immutable SpUnaryIntAction spUnaryIntAction) { super(spUnaryIntAction); }
+    private this(immutable SpA_CidInt spUnaryIntAction) { super(spUnaryIntAction); }
 }

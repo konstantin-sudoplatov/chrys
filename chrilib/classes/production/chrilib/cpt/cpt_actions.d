@@ -30,10 +30,10 @@ import crank.crank_types: DcpDescriptor;
     }
 
     /// Equality test
-    override bool opEquals(SpiritConcept sc) const {
+    override bool opEquals(Object sc) const {
 
         if(!super.opEquals(sc)) return false;
-        return _statActionCid == (cast(typeof(this))sc)._statActionCid;
+        return _statActionCid == scast!(typeof(this))(sc)._statActionCid;
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -108,10 +108,11 @@ class A: DynamicConcept {
     }
 
     /// Equality test
-    override bool opEquals(SpiritConcept sc) const {
+    override bool opEquals(Object sc) const {
 
         if(!super.opEquals(sc)) return false;
-        return _p1Cid == (cast(typeof(this))sc)._p1Cid;
+        auto o = scast!(typeof(this))(sc);
+        return _p1Cid == o._p1Cid;
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -173,10 +174,10 @@ final class A_Cid: A {
     }
 
     /// Equality test
-    override bool opEquals(SpiritConcept sc) const {
+    override bool opEquals(Object sc) const {
 
         if(!super.opEquals(sc)) return false;
-        auto o = cast(typeof(this))sc;
+        auto o = scast!(typeof(this))(sc);
         return _p1Cid == o._p1Cid && _p2Cid == o._p2Cid;
     }
 
@@ -246,10 +247,10 @@ final class A_CidCid: A {
     }
 
     /// Equality test
-    override bool opEquals(SpiritConcept sc) const {
+    override bool opEquals(Object sc) const {
 
         if(!super.opEquals(sc)) return false;
-        auto o = cast(typeof(this))sc;
+        auto o = scast!(typeof(this))(sc);
         return _p1Cid == o._p1Cid && _p2Float == o._p2Float;
     }
 
@@ -319,10 +320,10 @@ final class A_CidFloat: A {
     }
 
     /// Equality test
-    override bool opEquals(SpiritConcept sc) const {
+    override bool opEquals(Object sc) const {
 
         if(!super.opEquals(sc)) return false;
-        auto o = cast(typeof(this))sc;
+        auto o = scast!(typeof(this))(sc);
         return _p1Cid == o._p1Cid && _p2Cid == o._p2Cid && _p3Float == o._p3Float;
     }
 
@@ -401,10 +402,10 @@ final class A_CidCidFloat: A {
     }
 
     /// Equality test
-    override bool opEquals(SpiritConcept sc) const {
+    override bool opEquals(Object sc) const {
 
         if(!super.opEquals(sc)) return false;
-        auto o = cast(typeof(this))sc;
+        auto o = scast!(typeof(this))(sc);
         return _p1Cid == o._p1Cid && _p2Int == o._p2Int;
     }
 

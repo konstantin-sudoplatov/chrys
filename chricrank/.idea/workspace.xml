@@ -5,53 +5,27 @@
       <change beforePath="$PROJECT_DIR$/../chribaselib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chribaselib/bin/chribaselib" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/bin/chribaselib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chribaselib/bin/libchribaselib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/bin/libchribaselib.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/classes/production/chribaselib/base_proba.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/classes/production/chribaselib/base_proba.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chribaselib/classes/production/chribaselib/db/db_concepts_table.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/classes/production/chribaselib/db/db_concepts_table.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/classes/production/chribaselib/db/db_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/classes/production/chribaselib/db/db_main.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chribaselib/classes/production/chribaselib/tools.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/classes/production/chribaselib/tools.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/src/base_proba.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/base_proba.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/src/db/db_concepts_table.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/db/db_concepts_table.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/src/db/db_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/db/db_main.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chribaselib/src/tools.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/tools.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/chricrank" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chricrank" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/classes/production/chricrank/chricrank.d" beforeDir="false" afterPath="$PROJECT_DIR$/classes/production/chricrank/chricrank.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chricrank.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/chricrank.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/bin/chrilib" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/bin/chrilib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/bin/libchrilib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/bin/libchrilib.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/attn/attn_circle_thread.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/attn/attn_dispatcher_thread.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/chri_shared.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/chri_shared.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_abstract.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/abs/abs_concept.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/abs/abs_concept.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/abs/abs_neuron.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/abs/abs_neuron.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_actions.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_actions.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_neurons.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_neurons.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_premises.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_premises.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_registry.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_stat.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_stat.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/crank/crank_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/crank/crank_main.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/crank/crank_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/crank/crank_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/messages.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/messages.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/stat_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/stat_main.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/stat_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/stat_registry.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/substat/substat_subpile.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/substat/substat_subpile.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/attn/attn_circle_thread.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/attn/attn_dispatcher_thread.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/chri_shared.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/chri_shared.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_abstract.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_concept.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_concept.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_neuron.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_neuron.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_actions.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_actions.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_neurons.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_neurons.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_premises.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_premises.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_registry.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_stat.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_stat.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/crank/crank_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/crank/crank_main.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/crank/crank_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/crank/crank_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/messages.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/messages.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/stat/stat_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/stat/stat_main.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/stat/stat_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/stat/stat_registry.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/stat/substat/substat_subpile.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/stat/substat/substat_subpile.d" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -68,32 +42,33 @@
           <entry key="project.open.time.0" value="3" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.11" value="1" />
+          <entry key="project.open.time.15" value="1" />
           <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.opened" value="7" />
+          <entry key="project.opened" value="8" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="d" value="26" />
+          <entry key="d" value="27" />
           <entry key="sdl" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="D file" value="26" />
+          <entry key="D file" value="27" />
           <entry key="PLAIN_TEXT" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="d" value="3410" />
+          <entry key="d" value="3652" />
           <entry key="sdl" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="D file" value="3410" />
+          <entry key="D file" value="3652" />
           <entry key="PLAIN_TEXT" value="17" />
         </counts>
       </usages-collector>
@@ -102,11 +77,11 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/chricrank.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="513">
-              <caret line="27" column="40" selection-start-line="27" selection-start-column="40" selection-end-line="27" selection-end-column="40" />
+            <state relative-caret-position="163">
+              <caret line="24" column="21" selection-start-line="24" selection-start-column="21" selection-end-line="24" selection-end-column="21" />
             </state>
           </provider>
         </entry>
@@ -114,8 +89,27 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../chrilib/src/cpt/cpt_types.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="942">
-              <caret line="109" column="8" selection-start-line="109" selection-start-column="8" selection-end-line="109" selection-end-column="8" />
+            <state relative-caret-position="417">
+              <caret line="78" column="7" selection-start-line="78" selection-start-column="7" selection-end-line="78" selection-end-column="7" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_concept.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="342">
+              <caret line="75" selection-start-line="74" selection-end-line="75" />
+              <folding>
+                <element signature="e#3563#3564#0" expanded="true" />
+                <element signature="e#3590#3591#0" expanded="true" />
+                <element signature="e#4337#4338#0" expanded="true" />
+                <element signature="e#4373#4374#0" expanded="true" />
+                <element signature="e#5304#5305#0" expanded="true" />
+                <element signature="e#5337#5338#0" expanded="true" />
+                <element signature="e#6147#6148#0" expanded="true" />
+                <element signature="e#6176#6177#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -123,7 +117,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../chrilib/src/cpt/cpt_stat.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="341">
+            <state relative-caret-position="513">
               <caret line="27" selection-start-line="27" selection-end-line="27" />
             </state>
           </provider>
@@ -148,13 +142,13 @@
         <option value="$PROJECT_DIR$/../chrilib/src/chri_shared.d" />
         <option value="$PROJECT_DIR$/../chrilib/src/crank/crank_registry.d" />
         <option value="$PROJECT_DIR$/../chrilib/src/stat/stat_registry.d" />
-        <option value="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_concept.d" />
         <option value="$PROJECT_DIR$/../chrilib/src/cpt/cpt_types.d" />
         <option value="$PROJECT_DIR$/src/chricrank.d" />
+        <option value="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_concept.d" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
+  <component name="ProjectFrameBounds" extendedState="7">
     <option name="width" value="1912" />
     <option name="height" value="1078" />
   </component>
@@ -166,17 +160,7 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="chricrank" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chricrank" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
+      <pane id="Scope" />
       <pane id="PackagesPane">
         <subPane>
           <expand>
@@ -188,7 +172,17 @@
           <select />
         </subPane>
       </pane>
-      <pane id="Scope" />
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="chricrank" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chricrank" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -471,8 +465,8 @@
       <window_info anchor="bottom" id="Message" order="3" />
       <window_info anchor="bottom" id="Find" order="4" />
       <window_info anchor="bottom" id="Version Control" order="5" />
-      <window_info active="true" anchor="bottom" x="2" y="698" width="1916" height="378" id="Run" order="6" type="WINDOWED" visible="true" weight="0.32914045" />
-      <window_info anchor="bottom" id="Debug" order="7" weight="0.4" />
+      <window_info active="true" anchor="bottom" x="2" y="695" width="1916" height="381" id="Run" order="6" type="WINDOWED" visible="true" weight="0.32914045" />
+      <window_info anchor="bottom" id="Debug" order="7" visible="true" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="8" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="9" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="10" />
@@ -654,31 +648,41 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_concept.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="429">
-          <caret line="37" column="7" lean-forward="true" selection-start-line="37" selection-start-column="7" selection-end-line="37" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../chrilib/src/cpt/cpt_stat.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="341">
+        <state relative-caret-position="513">
           <caret line="27" selection-start-line="27" selection-end-line="27" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../chrilib/src/cpt/cpt_types.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="942">
-          <caret line="109" column="8" selection-start-line="109" selection-start-column="8" selection-end-line="109" selection-end-column="8" />
+        <state relative-caret-position="417">
+          <caret line="78" column="7" selection-start-line="78" selection-start-column="7" selection-end-line="78" selection-end-column="7" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/chricrank.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="513">
-          <caret line="27" column="40" selection-start-line="27" selection-start-column="40" selection-end-line="27" selection-end-column="40" />
+        <state relative-caret-position="163">
+          <caret line="24" column="21" selection-start-line="24" selection-start-column="21" selection-end-line="24" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_concept.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="342">
+          <caret line="75" selection-start-line="74" selection-end-line="75" />
+          <folding>
+            <element signature="e#3563#3564#0" expanded="true" />
+            <element signature="e#3590#3591#0" expanded="true" />
+            <element signature="e#4337#4338#0" expanded="true" />
+            <element signature="e#4373#4374#0" expanded="true" />
+            <element signature="e#5304#5305#0" expanded="true" />
+            <element signature="e#5337#5338#0" expanded="true" />
+            <element signature="e#6147#6148#0" expanded="true" />
+            <element signature="e#6176#6177#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

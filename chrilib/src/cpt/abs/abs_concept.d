@@ -3,7 +3,7 @@
 module cpt.abs.abs_concept;
 import std.format;
 
-import project_params;
+import project_params, tools;
 
 import cpt.cpt_types, cpt.cpt_registry;
 import chri_shared;
@@ -58,7 +58,7 @@ abstract class SpiritConcept {
 
         void* copy = cast(void*)_d_newclass(this.classinfo);
         size_t size = this.classinfo.initializer.length;
-        copy [8 .. size] = (cast(void *)this)[8 .. size];
+        copy[8 .. size] = (cast(void *)this)[8 .. size];
         return cast(SpiritConcept)copy;
     }
 
@@ -72,8 +72,8 @@ abstract class SpiritConcept {
         that influence behavior of the concept and logic it implements. For example the cid and ver fields are not checked.
         Must be realised in every concrete concept since it is used in versioning.
     */
-    bool opEquals(SpiritConcept sc) const {
-        assert(this.clid == sc.clid);
+    override bool opEquals(Object sc) const {
+        assert(this.clid == scast!SpiritConcept(sc).clid);
         assert(typeid(this) == typeid(sc));
 
         return true;

@@ -51,7 +51,7 @@ struct ConceptsTable {
             deep = byte array of the serialized fields, which are referencies and must be deep copied.
         Throws: enforce, for a duplicate key, for example.
     */
-    void insertConcept(const Cid cid, const Cvr ver, const Clid clid, const byte[] shallow, const byte[] deep) const {
+    void insertConcept(Cid cid, Cvr ver, Clid clid, const byte[] shallow, const byte[] deep) const {
         PGresult* res;
 
         Cid c = invertEndianess(cid);
@@ -83,7 +83,7 @@ struct ConceptsTable {
             cid = cid
             ver = version of the concept
     */
-    void deleteConcept(const Cid cid, const Cvr ver) const {
+    void deleteConcept(Cid cid, Cvr ver) const {
         PGresult* res;
 
         Cid c = invertEndianess(cid);
@@ -113,7 +113,7 @@ struct ConceptsTable {
         Returns: (clid, shallow, deep) as (Clid, byte[], byte[]). If there is no such concept (Clid.max, null, null)
             will be returned.
     */
-    auto getConcept(const Cid cid, const Cvr ver) const {
+    auto getConcept(Cid cid, Cvr ver) const {
         PGresult* res;
 
         Cid c = invertEndianess(cid);
@@ -175,7 +175,7 @@ struct ConceptsTable {
             deep = byte array of the serialized fields, which are referencies and must be deep copied.
         Throws: enforce, if there is no record to update, for example.
     */
-    void updateConcept(Cid cid, Cvr ver, Clid clid, byte[] shallow, byte[] deep) const {
+    void updateConcept(Cid cid, Cvr ver, Clid clid, const byte[] shallow, const byte[] deep) const {
         PGresult* res;
 
         Cid c = invertEndianess(cid);

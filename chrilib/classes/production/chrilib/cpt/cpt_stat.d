@@ -33,7 +33,7 @@ import atn.atn_circle_thread;
     }
 
     /// Disabled equality test
-    override bool opEquals(SpiritConcept sc) const {
+    override bool opEquals(Object sc) const {
         assert(false,
                 "No need for this test since static concepts are not stored in DB and so not subject to versioning.");
     }

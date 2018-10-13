@@ -35,10 +35,10 @@ import crank.crank_types: DcpDescriptor;
     }
 
     /// Equality test
-    override bool opEquals(SpiritConcept sc) const {
+    override bool opEquals(Object sc) const {
 
         if(!super.opEquals(sc)) return false;
-        auto o = cast(typeof(this))sc;
+        auto o = scast!(typeof(this))(sc);
         return seedCid_ == o.seedCid_;
     }
 

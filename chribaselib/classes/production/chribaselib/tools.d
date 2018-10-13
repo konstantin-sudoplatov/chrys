@@ -16,8 +16,8 @@ import std.format;
     Return: casted object or an assert happens if the object cannot be casted
 */
 T scast(T, S)(S o)
-    if ((is(T: Object) || is(T: shared Object) || is(T: immutable Object) || is(T == interface))
-        && (is(S: Object) || is(S: shared Object) || is(S: immutable Object)))
+    if ((is(T: Object) || is(T: shared Object) || is(T: immutable Object) || is(T: const Object) || is(T: const shared Object) || is(T == interface))
+        && (is(S: Object) || is(S: shared Object) || is(S: immutable Object) || is(S: const Object) || is(S: const shared Object)))
 {
     assert(cast(T)o, format!"Object %s cannot be casted to class(interface) %s"(typeid(o), T.stringof));
     return cast(T)o;
@@ -179,6 +179,11 @@ void logit(const Object o, TermColor color = null) {
     logit((cast()o).toString, color);
 }
 
+/// External runtime function, that creates a new object by its ClassInfo. No constructors are called. Very fast, much faster
+/// than manually allocating the object on the heap as new buf[], as it is done in the emplace function. Used in the
+/// SpiritConcept.clone() method.
+extern (C) Object _d_newclass (ClassInfo info);
+
 /**
         This function illustrates cloning a D object. It makes a shallow binary copy.
     Written by Burton Radons <burton-radons smocky.com> https://digitalmars.com/d/archives/digitalmars/D/learn/1625.html
@@ -190,7 +195,6 @@ void logit(const Object o, TermColor color = null) {
         srcObject = object to clone
     Returns: cloned object
 */
-extern (C) Object _d_newclass (ClassInfo info);
 Object clone (Object srcObject)
 {
     if (srcObject is null)

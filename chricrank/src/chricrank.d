@@ -1,4 +1,5 @@
 module chricrank;
+import std.stdio: writeln, writefln;
 import std.conv;
 
 import derelict.pq.pq;
@@ -30,7 +31,7 @@ void main()
         else if // is the concept in DP different from the newly cranked?
                 (dbCpt != smCpt)
         {   //yes: update it
-
+            dbCptHnd.updateConcept(smCpt);
         }
     }
 }

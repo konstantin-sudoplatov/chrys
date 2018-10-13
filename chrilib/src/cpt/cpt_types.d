@@ -5,11 +5,6 @@ import db.db_main, db.db_concepts_table;
 
 import cpt.cpt_registry, cpt.abs.abs_concept;
 
-/// External runtime function, that creates a new object by its ClassInfo. No constructors are called. Very fast, much faster
-/// than manually allocating the object on the heap as new buf[], as it is done in the emplace function. Used in the
-/// SpiritConcept.clone() method.
-extern (C) Object _d_newclass (ClassInfo info);
-
 /// Concept's attributes.
 enum SpCptFlags: short {
 
@@ -94,7 +89,9 @@ struct DbConceptHandler {
                 (cptDat.shallow)
         {   // yes: create and return it
             SpiritConcept dbCpt = cast(SpiritConcept)_d_newclass(spiritRegistry[cptDat.clid]);
-            assert(false, "Not finished");
+            size_t size = dbCpt.classinfo.initializer.length;
+            (cast(byte*)dbCpt)[8..size] = cptDat.shallow[0..size-8];
+            return dbCpt;
         }
         else
             return null;
@@ -108,6 +105,22 @@ struct DbConceptHandler {
     */
     void insertConcept(const SpiritConcept cpt) const {
         cptTbl_.insertConcept(
+            cpt.cid,
+            cpt.ver,
+            cpt.clid,
+            cpt.shallowBlit,
+            cpt.deepBlit
+        );
+    }
+
+    /**
+            Wrapper for the ConceptsTable.updateConcept.
+        Parameters:
+            cpt - concept to update
+        Throws: enforce, if there is an error, no record to update, for example.
+    */
+    void updateConcept(const SpiritConcept cpt) const {
+        cptTbl_.updateConcept(
             cpt.cid,
             cpt.ver,
             cpt.clid,

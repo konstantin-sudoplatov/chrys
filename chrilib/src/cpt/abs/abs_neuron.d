@@ -64,10 +64,10 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     }
 
     /// Equality test
-    override bool opEquals(SpiritConcept sc) const {
+    override bool opEquals(Object sc) const {
 
         if(!super.opEquals(sc)) return false;
-        auto o = cast(typeof(this))sc;
+        auto o = scast!(typeof(this))(sc);
         return _effects == o._effects && cutoff_ == o.cutoff_;
     }
 
@@ -448,10 +448,10 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
     }
 
     /// Equality test
-    override bool opEquals(SpiritConcept sc) const {
+    override bool opEquals(Object sc) const {
 
         if(!super.opEquals(sc)) return false;
-        auto o = cast(typeof(this))sc;
+        auto o = scast!(typeof(this))(sc);
         return _premises == o._premises;
     }
 

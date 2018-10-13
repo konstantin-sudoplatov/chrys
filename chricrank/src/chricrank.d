@@ -6,23 +6,33 @@ import project_params, tools;
 import db.db_main, db.db_concepts_table;
 
 import chri_shared;
+import cpt.cpt_types, cpt.cpt_registry, cpt.abs.abs_concept;
 import stat.stat_registry;
 import crank.crank_registry;
 import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_stat;
 
 void main()
 {
+    const dbCptHnd = DbConceptHandler(0);
+    logUnusedClids;
+
     // Fill and crank main maps with static and hardcoded dynamic concepts and their names.
     loadAndCrank_(_sm_, _nm_);
 
-    PGconn* conn = connectToDb;
-    auto ct = ConceptsTable(conn);
-
     foreach(cid; _sm_.byKey) {
-        auto bin = ct.getConcept(cid, 0);
-    }
+        const SpiritConcept smCpt = _sm_[cid];
+        const SpiritConcept dbCpt = dbCptHnd.retreiveConcept(cid, 0);
+        if      // isn't the concept in DP?
+                (!dbCpt)
+        {   //no: add it
+            dbCptHnd.insertConcept(smCpt);
+        }
+        else if // is the concept in DP different from the newly cranked?
+                (dbCpt != smCpt)
+        {   //yes: update it
 
-    disconnectFromDb(conn);
+        }
+    }
 }
 
 //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%

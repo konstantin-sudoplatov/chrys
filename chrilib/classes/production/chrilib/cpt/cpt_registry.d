@@ -44,21 +44,26 @@ TypeInfo_Class[] createSpiritClassesRegistry() {
 
     // Check the lowest clid
     import std.algorithm: min, max, reduce;
-    auto tuple = classMap.byKey.reduce!(min, max);
+    auto tuple = classMap.keys.reduce!(min, max);
     assert(tuple[0] >= 0, format!"Clids must be positive. Your lowest clid is %s"(tuple[0]));
 
     // Create array of classes with index as a clid
     TypeInfo_Class[] classArr;
     classArr.length = tuple[1] + 1;
-    foreach(clid; classMap.byKey)
+    foreach(clid; classMap.keys)
         classArr[clid] = classMap[clid];
-
-    // Printout unused clids
-    int[] unusedClids;
-    foreach(i, cl; classArr)
-        if(classArr[i] is null) unusedClids ~= cast(int)i;
-    logit(format!"Max used clid: %s, unused clids: %s"(classArr.length-1, unusedClids));
 
     return classArr;
 }
 
+/**
+        Put into log a record about Clid usage.
+*/
+void logUnusedClids() {
+    TypeInfo_Class[] clidRegistry = createSpiritClassesRegistry;
+
+    int[] unusedClids;
+    foreach(i, cl; clidRegistry)
+        if(clidRegistry[i] is null) unusedClids ~= cast(int)i;
+    logit(format!"Max used clid: %s, unused clids: %s"(clidRegistry.length-1, unusedClids));
+}

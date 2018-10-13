@@ -4,7 +4,8 @@ import std.format;
 import project_params, tools;
 
 import chri_shared;
-import cpt.cpt_types, cpt.cpt_abstract;
+import cpt.cpt_types;
+import cpt.abs.abs_concept, cpt.abs.abs_premise;
 import crank.crank_types: DcpDescriptor;
 
 /**
@@ -25,12 +26,20 @@ import crank.crank_types: DcpDescriptor;
             cid = predefined concept identifier
     */
     this(Cid cid) {
-        super(cid, spClid!SpBreed);
+        super(cid, spClid!(typeof(this)));
     }
 
     /// Create live wrapper for the holy static concept.
     override Breed live_factory() const {
         return new Breed(cast(immutable)this);
+    }
+
+    /// Equality test
+    override bool opEquals(SpiritConcept sc) const {
+
+        if(!super.opEquals(sc)) return false;
+        auto o = cast(typeof(this))sc;
+        return seedCid_ == o.seedCid_;
     }
 
     override string toString() const {
@@ -85,7 +94,7 @@ final class Breed: Premise {
 @(12) final class SpTidPremise: SpiritPremise {
 
     /// Constructor
-    this(Cid cid) { super(cid, spClid!SpTidPremise); }
+    this(Cid cid) { super(cid, spClid!(typeof(this))); }
 
     /// Create live wrapper for the holy static concept.
     override TidPremise live_factory() const {
@@ -116,7 +125,7 @@ final class TidPremise: Premise {
 @(13) final class SpPegPremise: SpiritPremise {
 
     /// Constructor
-    this(Cid cid) { super(cid, spClid!SpPegPremise); }
+    this(Cid cid) { super(cid, spClid!(typeof(this))); }
 
     /// Create live wrapper for the holy static concept.
     override PegPremise live_factory() const {
@@ -142,7 +151,7 @@ final class PegPremise: Premise {
         Parameters:
             cid = predefined concept identifier
     */
-    this(Cid cid) { super(cid, spClid!SpStringPremise); }
+    this(Cid cid) { super(cid, spClid!(typeof(this))); }
 
     /// Create live wrapper for the spirit static concept.
     override StringPremise live_factory() const {
@@ -175,7 +184,7 @@ final class StringPremise: Premise {
 @(15)final class SpStringQueuePremise: SpiritPremise {
 
     /// Constructor.
-    this(Cid cid) { super(cid, spClid!SpStringQueuePremise); }
+    this(Cid cid) { super(cid, spClid!(typeof(this))); }
 
     /// Create live wrapper for the spirit static concept.
     override StringQueuePremise live_factory() const {return new StringQueuePremise(cast(immutable)this); }

@@ -3,7 +3,7 @@ import std.concurrency;
 
 import project_params;
 
-import cpt.cpt_abstract;
+import cpt.abs.abs_concept;
 
 /// Common ancestor of all messages.
 /// Object must be created in the sender's thread, so that sender's tid was correctly set up. Do not create message objects beforehand!

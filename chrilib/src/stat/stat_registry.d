@@ -4,7 +4,7 @@ import std.traits, std.conv;
 import project_params;
 
 import stat.stat_types;
-import attn.attn_circle_thread;
+import atn.atn_circle_thread;
 
 /// Full list of modules, that contain static concept functions. This list is used at compile time to gather all static
 /// concepts and put them in the spirit map and their names and cids in the name map.
@@ -125,7 +125,7 @@ private struct StatDescriptor {
 
 ///
 unittest {
-    import attn.attn_circle_thread: Caldron;
+    import atn.atn_circle_thread: Caldron;
 
     // Stat concept to make a test call
     @(1, StatCallType.p0Calp1Cid) static void fun(Caldron spaceName, Cid cid) {

@@ -4,8 +4,8 @@ import std.format;
 import project_params, tools;
 
 import stat.stat_types;
-import cpt.cpt_types, cpt.cpt_abstract;
-import attn.attn_circle_thread;
+import cpt.cpt_types, cpt.abs.abs_concept;
+import atn.atn_circle_thread;
 
 /**
             Static concept.
@@ -14,7 +14,7 @@ import attn.attn_circle_thread;
 */
 @(0) final class SpStaticConcept: SpiritConcept {
 
-    immutable void* fp;                     /// function pointer to the static concept function
+    immutable void* fp;                    /// function pointer to the static concept function
     immutable StatCallType callType;       /// call type of the static concept function
 
     /**
@@ -25,11 +25,17 @@ import attn.attn_circle_thread;
             callType = call type of the static concept function
     */
     this(Cid cid, void* fp, StatCallType callType){
-        super(cid, spClid!SpStaticConcept);
+        super(cid, spClid!(typeof(this)));
 
         cast()flags |= SpCptFlags.STATIC;
         cast()this.fp = cast(immutable)fp;
         cast()this.callType = callType;
+    }
+
+    /// Disabled equality test
+    override bool opEquals(SpiritConcept sc) const {
+        assert(false,
+                "No need for this test since static concepts are not stored in DB and so not subject to versioning.");
     }
 
     /// Create live wrapper for the holy static concept.

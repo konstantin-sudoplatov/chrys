@@ -1,8 +1,9 @@
 module cpt.cpt_types;
 
-import project_params;
+import project_params, tools;
+import db.db_main, db.db_concepts_table;
 
-import cpt.cpt_abstract;
+import cpt.cpt_registry, cpt.abs.abs_concept;
 
 /// External runtime function, that creates a new object by its ClassInfo. No constructors are called. Very fast, much faster
 /// than manually allocating the object on the heap as new buf[], as it is done in the emplace function. Used in the
@@ -55,4 +56,88 @@ shared synchronized class ConceptVersion {
 
     /// Minimum stale version. Stale versions are less than _min_ver_ and so should be removed.
     private static Cvr _stale_ver_;
+}
+
+/// Database management for concepts
+struct DbConceptHandler {
+    import derelict.pq.pq: PGconn;
+
+    /// Spirit concept classes registry (classinfo by clid
+    enum TypeInfo_Class[] spiritRegistry = createSpiritClassesRegistry;
+
+    @disable this();
+
+    alias con_ this;
+
+    /// Implicit constructor.
+    this(int dummy) {
+        openDatabase_;
+    }
+
+    /// Destructor.
+    ~this() {
+        closeDatabase_;
+    }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /**
+            Factory for creating concepts based on the serialization from the database.
+        Parameters:
+            cid = cid
+            ver = version
+        Returns: newly constructed object or null if it was not found in the DB.
+    */
+    SpiritConcept retreiveConcept(Cid cid, Cvr ver) const {
+        const cptDat = cptTbl_.getConcept(cid, ver);
+        if      // is the concept present in the DB?
+                (cptDat.shallow)
+        {   // yes: create and return it
+            SpiritConcept dbCpt = cast(SpiritConcept)_d_newclass(spiritRegistry[cptDat.clid]);
+            assert(false, "Not finished");
+        }
+        else
+            return null;
+    }
+
+    /**
+            Wrapper for the ConceptsTable.insertConcept.
+        Parameters:
+            cpt - concept to insert
+        Throws: enforce() for errors, for a dupilcate key, for example
+    */
+    void insertConcept(const SpiritConcept cpt) const {
+        cptTbl_.insertConcept(
+            cpt.cid,
+            cpt.ver,
+            cpt.clid,
+            cpt.shallowBlit,
+            cpt.deepBlit
+        );
+    }
+
+    //---***---***---***---***---***--- private ---***---***---***---***---***--
+
+    /// Pointer to connection.
+    private PGconn* con_;
+
+    /// Pointer to the concepts table control structure
+    private ConceptsTable* cptTbl_;
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /// Connect to the database.
+    private void openDatabase_() {
+        assert(!con_, "Db must be closed.");
+        con_ = connectToDb;
+        cptTbl_ = new ConceptsTable(con_);
+    }
+
+    /// Diskonnect from the database.
+    private void closeDatabase_() {
+        assert(con_, "DB must be open.");
+        disconnectFromDb(con_);
+        con_ = null;
+        cptTbl_ = null;
+    }
 }

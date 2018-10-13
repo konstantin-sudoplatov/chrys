@@ -3,8 +3,9 @@ import std.format;
 
 import project_params, tools;
 
-import cpt.cpt_types, cpt.cpt_abstract;
-import attn.attn_circle_thread;
+import cpt.cpt_types;
+import cpt.abs.abs_concept, cpt.abs.abs_neuron;
+import atn.atn_circle_thread;
 import crank.crank_types: DcpDescriptor;
 import cpt.cpt_interfaces;
 
@@ -19,7 +20,7 @@ import cpt.cpt_interfaces;
         Parameters:
             cid = predefined concept identifier
     */
-    this(Cid cid, Clid clid = spClid!SpActionNeuron) {
+    this(Cid cid, Clid clid = spClid!(typeof(this))) {
         super(cid, clid);
         this.disableCutoff;
     }
@@ -150,7 +151,7 @@ class ActionNeuron: Neuron, ActivationIfc {
 @(8) final class SpSeed: SpActionNeuron {
 
     /// Constructor
-    this(Cid cid) { super(cid, spClid!SpSeed); }
+    this(Cid cid) { super(cid, spClid!(typeof(this))); }
 
     /// Create live wrapper for the holy static concept.
     override Seed live_factory() const {
@@ -177,7 +178,7 @@ final class Seed: ActionNeuron {
         Parameters:
             cid = predefined concept identifier
     */
-    this(Cid cid) { super(cid, spClid!SpAndNeuron); }
+    this(Cid cid) { super(cid, spClid!(typeof(this))); }
 
     // Create live wrapper for the holy static concept.
     override AndNeuron live_factory() const {
@@ -228,7 +229,7 @@ final class AndNeuron: LogicalNeuron {
         Parameters:
             cid = predefined concept identifier
     */
-    this(Cid cid) { super(cid, spClid!SpWeightNeuron); }
+    this(Cid cid) { super(cid, spClid!(typeof(this))); }
 
     /// Create live wrapper for the holy static concept.
     override WeightNeuron live_factory() const {

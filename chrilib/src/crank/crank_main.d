@@ -5,7 +5,7 @@ import project_params, tools;
 
 import crank.crank_types, crank.crank_registry;
 import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises;
-import attn.attn_circle_thread;
+import atn.atn_circle_thread;
 import stat.stat_types, stat.stat_main;
 
 /// Dynamic concept names.

@@ -190,7 +190,7 @@ void logit(const Object o, TermColor color = null) {
         srcObject = object to clone
     Returns: cloned object
 */
-private extern (C) Object _d_newclass (ClassInfo info);
+extern (C) Object _d_newclass (ClassInfo info);
 Object clone (Object srcObject)
 {
     if (srcObject is null)

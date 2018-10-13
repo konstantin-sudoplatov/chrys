@@ -51,7 +51,7 @@ struct ConceptsTable {
             deep = byte array of the serialized fields, which are referencies and must be deep copied.
         Throws: enforce, for a duplicate key, for example.
     */
-    void insertConcept(Cid cid, Cvr ver, Clid clid, byte[] shallow, byte[] deep) {
+    void insertConcept(Cid cid, Cvr ver, Clid clid, const byte[] shallow, const byte[] deep) const {
         PGresult* res;
 
         Cid c = invertEndianess(cid);
@@ -65,7 +65,7 @@ struct ConceptsTable {
             cast(char*)deep.ptr
         ].ptr;
         res = PQexecPrepared(
-            conn_,
+            cast(PGconn*)conn_,
             insertConcept_stmt,
             5,      // nParams
             paramValues,
@@ -83,7 +83,7 @@ struct ConceptsTable {
             cid = cid
             ver = version of the concept
     */
-    void deleteConcept(Cid cid, Cvr ver) {
+    void deleteConcept(Cid cid, Cvr ver) const {
         PGresult* res;
 
         Cid c = invertEndianess(cid);
@@ -93,7 +93,7 @@ struct ConceptsTable {
             cast(char*)&v
         ].ptr;
         res = PQexecPrepared(
-            conn_,
+            cast(PGconn*)conn_,
             deleteConcept_stmt,
             2,      // nParams
             paramValues,
@@ -113,7 +113,7 @@ struct ConceptsTable {
         Returns: (clid, shallow, deep) as (Clid, byte[], byte[]). If there is no such concept (Clid.max, null, null)
             will be returned.
     */
-    auto getConcept(Cid cid, Cvr ver) {
+    auto getConcept(Cid cid, Cvr ver) const {
         PGresult* res;
 
         Cid c = invertEndianess(cid);
@@ -124,7 +124,7 @@ struct ConceptsTable {
         ].ptr;
 
         res = PQexecPrepared(
-            conn_,
+            cast(PGconn*)conn_,
             getConcept_stmt,
             2,      // nParams
             paramValues,
@@ -175,7 +175,7 @@ struct ConceptsTable {
             deep = byte array of the serialized fields, which are referencies and must be deep copied.
         Throws: enforce, if there is no record to update, for example.
     */
-    void updateConcept(Cid cid, Cvr ver, Clid clid, byte[] shallow, byte[] deep) {
+    void updateConcept(Cid cid, Cvr ver, Clid clid, const byte[] shallow, const byte[] deep) const {
         PGresult* res;
 
         Cid c = invertEndianess(cid);
@@ -189,7 +189,7 @@ struct ConceptsTable {
             cast(char*)deep.ptr
         ].ptr;
         res = PQexecPrepared(
-            conn_,
+            cast(PGconn*)conn_,
             updateConcept_stmt,
             5,      // nParams
             paramValues,
@@ -209,7 +209,7 @@ struct ConceptsTable {
             cid = cid
         Returns: array of versions. If no versions, null is returned.
     */
-    Cvr[] findConceptVersions(Cid cid) {
+    Cvr[] findConceptVersions(Cid cid) const {
         PGresult* res;
 
         Cid c = invertEndianess(cid);
@@ -217,7 +217,7 @@ struct ConceptsTable {
             cast(char*)&c,
         ].ptr;
         res = PQexecPrepared(
-            conn_,
+            cast(PGconn*)conn_,
             findConceptVersions_stmt,
             1,      // nParams
             paramValues,
@@ -238,12 +238,12 @@ struct ConceptsTable {
     }
 
     /// Prepare all statements, whose names a present in the enum
-    void prepare() {
+    void prepare() const {
         PGresult* res;
 
         // Add concept
         res = PQprepare(
-            conn_,
+            cast(PGconn*)conn_,
             insertConcept_stmt,
             format!"insert into %s (%s, %s, %s, %s, %s) values($1, $2, $3, $4, $5)"
                     (tableName, Fld.cid, Fld.ver, Fld.clid, Fld.shallow, Fld.deep).toStringz,
@@ -255,7 +255,7 @@ struct ConceptsTable {
 
         // Delete
         res = PQprepare(
-            conn_,
+            cast(PGconn*)conn_,
             deleteConcept_stmt,
             format!"delete from %s where %s=$1 and %s=$2"(tableName, Fld.cid, Fld.ver).toStringz,
             0,
@@ -266,7 +266,7 @@ struct ConceptsTable {
 
         // Get
         res = PQprepare(
-            conn_,
+            cast(PGconn*)conn_,
             getConcept_stmt,
             format!"select %s, %s, %s from %s where %s=$1 and %s=$2"
                     (Fld.clid, Fld.shallow, Fld.deep, tableName, Fld.cid, Fld.ver).toStringz,
@@ -278,7 +278,7 @@ struct ConceptsTable {
 
         // Update
         res = PQprepare(
-            conn_,
+            cast(PGconn*)conn_,
             updateConcept_stmt,
             format!"update %s set %s=$3, %s=$4, %s=$5 where %s=$1 and %s=$2"
                     (tableName, Fld.clid, Fld.shallow, Fld.deep, Fld.cid, Fld.ver).toStringz,
@@ -290,7 +290,7 @@ struct ConceptsTable {
 
         // Find versions
         res = PQprepare(
-            conn_,
+            cast(PGconn*)conn_,
             findConceptVersions_stmt,
             format!"select %s from %s where %s=$1 order by %s"(Fld.ver, tableName, Fld.cid, Fld.ver).toStringz,
             0,

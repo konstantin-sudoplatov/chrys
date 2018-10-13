@@ -4,8 +4,8 @@ import std.format;
 import project_params, tools;
 
 import chri_shared;
-import attn.attn_circle_thread;
-import cpt.cpt_abstract, cpt.cpt_actions, cpt.cpt_premises, cpt.cpt_neurons;
+import atn.atn_circle_thread;
+import cpt.abs.abs_concept, cpt.cpt_actions, cpt.cpt_premises, cpt.cpt_neurons;
 import stat.stat_types;
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--

@@ -38,8 +38,7 @@ PGconn* connectToDb() {
         cast(string)DbCreds.dbname
     );
     PGconn* conn = PQconnectdb(s.toStringz);
-    if(PQstatus(conn) != CONNECTION_OK)
-            enforce(false, to!string(PQerrorMessage(conn)));
+    enforce(PQstatus(conn) == CONNECTION_OK, to!string(PQerrorMessage(conn)));
     return conn;
 }
 
@@ -103,11 +102,11 @@ struct TableParams {
             name = name of the parameter
         Returns: value of the parameter as a string, null is possible since the field can be null.
     */
-    string getParam(string name) {
+    string getParam(string name) const {
         PGresult* res;
         char** paramValues = [cast(char*)name.toStringz].ptr;
         res = PQexecPrepared(
-            conn_,
+            cast(PGconn*)conn_,
             getParam_stmt,
             1,      // nParams
             paramValues,
@@ -137,14 +136,14 @@ struct TableParams {
             name = name of the parameter
             value = value to set, can be null
     */
-    void setParam(string name, string value) {
+    void setParam(string name, string value) const {
         PGresult* res;
 
         char* pcValue;
         pcValue = value is null? null: cast(char*)value.toStringz;
         char** paramValues = [cast(char*)name.toStringz, pcValue].ptr;
         res = PQexecPrepared(
-            conn_,
+            cast(PGconn*)conn_,
             setParam_stmt,
             2,      // nParams
             paramValues,
@@ -159,11 +158,11 @@ struct TableParams {
     }
 
     /// Prepare all statements, whose names a present in the enum
-    void prepare() {
+    void prepare() const {
         PGresult* res;
 
         res = PQprepare(
-            conn_,
+            cast(PGconn*)conn_,
             getParam_stmt,
             format!"select %s from %s where %s=$1"(Fld.value, tableName, Fld.name).toStringz,
             0,
@@ -173,7 +172,7 @@ struct TableParams {
         PQclear(res);
 
         res = PQprepare(
-            conn_,
+            cast(PGconn*)conn_,
             setParam_stmt,
             format!"update %s set %s=$2 where %s=$1"(tableName, Fld.value, Fld.name).toStringz,
             0,

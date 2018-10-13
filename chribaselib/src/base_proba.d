@@ -8,7 +8,16 @@ version(unittest) {
 
 // We need an executable in debug and unittest modes in order to run the Gnu Debugger on.
 debug void main() {
+    import tools;
+    //auto a = cast(A)_d_newclass(typeid(A));
+    auto a = cast(A)typeid(A).factory("base_proba.A");
+    a.foo;
+    writeln(a.x);
 }
 
-unittest {
+class A {
+    int x = 1;
+    void foo() {
+        writeln("here");
+    }
 }

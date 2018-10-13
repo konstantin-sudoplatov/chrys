@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.4 (Ubuntu 10.4-2.pgdg14.04+1)
--- Dumped by pg_dump version 10.4 (Ubuntu 10.4-2.pgdg14.04+1)
+-- Dumped from database version 10.5 (Ubuntu 10.5-1.pgdg18.04+1)
+-- Dumped by pg_dump version 10.5 (Ubuntu 10.5-1.pgdg18.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -41,8 +41,8 @@ CREATE TABLE public.concepts (
     cid integer NOT NULL,
     ver smallint NOT NULL,
     clid smallint NOT NULL,
-    shallow bytea NOT NULL,
-    deep bytea
+    stable bytea,
+    transient bytea
 );
 
 

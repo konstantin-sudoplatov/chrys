@@ -21,8 +21,8 @@ struct ConceptsTable {
         cid = "cid",        // concept identifier
         ver = "ver",        // version of the concept
         clid = "clid",
-        shallow = "shallow",// shallow copy of the concept
-        deep = "deep"       // deep copy fields
+        stable = "stable", // data responsible for logic and behavior
+        transient = "transient"  // changeable data like usage statistics
     }
 
     @disable this();
@@ -47,11 +47,11 @@ struct ConceptsTable {
             cid = cid
             ver = version of the concept
             clid = class identifier
-            shallow = byte array of the shallow copy of the concept object
-            deep = byte array of the serialized fields, which are referencies and must be deep copied.
+            stable = byte array of the stable data (like effects, premises and so on)
+            transient = byte array of the transient data (like usage statistics)
         Throws: enforce, for a duplicate key, for example.
     */
-    void insertConcept(Cid cid, Cvr ver, Clid clid, const byte[] shallow, const byte[] deep) const {
+    void insertConcept(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) const {
         PGresult* res;
 
         Cid c = invertEndianess(cid);
@@ -61,15 +61,15 @@ struct ConceptsTable {
             cast(char*)&c,
             cast(char*)&v,
             cast(char*)&cl,
-            cast(char*)shallow.ptr,
-            cast(char*)deep.ptr
+            cast(char*)stable.ptr,
+            cast(char*)transient.ptr
         ].ptr;
         res = PQexecPrepared(
             cast(PGconn*)conn_,
             insertConcept_stmt,
             5,      // nParams
             paramValues,
-            (cast(int[])[Cid.sizeof, Cvr.sizeof, Clid.sizeof, shallow.length, deep.length]).ptr,
+            (cast(int[])[Cid.sizeof, Cvr.sizeof, Clid.sizeof, stable.length, transient.length]).ptr,
             (cast(int[])[1, 1, 1, 1, 1]).ptr,
             0       // result as a string
         );
@@ -110,10 +110,16 @@ struct ConceptsTable {
         Parameters:
             cid = cid
             ver = version of the concept
-        Returns: (clid, shallow, deep) as (Clid, byte[], byte[]). If there is no such concept (Clid.max, null, null)
+        Returns: pointer to struct {clid, stable, transient} as (Clid, byte[], byte[]). If there is no concept found, null
             will be returned.
     */
     auto getConcept(Cid cid, Cvr ver) const {
+
+        struct Result {
+            Clid clid = Clid.max;
+            byte[] stable;
+            byte[] transient;
+        }
         PGresult* res;
 
         Cid c = invertEndianess(cid);
@@ -134,33 +140,30 @@ struct ConceptsTable {
         );
         enforce(PQresultStatus(res) == PGRES_TUPLES_OK, to!string(PQerrorMessage(conn_)));
         scope(exit) PQclear(res);
-
-        struct Result {
-            Clid clid = Clid.max;
-            byte[] shallow;
-            byte[] deep;
-        }
-        Result rs;   // result
-        if      // is there such concept?
+        if      // does the concept exist?
                 (PQntuples(res) != 0)
         {
+            Result* rs = new Result;   // result
+
             // get the clid
             rs.clid = invertEndianess(*cast(Clid*)PQgetvalue(res, 0, 0));
 
             // get the shallow
             int len = PQgetlength(res, 0, 1);
-            rs.shallow.length = len;
-            rs.shallow[0..len] = (cast(byte*)PQgetvalue(res, 0, 1))[0..len];
+            rs.stable.length = len;
+            rs.stable[0..len] = (cast(byte*)PQgetvalue(res, 0, 1))[0..len];
 
             // get the deep
             len = PQgetlength(res, 0, 2);
             if(len) {
-                rs.deep.length = len;
-                rs.deep[0..len] = (cast(byte*)PQgetvalue(res, 0, 2))[0..len];
+                rs.transient.length = len;
+                rs.transient[0..len] = (cast(byte*)PQgetvalue(res, 0, 2))[0..len];
             }
-        }
 
-        return rs;
+            return rs;
+        }
+        else
+            return null;
     }
 
     /**
@@ -171,11 +174,11 @@ struct ConceptsTable {
             cid = cid
             ver = version of the concept
             clid = class identifier
-            shallow = byte array of the shallow copy of the concept object
-            deep = byte array of the serialized fields, which are referencies and must be deep copied.
+            stable = byte array of the stable data (like effects, premises and so on)
+            transient = byte array of the transient data (like usage statistics)
         Throws: enforce, if there is no record to update, for example.
     */
-    void updateConcept(Cid cid, Cvr ver, Clid clid, const byte[] shallow, const byte[] deep) const {
+    void updateConcept(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) const {
         PGresult* res;
 
         Cid c = invertEndianess(cid);
@@ -185,15 +188,15 @@ struct ConceptsTable {
             cast(char*)&c,
             cast(char*)&v,
             cast(char*)&cl,
-            cast(char*)shallow.ptr,
-            cast(char*)deep.ptr
+            cast(char*)stable.ptr,
+            cast(char*)transient.ptr
         ].ptr;
         res = PQexecPrepared(
             cast(PGconn*)conn_,
             updateConcept_stmt,
             5,      // nParams
             paramValues,
-            (cast(int[])[Cid.sizeof, Cvr.sizeof, Clid.sizeof, shallow.length, deep.length]).ptr,
+            (cast(int[])[Cid.sizeof, Cvr.sizeof, Clid.sizeof, stable.length, transient.length]).ptr,
             (cast(int[])[1, 1, 1, 1, 1]).ptr,
             0       // result as a string
         );
@@ -246,7 +249,7 @@ struct ConceptsTable {
             cast(PGconn*)conn_,
             insertConcept_stmt,
             format!"insert into %s (%s, %s, %s, %s, %s) values($1, $2, $3, $4, $5)"
-                    (tableName, Fld.cid, Fld.ver, Fld.clid, Fld.shallow, Fld.deep).toStringz,
+                    (tableName, Fld.cid, Fld.ver, Fld.clid, Fld.stable, Fld.transient).toStringz,
             0,
             null
         );
@@ -269,7 +272,7 @@ struct ConceptsTable {
             cast(PGconn*)conn_,
             getConcept_stmt,
             format!"select %s, %s, %s from %s where %s=$1 and %s=$2"
-                    (Fld.clid, Fld.shallow, Fld.deep, tableName, Fld.cid, Fld.ver).toStringz,
+                    (Fld.clid, Fld.stable, Fld.transient, tableName, Fld.cid, Fld.ver).toStringz,
             0,
             null
         );
@@ -281,7 +284,7 @@ struct ConceptsTable {
             cast(PGconn*)conn_,
             updateConcept_stmt,
             format!"update %s set %s=$3, %s=$4, %s=$5 where %s=$1 and %s=$2"
-                    (tableName, Fld.clid, Fld.shallow, Fld.deep, Fld.cid, Fld.ver).toStringz,
+                    (tableName, Fld.clid, Fld.stable, Fld.transient, Fld.cid, Fld.ver).toStringz,
             0,
             null
         );
@@ -320,17 +323,17 @@ unittest {
 
     // Get
     assert(ct.getConcept(0, 10).clid == 42);
-    assert(to!string(ct.getConcept(0, 10).shallow) == "[1, 2, 3, 4, 5]"
-            && to!string(ct.getConcept(0, 10).deep) == "[6, 7, 8, 9, 10, 11]");
-    assert(to!string(ct.getConcept(0, 20).shallow) == "[1, 2, 3, 4, 5]" && ct.getConcept(0, 20).deep is null);
+    assert(to!string(ct.getConcept(0, 10).stable) == "[1, 2, 3, 4, 5]"
+            && to!string(ct.getConcept(0, 10).transient) == "[6, 7, 8, 9, 10, 11]");
+    assert(to!string(ct.getConcept(0, 20).stable) == "[1, 2, 3, 4, 5]" && ct.getConcept(0, 20).transient is null);
 
     // Update
     ct.updateConcept(0, 10, Clid.max, cast(byte[])[1,2,3], null);
-    assert(ct.getConcept(0, 10).clid == Clid.max && to!string(ct.getConcept(0, 10).shallow) == "[1, 2, 3]" &&
-            ct.getConcept(0, 10).deep is null);
+    assert(ct.getConcept(0, 10).clid == Clid.max && to!string(ct.getConcept(0, 10).stable) == "[1, 2, 3]" &&
+            ct.getConcept(0, 10).transient is null);
     ct.updateConcept(0, 20, Clid.max, cast(byte[])[1,2,3], cast(byte[])[10,11]);
-    assert(ct.getConcept(0, 20).clid == cast(Clid)-1 && to!string(ct.getConcept(0, 20).shallow) == "[1, 2, 3]" &&
-            to!string(ct.getConcept(0, 20).deep) =="[10, 11]");
+    assert(ct.getConcept(0, 20).clid == cast(Clid)-1 && to!string(ct.getConcept(0, 20).stable) == "[1, 2, 3]" &&
+            to!string(ct.getConcept(0, 20).transient) =="[10, 11]");
 //    tc.updateConcept(0, 30, 42, cast(byte[])[1,2,3], cast(byte[])[10,11]);    // throws exception, since there is no such concept
 
     // Find versions

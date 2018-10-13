@@ -1,5 +1,5 @@
 module chricrank;
-import std.stdio: writeln, writefln;
+import std.stdio;
 import std.conv;
 
 import derelict.pq.pq;
@@ -23,6 +23,7 @@ void main()
     foreach(cid; _sm_.byKey) {
         const SpiritConcept smCpt = _sm_[cid];
         const SpiritConcept dbCpt = dbCptHnd.retreiveConcept(cid, 0);
+
         if      // isn't the concept in DP?
                 (!dbCpt)
         {   //no: add it

@@ -114,6 +114,12 @@ struct ConceptsTable {
             will be returned.
     */
     auto getConcept(Cid cid, Cvr ver) const {
+
+        struct Result {
+            Clid clid = Clid.max;
+            byte[] stable;
+            byte[] transient;
+        }
         PGresult* res;
 
         Cid c = invertEndianess(cid);
@@ -134,12 +140,6 @@ struct ConceptsTable {
         );
         enforce(PQresultStatus(res) == PGRES_TUPLES_OK, to!string(PQerrorMessage(conn_)));
         scope(exit) PQclear(res);
-
-        struct Result {
-            Clid clid = Clid.max;
-            byte[] stable;
-            byte[] transient;
-        }
         if      // does the concept exist?
                 (PQntuples(res) != 0)
         {

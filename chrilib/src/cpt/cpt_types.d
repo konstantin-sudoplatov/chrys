@@ -57,9 +57,6 @@ shared synchronized class ConceptVersion {
 struct DbConceptHandler {
     import derelict.pq.pq: PGconn;
 
-    /// Spirit concept classes registry (classinfo by clid
-    enum TypeInfo_Class[] spiritRegistry = createSpiritClassesRegistry;
-
     @disable this();
 
     alias con_ this;
@@ -83,18 +80,16 @@ struct DbConceptHandler {
             ver = version
         Returns: newly constructed object or null if it was not found in the DB.
     */
-    SpiritConcept retreiveConcept(Cid cid, Cvr ver) {
+    SpiritConcept retreiveConcept(Cid cid, Cvr ver) const {
         const cptDat = cptTbl_.getConcept(cid, ver);
         if      // is the concept present in the DB?
                 (cptDat)
         {   // yes: create and return it
-            SpiritConcept dbCpt = cast(SpiritConcept)_d_newclass(spiritRegistry[cptDat.clid]);
-            (cast(SpiritConcept)dbCpt).cid = cid;
-            (cast()dbCpt).ver = ver;
-            (cast(SpiritConcept)dbCpt).clid = cptDat.clid;
+            // TODO not finished
+            //SpiritConcept dbCpt = cast(SpiritConcept)_d_newclass(spiritRegistry[cptDat.clid]);
             //size_t size = dbCpt.classinfo.initializer.length;
             //(cast(byte*)dbCpt)[8..size] = cptDat.stable[0..size-8];
-            return dbCpt;
+            return null;
         }
         else
             return null;

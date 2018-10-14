@@ -1,7 +1,10 @@
 module tools;
 import std.format;
 
-//---***---***---***---***---***--- data ---***---***---***---***---***--
+/// External runtime function, that creates a new object by its ClassInfo. No constructors are called, though static
+/// initialisation is done. Very fast. Much faster than manually allocate an object on the heap as new buf[], as ehe emplace
+/// function does. Used in the SpiritConcept.clone() method and when restoring serialized classes from DB.
+extern (C) Object _d_newclass (ClassInfo info);
 
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
@@ -178,11 +181,6 @@ void logit(string text, TermColor color = null) {
 void logit(const Object o, TermColor color = null) {
     logit((cast()o).toString, color);
 }
-
-/// External runtime function, that creates a new object by its ClassInfo. No constructors are called. Very fast, much faster
-/// than manually allocating the object on the heap as new buf[], as it is done in the emplace function. Used in the
-/// SpiritConcept.clone() method.
-extern (C) Object _d_newclass (ClassInfo info);
 
 /**
         This function illustrates cloning a D object. It makes a shallow binary copy.

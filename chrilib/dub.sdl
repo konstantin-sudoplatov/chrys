@@ -10,12 +10,13 @@ targetPath "bin"
 
 dependency "chribaselib" version="*"
 
-configuration "release" {
-    targetType "library"
-}
-
 configuration "debug" {
     targetType "executable"
+}
+
+// The GDB in idea wouldn't work if this config stands the first
+configuration "release" {
+    targetType "library"
 }
 
 configuration "unittest" {

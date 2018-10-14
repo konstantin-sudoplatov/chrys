@@ -20,20 +20,21 @@ void main()
     // Fill and crank main maps with static and hardcoded dynamic concepts and their names.
     loadAndCrank_(_sm_, _nm_);
 
+    // TODO: not finished
     foreach(cid; _sm_.byKey) {
-        const SpiritConcept smCpt = _sm_[cid];
-        const SpiritConcept dbCpt = dbCptHnd.retreiveConcept(cid, 0);
-
-        if      // isn't the concept in DP?
-                (!dbCpt)
-        {   //no: add it
-            dbCptHnd.insertConcept(smCpt);
-        }
-        else if // is the concept in DP different from the newly cranked?
-                (dbCpt != smCpt)
-        {   //yes: update it
-            dbCptHnd.updateConcept(smCpt);
-        }
+        //const SpiritConcept smCpt = _sm_[cid];
+        //const SpiritConcept dbCpt = dbCptHnd.retreiveConcept(cid, 0);
+        //
+        //if      // isn't the concept in DP?
+        //        (!dbCpt)
+        //{   //no: add it
+        //    dbCptHnd.insertConcept(smCpt);
+        //}
+        //else if // is the concept in DP different from the newly cranked?
+        //        (dbCpt != smCpt)
+        //{   //yes: update it
+        //    dbCptHnd.updateConcept(smCpt);
+        //}
     }
 }
 

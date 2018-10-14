@@ -34,6 +34,11 @@ import crank.crank_types: DcpDescriptor;
         return new Breed(cast(immutable)this);
     }
 
+    /// Serialize concept
+    override Serial serialize() const {
+        assert(false, "Stab");
+    }
+
     /// Equality test
     override bool opEquals(Object sc) const {
 
@@ -58,6 +63,20 @@ import crank.crank_types: DcpDescriptor;
     /// Getter.
     @property Cid seed() const {
         return seedCid_;
+    }
+
+    /**
+            Initialize concept from its serialized form.
+        Parameters:
+            cid = cid
+            ver = concept version
+            clid = classinfo identifier
+            stable = stable part of data
+            transient = unstable part of data
+        Returns: newly constructed object of this class
+    */
+    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
+        assert(false, "Stab");
     }
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%

@@ -63,6 +63,11 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         return clon;
     }
 
+    /// Serialize concept
+    override Serial serialize() const {
+        assert(false, "Stab");
+    }
+
     /// Equality test
     override bool opEquals(Object sc) const {
 
@@ -374,8 +379,13 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
             brCids ~= ad.cid;
         appendBranches(activation, brCids);
     }
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+    //
+    //                                 Protected
+    //
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
 
-    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+    //---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
 
     /// The Effect[] array represents effects (actions to be taken and branches to be set as the next step in the reasoning process),
     /// corresponding to spans of the neuron's activation value. Each span is represented by its higher boundary and goes from
@@ -388,6 +398,22 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     /// In all cases when the actions array is null or empty that means the action "stop and wait", and if the branches array
     /// is null or empty, it means no change of branch.
     protected Effect[] _effects;
+
+    //---$$$---$$$---$$$---$$$---$$$--- functions ---$$$---$$$---$$$---$$$---$$$---
+
+    /**
+            Initialize concept from its serialized form.
+        Parameters:
+            cid = cid
+            ver = concept version
+            clid = classinfo identifier
+            stable = stable part of data
+            transient = unstable part of data
+        Returns: newly constructed object of this class
+    */
+    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
+        assert(false, "Stab");
+    }
 
     /// If activation <= cutoff then result of the selectEffects() function is automatically Effect(cutoff, null, null),
     /// which means action stopAndWait and no branches. This allows to get rid of the first span from -infinity to 0, which
@@ -447,6 +473,11 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
         return cpt;
     }
 
+    /// Serialize concept
+    override Serial serialize() const {
+        assert(false, "Stab");
+    }
+
     /// Equality test
     override bool opEquals(Object sc) const {
 
@@ -468,6 +499,20 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     mixin PremiseImpl!SpiritLogicalNeuron;
+
+    /**
+            Initialize concept from its serialized form.
+        Parameters:
+            cid = cid
+            ver = concept version
+            clid = classinfo identifier
+            stable = stable part of data
+            transient = unstable part of data
+        Returns: newly constructed object of this class
+    */
+    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
+        assert(false, "Stab");
+    }
 }
 
 /// Ditto

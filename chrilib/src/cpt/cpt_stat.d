@@ -32,6 +32,11 @@ import atn.atn_circle_thread;
         cast()this.callType = callType;
     }
 
+    /// Serialize concept
+    override Serial serialize() const {
+        assert(false, "Stab");
+    }
+
     /// Disabled equality test
     override bool opEquals(Object sc) const {
         assert(false,
@@ -44,6 +49,20 @@ import atn.atn_circle_thread;
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /**
+            Initialize concept from its serialized form.
+        Parameters:
+            cid = cid
+            ver = concept version
+            clid = classinfo identifier
+            stable = stable part of data
+            transient = unstable part of data
+        Returns: newly constructed object of this class
+    */
+    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
+        assert(false, "Stab");
+    }
 }
 
 /// Live wrapper for the HolyConcept class

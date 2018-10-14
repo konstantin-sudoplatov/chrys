@@ -3,6 +3,7 @@
     that knows nothing about the code and the static world, which is a big set of functions, that actually are the code.
 */
 module cpt.cpt_actions;
+import std.stdio;
 import std.format;
 
 import project_params, tools;
@@ -27,6 +28,26 @@ import crank.crank_types: DcpDescriptor;
     /// Create live wrapper for the holy static concept.
     override A live_factory() const {
         return new A(cast(immutable)this);
+    }
+
+    /// Serialize concept
+    override Serial serialize() const {
+        Serial res;
+
+        res.cid = cid; res.ver = ver; res.clid = clid;
+        res.stable.length = St.length;  // allocate
+        *cast(Cid*)&res.stable[0] = _statActionCid;
+
+        return res;
+    }
+
+    /// Stable offsets. For use by serialize()/deserialize()
+    private enum St {
+        length = _statActionCid.sizeof
+    }
+    /// Tranzient offsets. For use by serialize()/deserialize()
+    private enum Tr {
+        length = 0
     }
 
     /// Equality test
@@ -69,10 +90,47 @@ import crank.crank_types: DcpDescriptor;
         return _statActionCid = statActionCid;
     }
 
-    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+    //
+    //                                 Protected
+    //
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+
+    //---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
 
     // Static action.
     protected Cid _statActionCid;
+
+    //---$$$---$$$---$$$---$$$---$$$--- functions ---$$$---$$$---$$$---$$$---$$$---
+
+    /**
+            Initialize concept from its serialized form.
+        Parameters:
+            cid = cid
+            ver = concept version
+            clid = classinfo identifier
+            stable = stable part of data
+            transient = unstable part of data
+        Returns: newly constructed object of this class
+    */
+    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
+        cast()this.cid = cid;
+        this.ver = ver;
+        cast()this.clid = clid;
+        _statActionCid = *cast(Cid*)&stable[0];
+    }
+}
+
+unittest {
+    auto a = new SpA(42);
+    a.ver = 5;
+    a.statAction(43);
+
+    SpiritConcept.Serial ser = a.serialize;
+
+    auto b = cast(SpA)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
+
+    assert(a == b);
 }
 
 /// Live.
@@ -105,6 +163,11 @@ class A: DynamicConcept {
     /// Create live wrapper for the holy static concept.
     override A_Cid live_factory() const {
         return new A_Cid(cast(immutable)this);
+    }
+
+    /// Serialize concept
+    override Serial serialize() const {
+        assert(false, "Stab");
     }
 
     /// Equality test
@@ -150,6 +213,20 @@ class A: DynamicConcept {
 
     /// Cid of a concept to operate on
     protected Cid _p1Cid;
+
+    /**
+            Initialize concept from its serialized form.
+        Parameters:
+            cid = cid
+            ver = concept version
+            clid = classinfo identifier
+            stable = stable part of data
+            transient = unstable part of data
+        Returns: newly constructed object of this class
+    */
+    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
+        assert(false, "Stab");
+    }
 }
 
 /// Live.
@@ -171,6 +248,11 @@ final class A_Cid: A {
     /// Create live wrapper for the holy static concept.
     override A_CidCid live_factory() const {
         return new A_CidCid(cast(immutable)this);
+    }
+
+    /// Serialize concept
+    override Serial serialize() const {
+        assert(false, "Stab");
     }
 
     /// Equality test
@@ -225,6 +307,20 @@ final class A_Cid: A {
 
     /// Cid of the second concept
     protected Cid _p2Cid;
+
+    /**
+            Initialize concept from its serialized form.
+        Parameters:
+            cid = cid
+            ver = concept version
+            clid = classinfo identifier
+            stable = stable part of data
+            transient = unstable part of data
+        Returns: newly constructed object of this class
+    */
+    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
+        assert(false, "Stab");
+    }
 }
 
 /// Live.
@@ -244,6 +340,11 @@ final class A_CidCid: A {
     /// Create live wrapper for the holy static concept.
     override A_CidFloat live_factory() const {
         return new A_CidFloat(cast(immutable)this);
+    }
+
+    /// Serialize concept
+    override Serial serialize() const {
+        assert(false, "Stab");
     }
 
     /// Equality test
@@ -298,6 +399,20 @@ final class A_CidCid: A {
 
     // Parameter 2 - a float value
     protected float _p2Float;
+
+    /**
+            Initialize concept from its serialized form.
+        Parameters:
+            cid = cid
+            ver = concept version
+            clid = classinfo identifier
+            stable = stable part of data
+            transient = unstable part of data
+        Returns: newly constructed object of this class
+    */
+    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
+        assert(false, "Stab");
+    }
 }
 
 /// Live.
@@ -317,6 +432,11 @@ final class A_CidFloat: A {
     /// Create live wrapper for the holy static concept.
     override A_CidCidFloat live_factory() const {
         return new A_CidCidFloat(cast(immutable)this);
+    }
+
+    /// Serialize concept
+    override Serial serialize() const {
+        assert(false, "Stab");
     }
 
     /// Equality test
@@ -380,6 +500,20 @@ final class A_CidFloat: A {
 
     // Parameter 2 - a float value
     protected float _p3Float;
+
+    /**
+            Initialize concept from its serialized form.
+        Parameters:
+            cid = cid
+            ver = concept version
+            clid = classinfo identifier
+            stable = stable part of data
+            transient = unstable part of data
+        Returns: newly constructed object of this class
+    */
+    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
+        assert(false, "Stab");
+    }
 }
 
 /// Live.
@@ -399,6 +533,11 @@ final class A_CidCidFloat: A {
     /// Create live wrapper for the holy static concept.
     override A_CidInt live_factory() const {
         return new A_CidInt(cast(immutable)this);
+    }
+
+    /// Serialize concept
+    override Serial serialize() const {
+        assert(false, "Stab");
     }
 
     /// Equality test
@@ -453,6 +592,20 @@ final class A_CidCidFloat: A {
 
     // Parameter 2 - a float value
     protected int _p2Int;
+
+    /**
+            Initialize concept from its serialized form.
+        Parameters:
+            cid = cid
+            ver = concept version
+            clid = classinfo identifier
+            stable = stable part of data
+            transient = unstable part of data
+        Returns: newly constructed object of this class
+    */
+    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
+        assert(false, "Stab");
+    }
 }
 
 /// Live.

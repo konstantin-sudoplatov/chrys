@@ -21,6 +21,9 @@ import crank.crank_types: DcpDescriptor;
 */
 abstract class SpiritConcept {
 
+    /// Spirit concept classes registry (classinfo by clid
+    enum TypeInfo_Class[] spiritRegistry = createSpiritClassesRegistry;
+
     /// Concept identifier.
     immutable Cid cid = 0;
 
@@ -67,8 +70,29 @@ abstract class SpiritConcept {
     */
     abstract Concept live_factory() const;
 
+    /// Serialize concept
+    abstract Serial serialize() const;
+
     /**
-            "==" overload. Test for equality excluding unsignigicant information like usage statistics. Onle check data
+            Initialize concept from its serialized form.
+        Parameters:
+            cid = cid
+            ver = concept version
+            clid = classinfo identifier
+            stable = stable part of data
+            transient = unstable part of data
+        Returns: newly constructed object of this class
+    */
+    static SpiritConcept deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
+
+        auto res = cast(SpiritConcept)_d_newclass(spiritRegistry[clid]);    // create object
+        res._deserialize(cid, ver, clid, stable, transient);
+
+        return res;
+    }
+
+    /**
+            "==" operation overload. Test for equality excluding unsignigicant information like usage statistics. Onle check data
         that influence behavior of the concept and logic it implements. For example the cid and ver fields are not checked.
         Must be realised in every concrete concept since it is used in versioning.
     */
@@ -90,7 +114,7 @@ abstract class SpiritConcept {
             Get shallow binary copy of this object
         Returns: shallow binary copy as a const byte array.
     */
-    final const(byte[]) shallowBlit() const {
+deprecated    final const(byte[]) shallowBlit() const {
         size_t size = this.classinfo.initializer.length;
         return (cast(byte*)this)[8..size];
     }
@@ -99,8 +123,46 @@ abstract class SpiritConcept {
             Get the deep part (excluding the shallow) binary copy of this object.
         Returns: deep binary copy as a const byte array or null if there is no deep data.
     */
-    const(byte[]) deepBlit() const {
+deprecated    const(byte[]) deepBlit() const {
         return null;
+    }
+
+    //---***---***---***---***---***--- types ---***---***---***---***---***--
+
+    /// Serialized form of this concept. Used as a return and type in the serialize() method.
+    struct Serial {
+        Cid cid;
+        Cvr ver;
+        Clid clid;
+        byte[] stable;
+        byte[] transient;
+    }
+
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+    //
+    //                                 Protected
+    //
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+
+    //---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
+
+    //---$$$---$$$---$$$---$$$---$$$--- functions ---$$$---$$$---$$$---$$$---$$$---
+
+    /**
+            Initialize concept from its serialized form.
+        Parameters:
+            cid = cid
+            ver = concept version
+            clid = classinfo identifier
+            stable = stable part of data
+            transient = unstable part of data
+        Returns: newly constructed object of this class
+    */
+    protected void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient)
+    {
+        cast()this.cid = cid;
+        this.ver = ver;
+        cast()this.clid = clid;
     }
 }
 

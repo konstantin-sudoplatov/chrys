@@ -1,6 +1,7 @@
 /// The HolyConcept and its descendants. All holy classes are shared, and they inherit the shared attribute from the root class
 /// HolyConcept.
 module cpt.abs.abs_concept;
+import std.stdio;
 import std.format, std.typecons;
 
 import project_params, tools;
@@ -83,8 +84,7 @@ abstract class SpiritConcept {
             transient = unstable part of data
         Returns: newly constructed object of this class
     */
-    static SpiritConcept deserialize(Cid cid, Cvr ver, Clid clid, byte[] stable, byte[] transient) {
-
+    static SpiritConcept deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
         auto res = cast(SpiritConcept)_d_newclass(spiritRegistry[clid]);    // create object
         cast()res.cid = cid;
         res.ver = ver;
@@ -113,24 +113,7 @@ abstract class SpiritConcept {
         if(auto p = cid in _nm_)
             return format!"%s(%s): %,3?s(%s)"(*p, typeid(this), '_', cid, '_', ver);
         else
-            return format!"Noname(%s): %,3?s(%s)"(typeid(this), '_', cid, '_', ver);
-    }
-
-    /**
-            Get shallow binary copy of this object
-        Returns: shallow binary copy as a const byte array.
-    */
-deprecated    final const(byte[]) shallowBlit() const {
-        size_t size = this.classinfo.initializer.length;
-        return (cast(byte*)this)[8..size];
-    }
-
-    /**
-            Get the deep part (excluding the shallow) binary copy of this object.
-        Returns: deep binary copy as a const byte array or null if there is no deep data.
-    */
-deprecated    const(byte[]) deepBlit() const {
-        return null;
+            return format!"noname(%s): %,3?s(%s)"(typeid(this), '_', cid, '_', ver);
     }
 
     //---***---***---***---***---***--- types ---***---***---***---***---***--
@@ -161,7 +144,8 @@ deprecated    const(byte[]) deepBlit() const {
             transient = unstable part of data
         Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    abstract protected Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient);
+    abstract protected Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
+            const byte[] transient);
 }
 
 /**

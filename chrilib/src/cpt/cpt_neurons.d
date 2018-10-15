@@ -193,14 +193,13 @@ unittest {
     auto a = new SpAndNeuron(42);
     a.addEffects(1, [5_000_000, 5_000_001], [5_000_010, 5_000_011]);
     a.addEffects(10, [5_000_002, 5_000_003], [5_000_012, 5_000_013]);
-    a.addPremises([5_000_0100, 5_000_0101, 5_000_0102]);
-//writefln("a = %s", a); stdout.flush;
-//    SpiritConcept.Serial ser = a.serialize;
 
-//    auto b = cast(SpAndNeuron)SpiritConcept.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
-//writefln("b = %s", b); stdout.flush;
-    //assert(a.cid == b.cid && a.ver == b.ver && a.clid == b.clid && a.cutoff == b.cutoff);
-    //assert(a == b);
+    a._premises = [5_000_0100, 5_000_0101, 5_000_0102];
+    SpiritConcept.Serial ser = a.serialize;
+
+    auto b = cast(SpAndNeuron)SpiritConcept.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
+    assert(a.cid == b.cid && a.ver == b.ver && a.clid == b.clid && a.cutoff == b.cutoff);
+    assert(a == b);
 }
 
 /// Live.

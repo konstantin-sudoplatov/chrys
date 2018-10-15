@@ -101,11 +101,12 @@ import crank.crank_types: DcpDescriptor;
             transient = unstable part of data
         Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
+            const byte[] transient)
     {
         _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
 
-        return tuple!("stable", "transient")(stable[St.length..$], transient[]);
+        return cast(Tuple!(const byte[], "stable", const byte[], "transient"))(stable[St.length..$], transient[]);
     }
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
@@ -234,12 +235,13 @@ class A: DynamicConcept {
             transient = unstable part of data
         Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
+            const byte[] transient)
     {
         _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
         _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
 
-        return tuple!("stable", "transient")(stable[St.length..$], transient[]);
+        return cast(Tuple!(const byte[], "stable", const byte[], "transient"))(stable[St.length..$], transient[]);
     }
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
@@ -372,13 +374,14 @@ final class A_Cid: A {
             transient = unstable part of data
         Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
+            const byte[] transient)
     {
         _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
         _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
         _p2Cid = *cast(Cid*)&stable[St._p2Cid_ofs];
 
-        return tuple!("stable", "transient")(stable[St.length..$], transient[]);
+        return cast(Tuple!(const byte[], "stable", const byte[], "transient"))(stable[St.length..$], transient[]);
     }
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
@@ -509,13 +512,14 @@ final class A_CidCid: A {
             transient = unstable part of data
         Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
+            const byte[] transient)
     {
         _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
         _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
         _p2Float = *cast(float*)&stable[St._p2Float_ofs];
 
-        return tuple!("stable", "transient")(stable[St.length..$], transient[]);
+        return cast(Tuple!(const byte[], "stable", const byte[], "transient"))(stable[St.length..$], transient[]);
     }
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
@@ -656,14 +660,15 @@ final class A_CidFloat: A {
             transient = unstable part of data
         Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
+            const byte[] transient)
     {
         _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
         _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
         _p2Cid = *cast(Cid*)&stable[St._p2Cid_ofs];
         _p3Float = *cast(float*)&stable[St._p3Float_ofs];
 
-        return tuple!("stable", "transient")(stable[St.length..$], transient[]);
+        return cast(Tuple!(const byte[], "stable", const byte[], "transient"))(stable[St.length..$], transient[]);
     }
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
@@ -796,13 +801,14 @@ final class A_CidCidFloat: A {
             transient = unstable part of data
         Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
+            const byte[] transient)
     {
         _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
         _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
         _p2Int = *cast(int*)&stable[St._p2Int_ofs];
 
-        return tuple!("stable", "transient")(stable[St.length..$], transient[]);
+        return cast(Tuple!(const byte[], "stable", const byte[], "transient"))(stable[St.length..$], transient[]);
     }
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@

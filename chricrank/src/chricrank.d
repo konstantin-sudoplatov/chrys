@@ -22,8 +22,8 @@ void main()
 
     // TODO: not finished
     foreach(cid; _sm_.byKey) {
-        //const SpiritConcept smCpt = _sm_[cid];
-        //const SpiritConcept dbCpt = dbCptHnd.retreiveConcept(cid, 0);
+        const SpiritConcept smCpt = _sm_[cid];
+        const SpiritConcept dbCpt = dbCptHnd.retreiveConcept(cid, 0);
         //
         //if      // isn't the concept in DP?
         //        (!dbCpt)

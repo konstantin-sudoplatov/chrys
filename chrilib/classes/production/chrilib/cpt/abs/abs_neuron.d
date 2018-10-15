@@ -47,39 +47,42 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         Serial res = Serial(cid, ver, clid);
 
         // Calculate size of the stable buffer and allocate it
-        size_t len = cutoff_.sizeof;                                // space for cutoff_
-        len += size_t.sizeof;                                       // space for the number elements of _effects
+        Cind len = cutoff_.sizeof;                                // space for cutoff_
+        len += Cind.sizeof;                                       // space for the number elements of _effects
         foreach(i; 0.._effects.length) {
-            len += float.sizeof + 2*size_t.sizeof;          // space for upperBound and sizes of the action and branch arrays
+            len += float.sizeof + 2*Cind.sizeof;            // space for upperBound and sizes of the action and branch arrays
             len += _effects[i].actions.length*Cid.sizeof;   // space for the action array
             len += _effects[i].branches.length*Cid.sizeof;  // space for the branch array
         }
-        res.stable.length = len;
+        res.stable.length = len;        // allocate
 
         // Fill in the stable buffer
-        size_t ofs;     // offset
+        Cind ofs;     // offset
         static assert(is(typeof(cutoff_) == const float));
         *cast(float*)&res.stable[ofs] = cutoff_;                    // cutoff_
         ofs += cutoff_.sizeof;
-        *cast(size_t*)&res.stable[ofs] = _effects.length;           // _effects.length
-        ofs += size_t.sizeof;
-        foreach(i; 0.._effects.length) {
+        *cast(Cind*)&res.stable[ofs] = cast(Cind)_effects.length;           // _effects.length
+        ofs += Cind.sizeof;
+        len = cast(Cind)_effects.length;
+        foreach(i; 0..len) {
             static assert(is(typeof(_effects[i].upperBound) == const float));
             *cast(float*)&res.stable[ofs] = _effects[i].upperBound;         // _effects[i].upperBound
             ofs += float.sizeof;
 
             // actions
-            *cast(size_t*)&res.stable[ofs] = _effects[i].actions.length;    // _effects[i].actions.length
-            ofs += size_t.sizeof;
-            foreach(j; 0.._effects[i].actions.length) {
+            *cast(Cind*)&res.stable[ofs] = cast(Cind)_effects[i].actions.length;    // _effects[i].actions.length
+            ofs += Cind.sizeof;
+            Cind leng = cast(Cind)_effects[i].actions.length;
+            foreach(j; 0..leng) {
                 *cast(Cid*)&res.stable[ofs] = _effects[i].actions[j];       // _effects[i].actions[j]
                 ofs += Cid.sizeof;
             }
 
             // branches
-            *cast(size_t*)&res.stable[ofs] = _effects[i].branches.length;   // _effects[i].actions.length
-            ofs += size_t.sizeof;
-            foreach(j; 0.._effects[i].branches.length) {
+            *cast(Cind*)&res.stable[ofs] = cast(Cind)_effects[i].branches.length;   // _effects[i].actions.length
+            ofs += Cind.sizeof;
+            leng = cast(Cind)_effects[i].branches.length;
+            foreach(j; 0..leng) {
                 *cast(Cid*)&res.stable[ofs] = _effects[i].branches[j];      // _effects[i].branches[j]
                 ofs += Cid.sizeof;
             }
@@ -455,40 +458,41 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
             transient = unstable part of data
         Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
+            const byte[] transient)
     {
-        size_t ofs;     // offset in the stable buffer
+        Cind ofs;     // offset in the stable buffer
         static assert(is(typeof(cutoff_) == float));
         cutoff_ = *cast(float*)&stable[ofs];                    // cutoff_
         ofs += cutoff_.sizeof;
-        size_t len = *cast(size_t*)&stable[ofs];                // _effects.length
-        ofs += size_t.sizeof;
+        Cind len = *cast(Cind*)&stable[ofs];                // _effects.length
+        ofs += Cind.sizeof;
         _effects.length = len;                          // allocate
-        foreach(i; 0.._effects.length) {
+        foreach(i; 0..len) {
             static assert(is(typeof(_effects[0].upperBound) == float));
             _effects[i].upperBound = *cast(float*)&stable[ofs];         // _effects[i].upperBound
             ofs += float.sizeof;
 
             // actions
-            len = *cast(size_t*)&stable[ofs];                           // _effects[i].actions.length
-            ofs += size_t.sizeof;
-            _effects[i].actions.length = len;                           // allocate
-            foreach(j; 0.._effects[i].actions.length) {
+            Cind leng = *cast(Cind*)&stable[ofs];                           // _effects[i].actions.length
+            ofs += Cind.sizeof;
+            _effects[i].actions.length = leng;                           // allocate
+            foreach(j; 0..leng) {
                 _effects[i].actions[j] = *cast(Cid*)&stable[ofs];       // _effects[i].actions[j]
                 ofs += Cid.sizeof;
             }
 
             // branches
-            len = *cast(size_t*)&stable[ofs];                           // _effects[i].branches.length
-            ofs += size_t.sizeof;
-            _effects[i].branches.length = len;                          // allocate
-            foreach(j; 0.._effects[i].branches.length) {
+            leng = *cast(Cind*)&stable[ofs];                           // _effects[i].branches.length
+            ofs += Cind.sizeof;
+            _effects[i].branches.length = leng;                          // allocate
+            foreach(j; 0..leng) {
                 _effects[i].branches[j] = *cast(Cid*)&stable[ofs];      // _effects[i].branches[j]
                 ofs += Cid.sizeof;
             }
         }
 
-        return tuple!("stable", "transient")(stable[ofs..$], transient[]);
+        return cast(Tuple!(const byte[], "stable", const byte[], "transient"))(stable[ofs..$], transient[]);
     }
 
     /// If activation <= cutoff then result of the selectEffects() function is automatically Effect(cutoff, null, null),
@@ -553,19 +557,19 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
     override Serial serialize() const {
         Serial res = super.serialize;
 
-        //// Calculate needed space and allocate it
-        //size_t ofs = res.stable.length;                         // offset from the beginning of the bufer
-        //size_t len = size_t.sizeof;                             // space for the number elements of _premises
-        //len += _premises.length*Cid.sizeof;                     // space for the premise cids
-        //res.stable.length = ofs + len;              // allocate
-        //
-        //// Fill in the buffer
-        //*cast(size_t*)&res.stable[ofs] = _premises.length;      // number of elements in the _premises array
-        //ofs += size_t.sizeof;
-        //foreach(i; 0.._premises.length) {
-        //    *cast(Cid*)&res.stable[ofs] = _premises[i];         // the premise cids
-        //    ofs += Cid.sizeof;
-        //}
+        // Calculate needed space and allocate it
+        Cind ofs = cast(Cind)res.stable.length;                         // offset from the beginning of the bufer
+        Cind len = Cind.sizeof;                             // space for the number elements of _premises
+        len += _premises.length*Cid.sizeof;                     // space for the premise cids
+        res.stable.length = ofs + len;              // allocate
+
+        // Fill in the buffer
+        *cast(Cind*)&res.stable[ofs] = cast(Cind)_premises.length;      // number of elements in the _premises array
+        ofs += Cind.sizeof;
+        foreach(i; 0.._premises.length) {
+            *cast(Cid*)&res.stable[ofs] = _premises[i];         // the premise cids
+            ofs += Cid.sizeof;
+        }
 
         return res;
     }
@@ -581,9 +585,12 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
     override string toString() const {
         auto s = super.toString;
         s ~= "\n    premises: [";
-        foreach(pr; _premises) {
-            s ~= format!"\n        %s(%,?s)"(_nm_[pr], '_', pr);
-        }
+        foreach(pr; _premises)
+            if(auto p = pr in _nm_)
+                s ~= format!"\n        %s(%,?s),"(*p, '_', pr);
+            else
+                s ~= format!"\n        noname(%,?s),"('_', pr);
+
         s ~= "\n    ]";
         return s;
     }
@@ -599,20 +606,20 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
             transient = unstable part of data
         Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
+            const byte[] transient)
     {
-        //auto theRest = super._deserialize(stable, transient);
-        //size_t ofs;
-        //size_t len = *cast(size_t*)theRest.stable[ofs];         // number of elements in the _premises array
-        //ofs += size_t.sizeof;
-        //_premises.length = len;                         // allocate
-        //foreach(i; 0.._premises.length) {
-        //    _premises[i] = *cast(Cid*)theRest.stable[ofs];
-        //    ofs += Cid.sizeof;
-        //}
+        auto theRest = super._deserialize(stable, transient);
+        Cind ofs;
+        Cind len = *cast(Cind*)&theRest.stable[ofs];         // number of elements in the _premises array
+        ofs += Cind.sizeof;
+        _premises.length = len;                         // allocate
+        foreach(i; 0.._premises.length) {
+            _premises[i] = *cast(Cid*)&theRest.stable[ofs];
+            ofs += Cid.sizeof;
+        }
 
-//        return tuple!("stable", "transient")(stable[ofs..$], transient[]);
-        return tuple!("stable", "transient")(stable[0..$], transient[]);
+        return cast(Tuple!(const byte[], "stable", const byte[], "transient"))(stable[ofs..$], transient[]);
     }
 }
 

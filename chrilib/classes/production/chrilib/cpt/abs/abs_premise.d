@@ -29,7 +29,8 @@ abstract class SpiritPremise: SpiritDynamicConcept {
             transient = unstable part of data
         Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
+            const byte[] transient)
     {
         assert(false, "Stab");
     }

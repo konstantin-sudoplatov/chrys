@@ -81,15 +81,11 @@ struct DbConceptHandler {
         Returns: newly constructed object or null if it was not found in the DB.
     */
     SpiritConcept retreiveConcept(Cid cid, Cvr ver) const {
-        const cptDat = cptTbl_.getConcept(cid, ver);
+        const cpDat = cptTbl_.getConcept(cid, ver);
         if      // is the concept present in the DB?
-                (cptDat)
+                (cpDat)
         {   // yes: create and return it
-            // TODO not finished
-            //SpiritConcept dbCpt = cast(SpiritConcept)_d_newclass(spiritRegistry[cptDat.clid]);
-            //size_t size = dbCpt.classinfo.initializer.length;
-            //(cast(byte*)dbCpt)[8..size] = cptDat.stable[0..size-8];
-            return null;
+            return SpiritConcept.deserialize(cid, ver, cpDat.clid, cpDat.stable, cpDat.transient);
         }
         else
             return null;
@@ -102,12 +98,13 @@ struct DbConceptHandler {
         Throws: enforce() for errors, for a dupilcate key, for example
     */
     void insertConcept(const SpiritConcept cpt) const {
+        SpiritConcept.Serial ser = cpt.serialize;
         cptTbl_.insertConcept(
-            cpt.cid,
-            cpt.ver,
-            cpt.clid,
-            cpt.shallowBlit,
-            cpt.deepBlit
+            ser.cid,
+            ser.ver,
+            ser.clid,
+            ser.stable,
+            ser.transient
         );
     }
 
@@ -118,12 +115,13 @@ struct DbConceptHandler {
         Throws: enforce, if there is an error, no record to update, for example.
     */
     void updateConcept(const SpiritConcept cpt) const {
+        SpiritConcept.Serial ser = cpt.serialize;
         cptTbl_.updateConcept(
-            cpt.cid,
-            cpt.ver,
-            cpt.clid,
-            cpt.shallowBlit,
-            cpt.deepBlit
+            ser.cid,
+            ser.ver,
+            ser.clid,
+            ser.stable,
+            ser.transient
         );
     }
 

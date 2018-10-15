@@ -11,6 +11,9 @@ alias Cvr = ushort;
 /// Spirit concept class identifier
 alias Clid = ushort;
 
+/// Type for project's array indexes. Max size for internal arrays is Asize.max.
+alias Cind = uint;
+
 /// Static cid range is from 1 to MAX_STATIC_CID;
 enum MIN_STATIC_CID = Cid(1);
 enum MAX_STATIC_CID = Cid(1_000_000);

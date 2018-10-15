@@ -1,5 +1,5 @@
 module cpt.abs.abs_premise;
-import std.format;
+import std.format, std.typecons;
 
 import project_params;
 
@@ -25,14 +25,12 @@ abstract class SpiritPremise: SpiritDynamicConcept {
     /**
             Initialize concept from its serialized form.
         Parameters:
-            cid = cid
-            ver = concept version
-            clid = classinfo identifier
             stable = stable part of data
             transient = unstable part of data
-        Returns: newly constructed object of this class
+        Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
+    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    {
         assert(false, "Stab");
     }
 }

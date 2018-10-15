@@ -4,7 +4,7 @@
 */
 module cpt.cpt_actions;
 import std.stdio;
-import std.format;
+import std.format, std.typecons;
 
 import project_params, tools;
 
@@ -36,7 +36,7 @@ import crank.crank_types: DcpDescriptor;
 
         res.cid = cid; res.ver = ver; res.clid = clid;
         res.stable.length = St.length;  // allocate
-        *cast(Cid*)&res.stable[0] = _statActionCid;
+        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
 
         return res;
     }
@@ -97,18 +97,15 @@ import crank.crank_types: DcpDescriptor;
     /**
             Initialize concept from its serialized form.
         Parameters:
-            cid = cid
-            ver = concept version
-            clid = classinfo identifier
             stable = stable part of data
             transient = unstable part of data
-        Returns: newly constructed object of this class
+        Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
-        cast()this.cid = cid;
-        this.ver = ver;
-        cast()this.clid = clid;
-        _statActionCid = *cast(Cid*)&stable[0];
+    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    {
+        _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
+
+        return tuple!("stable", "transient")(stable[St.length..$], transient[]);
     }
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
@@ -119,7 +116,8 @@ import crank.crank_types: DcpDescriptor;
 
     /// Stable offsets. Used by serialize()/_deserialize()
     private enum St {
-        length = _statActionCid.sizeof
+        _statActionCid_ofs = 0,
+        length = _statActionCid_ofs + _statActionCid.sizeof
     }
 
     /// Tranzient offsets. Used by serialize()/_deserialize()
@@ -134,8 +132,8 @@ unittest {
     a.statAction(43);
 
     SpiritConcept.Serial ser = a.serialize;
-
     auto b = cast(SpA)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
+    assert(ser.cid == 42 && ser.ver == 5 && SpiritConcept.spiritRegistry[ser.clid] == typeid(SpA));
 
     assert(a == b);
 }
@@ -174,7 +172,13 @@ class A: DynamicConcept {
 
     /// Serialize concept
     override Serial serialize() const {
-        assert(false, "Stab");
+        Serial res = Serial(cid, ver, clid);
+
+        res.stable.length = St.length;  // allocate
+        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
+        *cast(Cid*)&res.stable[St._p1Cid_ofs] = _p1Cid;
+
+        return res;
     }
 
     /// Equality test
@@ -221,19 +225,54 @@ class A: DynamicConcept {
     /// Cid of a concept to operate on
     protected Cid _p1Cid;
 
+    //---%%%---%%%---%%%---%%%---%%% funcs ---%%%---%%%---%%%---%%%---%%%---%%%
+
     /**
             Initialize concept from its serialized form.
         Parameters:
-            cid = cid
-            ver = concept version
-            clid = classinfo identifier
             stable = stable part of data
             transient = unstable part of data
-        Returns: newly constructed object of this class
+        Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
-        assert(false, "Stab");
+    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    {
+        _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
+        _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
+
+        return tuple!("stable", "transient")(stable[St.length..$], transient[]);
     }
+
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+    //
+    //                                  Private
+    //
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+
+    /// Stable offsets. Used by serialize()/_deserialize()
+    private enum St {
+        _statActionCid_ofs = 0,
+        _p1Cid_ofs = _statActionCid_ofs + _statActionCid.sizeof,
+        length = _p1Cid_ofs + _p1Cid.sizeof
+    }
+
+    /// Tranzient offsets. Used by serialize()/_deserialize()
+    private enum Tr {
+        length = 0
+    }
+}
+
+unittest {
+    auto a = new SpA_Cid(42);
+    a.ver = 5;
+    a._statActionCid = 43;
+    a._p1Cid = 44;
+
+    SpiritConcept.Serial ser = a.serialize;
+    auto b = cast(SpA_Cid)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
+    assert(b.cid == 42 && b.ver == 5 && SpiritConcept.spiritRegistry[b.clid] == typeid(SpA_Cid) &&
+            b._statActionCid == 43 && b._p1Cid == 44);
+
+    assert(a == b);
 }
 
 /// Live.
@@ -244,9 +283,11 @@ final class A_Cid: A {
 
 }
 
-/// SpA - spirit action, CidCid - p0Calp1Cidp2Cid
-/// Actions, that operate on two concepts. Examples: sending a message - the first operand breed of the correspondent,
-/// the second operand concept object to send.
+/**
+        SpA - spirit action, CidCid - p0Calp1Cidp2Cid
+    Actions, that operate on two concepts. Examples: sending a message - the first operand breed of the correspondent,
+    the second operand concept object to send.
+*/
 @(3) final class SpA_CidCid: SpA {
 
     /// Constructor
@@ -259,7 +300,14 @@ final class A_Cid: A {
 
     /// Serialize concept
     override Serial serialize() const {
-        assert(false, "Stab");
+        Serial res = Serial(cid, ver, clid);
+
+        res.stable.length = St.length;  // allocate
+        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
+        *cast(Cid*)&res.stable[St._p1Cid_ofs] = _p1Cid;
+        *cast(Cid*)&res.stable[St._p2Cid_ofs] = _p2Cid;
+
+        return res;
     }
 
     /// Equality test
@@ -315,19 +363,57 @@ final class A_Cid: A {
     /// Cid of the second concept
     protected Cid _p2Cid;
 
+    //---%%%---%%%---%%%---%%%---%%% funcs ---%%%---%%%---%%%---%%%---%%%---%%%
+
     /**
             Initialize concept from its serialized form.
         Parameters:
-            cid = cid
-            ver = concept version
-            clid = classinfo identifier
             stable = stable part of data
             transient = unstable part of data
-        Returns: newly constructed object of this class
+        Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
-        assert(false, "Stab");
+    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    {
+        _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
+        _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
+        _p2Cid = *cast(Cid*)&stable[St._p2Cid_ofs];
+
+        return tuple!("stable", "transient")(stable[St.length..$], transient[]);
     }
+
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+    //
+    //                                  Private
+    //
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+
+    /// Stable offsets. Used by serialize()/_deserialize()
+    private enum St {
+        _statActionCid_ofs = 0,
+        _p1Cid_ofs = _statActionCid_ofs + _statActionCid.sizeof,
+        _p2Cid_ofs = _p1Cid_ofs + _p1Cid.sizeof,
+        length = _p2Cid_ofs + _p2Cid.sizeof
+    }
+
+    /// Tranzient offsets. Used by serialize()/_deserialize()
+    private enum Tr {
+        length = 0
+    }
+}
+
+unittest {
+    auto a = new SpA_CidCid(42);
+    a.ver = 5;
+    a._statActionCid = 43;
+    a._p1Cid = 44;
+    a._p2Cid = 45;
+
+    SpiritConcept.Serial ser = a.serialize;
+    auto b = cast(SpA_CidCid)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
+    assert(b.cid == 42 && b.ver == 5 && SpiritConcept.spiritRegistry[b.clid] == typeid(SpA_CidCid) &&
+            b._statActionCid == 43 && b._p1Cid == 44 && b._p2Cid == 45);
+
+    assert(a == b);
 }
 
 /// Live.
@@ -351,7 +437,14 @@ final class A_CidCid: A {
 
     /// Serialize concept
     override Serial serialize() const {
-        assert(false, "Stab");
+        Serial res = Serial(cid, ver, clid);
+
+        res.stable.length = St.length;  // allocate
+        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
+        *cast(Cid*)&res.stable[St._p1Cid_ofs] = _p1Cid;
+        *cast(float*)&res.stable[St._p2Float_ofs] = _p2Float;
+
+        return res;
     }
 
     /// Equality test
@@ -407,19 +500,57 @@ final class A_CidCid: A {
     // Parameter 2 - a float value
     protected float _p2Float;
 
+    //---%%%---%%%---%%%---%%%---%%% funcs ---%%%---%%%---%%%---%%%---%%%---%%%
+
     /**
             Initialize concept from its serialized form.
         Parameters:
-            cid = cid
-            ver = concept version
-            clid = classinfo identifier
             stable = stable part of data
             transient = unstable part of data
-        Returns: newly constructed object of this class
+        Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
-        assert(false, "Stab");
+    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    {
+        _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
+        _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
+        _p2Float = *cast(float*)&stable[St._p2Float_ofs];
+
+        return tuple!("stable", "transient")(stable[St.length..$], transient[]);
     }
+
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+    //
+    //                                  Private
+    //
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+
+    /// Stable offsets. Used by serialize()/_deserialize()
+    private enum St {
+        _statActionCid_ofs = 0,
+        _p1Cid_ofs = _statActionCid_ofs + _statActionCid.sizeof,
+        _p2Float_ofs = _p1Cid_ofs + _p1Cid.sizeof,
+        length = _p2Float_ofs + _p2Float.sizeof
+    }
+
+    /// Tranzient offsets. Used by serialize()/_deserialize()
+    private enum Tr {
+        length = 0
+    }
+}
+
+unittest {
+    auto a = new SpA_CidFloat(42);
+    a.ver = 5;
+    a._statActionCid = 43;
+    a._p1Cid = 44;
+    a._p2Float = 4.5;
+
+    SpiritConcept.Serial ser = a.serialize;
+    auto b = cast(SpA_CidFloat)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
+    assert(b.cid == 42 && b.ver == 5 && SpiritConcept.spiritRegistry[b.clid] == typeid(SpA_CidFloat) &&
+            b._statActionCid == 43 && b._p1Cid == 44 && b._p2Float == 4.5);
+
+    assert(a == b);
 }
 
 /// Live.
@@ -443,7 +574,15 @@ final class A_CidFloat: A {
 
     /// Serialize concept
     override Serial serialize() const {
-        assert(false, "Stab");
+        Serial res = Serial(cid, ver, clid);
+
+        res.stable.length = St.length;  // allocate
+        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
+        *cast(Cid*)&res.stable[St._p1Cid_ofs] = _p1Cid;
+        *cast(Cid*)&res.stable[St._p2Cid_ofs] = _p2Cid;
+        *cast(float*)&res.stable[St._p3Float_ofs] = _p3Float;
+
+        return res;
     }
 
     /// Equality test
@@ -508,19 +647,60 @@ final class A_CidFloat: A {
     // Parameter 2 - a float value
     protected float _p3Float;
 
+    //---%%%---%%%---%%%---%%%---%%% funcs ---%%%---%%%---%%%---%%%---%%%---%%%
+
     /**
             Initialize concept from its serialized form.
         Parameters:
-            cid = cid
-            ver = concept version
-            clid = classinfo identifier
             stable = stable part of data
             transient = unstable part of data
-        Returns: newly constructed object of this class
+        Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
-        assert(false, "Stab");
+    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    {
+        _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
+        _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
+        _p2Cid = *cast(Cid*)&stable[St._p2Cid_ofs];
+        _p3Float = *cast(float*)&stable[St._p3Float_ofs];
+
+        return tuple!("stable", "transient")(stable[St.length..$], transient[]);
     }
+
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+    //
+    //                                  Private
+    //
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+
+    /// Stable offsets. Used by serialize()/_deserialize()
+    private enum St {
+        _statActionCid_ofs = 0,
+        _p1Cid_ofs = _statActionCid_ofs + _statActionCid.sizeof,
+        _p2Cid_ofs = _p1Cid_ofs + _p1Cid.sizeof,
+        _p3Float_ofs = _p2Cid_ofs + _p2Cid.sizeof,
+        length = _p3Float_ofs + _p3Float.sizeof
+    }
+
+    /// Tranzient offsets. Used by serialize()/_deserialize()
+    private enum Tr {
+        length = 0
+    }
+}
+
+unittest {
+    auto a = new SpA_CidCidFloat(42);
+    a.ver = 5;
+    a._statActionCid = 43;
+    a._p1Cid = 44;
+    a._p2Cid = 45;
+    a._p3Float = 4.5;
+
+    SpiritConcept.Serial ser = a.serialize;
+    auto b = cast(SpA_CidCidFloat)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
+    assert(b.cid == 42 && b.ver == 5 && SpiritConcept.spiritRegistry[b.clid] == typeid(SpA_CidCidFloat) &&
+            b._statActionCid == 43 && b._p1Cid == 44 && b._p2Cid == 45 && b._p3Float == 4.5);
+
+    assert(a == b);
 }
 
 /// Live.
@@ -544,7 +724,14 @@ final class A_CidCidFloat: A {
 
     /// Serialize concept
     override Serial serialize() const {
-        assert(false, "Stab");
+        Serial res = Serial(cid, ver, clid);
+
+        res.stable.length = St.length;  // allocate
+        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
+        *cast(Cid*)&res.stable[St._p1Cid_ofs] = _p1Cid;
+        *cast(int*)&res.stable[St._p2Int_ofs] = _p2Int;
+
+        return res;
     }
 
     /// Equality test
@@ -600,19 +787,57 @@ final class A_CidCidFloat: A {
     // Parameter 2 - a float value
     protected int _p2Int;
 
+    //---%%%---%%%---%%%---%%%---%%% funcs ---%%%---%%%---%%%---%%%---%%%---%%%
+
     /**
             Initialize concept from its serialized form.
         Parameters:
-            cid = cid
-            ver = concept version
-            clid = classinfo identifier
             stable = stable part of data
             transient = unstable part of data
-        Returns: newly constructed object of this class
+        Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
-        assert(false, "Stab");
+    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    {
+        _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
+        _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
+        _p2Int = *cast(int*)&stable[St._p2Int_ofs];
+
+        return tuple!("stable", "transient")(stable[St.length..$], transient[]);
     }
+
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+    //
+    //                                  Private
+    //
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+
+    /// Stable offsets. Used by serialize()/_deserialize()
+    private enum St {
+        _statActionCid_ofs = 0,
+        _p1Cid_ofs = _statActionCid_ofs + _statActionCid.sizeof,
+        _p2Int_ofs = _p1Cid_ofs + _p1Cid.sizeof,
+        length = _p2Int_ofs + _p2Int.sizeof
+    }
+
+    /// Tranzient offsets. Used by serialize()/_deserialize()
+    private enum Tr {
+        length = 0
+    }
+}
+
+unittest {
+    auto a = new SpA_CidInt(42);
+    a.ver = 5;
+    a._statActionCid = 43;
+    a._p1Cid = 44;
+    a._p2Int = 45;
+
+    SpiritConcept.Serial ser = a.serialize;
+    auto b = cast(SpA_CidInt)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
+    assert(b.cid == 42 && b.ver == 5 && SpiritConcept.spiritRegistry[b.clid] == typeid(SpA_CidInt) &&
+            b._statActionCid == 43 && b._p1Cid == 44 && b._p2Int == 45);
+
+    assert(a == b);
 }
 
 /// Live.

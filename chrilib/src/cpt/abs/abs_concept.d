@@ -1,7 +1,7 @@
 /// The HolyConcept and its descendants. All holy classes are shared, and they inherit the shared attribute from the root class
 /// HolyConcept.
 module cpt.abs.abs_concept;
-import std.format;
+import std.format, std.typecons;
 
 import project_params, tools;
 
@@ -83,10 +83,13 @@ abstract class SpiritConcept {
             transient = unstable part of data
         Returns: newly constructed object of this class
     */
-    static SpiritConcept deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
+    static SpiritConcept deserialize(Cid cid, Cvr ver, Clid clid, byte[] stable, byte[] transient) {
 
         auto res = cast(SpiritConcept)_d_newclass(spiritRegistry[clid]);    // create object
-        res._deserialize(cid, ver, clid, stable, transient);
+        cast()res.cid = cid;
+        res.ver = ver;
+        cast()res.clid = clid;
+        res._deserialize(stable, transient);
 
         return res;
     }
@@ -103,11 +106,14 @@ abstract class SpiritConcept {
         return true;
     }
 
-    /// Cannot override Object.toString with shared function, so live with it.
+    /// To human readable string.
     override string toString() const {
         import std.format: format;
 
-        return format!"%s(%s): %,3?s"(_nm_[cid], typeid(this), '_', cid);
+        if(auto p = cid in _nm_)
+            return format!"%s(%s): %,3?s(%s)"(*p, typeid(this), '_', cid, '_', ver);
+        else
+            return format!"Noname(%s): %,3?s(%s)"(typeid(this), '_', cid, '_', ver);
     }
 
     /**
@@ -151,19 +157,11 @@ deprecated    const(byte[]) deepBlit() const {
     /**
             Initialize concept from its serialized form.
         Parameters:
-            cid = cid
-            ver = concept version
-            clid = classinfo identifier
             stable = stable part of data
             transient = unstable part of data
-        Returns: newly constructed object of this class
+        Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient)
-    {
-        cast()this.cid = cid;
-        this.ver = ver;
-        cast()this.clid = clid;
-    }
+    abstract protected Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient);
 }
 
 /**

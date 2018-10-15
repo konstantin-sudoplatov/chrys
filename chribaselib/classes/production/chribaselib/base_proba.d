@@ -8,4 +8,8 @@ version(unittest) {
 
 // We need an executable in debug and unittest modes in order to run the Gnu Debugger on.
 debug void main() {
+    string[int] a;
+    a[1] = "one";
+    string* p = 1 in a;
+    writeln(*p);
 }

@@ -1,5 +1,6 @@
 module cpt.abs.abs_neuron;
-import std.format;
+import std.stdio;
+import std.format, std.typecons;
 
 import project_params, tools;
 
@@ -15,28 +16,6 @@ import cpt.cpt_interfaces;
             Base for all neurons.
 */
 abstract class SpiritNeuron: SpiritDynamicConcept {
-
-    //---***---***---***---***---***--- types ---***---***---***---***---***---***
-
-    /// Element of the effects_ array.
-    static struct Effect {
-        float upperBound;    /// lower boundary of the span (excluding)
-        Cid[] actions;          /// actions, that will be taken before the branching
-        Cid[] branches;         /// list of branches where the first branch is the next head of the current branch and the rest will be spawned
-
-        this(float upBnd, Cid[] acts, Cid[] brs) {
-            upperBound = upBnd;
-            actions = acts;
-            branches = brs;
-        }
-
-        /// Equality test.
-        bool opEquals()(auto ref const Effect e) const {
-            return upperBound == e.upperBound && actions == e.actions && branches == e.branches;
-        }
-    }
-
-    //---***---***---***---***---***--- data ---***---***---***---***---***--
 
     /**
                 Constructor
@@ -65,15 +44,62 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
 
     /// Serialize concept
     override Serial serialize() const {
-        assert(false, "Stab");
+        Serial res = Serial(cid, ver, clid);
+
+        // Calculate size of the stable buffer and allocate it
+        size_t len = cutoff_.sizeof;                                // space for cutoff_
+        len += size_t.sizeof;                                       // space for the number elements of _effects
+        foreach(i; 0.._effects.length) {
+            len += float.sizeof + 2*size_t.sizeof;          // space for upperBound and sizes of the action and branch arrays
+            len += _effects[i].actions.length*Cid.sizeof;   // space for the action array
+            len += _effects[i].branches.length*Cid.sizeof;  // space for the branch array
+        }
+        res.stable.length = len;
+
+        // Fill in the stable buffer
+        size_t ofs;     // offset
+        static assert(is(typeof(cutoff_) == const float));
+        *cast(float*)&res.stable[ofs] = cutoff_;                    // cutoff_
+        ofs += cutoff_.sizeof;
+        *cast(size_t*)&res.stable[ofs] = _effects.length;           // _effects.length
+        ofs += size_t.sizeof;
+        foreach(i; 0.._effects.length) {
+            static assert(is(typeof(_effects[i].upperBound) == const float));
+            *cast(float*)&res.stable[ofs] = _effects[i].upperBound;         // _effects[i].upperBound
+            ofs += float.sizeof;
+
+            // actions
+            *cast(size_t*)&res.stable[ofs] = _effects[i].actions.length;    // _effects[i].actions.length
+            ofs += size_t.sizeof;
+            foreach(j; 0.._effects[i].actions.length) {
+                *cast(Cid*)&res.stable[ofs] = _effects[i].actions[j];       // _effects[i].actions[j]
+                ofs += Cid.sizeof;
+            }
+
+            // branches
+            *cast(size_t*)&res.stable[ofs] = _effects[i].branches.length;   // _effects[i].actions.length
+            ofs += size_t.sizeof;
+            foreach(j; 0.._effects[i].branches.length) {
+                *cast(Cid*)&res.stable[ofs] = _effects[i].branches[j];      // _effects[i].branches[j]
+                ofs += Cid.sizeof;
+            }
+        }
+
+        return res;
     }
 
     /// Equality test
     override bool opEquals(Object sc) const {
-
         if(!super.opEquals(sc)) return false;
+
         auto o = scast!(typeof(this))(sc);
-        return _effects == o._effects && cutoff_ == o.cutoff_;
+        if(cutoff_ != o.cutoff_ || _effects.length != o._effects.length) return false;
+        foreach(i; 0.._effects.length){
+            if(_effects[i].upperBound != o._effects[i].upperBound) return false;
+            if(_effects[i].actions != o._effects[i].actions) return false;
+            if(_effects[i].branches != o._effects[i].branches) return false;
+        }
+        return true;
     }
 
     override string toString() const {
@@ -146,7 +172,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
 
     /**
                 Add actions and branches for a new span of the activation values. If cutoff is enabled, which is the default,
-            the the number of spans is bigger by one, than defined in the effects array, the first dummy span of
+            the the number of spans is bigger by one, than defined in the effects array. The first dummy span of
         Effect(cutoff, null, null) ocupies the region [-float.infinity, cutoff]. You can disable cutoff in three ways:
         1. the function disableCutoff(); 2. the property neuron.cutoff = float.nan; 3. defining the first span with the
         upperBound <= cutoff.
@@ -379,6 +405,27 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
             brCids ~= ad.cid;
         appendBranches(activation, brCids);
     }
+
+    //---***---***---***---***---***--- types ---***---***---***---***---***---***
+
+    /// Element of the effects_ array.
+    static struct Effect {
+        float upperBound;    /// lower boundary of the span (excluding)
+        Cid[] actions;          /// actions, that will be taken before the branching
+        Cid[] branches;         /// list of branches where the first branch is the next head of the current branch and the rest will be spawned
+
+        this(float upBnd, Cid[] acts, Cid[] brs) {
+            upperBound = upBnd;
+            actions = acts;
+            branches = brs;
+        }
+
+        /// Equality test.
+        bool opEquals()(auto ref const Effect e) const {
+            return upperBound == e.upperBound && actions == e.actions && branches == e.branches;
+        }
+    }
+
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //                                 Protected
@@ -404,15 +451,44 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     /**
             Initialize concept from its serialized form.
         Parameters:
-            cid = cid
-            ver = concept version
-            clid = classinfo identifier
             stable = stable part of data
             transient = unstable part of data
-        Returns: newly constructed object of this class
+        Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
-        assert(false, "Stab");
+    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    {
+        size_t ofs;     // offset in the stable buffer
+        static assert(is(typeof(cutoff_) == float));
+        cutoff_ = *cast(float*)&stable[ofs];                    // cutoff_
+        ofs += cutoff_.sizeof;
+        size_t len = *cast(size_t*)&stable[ofs];                // _effects.length
+        ofs += size_t.sizeof;
+        _effects.length = len;                          // allocate
+        foreach(i; 0.._effects.length) {
+            static assert(is(typeof(_effects[0].upperBound) == float));
+            _effects[i].upperBound = *cast(float*)&stable[ofs];         // _effects[i].upperBound
+            ofs += float.sizeof;
+
+            // actions
+            len = *cast(size_t*)&stable[ofs];                           // _effects[i].actions.length
+            ofs += size_t.sizeof;
+            _effects[i].actions.length = len;                           // allocate
+            foreach(j; 0.._effects[i].actions.length) {
+                _effects[i].actions[j] = *cast(Cid*)&stable[ofs];       // _effects[i].actions[j]
+                ofs += Cid.sizeof;
+            }
+
+            // branches
+            len = *cast(size_t*)&stable[ofs];                           // _effects[i].branches.length
+            ofs += size_t.sizeof;
+            _effects[i].branches.length = len;                          // allocate
+            foreach(j; 0.._effects[i].branches.length) {
+                _effects[i].branches[j] = *cast(Cid*)&stable[ofs];      // _effects[i].branches[j]
+                ofs += Cid.sizeof;
+            }
+        }
+
+        return tuple!("stable", "transient")(stable[ofs..$], transient[]);
     }
 
     /// If activation <= cutoff then result of the selectEffects() function is automatically Effect(cutoff, null, null),
@@ -475,7 +551,23 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
 
     /// Serialize concept
     override Serial serialize() const {
-        assert(false, "Stab");
+        Serial res = super.serialize;
+
+        //// Calculate needed space and allocate it
+        //size_t ofs = res.stable.length;                         // offset from the beginning of the bufer
+        //size_t len = size_t.sizeof;                             // space for the number elements of _premises
+        //len += _premises.length*Cid.sizeof;                     // space for the premise cids
+        //res.stable.length = ofs + len;              // allocate
+        //
+        //// Fill in the buffer
+        //*cast(size_t*)&res.stable[ofs] = _premises.length;      // number of elements in the _premises array
+        //ofs += size_t.sizeof;
+        //foreach(i; 0.._premises.length) {
+        //    *cast(Cid*)&res.stable[ofs] = _premises[i];         // the premise cids
+        //    ofs += Cid.sizeof;
+        //}
+
+        return res;
     }
 
     /// Equality test
@@ -503,15 +595,24 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
     /**
             Initialize concept from its serialized form.
         Parameters:
-            cid = cid
-            ver = concept version
-            clid = classinfo identifier
             stable = stable part of data
             transient = unstable part of data
-        Returns: newly constructed object of this class
+        Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    protected override void _deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
-        assert(false, "Stab");
+    protected override Tuple!(byte[], "stable", byte[], "transient") _deserialize(byte[] stable, byte[] transient)
+    {
+        //auto theRest = super._deserialize(stable, transient);
+        //size_t ofs;
+        //size_t len = *cast(size_t*)theRest.stable[ofs];         // number of elements in the _premises array
+        //ofs += size_t.sizeof;
+        //_premises.length = len;                         // allocate
+        //foreach(i; 0.._premises.length) {
+        //    _premises[i] = *cast(Cid*)theRest.stable[ofs];
+        //    ofs += Cid.sizeof;
+        //}
+
+//        return tuple!("stable", "transient")(stable[ofs..$], transient[]);
+        return tuple!("stable", "transient")(stable[0..$], transient[]);
     }
 }
 

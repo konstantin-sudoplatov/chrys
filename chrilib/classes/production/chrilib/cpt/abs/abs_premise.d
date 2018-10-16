@@ -15,25 +15,7 @@ abstract class SpiritPremise: SpiritDynamicConcept {
     /// constructor
     this(Cid cid, Clid clid) { super(cid, clid); }
 
-    /// Serialize concept
-    override Serial serialize() const {
-        assert(false, "Stab");
-    }
-
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-    /**
-            Initialize concept from its serialized form.
-        Parameters:
-            stable = stable part of data
-            transient = unstable part of data
-        Returns: unconsumed slices of the stable and transient byte arrays.
-    */
-    protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
-            const byte[] transient)
-    {
-        assert(false, "Stab");
-    }
 }
 
 /// Ditto

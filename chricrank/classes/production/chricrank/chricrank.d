@@ -1,6 +1,6 @@
 module chricrank;
 import std.stdio;
-import std.conv;
+import std.conv, std.format;
 
 import derelict.pq.pq;
 import project_params, tools;
@@ -20,22 +20,32 @@ void main()
     // Fill and crank main maps with static and hardcoded dynamic concepts and their names.
     loadAndCrank_(_sm_, _nm_);
 
-    // TODO: not finished
+    // Add or update spirit concepts in DB
+    Cind added;
+    Cind updated;
     foreach(cid; _sm_.byKey) {
         const SpiritConcept smCpt = _sm_[cid];
+        if      // is it a static concept?
+                (smCpt.cid <= MAX_STATIC_CID)
+            // no DB for it
+            continue;
+
         const SpiritConcept dbCpt = dbCptHnd.retreiveConcept(cid, 0);
-        //
-        //if      // isn't the concept in DP?
-        //        (!dbCpt)
-        //{   //no: add it
-        //    dbCptHnd.insertConcept(smCpt);
-        //}
-        //else if // is the concept in DP different from the newly cranked?
-        //        (dbCpt != smCpt)
-        //{   //yes: update it
-        //    dbCptHnd.updateConcept(smCpt);
-        //}
+        if      // isn't the concept in DP?
+                (!dbCpt)
+        {   //no: add it
+            dbCptHnd.insertConcept(smCpt);
+            added++;
+        }
+        else if // is the concept in DP different from the newly cranked?
+                (dbCpt != smCpt)
+        {   //yes: update it
+            dbCptHnd.updateConcept(smCpt);
+            updated++;
+        }
     }
+
+    logit(format!"%s concepts added to DB, %s concepts updated in DB."(added, updated));
 }
 
 //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%

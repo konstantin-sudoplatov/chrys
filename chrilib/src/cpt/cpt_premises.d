@@ -36,7 +36,12 @@ import crank.crank_types: DcpDescriptor;
 
     /// Serialize concept
     override Serial serialize() const {
-        assert(false, "Stab");
+        auto res = Serial(cid, ver, clid);
+
+        res.stable.length = Cid.sizeof;  // allocate
+        *cast(Cid*)&res.stable[0] = seedCid_;
+
+        return res;
     }
 
     /// Equality test
@@ -75,7 +80,9 @@ import crank.crank_types: DcpDescriptor;
     protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
             const byte[] transient)
     {
-        assert(false, "Stab");
+        seedCid_ = *cast(Cid*)&stable[0];
+
+        return tuple!(const byte[], "stable", const byte[], "transient")(stable[Cid.sizeof..$], transient);
     }
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%

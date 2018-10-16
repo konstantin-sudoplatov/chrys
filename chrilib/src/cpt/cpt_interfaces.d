@@ -169,8 +169,8 @@ mixin template PremiseImpl(T : PremiseIfc) {
 
     /// Add premises by cid.
     void addPremises(Cid[] premCids) {
-        foreach(cid; premCids)
-            assert(cast(BinActivationIfc)_sm_[cid].live_factory,
+        debug foreach(cid; premCids)
+            assert(!_maps_filled_ || cast(BinActivationIfc)_sm_[cid].live_factory,    // !_maps_filled_ in case of calls from unittest
                     format!"Cid %s must implement BinActivationIfc. Check the class %s."(cid, typeid(_sm_[cid])));
 
         _premises ~= premCids;
@@ -178,7 +178,7 @@ mixin template PremiseImpl(T : PremiseIfc) {
 
     /// Add premise by cid.
     void addPremises(Cid premCid) {
-        assert(cast(BinActivationIfc)_sm_[premCid].live_factory,
+        debug assert(!_maps_filled_ || cast(BinActivationIfc)_sm_[premCid].live_factory,     // !_maps_filled_ in case of calls from unittest
                 format!"Cid %s must implement BinActivationIfc. Check the class %s."(premCid, typeid(_sm_[premCid])));
 
         _premises ~= premCid;

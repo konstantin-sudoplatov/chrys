@@ -1,5 +1,8 @@
 module tools;
-import std.format;
+import std.stdio;
+import std.format, std.typecons;
+
+import project_params;
 
 /// External runtime function, that creates a new object by its ClassInfo. No constructors are called, though static
 /// initialisation is done. Very fast. Much faster than manually allocate an object on the heap as new buf[], as ehe emplace
@@ -203,6 +206,80 @@ Object clone (Object srcObject)
     copy [8 .. size] = (cast(void *)srcObject)[8 .. size];
     return cast(Object)copy;
 }
+
+/**
+        Serialize an arbitrary array into a byte buffer. Works in pair with the deserializeArray() function.
+    Note: null or empty arrays after serialization/deserialization becomes null.
+    Parameters:
+        ar = array to serialize
+    Returns: byte array with first Cind as the length and the rest as the elements of the array.
+*/
+pure nothrow const(byte[]) serializeArray(T)(const T[] ar) {
+    byte[] rs;
+
+    size_t len = Cind.sizeof + ar.length*T.sizeof;    // calculate required space
+    rs.length = len;        // allocate
+    Cind ofs;
+
+    // Put intu buffer length of the source array as Cind
+    *cast(T*)&rs[ofs] = cast(Cind)ar.length;
+    ofs += Cind.sizeof;
+
+    // Put array content
+    foreach(i, e; ar) {
+        *cast(T*)&rs[ofs] = e;
+        ofs += T.sizeof;
+    }
+
+    return rs;
+}
+
+/**
+        Deserialize a byte buffer into an array of given type. Works in pair with the serializeArray() function.
+    Note: null or empty arrays after serialization/deserialization becomes null.
+    Parameters:
+        T = type of the array elements.
+        buf = byte buffer with the serialization data. Length (Cind) of the array goes first and then its elements.
+    Returns: Tuple, the first element of which is the deserialized array and the second one is the unconsumed rest of the
+        byte buffer.
+*/
+pure Tuple!(T[], "array", const byte[], "restOfBuffer") deserializeArray(T: T[])(const byte[] buf) {
+    assert(buf.length >= Cind.sizeof, format!"Buffer must be at least %s bytes and it is %s"(Cind.sizeof, buf.length));
+
+    Cind ofs;
+    size_t len = *cast(T*)&buf[ofs];        // length of the array
+    ofs += Cind.sizeof;
+
+    // Check for emptiness. If empty return null array and consumed by Cind.sizeof buffer
+    if(len == 0) return tuple!(T[], "array", const byte[], "restOfBuffer")(null, buf[ofs..$]);
+
+    assert(Cind.sizeof + len*T.sizeof <= buf.length,
+            format!"The buf of length %s is not enough to contain %s elements of type %s"
+            (buf.length, len, T.stringof));
+
+    T[] rs;
+    rs.length = len;    // allocate
+    foreach(i; 0..len) {
+        rs[i] = *cast(T*)&buf[ofs];
+        ofs += T.sizeof;
+    }
+
+    return tuple!(T[], "array", const byte[], "restOfBuffer")(rs, buf[ofs..$]);
+}
+
+unittest{
+    Cid[] a = [1, 2, 3];
+    const byte[] ser = serializeArray(a);
+    auto dser = deserializeArray!(Cid[])(ser);
+    assert(a == dser.array);
+
+    a = null;   // null goes to null
+    assert(deserializeArray!(Cid[])(serializeArray(a)).array is null);
+
+    a = [];   // empty goes to null
+    assert(deserializeArray!(Cid[])(serializeArray(a)).array is null);
+}
+
 
 //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
@@ -817,7 +894,7 @@ unittest {
             E = type of elements
             Sz = type of internal pointers. They determine the maximum size of the buffer.
 */
-private struct ArrayListImpl(E, Sz=uint)
+private struct ArrayListImpl(E, Sz=Cind)
     if(is(Sz == ubyte) || is(Sz == ushort) || is (Sz == uint) || is(Sz == ulong))
 {
     import core.exception: RangeError;

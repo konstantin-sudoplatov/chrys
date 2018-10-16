@@ -72,7 +72,9 @@ abstract class SpiritConcept {
     abstract Concept live_factory() const;
 
     /// Serialize concept
-    abstract Serial serialize() const;
+    Serial serialize() const {
+        return Serial(cid, ver, clid);
+    }
 
     /**
             Initialize concept from its serialized form.
@@ -144,8 +146,10 @@ abstract class SpiritConcept {
             transient = unstable part of data
         Returns: unconsumed slices of the stable and transient byte arrays.
     */
-    abstract protected Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
-            const byte[] transient);
+    protected Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
+            const byte[] transient) {
+        return tuple!(const byte[], "stable", const byte[], "transient")(stable, transient);
+    }
 }
 
 /**

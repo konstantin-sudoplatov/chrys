@@ -32,9 +32,8 @@ import crank.crank_types: DcpDescriptor;
 
     /// Serialize concept
     override Serial serialize() const {
-        Serial res;
+        auto res = Serial(cid, ver, clid);
 
-        res.cid = cid; res.ver = ver; res.clid = clid;
         res.stable.length = St.length;  // allocate
         *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
 
@@ -106,7 +105,7 @@ import crank.crank_types: DcpDescriptor;
     {
         _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
 
-        return cast(Tuple!(const byte[], "stable", const byte[], "transient"))(stable[St.length..$], transient[]);
+        return tuple!(const byte[], "stable", const byte[], "transient")(stable[St.length..$], transient);
     }
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
@@ -241,7 +240,7 @@ class A: DynamicConcept {
         _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
         _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
 
-        return cast(Tuple!(const byte[], "stable", const byte[], "transient"))(stable[St.length..$], transient[]);
+        return tuple!(const byte[], "stable", const byte[], "transient")(stable[St.length..$], transient);
     }
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
@@ -381,7 +380,7 @@ final class A_Cid: A {
         _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
         _p2Cid = *cast(Cid*)&stable[St._p2Cid_ofs];
 
-        return cast(Tuple!(const byte[], "stable", const byte[], "transient"))(stable[St.length..$], transient[]);
+        return tuple!(const byte[], "stable", const byte[], "transient")(stable[St.length..$], transient);
     }
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
@@ -519,7 +518,7 @@ final class A_CidCid: A {
         _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
         _p2Float = *cast(float*)&stable[St._p2Float_ofs];
 
-        return cast(Tuple!(const byte[], "stable", const byte[], "transient"))(stable[St.length..$], transient[]);
+        return tuple!(const byte[], "stable", const byte[], "transient")(stable[St.length..$], transient);
     }
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
@@ -668,7 +667,7 @@ final class A_CidFloat: A {
         _p2Cid = *cast(Cid*)&stable[St._p2Cid_ofs];
         _p3Float = *cast(float*)&stable[St._p3Float_ofs];
 
-        return cast(Tuple!(const byte[], "stable", const byte[], "transient"))(stable[St.length..$], transient[]);
+        return tuple!(const byte[], "stable", const byte[], "transient")(stable[St.length..$], transient);
     }
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
@@ -808,7 +807,7 @@ final class A_CidCidFloat: A {
         _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
         _p2Int = *cast(int*)&stable[St._p2Int_ofs];
 
-        return cast(Tuple!(const byte[], "stable", const byte[], "transient"))(stable[St.length..$], transient[]);
+        return tuple!(const byte[], "stable", const byte[], "transient")(stable[St.length..$], transient);
     }
 
     //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@

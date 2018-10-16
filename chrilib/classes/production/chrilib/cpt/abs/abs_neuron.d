@@ -1,6 +1,6 @@
 module cpt.abs.abs_neuron;
 import std.stdio;
-import std.format, std.typecons;
+import std.format, std.typecons, std.math;
 
 import project_params, tools;
 
@@ -54,38 +54,24 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
             len += _effects[i].actions.length*Cid.sizeof;   // space for the action array
             len += _effects[i].branches.length*Cid.sizeof;  // space for the branch array
         }
-        res.stable.length = len;        // allocate
+        res.stable.reserve(len);        // get rid of unnesessary allocations
 
-        // Fill in the stable buffer
-        Cind ofs;     // offset
+        // Fill in the cutoff_ and _effect.length
         static assert(is(typeof(cutoff_) == const float));
-        *cast(float*)&res.stable[ofs] = cutoff_;                    // cutoff_
-        ofs += cutoff_.sizeof;
-        *cast(Cind*)&res.stable[ofs] = cast(Cind)_effects.length;           // _effects.length
-        ofs += Cind.sizeof;
+        res.stable ~= (cast(byte*)&cutoff_)[0..float.sizeof];                   // cutoff_
         len = cast(Cind)_effects.length;
+        res.stable ~= (cast(byte*)&len)[0..Cind.sizeof];                        // _effects.length
+
+        // serialize _effects
         foreach(i; 0..len) {
             static assert(is(typeof(_effects[i].upperBound) == const float));
-            *cast(float*)&res.stable[ofs] = _effects[i].upperBound;         // _effects[i].upperBound
-            ofs += float.sizeof;
+            res.stable ~= (cast(byte*)&_effects[i].upperBound)[0..float.sizeof];         // _effects[i].upperBound
 
             // actions
-            *cast(Cind*)&res.stable[ofs] = cast(Cind)_effects[i].actions.length;    // _effects[i].actions.length
-            ofs += Cind.sizeof;
-            Cind leng = cast(Cind)_effects[i].actions.length;
-            foreach(j; 0..leng) {
-                *cast(Cid*)&res.stable[ofs] = _effects[i].actions[j];       // _effects[i].actions[j]
-                ofs += Cid.sizeof;
-            }
+            res.stable ~= serializeArray(_effects[i].actions);
 
             // branches
-            *cast(Cind*)&res.stable[ofs] = cast(Cind)_effects[i].branches.length;   // _effects[i].actions.length
-            ofs += Cind.sizeof;
-            leng = cast(Cind)_effects[i].branches.length;
-            foreach(j; 0..leng) {
-                *cast(Cid*)&res.stable[ofs] = _effects[i].branches[j];      // _effects[i].branches[j]
-                ofs += Cid.sizeof;
-            }
+            res.stable ~= serializeArray(_effects[i].branches);
         }
 
         return res;
@@ -96,9 +82,11 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         if(!super.opEquals(sc)) return false;
 
         auto o = scast!(typeof(this))(sc);
-        if(cutoff_ != o.cutoff_ || _effects.length != o._effects.length) return false;
+        if(!(cutoff_.isNaN && o.cutoff_.isNaN) && cutoff_ != o.cutoff_) return false;
+        if(_effects.length != o._effects.length) return false;
         foreach(i; 0.._effects.length){
-            if(_effects[i].upperBound != o._effects[i].upperBound) return false;
+            if(!(_effects[i].upperBound.isNaN && o._effects[i].upperBound.isNaN) &&
+                    _effects[i].upperBound != o._effects[i].upperBound) return false;
             if(_effects[i].actions != o._effects[i].actions) return false;
             if(_effects[i].branches != o._effects[i].branches) return false;
         }
@@ -468,31 +456,23 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         Cind len = *cast(Cind*)&stable[ofs];                // _effects.length
         ofs += Cind.sizeof;
         _effects.length = len;                          // allocate
+
+        byte[] buf = cast(byte[])stable[ofs..$];
         foreach(i; 0..len) {
             static assert(is(typeof(_effects[0].upperBound) == float));
-            _effects[i].upperBound = *cast(float*)&stable[ofs];         // _effects[i].upperBound
-            ofs += float.sizeof;
+            _effects[i].upperBound = *cast(float*)&buf[0];         // _effects[i].upperBound
 
             // actions
-            Cind leng = *cast(Cind*)&stable[ofs];                           // _effects[i].actions.length
-            ofs += Cind.sizeof;
-            _effects[i].actions.length = leng;                           // allocate
-            foreach(j; 0..leng) {
-                _effects[i].actions[j] = *cast(Cid*)&stable[ofs];       // _effects[i].actions[j]
-                ofs += Cid.sizeof;
-            }
+            auto dserAct = deserializeArray!(Cid[])(buf[float.sizeof..$]);
+            _effects[i].actions = dserAct.array;
 
             // branches
-            leng = *cast(Cind*)&stable[ofs];                           // _effects[i].branches.length
-            ofs += Cind.sizeof;
-            _effects[i].branches.length = leng;                          // allocate
-            foreach(j; 0..leng) {
-                _effects[i].branches[j] = *cast(Cid*)&stable[ofs];      // _effects[i].branches[j]
-                ofs += Cid.sizeof;
-            }
+            auto dserBr = deserializeArray!(Cid[])(dserAct.restOfBuffer);
+            _effects[i].branches = dserBr.array;
+            buf = cast(byte[])dserBr.restOfBuffer;
         }
 
-        return cast(Tuple!(const byte[], "stable", const byte[], "transient"))(stable[ofs..$], transient[]);
+        return tuple!(const byte[], "stable", const byte[], "transient")(buf, transient);
     }
 
     /// If activation <= cutoff then result of the selectEffects() function is automatically Effect(cutoff, null, null),
@@ -557,19 +537,8 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
     override Serial serialize() const {
         Serial res = super.serialize;
 
-        // Calculate needed space and allocate it
-        Cind ofs = cast(Cind)res.stable.length;                         // offset from the beginning of the bufer
-        Cind len = Cind.sizeof;                             // space for the number elements of _premises
-        len += _premises.length*Cid.sizeof;                     // space for the premise cids
-        res.stable.length = ofs + len;              // allocate
-
-        // Fill in the buffer
-        *cast(Cind*)&res.stable[ofs] = cast(Cind)_premises.length;      // number of elements in the _premises array
-        ofs += Cind.sizeof;
-        foreach(i; 0.._premises.length) {
-            *cast(Cid*)&res.stable[ofs] = _premises[i];         // the premise cids
-            ofs += Cid.sizeof;
-        }
+        // add _premises
+        res.stable ~= serializeArray(_premises);
 
         return res;
     }
@@ -610,16 +579,11 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
             const byte[] transient)
     {
         auto theRest = super._deserialize(stable, transient);
-        Cind ofs;
-        Cind len = *cast(Cind*)&theRest.stable[ofs];         // number of elements in the _premises array
-        ofs += Cind.sizeof;
-        _premises.length = len;                         // allocate
-        foreach(i; 0.._premises.length) {
-            _premises[i] = *cast(Cid*)&theRest.stable[ofs];
-            ofs += Cid.sizeof;
-        }
 
-        return cast(Tuple!(const byte[], "stable", const byte[], "transient"))(stable[ofs..$], transient[]);
+        auto dser = deserializeArray!(Cind[])(theRest.stable);
+        _premises = dser.array;
+
+        return tuple!(const byte[], "stable", const byte[], "transient")(dser.restOfBuffer, transient);
     }
 }
 

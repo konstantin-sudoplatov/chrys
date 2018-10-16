@@ -54,7 +54,7 @@ shared synchronized class ConceptVersion {
 }
 
 /// Database management for concepts
-struct DbConceptHandler {
+struct CptManager {
     import derelict.pq.pq: PGconn;
 
     @disable this();

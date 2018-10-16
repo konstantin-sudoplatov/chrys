@@ -14,7 +14,7 @@ import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_stat;
 
 void main()
 {
-    const dbCptHnd = DbConceptHandler(0);
+    const dbCptHnd = CptManager(0);
     logUnusedClids;
 
     // Fill and crank main maps with static and hardcoded dynamic concepts and their names.
@@ -59,34 +59,40 @@ void main()
 //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
 /**
-        Fully prepare spirit and name maps based on the stat and crank modules.
+        Create and initialize the key shared structures, namely the spirit and name maps based on the stat and crank modules.
+    The spirit map is synchronized store for all concepts. The name map holds names for the named concepts. Those are
+    the concepts that code is aware of. The names are defined in the enums in the crank modules. Actually code works with
+    them based on those enums, the map is more for debugging. It is immutable, so shared easily.
+
     Parameters:
         sm = spirit map
         nm = name map
 */
 private void loadAndCrank_(ref shared SpiritMap sm, ref immutable string[Cid] nm) {
-    // Create and initialize the key shared structures
+
+    // Create spirit map
     sm = new shared SpiritMap;
-    // static concepts from the stat modules, dynamic concept names and uncrunk objects from the crank modules
+
+    // Load static concepts from the stat modules. Load dynamic named concept from the enums, located in the crank modules.
     loadConceptMaps_(sm, nm);
     debug
-        cast()_maps_filled_ = true;
+        cast()_maps_filled_ = true;     // raise the "filled" flag
 
     // Crank the system, i.e. setup manually programed dynamic concepts
     runCranks;
     import std.stdio: writefln;
     writefln("Some free dynamic cids: %s", sm.generate_some_cids(5));
 
-    // Remove from the name map entries not related to the concepts.
+    // Remove from the name map entries that have no corresponding the concepts.
     cleanupNotUsedNames;
     sm.rehash;
     (cast()nm).rehash;
     debug
-        cast()_cranked_ = true;
+        cast()_cranked_ = true;         // raise the "cranked" flag
 }
 
 /**
-            Fill in gathered in statDescriptors_ and dynDescriptors_ info into the holy map and name map.
+            Gather the static and dynamic concepts info from the stat and crank modules and put it to the spirit and name maps.
     Parameters:
         sm = spirit map
         nm = name map
@@ -94,7 +100,7 @@ private void loadAndCrank_(ref shared SpiritMap sm, ref immutable string[Cid] nm
 private void loadConceptMaps_(ref shared SpiritMap sm, ref immutable string[Cid] nm) {
     import std.stdio: writefln;
 
-    // Accept static concepts and their names from the statDescriptors_ enum
+    // Load static concepts and their names to the sm and nm maps.
     auto statDescriptors = createStatDescriptors;
     foreach(sd; statDescriptors) {
         assert(sd.cid !in sm, "Cid: " ~ to!string(sd.cid) ~ ". Cids cannot be reused.");
@@ -106,14 +112,15 @@ private void loadConceptMaps_(ref shared SpiritMap sm, ref immutable string[Cid]
     writefln("Unused static cids: %s", findUnusedStatCids);
     writefln("Last used static cid: %s", statDescriptors[$-1].cid);
 
-    // Accept dynamic concept names from the dynDescriptors_ enum
-    foreach(dd; createDynDescriptors) {
+    // Accept dynamic concepts and their names,
+    enum dynDescriptors = createDynDescriptors;
+    foreach(dd; dynDescriptors) {
         assert(dd.cid !in nm);
         cast()nm[dd.cid] = dd.name;
     }
 
     // Create dynamic concepts based on the dynDescriptors_ enum
-    static foreach(dd; createDynDescriptors) {
+    static foreach(dd; dynDescriptors) {
         sm.add(mixin("new " ~ dd.class_name ~ "(" ~ to!string(dd.cid) ~ ")"));
     }
 }

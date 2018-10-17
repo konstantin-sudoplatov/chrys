@@ -45,6 +45,7 @@ void main()
         }
     }
 
+    logit(format!"%s concepts loaded into the spirit map, %s names loaded into the name map"(_sm_.length, _nm_.length));
     logit(format!"%s concepts added to DB, %s concepts updated in DB."(added, updated));
 }
 
@@ -97,14 +98,14 @@ private void loadAndCrank_(ref shared SpiritMap sm, ref immutable string[Cid] nm
         sm = spirit map
         nm = name map
 */
-private void loadConceptMaps_(ref shared SpiritMap sm, ref immutable string[Cid] nm) {
+private void loadConceptMaps_(shared SpiritMap sm, ref immutable string[Cid] nm) {
     import std.stdio: writefln;
 
     // Load static concepts and their names to the sm and nm maps.
     auto statDescriptors = createStatDescriptors;
     foreach(sd; statDescriptors) {
         assert(sd.cid !in sm, "Cid: " ~ to!string(sd.cid) ~ ". Cids cannot be reused.");
-        sm.add(new SpStaticConcept(sd.cid, sd.fun_ptr, sd.call_type));
+        sm.add(new SpStaticConcept(sd.cid, sd.fp, sd.call_type));
         cast()nm[sd.cid] = sd.name;
     }
 

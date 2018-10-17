@@ -1,5 +1,5 @@
 module chri_shared;
-import std.conv, std.format;
+import std.conv, std.format, std.concurrency;
 
 import project_params, tools;
 
@@ -7,6 +7,11 @@ import cpt.abs.abs_concept, cpt.cpt_stat;
 import atn.atn_circle_thread;
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--
+
+//      Key threads of the project. The console thead will be spawned, but we don't need to remember its Tid. The circle
+// knows it, it's enough.
+shared const Tid _mainTid_;         /// Tid of the main thread
+shared const Tid _attnDispTid_;     /// Attention dispatcher thread Tid
 
 // Key shared data structures
 shared SpiritMap _sm_;        /// The map of holy(stable and storrable and shared) concepts.

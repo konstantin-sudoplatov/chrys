@@ -2,13 +2,24 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="66786c13-09bf-432a-98d1-9bdb521c53ae" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../chribaselib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chribaselib/bin/libchribaselib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/bin/libchribaselib.a" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricrank/bin/chricrank" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/bin/chricrank" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricrank/classes/production/chricrank/chricrank.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/classes/production/chricrank/chricrank.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricrank/src/chricrank.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/src/chricrank.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/chrilib" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chrilib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/libchrilib.a" beforeDir="false" afterPath="$PROJECT_DIR$/bin/libchrilib.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/cpt/cpt_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/cpt_types.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/production/chrilib/stat/stat_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/classes/production/chrilib/stat/stat_registry.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chri_shared.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/chri_shared.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/stat/stat_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/stat/stat_registry.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chris/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chris/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/bin/chris" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chris/chris.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/chris.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chris/classes/production/chris/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/classes/production/chris/chris.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chris/src/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/src/chris.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../old/chris/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../old/chris/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -29,8 +40,8 @@
           <entry key="project.open.time.5" value="2" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="1" />
-          <entry key="project.open.time.8" value="1" />
-          <entry key="project.opened" value="12" />
+          <entry key="project.open.time.8" value="2" />
+          <entry key="project.opened" value="13" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -41,7 +52,7 @@
           <entry key="cpt_registry" value="1" />
           <entry key="cpt_types" value="1" />
           <entry key="crank_types" value="1" />
-          <entry key="d" value="239" />
+          <entry key="d" value="244" />
           <entry key="proba" value="1" />
           <entry key="sdl" value="1" />
           <entry key="stat_types" value="1" />
@@ -49,20 +60,20 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="D file" value="239" />
+          <entry key="D file" value="244" />
           <entry key="PLAIN_TEXT" value="9" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="cpt_types" value="2" />
-          <entry key="d" value="23371" />
+          <entry key="d" value="23415" />
           <entry key="sdl" value="79" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="D file" value="23371" />
+          <entry key="D file" value="23415" />
           <entry key="PLAIN_TEXT" value="81" />
         </counts>
       </usages-collector>
@@ -74,47 +85,57 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/chri_shared.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="15" column="32" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="32" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/cpt/cpt_interfaces.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="494">
-              <caret line="180" column="110" selection-start-line="180" selection-start-column="110" selection-end-line="180" selection-end-column="110" />
+            <state relative-caret-position="19">
+              <caret line="1" column="44" selection-start-line="1" selection-start-column="44" selection-end-line="1" selection-end-column="44" />
               <folding>
-                <element signature="e#5672#5673#0" expanded="true" />
-                <element signature="e#5713#5714#0" expanded="true" />
-                <element signature="e#7161#7162#0" expanded="true" />
-                <element signature="e#7189#7190#0" expanded="true" />
-                <element signature="e#7314#7315#0" expanded="true" />
-                <element signature="e#7343#7344#0" expanded="true" />
-                <element signature="e#7414#7415#0" expanded="true" />
-                <element signature="e#7442#7443#0" expanded="true" />
-                <element signature="e#7519#7520#0" expanded="true" />
-                <element signature="e#7548#7549#0" expanded="true" />
+                <element signature="e#3834#3835#0" expanded="true" />
+                <element signature="e#3874#3875#0" expanded="true" />
+                <element signature="e#5873#5874#0" expanded="true" />
+                <element signature="e#5918#5919#0" expanded="true" />
+                <element signature="e#6111#6112#0" expanded="true" />
+                <element signature="e#6155#6156#0" expanded="true" />
+                <element signature="e#6367#6368#0" expanded="true" />
+                <element signature="e#6429#6430#0" expanded="true" />
+                <element signature="e#6510#6511#0" expanded="true" />
+                <element signature="e#6576#6577#0" expanded="true" />
+                <element signature="e#7141#7142#0" expanded="true" />
+                <element signature="e#7174#7175#0" expanded="true" />
               </folding>
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/cpt/cpt_types.d">
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/atn/atn_dispatcher_thread.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="235">
-              <caret line="56" column="15" selection-start-line="56" selection-start-column="15" selection-end-line="56" selection-end-column="15" />
+            <state relative-caret-position="133">
+              <caret line="7" column="10" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/console_thread.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="-39">
+              <caret line="9" column="19" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
+              <folding>
+                <element signature="e#1357#1358#0" expanded="true" />
+                <element signature="e#1374#1375#0" expanded="true" />
+                <element signature="e#2894#2895#0" expanded="true" />
+                <element signature="e#2911#2912#0" expanded="true" />
+                <element signature="e#2938#2939#0" expanded="true" />
+                <element signature="e#2949#2950#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/crank/crank_main.d">
+        <entry file="file://$PROJECT_DIR$/src/stat/stat_registry.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="133">
-              <caret line="7" column="9" selection-start-line="7" selection-start-column="9" selection-end-line="7" selection-end-column="9" />
+            <state relative-caret-position="361">
+              <caret line="112" column="71" selection-start-line="112" selection-start-column="71" selection-end-line="112" selection-end-column="71" />
             </state>
           </provider>
         </entry>
@@ -156,14 +177,12 @@
         <option value="$PROJECT_DIR$/src/atn/atn_dispatcher_thread.d" />
         <option value="$PROJECT_DIR$/src/crank/crank_main.d" />
         <option value="$PROJECT_DIR$/src/stat/substat/substat_subpile.d" />
-        <option value="$PROJECT_DIR$/src/stat/stat_registry.d" />
         <option value="$PROJECT_DIR$/src/cpt/cpt_abstract.d" />
         <option value="$PROJECT_DIR$/src/cpt/concept.d" />
         <option value="$PROJECT_DIR$/src/stat/stat_main.d" />
         <option value="$PROJECT_DIR$/src/messages.d" />
         <option value="$PROJECT_DIR$/src/crank/crank_types.d" />
         <option value="$PROJECT_DIR$/src/atn/atn_circle_thread.d" />
-        <option value="$PROJECT_DIR$/src/chri_shared.d" />
         <option value="$PROJECT_DIR$/../chribaselib/classes/production/chribaselib/tools.d" />
         <option value="$PROJECT_DIR$/../chribaselib/classes/production/chribaselib/db/db_concepts_table.d" />
         <option value="$PROJECT_DIR$/../chribaselib/src/tools.d" />
@@ -179,14 +198,15 @@
         <option value="$PROJECT_DIR$/src/cpt/abs/abs_neuron.d" />
         <option value="$PROJECT_DIR$/src/cpt/cpt_interfaces.d" />
         <option value="$PROJECT_DIR$/src/cpt/cpt_types.d" />
+        <option value="$PROJECT_DIR$/src/stat/stat_registry.d" />
+        <option value="$PROJECT_DIR$/src/chri_shared.d" />
+        <option value="$PROJECT_DIR$/src/console_thread.d" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-2" />
-    <option name="y" value="-3" />
-    <option name="width" value="1924" />
-    <option name="height" value="1087" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="width" value="1908" />
+    <option name="height" value="1080" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
@@ -196,28 +216,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="ProjectPane">
-        <subPane>
-          <expand>
-            <path>
-              <item name="chrilib" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chrilib" type="462c0819:PsiDirectoryNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="chrilib" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="chrilib" type="2674bda8:ScopeViewTreeModel$GroupNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
       <pane id="PackagesPane">
         <subPane>
           <expand>
@@ -262,6 +260,28 @@
               <item name="chrilib" type="616d4139:PackageViewModuleNode" />
               <item name="stat" type="1f31426a:PackageElementNode" />
               <item name="substat" type="1f31426a:PackageElementNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="ProjectPane">
+        <subPane>
+          <expand>
+            <path>
+              <item name="chrilib" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chrilib" type="462c0819:PsiDirectoryNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="chrilib" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="chrilib" type="2674bda8:ScopeViewTreeModel$GroupNode" />
             </path>
           </expand>
           <select />
@@ -542,16 +562,16 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-3" width="1924" height="1087" extended-state="6" />
+    <frame x="-2" y="-3" width="1924" height="1087" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.4875" visible="true" weight="0.19873485" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48645833" visible="true" weight="0.19873485" />
       <window_info id="Designer" order="1" />
-      <window_info id="Structure" order="2" sideWeight="0.5125" side_tool="true" visible="true" weight="0.19873485" />
+      <window_info id="Structure" order="2" sideWeight="0.51354164" side_tool="true" visible="true" weight="0.19873485" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32914045" />
-      <window_info anchor="bottom" x="2" y="651" width="1916" height="425" id="Run" order="2" type="WINDOWED" weight="0.32285115" />
+      <window_info active="true" anchor="bottom" x="2" y="646" width="1910" height="423" id="Run" order="2" type="WINDOWED" visible="true" weight="0.32285115" />
       <window_info anchor="bottom" x="0" y="703" width="1918" height="377" id="Debug" order="3" type="WINDOWED" weight="0.39832285" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -618,13 +638,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cpt/abs/concept.d" />
-    <entry file="file://$PROJECT_DIR$/src/atn/atn_dispatcher_thread.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="133">
-          <caret line="7" column="10" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/crank/subcrank/subcrank_subpile.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="38">
@@ -650,13 +663,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
           <caret line="7" column="46" selection-start-line="7" selection-start-column="46" selection-end-line="7" selection-end-column="46" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/stat/stat_types.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="95">
-          <caret line="5" column="5" selection-start-line="5" selection-start-column="5" selection-end-line="5" selection-end-column="5" />
         </state>
       </provider>
     </entry>
@@ -696,13 +702,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="133">
           <caret line="7" column="7" selection-start-line="7" selection-start-column="7" selection-end-line="7" selection-end-column="7" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/stat/stat_registry.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="2121">
-          <caret line="127" column="13" selection-start-line="127" selection-start-column="13" selection-end-line="127" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -867,29 +866,10 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/chri_shared.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="15" column="32" selection-start-line="15" selection-start-column="19" selection-end-line="15" selection-end-column="32" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/cpt/cpt_interfaces.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="494">
+        <state relative-caret-position="3116">
           <caret line="180" column="110" selection-start-line="180" selection-start-column="110" selection-end-line="180" selection-end-column="110" />
-          <folding>
-            <element signature="e#5672#5673#0" expanded="true" />
-            <element signature="e#5713#5714#0" expanded="true" />
-            <element signature="e#7161#7162#0" expanded="true" />
-            <element signature="e#7189#7190#0" expanded="true" />
-            <element signature="e#7314#7315#0" expanded="true" />
-            <element signature="e#7343#7344#0" expanded="true" />
-            <element signature="e#7414#7415#0" expanded="true" />
-            <element signature="e#7442#7443#0" expanded="true" />
-            <element signature="e#7519#7520#0" expanded="true" />
-            <element signature="e#7548#7549#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -904,6 +884,63 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="235">
           <caret line="56" column="15" selection-start-line="56" selection-start-column="15" selection-end-line="56" selection-end-column="15" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/stat/stat_types.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" column="5" selection-start-line="5" selection-start-column="5" selection-end-line="5" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/stat/stat_registry.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="361">
+          <caret line="112" column="71" selection-start-line="112" selection-start-column="71" selection-end-line="112" selection-end-column="71" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chri_shared.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="1" column="44" selection-start-line="1" selection-start-column="44" selection-end-line="1" selection-end-column="44" />
+          <folding>
+            <element signature="e#3834#3835#0" expanded="true" />
+            <element signature="e#3874#3875#0" expanded="true" />
+            <element signature="e#5873#5874#0" expanded="true" />
+            <element signature="e#5918#5919#0" expanded="true" />
+            <element signature="e#6111#6112#0" expanded="true" />
+            <element signature="e#6155#6156#0" expanded="true" />
+            <element signature="e#6367#6368#0" expanded="true" />
+            <element signature="e#6429#6430#0" expanded="true" />
+            <element signature="e#6510#6511#0" expanded="true" />
+            <element signature="e#6576#6577#0" expanded="true" />
+            <element signature="e#7141#7142#0" expanded="true" />
+            <element signature="e#7174#7175#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/atn/atn_dispatcher_thread.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="7" column="10" selection-start-line="7" selection-start-column="10" selection-end-line="7" selection-end-column="10" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/console_thread.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-39">
+          <caret line="9" column="19" selection-start-line="9" selection-start-column="19" selection-end-line="9" selection-end-column="19" />
+          <folding>
+            <element signature="e#1357#1358#0" expanded="true" />
+            <element signature="e#1374#1375#0" expanded="true" />
+            <element signature="e#2894#2895#0" expanded="true" />
+            <element signature="e#2911#2912#0" expanded="true" />
+            <element signature="e#2938#2939#0" expanded="true" />
+            <element signature="e#2949#2950#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

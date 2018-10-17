@@ -32,7 +32,7 @@ StatDescriptor[] createStatDescriptors() {
             static if(__traits(isStaticFunction, __traits(getMember, mixin(moduleName), memberName))) {
                 sd.cid = __traits(getAttributes, mixin(memberName))[0];
                 sd.name = memberName;
-                sd.fun_ptr = mixin("&" ~ memberName);
+                sd.fp = mixin("&" ~ memberName);
                 static assert(is(typeof(mixin("&"~memberName))== type!(__traits(getAttributes, mixin(memberName))[1])),
                         memberName ~ ": annotated type " ~ __traits(getAttributes, mixin(memberName))[1] ~
                         " doesn't match with real type " ~ typeof(mixin("&" ~ memberName)).stringof);
@@ -109,7 +109,7 @@ private template type(string typeName) {
 private struct StatDescriptor {
     Cid cid;                        /// cid of the concept
     string name;                    /// concept's name
-    void* fun_ptr;                  /// pointer to the function
+    void* fp;                       /// pointer to the function
     StatCallType call_type;         /// call аgreement for the function
 
     /// Reload opCmp to make it sortable on cid (not nescessary, actually, since cid is the first field in the structure).
@@ -138,6 +138,6 @@ unittest {
     assert(sd.call_type == StatCallType.p0Calp1Cid);
 
     // use the descriptor form the map to call the concept.
-    auto fp = cast(void function(Caldron, Cid))sd.fun_ptr;
+    auto fp = cast(void function(Caldron, Cid))sd.fp;
     fp(null, 0);
 }

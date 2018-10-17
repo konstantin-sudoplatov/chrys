@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e6f13b7-b9cd-4af9-969e-5956d8669eca" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../../chribaselib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chribaselib/bin/libchribaselib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/bin/libchribaselib.a" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chricrank/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chricrank/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chricrank/bin/chricrank" beforeDir="false" afterPath="$PROJECT_DIR$/../../chricrank/bin/chricrank" afterDir="false" />
@@ -10,9 +11,16 @@
       <change beforePath="$PROJECT_DIR$/../../chrilib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/bin/chrilib" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/bin/chrilib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/bin/libchrilib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/bin/libchrilib.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_interfaces.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_interfaces.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/src/cpt/cpt_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/src/cpt/cpt_types.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/chri_shared.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/chri_shared.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/stat/stat_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/stat/stat_registry.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/src/chri_shared.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/src/chri_shared.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chrilib/src/stat/stat_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/src/stat/stat_registry.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chris/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chris/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chris/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/../../chris/bin/chris" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chris/chris.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chris/chris.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chris/classes/production/chris/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chris/classes/production/chris/chris.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../../chris/src/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chris/src/chris.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -102,8 +110,9 @@
           <entry key="project.open.time.1" value="2" />
           <entry key="project.open.time.16" value="1" />
           <entry key="project.open.time.3" value="1" />
+          <entry key="project.open.time.7" value="1" />
           <entry key="project.open.time.8" value="3" />
-          <entry key="project.opened" value="11" />
+          <entry key="project.opened" value="12" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
@@ -137,8 +146,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/global_data.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="418">
-              <caret line="22" column="72" selection-start-line="22" selection-start-column="72" selection-end-line="22" selection-end-column="72" />
+            <state relative-caret-position="-266">
+              <caret line="58" column="2" lean-forward="true" selection-start-line="58" selection-start-column="2" selection-end-line="58" selection-end-column="2" />
             </state>
           </provider>
         </entry>
@@ -155,8 +164,8 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/chris.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
-              <caret line="19" column="68" selection-start-line="19" selection-start-column="68" selection-end-line="19" selection-end-column="68" />
+            <state relative-caret-position="531">
+              <caret line="39" selection-start-line="38" selection-end-line="39" />
             </state>
           </provider>
         </entry>
@@ -244,11 +253,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="-2" />
-    <option name="y" value="-3" />
-    <option name="width" value="1924" />
-    <option name="height" value="1087" />
+  <component name="ProjectFrameBounds" extendedState="7">
+    <option name="width" value="1908" />
+    <option name="height" value="1080" />
   </component>
   <component name="ProjectInspectionProfilesVisibleTreeState">
     <entry key="Project Default">
@@ -597,10 +604,11 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-3" width="1924" height="1087" extended-state="6" />
+    <frame x="-2" y="-3" width="1924" height="1087" extended-state="7" />
+    <editor active="true" />
     <layout>
-      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.525" visible="true" weight="0.1797575" />
-      <window_info x="1944" y="563" width="330" height="781" id="Structure" order="1" sideWeight="0.475" side_tool="true" visible="true" weight="0.1797575" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5239583" visible="true" weight="0.1797575" />
+      <window_info x="1944" y="563" width="330" height="781" id="Structure" order="1" sideWeight="0.47604167" side_tool="true" visible="true" weight="0.1797575" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
       <window_info id="UI Designer" order="4" />
@@ -999,13 +1007,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/global_data.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="418">
-          <caret line="22" column="72" selection-start-line="22" selection-start-column="72" selection-end-line="22" selection-end-column="72" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/crank/crank_registry.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="76">
@@ -1013,10 +1014,17 @@
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/src/global_data.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-266">
+          <caret line="58" column="2" lean-forward="true" selection-start-line="58" selection-start-column="2" selection-end-line="58" selection-end-column="2" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/src/chris.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="19" column="68" selection-start-line="19" selection-start-column="68" selection-end-line="19" selection-end-column="68" />
+        <state relative-caret-position="531">
+          <caret line="39" selection-start-line="38" selection-end-line="39" />
         </state>
       </provider>
     </entry>

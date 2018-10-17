@@ -3,29 +3,23 @@
   <component name="ChangeListManager">
     <list default="true" id="1674d1c0-aec1-4378-9f0a-d51e4c2da9ab" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../chribaselib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/bin/chribaselib" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/bin/chribaselib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chribaselib/bin/libchribaselib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/bin/libchribaselib.a" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chricrank/bin/chricrank" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/bin/chricrank" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chricrank/classes/production/chricrank/chricrank.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/classes/production/chricrank/chricrank.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chricrank/src/chricrank.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/src/chricrank.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/bin/chrilib" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/bin/chrilib" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/attn/attn_circle_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/attn/attn_circle_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/crank/crank_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/crank/crank_main.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/crank/crank_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/crank/crank_registry.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/crank/crank_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/crank/crank_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/crank/subcrank/subcrank_subpile.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/crank/subcrank/subcrank_subpile.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/stat_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/stat_main.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/bin/libchrilib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/bin/libchrilib.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/chri_shared.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/chri_shared.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/stat_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/stat_registry.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/stat_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/stat_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/substat/substat_subpile.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/substat/substat_subpile.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/attn/attn_circle_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/attn/attn_circle_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/crank/crank_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/crank/crank_main.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/crank/crank_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/crank/crank_registry.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/crank/crank_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/crank/crank_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/crank/subcrank/subcrank_subpile.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/crank/subcrank/subcrank_subpile.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/stat/stat_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/stat/stat_main.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/src/chri_shared.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/chri_shared.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/src/stat/stat_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/stat/stat_registry.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/stat/stat_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/stat/stat_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/stat/substat/substat_subpile.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/stat/substat/substat_subpile.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chris" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chris.iml" beforeDir="false" afterPath="$PROJECT_DIR$/chris.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/production/chris/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/classes/production/chris/chris.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/chris.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../old/chris/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../old/chris/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
@@ -39,34 +33,35 @@
     <session id="-1552580023">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="3" />
-          <entry key="project.open.time.0" value="1" />
+          <entry key="project.closed" value="4" />
+          <entry key="project.open.time.0" value="2" />
           <entry key="project.open.time.1" value="1" />
+          <entry key="project.open.time.5" value="1" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.opened" value="3" />
+          <entry key="project.opened" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="d" value="3" />
+          <entry key="d" value="12" />
           <entry key="sdl" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="D file" value="3" />
+          <entry key="D file" value="12" />
           <entry key="PLAIN_TEXT" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="d" value="53" />
+          <entry key="d" value="1013" />
           <entry key="sdl" value="242" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="D file" value="53" />
+          <entry key="D file" value="1013" />
           <entry key="PLAIN_TEXT" value="242" />
         </counts>
       </usages-collector>
@@ -78,17 +73,12 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/chris.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="160">
-              <caret line="8" selection-start-line="8" selection-end-line="8" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/dub.sdl">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
+            <state relative-caret-position="665">
+              <caret line="35" column="30" selection-start-line="35" selection-start-column="30" selection-end-line="35" selection-end-column="30" />
+              <folding>
+                <element signature="e#191#192#0" expanded="true" />
+                <element signature="e#226#227#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -103,24 +93,23 @@
       <list>
         <option value="$PROJECT_DIR$/dub.sdl" />
         <option value="$PROJECT_DIR$/../chricorelib/src/co_proba.d" />
+        <option value="$PROJECT_DIR$/../chrilib/src/chri_shared.d" />
         <option value="$PROJECT_DIR$/src/chris.d" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="4">
-    <option name="x" value="108" />
-    <option name="width" value="1812" />
+  <component name="ProjectFrameBounds" extendedState="5">
+    <option name="width" value="1908" />
     <option name="height" value="1080" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="PackagesPane" proportions="" version="1">
+    <navigator currentView="Scope" currentSubView="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -139,6 +128,28 @@
               <item name="chris" type="58d84e3e:PackageViewProjectNode" />
               <item name="chris" type="616d4139:PackageViewModuleNode" />
             </path>
+            <path>
+              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
+              <item name="chris" type="616d4139:PackageViewModuleNode" />
+              <item name="Libraries" type="5c3f07af:PackageViewLibrariesNode" />
+            </path>
+            <path>
+              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
+              <item name="chris" type="616d4139:PackageViewModuleNode" />
+              <item name="Libraries" type="5c3f07af:PackageViewLibrariesNode" />
+              <item name="src" type="1f31426a:PackageElementNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
           </expand>
           <select />
         </subPane>
@@ -146,7 +157,10 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../chrilib" />
+    <property name="project.structure.last.edited" value="Libraries" />
+    <property name="project.structure.proportion" value="0.0" />
+    <property name="project.structure.side.proportion" value="0.0" />
     <property name="settings.editor.selected.configurable" value="D Tools" />
   </component>
   <component name="RunDashboard">
@@ -276,7 +290,7 @@
     </configuration>
     <configuration name="Debug Dub" type="DlangRunDubConfiguration" factoryName="Build with DUB" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="chris" />
-      <option name="additionalParams" value="--build=debug" />
+      <option name="additionalParams" value="--build=debug --config=debug" />
       <option name="buildMode" value="0" />
       <option name="cbCombined" value="false" />
       <option name="cbCoverage" value="false" />
@@ -305,7 +319,7 @@
     </configuration>
     <configuration name="Release DUB" type="DlangRunDubConfiguration" factoryName="Build with DUB" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="chris" />
-      <option name="additionalParams" value="--build=release" />
+      <option name="additionalParams" value="--build=release --config=release" />
       <option name="buildMode" value="0" />
       <option name="cbCombined" value="false" />
       <option name="cbCoverage" value="false" />
@@ -334,7 +348,7 @@
     </configuration>
     <configuration name="Unittest Dub" type="DlangRunDubConfiguration" factoryName="Build with DUB" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="chris" />
-      <option name="additionalParams" value="" />
+      <option name="additionalParams" value="--build=unittest --config=unittest" />
       <option name="buildMode" value="0" />
       <option name="cbCombined" value="false" />
       <option name="cbCoverage" value="false" />
@@ -398,17 +412,27 @@
       <item itemvalue="Run DMD Compiler.Compile with DMD" />
     </list>
   </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="1674d1c0-aec1-4378-9f0a-d51e4c2da9ab" name="Default Changelist" comment="" />
+      <created>1539747057212</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1539747057212</updated>
+    </task>
+    <servers />
+  </component>
   <component name="ToolWindowManager">
-    <frame x="108" y="0" width="1812" height="1080" extended-state="4" />
+    <frame x="0" y="0" width="1908" height="1080" extended-state="4" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.27246872" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.22434875" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.3301887" />
+      <window_info active="true" anchor="bottom" x="0" y="740" width="1916" height="349" id="Run" order="2" type="WINDOWED" visible="true" weight="0.32948583" />
       <window_info anchor="bottom" x="1920" y="673" width="1920" height="381" id="Debug" order="3" type="WINDOWED" weight="0.39937106" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -430,19 +454,124 @@
   <component name="editorHistoryManager">
     <entry file="file://$PROJECT_DIR$/../chrigloblib/src/gl_proba.d" />
     <entry file="file://$PROJECT_DIR$/../chricorelib/src/co_proba.d" />
-    <entry file="file://$PROJECT_DIR$/src/chris.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="160">
-          <caret line="8" selection-start-line="8" selection-end-line="8" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/dub.sdl">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
+        <state relative-caret-position="209">
           <caret line="11" column="20" selection-start-line="11" selection-start-column="20" selection-end-line="11" selection-end-column="20" />
         </state>
       </provider>
     </entry>
+    <entry file="file://$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/stat_registry.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="163">
+          <caret line="21" column="17" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
+          <folding>
+            <element signature="e#4602#4603#0" expanded="true" />
+            <element signature="e#4654#4655#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../chrilib/src/stat/stat_registry.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-1357">
+          <caret line="21" column="17" selection-start-line="21" selection-start-column="17" selection-end-line="21" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/dmd/phobos/std/concurrency.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="307">
+          <caret line="340" column="14" selection-start-line="340" selection-start-column="14" selection-end-line="340" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../chrilib/src/chri_shared.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="14" lean-forward="true" selection-start-line="14" selection-end-line="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../chrilib/src/atn/atn_dispatcher_thread.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-57" />
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chris.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="665">
+          <caret line="35" column="30" selection-start-line="35" selection-start-column="30" selection-end-line="35" selection-end-column="30" />
+          <folding>
+            <element signature="e#191#192#0" expanded="true" />
+            <element signature="e#226#227#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>DMD64 D Compiler v2.082.0</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>chris</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+                <option value="0.6" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>chrilib</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>

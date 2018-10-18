@@ -2,63 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1e6f13b7-b9cd-4af9-969e-5956d8669eca" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../../chribaselib/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chribaselib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chribaselib/bin/chribaselib" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/bin/chribaselib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chribaselib/bin/libchribaselib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/bin/libchribaselib.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chribaselib/chribaselib.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/chribaselib.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chribaselib/classes/production/chribaselib/base_proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chribaselib/classes/production/chribaselib/db/db_concepts_table.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chribaselib/classes/production/chribaselib/db/db_main.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chribaselib/classes/production/chribaselib/project_params.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chribaselib/classes/production/chribaselib/tools.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chribaselib/src/base_proba.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/src/base_proba.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chribaselib/src/db/db_concepts_table.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chribaselib/src/db/db_concepts_table.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chricrank/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chricrank/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chricrank/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chricrank/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chricrank/bin/chricrank" beforeDir="false" afterPath="$PROJECT_DIR$/../../chricrank/bin/chricrank" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chricrank/classes/production/chricrank/chricrank.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chricrank/src/chricrank.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chricrank/src/chricrank.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/.idea/libraries/chribaselib.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/bin/chrilib" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/bin/chrilib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chrilib/bin/libchrilib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/bin/libchrilib.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/atn/atn_circle_thread.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/atn/atn_dispatcher_thread.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/chri_proba.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/chri_shared.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/console_thread.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/abs/abs_concept.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/abs/abs_neuron.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/abs/abs_premise.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_actions.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_interfaces.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_neurons.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_premises.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_registry.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_stat.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/cpt/cpt_types.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/crank/crank_main.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/crank/crank_registry.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/crank/crank_types.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/crank/subcrank/subcrank_subpile.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/messages.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/stat/stat_main.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/stat/stat_registry.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/stat/stat_types.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/classes/production/chrilib/stat/substat/substat_subpile.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/src/atn/atn_circle_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/src/atn/atn_circle_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/src/chri_shared.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/src/chri_shared.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chrilib/src/cpt/cpt_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../../chrilib/src/cpt/cpt_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chris/.idea/libraries/chrilib.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chris/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chris/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chris/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chris/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chris/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/../../chris/bin/chris" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../../chris/chris.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../../chris/chris.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../../chris/classes/production/chris/chris.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chris.iml" beforeDir="false" afterPath="$PROJECT_DIR$/chris.iml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -143,7 +95,7 @@
     <session id="-755707414">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="7" />
+          <entry key="project.closed" value="8" />
           <entry key="project.open.time.0" value="4" />
           <entry key="project.open.time.1" value="3" />
           <entry key="project.open.time.16" value="1" />
@@ -156,11 +108,13 @@
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="d" value="18" />
+          <entry key="sdl" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
           <entry key="D file" value="18" />
+          <entry key="PLAIN_TEXT" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
@@ -199,11 +153,20 @@
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/chris.d">
           <provider selected="true" editor-type-id="text-editor">
             <state relative-caret-position="417">
-              <caret line="33" column="30" lean-forward="true" selection-start-line="33" selection-start-column="30" selection-end-line="33" selection-end-column="30" />
+              <caret line="33" column="30" selection-start-line="33" selection-start-column="30" selection-end-line="33" selection-end-column="30" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/dub.sdl">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="380">
+              <caret line="20" selection-start-line="20" selection-end-line="20" />
             </state>
           </provider>
         </entry>
@@ -291,7 +254,7 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="-2" />
     <option name="width" value="1916" />
     <option name="height" value="1078" />
@@ -323,7 +286,7 @@
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="PackagesPane" proportions="" version="1">
+    <navigator currentView="Scope" currentSubView="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
@@ -333,6 +296,11 @@
             <path>
               <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
               <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
+            <path>
+              <item name="chris" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="chris" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+              <item name="src" type="9f88c78c:ScopeViewTreeModel$FileNode" />
             </path>
           </expand>
           <select />
@@ -435,7 +403,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="Build with DUB.Debug Dub">
+  <component name="RunManager" selected="Build with DUB.Release DUB">
     <configuration name="Run D App" type="DlangRunAppConfiguration" factoryName="Run D App" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="chris" />
       <option name="additionalParams" />
@@ -492,35 +460,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="Build Dub" type="DlangRunDubConfiguration" factoryName="Build with DUB" show_console_on_std_err="false" show_console_on_std_out="false">
-      <module name="chris" />
-      <option name="additionalParams" value="" />
-      <option name="buildMode" value="0" />
-      <option name="cbCombined" value="false" />
-      <option name="cbCoverage" value="false" />
-      <option name="cbForce" value="false" />
-      <option name="cbForceRemove" value="false" />
-      <option name="cbNoDeps" value="false" />
-      <option name="cbParallel" value="false" />
-      <option name="cbRdmd" value="false" />
-      <option name="cbTempBuild" value="false" />
-      <option name="envVars">
-        <map />
-      </option>
-      <option name="generalDubOptions" value="0" />
-      <option name="quiet" value="false" />
-      <option name="tfArch" value="" />
-      <option name="tfBuild" value="" />
-      <option name="tfCompiler" value="" />
-      <option name="tfConfig" value="" />
-      <option name="tfDebug" value="" />
-      <option name="tfMainFile" value="" />
-      <option name="verbose" value="false" />
-      <option name="workingDir" value="" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="Debug Dub" type="DlangRunDubConfiguration" factoryName="Build with DUB" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="chris" />
       <option name="additionalParams" value="--build=debug" />
@@ -552,7 +491,7 @@
     </configuration>
     <configuration name="Release DUB" type="DlangRunDubConfiguration" factoryName="Build with DUB" show_console_on_std_err="false" show_console_on_std_out="false">
       <module name="chris" />
-      <option name="additionalParams" value="--build=release" />
+      <option name="additionalParams" value="--build=release --config=release" />
       <option name="buildMode" value="0" />
       <option name="cbCombined" value="false" />
       <option name="cbCoverage" value="false" />
@@ -609,7 +548,6 @@
       </method>
     </configuration>
     <list>
-      <item itemvalue="Build with DUB.Build Dub" />
       <item itemvalue="Build with DUB.Release DUB" />
       <item itemvalue="Build with DUB.Debug Dub" />
       <item itemvalue="Build with DUB.Unittest Dub" />
@@ -643,10 +581,10 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-3" width="1924" height="1087" extended-state="7" />
+    <frame x="-2" y="-3" width="1924" height="1087" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.5232198" visible="true" weight="0.1797575" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" sideWeight="0.5232198" visible="true" weight="0.1797575" />
       <window_info x="1944" y="563" width="330" height="781" id="Structure" order="1" sideWeight="0.47678018" side_tool="true" visible="true" weight="0.1797575" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -659,7 +597,7 @@
       <window_info anchor="bottom" x="2" y="720" width="1912" height="329" id="Debug" order="3" weight="0.39852008" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info active="true" anchor="bottom" id="TODO" order="6" sideWeight="0.4994664" visible="true" weight="0.32708332" />
+      <window_info anchor="bottom" id="TODO" order="6" sideWeight="0.4994664" visible="true" weight="0.32708332" />
       <window_info anchor="bottom" x="2" y="570" width="1911" height="504" id="Terminal" order="7" type="WINDOWED" weight="0.5387841" />
       <window_info anchor="bottom" id="Event Log" order="8" sideWeight="0.50053364" side_tool="true" weight="0.32809225" />
       <window_info anchor="bottom" id="Version Control" order="9" weight="0.32916668" />
@@ -962,13 +900,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/dub.sdl">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="20" selection-start-line="20" selection-end-line="20" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/stat/stat_main.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="95">
@@ -1063,7 +994,14 @@
     <entry file="file://$PROJECT_DIR$/src/chris.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="417">
-          <caret line="33" column="30" lean-forward="true" selection-start-line="33" selection-start-column="30" selection-end-line="33" selection-end-column="30" />
+          <caret line="33" column="30" selection-start-line="33" selection-start-column="30" selection-end-line="33" selection-end-column="30" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/dub.sdl">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="380">
+          <caret line="20" selection-start-line="20" selection-end-line="20" />
         </state>
       </provider>
     </entry>

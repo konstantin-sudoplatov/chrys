@@ -9,6 +9,9 @@
     <content url="file://$MODULE_DIR$/classes" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="src" level="project" />
+    <orderEntry type="library" name="chrilib-~master" level="project" />
+    <orderEntry type="library" name="chribaselib-~master" level="project" />
+    <orderEntry type="library" name="derelict-pq-4.0.0-alpha.2" level="project" />
+    <orderEntry type="library" name="derelict-util-3.0.0-beta.2" level="project" />
   </component>
 </module>

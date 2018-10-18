@@ -1,5 +1,5 @@
 module base_proba;
-import std.stdio: writeln, writefln;
+import std.stdio: writeln, writefln, stdout;
 import std.typecons;
 
 // Show in console that it is the unittest mode
@@ -9,4 +9,7 @@ version(unittest) {
 
 // We need an executable in debug and unittest modes in order to run the Gnu Debugger on.
 debug void main() {
+}
+
+struct A {
 }

@@ -1,37 +1,9 @@
-module cpt.cpt_types;
+module chri_types;
+import std.stdio;
 
-import project_params, tools;
-import db.db_main, db.db_concepts_table;
+import project_params, db.db_main, db.db_concepts_table;
 
-import cpt.cpt_registry, cpt.abs.abs_concept;
-
-/// Concept's attributes.
-enum SpCptFlags: short {
-
-    /// Static concept
-    STATIC = 0x0001,
-
-    /// Temporary dynamic concept. Heavily uses its live part, since it is thread local. Even its holy part is not designed
-    /// to be stored in the DB, if only to collect the usage info.
-    TEMP = 0x0002,
-
-    /// Permanent dynamic concept. The holy part is stored in the DB and constitutes the knoledge base.
-    PERM = 0x0004,
-}
-
-//---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-/// Take clid from annotation of the spirit concept class and make it a enum. Designed to be used in the class constructor.
-template spClid(T: SpiritConcept)
-    if(__traits(getAttributes, T).length == 1 && is(typeof(__traits(getAttributes, T)[0]) == int) &&
-            __traits(getAttributes, T)[0] >= 0)
-{
-    enum :Clid {
-        spClid = __traits(getAttributes, T)[0]
-    }
-}
-
-//---***---***---***---***---***--- types ---***---***---***---***---***--
+import cpt.abs.abs_concept;
 
 /**
         Concept version control struct. BR
@@ -54,22 +26,15 @@ shared synchronized class ConceptVersion {
 }
 
 /// Database management for concepts
-struct CptManager {
+struct SpiritManager {
     import derelict.pq.pq: PGconn;
 
-    @disable this();
-
-    alias con_ this;
-
-    /// Implicit constructor.
-    this(int dummy) {
-        openDatabase_;
-    }
+    alias cptTbl_ this;
 
     /// Destructor.
-    ~this() {
-        closeDatabase_;
-    }
+    //~this() {
+    //    closeDatabase_;
+    //}
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
@@ -80,7 +45,7 @@ struct CptManager {
             ver = version
         Returns: newly constructed object or null if it was not found in the DB.
     */
-    SpiritConcept retreiveConcept(Cid cid, Cvr ver) const {
+    SpiritConcept retrieveConcept(Cid cid, Cvr ver) const {
         const cpDat = cptTbl_.getConcept(cid, ver);
         if      // is the concept present in the DB?
                 (cpDat)
@@ -125,6 +90,21 @@ struct CptManager {
         );
     }
 
+    /// Connect to the database.
+    void openDatabase() {
+        assert(!con_, "Db must be closed.");
+        con_ = connectToDb;
+        cptTbl_ = new ConceptsTable(con_);
+    }
+
+    /// Diskonnect from the database.
+    void closeDatabase() {
+        assert(con_, "DB must be open.");
+        disconnectFromDb(con_);
+        con_ = null;
+        cptTbl_ = null;
+    }
+
     //---***---***---***---***---***--- private ---***---***---***---***---***--
 
     /// Pointer to connection.
@@ -134,19 +114,25 @@ struct CptManager {
     private ConceptsTable* cptTbl_;
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
-
-    /// Connect to the database.
-    private void openDatabase_() {
-        assert(!con_, "Db must be closed.");
-        con_ = connectToDb;
-        cptTbl_ = new ConceptsTable(con_);
-    }
-
-    /// Diskonnect from the database.
-    private void closeDatabase_() {
-        assert(con_, "DB must be open.");
-        disconnectFromDb(con_);
-        con_ = null;
-        cptTbl_ = null;
-    }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

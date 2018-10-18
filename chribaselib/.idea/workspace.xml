@@ -2,15 +2,63 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="20fa5edd-9ad6-4b45-8535-74fbc6df3ba3" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/bin/chribaselib" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chribaselib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/libchribaselib.a" beforeDir="false" afterPath="$PROJECT_DIR$/bin/libchribaselib.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chribaselib.iml" beforeDir="false" afterPath="$PROJECT_DIR$/chribaselib.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/production/chribaselib/base_proba.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/production/chribaselib/db/db_concepts_table.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/production/chribaselib/db/db_main.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/production/chribaselib/project_params.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/classes/production/chribaselib/tools.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/base_proba.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/base_proba.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/db/db_concepts_table.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/db/db_concepts_table.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chricrank/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chricrank/bin/chricrank" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/bin/chricrank" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chricrank/classes/production/chricrank/chricrank.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chricrank/src/chricrank.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/src/chricrank.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/.idea/libraries/chribaselib.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/bin/chrilib" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/bin/chrilib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/bin/libchrilib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/bin/libchrilib.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/atn/atn_circle_thread.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/atn/atn_dispatcher_thread.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/chri_proba.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/chri_shared.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/console_thread.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/abs/abs_concept.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/abs/abs_neuron.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/abs/abs_premise.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_actions.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_interfaces.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_neurons.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_premises.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_registry.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_stat.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/cpt/cpt_types.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/crank/crank_main.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/crank/crank_registry.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/crank/crank_types.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/crank/subcrank/subcrank_subpile.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/messages.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/stat_main.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/stat_registry.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/stat_types.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/classes/production/chrilib/stat/substat/substat_subpile.d" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/src/atn/atn_circle_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/atn/atn_circle_thread.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/src/chri_shared.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/chri_shared.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_types.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chris/.idea/libraries/chrilib.xml" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chris/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chris/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chris/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/bin/chris" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/classes/production/chris/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/classes/production/chris/chris.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/src/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/src/chris.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chris/chris.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/chris.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chris/classes/production/chris/chris.d" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../old/chris/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../old/chris/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../old/chris/chris.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../old/chris/chris.iml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -37,7 +85,7 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="d" value="12" />
+          <entry key="d" value="16" />
           <entry key="global_data" value="1" />
           <entry key="primary_types" value="1" />
           <entry key="sdl" value="2" />
@@ -46,19 +94,19 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="D file" value="12" />
+          <entry key="D file" value="16" />
           <entry key="PLAIN_TEXT" value="5" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="d" value="6814" />
+          <entry key="d" value="7131" />
           <entry key="sdl" value="60" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="D file" value="6814" />
+          <entry key="D file" value="7131" />
           <entry key="PLAIN_TEXT" value="60" />
         </counts>
       </usages-collector>
@@ -70,48 +118,17 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/base_proba.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="220">
-              <caret line="11" selection-start-line="11" selection-end-line="11" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/db/db_concepts_table.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="3600">
-              <caret line="180" column="80" selection-start-line="180" selection-start-column="80" selection-end-line="180" selection-end-column="80" />
+            <state relative-caret-position="266">
+              <caret line="14" column="1" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/tools.d">
+        <entry file="file://$PROJECT_DIR$/src/db/db_concepts_table.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1600">
-              <caret line="295" selection-start-line="295" selection-end-line="295" />
-              <folding>
-                <element signature="e#9520#9521#0" expanded="true" />
-                <element signature="e#9555#9556#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/db/db_main.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="800">
-              <caret line="40" selection-start-line="40" selection-end-line="40" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/project_params.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="200">
-              <caret line="10" column="35" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
+            <state relative-caret-position="278">
+              <caret line="17" selection-start-line="17" selection-end-line="17" />
             </state>
           </provider>
         </entry>
@@ -141,17 +158,17 @@
         <option value="$PROJECT_DIR$/src/db/db_concept_table.d" />
         <option value="$PROJECT_DIR$/dub.sdl" />
         <option value="$PROJECT_DIR$/src/db/db_main.d" />
-        <option value="$PROJECT_DIR$/src/db/db_concepts_table.d" />
         <option value="$PROJECT_DIR$/src/project_params.d" />
-        <option value="$PROJECT_DIR$/src/base_proba.d" />
         <option value="$PROJECT_DIR$/src/tools.d" />
+        <option value="$PROJECT_DIR$/src/base_proba.d" />
+        <option value="$PROJECT_DIR$/src/db/db_concepts_table.d" />
       </list>
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="3840" />
-    <option name="width" value="1920" />
-    <option name="height" value="1080" />
+    <option name="x" value="-2" />
+    <option name="width" value="1916" />
+    <option name="height" value="1078" />
   </component>
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="1" id="Add" />
@@ -161,6 +178,17 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
+      <pane id="Scope">
+        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
+          <expand>
+            <path>
+              <item name="chribaselib" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
+              <item name="chribaselib" type="2674bda8:ScopeViewTreeModel$GroupNode" />
+            </path>
+          </expand>
+          <select />
+        </subPane>
+      </pane>
       <pane id="PackagesPane">
         <subPane>
           <expand>
@@ -172,17 +200,6 @@
               <item name="chribaselib" type="58d84e3e:PackageViewProjectNode" />
               <item name="chribaselib" type="616d4139:PackageViewModuleNode" />
               <item name="db" type="1f31426a:PackageElementNode" />
-            </path>
-          </expand>
-          <select />
-        </subPane>
-      </pane>
-      <pane id="Scope">
-        <subPane subId="Scope 'Project Files'; set:Project Files; class com.intellij.psi.search.scope.ProjectFilesScope">
-          <expand>
-            <path>
-              <item name="chribaselib" type="3d21c010:ScopeViewTreeModel$ProjectNode" />
-              <item name="chribaselib" type="2674bda8:ScopeViewTreeModel$GroupNode" />
             </path>
           </expand>
           <select />
@@ -203,6 +220,9 @@
   </component>
   <component name="PropertiesComponent">
     <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="project.structure.last.edited" value="Modules" />
+    <property name="project.structure.proportion" value="0.15" />
+    <property name="project.structure.side.proportion" value="0.2" />
     <property name="settings.editor.selected.configurable" value="D Tools" />
   </component>
   <component name="RunDashboard">
@@ -465,17 +485,17 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="3840" y="0" width="1920" height="1080" extended-state="6" />
+    <frame x="-2" y="-3" width="1924" height="1087" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.4874214" visible="true" weight="0.1995731" />
-      <window_info id="Structure" order="1" sideWeight="0.5125786" side_tool="true" visible="true" weight="0.1995731" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48854166" visible="true" weight="0.1971534" />
+      <window_info id="Structure" order="1" sideWeight="0.51145834" side_tool="true" visible="true" weight="0.1971534" />
       <window_info id="Designer" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info active="true" anchor="bottom" x="2" y="769" width="1916" height="307" id="Run" order="2" type="WINDOWED" visible="true" weight="0.32738718" />
-      <window_info anchor="bottom" x="2" y="708" width="1916" height="368" id="Debug" order="3" type="WINDOWED" visible="true" weight="0.34591195" />
+      <window_info active="true" anchor="bottom" x="2" y="767" width="1908" height="253" id="Run" order="2" type="WINDOWED" visible="true" weight="0.32738718" />
+      <window_info anchor="bottom" x="2" y="708" width="1916" height="366" id="Debug" order="3" type="WINDOWED" visible="true" weight="0.34591195" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -533,44 +553,130 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/base_proba.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="220">
-          <caret line="11" selection-start-line="11" selection-end-line="11" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/db/db_concepts_table.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="3600">
-          <caret line="180" column="80" selection-start-line="180" selection-start-column="80" selection-end-line="180" selection-end-column="80" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/db/db_main.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="800">
-          <caret line="40" selection-start-line="40" selection-end-line="40" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/project_params.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="200">
+        <state relative-caret-position="190">
           <caret line="10" column="35" selection-start-line="10" selection-start-column="35" selection-end-line="10" selection-end-column="35" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/tools.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1600">
-          <caret line="295" selection-start-line="295" selection-end-line="295" />
+        <state relative-caret-position="703">
+          <caret line="227" column="24" selection-start-line="227" selection-start-column="24" selection-end-line="227" selection-end-column="24" />
           <folding>
-            <element signature="e#9520#9521#0" expanded="true" />
-            <element signature="e#9555#9556#0" expanded="true" />
+            <element signature="e#23123#23124#0" expanded="true" />
+            <element signature="e#23155#23156#0" expanded="true" />
+            <element signature="e#32333#32334#0" expanded="true" />
+            <element signature="e#32365#32366#0" expanded="true" />
           </folding>
         </state>
       </provider>
     </entry>
+    <entry file="file://$USER_HOME$/.dub/packages/derelict-pq-4.0.0-alpha.2/derelict-pq/source/derelict/pq/types.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="595">
+          <caret line="108" column="7" selection-start-line="108" selection-start-column="7" selection-end-line="108" selection-end-column="7" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$USER_HOME$/.dub/packages/derelict-pq-4.0.0-alpha.2/derelict-pq/source/derelict/pq/dynload.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="367">
+          <caret line="230" column="19" selection-start-line="230" selection-start-column="19" selection-end-line="230" selection-end-column="19" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/db/db_main.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="228">
+          <caret line="33" selection-start-line="33" selection-end-line="33" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file:///usr/include/dmd/phobos/std/stdio.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="310">
+          <caret line="3821" selection-start-line="3821" selection-end-line="3821" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/base_proba.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="14" column="1" selection-start-line="14" selection-start-column="1" selection-end-line="14" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/db/db_concepts_table.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="278">
+          <caret line="17" selection-start-line="17" selection-end-line="17" />
+        </state>
+      </provider>
+    </entry>
+  </component>
+  <component name="masterDetails">
+    <states>
+      <state key="ArtifactsStructureConfigurable.UI">
+        <settings>
+          <artifact-editor />
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="GlobalLibrariesConfigurable.UI">
+        <settings>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="JdkListConfigurable.UI">
+        <settings>
+          <last-edited>DMD64 D Compiler v2.082.0</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ModuleStructureConfigurable.UI">
+        <settings>
+          <last-edited>chribaselib</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+      <state key="ProjectLibrariesConfigurable.UI">
+        <settings>
+          <last-edited>derelict-pq-4.0.0-alpha.2</last-edited>
+          <splitter-proportions>
+            <option name="proportions">
+              <list>
+                <option value="0.2" />
+              </list>
+            </option>
+          </splitter-proportions>
+        </settings>
+      </state>
+    </states>
   </component>
 </project>

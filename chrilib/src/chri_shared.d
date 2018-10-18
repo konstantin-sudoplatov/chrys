@@ -1,8 +1,11 @@
 module chri_shared;
+import std.stdio;
 import std.conv, std.format, std.concurrency;
+import core.exception;
 
 import project_params, tools;
 
+import chri_types;
 import cpt.abs.abs_concept, cpt.cpt_stat;
 import atn.atn_circle_thread;
 
@@ -89,9 +92,8 @@ void cleanupNotUsedNames() {
 import std.random;
 synchronized final pure nothrow class SpiritMap {
 
-    //---***---***---***---***---***--- types ---***---***---***---***---***---***
-
-    //---***---***---***---***---***--- data ---***---***---***---***---***--
+    // Forward
+    alias spiritMan_ this;
 
     /**
         Constructor
@@ -99,6 +101,12 @@ synchronized final pure nothrow class SpiritMap {
     this(){
         // Initialize random generator
         rnd_ = Random(unpredictableSeed);
+        (cast()spiritMan_).openDatabase;
+    }
+
+    /// Destructor.
+    ~this(){
+        (cast()spiritMan_).closeDatabase;
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -112,13 +120,13 @@ synchronized final pure nothrow class SpiritMap {
     }
 
     /**
-                Assign/construct-assign new holy map entry. If cid had not been assigned to the cpt yet, it is generated.
+                Assign/construct-assign new spirit map entry. If cid had not been assigned to the cpt yet, it is generated.
         Parameters:
             cpt = shared concept to assign
     */
     SpiritConcept add(SpiritConcept cpt)
     in {
-        assert(cpt !in this, "Cid " ~ to!string(cpt.cid) ~ " - this cid already exists in the holy map.");
+        assert(cpt.cid !in this, "Cid " ~ to!string(cpt.cid) ~ " - this cid already exists in the spirit map.");
         if      // dynamic?
                 (cast(shared SpiritDynamicConcept)cpt)
             if      // with preset cid?
@@ -168,7 +176,16 @@ synchronized final pure nothrow class SpiritMap {
         Returns: concept
     */
     SpiritConcept opIndex(Cid cid) {
-        return cast()spiritMap_[cid];
+        if      //is cid in the map?
+                (auto p = cid in spiritMap_)
+            return cast()*p;
+        else {
+            SpiritConcept cpt = (cast()spiritMan_).retrieveConcept(cid, 0);
+            if(cpt)
+                return cpt;
+            else
+                throw new RangeError;
+        }
     }
 
     /**
@@ -179,11 +196,6 @@ synchronized final pure nothrow class SpiritMap {
     */
     SpiritConcept* opBinaryRight(string op)(Cid cid) {
         return cast(SpiritConcept*)(cid in spiritMap_);
-    }
-
-    /// Ditto.
-    SpiritConcept* opBinaryRight(string op)(SpiritConcept cpt) {
-        return cast(SpiritConcept*)(cpt.cid in spiritMap_);
     }
 
     /**
@@ -232,6 +244,8 @@ synchronized final pure nothrow class SpiritMap {
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
     private SpiritConcept[Cid] spiritMap_;       /// map concept/cid
+
+    private SpiritManager spiritMan_;
 
     /// rnd generator. Initialized from constructor.
     private static typeof(Random(unpredictableSeed())) rnd_;

@@ -26,6 +26,7 @@ struct ConceptsTable {
     }
 
     @disable this();
+
     this(PGconn* conn) {
         assert(conn);
         conn_ = conn;

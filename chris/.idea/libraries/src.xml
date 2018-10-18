@@ -1,7 +1,7 @@
 <component name="libraryTable">
-  <library name="chribaselib" type="DLangLib">
+  <library name="src">
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/../chribaselib" />
+      <root url="file://$PROJECT_DIR$/../chrilib/src" />
     </CLASSES>
     <JAVADOC />
     <LIBRARY_FILE />

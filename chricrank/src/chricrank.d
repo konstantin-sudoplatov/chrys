@@ -6,15 +6,18 @@ import derelict.pq.pq;
 import project_params, tools;
 import db.db_main, db.db_concepts_table;
 
-import chri_shared;
-import cpt.cpt_types, cpt.cpt_registry, cpt.abs.abs_concept;
+import chri_types, chri_shared;
+import cpt.cpt_registry, cpt.abs.abs_concept;
 import stat.stat_registry;
 import crank.crank_registry;
 import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_stat;
 
 void main()
 {
-    const dbCptHnd = CptManager(0);
+    SpiritManager spiritMan;
+    spiritMan.openDatabase;
+    scope(exit) spiritMan.closeDatabase;
+
     logUnusedClids;
 
     // Fill and crank main maps with static and hardcoded dynamic concepts and their names.
@@ -30,17 +33,17 @@ void main()
             // no DB for it
             continue;
 
-        const SpiritConcept dbCpt = dbCptHnd.retreiveConcept(cid, 0);
+        const SpiritConcept dbCpt = spiritMan.retrieveConcept(cid, 0);
         if      // isn't the concept in DP?
                 (!dbCpt)
         {   //no: add it
-            dbCptHnd.insertConcept(smCpt);
+            spiritMan.insertConcept(smCpt);
             added++;
         }
         else if // is the concept in DP different from the newly cranked?
                 (dbCpt != smCpt)
         {   //yes: update it
-            dbCptHnd.updateConcept(smCpt);
+            spiritMan.updateConcept(smCpt);
             updated++;
         }
     }

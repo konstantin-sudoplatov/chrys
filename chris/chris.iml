@@ -4,9 +4,11 @@
     <exclude-output />
     <content url="file://$MODULE_DIR$">
       <sourceFolder url="file://$MODULE_DIR$/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/classes" />
     </content>
+    <content url="file://$MODULE_DIR$/classes" />
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
-    <orderEntry type="library" name="chrilib" level="project" />
+    <orderEntry type="library" name="src" level="project" />
   </component>
 </module>

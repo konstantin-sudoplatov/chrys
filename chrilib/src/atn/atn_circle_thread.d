@@ -52,7 +52,7 @@ class Caldron {
         Returns: the live concept object
     */
     final Concept opIndex(Cid cid) {
-        assert(cid in _sm_, format!"Cid %s(%s) is not in the holy map."(cid, _nm_[cid]));
+        assert(_sm_[cid], format!"Cid %s(%s) cannot be get from the spirit map."(cid, (cid in _nm_)? _nm_[cid]: "noname"));
         if
                 (auto p = cid in lm_)
             return *p;

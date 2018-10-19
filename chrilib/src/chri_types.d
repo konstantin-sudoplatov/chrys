@@ -83,12 +83,12 @@ synchronized final pure nothrow class SpiritMap {
     this(){
         // Initialize random generator
         rnd_ = Random(unpredictableSeed);
-        (cast()spiritMan_).openDatabase;
+        spiritMan_.openDatabase;
     }
 
     /// Destructor.
     ~this(){
-        (cast()spiritMan_).closeDatabase;
+        spiritMan_.closeDatabase;
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -108,7 +108,7 @@ synchronized final pure nothrow class SpiritMap {
     */
     SpiritConcept add(SpiritConcept cpt)
     in {
-        assert(cpt.cid !in this, "Cid " ~ to!string(cpt.cid) ~ " - this cid already exists in the spirit map.");
+        assert(cpt.cid !in spiritMap_, "Cid " ~ to!string(cpt.cid) ~ " - this cid already exists in the spirit map.");
         if      // dynamic?
                 (cast(shared SpiritDynamicConcept)cpt)
             if      // with preset cid?
@@ -162,7 +162,7 @@ synchronized final pure nothrow class SpiritMap {
                 (auto p = cid in spiritMap_)
             return cast()*p;
         else {
-            SpiritConcept cpt = (cast()spiritMan_).retrieveConcept(cid, 0);
+            SpiritConcept cpt = spiritMan_.retrieveConcept(cid, 0);     // is ver=0 ok? it is for now.
             if(cpt)
                 return cpt;
             else
@@ -171,29 +171,29 @@ synchronized final pure nothrow class SpiritMap {
     }
 
     /**
-                Overload for "in".
+                Overload for "in". It checks for existence of the concept not only in the map, but in DB too.
         Parameters:
             cid = cid of the concept.
         Returns: pointer to the concept or null
     */
     SpiritConcept* opBinaryRight(string op)(Cid cid) {
-        return cast(SpiritConcept*)(cid in spiritMap_);
+        if      // is the concept in the map?
+                (auto p = cid in spiritMap_)
+            return cast(SpiritConcept*)p;
+        else
+            if      // is it in the DB?
+                    (auto cpt = spiritMan_.retrieveConcept(cid, 0))
+                return cast(SpiritConcept*)cpt;
+            else
+                return null;
     }
 
     /**
-                Pass through for byKey.
-        Returns: range of cids
+            Returns (I hope) a cast of keys of the map on the moment of the call. Synchronization would obviously be no
+        good with ranges.
     */
-    auto byKey() {
-        return (cast()spiritMap_).byKey;      // need to cast off the shared attribute to avoid a compiler error
-    }
-
-    /**
-                Pass through for byValue.
-        Returns: range of concepts
-    */
-    auto byValue() {
-        return (cast()spiritMap_).byValue;      // need to cast off the shared attribute to avoid a compiler error
+    Cid[] keys() {
+        return spiritMap_.keys;
     }
 
     /**
@@ -227,7 +227,7 @@ synchronized final pure nothrow class SpiritMap {
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
     private SpiritConcept[Cid] spiritMap_;       /// map concept/cid
 
-    private SpiritManager spiritMan_;
+    private immutable SpiritManager spiritMan_ = SpiritManager();
 
     /// rnd generator. Initialized from constructor.
     private static typeof(Random(unpredictableSeed())) rnd_;
@@ -242,7 +242,7 @@ synchronized final pure nothrow class SpiritMap {
         Cid cid;
         do {
             cid = rnd_.uniform!Cid;
-        } while(cid in spiritMap_);        // do until not repeated in the map
+        } while(cid in this);        // do until not repeated in the map and DB
 
         return cid;
     }
@@ -269,15 +269,10 @@ shared synchronized class ConceptVersion {
 }
 
 /// Database management for concepts
-struct SpiritManager {
+immutable struct SpiritManager {
     import derelict.pq.pq: PGconn;
 
     alias cptTbl_ this;
-
-    /// Destructor.
-    //~this() {
-    //    closeDatabase_;
-    //}
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
@@ -336,16 +331,16 @@ struct SpiritManager {
     /// Connect to the database.
     void openDatabase() {
         assert(!con_, "Db must be closed.");
-        con_ = connectToDb;
-        cptTbl_ = new ConceptsTable(con_);
+        cast()con_ = cast(immutable)connectToDb;
+        cast()cptTbl_ = cast(immutable)new ConceptsTable(cast(PGconn*)con_);
     }
 
     /// Diskonnect from the database.
     void closeDatabase() {
         assert(con_, "DB must be open.");
-        disconnectFromDb(con_);
-        con_ = null;
-        cptTbl_ = null;
+        disconnectFromDb(cast(PGconn*)con_);
+        cast()con_ = null;
+        cast()cptTbl_ = null;
     }
 
     //---***---***---***---***---***--- private ---***---***---***---***---***--

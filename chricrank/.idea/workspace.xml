@@ -3,51 +3,20 @@
   <component name="ChangeListManager">
     <list default="true" id="8774b1c0-0bdb-42dc-9ffb-234d9d42a39c" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../chribaselib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/bin/chribaselib" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/bin/chribaselib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chribaselib/bin/libchribaselib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/bin/libchribaselib.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/src/base_proba.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/base_proba.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/src/db/db_concepts_table.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/db/db_concepts_table.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/src/db/db_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/db/db_main.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/src/project_params.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/proj_shared.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/src/tools.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/proj_tools.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/chricrank" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chricrank" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chricrank.iml" beforeDir="false" afterPath="$PROJECT_DIR$/chricrank.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dub.sdl" beforeDir="false" afterPath="$PROJECT_DIR$/dub.sdl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/dub.selections.json" beforeDir="false" afterPath="$PROJECT_DIR$/dub.selections.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chricrank.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/chricrank.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/bin/chrilib" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/bin/chrilib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/bin/libchrilib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/bin/libchrilib.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/atn/atn_circle_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/atn/atn_circle_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/atn/atn_dispatcher_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/atn/atn_dispatcher_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/chri_proba.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/chri_proba.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/src/chri_shared.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/chri_shared.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/src/chri_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/chri_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/console_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/console_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_concept.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_concept.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_neuron.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_neuron.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_premise.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_premise.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_actions.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_actions.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_interfaces.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_interfaces.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_neurons.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_neurons.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_premises.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_premises.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_registry.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_stat.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_stat.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/crank/crank_main.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/crank/crank_registry.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/crank/crank_types.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/crank/subcrank/subcrank_subpile.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/messages.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/messages.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/stat/stat_main.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/stat/stat_registry.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/stat/stat_types.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/stat/substat/substat_subpile.d" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/../chris/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chris/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/bin/chris" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chris/bin/libchris.a" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/bin/libchris.a" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chris/dub.sdl" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/dub.sdl" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/src/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/src/chris.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chris/src/stat/stat_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/src/stat/stat_types.d" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -76,27 +45,27 @@
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="d" value="42" />
+          <entry key="d" value="45" />
           <entry key="sdl" value="2" />
           <entry key="sh" value="1" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="D file" value="42" />
+          <entry key="D file" value="45" />
           <entry key="PLAIN_TEXT" value="3" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="d" value="6032" />
+          <entry key="d" value="6270" />
           <entry key="sdl" value="53" />
           <entry key="sh" value="54" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="D file" value="6032" />
+          <entry key="D file" value="6270" />
           <entry key="PLAIN_TEXT" value="107" />
         </counts>
       </usages-collector>
@@ -105,19 +74,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
+      <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/chricrank.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="152">
-              <caret line="8" column="26" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="26" />
+            <state relative-caret-position="38">
+              <caret line="2" column="42" selection-start-line="2" selection-start-column="42" selection-end-line="2" selection-end-column="42" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/crank/crank_main.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="512">
+            <state relative-caret-position="3667">
               <caret line="193" column="103" selection-start-line="193" selection-start-column="103" selection-end-line="193" selection-end-column="103" />
             </state>
           </provider>
@@ -126,7 +95,7 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/crank/crank_registry.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="190">
+            <state relative-caret-position="133">
               <caret line="10" column="51" selection-start-line="10" selection-start-column="51" selection-end-line="10" selection-end-column="51" />
             </state>
           </provider>
@@ -177,11 +146,11 @@
         <option value="$PROJECT_DIR$/../chrilib/src/cpt/cpt_types.d" />
         <option value="$PROJECT_DIR$/dub.sh" />
         <option value="$PROJECT_DIR$/dub.sdl" />
-        <option value="$PROJECT_DIR$/src/chricrank.d" />
         <option value="$PROJECT_DIR$/src/crank/crank_types.d" />
-        <option value="$PROJECT_DIR$/../chrilib/src/chri_types.d" />
         <option value="$PROJECT_DIR$/src/crank/crank_registry.d" />
         <option value="$PROJECT_DIR$/src/crank/crank_main.d" />
+        <option value="$PROJECT_DIR$/../chrilib/src/chri_types.d" />
+        <option value="$PROJECT_DIR$/src/chricrank.d" />
       </list>
     </option>
   </component>
@@ -542,91 +511,6 @@
     <entry file="file://$USER_HOME$/.dub/packages/derelict-pq-4.0.0-alpha.2/derelict-pq/source/derelict/pq/pq.d">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/../chribaselib/src/proj_tools.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="-3610">
-          <caret line="11" column="118" selection-start-line="11" selection-start-column="118" selection-end-line="11" selection-end-column="118" />
-          <folding>
-            <element signature="e#3806#3807#0" expanded="true" />
-            <element signature="e#3846#3847#0" expanded="true" />
-            <element signature="e#5725#5726#0" expanded="true" />
-            <element signature="e#5753#5754#0" expanded="true" />
-            <element signature="e#5773#5774#0" expanded="true" />
-            <element signature="e#5803#5804#0" expanded="true" />
-            <element signature="e#5819#5820#0" expanded="true" />
-            <element signature="e#5846#5847#0" expanded="true" />
-            <element signature="e#5865#5866#0" expanded="true" />
-            <element signature="e#5894#5895#0" expanded="true" />
-            <element signature="e#5923#5924#0" expanded="true" />
-            <element signature="e#5958#5959#0" expanded="true" />
-            <element signature="e#6417#6418#0" expanded="true" />
-            <element signature="e#6444#6445#0" expanded="true" />
-            <element signature="e#6463#6464#0" expanded="true" />
-            <element signature="e#6492#6493#0" expanded="true" />
-            <element signature="e#6507#6508#0" expanded="true" />
-            <element signature="e#6533#6534#0" expanded="true" />
-            <element signature="e#6551#6552#0" expanded="true" />
-            <element signature="e#6579#6580#0" expanded="true" />
-            <element signature="e#6607#6608#0" expanded="true" />
-            <element signature="e#6641#6642#0" expanded="true" />
-            <element signature="e#7497#7498#0" expanded="true" />
-            <element signature="e#7525#7526#0" expanded="true" />
-            <element signature="e#7545#7546#0" expanded="true" />
-            <element signature="e#7575#7576#0" expanded="true" />
-            <element signature="e#7604#7605#0" expanded="true" />
-            <element signature="e#7639#7640#0" expanded="true" />
-            <element signature="e#8110#8111#0" expanded="true" />
-            <element signature="e#8137#8138#0" expanded="true" />
-            <element signature="e#8156#8157#0" expanded="true" />
-            <element signature="e#8185#8186#0" expanded="true" />
-            <element signature="e#8213#8214#0" expanded="true" />
-            <element signature="e#8247#8248#0" expanded="true" />
-            <element signature="e#9478#9479#0" expanded="true" />
-            <element signature="e#9514#9515#0" expanded="true" />
-            <element signature="e#9689#9690#0" expanded="true" />
-            <element signature="e#9728#9729#0" expanded="true" />
-            <element signature="e#9905#9906#0" expanded="true" />
-            <element signature="e#9944#9945#0" expanded="true" />
-            <element signature="e#10207#10208#0" expanded="true" />
-            <element signature="e#10244#10245#0" expanded="true" />
-            <element signature="e#10504#10505#0" expanded="true" />
-            <element signature="e#10541#10542#0" expanded="true" />
-            <element signature="e#10667#10668#0" expanded="true" />
-            <element signature="e#10703#10704#0" expanded="true" />
-            <element signature="e#10830#10831#0" expanded="true" />
-            <element signature="e#10865#10866#0" expanded="true" />
-            <element signature="e#16864#16865#0" expanded="true" />
-            <element signature="e#16899#16900#0" expanded="true" />
-            <element signature="e#17017#17018#0" expanded="true" />
-            <element signature="e#17052#17053#0" expanded="true" />
-            <element signature="e#17801#17802#0" expanded="true" />
-            <element signature="e#17828#17829#0" expanded="true" />
-            <element signature="e#17931#17932#0" expanded="true" />
-            <element signature="e#17966#17967#0" expanded="true" />
-            <element signature="e#19435#19436#0" expanded="true" />
-            <element signature="e#19465#19466#0" expanded="true" />
-            <element signature="e#19526#19527#0" expanded="true" />
-            <element signature="e#19558#19559#0" expanded="true" />
-            <element signature="e#20561#20562#0" expanded="true" />
-            <element signature="e#20597#20598#0" expanded="true" />
-            <element signature="e#26707#26708#0" expanded="true" />
-            <element signature="e#26742#26743#0" expanded="true" />
-            <element signature="e#26858#26859#0" expanded="true" />
-            <element signature="e#26895#26896#0" expanded="true" />
-            <element signature="e#27500#27501#0" expanded="true" />
-            <element signature="e#27527#27528#0" expanded="true" />
-            <element signature="e#28645#28646#0" expanded="true" />
-            <element signature="e#28675#28676#0" expanded="true" />
-            <element signature="e#28736#28737#0" expanded="true" />
-            <element signature="e#28768#28769#0" expanded="true" />
-            <element signature="e#29333#29334#0" expanded="true" />
-            <element signature="e#29369#29370#0" expanded="true" />
-            <element signature="e#31833#31834#0" expanded="true" />
-            <element signature="e#31862#31863#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/include/dmd/phobos/std/stdio.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="182">
@@ -741,25 +625,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../chrilib/src/chri_types.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="310">
-          <caret line="362" column="7" selection-start-line="362" selection-start-column="7" selection-end-line="362" selection-end-column="7" />
-          <folding>
-            <element signature="e#2905#2906#0" expanded="true" />
-            <element signature="e#2953#2954#0" expanded="true" />
-            <element signature="e#3160#3161#0" expanded="true" />
-            <element signature="e#3200#3201#0" expanded="true" />
-            <element signature="e#5207#5208#0" expanded="true" />
-            <element signature="e#5252#5253#0" expanded="true" />
-            <element signature="e#5978#5979#0" expanded="true" />
-            <element signature="e#6040#6041#0" expanded="true" />
-            <element signature="e#6605#6606#0" expanded="true" />
-            <element signature="e#6638#6639#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/../chrilib/src/chri_shared.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="417">
@@ -767,24 +632,38 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/chricrank.d">
+    <entry file="file://$PROJECT_DIR$/src/crank/crank_registry.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="152">
-          <caret line="8" column="26" selection-start-line="8" selection-start-column="26" selection-end-line="8" selection-end-column="26" />
+        <state relative-caret-position="133">
+          <caret line="10" column="51" selection-start-line="10" selection-start-column="51" selection-end-line="10" selection-end-column="51" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/crank/crank_registry.d">
+    <entry file="file://$PROJECT_DIR$/../chribaselib/src/proj_tools.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="190">
-          <caret line="10" column="51" selection-start-line="10" selection-start-column="51" selection-end-line="10" selection-end-column="51" />
+        <state relative-caret-position="892">
+          <caret line="475" column="9" selection-start-line="475" selection-start-column="9" selection-end-line="475" selection-end-column="9" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../chrilib/src/chri_types.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="424">
+          <caret line="114" column="34" lean-forward="true" selection-start-line="114" selection-start-column="34" selection-end-line="114" selection-end-column="34" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/crank/crank_main.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="512">
+        <state relative-caret-position="3667">
           <caret line="193" column="103" selection-start-line="193" selection-start-column="103" selection-end-line="193" selection-end-column="103" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chricrank.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="42" selection-start-line="2" selection-start-column="42" selection-end-line="2" selection-end-column="42" />
         </state>
       </provider>
     </entry>

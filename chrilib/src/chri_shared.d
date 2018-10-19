@@ -28,6 +28,7 @@ debug {
 
 /// Concepts, that are not code-agnostic. They are used in static concept functions, for example, so code has to know
 /// its cids (not names. The concept names still shouldn't be used in code).
+/// 1373740169, 1354580365, 9082381, 584599776, 1722596122
 enum HardCid: DcpDescriptor {
     /// In this buffer the attention circle thread puts user lines of text, where they wait to get processed. Used in
     /// the attention circle thread.

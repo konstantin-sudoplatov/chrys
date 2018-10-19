@@ -10,11 +10,18 @@ targetPath "bin"
 
 dependency "chrilib" version="*"
 
-configuration "release" {
-    targetType "executable"    
+configuration "debug" {
+    targetType "executable"
 }
 
-configuration "debug" {
+// If targetType is not "library", then debugging in chriscrank won't work.
+configuration "release" {
+    targetType "library"
+}
+
+// So, this new configuration here is to bypass that debugging issue and yet let the chris project to be able to build
+// the release executable.
+configuration "true_release" {
     targetType "executable"
 }
 

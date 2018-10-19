@@ -1,6 +1,6 @@
 module chricrank;
 import std.stdio;
-import std.conv, std.format;
+import std.conv, std.format, std.exception;
 
 import proj_shared, proj_tools;
 import db.db_main, db.db_concepts_table;
@@ -25,7 +25,7 @@ void main()
     // Add or update spirit concepts in DB
     Cind added;
     Cind updated;
-    foreach(cid; _sm_.byKey) {
+    foreach(cid; _sm_.keys) {
         const SpiritConcept smCpt = _sm_[cid];
         if      // is it a static concept?
                 (smCpt.cid <= MAX_STATIC_CID)
@@ -42,6 +42,8 @@ void main()
         else if // is the concept in DP different from the newly cranked?
                 (dbCpt != smCpt)
         {   //yes: update it
+            enforce(cid in _nm_, format!("Cid %s is used by for a concept in DB, and it's not present in the name map." ~
+                    " May be we are trying to reuse this cid?")(cid));
             spiritMan.updateConcept(smCpt);
             updated++;
         }

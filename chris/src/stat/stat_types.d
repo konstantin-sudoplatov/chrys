@@ -5,7 +5,7 @@ import proj_shared, proj_tools;
 import chri_types: StatCallType;
 
 /**
-        Get cid by static concept (it' a function, remember!) name.
+        Get cid by static concept function name.
     Parameters:
         cptName = name of the static concept function
     Returns: its cid (from the annotation) as int enum.

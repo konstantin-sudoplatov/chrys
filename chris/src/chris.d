@@ -2,14 +2,14 @@ module chris;
 import std.stdio;
 import std.format, std.concurrency, core.thread;
 
-import project_params, tools;
+import proj_shared, proj_tools;
 
-import chri_shared;
 import stat.stat_registry;
 import cpt.cpt_stat;
 import atn.atn_dispatcher_thread;
 import console_thread;
 import messages;
+import chri_types, chri_shared;
 
 void main()
 {

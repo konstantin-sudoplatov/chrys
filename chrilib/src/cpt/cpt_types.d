@@ -1,6 +1,6 @@
 module cpt.cpt_types;
 
-import project_params, tools;
+import proj_shared, proj_tools;
 import db.db_main, db.db_concepts_table;
 
 import cpt.cpt_registry, cpt.abs.abs_concept;

@@ -5,7 +5,7 @@ import std.string;
 import std.concurrency;
 import core.thread;
 
-import tools;
+import proj_shared, proj_tools;
 
 import chri_shared;
 import messages;

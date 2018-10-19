@@ -2,13 +2,13 @@ module cpt.cpt_neurons;
 import std.stdio;
 import std.format;
 
-import project_params, tools;
+import proj_shared, proj_tools;
 
 import cpt.cpt_types;
 import cpt.abs.abs_concept, cpt.abs.abs_neuron;
 import atn.atn_circle_thread;
-import crank.crank_types: DcpDescriptor;
 import cpt.cpt_interfaces;
+import chri_types;
 
 /**
             An uncontitional neuron.

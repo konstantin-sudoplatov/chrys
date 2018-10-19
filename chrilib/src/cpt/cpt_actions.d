@@ -6,13 +6,11 @@ module cpt.cpt_actions;
 import std.stdio;
 import std.format, std.typecons;
 
-import project_params, tools;
+import proj_shared, proj_tools;
 
-import chri_shared;
+import chri_types, chri_shared;
 import cpt.cpt_types, cpt.abs.abs_concept, cpt.cpt_stat;
 import atn.atn_circle_thread;
-import stat.stat_types;
-import crank.crank_types: DcpDescriptor;
 
 /// Spirit Action. Runs a static concept function with signature p0Cal.
 @(1) class SpA: SpiritDynamicConcept {

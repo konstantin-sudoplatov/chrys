@@ -1,13 +1,11 @@
 module atn.atn_circle_thread;
 import std.concurrency, std.format;
 
-import project_params, tools;
+import proj_shared, proj_tools;
 
-import chri_shared;
+import chri_types, chri_shared;
 import cpt.abs.abs_concept, cpt.abs.abs_neuron;
 import cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_actions, cpt.cpt_interfaces;
-import crank.crank_types: DcpDescriptor;
-import crank.crank_main;
 import messages;
 
 /**
@@ -165,7 +163,7 @@ class Caldron {
             if (dynDebug >= 1)
                 logit(format!"%s, message UserTalksToCircleMsg has come, text: %s"(caldName, m.line), TermColor.brown);
 
-            auto cpt = scast!StringQueuePremise(this[Uline.userInputBuffer_uline_strqprem]);
+            auto cpt = scast!StringQueuePremise(this[HardCid.userInputBuffer_hardcid_strqprem]);
             cpt.push(m.line);
             cpt.activate;       // the premise is ready
             reasoning_;         // kick off
@@ -272,7 +270,7 @@ class AttentionCircle: Caldron {
     this() {
 
         // Setup chat_breed
-        Breed breed = cast(Breed)this[Chat.chat_breed];
+        Breed breed = cast(Breed)this[HardCid.chatBreed_hardcid_breed];
         breed.tid = thisTid;
         breed.activate;         // the breed is setup and ready
         super(breed.cid);
@@ -285,7 +283,7 @@ class AttentionCircle: Caldron {
         else if      // is it a Tid of the client sent by Dispatcher?
                 (auto m = cast(immutable DispatcherSuppliesCircleWithUserTid_msg)msg)
         {   //yes: wind up the userThread_tidprem concept
-            auto userThreadTidprem = (scast!(TidPremise)(this[CommonConcepts.userThread_tidprem]));
+            auto userThreadTidprem = (scast!(TidPremise)(this[HardCid.userThread_hardcid_tidprem]));
             userThreadTidprem.tid = cast()m.tid;
             userThreadTidprem.activate;
             return true;

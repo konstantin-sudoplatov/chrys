@@ -1,12 +1,11 @@
 module cpt.cpt_premises;
 import std.format, std.typecons;
 
-import project_params, tools;
+import proj_shared, proj_tools;
 
-import chri_shared;
+import chri_types, chri_shared;
 import cpt.cpt_types;
 import cpt.abs.abs_concept, cpt.abs.abs_premise;
-import crank.crank_types: DcpDescriptor;
 
 /**
             Branch identifier.

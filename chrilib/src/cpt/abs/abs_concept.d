@@ -4,13 +4,12 @@ module cpt.abs.abs_concept;
 import std.stdio;
 import std.format, std.typecons;
 
-import project_params, tools;
+import proj_shared, proj_tools;
 
 import cpt.cpt_types, cpt.cpt_registry;
-import chri_shared;
+import chri_types, chri_shared;
 import atn.atn_circle_thread;
 import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_interfaces;
-import crank.crank_types: DcpDescriptor;
 
 /**
             Base for all concepts.

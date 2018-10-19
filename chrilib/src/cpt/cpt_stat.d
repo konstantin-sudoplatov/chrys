@@ -1,9 +1,9 @@
 module cpt.cpt_stat;
 import std.format, std.typecons;
 
-import project_params, tools;
+import proj_shared, proj_tools;
 
-import stat.stat_types;
+import chri_types;
 import cpt.cpt_types, cpt.abs.abs_concept;
 import atn.atn_circle_thread;
 

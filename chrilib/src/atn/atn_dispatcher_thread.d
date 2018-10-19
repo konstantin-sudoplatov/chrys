@@ -2,7 +2,7 @@ module atn.atn_dispatcher_thread;
 import std.concurrency;
 import std.format;
 
-import tools;
+import proj_shared, proj_tools;
 
 import messages;
 import atn.atn_circle_thread;

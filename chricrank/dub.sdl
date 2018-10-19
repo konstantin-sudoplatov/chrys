@@ -9,6 +9,7 @@ importPaths "src"
 targetPath "bin"
 
 dependency "chrilib" version="*"
+dependency "chris" version="*"
 
 configuration "release" {
     targetType "executable"

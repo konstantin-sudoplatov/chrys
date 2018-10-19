@@ -2,7 +2,7 @@ module cpt.cpt_registry;
 import std.stdio: writeln, writefln;
 import std.traits, std.format;
 
-import project_params, tools;
+import proj_shared, proj_tools;
 
 /// List of modules, containg concrete spirit concept clasess. The spirit concepts are annotated with class identifier (clid)
 /// user defined attribute.

@@ -2,14 +2,13 @@ module cpt.abs.abs_neuron;
 import std.stdio;
 import std.format, std.typecons, std.math;
 
-import project_params, tools;
+import proj_shared, proj_tools;
 
 import cpt.abs.abs_concept;
 import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises;
 
 import atn.atn_circle_thread;
-import chri_shared;
-import crank.crank_types;
+import chri_types, chri_shared;
 import cpt.cpt_interfaces;
 
 /**

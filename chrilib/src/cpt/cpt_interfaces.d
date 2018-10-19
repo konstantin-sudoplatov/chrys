@@ -1,11 +1,9 @@
 module cpt.cpt_interfaces;
 import std.format;
 
-import project_params;
+import proj_shared, proj_tools;
 
-import chri_shared;
-import crank.crank_types: DcpDescriptor;
-//import chri_shared;
+import chri_types, chri_shared;
 
 /// Base activation interface. Does not have an implementation.
 abstract interface ActivationIfc {

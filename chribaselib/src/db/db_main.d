@@ -5,7 +5,7 @@ version(unittest) import std.stdio;
 
 import derelict.pq.pq;
 
-import tools;
+import proj_tools;
 
 /// Credentials for the DB. Be carefull not to use named enums in writeln or format functions without implicit cast to
 /// string. You'll get strange results! While cast(string)DbCreds.password gives out "chris", to!string(DbCreds.password) will

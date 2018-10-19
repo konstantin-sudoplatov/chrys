@@ -1,7 +1,7 @@
 module cpt.abs.abs_premise;
 import std.format, std.typecons;
 
-import project_params;
+import proj_shared, proj_tools;
 
 import cpt.abs.abs_concept;
 import cpt.cpt_interfaces;

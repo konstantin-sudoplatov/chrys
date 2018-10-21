@@ -1,9 +1,9 @@
 module cpt.cpt_interfaces;
 import std.format;
 
-import proj_shared, proj_tools;
+import proj_data;
 
-import chri_types, chri_shared;
+import chri_types, chri_data;
 
 /// Base activation interface. Does not have an implementation.
 abstract interface ActivationIfc {

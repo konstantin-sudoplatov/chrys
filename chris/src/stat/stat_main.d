@@ -1,7 +1,7 @@
 /// Unsorted static concepts
 module stat.stat_main;
 
-import proj_shared, proj_tools;
+import proj_data, proj_funcs;
 
 import stat.stat_types;
 import cpt.cpt_interfaces, cpt.abs.abs_concept, cpt.cpt_premises;

@@ -1,7 +1,7 @@
 module cpt.cpt_stat;
 import std.format, std.typecons;
 
-import proj_shared, proj_tools;
+import proj_data;
 
 import chri_types;
 import cpt.cpt_types, cpt.abs.abs_concept;
@@ -25,7 +25,7 @@ import atn.atn_circle_thread;
             callType = call type of the static concept function
     */
     this(Cid cid, void* fp, StatCallType callType){
-        super(cid, spClid!(typeof(this)));
+        super(cid);
 
         cast()flags |= SpCptFlags.STATIC;
         cast()this.fp = cast(immutable)fp;

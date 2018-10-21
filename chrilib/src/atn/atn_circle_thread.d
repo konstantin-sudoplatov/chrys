@@ -1,9 +1,9 @@
 module atn.atn_circle_thread;
 import std.concurrency, std.format;
 
-import proj_shared, proj_tools;
+import proj_data, proj_funcs;
 
-import chri_types, chri_shared;
+import chri_types, chri_data;
 import cpt.abs.abs_concept, cpt.abs.abs_neuron;
 import cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_actions, cpt.cpt_interfaces;
 import messages;

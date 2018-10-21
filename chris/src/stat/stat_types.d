@@ -1,6 +1,6 @@
 module stat.stat_types;
 
-import proj_shared, proj_tools;
+import proj_data;
 
 import chri_types: StatCallType;
 

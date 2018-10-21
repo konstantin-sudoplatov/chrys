@@ -12,5 +12,9 @@
     <orderEntry type="library" name="derelict-pq-4.0.0-alpha.2" level="project" />
     <orderEntry type="library" name="derelict-util-3.0.0-beta.2" level="project" />
     <orderEntry type="library" name="chris-~master" level="project" />
+    <orderEntry type="library" name="chribaselib-~master" level="project" />
+    <orderEntry type="library" name="derelict-pq-4.0.0-alpha.2" level="project" />
+    <orderEntry type="library" name="derelict-util-3.0.0-beta.2" level="project" />
+    <orderEntry type="library" name="chris-~master" level="project" />
   </component>
 </module>

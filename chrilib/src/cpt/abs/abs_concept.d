@@ -4,12 +4,17 @@ module cpt.abs.abs_concept;
 import std.stdio;
 import std.format, std.typecons;
 
-import proj_shared, proj_tools;
+import proj_data, proj_funcs;
 
 import cpt.cpt_types, cpt.cpt_registry;
-import chri_types, chri_shared;
+import chri_types, chri_data;
 import atn.atn_circle_thread;
 import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_interfaces;
+
+/// External runtime function, that creates a new object by its ClassInfo. No constructors are called, though static
+/// initialisation is done. Very fast. Much faster than manually allocate an object on the heap as new buf[], as ehe emplace
+/// function does. Used in the SpiritConcept.clone() method and when restoring serialized classes from DB.
+extern (C) Object _d_newclass (ClassInfo info);
 
 /**
             Base for all concepts.
@@ -21,17 +26,11 @@ import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_interfaces;
 */
 abstract class SpiritConcept {
 
-    /// Spirit concept classes registry (classinfo by clid
-    enum TypeInfo_Class[] spiritRegistry = createSpiritClassesRegistry;
-
     /// Concept identifier.
     immutable Cid cid = 0;
 
     /// Version.
     Cvr ver = 0;
-
-    /// Spirit concept class identifier
-    immutable Clid clid;
 
     /// Attributes of the concept.
     immutable SpCptFlags flags =  cast(SpCptFlags)0;
@@ -41,11 +40,9 @@ abstract class SpiritConcept {
             Used for concepts with predefined cids.
         Parameters:
             cid = Concept identifier.
-            clid = concept class identifier
     */
-    this(Cid cid, Clid clid) {
+    this(Cid cid) {
         this.cid = cid;
-        this.clid = clid;
     }
 
     /**
@@ -72,7 +69,7 @@ abstract class SpiritConcept {
 
     /// Serialize concept
     Serial serialize() const {
-        return Serial(cid, ver, clid);
+        return Serial(cid, ver, _spReg_[typeid(this)]);
     }
 
     /**
@@ -86,10 +83,9 @@ abstract class SpiritConcept {
         Returns: newly constructed object of this class
     */
     static SpiritConcept deserialize(Cid cid, Cvr ver, Clid clid, const byte[] stable, const byte[] transient) {
-        auto res = cast(SpiritConcept)_d_newclass(spiritRegistry[clid]);    // create object
+        auto res = cast(SpiritConcept)_d_newclass(cast()_spReg_[clid]);    // create object
         cast()res.cid = cid;
         res.ver = ver;
-        cast()res.clid = clid;
         res._deserialize(stable, transient);
 
         return res;
@@ -101,7 +97,6 @@ abstract class SpiritConcept {
         Must be realised in every concrete concept since it is used in versioning.
     */
     override bool opEquals(Object sc) const {
-        assert(this.clid == scast!SpiritConcept(sc).clid);
         assert(typeid(this) == typeid(sc));
 
         return true;
@@ -213,10 +208,9 @@ abstract class SpiritDynamicConcept: SpiritConcept {
         Parameters:
             cid = Concept identifier. Can be a preassigned value or 0. If it is 0, then actual value is generated when you
                   add the concept to the holy map.
-            clid = Concept class identifier.
     */
-    this(Cid cid, Clid clid) {
-        super(cid, clid);
+    this(Cid cid) {
+        super(cid);
         cast()flags |= SpCptFlags.PERM;       // all dynamic concepts are permanent until further notice
     }
 

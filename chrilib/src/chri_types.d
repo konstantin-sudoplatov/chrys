@@ -2,10 +2,10 @@ module chri_types;
 import std.stdio;
 import std.conv, std.format, core.exception;
 
-import proj_shared, proj_tools;
+import proj_data, proj_funcs;
 import db.db_main, db.db_concepts_table;
 
-import chri_shared;
+import chri_data;
 import cpt.abs.abs_concept, cpt.cpt_stat;
 import atn.atn_circle_thread;
 

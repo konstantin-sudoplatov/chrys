@@ -2,7 +2,7 @@ module cpt.cpt_neurons;
 import std.stdio;
 import std.format;
 
-import proj_shared, proj_tools;
+import proj_data, proj_funcs;
 
 import cpt.cpt_types;
 import cpt.abs.abs_concept, cpt.abs.abs_neuron;
@@ -21,8 +21,8 @@ import chri_types;
         Parameters:
             cid = predefined concept identifier
     */
-    this(Cid cid, Clid clid = spClid!(typeof(this))) {
-        super(cid, clid);
+    this(Cid cid) {
+        super(cid);
         this.disableCutoff;
     }
 
@@ -152,7 +152,7 @@ class ActionNeuron: Neuron, ActivationIfc {
 @(8) final class SpSeed: SpActionNeuron {
 
     /// Constructor
-    this(Cid cid) { super(cid, spClid!(typeof(this))); }
+    this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the holy static concept.
     override Seed live_factory() const {
@@ -179,7 +179,7 @@ final class Seed: ActionNeuron {
         Parameters:
             cid = predefined concept identifier
     */
-    this(Cid cid) { super(cid, spClid!(typeof(this))); }
+    this(Cid cid) { super(cid); }
 
     // Create live wrapper for the holy static concept.
     override AndNeuron live_factory() const {
@@ -198,7 +198,7 @@ unittest {
     SpiritConcept.Serial ser = a.serialize;
 
     auto b = cast(SpAndNeuron)SpiritConcept.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
-    assert(a.cid == b.cid && a.ver == b.ver && a.clid == b.clid && a.cutoff == b.cutoff);
+    assert(a.cid == b.cid && a.ver == b.ver && typeid(a) == typeid(b) && a.cutoff == b.cutoff);
     assert(a == b);
 }
 
@@ -243,7 +243,7 @@ final class AndNeuron: LogicalNeuron {
         Parameters:
             cid = predefined concept identifier
     */
-    this(Cid cid) { super(cid, spClid!(typeof(this))); }
+    this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the holy static concept.
     override WeightNeuron live_factory() const {
@@ -261,7 +261,7 @@ unittest {
     SpiritConcept.Serial ser = a.serialize;
 
     auto b = cast(SpWeightNeuron)SpiritConcept.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
-    assert(a.cid == b.cid && a.ver == b.ver && a.clid == b.clid && a.cutoff == b.cutoff);
+    assert(a.cid == b.cid && a.ver == b.ver && typeid(a) == typeid(b) && a.cutoff == b.cutoff);
     assert(a == b);
 }
 

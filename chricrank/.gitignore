@@ -12,3 +12,4 @@ chricrank-test-*
 *.o
 *.obj
 *.lst
+.idea/workspace.xml

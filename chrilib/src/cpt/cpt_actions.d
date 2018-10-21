@@ -6,9 +6,9 @@ module cpt.cpt_actions;
 import std.stdio;
 import std.format, std.typecons;
 
-import proj_shared, proj_tools;
+import proj_data, proj_funcs;
 
-import chri_types, chri_shared;
+import chri_types, chri_data;
 import cpt.cpt_types, cpt.abs.abs_concept, cpt.cpt_stat;
 import atn.atn_circle_thread;
 
@@ -19,9 +19,8 @@ import atn.atn_circle_thread;
                 Constructor
         Parameters:
             cid = predefined concept identifier
-            clid = class identifier
     */
-    this(Cid cid, Clid clid = spClid!(typeof(this)) ) { super(cid, clid); }
+    this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the holy static concept.
     override A live_factory() const {
@@ -30,7 +29,7 @@ import atn.atn_circle_thread;
 
     /// Serialize concept
     override Serial serialize() const {
-        auto res = Serial(cid, ver, clid);
+        auto res = Serial(cid, ver, _spReg_[typeid(this)]);
 
         res.stable.length = St.length;  // allocate
         *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
@@ -131,7 +130,7 @@ unittest {
 
     SpiritConcept.Serial ser = a.serialize;
     auto b = cast(SpA)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
-    assert(ser.cid == 42 && ser.ver == 5 && SpiritConcept.spiritRegistry[ser.clid] == typeid(SpA));
+    assert(ser.cid == 42 && ser.ver == 5 && typeid(b) == typeid(SpA));
 
     assert(a == b);
 }
@@ -161,7 +160,7 @@ class A: DynamicConcept {
 @(2) final class SpA_Cid: SpA {
 
     /// Constructor
-    this(Cid cid) { super(cid, spClid!(typeof(this))); }
+    this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the holy static concept.
     override A_Cid live_factory() const {
@@ -170,7 +169,7 @@ class A: DynamicConcept {
 
     /// Serialize concept
     override Serial serialize() const {
-        Serial res = Serial(cid, ver, clid);
+        Serial res = Serial(cid, ver, _spReg_[typeid(this)]);
 
         res.stable.length = St.length;  // allocate
         *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
@@ -268,7 +267,7 @@ unittest {
 
     SpiritConcept.Serial ser = a.serialize;
     auto b = cast(SpA_Cid)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
-    assert(b.cid == 42 && b.ver == 5 && SpiritConcept.spiritRegistry[b.clid] == typeid(SpA_Cid) &&
+    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_Cid) &&
             b._statActionCid == 43 && b._p1Cid == 44);
 
     assert(a == b);
@@ -290,7 +289,7 @@ final class A_Cid: A {
 @(3) final class SpA_CidCid: SpA {
 
     /// Constructor
-    this(Cid cid) { super(cid, spClid!(typeof(this))); }
+    this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the holy static concept.
     override A_CidCid live_factory() const {
@@ -299,7 +298,7 @@ final class A_Cid: A {
 
     /// Serialize concept
     override Serial serialize() const {
-        Serial res = Serial(cid, ver, clid);
+        Serial res = Serial(cid, ver, _spReg_[typeid(this)]);
 
         res.stable.length = St.length;  // allocate
         *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
@@ -410,7 +409,7 @@ unittest {
 
     SpiritConcept.Serial ser = a.serialize;
     auto b = cast(SpA_CidCid)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
-    assert(b.cid == 42 && b.ver == 5 && SpiritConcept.spiritRegistry[b.clid] == typeid(SpA_CidCid) &&
+    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_CidCid) &&
             b._statActionCid == 43 && b._p1Cid == 44 && b._p2Cid == 45);
 
     assert(a == b);
@@ -428,7 +427,7 @@ final class A_CidCid: A {
 @(4) final class SpA_CidFloat: SpA {
 
     /// Constructor
-    this(Cid cid) { super(cid, spClid!(typeof(this))); }
+    this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the holy static concept.
     override A_CidFloat live_factory() const {
@@ -437,7 +436,7 @@ final class A_CidCid: A {
 
     /// Serialize concept
     override Serial serialize() const {
-        Serial res = Serial(cid, ver, clid);
+        Serial res = Serial(cid, ver, _spReg_[typeid(this)]);
 
         res.stable.length = St.length;  // allocate
         *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
@@ -548,7 +547,7 @@ unittest {
 
     SpiritConcept.Serial ser = a.serialize;
     auto b = cast(SpA_CidFloat)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
-    assert(b.cid == 42 && b.ver == 5 && SpiritConcept.spiritRegistry[b.clid] == typeid(SpA_CidFloat) &&
+    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_CidFloat) &&
             b._statActionCid == 43 && b._p1Cid == 44 && b._p2Float == 4.5);
 
     assert(a == b);
@@ -566,7 +565,7 @@ final class A_CidFloat: A {
 @(5) final class SpA_CidCidFloat: SpA {
 
     /// Constructor
-    this(Cid cid) { super(cid, spClid!(typeof(this))); }
+    this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the holy static concept.
     override A_CidCidFloat live_factory() const {
@@ -575,7 +574,7 @@ final class A_CidFloat: A {
 
     /// Serialize concept
     override Serial serialize() const {
-        Serial res = Serial(cid, ver, clid);
+        Serial res = Serial(cid, ver, _spReg_[typeid(this)]);
 
         res.stable.length = St.length;  // allocate
         *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
@@ -699,7 +698,7 @@ unittest {
 
     SpiritConcept.Serial ser = a.serialize;
     auto b = cast(SpA_CidCidFloat)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
-    assert(b.cid == 42 && b.ver == 5 && SpiritConcept.spiritRegistry[b.clid] == typeid(SpA_CidCidFloat) &&
+    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_CidCidFloat) &&
             b._statActionCid == 43 && b._p1Cid == 44 && b._p2Cid == 45 && b._p3Float == 4.5);
 
     assert(a == b);
@@ -717,7 +716,7 @@ final class A_CidCidFloat: A {
 @(6) final class SpA_CidInt: SpA {
 
     /// Constructor
-    this(Cid cid) { super(cid, spClid!(typeof(this))); }
+    this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the holy static concept.
     override A_CidInt live_factory() const {
@@ -726,7 +725,7 @@ final class A_CidCidFloat: A {
 
     /// Serialize concept
     override Serial serialize() const {
-        Serial res = Serial(cid, ver, clid);
+        Serial res = Serial(cid, ver, _spReg_[typeid(this)]);
 
         res.stable.length = St.length;  // allocate
         *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
@@ -837,7 +836,7 @@ unittest {
 
     SpiritConcept.Serial ser = a.serialize;
     auto b = cast(SpA_CidInt)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
-    assert(b.cid == 42 && b.ver == 5 && SpiritConcept.spiritRegistry[b.clid] == typeid(SpA_CidInt) &&
+    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_CidInt) &&
             b._statActionCid == 43 && b._p1Cid == 44 && b._p2Int == 45);
 
     assert(a == b);

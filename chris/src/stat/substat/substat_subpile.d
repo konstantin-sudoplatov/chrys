@@ -1,7 +1,7 @@
 module stat.substat.substat_subpile;
 import std.stdio;
 
-import proj_shared, proj_tools;
+import proj_data;
 
 import stat.stat_types;
 import atn.atn_circle_thread: Caldron;

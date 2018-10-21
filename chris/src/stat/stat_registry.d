@@ -1,7 +1,7 @@
 module stat.stat_registry;
 import std.traits, std.conv;
 
-import proj_shared, proj_tools;
+import proj_data;
 
 import stat.stat_types;
 import atn.atn_circle_thread;

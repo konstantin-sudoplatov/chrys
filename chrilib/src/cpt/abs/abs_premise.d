@@ -1,7 +1,7 @@
 module cpt.abs.abs_premise;
 import std.format, std.typecons;
 
-import proj_shared, proj_tools;
+import proj_data;
 
 import cpt.abs.abs_concept;
 import cpt.cpt_interfaces;
@@ -13,7 +13,7 @@ import cpt.cpt_interfaces;
 abstract class SpiritPremise: SpiritDynamicConcept {
 
     /// constructor
-    this(Cid cid, Clid clid) { super(cid, clid); }
+    this(Cid cid) { super(cid); }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 }

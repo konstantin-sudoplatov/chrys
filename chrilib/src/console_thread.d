@@ -5,9 +5,9 @@ import std.string;
 import std.concurrency;
 import core.thread;
 
-import proj_shared, proj_tools;
+import proj_data, proj_funcs;
 
-import chri_shared;
+import chri_data;
 import messages;
 
 enum msgTimeout = 1;    // seconds

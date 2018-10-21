@@ -1,7 +1,7 @@
 module messages;
 import std.concurrency;
 
-import proj_shared, proj_tools;
+import proj_data;
 
 import cpt.abs.abs_concept;
 

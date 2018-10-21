@@ -2,32 +2,19 @@ module chris;
 import std.stdio;
 import std.format, std.concurrency, core.thread;
 
-import proj_shared, proj_tools;
+import proj_data, proj_funcs;
 
 import stat.stat_registry;
+import crank.crank_registry;
 import cpt.cpt_stat;
 import atn.atn_dispatcher_thread;
 import console_thread;
 import messages;
-import chri_types, chri_shared;
+import chri_types, chri_data;
 
 void main()
 {
 	preloadConceptMaps(_sm_, _nm_);
-}
-
-/**
-		Load the spirit and name maps with static concepts. Load name map with dynamic concepts names (dynamic concepts
-	themselves will be loaded from DB into the spirit maps dynamically, when they are needed).
-*/
-void preloadConceptMaps(ref shared SpiritMap sm, ref immutable string[Cid] nm) {
-
-    // Create and load spirit and name maps.
-    sm = new shared SpiritMap;
-    foreach(sd; createStatDescriptors) {
-        sm.add(new SpStaticConcept(sd.cid, sd.fp, sd.call_type));
-        cast()nm[sd.cid] = sd.name;
-    }
 
     // Capture Tid of the main thread.
     cast()_mainTid_ = thisTid;
@@ -39,7 +26,7 @@ void preloadConceptMaps(ref shared SpiritMap sm, ref immutable string[Cid] nm) {
     // thread and that would be enough.
     spawn(&console_thread_func);
 
-    // Wait for messages. That should be only requests for termination from console or exceptions that should be rethrown.
+    // Wait for messages. Those should be only requests for termination from console or exceptions that should be rethrown.
     while(true) {
         TerminateApp_msg termMsg;
         Throwable ex;
@@ -73,5 +60,24 @@ TERMINATE_APPLICATION:
     scope(exit) {
         thread_joinAll;
         writeln("good bye, world!"); stdout.flush;
+    }
+}
+
+/**
+		Load the spirit and name maps with static concepts. Load name map with dynamic concepts names (dynamic concepts
+	themselves will be loaded from DB into the spirit maps dynamically, when they are needed).
+*/
+void preloadConceptMaps(ref shared SpiritMap sm, ref immutable string[Cid] nm) {
+
+    // Create and load spirit and name maps for static concepts.
+    sm = new shared SpiritMap;
+    foreach(sd; createStatDescriptors) {
+        sm.add(new SpStaticConcept(sd.cid, sd.fp, sd.call_type));
+        cast()nm[sd.cid] = sd.name;
+    }
+
+    // Load the name map
+    foreach(dd; createDynDescriptors) {
+        cast()nm[dd.cid] = dd.name;
     }
 }

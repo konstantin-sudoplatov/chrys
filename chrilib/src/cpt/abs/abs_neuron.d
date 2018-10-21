@@ -25,10 +25,10 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     this(Cid cid) { super(cid); }
 
     /// Ditto.
-    override SpiritNeuron _deep_copy_() const {
+    override SpiritNeuron clone() const {
 
         // Take shallow copy
-        SpiritNeuron clon = cast(SpiritNeuron)super._deep_copy_;
+        SpiritNeuron clon = cast(SpiritNeuron)super.clone;
 
         // Make it deep.
         clon._effects = (cast(Effect[])this._effects).dup;
@@ -523,8 +523,8 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
     this(Cid cid) { super(cid); }
 
     /// Clone
-    override SpiritLogicalNeuron _deep_copy_() const {
-        SpiritLogicalNeuron cpt = cast(SpiritLogicalNeuron)super._deep_copy_;
+    override SpiritLogicalNeuron clone() const {
+        SpiritLogicalNeuron cpt = cast(SpiritLogicalNeuron)super.clone;
         cpt._premises = this._premises.dup;      // deep copy of premises
 
         return cpt;

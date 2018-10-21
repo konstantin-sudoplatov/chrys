@@ -72,10 +72,10 @@ import atn.atn_circle_thread;
     }
 
     /// Setter
-    final @property Cid statAction(Cid statActionCid) {
-        debug checkCid!SpStaticConcept(statActionCid);
-        return _statActionCid = statActionCid;
-    }
+    //final @property Cid statAction(Cid statActionCid) {
+    //    debug checkCid!SpStaticConcept(statActionCid);
+    //    return _statActionCid = statActionCid;
+    //}
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
@@ -202,6 +202,9 @@ class A: DynamicConcept {
 
         (cast(void function(Caldron, Cid))statAct.fp)(caldron, _p1Cid);
     }
+
+    /// Allow loading only static action using load(Cid statAction) of the SpA class.
+    alias load = SpA.load;
 
     /// Full setup
     void load(Cid statAction, DcpDescriptor operand) {
@@ -333,6 +336,9 @@ final class A_Cid: A {
 
         (cast(void function(Caldron, Cid, Cid))statAct.fp)(caldron, _p1Cid, _p2Cid);
     }
+
+    /// Allow loading only static action using load(Cid statAction) of the SpA class.
+    alias load = SpA.load;
 
     /// Full setup
     void load(Cid statAction, DcpDescriptor firstOperand, DcpDescriptor secondOperand) {
@@ -466,6 +472,9 @@ final class A_CidCid: A {
 
         (cast(void function(Caldron, Cid, float))statAct.fp)(caldron, _p1Cid, _p2Float);
     }
+
+    /// Allow loading only static action using load(Cid statAction) of the SpA class.
+    alias load = SpA.load;
 
     /**
             Set float value for a concept in the current namespace.
@@ -606,6 +615,9 @@ final class A_CidFloat: A {
 
         (cast(void function(Caldron, Cid, Cid, float))statAct.fp)(caldron, _p1Cid, _p2Cid, _p3Float);
     }
+
+    /// Allow loading only static action using load(Cid statAction) of the SpA class.
+    alias load = SpA.load;
 
     /**
             Set float value for a concept in the current namespace.
@@ -755,6 +767,9 @@ final class A_CidCidFloat: A {
 
         (cast(void function(Caldron, Cid, int))statAct.fp)(caldron, _p1Cid, _p2Int);
     }
+
+    /// Allow loading only static action using load(Cid statAction) of the SpA class.
+    alias load = SpA.load;
 
     /**
             Set int value for a concept in the current namespace.

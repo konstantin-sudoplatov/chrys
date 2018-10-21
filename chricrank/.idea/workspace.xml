@@ -2,77 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="8774b1c0-0bdb-42dc-9ffb-234d9d42a39c" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/../chribaselib/src/proj_funcs.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chribaselib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/bin/chribaselib" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/bin/chribaselib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chribaselib/bin/libchribaselib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/bin/libchribaselib.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/src/db/db_concepts_table.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/db/db_concepts_table.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/src/db/db_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/db/db_main.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/src/proj_shared.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/proj_data.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/src/proj_tools.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/chribaselib__master2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/chribaselib__master3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/chribaselib__master4.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/chrilib__master2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/chrilib__master3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/chrilib__master4.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/chris__master2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/chris__master3.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_pq_4_0_0_alpha_22.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_pq_4_0_0_alpha_23.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_pq_4_0_0_alpha_24.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_util_3_0_0_beta_22.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_util_3_0_0_beta_23.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/derelict_util_3_0_0_beta_24.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/src/base_proba.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/base_proba.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/src/proj_funcs.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/proj_funcs.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/chricrank" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chricrank" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chricrank.iml" beforeDir="false" afterPath="$PROJECT_DIR$/chricrank.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chricrank.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/chricrank.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/crank/crank_main.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/crank/crank_registry.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/crank/crank_types.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/crank/subcrank/subcrank_subpile.d" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/bin/chrilib" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/bin/chrilib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/bin/libchrilib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/bin/libchrilib.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/atn/atn_circle_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/atn/atn_circle_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/atn/atn_dispatcher_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/atn/atn_dispatcher_thread.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/chri_proba.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/chri_proba.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/chri_shared.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/chri_data.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/chri_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/chri_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/console_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/console_thread.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/src/chri_data.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/chri_data.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_concept.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_concept.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_neuron.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_neuron.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_premise.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_premise.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_actions.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_actions.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_interfaces.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_interfaces.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_neurons.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_neurons.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_premises.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_premises.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_registry.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_stat.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_stat.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/cpt_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/messages.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/messages.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/.gitignore" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/.idea/libraries/chribaselib__master.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/.idea/libraries/chrilib__master.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/.idea/libraries/derelict_pq_4_0_0_alpha_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/.idea/libraries/derelict_util_3_0_0_beta_2.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/.idea/libraries/src.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/.idea/libraries/src.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chris/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chris/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/bin/chris" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chris/bin/libchris.a" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/bin/libchris.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/chris.iml" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/chris.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/src/chris.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/src/chris.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chris/classes/production/chris/crank/crank_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/classes/production/chris/crank/crank_main.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chris/classes/production/chris/stat/stat_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/classes/production/chris/stat/stat_main.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chris/src/crank/crank_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/src/crank/crank_main.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chris/src/stat/stat_main.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/src/stat/stat_main.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/src/stat/stat_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/src/stat/stat_registry.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/src/stat/stat_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/src/stat/stat_types.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chris/src/stat/substat/substat_subpile.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/src/stat/substat/substat_subpile.d" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../old/chris/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../old/chris/.idea/workspace.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/classes/" />
     <option name="EXCLUDED_CONVERTED_TO_IGNORED" value="true" />
@@ -133,7 +81,7 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/chricrank.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="440">
+            <state relative-caret-position="-1255">
               <caret line="22" column="30" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
             </state>
           </provider>
@@ -171,6 +119,7 @@
     </option>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
+    <option name="x" value="1920" />
     <option name="width" value="1920" />
     <option name="height" value="1080" />
   </component>
@@ -484,7 +433,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1080" extended-state="6" />
+    <frame x="1920" y="0" width="1920" height="1080" extended-state="6" />
     <editor active="true" />
     <layout>
       <window_info id="Favorites" order="0" side_tool="true" />
@@ -637,7 +586,7 @@
     </entry>
     <entry file="file://$PROJECT_DIR$/src/chricrank.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="440">
+        <state relative-caret-position="-1255">
           <caret line="22" column="30" selection-start-line="22" selection-start-column="30" selection-end-line="22" selection-end-column="30" />
         </state>
       </provider>

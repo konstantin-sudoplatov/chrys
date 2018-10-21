@@ -2,6 +2,8 @@ module base_proba;
 import std.stdio: writeln, writefln, stdout;
 import std.typecons;
 
+import base_proba2;
+
 // Show in console that it is the unittest mode
 version(unittest) {
     pragma(msg, "Unittest");

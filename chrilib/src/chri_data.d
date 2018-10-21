@@ -26,7 +26,7 @@ debug {
     immutable bool _cranked_;
 }
 
-/// Registry of serializeable spirit classes. It's a two way associative array of TypeInfo_Class[Clid].
+/// Registry of serializable spirit classes. It's a two way associative array of TypeInfo_Class[Clid].
 immutable CrossMap!(ClassInfo, Clid) _spReg_;
 
 /// Concepts, that are not code-agnostic. They are used in static concept functions, for example, so code has to know

@@ -164,8 +164,8 @@ void anactivateRemotely_stat(Caldron cld, Cid destBreedCid, Cid cptCid) {
 /**
         Send concept object to a branch. The concept is injected into the branch's name space. If there is already such a concept
     in the branch name space, it will be overriden. The concept is cloned on sending, so that receiving side will get the
-    concept as it was at this moment. Initially, it was cloned on the receiving side and happened to change through the
-    time of traveling. Corrected.
+    concept as it was at the moment of calling this function. If it were cloned on the receiving side it could get changed
+    during the traveling time.
     Parameters:
         cld = caldron as a name space for cids.
         breedCid = breed of the addressed branch as its identifier
@@ -175,10 +175,9 @@ void anactivateRemotely_stat(Caldron cld, Cid destBreedCid, Cid cptCid) {
 void sendConceptToBranch_stat(Caldron cld, Cid breedCid, Cid loadCid) {
     import std.concurrency: Tid, send;
     import messages: IbrSingleConceptPackage_msg;
-    checkCid!Breed(cld, breedCid);
     checkCid!Concept(cld, loadCid);
 
-    Breed br = cast(Breed)cld[breedCid];
+    Breed br = scast!(Breed)(cld[breedCid]);
     try {
         send(br.tid, new immutable IbrSingleConceptPackage_msg(cld[loadCid].clone));
     } catch(Exception e) {  // Something happened with the destination thread

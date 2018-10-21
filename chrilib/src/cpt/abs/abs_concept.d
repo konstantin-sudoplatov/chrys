@@ -47,14 +47,13 @@ abstract class SpiritConcept {
 
     /**
                 Clone an object and than make it a deep copy.
-        Note, the runtime type of the object is used, not the compile (declared) type.
             Written by Burton Radons <burton-radons smocky.com>
             https://digitalmars.com/d/archives/digitalmars/D/learn/1625.html
             Tested against memory leaks in the garbage collecter both via copied object omission and omission of reference to other
         object in the its body.
         Returns: deep clone of itself
     */
-    SpiritConcept _deep_copy_() const {
+    SpiritConcept clone() const {
 
         void* copy = cast(void*)_d_newclass(this.classinfo);
         size_t size = this.classinfo.initializer.length;
@@ -165,8 +164,8 @@ abstract class Concept {
     }
 
     /**
-            It is a partly deep copy. All fields of the object cloned deeply except the holy part. The holy is immutable
-        for a caldron, no need to duplicate it.
+            It is a partly deep copy. All fields of the object cloned deeply except the spirit part. The spirit is immutable
+        from a caldron viewpoint, no need to duplicate it.
     */
     Concept clone() const {
 

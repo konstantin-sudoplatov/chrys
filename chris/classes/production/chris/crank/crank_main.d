@@ -31,7 +31,7 @@ enum CommonConcepts: DcpDescriptor {
     stopAndWait_act = cd!(SpA, 580_052_493),
 
     /// line of text from the user, string premise.
-    userInputLine_strprem = cd!(SpStringPremise, 3_622_010_989),
+    userInputLine_strprem = cd!(SpStringPrem, 3_622_010_989),
 
     /// anactivate user input string premise
     anactivateUserInputLine_cact = cd!(SpA_Cid, 1_733_678_366),
@@ -102,8 +102,8 @@ void chatBranch() {
     // Handshake with uline
     cp!sendUlineChatBreed_chat_ccact.load(statCid!sendConceptToBranch_stat, uline_breed, chatBreed_hardcid_breed);
     cp!sendUlineUserTid_chat_ccact.load(statCid!sendConceptToBranch_stat, uline_breed, userThread_hardcid_tidprem);
-    cp!activateRemotely_readyForUlineInput_chat_ccact.
-            load(statCid!activateRemotely_stat, uline_breed, chatReadyForUlineInputPeg_uline_pegprem);
+    cp!activateRemotely_readyForUlineInput_chat_ccact.load(statCid!activateRemotely_stat, uline_breed,
+            chatReadyForUlineInputPeg_uline_pegprem);
     cp!shakeHandsWithUline_chat_actnrn.addEffects(
         [   // acts
             sendUlineChatBreed_chat_ccact,       // give uline own breed
@@ -144,14 +144,14 @@ enum Uline {
     userInputValve_uline_andnrn = cd!(SpAndNeuron, 732_066_873),
 
     /// Flag for uline to feed the next input from user to chat and anactivation action for it
-    chatReadyForUlineInputPeg_uline_pegprem = cd!(SpPegPremise, 1_456_194_005),
+    chatReadyForUlineInputPeg_uline_pegprem = cd!(SpPegPrem, 1_456_194_005),
     anactivateChatReadyForUlineInputPeg_uline_cact = cd!(SpA_Cid, 409_329_855),
 
     /// Call stat action of moving line from buffer to string peg.
     moveLineFromUserInuputBufferToUserInputLine_uline_ccact = cd!(SpA_CidCid, 2_949_480_003),
 
     /// Send user line premise to chat (together with the activation value)
-    sendUserInputLineToChat_uline_binact = cd!(SpA_CidCid, 3_447_310_214),
+    sendUserInputLineToChat_uline_ccact = cd!(SpA_CidCid, 3_447_310_214),
 
     /// Send user a prompt for the next input
     sendUserRequestForNextLine_uline_cact = cd!(SpA_Cid, 1_439_958_318),
@@ -187,20 +187,23 @@ void ulineBranch() {
     );
 
     // User input valve. The handshake is over. Now, wait for user input and send it to chat, in a cycle.
-    cp!moveLineFromUserInuputBufferToUserInputLine_uline_ccact.load(statCid!getUserInputLineFromBuffer_stat,
-            userInputBuffer_hardcid_strqprem, userInputLine_strprem);
-    cp!sendUserInputLineToChat_uline_binact.load(statCid!sendConceptToBranch_stat, chatBreed_hardcid_breed, userInputLine_strprem);
-    cp!anactivateChatReadyForUlineInputPeg_uline_cact.load(statCid!anactivate_stat, chatReadyForUlineInputPeg_uline_pegprem);
-    cp!sendUserRequestForNextLine_uline_cact.load(statCid!requestUserInput, userThread_hardcid_tidprem);
+        // Premises
     cp!userInputValve_uline_andnrn.addPremises([
         userInputBuffer_hardcid_strqprem,
         chatReadyForUlineInputPeg_uline_pegprem
     ]);
+        // Actions
+    cp!moveLineFromUserInuputBufferToUserInputLine_uline_ccact.load(statCid!getUserInputLineFromBuffer_stat,
+            userInputBuffer_hardcid_strqprem, userInputLine_strprem);
+    cp!sendUserInputLineToChat_uline_ccact.load(statCid!sendConceptToBranch_stat, chatBreed_hardcid_breed, userInputLine_strprem);
+    cp!anactivateChatReadyForUlineInputPeg_uline_cact.load(statCid!anactivate_stat, chatReadyForUlineInputPeg_uline_pegprem);
+    cp!sendUserRequestForNextLine_uline_cact.load(statCid!requestUserInput, userThread_hardcid_tidprem);
+        // Effects
     cp!userInputValve_uline_andnrn.addEffects(
         float.infinity,
         [
             moveLineFromUserInuputBufferToUserInputLine_uline_ccact,
-            sendUserInputLineToChat_uline_binact,
+            sendUserInputLineToChat_uline_ccact,
             anactivateChatReadyForUlineInputPeg_uline_cact,
             anactivateUserInputLine_cact,
             sendUserRequestForNextLine_uline_cact,

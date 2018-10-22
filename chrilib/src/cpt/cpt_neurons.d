@@ -195,7 +195,7 @@ unittest {
     a.addEffects(10, [5_000_002, 5_000_003], [5_000_012, 5_000_013]);
 
     a.addPremises([5_000_0100, 5_000_0101, 5_000_0102]);
-    SpiritConcept.Serial ser = a.serialize;
+    Serial ser = a.serialize;
 
     auto b = cast(SpAndNeuron)SpiritConcept.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
     assert(a.cid == b.cid && a.ver == b.ver && typeid(a) == typeid(b) && a.cutoff == b.cutoff);
@@ -258,7 +258,7 @@ unittest {
     a.addEffects(1, [5_000_000, 5_000_001], [5_000_010, 5_000_011]);
     a.addEffects(10, [5_000_002, 5_000_003], [5_000_012, 5_000_013]);
 
-    SpiritConcept.Serial ser = a.serialize;
+    Serial ser = a.serialize;
 
     auto b = cast(SpWeightNeuron)SpiritConcept.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
     assert(a.cid == b.cid && a.ver == b.ver && typeid(a) == typeid(b) && a.cutoff == b.cutoff);

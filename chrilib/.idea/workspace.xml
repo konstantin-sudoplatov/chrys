@@ -3,17 +3,26 @@
   <component name="ChangeListManager">
     <list default="true" id="66786c13-09bf-432a-98d1-9bdb521c53ae" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../chribaselib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/bin/chribaselib" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/bin/chribaselib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chribaselib/bin/libchribaselib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/bin/libchribaselib.a" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chribaselib/src/base_proba.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/base_proba.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chribaselib/src/proj_funcs.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/proj_funcs.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricrank/bin/chricrank" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/bin/chricrank" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/chrilib" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chrilib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/libchrilib.a" beforeDir="false" afterPath="$PROJECT_DIR$/bin/libchrilib.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/atn/atn_circle_thread.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/atn/atn_circle_thread.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/chri_data.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/chri_data.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/chri_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/chri_types.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cpt/abs/abs_concept.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/abs/abs_concept.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cpt/abs/abs_neuron.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/abs/abs_neuron.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpt/abs/abs_premise.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/abs/abs_premise.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cpt/cpt_actions.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/cpt_actions.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpt/cpt_neurons.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/cpt_neurons.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpt/cpt_premises.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/cpt_premises.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpt/cpt_registry.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/cpt_registry.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/cpt/cpt_types.d" beforeDir="false" afterPath="$PROJECT_DIR$/src/cpt/cpt_types.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chris/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chris/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/bin/chris" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chris/bin/libchris.a" beforeDir="false" afterPath="$PROJECT_DIR$/../chris/bin/libchris.a" afterDir="false" />
@@ -33,27 +42,30 @@
     <session id="1699484468">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="5" />
+          <entry key="project.closed" value="7" />
           <entry key="project.open.time.0" value="1" />
-          <entry key="project.open.time.1" value="4" />
+          <entry key="project.open.time.1" value="5" />
+          <entry key="project.open.time.10" value="1" />
           <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.4" value="1" />
           <entry key="project.open.time.5" value="2" />
           <entry key="project.open.time.6" value="1" />
           <entry key="project.open.time.7" value="2" />
-          <entry key="project.open.time.8" value="2" />
-          <entry key="project.opened" value="14" />
+          <entry key="project.open.time.8" value="3" />
+          <entry key="project.opened" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
           <entry key="abs_neuron" value="1" />
           <entry key="abs_premise" value="1" />
+          <entry key="abs_primitive" value="1" />
           <entry key="chri_types" value="2" />
+          <entry key="cpt_primitives" value="1" />
           <entry key="cpt_registry" value="1" />
           <entry key="cpt_types" value="1" />
           <entry key="crank_types" value="1" />
-          <entry key="d" value="337" />
+          <entry key="d" value="367" />
           <entry key="proba" value="1" />
           <entry key="sdl" value="2" />
           <entry key="stat_types" value="1" />
@@ -61,20 +73,20 @@
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="D file" value="337" />
-          <entry key="PLAIN_TEXT" value="11" />
+          <entry key="D file" value="367" />
+          <entry key="PLAIN_TEXT" value="13" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
           <entry key="cpt_types" value="2" />
-          <entry key="d" value="27656" />
+          <entry key="d" value="30455" />
           <entry key="sdl" value="79" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="D file" value="27656" />
+          <entry key="D file" value="30455" />
           <entry key="PLAIN_TEXT" value="81" />
         </counts>
       </usages-collector>
@@ -83,11 +95,25 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/chri_data.d">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/cpt/cpt_primitives.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="285">
-              <caret line="28" column="24" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
+            <state relative-caret-position="1368">
+              <caret line="102" selection-start-line="102" selection-end-line="102" />
+              <folding>
+                <element signature="e#404#405#0" expanded="true" />
+                <element signature="e#418#419#0" expanded="true" />
+                <element signature="e#523#524#0" expanded="true" />
+                <element signature="e#579#580#0" expanded="true" />
+                <element signature="e#751#752#0" expanded="true" />
+                <element signature="e#777#778#0" expanded="true" />
+                <element signature="e#950#951#0" expanded="true" />
+                <element signature="e#964#965#0" expanded="true" />
+                <element signature="e#1071#1072#0" expanded="true" />
+                <element signature="e#1129#1130#0" expanded="true" />
+                <element signature="e#3276#3277#0" expanded="true" />
+                <element signature="e#3304#3305#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -95,8 +121,44 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cpt/abs/abs_concept.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="130">
-              <caret line="49" selection-start-line="49" selection-end-line="49" />
+            <state relative-caret-position="569">
+              <caret line="87" selection-start-line="87" selection-end-line="87" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../chribaselib/src/proj_types.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="329">
+              <caret line="161" selection-start-line="161" selection-end-line="161" />
+              <folding>
+                <element signature="e#4757#4758#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/../chribaselib/src/proj_funcs.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="538">
+              <caret line="252" selection-start-line="252" selection-end-line="252" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/cpt/abs/abs_primitive.d">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="265">
+              <caret line="41" selection-start-line="33" selection-end-line="41" />
+              <folding>
+                <element signature="e#1075#1076#0" expanded="true" />
+                <element signature="e#1089#1090#0" expanded="true" />
+                <element signature="e#2707#2708#0" expanded="true" />
+                <element signature="e#2733#2734#0" expanded="true" />
+              </folding>
             </state>
           </provider>
         </entry>
@@ -104,41 +166,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/cpt/abs/abs_neuron.d">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="491">
-              <caret line="525" column="38" selection-start-line="525" selection-start-column="38" selection-end-line="525" selection-end-column="38" />
-              <folding>
-                <element signature="e#5014#5015#0" expanded="true" />
-                <element signature="e#5044#5045#0" expanded="true" />
-                <element signature="e#5553#5554#0" expanded="true" />
-                <element signature="e#5588#5589#0" expanded="true" />
-                <element signature="e#13714#13715#0" expanded="true" />
-                <element signature="e#13765#13766#0" expanded="true" />
-                <element signature="e#13855#13856#0" expanded="true" />
-                <element signature="e#13911#13912#0" expanded="true" />
-                <element signature="e#15261#15262#0" expanded="true" />
-                <element signature="e#15316#15317#0" expanded="true" />
-                <element signature="e#19881#19882#0" expanded="true" />
-                <element signature="e#19902#19903#0" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/cpt/cpt_neurons.d">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="303">
-              <caret line="30" column="53" selection-start-line="30" selection-start-column="53" selection-end-line="30" selection-end-column="53" />
-              <folding>
-                <element signature="e#751#752#0" expanded="true" />
-                <element signature="e#811#812#0" expanded="true" />
-                <element signature="e#6182#6183#0" expanded="true" />
-                <element signature="e#6206#6207#0" expanded="true" />
-                <element signature="e#7288#7289#0" expanded="true" />
-                <element signature="e#7302#7303#0" expanded="true" />
-                <element signature="e#7409#7410#0" expanded="true" />
-                <element signature="e#7469#7470#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="-7866">
+              <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -193,18 +222,21 @@
         <option value="$PROJECT_DIR$/src/chri_proba.d" />
         <option value="$PROJECT_DIR$/src/atn/atn_circle_thread.d" />
         <option value="$PROJECT_DIR$/src/atn/atn_dispatcher_thread.d" />
-        <option value="$PROJECT_DIR$/src/chri_types.d" />
         <option value="$PROJECT_DIR$/src/console_thread.d" />
-        <option value="$PROJECT_DIR$/src/cpt/cpt_registry.d" />
-        <option value="$PROJECT_DIR$/src/cpt/abs/abs_premise.d" />
-        <option value="$PROJECT_DIR$/src/cpt/cpt_types.d" />
-        <option value="$PROJECT_DIR$/src/cpt/cpt_actions.d" />
-        <option value="$PROJECT_DIR$/src/cpt/cpt_neurons.d" />
-        <option value="$PROJECT_DIR$/src/cpt/cpt_premises.d" />
         <option value="$PROJECT_DIR$/src/cpt/cpt_stat.d" />
+        <option value="$PROJECT_DIR$/src/cpt/abs/abs_premise.d" />
+        <option value="$PROJECT_DIR$/src/cpt/cpt_registry.d" />
         <option value="$PROJECT_DIR$/src/chri_data.d" />
         <option value="$PROJECT_DIR$/src/cpt/abs/abs_concept.d" />
+        <option value="$PROJECT_DIR$/src/cpt/cpt_types.d" />
         <option value="$PROJECT_DIR$/src/cpt/abs/abs_neuron.d" />
+        <option value="$PROJECT_DIR$/src/chri_types.d" />
+        <option value="$PROJECT_DIR$/src/cpt/cpt_neurons.d" />
+        <option value="$PROJECT_DIR$/src/cpt/cpt_actions.d" />
+        <option value="$PROJECT_DIR$/src/cpt/cpt_premises.d" />
+        <option value="$PROJECT_DIR$/../chribaselib/src/proj_funcs.d" />
+        <option value="$PROJECT_DIR$/src/cpt/abs/abs_primitive.d" />
+        <option value="$PROJECT_DIR$/src/cpt/cpt_primitives.d" />
       </list>
     </option>
   </component>
@@ -215,7 +247,7 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="6">
-    <option name="width" value="1920" />
+    <option name="width" value="1910" />
     <option name="height" value="1080" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
@@ -283,7 +315,7 @@
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../chris" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../chribaselib" />
     <property name="project.structure.last.edited" value="Project" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -555,17 +587,17 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="0" y="0" width="1920" height="1080" extended-state="6" />
+    <frame x="-2" y="-3" width="1924" height="1087" extended-state="6" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48532495" visible="true" weight="0.20117396" />
+      <window_info content_ui="combo" id="Project" order="0" sideWeight="0.48229167" visible="true" weight="0.18713759" />
       <window_info id="Designer" order="1" />
-      <window_info id="Structure" order="2" sideWeight="0.5146751" side_tool="true" visible="true" weight="0.20117396" />
+      <window_info id="Structure" order="2" sideWeight="0.51770836" side_tool="true" visible="true" weight="0.18713759" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32914045" />
-      <window_info active="true" anchor="bottom" x="0" y="791" width="1920" height="285" id="Run" order="2" type="WINDOWED" visible="true" weight="0.32285115" />
-      <window_info anchor="bottom" x="2" y="701" width="1912" height="344" id="Debug" order="3" type="WINDOWED" weight="0.39832285" />
+      <window_info active="true" anchor="bottom" x="2" y="758" width="1916" height="318" id="Run" order="2" type="WINDOWED" visible="true" weight="0.32285115" />
+      <window_info anchor="bottom" x="2" y="702" width="1916" height="374" id="Debug" order="3" type="WINDOWED" visible="true" weight="0.39832285" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
       <window_info anchor="bottom" id="TODO" order="6" />
@@ -679,13 +711,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/../chribaselib/src/proj_funcs.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="361">
-          <caret line="245" column="56" selection-start-line="245" selection-start-column="56" selection-end-line="245" selection-end-column="56" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file:///usr/include/dmd/druntime/import/object.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="76608">
@@ -733,13 +758,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_interfaces.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="55">
-          <caret line="3" column="16" selection-start-line="3" selection-start-column="16" selection-end-line="3" selection-end-column="16" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/messages.d">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="56">
@@ -758,20 +776,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="3" column="28" selection-start-line="3" selection-start-column="28" selection-end-line="3" selection-end-column="28" />
-          <folding>
-            <element signature="e#2340#2341#0" expanded="true" />
-            <element signature="e#2375#2376#0" expanded="true" />
-            <element signature="e#2710#2711#0" expanded="true" />
-            <element signature="e#2751#2752#0" expanded="true" />
-            <element signature="e#2907#2908#0" expanded="true" />
-            <element signature="e#2942#2943#0" expanded="true" />
-            <element signature="e#13453#13454#0" expanded="true" />
-            <element signature="e#13476#13477#0" expanded="true" />
-            <element signature="e#13511#13512#0" expanded="true" />
-            <element signature="e#13525#13526#0" expanded="true" />
-            <element signature="e#13552#13553#0" expanded="true" />
-            <element signature="e#13561#13562#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -779,33 +783,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="75">
           <caret line="4" column="28" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
-          <folding>
-            <element signature="e#709#710#0" expanded="true" />
-            <element signature="e#724#725#0" expanded="true" />
-            <element signature="e#759#760#0" expanded="true" />
-            <element signature="e#773#774#0" expanded="true" />
-            <element signature="e#799#800#0" expanded="true" />
-            <element signature="e#808#809#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/chri_types.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="80">
-          <caret line="4" column="28" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
-          <folding>
-            <element signature="e#2893#2894#0" expanded="true" />
-            <element signature="e#2933#2934#0" expanded="true" />
-            <element signature="e#3140#3141#0" expanded="true" />
-            <element signature="e#3180#3181#0" expanded="true" />
-            <element signature="e#5193#5194#0" expanded="true" />
-            <element signature="e#5238#5239#0" expanded="true" />
-            <element signature="e#6601#6602#0" expanded="true" />
-            <element signature="e#6639#6640#0" expanded="true" />
-            <element signature="e#6744#6745#0" expanded="true" />
-            <element signature="e#6777#6778#0" expanded="true" />
-          </folding>
         </state>
       </provider>
     </entry>
@@ -813,170 +790,59 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="132">
           <caret line="7" column="28" selection-start-line="7" selection-start-column="28" selection-end-line="7" selection-end-column="28" />
-          <folding>
-            <element signature="e#1365#1366#0" expanded="true" />
-            <element signature="e#1382#1383#0" expanded="true" />
-            <element signature="e#2902#2903#0" expanded="true" />
-            <element signature="e#2919#2920#0" expanded="true" />
-            <element signature="e#2946#2947#0" expanded="true" />
-            <element signature="e#2957#2958#0" expanded="true" />
-          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_interfaces.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="55">
+          <caret line="91" column="15" selection-start-line="91" selection-start-column="15" selection-end-line="91" selection-end-column="15" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cpt/cpt_registry.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="135">
-          <caret line="22" column="44" selection-start-line="22" selection-start-column="17" selection-end-line="22" selection-end-column="44" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/abs/abs_premise.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="300">
-          <caret line="15" column="29" selection-start-line="15" selection-start-column="29" selection-end-line="15" selection-end-column="29" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_types.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="580">
-          <caret line="29" column="8" selection-start-line="29" selection-start-column="8" selection-end-line="29" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_actions.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="580">
-          <caret line="838" column="49" selection-start-line="838" selection-start-column="49" selection-end-line="838" selection-end-column="49" />
-          <folding>
-            <element signature="e#2259#2260#0" expanded="true" />
-            <element signature="e#2296#2297#0" expanded="true" />
-            <element signature="e#4534#4535#0" expanded="true" />
-            <element signature="e#4553#4554#0" expanded="true" />
-            <element signature="e#5196#5197#0" expanded="true" />
-            <element signature="e#5210#5211#0" expanded="true" />
-            <element signature="e#5310#5311#0" expanded="true" />
-            <element signature="e#5363#5364#0" expanded="true" />
-            <element signature="e#9076#9077#0" expanded="true" />
-            <element signature="e#9100#9101#0" expanded="true" />
-            <element signature="e#9407#9408#0" expanded="true" />
-            <element signature="e#9421#9422#0" expanded="true" />
-            <element signature="e#9524#9525#0" expanded="true" />
-            <element signature="e#9580#9581#0" expanded="true" />
-            <element signature="e#13943#13944#0" expanded="true" />
-            <element signature="e#13968#13969#0" expanded="true" />
-            <element signature="e#14157#14158#0" expanded="true" />
-            <element signature="e#14171#14172#0" expanded="true" />
-            <element signature="e#14276#14277#0" expanded="true" />
-            <element signature="e#14334#14335#0" expanded="true" />
-            <element signature="e#18561#18562#0" expanded="true" />
-            <element signature="e#18590#18591#0" expanded="true" />
-            <element signature="e#18802#18803#0" expanded="true" />
-            <element signature="e#18816#18817#0" expanded="true" />
-            <element signature="e#18924#18925#0" expanded="true" />
-            <element signature="e#18985#18986#0" expanded="true" />
-            <element signature="e#23770#23771#0" expanded="true" />
-            <element signature="e#23800#23801#0" expanded="true" />
-            <element signature="e#23983#23984#0" expanded="true" />
-            <element signature="e#23997#23998#0" expanded="true" />
-            <element signature="e#24100#24101#0" expanded="true" />
-            <element signature="e#24156#24157#0" expanded="true" />
-            <element signature="e#28317#28318#0" expanded="true" />
-            <element signature="e#28344#28345#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_premises.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="502">
-          <caret line="210" column="29" selection-start-line="210" selection-start-column="29" selection-end-line="210" selection-end-column="29" />
-          <folding>
-            <element signature="e#953#954#0" expanded="true" />
-            <element signature="e#1002#1003#0" expanded="true" />
-            <element signature="e#2019#2020#0" expanded="true" />
-            <element signature="e#2050#2051#0" expanded="true" />
-            <element signature="e#2993#2994#0" expanded="true" />
-            <element signature="e#3011#3012#0" expanded="true" />
-            <element signature="e#3206#3207#0" expanded="true" />
-            <element signature="e#3265#3266#0" expanded="true" />
-            <element signature="e#3385#3386#0" expanded="true" />
-            <element signature="e#3422#3423#0" expanded="true" />
-            <element signature="e#3527#3528#0" expanded="true" />
-            <element signature="e#3585#3586#0" expanded="true" />
-            <element signature="e#3825#3826#0" expanded="true" />
-            <element signature="e#3848#3849#0" expanded="true" />
-            <element signature="e#4120#4121#0" expanded="true" />
-            <element signature="e#4157#4158#0" expanded="true" />
-            <element signature="e#4262#4263#0" expanded="true" />
-            <element signature="e#4320#4321#0" expanded="true" />
-            <element signature="e#4493#4494#0" expanded="true" />
-            <element signature="e#4518#4519#0" expanded="true" />
-            <element signature="e#4780#4781#0" expanded="true" />
-            <element signature="e#4817#4818#0" expanded="true" />
-            <element signature="e#4927#4928#0" expanded="true" />
-            <element signature="e#4988#4989#0" expanded="true" />
-            <element signature="e#5289#5290#0" expanded="true" />
-            <element signature="e#5315#5316#0" expanded="true" />
-            <element signature="e#5786#5787#0" expanded="true" />
-            <element signature="e#5823#5824#0" expanded="true" />
-            <element signature="e#5938#5939#0" expanded="true" />
-            <element signature="e#5991#5992#0" expanded="true" />
-            <element signature="e#6243#6244#0" expanded="true" />
-            <element signature="e#6266#6267#0" expanded="true" />
-            <element signature="e#6306#6307#0" expanded="true" />
-            <element signature="e#6368#6369#0" expanded="true" />
-          </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_stat.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="415">
-          <caret line="27" column="17" selection-start-line="27" selection-start-column="17" selection-end-line="27" selection-end-column="17" />
+        <state relative-caret-position="-1">
+          <caret line="26" column="57" selection-start-line="26" selection-start-column="57" selection-end-line="26" selection-end-column="57" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/chri_data.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="285">
-          <caret line="28" column="24" selection-start-line="28" selection-start-column="24" selection-end-line="28" selection-end-column="24" />
+        <state relative-caret-position="759">
+          <caret line="53" column="15" selection-start-line="53" selection-start-column="15" selection-end-line="53" selection-end-column="15" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/abs/abs_concept.d">
+    <entry file="file://$PROJECT_DIR$/src/cpt/abs/abs_premise.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="130">
-          <caret line="49" selection-start-line="49" selection-end-line="49" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/cpt/abs/abs_neuron.d">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="491">
-          <caret line="525" column="38" selection-start-line="525" selection-start-column="38" selection-end-line="525" selection-end-column="38" />
+        <state relative-caret-position="399">
+          <caret line="21" selection-start-line="19" selection-end-line="21" />
           <folding>
-            <element signature="e#5014#5015#0" expanded="true" />
-            <element signature="e#5044#5045#0" expanded="true" />
-            <element signature="e#5553#5554#0" expanded="true" />
-            <element signature="e#5588#5589#0" expanded="true" />
-            <element signature="e#13714#13715#0" expanded="true" />
-            <element signature="e#13765#13766#0" expanded="true" />
-            <element signature="e#13855#13856#0" expanded="true" />
-            <element signature="e#13911#13912#0" expanded="true" />
-            <element signature="e#15261#15262#0" expanded="true" />
-            <element signature="e#15316#15317#0" expanded="true" />
-            <element signature="e#19881#19882#0" expanded="true" />
-            <element signature="e#19902#19903#0" expanded="true" />
+            <element signature="e#726#727#0" expanded="true" />
+            <element signature="e#750#751#0" expanded="true" />
           </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_types.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="817">
+          <caret line="43" selection-start-line="43" selection-end-line="43" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/chri_types.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-95">
+          <caret line="320" column="8" selection-start-line="320" selection-start-column="8" selection-end-line="320" selection-end-column="8" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/cpt/cpt_neurons.d">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="303">
-          <caret line="30" column="53" selection-start-line="30" selection-start-column="53" selection-end-line="30" selection-end-column="53" />
+        <state relative-caret-position="310">
+          <caret line="238" column="47" selection-start-line="238" selection-start-column="47" selection-end-line="238" selection-end-column="47" />
           <folding>
             <element signature="e#751#752#0" expanded="true" />
             <element signature="e#811#812#0" expanded="true" />
@@ -986,6 +852,126 @@
             <element signature="e#7302#7303#0" expanded="true" />
             <element signature="e#7409#7410#0" expanded="true" />
             <element signature="e#7469#7470#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_stat.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="513">
+          <caret line="27" column="17" selection-start-line="27" selection-start-column="17" selection-end-line="27" selection-end-column="17" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_premises.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="437">
+          <caret line="99" column="76" selection-start-line="99" selection-start-column="76" selection-end-line="99" selection-end-column="76" />
+          <folding>
+            <element signature="e#953#954#0" expanded="true" />
+            <element signature="e#979#980#0" expanded="true" />
+            <element signature="e#3312#3313#0" expanded="true" />
+            <element signature="e#3330#3331#0" expanded="true" />
+            <element signature="e#3525#3526#0" expanded="true" />
+            <element signature="e#3584#3585#0" expanded="true" />
+            <element signature="e#3701#3702#0" expanded="true" />
+            <element signature="e#3715#3716#0" expanded="true" />
+            <element signature="e#3817#3818#0" expanded="true" />
+            <element signature="e#3872#3873#0" expanded="true" />
+            <element signature="e#4106#4107#0" expanded="true" />
+            <element signature="e#4129#4130#0" expanded="true" />
+            <element signature="e#4398#4399#0" expanded="true" />
+            <element signature="e#4412#4413#0" expanded="true" />
+            <element signature="e#4514#4515#0" expanded="true" />
+            <element signature="e#4569#4570#0" expanded="true" />
+            <element signature="e#4731#4732#0" expanded="true" />
+            <element signature="e#4751#4752#0" expanded="true" />
+            <element signature="e#5010#5011#0" expanded="true" />
+            <element signature="e#5024#5025#0" expanded="true" />
+            <element signature="e#5131#5132#0" expanded="true" />
+            <element signature="e#5189#5190#0" expanded="true" />
+            <element signature="e#5484#5485#0" expanded="true" />
+            <element signature="e#5510#5511#0" expanded="true" />
+            <element signature="e#5978#5979#0" expanded="true" />
+            <element signature="e#5992#5993#0" expanded="true" />
+            <element signature="e#6104#6105#0" expanded="true" />
+            <element signature="e#6154#6155#0" expanded="true" />
+            <element signature="e#6400#6401#0" expanded="true" />
+            <element signature="e#6423#6424#0" expanded="true" />
+            <element signature="e#6463#6464#0" expanded="true" />
+            <element signature="e#6525#6526#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_actions.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="341">
+          <caret line="756" selection-start-line="748" selection-end-line="756" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/abs/abs_neuron.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="-7866">
+          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../chribaselib/src/proj_types.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="329">
+          <caret line="161" selection-start-line="161" selection-end-line="161" />
+          <folding>
+            <element signature="e#4757#4758#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../chribaselib/src/proj_funcs.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="538">
+          <caret line="252" selection-start-line="252" selection-end-line="252" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/abs/abs_concept.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="569">
+          <caret line="87" selection-start-line="87" selection-end-line="87" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/abs/abs_primitive.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="265">
+          <caret line="41" selection-start-line="33" selection-end-line="41" />
+          <folding>
+            <element signature="e#1075#1076#0" expanded="true" />
+            <element signature="e#1089#1090#0" expanded="true" />
+            <element signature="e#2707#2708#0" expanded="true" />
+            <element signature="e#2733#2734#0" expanded="true" />
+          </folding>
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/cpt/cpt_primitives.d">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1368">
+          <caret line="102" selection-start-line="102" selection-end-line="102" />
+          <folding>
+            <element signature="e#404#405#0" expanded="true" />
+            <element signature="e#418#419#0" expanded="true" />
+            <element signature="e#523#524#0" expanded="true" />
+            <element signature="e#579#580#0" expanded="true" />
+            <element signature="e#751#752#0" expanded="true" />
+            <element signature="e#777#778#0" expanded="true" />
+            <element signature="e#950#951#0" expanded="true" />
+            <element signature="e#964#965#0" expanded="true" />
+            <element signature="e#1071#1072#0" expanded="true" />
+            <element signature="e#1129#1130#0" expanded="true" />
+            <element signature="e#3276#3277#0" expanded="true" />
+            <element signature="e#3304#3305#0" expanded="true" />
           </folding>
         </state>
       </provider>

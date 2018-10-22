@@ -224,7 +224,7 @@ pure nothrow const(byte[]) serializeArray(T)(const T[] ar) {
     Cind ofs;
 
     // Put into buffer length of the source array as Cind
-    *cast(T*)&rs[ofs] = cast(Cind)ar.length;
+    *cast(Cind*)&rs[ofs] = cast(Cind)ar.length;
     ofs += Cind.sizeof;
 
     // Put array content

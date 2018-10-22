@@ -29,7 +29,7 @@ import atn.atn_circle_thread;
 
     /// Serialize concept
     override Serial serialize() const {
-        auto res = Serial(cid, ver, _spReg_[typeid(this)]);
+        Serial res = super.serialize;
 
         res.stable.length = St.length;  // allocate
         *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
@@ -126,11 +126,11 @@ import atn.atn_circle_thread;
 unittest {
     auto a = new SpA(42);
     a.ver = 5;
-    a.statAction(43);
+    a.load(43);
 
-    SpiritConcept.Serial ser = a.serialize;
+    Serial ser = a.serialize;
     auto b = cast(SpA)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
-    assert(ser.cid == 42 && ser.ver == 5 && typeid(b) == typeid(SpA));
+    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA));
 
     assert(a == b);
 }
@@ -169,7 +169,7 @@ class A: DynamicConcept {
 
     /// Serialize concept
     override Serial serialize() const {
-        Serial res = Serial(cid, ver, _spReg_[typeid(this)]);
+        Serial res = super.serialize;
 
         res.stable.length = St.length;  // allocate
         *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
@@ -268,7 +268,7 @@ unittest {
     a._statActionCid = 43;
     a._p1Cid = 44;
 
-    SpiritConcept.Serial ser = a.serialize;
+    Serial ser = a.serialize;
     auto b = cast(SpA_Cid)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
     assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_Cid) &&
             b._statActionCid == 43 && b._p1Cid == 44);
@@ -301,7 +301,7 @@ final class A_Cid: A {
 
     /// Serialize concept
     override Serial serialize() const {
-        Serial res = Serial(cid, ver, _spReg_[typeid(this)]);
+        Serial res = super.serialize;
 
         res.stable.length = St.length;  // allocate
         *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
@@ -413,7 +413,7 @@ unittest {
     a._p1Cid = 44;
     a._p2Cid = 45;
 
-    SpiritConcept.Serial ser = a.serialize;
+    Serial ser = a.serialize;
     auto b = cast(SpA_CidCid)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
     assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_CidCid) &&
             b._statActionCid == 43 && b._p1Cid == 44 && b._p2Cid == 45);
@@ -442,7 +442,7 @@ final class A_CidCid: A {
 
     /// Serialize concept
     override Serial serialize() const {
-        Serial res = Serial(cid, ver, _spReg_[typeid(this)]);
+        Serial res = super.serialize;
 
         res.stable.length = St.length;  // allocate
         *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
@@ -554,7 +554,7 @@ unittest {
     a._p1Cid = 44;
     a._p2Float = 4.5;
 
-    SpiritConcept.Serial ser = a.serialize;
+    Serial ser = a.serialize;
     auto b = cast(SpA_CidFloat)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
     assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_CidFloat) &&
             b._statActionCid == 43 && b._p1Cid == 44 && b._p2Float == 4.5);
@@ -583,7 +583,7 @@ final class A_CidFloat: A {
 
     /// Serialize concept
     override Serial serialize() const {
-        Serial res = Serial(cid, ver, _spReg_[typeid(this)]);
+        Serial res = super.serialize;
 
         res.stable.length = St.length;  // allocate
         *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
@@ -708,7 +708,7 @@ unittest {
     a._p2Cid = 45;
     a._p3Float = 4.5;
 
-    SpiritConcept.Serial ser = a.serialize;
+    Serial ser = a.serialize;
     auto b = cast(SpA_CidCidFloat)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
     assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_CidCidFloat) &&
             b._statActionCid == 43 && b._p1Cid == 44 && b._p2Cid == 45 && b._p3Float == 4.5);
@@ -737,7 +737,7 @@ final class A_CidCidFloat: A {
 
     /// Serialize concept
     override Serial serialize() const {
-        Serial res = Serial(cid, ver, _spReg_[typeid(this)]);
+        Serial res = super.serialize;
 
         res.stable.length = St.length;  // allocate
         *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
@@ -849,7 +849,7 @@ unittest {
     a._p1Cid = 44;
     a._p2Int = 45;
 
-    SpiritConcept.Serial ser = a.serialize;
+    Serial ser = a.serialize;
     auto b = cast(SpA_CidInt)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
     assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_CidInt) &&
             b._statActionCid == 43 && b._p1Cid == 44 && b._p2Int == 45);

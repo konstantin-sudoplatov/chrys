@@ -32,3 +32,12 @@ enum SpCptFlags: short {
 //}
 
 //---***---***---***---***---***--- types ---***---***---***---***---***--
+
+/// Serialized form of this concept. Used as a return and type in the serialize() method.
+struct Serial {
+    Cid cid;
+    Cvr ver;
+    Clid clid;
+    byte[] stable;
+    byte[] transient;
+}

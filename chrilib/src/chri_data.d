@@ -35,7 +35,7 @@ immutable CrossMap!(ClassInfo, Clid) _spReg_;
 enum HardCid: DcpDescriptor {
     /// In this buffer the attention circle thread puts user lines of text, where they wait to get processed. Used in
     /// the attention circle thread.
-    userInputBuffer_hardcid_strqprem = cd!(SpStringQueuePremise, 1_079_824_511),
+    userInputBuffer_hardcid_strqprem = cd!(SpStringQueuePrem, 1_079_824_511),
 
     /// This is the root branch of the attention circle. It is set up in the attention circle constructor. Used in the
     /// attention circle thread.
@@ -45,13 +45,13 @@ enum HardCid: DcpDescriptor {
     /// It is the thread that controls the console or http connection. The Tid is put in it on start of the chat caldron,
     /// and the primitive is valid only for chat branch, since the Tid field is stored in the live part of the concept.
     /// Used in the attention circle thread.
-    userThread_hardcid_tidprem = cd!(SpTidPremise, 217_397_612),
+    userThread_hardcid_tidprem = cd!(SpTidPrem, 217_397_612),
 }
 
 shared static this(){
     CrossMap!(ClassInfo, Clid) spReg;
     foreach(i, sc; createSpiritClassesRegistry) {
-        spReg[cast(Clid)i] = sc;
+        if(sc) spReg[cast(Clid)i] = sc;
     }
     _spReg_ = cast(immutable)spReg;
 }

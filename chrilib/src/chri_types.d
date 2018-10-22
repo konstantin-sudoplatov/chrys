@@ -6,7 +6,7 @@ import proj_data, proj_funcs;
 import db.db_main, db.db_concepts_table;
 
 import chri_data;
-import cpt.abs.abs_concept, cpt.cpt_stat;
+import cpt.cpt_types, cpt.abs.abs_concept, cpt.cpt_stat;
 import atn.atn_circle_thread;
 
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -301,7 +301,7 @@ immutable struct SpiritManager {
         Throws: enforce() for errors, for a dupilcate key, for example
     */
     void insertConcept(const SpiritConcept cpt) const {
-        SpiritConcept.Serial ser = cpt.serialize;
+        Serial ser = cpt.serialize;
         cptTbl_.insertConcept(
             ser.cid,
             ser.ver,
@@ -318,7 +318,7 @@ immutable struct SpiritManager {
         Throws: enforce, if there is an error, no record to update, for example.
     */
     void updateConcept(const SpiritConcept cpt) const {
-        SpiritConcept.Serial ser = cpt.serialize;
+        Serial ser = cpt.serialize;
         cptTbl_.updateConcept(
             ser.cid,
             ser.ver,

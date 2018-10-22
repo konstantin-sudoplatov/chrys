@@ -163,7 +163,7 @@ class Caldron {
             if (dynDebug >= 1)
                 logit(format!"%s, message UserTalksToCircleMsg has come, text: %s"(caldName, m.line), TermColor.brown);
 
-            auto cpt = scast!StringQueuePremise(this[HardCid.userInputBuffer_hardcid_strqprem]);
+            auto cpt = scast!StringQueuePrem(this[HardCid.userInputBuffer_hardcid_strqprem]);
             cpt.push(m.line);
             cpt.activate;       // the premise is ready
             reasoning_;         // kick off
@@ -283,7 +283,7 @@ class AttentionCircle: Caldron {
         else if      // is it a Tid of the client sent by Dispatcher?
                 (auto m = cast(immutable DispatcherSuppliesCircleWithUserTid_msg)msg)
         {   //yes: wind up the userThread_tidprem concept
-            auto userThreadTidprem = (scast!(TidPremise)(this[HardCid.userThread_hardcid_tidprem]));
+            auto userThreadTidprem = (scast!(TidPrem)(this[HardCid.userThread_hardcid_tidprem]));
             userThreadTidprem.tid = cast()m.tid;
             userThreadTidprem.activate;
             return true;

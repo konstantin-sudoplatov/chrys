@@ -35,7 +35,7 @@ import cpt.abs.abs_concept, cpt.abs.abs_premise;
 
     /// Serialize concept
     override Serial serialize() const {
-        auto res = Serial(cid, ver, _spReg_[typeid(this)]);
+        Serial res = super.serialize;
 
         res.stable.length = Cid.sizeof;  // allocate
         *cast(Cid*)&res.stable[0] = seedCid_;
@@ -90,6 +90,18 @@ import cpt.abs.abs_concept, cpt.abs.abs_premise;
     private Cid seedCid_;
 }
 
+unittest {
+    auto a = new SpBreed(42);
+    a.ver = 5;
+    a.seedCid_ = 43;
+
+    Serial ser = a.serialize;
+    auto b = cast(SpBreed)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
+    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpBreed) && b.seedCid_ == 43);
+
+    assert(a == b);
+}
+
 /// Live.
 final class Breed: Premise {
     import std.concurrency: Tid;
@@ -115,26 +127,26 @@ final class Breed: Premise {
 /**
         Tid premise.
 */
-@(12) final class SpTidPremise: SpiritPremise {
+@(12) final class SpTidPrem: SpiritPremise {
 
     /// Constructor
     this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the holy static concept.
-    override TidPremise live_factory() const {
-        return new TidPremise(cast(immutable)this);
+    override TidPrem live_factory() const {
+        return new TidPrem(cast(immutable)this);
     }
 }
 
 /// Live.
-final class TidPremise: Premise {
+final class TidPrem: Premise {
     import std.concurrency: Tid;
 
     /// The tid field
     Tid tid;
 
     /// Private constructor. Use spiritual live_factory() instead.
-    private this(immutable SpTidPremise SpTidPremise) { super(SpTidPremise); }
+    private this(immutable SpTidPrem SpTidPremise) { super(SpTidPremise); }
 
     override string toString() const {
         string s = super.toString;
@@ -146,29 +158,29 @@ final class TidPremise: Premise {
 /**
             Peg premise.
 */
-@(13) final class SpPegPremise: SpiritPremise {
+@(13) final class SpPegPrem: SpiritPremise {
 
     /// Constructor
     this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the holy static concept.
-    override PegPremise live_factory() const {
-        return new PegPremise(cast(immutable)this);
+    override PegPrem live_factory() const {
+        return new PegPrem(cast(immutable)this);
     }
 }
 
 /// Live.
-final class PegPremise: Premise {
+final class PegPrem: Premise {
 
     /// Private constructor. Use spiritual live_factory() instead.
-    private this(immutable SpPegPremise holyPegPremise) { super(holyPegPremise); }
+    private this(immutable SpPegPrem spPegPrem) { super(spPegPrem); }
 }
 
 /**
             String premise.
     The string field is in the live part.
 */
-@(14)final class SpStringPremise: SpiritPremise {
+@(14)final class SpStringPrem: SpiritPremise {
 
     /**
                 Constructor
@@ -178,25 +190,25 @@ final class PegPremise: Premise {
     this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the spirit static concept.
-    override StringPremise live_factory() const {
-        return new StringPremise(cast(immutable)this);
+    override StringPrem live_factory() const {
+        return new StringPrem(cast(immutable)this);
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 }
 
 /// Live.
-final class StringPremise: Premise {
+final class StringPrem: Premise {
 
     /// The string
-    string line;
+    string text;
 
     /// Private constructor. Use spiritual live_factory() instead.
-    private this(immutable SpStringPremise spStringPremise) { super(spStringPremise); }
+    private this(immutable SpStringPrem spStringPremise) { super(spStringPremise); }
 
     override string toString() const {
         string s = super.toString;
-        s ~= format!"\n    line = %s"(line);
+        s ~= format!"\n    text = %s"(text);
         return s;
     }
 }
@@ -205,24 +217,24 @@ final class StringPremise: Premise {
             Queue premise. This concept is capable of accumulating a queue of strings. For example, when messages from
     user come, they may be coming faster than they get processed. In that case such queue will help.
 */
-@(15)final class SpStringQueuePremise: SpiritPremise {
+@(15)final class SpStringQueuePrem: SpiritPremise {
 
     /// Constructor.
     this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the spirit static concept.
-    override StringQueuePremise live_factory() const {return new StringQueuePremise(cast(immutable)this); }
+    override StringQueuePrem live_factory() const {return new StringQueuePrem(cast(immutable)this); }
 }
 
 /// Live.
-final class StringQueuePremise: Premise {
+final class StringQueuePrem: Premise {
 
     /// The queue
     Deque!string deque;
     alias deque this;
 
     /// Private constructor. Use spiritual live_factory() instead.
-    private this(immutable SpStringQueuePremise spStrQuePrem) { super(spStrQuePrem); }
+    private this(immutable SpStringQueuePrem spStrQuePrem) { super(spStrQuePrem); }
 
     override string toString() const {
         return format!"\n    deq = %s"(deque.toString);

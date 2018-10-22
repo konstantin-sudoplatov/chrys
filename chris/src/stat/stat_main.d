@@ -69,10 +69,10 @@ void setDebugLevel_0_stat(Caldron ) {
 void sendTidToUser_stat(Caldron cld, Cid userTidPremCid, Cid ulineBreedCid) {
     import std.concurrency: Tid, send;
     import messages: CircleSuppliesUserWithItsTid_msg;
-    checkCid!TidPremise(cld, userTidPremCid);
+    checkCid!TidPrem(cld, userTidPremCid);
     checkCid!Breed(cld, ulineBreedCid);
 
-    auto userTidPrem = cast(TidPremise)cld[userTidPremCid];
+    auto userTidPrem = cast(TidPrem)cld[userTidPremCid];
     auto ulineBreed = cast(Breed)cld[ulineBreedCid];
     send(userTidPrem.tid, new immutable CircleSuppliesUserWithItsTid_msg(ulineBreed.tid));
 }
@@ -87,7 +87,7 @@ void sendTidToUser_stat(Caldron cld, Cid userTidPremCid, Cid ulineBreedCid) {
 void requestUserInput(Caldron cld, Cid userTidPremCid) {
     import std.concurrency: Tid, send;
     import messages: CircleListensToUser_msg;
-    Tid tid = scast!TidPremise(cld[userTidPremCid]).tid;
+    Tid tid = scast!TidPrem(cld[userTidPremCid]).tid;
     send(tid, new immutable CircleListensToUser_msg);
 }
 
@@ -102,8 +102,8 @@ void requestUserInput(Caldron cld, Cid userTidPremCid) {
 void sendUserOutput(Caldron cld, Cid userTidPremCid, Cid stringPremCid) {
     import std.concurrency: Tid, send;
     import messages: CircleTalksToUser_msg;
-    Tid tid = scast!TidPremise(cld[userTidPremCid]).tid;
-    string s = scast!StringPremise(cld[stringPremCid]).line;
+    Tid tid = scast!TidPrem(cld[userTidPremCid]).tid;
+    string s = scast!StringPrem(cld[stringPremCid]).text;
     send(tid, new immutable CircleTalksToUser_msg(s));
 }
 
@@ -196,10 +196,10 @@ void sendConceptToBranch_stat(Caldron cld, Cid breedCid, Cid loadCid) {
 void getUserInputLineFromBuffer_stat(Caldron cld, Cid bufPrem, Cid strPrem) {
     checkCid!(BinActivationIfc)(cld, bufPrem);
     checkCid!(BinActivationIfc)(cld, strPrem);
-    auto uBuf = scast!StringQueuePremise(cld[bufPrem]);
+    auto uBuf = scast!StringQueuePrem(cld[bufPrem]);
     assert(!uBuf.empty && uBuf.activation == 1, "Must not get called if the user buffer is empty.");
-    auto uline = scast!StringPremise(cld[strPrem]);
-    uline.line = uBuf.pull;
+    auto uline = scast!StringPrem(cld[strPrem]);
+    uline.text = uBuf.pull;
     uline.activate;
     if(uBuf.empty) uBuf.anactivate;
 }

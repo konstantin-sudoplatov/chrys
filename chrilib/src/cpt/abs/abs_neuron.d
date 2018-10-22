@@ -4,7 +4,7 @@ import std.format, std.typecons, std.math;
 
 import proj_data, proj_funcs;
 
-import cpt.abs.abs_concept;
+import cpt.cpt_types, cpt.abs.abs_concept;
 import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises;
 
 import atn.atn_circle_thread;

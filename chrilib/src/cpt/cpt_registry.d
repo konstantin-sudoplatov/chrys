@@ -10,6 +10,7 @@ enum CptModules {
     actions = "cpt.cpt_actions",
     neurons = "cpt.cpt_neurons",
     premises = "cpt.cpt_premises",
+    primitives = "cpt.cpt_primitives",
     stat = "cpt.cpt_stat",
 }
 

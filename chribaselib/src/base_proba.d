@@ -11,5 +11,4 @@ version(unittest) {
 
 // We need an executable in debug and unittest modes in order to run the Gnu Debugger on.
 debug void main() {
-    writeln(char.sizeof);
 }

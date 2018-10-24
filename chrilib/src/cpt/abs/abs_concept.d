@@ -57,7 +57,7 @@ abstract class SpiritConcept {
 
         void* copy = cast(void*)_d_newclass(this.classinfo);
         size_t size = this.classinfo.initializer.length;
-        copy[8 .. size] = (cast(void *)this)[8 .. size];
+        copy[8..size] = (cast(void *)this)[8..size];
         return cast(SpiritConcept)copy;
     }
 

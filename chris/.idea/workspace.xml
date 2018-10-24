@@ -3,12 +3,15 @@
   <component name="ChangeListManager">
     <list default="true" id="d38264ed-5c71-4d46-bd90-33c791eba857" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../chribaselib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/bin/chribaselib" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/bin/chribaselib" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chribaselib/bin/libchribaselib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/bin/libchribaselib.a" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/src/base_proba.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/base_proba.d" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/src/proj_funcs.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/proj_funcs.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chricrank/bin/chricrank" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/bin/chricrank" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../chrilib/bin/libchrilib.a" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/bin/libchrilib.a" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_concept.d" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/cpt/abs/abs_concept.d" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/chris" beforeDir="false" afterPath="$PROJECT_DIR$/bin/chris" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/bin/libchris.a" beforeDir="false" afterPath="$PROJECT_DIR$/bin/libchris.a" afterDir="false" />
     </list>
@@ -104,9 +107,9 @@
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
-    <option name="width" value="1910" />
-    <option name="height" value="1080" />
+  <component name="ProjectFrameBounds" extendedState="6">
+    <option name="width" value="1920" />
+    <option name="height" value="1071" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
@@ -433,7 +436,8 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-3" width="1924" height="1087" extended-state="7" />
+    <frame x="-2" y="-3" width="1924" height="1087" extended-state="6" />
+    <editor active="true" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.1839747" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -496,6 +500,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="3" column="16" selection-start-line="3" selection-start-column="16" selection-end-line="3" selection-end-column="16" />
+          <folding>
+            <element signature="e#296#297#0" expanded="true" />
+            <element signature="e#331#332#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -503,6 +511,14 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="80">
           <caret line="4" column="28" selection-start-line="4" selection-start-column="28" selection-end-line="4" selection-end-column="28" />
+          <folding>
+            <element signature="e#1005#1006#0" expanded="true" />
+            <element signature="e#1024#1025#0" expanded="true" />
+            <element signature="e#1059#1060#0" expanded="true" />
+            <element signature="e#1073#1074#0" expanded="true" />
+            <element signature="e#1100#1101#0" expanded="true" />
+            <element signature="e#1109#1110#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
@@ -510,6 +526,10 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="60">
           <caret line="3" column="28" selection-start-line="3" selection-start-column="28" selection-end-line="3" selection-end-column="28" />
+          <folding>
+            <element signature="e#1273#1274#0" expanded="true" />
+            <element signature="e#1329#1330#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>

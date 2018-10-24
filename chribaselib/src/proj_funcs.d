@@ -216,22 +216,17 @@ Object clone (Object srcObject)
         ar = array to serialize
     Returns: byte array with first Cind as the length and the rest as the elements of the array.
 */
-pure nothrow const(byte[]) serializeArray(T)(const T[] ar) {
+pure nothrow byte[] serializeArray(T)(const T[] ar) {
     byte[] rs;
 
     size_t len = Cind.sizeof + ar.length*T.sizeof;    // calculate required space
     rs.length = len;        // allocate
-    Cind ofs;
 
     // Put into buffer length of the source array as Cind
-    *cast(Cind*)&rs[ofs] = cast(Cind)ar.length;
-    ofs += Cind.sizeof;
+    *cast(Cind*)&rs[0] = cast(Cind)ar.length;
 
-    // Put array content
-    foreach(i, e; ar) {
-        *cast(T*)&rs[ofs] = e;
-        ofs += T.sizeof;
-    }
+    // Put in the buffer array's content
+    (cast(T[])rs[Cind.sizeof..$])[]= ar[];
 
     return rs;
 }
@@ -248,38 +243,45 @@ pure nothrow const(byte[]) serializeArray(T)(const T[] ar) {
 pure Tuple!(T[], "array", const byte[], "restOfBuffer") deserializeArray(T: T[])(const byte[] buf) {
     assert(buf.length >= Cind.sizeof, format!"Buffer must be at least %s bytes and it is %s"(Cind.sizeof, buf.length));
 
-    Cind ofs;
-    size_t len = *cast(T*)&buf[ofs];        // length of the array
-    ofs += Cind.sizeof;
+    size_t len = *cast(T*)&buf[0];        // length of the array
 
     // Check for emptiness. If empty return null array and consumed by Cind.sizeof buffer
-    if(len == 0) return tuple!(T[], "array", const byte[], "restOfBuffer")(null, buf[ofs..$]);
+    if(len == 0) return tuple!(T[], "array", const byte[], "restOfBuffer")(null, buf[Cind.sizeof..$]);
 
     assert(Cind.sizeof + len*T.sizeof <= buf.length,
             format!"The buf of length %s is not enough to contain %s elements of type %s"
             (buf.length, len, T.stringof));
 
+    // allocate and restore the array
     T[] rs;
     rs.length = len;    // allocate
-    foreach(i; 0..len) {
-        rs[i] = *cast(T*)&buf[ofs];
-        ofs += T.sizeof;
-    }
+    size_t nBytes = len*T.sizeof;
+    (cast(byte*)rs)[0..nBytes] = (cast(byte*)&buf[Cind.sizeof])[0..nBytes];
 
-    return tuple!(T[], "array", const byte[], "restOfBuffer")(rs, buf[ofs..$]);
+    return tuple!(T[], "array", const byte[], "restOfBuffer")(rs, buf[Cind.sizeof+nBytes..$]);
 }
 
 unittest{
+    // check dynamic array
     Cid[] a = [1, 2, 3];
-    const byte[] ser = serializeArray(a);
+    byte[] ser = serializeArray(a);
+    ser ~= [7, 8, 9];       // add some extra stuff, it is not forbidden.
     auto dser = deserializeArray!(Cid[])(ser);
     assert(a == dser.array);
+    assert(dser.restOfBuffer.length == 3);
 
     a = null;   // null goes to null
     assert(deserializeArray!(Cid[])(serializeArray(a)).array is null);
 
     a = [];   // empty goes to null
     assert(deserializeArray!(Cid[])(serializeArray(a)).array is null);
+
+    // check static array
+    Cid[3] b = [1, 2, 3];
+    const byte[] ser1 = serializeArray(b);
+    auto dser1 = deserializeArray!(Cid[])(ser1);
+    assert(b == dser1.array);
+    assert(dser1.restOfBuffer.length == 0);
 }
 
 /// test class for unittests

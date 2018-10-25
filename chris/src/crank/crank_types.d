@@ -67,14 +67,14 @@ string dequalify_enums(enumList...)() {
 unittest {
     import std.conv: asOriginalType;
     import cpt.cpt_neurons: SpSeed;
-    import cpt.cpt_premises: SpBreed;
+    import cpt.cpt_premises: SpBrid;
     enum CommonConcepts: DcpDescriptor {
         chat_seed = cd!(SpSeed, 2_500_739_441),                  // this is the root branch of the chat
         do_not_know_what_it_is = cd!(SpSeed, 580_052_493),
     }
 
     enum Chat: DcpDescriptor {
-        console_breed = cd!(SpBreed, 4_021_308_401),
+        console_breed = cd!(SpBrid, 4_021_308_401),
         console_seed = cd!(SpSeed, 1_771_384_341),
     }
 

@@ -144,8 +144,33 @@ class ActionNeuron: Neuron, ActivationIfc {
 }
 
 /**
+            Graft. It is a special case of the action neuron.
+        It used much as the branching with Seed, but without actually branching and in the current name space. All grafting
+        are executed sequentially and in the order they are presented in the effects.branches of the last processed neuron.
+*/
+@(8) final class SpGraft: SpActionNeuron {
+
+    /// Constructor
+    this(Cid cid) { super(cid); }
+
+    /// Create live wrapper for the holy static concept.
+    override Graft live_factory() const {
+        return new Graft(cast(immutable)this);
+    }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+}
+
+/// Live.
+final class Graft: ActionNeuron {
+
+    /// Private constructor. Use live_factory() instead.
+    private this(immutable SpGraft spGraft) { super(spGraft); }
+}
+
+/**
             Seed. It is a special case of the action neuron.
-        It used for anonymous branching as apposed to the Breed. After a branch is started with seed there is no branch identifier
+        It used for anonymous branching as apposed to the Brid. After a branch is started with seed there is no branch identifier
     left in the parent branch, so there is no way to communicate to it except waiting for a result concept or set of concepts,
     that the branch will send to the parent when it finishes.
 */
@@ -165,7 +190,7 @@ class ActionNeuron: Neuron, ActivationIfc {
 /// Live.
 final class Seed: ActionNeuron {
 
-    /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
+    /// Private constructor. Use live_factory() instead.
     private this(immutable SpSeed spSeed) { super(spSeed); }
 }
 

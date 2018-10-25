@@ -1,4 +1,7 @@
 .dub
+bin
+.idea/workspace.xml
+
 docs.json
 __dummy.html
 docs/

@@ -1,4 +1,7 @@
 .dub
+bin
+.idea/workspace.xml
+
 docs.json
 __dummy.html
 docs/
@@ -12,4 +15,3 @@ chricrank-test-*
 *.o
 *.obj
 *.lst
-.idea/workspace.xml

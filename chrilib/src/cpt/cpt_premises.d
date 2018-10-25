@@ -16,7 +16,7 @@ import cpt.abs.abs_concept, cpt.abs.abs_premise;
     to a child to send it messages. This concept will be that handler. After the new branch started, its tid will be put
     in the tid_ field of the live part.
 */
-@(11) final class SpBreed: SpiritPremise {
+@(11) final class SpBrid: SpiritPremise {
     import cpt.cpt_neurons: SpSeed;
 
     /**
@@ -29,8 +29,8 @@ import cpt.abs.abs_concept, cpt.abs.abs_premise;
     }
 
     /// Create live wrapper for the holy static concept.
-    override Breed live_factory() const {
-        return new Breed(cast(immutable)this);
+    override Brid live_factory() const {
+        return new Brid(cast(immutable)this);
     }
 
     /// Serialize concept
@@ -91,26 +91,26 @@ import cpt.abs.abs_concept, cpt.abs.abs_premise;
 }
 
 unittest {
-    auto a = new SpBreed(42);
+    auto a = new SpBrid(42);
     a.ver = 5;
     a.seedCid_ = 43;
 
     Serial ser = a.serialize;
-    auto b = cast(SpBreed)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
-    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpBreed) && b.seedCid_ == 43);
+    auto b = cast(SpBrid)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
+    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpBrid) && b.seedCid_ == 43);
 
     assert(a == b);
 }
 
 /// Live.
-final class Breed: Premise {
+final class Brid: Premise {
     import std.concurrency: Tid;
 
     /// The thread identifier.
     Tid tid;
 
     /// Private constructor. Use spiritual live_factory() instead.
-    private this(immutable SpBreed spBreed) { super(spBreed); }
+    private this(immutable SpBrid spBreed) { super(spBreed); }
 
     override string toString() const {
         string s = super.toString;
@@ -120,7 +120,7 @@ final class Breed: Premise {
 
     /// Getter.
     const(Cid) seed() const {
-        return (cast(immutable SpBreed)spirit).seed;
+        return (cast(immutable SpBrid)spirit).seed;
     }
 }
 

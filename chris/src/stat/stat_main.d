@@ -66,15 +66,15 @@ void setDebugLevel_0_stat(Caldron ) {
         operandCid = a tid primitive, containing the user Tid.
 */
 @(6, StatCallType.p0Calp1Cidp2Cid)
-void sendTidToUser_stat(Caldron cld, Cid userTidPremCid, Cid ulineBreedCid) {
+void sendTidToUser_stat(Caldron cld, Cid userTidPremCid, Cid ulineBridCid) {
     import std.concurrency: Tid, send;
     import messages: CircleSuppliesUserWithItsTid_msg;
     checkCid!TidPrem(cld, userTidPremCid);
-    checkCid!Breed(cld, ulineBreedCid);
+    checkCid!Brid(cld, ulineBridCid);
 
     auto userTidPrem = cast(TidPrem)cld[userTidPremCid];
-    auto ulineBreed = cast(Breed)cld[ulineBreedCid];
-    send(userTidPrem.tid, new immutable CircleSuppliesUserWithItsTid_msg(ulineBreed.tid));
+    auto ulineBrid = cast(Brid)cld[ulineBridCid];
+    send(userTidPrem.tid, new immutable CircleSuppliesUserWithItsTid_msg(ulineBrid.tid));
 }
 
 /**
@@ -133,15 +133,15 @@ void anactivate_stat(Caldron cld, Cid cptCid) {
             Activate a concept in a given name space
     Parameters:
         cld = current caldron
-        destBreedCid = breed of the destination branch
+        destBridCid = brid of the destination branch
         cptCid = concept to activate
 */
 @(11, StatCallType.p0Calp1Cidp2Cid)
-void activateRemotely_stat(Caldron cld, Cid destBreedCid, Cid cptCid) {
+void activateRemotely_stat(Caldron cld, Cid destBridCid, Cid cptCid) {
     import std.concurrency: Tid, send;
     import messages: IbrSetActivation_msg;
     checkCid!BinActivationIfc(cld, cptCid);
-    auto br = scast!Breed(cld[destBreedCid]);
+    auto br = scast!Brid(cld[destBridCid]);
     send(br.tid, new immutable IbrSetActivation_msg(cptCid, +1));
 }
 
@@ -149,15 +149,15 @@ void activateRemotely_stat(Caldron cld, Cid destBreedCid, Cid cptCid) {
             Anactivate a concept in a given name space
     Parameters:
         cld = current caldron
-        destBreedCid = breed of the destination branch
+        destBridCid = brid of the destination branch
         cptCid = concept to anactivate
 */
 @(12, StatCallType.p0Calp1Cidp2Cid)
-void anactivateRemotely_stat(Caldron cld, Cid destBreedCid, Cid cptCid) {
+void anactivateRemotely_stat(Caldron cld, Cid destBridCid, Cid cptCid) {
     import std.concurrency: Tid, send;
     import messages: IbrSetActivation_msg;
     checkCid!BinActivationIfc(cld, cptCid);
-    auto br = scast!Breed(cld[destBreedCid]);
+    auto br = scast!Brid(cld[destBridCid]);
     send(br.tid, new immutable IbrSetActivation_msg(cptCid, -1));
 }
 
@@ -168,20 +168,20 @@ void anactivateRemotely_stat(Caldron cld, Cid destBreedCid, Cid cptCid) {
     during the traveling time.
     Parameters:
         cld = caldron as a name space for cids.
-        breedCid = breed of the addressed branch as its identifier
+        bridCid = brid of the addressed branch as its identifier
         loadCid = concept to send
 */
 @(13, StatCallType.p0Calp1Cidp2Cid)
-void sendConceptToBranch_stat(Caldron cld, Cid breedCid, Cid loadCid) {
+void sendConceptToBranch_stat(Caldron cld, Cid bridCid, Cid loadCid) {
     import std.concurrency: Tid, send;
     import messages: IbrSingleConceptPackage_msg;
     checkCid!Concept(cld, loadCid);
 
-    Breed br = scast!(Breed)(cld[breedCid]);
+    Brid br = scast!(Brid)(cld[bridCid]);
     try {
         send(br.tid, new immutable IbrSingleConceptPackage_msg(cld[loadCid].clone));
     } catch(Exception e) {  // Something happened with the destination thread
-        // anactivate the destination thread breed
+        // anactivate the destination thread brid
         br.anactivate;
     }
 }

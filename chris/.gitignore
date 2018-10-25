@@ -5,11 +5,11 @@ docs/
 chris.so
 chris.dylib
 chris.dll
-chris.a
+libchris.a
 chris.lib
 chris-test-*
 *.exe
 *.o
 *.obj
 *.lst
-.idea/workspace.xml
+/.idea/workspace.xml

@@ -8,9 +8,8 @@ import cpt.cpt_types;
 import cpt.abs.abs_concept, cpt.abs.abs_premise;
 
 /**
-            Branch identifier.
-        On one hand it is a container for TID. TID itself is stored in the live part, since it is a changeable entity. On the
-    other, it is a pointer to the seed of the branch. Its cid is stored in the holy part.
+            Branch identifier. On one hand it is a container for TID. TID itself is stored in the live part, since it is
+    a changeable entity. On the other, it is a pointer to the seed of the branch. Its cid is stored in the holy part.
 
         This concept can be used to start new branch instead of the seed, if we want to have in the parent branch a handler
     to a child to send it messages. This concept will be that handler. After the new branch started, its tid will be put

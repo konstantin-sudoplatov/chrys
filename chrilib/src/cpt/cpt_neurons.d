@@ -144,9 +144,9 @@ class ActionNeuron: Neuron, ActivationIfc {
 }
 
 /**
-            Graft. It is a special case of the action neuron.
-        It used much as the branching with Seed, but without actually branching and in the current name space. All grafting
-        are executed sequentially and in the order they are presented in the effects.branches of the last processed neuron.
+        Graft. It is a special case of the action neuron.
+    It used much as the branching with Seed, but without actually branching and in the current name space. All grafting
+    are executed sequentially and in the order they are presented in the effects.branches of the last processed neuron.
 */
 //@(8) final class SpGraft: SpActionNeuron {
 //

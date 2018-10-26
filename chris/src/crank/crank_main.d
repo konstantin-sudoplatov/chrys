@@ -129,7 +129,7 @@ void chatBranch() {
 /// , , 2821656862, 3589523171, 145413872 , 4278173576
 enum Uline {
     /// uline branch identifier
-    uline_brid = cd!(SpBrid, 4_021_308_401),
+    uline_brid = cd!(SpBreed, 4_021_308_401),
 
     /// uline branch seed
     uline_seed = cd!(SpSeed, 1_771_384_341),

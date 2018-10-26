@@ -110,7 +110,7 @@ final class Brid: Premise {
     Tid tid;
 
     /// Private constructor. Use spiritual live_factory() instead.
-    private this(immutable SpBrid spBreed) { super(spBreed); }
+    private this(immutable SpBreed spBreed) { super(spBreed); }
 
     override string toString() const {
         string s = super.toString;
@@ -120,7 +120,7 @@ final class Brid: Premise {
 
     /// Getter.
     const(Cid) seed() const {
-        return (cast(immutable SpBrid)spirit).seed;
+        return (cast(immutable SpBreed)spirit).seed;
     }
 }
 

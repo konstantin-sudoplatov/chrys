@@ -160,8 +160,8 @@ class ActionNeuron: Neuron, ActivationIfc {
 //
 //    //---***---***---***---***---***--- functions ---***---***---***---***---***--
 //}
-//
-///// Live.
+
+/// Live.
 //final class Graft: ActionNeuron {
 //
 //    /// Private constructor. Use live_factory() instead.

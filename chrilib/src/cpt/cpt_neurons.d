@@ -148,25 +148,25 @@ class ActionNeuron: Neuron, ActivationIfc {
         It used much as the branching with Seed, but without actually branching and in the current name space. All grafting
         are executed sequentially and in the order they are presented in the effects.branches of the last processed neuron.
 */
-@(8) final class SpGraft: SpActionNeuron {
-
-    /// Constructor
-    this(Cid cid) { super(cid); }
-
-    /// Create live wrapper for the holy static concept.
-    override Graft live_factory() const {
-        return new Graft(cast(immutable)this);
-    }
-
-    //---***---***---***---***---***--- functions ---***---***---***---***---***--
-}
-
-/// Live.
-final class Graft: ActionNeuron {
-
-    /// Private constructor. Use live_factory() instead.
-    private this(immutable SpGraft spGraft) { super(spGraft); }
-}
+//@(8) final class SpGraft: SpActionNeuron {
+//
+//    /// Constructor
+//    this(Cid cid) { super(cid); }
+//
+//    /// Create live wrapper for the holy static concept.
+//    override Graft live_factory() const {
+//        return new Graft(cast(immutable)this);
+//    }
+//
+//    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+//}
+//
+///// Live.
+//final class Graft: ActionNeuron {
+//
+//    /// Private constructor. Use live_factory() instead.
+//    private this(immutable SpGraft spGraft) { super(spGraft); }
+//}
 
 /**
             Seed. It is a special case of the action neuron.

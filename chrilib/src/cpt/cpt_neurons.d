@@ -170,7 +170,7 @@ final class Graft: ActionNeuron {
 
 /**
             Seed. It is a special case of the action neuron.
-        It used for anonymous branching as apposed to the Brid. After a branch is started with seed there is no branch identifier
+        It used for anonymous branching as apposed to the Breed. After a branch is started with seed there is no branch identifier
     left in the parent branch, so there is no way to communicate to it except waiting for a result concept or set of concepts,
     that the branch will send to the parent when it finishes.
 */
@@ -190,7 +190,7 @@ final class Graft: ActionNeuron {
 /// Live.
 final class Seed: ActionNeuron {
 
-    /// Private constructor. Use live_factory() instead.
+    /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
     private this(immutable SpSeed spSeed) { super(spSeed); }
 }
 

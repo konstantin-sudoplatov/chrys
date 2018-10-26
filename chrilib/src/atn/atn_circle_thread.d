@@ -21,12 +21,12 @@ class Caldron {
             breedOrSeedCid = breed or seed concept
     */
     this(Cid breedOrSeedCid) {
-        assert(cast(Seed)this[breedOrSeedCid] || cast(Brid)this[breedOrSeedCid],
+        assert(cast(Seed)this[breedOrSeedCid] || cast(Breed)this[breedOrSeedCid],
                 format!"Cid: %s, this concept must be of Seed or Breed type, not of %s."
                         (breedOrSeedCid, typeid(this[breedOrSeedCid])));
 
         if      // is it a breed?
-                (auto breed = cast(Brid)this[breedOrSeedCid])
+                (auto breed = cast(Breed)this[breedOrSeedCid])
         {   //yes: setup the caldron's instance of breed and the caldron's head
             breed.tid = thisTid;
             breed.activate;         // the local instance of the breed is setup and ready
@@ -235,7 +235,7 @@ class Caldron {
 
             // May be start new caldrons
             foreach(cid; effect.branches[1..$]) {
-                assert(cast(Seed)this[cid] || cast(Brid)this[cid],
+                assert(cast(Seed)this[cid] || cast(Breed)this[cid],
                         format!"Cid: %s, this concept must be of Seed or Breed type, not of %s."
                                 (cid, typeid(this[cid])));
                 Tid tid = spawn(&caldron_thread_func, false, cid);
@@ -243,7 +243,7 @@ class Caldron {
 
                 // Mybe setup the host instance of breed
                 if      //is it a breed?
-                        (auto br = cast(Brid)this[cid])
+                        (auto br = cast(Breed)this[cid])
                 {
                     br.tid = tid;   // spawned Tid
                     br.activate;    // bread concept is setup and ready
@@ -271,7 +271,7 @@ class AttentionCircle: Caldron {
     this() {
 
         // Setup chat_breed
-        Brid breed = cast(Brid)this[HardCid.chatBrid_hardcid_brid];
+        Breed breed = cast(Breed)this[HardCid.chatBreed_hardcid_breed];
         breed.tid = thisTid;
         breed.activate;         // the breed is setup and ready
         super(breed.cid);
@@ -338,7 +338,7 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
             s = "starting the attention circle thread";
         else
             if      // is it a breeded branch?
-                    (auto br = cast(SpBrid)_sm_[breedOrSeedCid])
+                    (auto br = cast(SpBreed)_sm_[breedOrSeedCid])
                 s = format!"starting breeded branch %s(%s)"(_nm_[br.seed], br.seed);
             else
                 s = format!"starting seeded branch %s(%s)"(_nm_[breedOrSeedCid], breedOrSeedCid);

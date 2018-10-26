@@ -29,8 +29,8 @@ import cpt.abs.abs_concept, cpt.abs.abs_premise;
     }
 
     /// Create live wrapper for the holy static concept.
-    override Brid live_factory() const {
-        return new Brid(cast(immutable)this);
+    override Breed live_factory() const {
+        return new Breed(cast(immutable)this);
     }
 
     /// Serialize concept
@@ -91,19 +91,19 @@ import cpt.abs.abs_concept, cpt.abs.abs_premise;
 }
 
 unittest {
-    auto a = new SpBrid(42);
+    auto a = new SpBreed(42);
     a.ver = 5;
     a.seedCid_ = 43;
 
     Serial ser = a.serialize;
-    auto b = cast(SpBrid)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
-    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpBrid) && b.seedCid_ == 43);
+    auto b = cast(SpBreed)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
+    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpBreed) && b.seedCid_ == 43);
 
     assert(a == b);
 }
 
 /// Live.
-final class Brid: Premise {
+final class Breed: Premise {
     import std.concurrency: Tid;
 
     /// The thread identifier.

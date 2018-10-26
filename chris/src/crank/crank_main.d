@@ -66,12 +66,12 @@ enum Chat: DcpDescriptor {
     chat_seed = cd!(SpSeed, 2_500_739_441),
 
     /// Setting up the uline branch (see actions below)
-    /// After chat starts the uline branch, it sends user its own brid. Also it sends uline Tid of the user thread
+    /// After chat starts the uline branch, it sends user its own breed. Also it sends uline Tid of the user thread
     /// (console or http), so that uline could talk to user.
     shakeHandsWithUline_chat_actnrn = cd!(SpActionNeuron, 3_996_466_002),
 
-    /// The action for the handshaker. After chat starts the uline branch, it sends user its own brid.
-    sendUlineChatBrid_chat_ccact = cd!(SpA_CidCid, 553_436_801),
+    /// The action for the handshaker. After chat starts the uline branch, it sends user its own breed.
+    sendUlineChatBreed_chat_ccact = cd!(SpA_CidCid, 553_436_801),
 
     /// The action for the handshaker. It sends uline Tid of the user thread (console or http), so that uline could be able
     /// to talk to the user.
@@ -87,26 +87,26 @@ enum Chat: DcpDescriptor {
 void chatBranch() {
     mixin(dequalify_enums!(HardCid, CommonConcepts, Chat, Uline));    // anonymizes the concept enums, so we don't need use their full names.
 
-    // Setup the brid and seed
-    cp!chatBrid_hardcid_brid.load(chat_seed);
+    // Setup the breed and seed
+    cp!chatBreed_hardcid_breed.load(chat_seed);
     cp!chat_seed.addEffects(
         //[   // acts
         //],
         null,
         [   // brans
             shakeHandsWithUline_chat_actnrn,    // handshake with uline
-            uline_brid                         // start uline branch
+            uline_breed                         // start uline branch
         ]
     );
 
     // Handshake with uline
-    cp!sendUlineChatBrid_chat_ccact.load(statCid!sendConceptToBranch_stat, uline_brid, chatBrid_hardcid_brid);
-    cp!sendUlineUserTid_chat_ccact.load(statCid!sendConceptToBranch_stat, uline_brid, userThread_hardcid_tidprem);
-    cp!activateRemotely_readyForUlineInput_chat_ccact.load(statCid!activateRemotely_stat, uline_brid,
+    cp!sendUlineChatBreed_chat_ccact.load(statCid!sendConceptToBranch_stat, uline_breed, chatBreed_hardcid_breed);
+    cp!sendUlineUserTid_chat_ccact.load(statCid!sendConceptToBranch_stat, uline_breed, userThread_hardcid_tidprem);
+    cp!activateRemotely_readyForUlineInput_chat_ccact.load(statCid!activateRemotely_stat, uline_breed,
             chatReadyForUlineInputPeg_uline_pegprem);
     cp!shakeHandsWithUline_chat_actnrn.addEffects(
         [   // acts
-            sendUlineChatBrid_chat_ccact,       // give uline own brid
+            sendUlineChatBreed_chat_ccact,       // give uline own breed
             sendUlineUserTid_chat_ccact,         // give uline user's Tid
             activateRemotely_readyForUlineInput_chat_ccact,    // tell uline to send next line
         ],
@@ -126,15 +126,15 @@ void chatBranch() {
 }
 
 // User line branch enums
-/// , , 2821656862, 3589523171, 145413872 , 4278173576
+/// , 643414724, 2821656862, 3589523171, 145413872 , 4278173576
 enum Uline {
     /// uline branch identifier
-    uline_brid = cd!(SpBreed, 4_021_308_401),
+    uline_breed = cd!(SpBreed, 4_021_308_401),
 
     /// uline branch seed
     uline_seed = cd!(SpSeed, 1_771_384_341),
 
-    /// wait until chat sends its brid and user's tid.
+    /// wait until chat sends its breed and user's tid.
     shakeHandsWithChat_uline_anrn = cd!(SpAndNeuron, 226_154_664),
 
     /// After the handshaking with chat uline has user tid and can send back its own
@@ -162,8 +162,8 @@ void ulineBranch() {
     mixin(dequalify_enums!(HardCid, CommonConcepts, Uline, Chat));
 
 
-    // Mate uline seed and brid.
-    cp!uline_brid.load(uline_seed);
+    // Mate uline seed and breed.
+    cp!uline_breed.load(uline_seed);
 
     // Setup the uline_seed
     cp!uline_seed.addEffects(
@@ -171,11 +171,11 @@ void ulineBranch() {
         shakeHandsWithChat_uline_anrn       // branch
     );
 
-    // Handshaker. The chat brid and the user thread tid will be sent by the chat branch, wait for them.
-    // The uline brid will be set up in the chat name space.
-    cp!sendUserUlineTid_uline_ccact.load(statCid!sendTidToUser_stat, userThread_hardcid_tidprem, uline_brid);
+    // Handshaker. The chat breed and the user thread tid will be sent by the chat branch, wait for them.
+    // The uline breed will be set up in the chat name space.
+    cp!sendUserUlineTid_uline_ccact.load(statCid!sendTidToUser_stat, userThread_hardcid_tidprem, uline_breed);
     cp!shakeHandsWithChat_uline_anrn.addPremises([
-        chatBrid_hardcid_brid,
+        chatBreed_hardcid_breed,
         userThread_hardcid_tidprem
     ]);
     cp!shakeHandsWithChat_uline_anrn.addEffects(
@@ -195,7 +195,7 @@ void ulineBranch() {
         // Actions
     cp!moveLineFromUserInuputBufferToUserInputLine_uline_ccact.load(statCid!getUserInputLineFromBuffer_stat,
             userInputBuffer_hardcid_strqprem, userInputLine_strprem);
-    cp!sendUserInputLineToChat_uline_ccact.load(statCid!sendConceptToBranch_stat, chatBrid_hardcid_brid, userInputLine_strprem);
+    cp!sendUserInputLineToChat_uline_ccact.load(statCid!sendConceptToBranch_stat, chatBreed_hardcid_breed, userInputLine_strprem);
     cp!anactivateChatReadyForUlineInputPeg_uline_cact.load(statCid!anactivate_stat, chatReadyForUlineInputPeg_uline_pegprem);
     cp!sendUserRequestForNextLine_uline_cact.load(statCid!requestUserInput, userThread_hardcid_tidprem);
         // Effects
@@ -212,17 +212,8 @@ void ulineBranch() {
     );
 }
 
-enum UChunk {
 
-    ///
-    uchunk_strprem = cd!(SpStringPrem, 643_414_724),
-}
 
-/// Extracting a chunk from the user line. Uchanks are pieces of user line separated from each other by blanks. Uchank
-/// can contain words, numbers and separators.
-void uchunk() {
-
-}
 
 
 

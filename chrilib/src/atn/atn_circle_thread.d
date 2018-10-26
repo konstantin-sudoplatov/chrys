@@ -50,7 +50,8 @@ class Caldron {
         Returns: the live concept object
     */
     final Concept opIndex(Cid cid) {
-        assert(_sm_[cid], format!"Cid %s(%s) cannot be get from the spirit map."(cid, (cid in _nm_)? _nm_[cid]: "noname"));
+        assert(_sm_[cid], format!"Cid %s(%s) cannot be get from the spirit map."
+                (cid, (cid in _nm_)? _nm_[cid]: "noname"));
         if
                 (auto p = cid in lm_)
             return *p;
@@ -380,7 +381,8 @@ void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
             }
             else
             {  // unrecognized message of type Msg. Log it.
-                logit(format!"Unexpected message to the caldron %s: %s"(caldron.caldName, typeid(msg)), TermColor.brown);
+                logit(format!"Unexpected message to the caldron %s: %s"
+                        (caldron.caldName, typeid(msg)), TermColor.brown);
                 continue ;
             }
         }

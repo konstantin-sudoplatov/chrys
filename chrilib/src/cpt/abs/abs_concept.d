@@ -2,7 +2,7 @@
 /// HolyConcept.
 module cpt.abs.abs_concept;
 import std.stdio;
-import std.format, std.typecons;
+import std.format, std.typecons, std.string;
 
 import proj_data, proj_funcs;
 
@@ -96,7 +96,8 @@ abstract class SpiritConcept {
         Must be realised in every concrete concept since it is used in versioning.
     */
     override bool opEquals(Object sc) const {
-        assert(typeid(this) == typeid(sc));
+        assert(typeid(this) == typeid(sc), "Type of this %s(clid %s) is not the same as type of sc %s(clid %s).".
+                format(typeid(this), _spReg_[typeid(this)], typeid(sc), _spReg_[typeid(sc)]));
 
         return true;
     }

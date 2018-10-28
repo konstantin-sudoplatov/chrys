@@ -2,7 +2,7 @@ module stat.stat_types;
 
 import proj_data;
 
-import chri_types: StatCallType;
+import chri_data: StatCallType;
 
 /**
         Get cid by static concept function name.

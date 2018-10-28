@@ -46,10 +46,10 @@ abstract class SpiritConcept {
     }
 
     /**
-                Clone an object and than make it a deep copy.
-            Written by Burton Radons <burton-radons smocky.com>
-            https://digitalmars.com/d/archives/digitalmars/D/learn/1625.html
-            Tested against memory leaks in the garbage collecter both via copied object omission and omission of reference to other
+            Clone an object and than make it a deep copy.
+        Written by Burton Radons <burton-radons smocky.com>
+        https://digitalmars.com/d/archives/digitalmars/D/learn/1625.html
+        Tested against memory leaks in the garbage collecter both via copied object omission and omission of reference to other
         object in the its body.
         Returns: deep clone of itself
     */
@@ -210,5 +210,5 @@ abstract class SpiritDynamicConcept: SpiritConcept {
 
 /// Ditto
 abstract class DynamicConcept: Concept {
-    this(immutable SpiritDynamicConcept holyDynamicConcept) { super(holyDynamicConcept); }
+    this(immutable SpiritDynamicConcept spiritDynamicConcept) { super(spiritDynamicConcept); }
 }

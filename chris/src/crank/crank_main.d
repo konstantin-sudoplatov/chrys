@@ -28,7 +28,7 @@ enum CommonConcepts: DcpDescriptor {
     setDebugLevel_2_act = cd!(SpA, 2_996_929_904),
 
     /// call current Caldron._requestStopAndWait_(), can be used by all caldrons
-    stopAndWait_act = cd!(SpA, 580_052_493),
+    wait_act = cd!(SpA, 580_052_493),
 
     /// line of text from the user, string premise.
     userInputLine_strprem = cd!(SpStringPrem, 3_622_010_989),
@@ -51,8 +51,8 @@ void commonConcepts() {
     cp!setDebugLevel_1_act.load(statCid!setDebugLevel_1_stat);
     cp!setDebugLevel_2_act.load(statCid!setDebugLevel_2_stat);
 
-    // Setup the stop and wait action
-    cp!stopAndWait_act.load(statCid!stopAndWait_stat);
+    // Setup the wait action
+    cp!wait_act.load(statCid!wait_stat);
 
     // Setup activation of the user input premise
     cp!anactivateUserInputLine_cact.load(statCid!anactivate_stat, userInputLine_strprem);

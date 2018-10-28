@@ -6,12 +6,12 @@ import proj_data, proj_funcs;
 import stat.stat_types;
 import cpt.cpt_interfaces, cpt.abs.abs_concept, cpt.cpt_premises;
 import atn.atn_circle_thread;
-import chri_types;
+import chri_data, chri_types;
 
 
 /// Raise stop flag on a caldron.
 @(1, StatCallType.p0Cal)
-void stopAndWait_stat(Caldron cld){
+void wait_stat(Caldron cld){
     cld.requestStopAndWait;
 }
 

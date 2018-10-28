@@ -6,7 +6,7 @@ import proj_data, proj_funcs;
 
 import cpt.cpt_types;
 import cpt.abs.abs_concept, cpt.abs.abs_neuron;
-import atn.atn_circle_thread;
+import atn.atn_caldron, atn.atn_circle_thread;
 import cpt.cpt_interfaces;
 import chri_types;
 

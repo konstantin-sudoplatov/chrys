@@ -10,6 +10,19 @@ import cpt.cpt_premises, cpt.cpt_registry;
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--
 
+/// Maximum number of fibers in the fiber pool
+enum FIBER_POOL_SIZE = 30;
+
+/// Call types of the static concept functions.
+enum StatCallType: string {
+    p0Cal = "void function(Caldron)",                              // void function(Caldron nameSpace)
+    p0Calp1Cid = "void function(Caldron, Cid)",                         // void function(Caldron nameSpace, Cid operandCid)
+    p0Calp1Cidp2Cid = "void function(Caldron, Cid, Cid)",                    // void function(Caldron nameSpace, Cid firstoperandCid, Cid secondOperandCid)
+    p0Calp1Cidp2Int = "void function(Caldron, Cid, int)",                    // void function(Caldron nameSpace, Cid conceptCid, int intValue)
+    p0Calp1Cidp2Float = "void function(Caldron, Cid, float)",                  // void function(Caldron nameSpace, Cid conceptCid, float floatValue)
+    p0Calp1Cidp2Cidp3Float = "void function(Caldron, Cid, Cid, float)",             // void function(Caldron nameSpace, Cid branchBreedCid, Cid conceptCid, float floatValue)
+}
+
 //      Key threads of the project. The console thead will be spawned, but we don't need to remember its Tid. The circle
 // knows it, it's enough.
 shared const Tid _mainTid_;         /// Tid of the main thread
@@ -25,6 +38,10 @@ debug {
     // set to true after the cranking is finished and the maps rehashed
     immutable bool _cranked_;
 }
+
+/// Fiber pool for caldrons.
+import atn.atn_caldron: FiberPool;
+shared FiberPool _fiberPool_;
 
 /// Registry of serializable spirit classes. It's a two way associative array of TypeInfo_Class[Clid].
 immutable CrossMap!(ClassInfo, Clid) _spReg_;
@@ -54,4 +71,6 @@ shared static this(){
         if(sc) spReg[cast(Clid)i] = sc;
     }
     _spReg_ = cast(immutable)spReg;
+
+    _fiberPool_ = new shared FiberPool;
 }

@@ -10,8 +10,6 @@ import messages;
 
 /**
             Main work horse of the system. It provides the room for doing reasoning on some branch.
-    This class, as well as it successors, must be shared, i.e. used for creating of shared objects. It must be a shared object
-    to be able to provide threads a thread function (entry point for them).
 */
 class Caldron {
 
@@ -269,7 +267,6 @@ class AttentionCircle: Caldron {
             Constructor.
     */
     this() {
-
         // Setup chat_breed
         Breed breed = cast(Breed)this[HardCid.chatBreed_hardcid_breed];
         breed.tid = thisTid;

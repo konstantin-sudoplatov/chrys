@@ -5,7 +5,7 @@ import proj_data;
 
 import stat.stat_types;
 import atn.atn_circle_thread: Caldron;
-import chri_types: StatCallType;
+import chri_data: StatCallType;
 
 
 

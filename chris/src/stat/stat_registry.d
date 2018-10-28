@@ -5,7 +5,7 @@ import proj_data;
 
 import stat.stat_types;
 import atn.atn_circle_thread;
-import chri_types: StatCallType;
+import chri_data: StatCallType;
 
 /// Full list of modules, that contain static concept functions. This list is used at compile time to gather all static
 /// concepts and put them in the spirit map and their names and cids in the name map.

@@ -1,13 +1,13 @@
 module atn.atn_caldron;
 import std.stdio, std.string;
-import core.thread, std.concurrency;
+import core.thread, std.concurrency, std.exception;
 
 import proj_data, proj_funcs;
 
 import chri_types;
 import messages;
 import cpt.abs.abs_concept, cpt.abs.abs_neuron;
-import cpt.cpt_actions;
+import cpt.cpt_neurons, cpt.cpt_actions, cpt.cpt_premises;
 import atn.atn_circle_thread;
 
 /// The debug level switch, controlled from the conceptual level.
@@ -134,6 +134,7 @@ class NewCaldron {
                 act.run(this);
             }
 
+            // May be the actions raised the stop_ or wait_ flags.
             if (wait_) {
                 if (dynDebug >= 1) logit("Caldron %s, yielding level %s on wait.".format(caldName, depth_),
                         TermColor.green);
@@ -146,6 +147,29 @@ class NewCaldron {
                         TermColor.green);
                 depth_--;
                 return;
+            }
+
+            // Do branching and extract the grafts and the new head neuron.
+            Graft[] grafts;
+            Neuron newHead;
+            foreach(cid; effect.branches) {
+                Concept cpt = this[cid];
+                if      // is it a breed?
+                        (auto breed = cast(Breed)cpt)
+                {   //yes: spawn the new branch
+
+                }
+                else if
+                        (auto graft = cast(Graft)cpt)
+                    grafts ~= graft;
+                else if
+                        (auto nrn = cast(Neuron)cpt)
+                {
+                    enforce(newHead is null, "Neuron %s(%s) is the second neuron in branches, and there can" ~
+                            "only be one. effec.branches = %s".format(cid, (cid in _nm_? _nm_[cid]: "noname"),
+                            effect.branches));
+                    newHead = nrn;
+                }
             }
 
         }
@@ -192,9 +216,25 @@ synchronized class FiberPool {
     private Deque!(Fiber) fibers_;
 }
 
+shared struct CaldronThread {
 
+    int i;
 
+    this(int i) {this.i = i;}
 
+    void threadFunc() {
+        writefln("i = %s", i);
+    }
+
+    private Tid tid;
+}
+
+unittest {
+    shared static CaldronThread ct1 = CaldronThread(1);
+    shared static CaldronThread ct2 = CaldronThread(2);
+    spawn(&ct1.threadFunc);
+    spawn(&ct2.threadFunc);
+}
 
 
 

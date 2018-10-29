@@ -1,5 +1,5 @@
 module cpt.cpt_premises;
-import std.format, std.typecons;
+import std.string, std.typecons;
 
 import proj_data, proj_types, proj_funcs;
 
@@ -15,7 +15,7 @@ import cpt.abs.abs_concept, cpt.abs.abs_premise;
     to a child to send it messages. This concept will be that handler. After the new branch started, its tid will be put
     in the tid_ field of the live part.
 */
-@(12) final class SpBreed: SpiritPremise {
+@(11) final class SpBreed: SpiritPremise {
     import cpt.cpt_neurons: SpSeed;
 
     /**
@@ -52,7 +52,7 @@ import cpt.abs.abs_concept, cpt.abs.abs_premise;
 
     override string toString() const {
         string s = super.toString;
-        s ~= format!"\n    seedCid_ = %s(%,?s)"(_nm_[seedCid_], '_', seedCid_);
+        s ~= "\n    seedCid_ = %s(%,?s)".format(_nm_[seedCid_], '_', seedCid_);
         return s;
     }
 
@@ -113,13 +113,111 @@ final class Breed: Premise {
 
     override string toString() const {
         string s = super.toString;
-        s ~= format!"\n    tid = %s"(cast()tid);
+        s ~= "\n    tid = %s".format(cast()tid);
         return s;
     }
 
     /// Getter.
     const(Cid) seed() const {
         return (cast(immutable SpBreed)spirit).seed;
+    }
+}
+
+@(12) final class SpGraft: SpiritPremise {
+    import cpt.cpt_neurons: SpSeed;
+
+    /**
+                Constructor
+        Parameters:
+            cid = predefined concept identifier
+    */
+    this(Cid cid) {
+        super(cid);
+    }
+
+    /// Create live wrapper for the holy static concept.
+    override Graft live_factory() const {
+        return new Graft(cast(immutable)this);
+    }
+
+    /// Serialize concept
+    override Serial serialize() const {
+        Serial res = super.serialize;
+
+        res.stable.length = Cid.sizeof;  // allocate
+        *cast(Cid*)&res.stable[0] = seedCid_;
+
+        return res;
+    }
+
+    /// Equality test
+    override bool opEquals(Object sc) const {
+
+        if(!super.opEquals(sc)) return false;
+        auto o = scast!(typeof(this))(sc);
+        return seedCid_ == o.seedCid_;
+    }
+
+    override string toString() const {
+        string s = super.toString;
+        s ~= "\n    seedCid_ = %s(%,?s)".format(_nm_[seedCid_], '_', seedCid_);
+        return s;
+    }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    void load(DcpDescriptor seedDsc) {
+        checkCid!SpSeed(seedDsc.cid);
+        seedCid_ = seedDsc.cid;
+    }
+
+    /// Getter.
+    @property Cid seed() const {
+        return seedCid_;
+    }
+
+    /**
+            Initialize concept from its serialized form.
+        Parameters:
+            stable = stable part of data
+            transient = unstable part of data
+        Returns: unconsumed slices of the stable and transient byte arrays.
+    */
+    protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
+            const byte[] transient)
+    {
+        seedCid_ = *cast(Cid*)&stable[0];
+
+        return tuple!(const byte[], "stable", const byte[], "transient")(stable[Cid.sizeof..$], transient);
+    }
+
+    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+    /// The seed of the branch.
+    private Cid seedCid_;
+}
+
+unittest {
+    auto a = new SpGraft(42);
+    a.ver = 5;
+    a.seedCid_ = 43;
+
+    Serial ser = a.serialize;
+    auto b = cast(SpGraft)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
+    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpGraft) && b.seedCid_ == 43);
+
+    assert(a == b);
+}
+
+/// Live.
+final class Graft: Premise {
+
+    /// Private constructor. Use spiritual live_factory() instead.
+    private this(immutable SpGraft spGraft) { super(spGraft); }
+
+    /// Getter.
+    const(Cid) seed() const {
+        return (cast(immutable SpGraft)spirit).seed;
     }
 }
 
@@ -149,7 +247,7 @@ final class TidPrem: Premise {
 
     override string toString() const {
         string s = super.toString;
-        s ~= format!"\n    tid = %s"(cast()tid);
+        s ~= "\n    tid = %s".format(cast()tid);
         return s;
     }
 }
@@ -207,7 +305,7 @@ final class StringPrem: Premise {
 
     override string toString() const {
         string s = super.toString;
-        s ~= format!"\n    text = %s"(text);
+        s ~= "\n    text = %s".format(text);
         return s;
     }
 }
@@ -236,6 +334,6 @@ final class StringQueuePrem: Premise {
     private this(immutable SpStringQueuePrem spStrQuePrem) { super(spStrQuePrem); }
 
     override string toString() const {
-        return format!"\n    deq = %s"(deque.toString);
+        return "\n    deq = %s".format(deque.toString);
     }
 }

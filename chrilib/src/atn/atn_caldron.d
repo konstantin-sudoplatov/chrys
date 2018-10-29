@@ -7,7 +7,7 @@ import proj_data, proj_funcs;
 import chri_types;
 import messages;
 import cpt.abs.abs_concept, cpt.abs.abs_neuron;
-import cpt.cpt_neurons, cpt.cpt_actions, cpt.cpt_premises;
+import cpt.cpt_interfaces, cpt.cpt_neurons, cpt.cpt_actions, cpt.cpt_premises;
 import atn.atn_circle_thread;
 
 /// The debug level switch, controlled from the conceptual level.
@@ -24,6 +24,26 @@ int dynDebug = 2;
         To speed up the work pools of fibers and threads are provided.
 */
 class NewCaldron {
+
+    /**
+            Constructor.
+        Parameters:
+            breedCid = breed to start with
+    */
+    this(Cid breedCid) {
+
+        assert(cast(Breed)this[breedCid],
+                format!"Cid: %s, this concept must be of Seed or Breed type, not of %s."
+                        (breedCid, typeid(this[breedCid])));
+
+        auto breed = cast(Breed)this[breedCid];
+        breed.tid = thisTid;
+        breed.activate;         // the local instance of the breed is setup and ready
+        headCid_ = seedCid_ = breed.seed;
+
+        // Kick off the reasoning cycle
+//        thisTid.send(new immutable IbrStartReasoning_msg);
+    }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
@@ -72,7 +92,7 @@ class NewCaldron {
 
     /// Send children the termination signal and wait their termination.
     final void terminateChildren() {
-        foreach (child; childCaldrons_)
+        foreach (child; childCaldrons_.byKey)
             child.send(new immutable TerminateApp_msg);
     }
 
@@ -86,6 +106,80 @@ class NewCaldron {
             return "noname";
     }
 
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+    //
+    //                                 Protected
+    //
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+
+    //---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
+
+    //---$$$---$$$---$$$---$$$---$$$--- functions ---$$$---$$$---$$$---$$$---$$$---
+
+    /**
+            Message processing for caldron. All of the caldron workflow starts here.
+        Parameters:
+            msg = message from another caldron or the outside world including messages from user, e.g. lines from console
+                  and service messages, like TerminateAppMsg for termination.
+        Returns: true if the message was recognized, else false.
+
+    */
+    protected bool _processMessage(immutable Msg msg) {
+
+        if      // is it a request for starting reasoning?
+                (cast(IbrStartReasoning_msg)msg)
+        {   // kick off the reasoning loop
+            if (dynDebug >= 1)
+                logit(format!"%s, message StartReasoningMsg has come"(caldName), TermColor.brown);
+
+            reasoning_;
+            return true;
+        }
+        else if // is it a request for setting activation?
+                (auto m = cast(immutable IbrSetActivation_msg)msg)
+        {
+            if(dynDebug >= 1)
+                logit(format!"%s, message IbrSetActivationMsg has come, %s.activation = %s"
+                        (caldName, _nm_[m.destConceptCid], m.activation), TermColor.brown);
+
+            if      // is it bin activation?
+                    (auto cpt = cast(BinActivationIfc)this[m.destConceptCid])
+                if(m.activation > 0)
+                    cpt.activate;
+                else
+                    cpt.anactivate;
+            else    //no: it is esquash
+                (cast(EsquashActivationIfc)this[m.destConceptCid]).activation = m.activation;
+
+            reasoning_;
+            return true;
+        }
+        else if // A concept was posted by another caldron?
+                (auto m = cast(immutable IbrSingleConceptPackage_msg)msg)
+        {   //yes: it's already a clone, inject into the current name space (may be with overriding)
+            if (dynDebug >= 1)
+                logit(format!"%s, message SingleConceptPackageMsg has come, load: %s(%,?s)"
+                        (caldName, _nm_[m.load.cid], '_', m.load.cid), TermColor.brown);
+
+            this[] = cast()m.load;      // inject
+            reasoning_;                 // kick off
+            return true;
+        }
+        else if // new text line from user?
+                (auto m = cast(immutable UserTalksToCircle_msg)msg)
+        {   //yes: put the text into the userInput_strprem concept
+            if (dynDebug >= 1)
+                logit(format!"%s, message UserTalksToCircleMsg has come, text: %s"(caldName, m.line), TermColor.brown);
+
+            auto cpt = scast!StringQueuePrem(this[HardCid.userInputBuffer_hardcid_strqprem]);
+            cpt.push(m.line);
+            cpt.activate;       // the premise is ready
+            reasoning_;         // kick off
+            return true;
+        }
+        return false;
+    }
+
     //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
     //
     //                               Private
@@ -96,7 +190,7 @@ class NewCaldron {
     private Cid seedCid_;
 
     /// Caldrons, that were parented here.
-    private Tid[] childCaldrons_;
+    private CaldronThread[Tid] childCaldrons_;
 
     /// Live map. All holy concepts, that are ever addressed by the caldron are wrapped in corresponding live object and
     /// put in this map. So, caldron always works with its own instance of a concept.
@@ -153,11 +247,12 @@ class NewCaldron {
             Graft[] grafts;
             Neuron newHead;
             foreach(cid; effect.branches) {
-                Concept cpt = this[cid];
+                const Concept cpt = this[cid];
                 if      // is it a breed?
                         (auto breed = cast(Breed)cpt)
                 {   //yes: spawn the new branch
-
+                    CaldronThread thread = _threadPool_.pop(new NewCaldron(breed.cid));
+                    childCaldrons_[thread.tid] = thread;
                 }
                 else if
                         (auto graft = cast(Graft)cpt)
@@ -170,6 +265,10 @@ class NewCaldron {
                             effect.branches));
                     newHead = nrn;
                 }
+                else {
+                    logit("Unexpected concept %s(%s) %s".format(cid, (cid in _nm_? _nm_[cid]: "noname"),
+                            cid in _sm_? _sm_[cid].toString: "not in _sm_"), TermColor.red);
+                }
             }
 
         }
@@ -180,20 +279,19 @@ class NewCaldron {
 /// Fiber pool
 import proj_types;
 import chri_data;
-synchronized class FiberPool {
+synchronized class CaldronFiberPool {
 
     /**
             Get stacked or generate new fiber for the Caldron.reasoning_() delegate.
         Parameters:
-            cld = caldron to setup the fiber to
-        Returns: the fiber object.
+            cld = caldron to setup the fiber for
+        Returns: the Fiber object.
     */
     Fiber pop(NewCaldron cld) {
         if      // is the stack empty?
                 ((cast()fibers_).empty)
         {
-            Fiber fbr = new Fiber(&cld.reasoning_);
-            return fbr;
+            return new Fiber(&cld.reasoning_);
         }
         else { //no: reset and return a fiber
             auto fiber = cast(Fiber)(cast()fibers_).pull;
@@ -209,31 +307,170 @@ synchronized class FiberPool {
             fiber = fiber to stack
     */
     void push(Fiber fiber) {
-        if((cast()fibers_).length <= FIBER_POOL_SIZE) (cast()fibers_).push(fiber);
+        if((cast()fibers_).length <= CALDRON_FIBER_POOL_SIZE) (cast()fibers_).push(fiber);
     }
 
     /// Stack of fibers.
     private Deque!(Fiber) fibers_;
 }
 
-shared struct CaldronThread {
+synchronized class CaldronThreadPool {
 
-    int i;
+    /**
+            Get a stacked or generate new thread for the Caldron._processMessage() delegate.
+        Parameters:
+            cld = caldron to setup the thread for. This caldron is associated with the thread and from now on is used
+                  by the thread to call the _processMessage() function on new messages coming.
+        Returns: the CaldronThread object.
+    */
+    CaldronThread pop(NewCaldron cld) {
+        if      // is the stack empty?
+                ((cast()threads_).empty)
+        {
+            return new CaldronThread(cld);
+        }
+        else { //no: reset and return a fiber
+            auto cldThread = cast(CaldronThread)(cast()threads_).pull;
+            cldThread.reset(cld);
 
-    this(int i) {this.i = i;}
-
-    void threadFunc() {
-        writefln("i = %s", i);
+            return cldThread;
+        }
     }
 
-    private Tid tid;
+    /**
+            Get a caldron thread stacked if there is space in the stack. The caldron object is disassociated from the thread.
+        The thread meanwhile is not terminated, it waits on new messages.
+        Parameters:
+            thread = caldron thread to stack
+    */
+    void push(CaldronThread thread) {
+        if      // is pool able of storing the thread?
+                ((cast()threads_).length <= CALDRON_THREAD_POOL_SIZE)
+        {   //yes: disassociate it from the caldron and save it
+            thread.reset;
+            (cast()threads_).push(thread);
+        }
+        else { //no: terminate the thread
+            thread.destroy;
+        }
+    }
+
+    //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
+    //
+    //                               Private
+    //
+    //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
+
+    /// Stack of threads.
+    private Deque!(CaldronThread) threads_;
 }
 
-unittest {
-    shared static CaldronThread ct1 = CaldronThread(1);
-    shared static CaldronThread ct2 = CaldronThread(2);
-    spawn(&ct1.threadFunc);
-    spawn(&ct2.threadFunc);
+class CaldronThread {
+
+    /**
+            Constructor.
+        Parameters:
+            cld = caldron to associate with the thread
+    */
+    this(NewCaldron cld) {
+        assert(cld !is null);
+        caldron_ = cld;
+        myTid_ = spawn(&(cast(shared)this).caldronThreadFunc);
+        myTid_.send(new immutable IbrStartReasoning_msg);
+    }
+
+    /// Destructor terminates thread. To terminate it explicitely call destroy(this).
+    ~this() {
+        send(myTid_, cast(shared) new TerminationRequest);
+    }
+
+    /**
+            Disassociate current caldron from the thread or reassociate thread with the new caldron.
+        Parameters:
+            cld = caldron to associate the thread with. null for disassociation.
+    */
+    void reset(NewCaldron cld = null) {
+        caldron_ = cld;
+        if(cld) myTid_.send(new immutable IbrStartReasoning_msg);
+    }
+
+    /// Get Tid.
+    Tid tid() {
+        return myTid_;
+    }
+
+    /**
+            Main thread function. Basically it is receiving and processing messages that come to the thread.
+    */
+    shared void caldronThreadFunc() { try {
+        // Receive messages in a cycle
+        while(true) {
+            import std.variant: Variant;
+
+            immutable Msg msg;
+            Throwable ex;
+            TerminationRequest term;
+            Variant var;    // the catchall type
+
+            receive(
+                (immutable Msg m) { (cast()msg) = cast()m; },
+                (shared TerminationRequest t) { term = cast()t; },
+                (shared Throwable e) { ex = cast()e; },
+                (Variant v) { var = v; }          // the catchall clause
+            );
+
+            // Recognize and process the message
+            if      // is it a regular message?
+                    (msg)
+            {   // process it
+                //Send the message to caldron
+                if // processed by caldron?
+                        ((cast()caldron_)._processMessage(msg))
+                    //yes: go for a new message
+                    continue ;
+                else
+                {  // unrecognized message of type Msg. Log it.
+                    logit("Unexpected message to the caldron %s: %s".format(caldron.caldName, typeid(msg)),
+                            TermColor.brown);
+                    continue ;
+                }
+            }
+            else if // is it a request for the thread termination?
+                    (cast(TerminationRequest)term)
+            {   //yes: terminate itself
+                goto FINISH_THREAD;
+            }
+            else if // exception message?
+                    (ex)
+            {   // rethrow exception
+                throw ex;
+            }
+            else if
+                    (var.hasValue)
+            {  // unrecognized message of type Variant. Log it.
+                logit(format!"Unexpected message of type Variant to the caldron %s: %s"
+                        (caldron.caldName, var.toString), TermColor.brown);
+                continue;
+            }
+
+        }
+        FINISH_THREAD:
+    } catch(Throwable e) { send(ownerTid, cast(shared)e); }}
+
+    //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
+    //
+    //                               Private
+    //
+    //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
+
+    /// Own Tid.
+    private Tid myTid_;
+
+    /// Caldron instance to call to call the Caldron._processMessage() function.
+    private NewCaldron caldron_;
+
+    /// Message to itself to terminate.
+    private class TerminationRequest {}
 }
 
 

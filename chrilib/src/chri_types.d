@@ -19,9 +19,9 @@ import atn.atn_circle_thread;
 */
 void checkCid(T: SpiritConcept)(Cid cid) {
     debug if(_maps_filled_) {
-        assert(cid in _sm_, format!"Cid: %s(%s) do not exist in the holy map."(cid, cid in _nm_? _nm_[cid]: "noname"));
+        assert(cid in _sm_, "Cid: %s(%s) do not exist in the holy map.".format(cid, cid in _nm_? _nm_[cid]: "noname"));
         assert(cast(T)_sm_[cid],
-                format!"Cid: %s, must be of type %s and it is of type %s."(cid, T.stringof, typeid(_sm_[cid])));
+                "Cid: %s, must be of type %s and it is of type %s.".format(cid, T.stringof, typeid(_sm_[cid])));
     }
 }
 
@@ -33,6 +33,22 @@ void checkCid(T)(Caldron caldron, Cid cid)
         assert((cast(T)caldron[cid]),
                 format!"Cid: %s, must be of type %s and it is of type %s."
                         (cid, T.stringof, typeid(caldron[cid])));
+}
+
+/// Safe cast of spirit concepts
+T scast(T: SpiritConcept)(Cid cid) {
+    assert(_maps_filled_);
+    checkCid!T(cid);
+    return cast(T)_sm_[cid];
+}
+
+/// Safe cast of live concepts
+T scast(T)(Caldron caldron, Cid cid)
+    if(is(T: Concept) || is(T == interface))
+{
+    assert(_cranked_);
+    checkCid!T(caldron, cid);
+    return cast(T)caldron[cid];
 }
 
 /**

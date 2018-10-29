@@ -236,7 +236,7 @@ class Caldron {
                 assert(cast(Seed)this[cid] || cast(Breed)this[cid],
                         format!"Cid: %s, this concept must be of Seed or Breed type, not of %s."
                                 (cid, typeid(this[cid])));
-                Tid tid = spawn(&caldron_thread_func, false, cid);
+                Tid tid = spawn(&circleThreadFunc, false, cid);
                 childCaldrons_ ~= tid;
 
                 // Mybe setup the host instance of breed
@@ -314,7 +314,7 @@ int dynDebug = 0;
         calledByDispatcher = the caller, true - the dispatcher, false - a caldron
         seedCid = seed, only for a caldron
 */
-void caldron_thread_func(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
+void circleThreadFunc(bool calledByDispatcher, Cid breedOrSeedCid = 0) {try{
 
     // Create caldron
     if      //is dispatcher spawning an attention circle?

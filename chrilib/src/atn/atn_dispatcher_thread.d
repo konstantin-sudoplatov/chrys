@@ -44,7 +44,7 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                     circleTid = *circleTidPtr;
                 }
                 else {  //no: create the circle, tell him the client's Tid and put the pair in the circle register
-                    circleTid = spawn(&caldron_thread_func, true, 0);
+                    circleTid = spawn(&circleThreadFunc, true, 0);
                     circleTid.send(new immutable DispatcherSuppliesCircleWithUserTid_msg(clientTid));
                     circleRegister_[clientTid] = circleTid;
                 }

@@ -11,7 +11,10 @@ import cpt.cpt_premises, cpt.cpt_registry;
 //---***---***---***---***---***--- data ---***---***---***---***---***--
 
 /// Maximum number of fibers in the fiber pool
-enum FIBER_POOL_SIZE = 30;
+enum CALDRON_FIBER_POOL_SIZE = 30;
+
+/// Maximum number of threads in the caldron thread pool
+enum CALDRON_THREAD_POOL_SIZE = 50;
 
 /// Call types of the static concept functions.
 enum StatCallType: string {
@@ -39,9 +42,10 @@ debug {
     immutable bool _cranked_;
 }
 
-/// Fiber pool for caldrons.
-import atn.atn_caldron: FiberPool;
-shared FiberPool _fiberPool_;
+/// Fiber and thread pools for caldrons.
+import atn.atn_caldron: CaldronFiberPool, CaldronThreadPool;
+shared CaldronFiberPool _fiberPool_;
+shared CaldronThreadPool _threadPool_;
 
 /// Registry of serializable spirit classes. It's a two way associative array of TypeInfo_Class[Clid].
 immutable CrossMap!(ClassInfo, Clid) _spReg_;
@@ -72,5 +76,6 @@ shared static this(){
     }
     _spReg_ = cast(immutable)spReg;
 
-    _fiberPool_ = new shared FiberPool;
+    _fiberPool_ = new shared CaldronFiberPool;
+    _threadPool_ = new shared CaldronThreadPool;
 }

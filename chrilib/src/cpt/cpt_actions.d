@@ -152,15 +152,6 @@ class A: DynamicConcept {
         assert((cast(SpA)spirit).statAction != 0, format!"Cid: %s, static action must be assigned."(this.cid));
         (cast(SpA)spirit).run(caldron);
     }
-
-    /**
-                Call static concept function.
-        Parameters:
-            caldron = name space it which static concept function will be working.
-    */
-    void run(NewCaldron caldron) {
-        assert(false, "Use the one above.");
-    }
 }
 
 /// SpA - spirit action, Cid - p0Calp1Cid

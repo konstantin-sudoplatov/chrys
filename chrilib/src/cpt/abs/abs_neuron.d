@@ -504,17 +504,8 @@ abstract class Neuron: DynamicConcept, ActivationIfc {
     */
     SpiritNeuron.Effect calculate_activation_and_get_effects(Caldron cald)
     {
-        assert(cald is atn.atn_circle_thread.caldron);
+        assert(cald is atn.atn_circle_thread.circle);
         return (cast(SpiritNeuron)spirit).selectEffects(calculate_activation(cald));
-    }
-
-    /**
-                Calculate activation value and set up the activation_ variable.
-        Returns: effects, corresponding calculated activation
-    */
-    SpiritNeuron.Effect calculate_activation_and_get_effects(NewCaldron cald)
-    {
-        assert(false, "Use the one above.");
     }
 }
 

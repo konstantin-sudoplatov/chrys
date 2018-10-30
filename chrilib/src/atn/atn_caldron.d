@@ -23,7 +23,7 @@ int dynDebug = 2;
     comes and the reasoning_() function is called again. Br
         To speed up the work pools of fibers and threads are provided.
 */
-class NewCaldron {
+class Caldron {
 
     /**
             Constructor.
@@ -251,7 +251,7 @@ class NewCaldron {
                 if      // is it a breed?
                         (auto breed = cast(Breed)cpt)
                 {   //yes: spawn the new branch
-                    CaldronThread thread = _threadPool_.pop(new NewCaldron(breed.cid));
+                    CaldronThread thread = _threadPool_.pop(new Caldron(breed.cid));
                     childCaldrons_[thread.tid] = thread;
                 }
                 else if
@@ -276,6 +276,39 @@ class NewCaldron {
     }
 }
 
+/// This class works directly with the cilent. It creates a tree of caldrons along the way and remains its root.
+/// The client can be a person, or maybe a book or a scripted task. It is something that the circle get the informational
+/// input from. It is created and deleted by the attention circle dispatcher.
+final class AttentionCircle: Caldron {
+
+    /**
+            Constructor.
+    */
+    this() {
+        // Setup chat_breed
+        Breed breed = cast(Breed)this[HardCid.chatBreed_hardcid_breed];
+        breed.tid = thisTid;
+        breed.activate;         // the breed is setup and ready
+        super(breed.cid);
+    }
+
+    override bool _processMessage(immutable Msg msg) {
+
+        if (super._processMessage(msg))
+            return true;
+        else if      // is it a Tid of the client sent by Dispatcher?
+                (auto m = cast(immutable DispatcherProvidesCircleWithUserTid_msg)msg)
+        {   //yes: wind up the userThread_tidprem concept
+            auto userThreadTidprem = (scast!(TidPrem)(this[HardCid.userThread_hardcid_tidprem]));
+            userThreadTidprem.tid = cast()m.tid;
+            userThreadTidprem.activate;
+            return true;
+        }
+        else
+            return false;
+    }
+}
+
 /// Fiber pool
 import proj_types;
 import chri_data;
@@ -287,7 +320,7 @@ synchronized class CaldronFiberPool {
             cld = caldron to setup the fiber for
         Returns: the Fiber object.
     */
-    Fiber pop(NewCaldron cld) {
+    Fiber pop(Caldron cld) {
         if      // is the stack empty?
                 ((cast()fibers_).empty)
         {
@@ -323,7 +356,7 @@ synchronized class CaldronThreadPool {
                   by the thread to call the _processMessage() function on new messages coming.
         Returns: the CaldronThread object.
     */
-    CaldronThread pop(NewCaldron cld) {
+    CaldronThread pop(Caldron cld) {
         if      // is the stack empty?
                 ((cast()threads_).empty)
         {
@@ -372,7 +405,7 @@ class CaldronThread {
         Parameters:
             cld = caldron to associate with the thread
     */
-    this(NewCaldron cld) {
+    this(Caldron cld) {
         assert(cld !is null);
         caldron_ = cld;
         myTid_ = spawn(&(cast(shared)this).caldronThreadFunc);
@@ -389,7 +422,7 @@ class CaldronThread {
         Parameters:
             cld = caldron to associate the thread with. null for disassociation.
     */
-    void reset(NewCaldron cld = null) {
+    void reset(Caldron cld = null) {
         caldron_ = cld;
         if(cld) myTid_.send(new immutable IbrStartReasoning_msg);
     }
@@ -428,9 +461,19 @@ class CaldronThread {
                         ((cast()caldron_)._processMessage(msg))
                     //yes: go for a new message
                     continue ;
+                else if // is it a request for the circle termination?
+                        (cast(TerminateApp_msg)msg)
+                {   //yes: terminate me and all my subthreads
+                    if (dynDebug >= 1)
+                        logit("terminating caldron " ~ circle.caldName);
+                    circle.terminateChildren;
+
+                    // terminate itself
+                    goto FINISH_THREAD;
+                }
                 else
                 {  // unrecognized message of type Msg. Log it.
-                    logit("Unexpected message to the caldron %s: %s".format(caldron.caldName, typeid(msg)),
+                    logit("Unexpected message to the caldron %s: %s".format(circle.caldName, typeid(msg)),
                             TermColor.brown);
                     continue ;
                 }
@@ -449,7 +492,7 @@ class CaldronThread {
                     (var.hasValue)
             {  // unrecognized message of type Variant. Log it.
                 logit(format!"Unexpected message of type Variant to the caldron %s: %s"
-                        (caldron.caldName, var.toString), TermColor.brown);
+                        (circle.caldName, var.toString), TermColor.brown);
                 continue;
             }
 
@@ -467,7 +510,7 @@ class CaldronThread {
     private Tid myTid_;
 
     /// Caldron instance to call to call the Caldron._processMessage() function.
-    private NewCaldron caldron_;
+    private Caldron caldron_;
 
     /// Message to itself to terminate.
     private class TerminationRequest {}

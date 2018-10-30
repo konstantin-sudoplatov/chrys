@@ -5,7 +5,7 @@ import std.format;
 import proj_data, proj_funcs;
 
 import messages;
-import atn.atn_circle_thread;
+import atn.atn_caldron;
 
 /**
         Thread function for attention dispatcher.
@@ -44,8 +44,8 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                     circleTid = *circleTidPtr;
                 }
                 else {  //no: create the circle, tell him the client's Tid and put the pair in the circle register
-                    circleTid = spawn(&circleThreadFunc, true, 0);
-                    circleTid.send(new immutable DispatcherSuppliesCircleWithUserTid_msg(clientTid));
+                    circleTid = new CaldronThread(new AttentionCircle);
+                    circleTid.send(new immutable DispatcherProvidesCircleWithUserTid_msg(clientTid));
                     circleRegister_[clientTid] = circleTid;
                 }
                 continue;
@@ -93,7 +93,7 @@ private:
 //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
 /// Circle's Tids by client's Tids.
-Tid[Tid] circleRegister_;
+CaldronThread[Tid] circleRegister_;
 
 //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 

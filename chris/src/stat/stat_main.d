@@ -68,13 +68,13 @@ void setDebugLevel_0_stat(Caldron ) {
 @(6, StatCallType.p0Calp1Cidp2Cid)
 void sendTidToUser_stat(Caldron cld, Cid userTidPremCid, Cid ulineBreedCid) {
     import std.concurrency: Tid, send;
-    import messages: CircleSuppliesUserWithItsTid_msg;
+    import messages: CircleProvidesUserWithItsTid_msg;
     checkCid!TidPrem(cld, userTidPremCid);
     checkCid!Breed(cld, ulineBreedCid);
 
     auto userTidPrem = cast(TidPrem)cld[userTidPremCid];
     auto ulineBreed = cast(Breed)cld[ulineBreedCid];
-    send(userTidPrem.tid, new immutable CircleSuppliesUserWithItsTid_msg(ulineBreed.tid));
+    send(userTidPrem.tid, new immutable CircleProvidesUserWithItsTid_msg(ulineBreed.tid));
 }
 
 /**

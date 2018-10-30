@@ -118,7 +118,7 @@ final class Breed: Premise {
     }
 
     /// Getter.
-    const(Cid) seed() const {
+    Cid seed() const {
         return (cast(immutable SpBreed)spirit).seed;
     }
 }

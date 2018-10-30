@@ -53,7 +53,7 @@ void circleThreadFunc() {try{
                     (cast(TerminateApp_msg)msg)
             {   //yes: terminate me and all my subthreads
                 if (dynDebug >= 1)
-                    logit("terminating caldron " ~ circle.caldName);
+                    logit("terminating caldron " ~ circle.cldName);
                 circle.terminateChildren;
 
                 // terminate itself
@@ -62,7 +62,7 @@ void circleThreadFunc() {try{
             else
             {  // unrecognized message of type Msg. Log it.
                 logit(format!"Unexpected message to the caldron %s: %s"
-                        (circle.caldName, typeid(msg)), TermColor.brown);
+                        (circle.cldName, typeid(msg)), TermColor.brown);
                 continue ;
             }
         }
@@ -75,7 +75,7 @@ void circleThreadFunc() {try{
                 (var.hasValue)
         {  // unrecognized message of type Variant. Log it.
             logit(format!"Unexpected message of type Variant to the caldron %s: %s"
-                    (circle.caldName, var.toString), TermColor.brown);
+                    (circle.cldName, var.toString), TermColor.brown);
             continue;
         }
 

@@ -11,6 +11,16 @@ import atn.atn_caldron;
 
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
+/// Get name of a concept, if exists.
+string cptName(Cid cid) {
+    return cid in _nm_? _nm_[cid]: "noname";
+}
+
+/// Adapter.
+string cptName(DcpDescriptor dc) {
+    return dc.cid in _nm_? _nm_[dc.cid]: "noname";
+}
+
 /**
             Check up availability and type of a concept by its cid.
     Parameters:
@@ -33,22 +43,6 @@ void checkCid(T)(Caldron caldron, Cid cid)
         assert((cast(T)caldron[cid]),
                 format!"Cid: %s, must be of type %s and it is of type %s."
                         (cid, T.stringof, typeid(caldron[cid])));
-}
-
-/// Safe cast of spirit concepts
-T scast(T: SpiritConcept)(Cid cid) {
-    assert(_maps_filled_);
-    checkCid!T(cid);
-    return cast(T)_sm_[cid];
-}
-
-/// Safe cast of live concepts
-T scast(T)(Caldron caldron, Cid cid)
-    if(is(T: Concept) || is(T == interface))
-{
-    assert(_cranked_);
-    checkCid!T(caldron, cid);
-    return cast(T)caldron[cid];
 }
 
 /**
@@ -185,6 +179,11 @@ synchronized final pure nothrow class SpiritMap {
                 throw new RangeError("There is no concept cid = %s(\"%s\") in DB.".format(cid,
                         cid in _nm_? _nm_[cid]: "noname"));
         }
+    }
+
+    /// Adapter
+    SpiritConcept opIndex(DcpDescriptor dc) {
+        return this[dc.cid];
     }
 
     /**

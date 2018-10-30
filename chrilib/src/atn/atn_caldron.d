@@ -31,18 +31,11 @@ class Caldron {
             breedCid = breed to start with
     */
     this(Cid breedCid) {
-
-        assert(cast(Breed)this[breedCid],
-                format!"Cid: %s, this concept must be of Seed or Breed type, not of %s."
-                        (breedCid, typeid(this[breedCid])));
+        checkCid!SpBreed(breedCid);
 
         auto breed = cast(Breed)this[breedCid];
-        breed.tid = thisTid;
-        breed.activate;         // the local instance of the breed is setup and ready
-        headCid_ = seedCid_ = breed.seed;
-
-        // Kick off the reasoning cycle
-//        thisTid.send(new immutable IbrStartReasoning_msg);
+        breedCid_ = breed.cid;
+        headCid_ = breed.seed;
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -57,8 +50,7 @@ class Caldron {
         Returns: the live concept object
     */
     final Concept opIndex(Cid cid) {
-        assert(cid in _sm_, "Cid %s(%s) is not there in the spirit map.".format(cid,
-                (cid in _nm_)? _nm_[cid]: "noname"));
+        assert(cid in _sm_, "Cid %s(%s) is not there in the spirit map.".format(cid, cptName(cid)));
         if
                 (auto p = cid in lm_)
             return *p;
@@ -70,6 +62,7 @@ class Caldron {
     final Concept opIndex(DcpDescriptor cd) {
         return this[cd.cid];
     }
+
 
     /**
             Assign a concept to the local map. Overload for the index assignment operation. Used for injection of concepts,
@@ -96,14 +89,19 @@ class Caldron {
             child.send(new immutable TerminateApp_msg);
     }
 
-    // Caldron's name (based on the seed), if exist, else "noname".
-    final string caldName() {
+    /// Caldron's name (based on the seed), if exist, else "noname".
+    final string cldName() {
         import std.array: replace;
 
-        if (auto nmp = seedCid_ in _nm_)
+        if (auto nmp = breed.seed in _nm_)
             return (*nmp).replace("_seed", "");
         else
             return "noname";
+    }
+
+    /// Get breed of the caldron
+    final Breed breed() {
+        return scast!Breed(this[breedCid_]);
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -130,7 +128,7 @@ class Caldron {
                 (cast(IbrStartReasoning_msg)msg)
         {   // kick off the reasoning loop
             if (dynDebug >= 1)
-                logit(format!"%s, message StartReasoningMsg has come"(caldName), TermColor.brown);
+                logit(format!"%s, message StartReasoningMsg has come"(cldName), TermColor.brown);
 
             reasoning_;
             return true;
@@ -140,7 +138,7 @@ class Caldron {
         {
             if(dynDebug >= 1)
                 logit(format!"%s, message IbrSetActivationMsg has come, %s.activation = %s"
-                        (caldName, _nm_[m.destConceptCid], m.activation), TermColor.brown);
+                        (cldName, cptName(m.destConceptCid), m.activation), TermColor.brown);
 
             if      // is it bin activation?
                     (auto cpt = cast(BinActivationIfc)this[m.destConceptCid])
@@ -159,7 +157,7 @@ class Caldron {
         {   //yes: it's already a clone, inject into the current name space (may be with overriding)
             if (dynDebug >= 1)
                 logit(format!"%s, message SingleConceptPackageMsg has come, load: %s(%,?s)"
-                        (caldName, _nm_[m.load.cid], '_', m.load.cid), TermColor.brown);
+                        (cldName, cptName(m.load.cid), '_', m.load.cid), TermColor.brown);
 
             this[] = cast()m.load;      // inject
             reasoning_;                 // kick off
@@ -169,7 +167,7 @@ class Caldron {
                 (auto m = cast(immutable UserTalksToCircle_msg)msg)
         {   //yes: put the text into the userInput_strprem concept
             if (dynDebug >= 1)
-                logit(format!"%s, message UserTalksToCircleMsg has come, text: %s"(caldName, m.line), TermColor.brown);
+                logit(format!"%s, message UserTalksToCircleMsg has come, text: %s"(cldName, m.line), TermColor.brown);
 
             auto cpt = scast!StringQueuePrem(this[HardCid.userInputBuffer_hardcid_strqprem]);
             cpt.push(m.line);
@@ -186,8 +184,8 @@ class Caldron {
     //
     //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
 
-    /// Seed for this caldron.
-    private Cid seedCid_;
+    /// Breed for this caldron.
+    private Cid breedCid_;
 
     /// Caldrons, that were parented here.
     private CaldronThread[Tid] childCaldrons_;
@@ -211,47 +209,39 @@ class Caldron {
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     private void reasoning_() {
-        if (dynDebug >= 1) logit("Caldron %s, entering level %s.".format(caldName, depth_), TermColor.green);
-        depth_++;
-        const Cid headCid = headCid_;
+        if (dynDebug >= 1) logit("%s, entering".format(cldName), TermColor.blue);
+        //if (dynDebug >= 1) logit("%s, entering level %s".format(cldName, depth_), TermColor.blue);
+//        depth_++;
         wait_ = stop_ = false;
 
+        Neuron head = scast!Neuron(this[headCid_]);
         while(true) {
-            Neuron head = scast!Neuron(this[headCid_]);
+            // Put on the head
+            if (dynDebug >= 1)
+                    logit("%s, headCid_: %s(%,?s)".format(cldName, cptName(headCid_), '_', headCid_), TermColor.blue);
 
             // Process the head, determine effects and do the actions.
             auto effect = head.calculate_activation_and_get_effects(this);
             foreach(actCid; effect.actions) {
                 if (dynDebug >= 1)
-                    logit("%s, action: %s(%,?s)".format(caldName, _nm_[actCid], '_', actCid), TermColor.green);
+                    logit("%s, action: %s(%,?s)".format(cldName, cptName(actCid), '_', actCid), TermColor.blue);
                 A act = scast!A(this[actCid]);
                 act.run(this);
             }
 
-            // May be the actions raised the stop_ or wait_ flags.
-            if (wait_) {
-                if (dynDebug >= 1) logit("Caldron %s, yielding level %s on wait.".format(caldName, depth_),
-                        TermColor.green);
-                depth_--;
-                Fiber.yield;
-            }
-            else if (stop_) {
-                assert(!cast(AttentionCircle)this, "Attention circle cannot be stopped by the stop_ flag.");
-                if (dynDebug >= 1) logit("Caldron %s, leaving level %s on stop.".format(caldName, depth_),
-                        TermColor.green);
-                depth_--;
-                return;
-            }
-
             // Do branching and extract the grafts and the new head neuron.
             Graft[] grafts;
-            Neuron newHead;
+            head = null;
             foreach(cid; effect.branches) {
                 const Concept cpt = this[cid];
                 if      // is it a breed?
                         (auto breed = cast(Breed)cpt)
                 {   //yes: spawn the new branch
-                    CaldronThread thread = _threadPool_.pop(new Caldron(breed.cid));
+                    if(dynDebug >= 1) logit("%s, spawning %s(%,?s)".format(cldName, cptName(cid), '_', cid),
+                            TermColor.blue);
+                    CaldronThread thread = _threadPool_.pop(new Caldron(cid));
+                    breed.tid = thread.tid;     // wind up our instance
+                    breed.activate;             // of the breed
                     childCaldrons_[thread.tid] = thread;
                 }
                 else if
@@ -260,16 +250,35 @@ class Caldron {
                 else if
                         (auto nrn = cast(Neuron)cpt)
                 {
-                    enforce(newHead is null, "Neuron %s(%s) is the second neuron in branches, and there can" ~
-                            "only be one. effec.branches = %s".format(cid, (cid in _nm_? _nm_[cid]: "noname"),
-                            effect.branches));
-                    newHead = nrn;
+                    enforce(head is null, "Neuron %s(%,?s) is the second neuron in branches, and there can" ~
+                            "only be one. effec.branches = %s".format(cptName(cid), '_', cid, effect.branches));
+                    if(dynDebug >= 2) logit("%s, assigned new head %s(%,?s)".format(cldName, cptName(cid), '_', cid),
+                            TermColor.green);
+                    head = nrn;         // new head
+                    headCid_ = cid;
                 }
                 else {
-                    logit("Unexpected concept %s(%s) %s".format(cid, (cid in _nm_? _nm_[cid]: "noname"),
+                    logit("%s, unexpected concept %s(%,?s) %s".format(cldName, cptName(cid), '_', cid,
                             cid in _sm_? _sm_[cid].toString: "not in _sm_"), TermColor.red);
                 }
             }
+
+            // May be the actions raised the stop_ or wait_ flags.
+            if (wait_ || head is null) {
+                if (dynDebug >= 1) logit("%s, leaving".format(cldName), TermColor.blue);
+                return;
+                //if (dynDebug >= 1) logit("%s, yielding level %s on wait".format(cldName, depth_),
+                //        TermColor.blue);
+                //depth_--;
+                //Fiber.yield;
+            }
+            //else if (stop_) {
+            //    assert(!cast(AttentionCircle)this, "Attention circle cannot be stopped by the stop_ flag.");
+            //    if (dynDebug >= 1) logit("%s, leaving level %s on stop".format(cldName, depth_),
+            //            TermColor.blue);
+            //    depth_--;
+            //    return;
+            //}
 
         }
 
@@ -284,13 +293,7 @@ final class AttentionCircle: Caldron {
     /**
             Constructor.
     */
-    this() {
-        // Setup chat_breed
-        Breed breed = cast(Breed)this[HardCid.chatBreed_hardcid_breed];
-        breed.tid = thisTid;
-        breed.activate;         // the breed is setup and ready
-        super(breed.cid);
-    }
+    this() { super(HardCid.chatBreed_hardcid_breed.cid); }
 
     override bool _processMessage(immutable Msg msg) {
 
@@ -380,7 +383,7 @@ synchronized class CaldronThreadPool {
         if      // is pool able of storing the thread?
                 ((cast()threads_).length <= CALDRON_THREAD_POOL_SIZE)
         {   //yes: disassociate it from the caldron and save it
-            thread.reset;
+            thread.mothball;
             (cast()threads_).push(thread);
         }
         else { //no: terminate the thread
@@ -409,7 +412,10 @@ class CaldronThread {
         assert(cld !is null);
         caldron_ = cld;
         myTid_ = spawn(&(cast(shared)this).caldronThreadFunc);
-        myTid_.send(new immutable IbrStartReasoning_msg);
+        Breed cldBreed = cld.breed;
+        cldBreed.tid = myTid_;
+        cldBreed.activate;         // the local instance of the breed is setup and ready
+        myTid_.send(new immutable IbrStartReasoning_msg);   // kick off the reasoning cycle
     }
 
     /// Destructor terminates thread. To terminate it explicitely call destroy(this).
@@ -418,13 +424,24 @@ class CaldronThread {
     }
 
     /**
-            Disassociate current caldron from the thread or reassociate thread with the new caldron.
+            Reassociate thread with the new caldron.
         Parameters:
-            cld = caldron to associate the thread with. null for disassociation.
+            cld = caldron to associate the thread with.
     */
-    void reset(Caldron cld = null) {
+    void reset(Caldron cld) {
+        assert(cld);
+        assert(caldron_ is null);
+        cld.breed.tid = myTid_;
+        cld.breed.activate;
         caldron_ = cld;
-        if(cld) myTid_.send(new immutable IbrStartReasoning_msg);
+        myTid_.send(new immutable IbrStartReasoning_msg);
+    }
+
+    /**
+            Deactivate Thread.
+    */
+    void mothball() {
+        caldron_ = null;
     }
 
     /// Get Tid.
@@ -455,9 +472,8 @@ class CaldronThread {
             // Recognize and process the message
             if      // is it a regular message?
                     (msg)
-            {   // process it
-                //Send the message to caldron
-                if // processed by caldron?
+            {   // yes: send the message to caldron
+                if      // recognized and processed by caldron?
                         ((cast()caldron_)._processMessage(msg))
                     //yes: go for a new message
                     continue ;
@@ -465,7 +481,7 @@ class CaldronThread {
                         (cast(TerminateApp_msg)msg)
                 {   //yes: terminate me and all my subthreads
                     if (dynDebug >= 1)
-                        logit("terminating caldron " ~ circle.caldName);
+                        logit("terminating caldron " ~ circle.cldName);
                     circle.terminateChildren;
 
                     // terminate itself
@@ -473,7 +489,7 @@ class CaldronThread {
                 }
                 else
                 {  // unrecognized message of type Msg. Log it.
-                    logit("Unexpected message to the caldron %s: %s".format(circle.caldName, typeid(msg)),
+                    logit("Unexpected message to the caldron %s: %s".format(circle.cldName, typeid(msg)),
                             TermColor.brown);
                     continue ;
                 }
@@ -492,7 +508,7 @@ class CaldronThread {
                     (var.hasValue)
             {  // unrecognized message of type Variant. Log it.
                 logit(format!"Unexpected message of type Variant to the caldron %s: %s"
-                        (circle.caldName, var.toString), TermColor.brown);
+                        (circle.cldName, var.toString), TermColor.brown);
                 continue;
             }
 

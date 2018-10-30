@@ -2,7 +2,7 @@
 /// HolyConcept.
 module cpt.abs.abs_concept;
 import std.stdio;
-import std.format, std.typecons, std.string;
+import std.typecons, std.string;
 
 import proj_data, proj_funcs;
 
@@ -107,9 +107,9 @@ abstract class SpiritConcept {
         import std.format: format;
 
         if(auto p = cid in _nm_)
-            return format!"%s(%s): %,3?s(%s)"(*p, typeid(this), '_', cid, '_', ver);
+            return "%s(%s): %,3?s(%s)".format(*p, typeid(this), '_', cid, '_', ver);
         else
-            return format!"noname(%s): %,3?s(%s)"(typeid(this), '_', cid, '_', ver);
+            return "noname(%s): %,3?s(%s)".format(typeid(this), '_', cid, '_', ver);
     }
 
     //---***---***---***---***---***--- types ---***---***---***---***---***--
@@ -175,8 +175,8 @@ abstract class Concept {
         import std.format: format;
         import std.array: replace;
 
-        string s = format!"%s(%s):"(_nm_[spirit.cid], typeid(this));
-        s ~= format!"\nsp = %s"(spirit.toString).replace("\n", "\n    ");
+        string s = "%s(%s):".format(cptName(spirit.cid), typeid(this));
+        s ~= "\nsp = %s".format(spirit.toString).replace("\n", "\n    ");
         return s;
     }
 

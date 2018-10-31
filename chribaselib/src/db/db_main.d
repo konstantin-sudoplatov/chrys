@@ -122,7 +122,7 @@ struct TableParams {
         if      // not empty string?
                 (*pc != 0)
             return to!string(pc);
-        else //no: make difference betwee the null and empty string
+        else //no: make difference between the null and empty string
             if(PQgetisnull(res, 0, 0))
                 return null;
             else

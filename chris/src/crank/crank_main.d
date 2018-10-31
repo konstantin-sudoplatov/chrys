@@ -6,7 +6,6 @@ import proj_data;
 import chri_types, chri_data;
 import crank.crank_types, crank.crank_registry;
 import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises;
-import atn.atn_circle_thread;
 
 import stat.stat_types, stat.stat_main;
 
@@ -75,7 +74,7 @@ enum Chat: DcpDescriptor {
     /// Setting up the uline branch (see actions below)
     /// After chat starts the uline branch, it sends user its own breed. Also it sends uline Tid of the user thread
     /// (console or http), so that uline could talk to user.
-    shakeHandsWithUline_anrn_chat = cd!(SpActionNeuron, 3_996_466_002),
+    shakeHandsWithUline_andnrn_chat = cd!(SpAndNeuron, 3_996_466_002),
 
     /// The action for the handshaker. After chat starts the uline branch, it sends user its own breed.
     sendUlineChatBreed_c2act_chat = cd!(SpA_CidCid, 553_436_801),
@@ -101,26 +100,29 @@ void chatBranch() {
         //],
         null,
         [   // brans
-            shakeHandsWithUline_anrn_chat,    // handshake with uline
+            shakeHandsWithUline_andnrn_chat,    // handshake with uline
             uline_breed                         // start uline branch
         ]
     );
 
     // Handshake with uline
+        //prems
+    cp!shakeHandsWithUline_andnrn_chat.addPremises(userTid_tidprem_hcid);
+        // acts
     cp!sendUlineChatBreed_c2act_chat.load(statCid!sendConceptToBranch_stat, uline_breed, chatBreed_breed_hcid);
     cp!sendUlineUserTid_c2act_chat.load(statCid!sendConceptToBranch_stat, uline_breed, userTid_tidprem_hcid);
     cp!activateRemotely_readyForUlineInput_c2act_chat.load(statCid!activateRemotely_stat, uline_breed,
     chatReadyForUlineInputPeg_pegprem_uline);
-    cp!shakeHandsWithUline_anrn_chat.addEffects(
+        // nrn
+    cp!shakeHandsWithUline_andnrn_chat.addEffects(
+        float.infinity,
         [   // acts
             sendUlineChatBreed_c2act_chat,       // give uline own breed
-logCpt_0_cact,
             sendUlineUserTid_c2act_chat,         // give uline user's Tid
             activateRemotely_readyForUlineInput_c2act_chat,    // tell uline to send next line
         ],
         valveOnUlineInput_andnrn_chat
     );
-cp!logCpt_0_cact.load(userTid_tidprem_hcid);
 
     // Wait on the user input
     cp!valveOnUlineInput_andnrn_chat.addPremises(userInputLine_strprem);

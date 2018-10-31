@@ -5,7 +5,6 @@ import proj_data;
 
 import chri_data;
 import cpt.cpt_types, cpt.abs.abs_concept;
-import atn.atn_circle_thread;
 
 /**
             Static concept.

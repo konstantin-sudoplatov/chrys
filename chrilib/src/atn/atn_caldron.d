@@ -8,10 +8,9 @@ import chri_types;
 import messages;
 import cpt.abs.abs_concept, cpt.abs.abs_neuron;
 import cpt.cpt_interfaces, cpt.cpt_neurons, cpt.cpt_actions, cpt.cpt_premises;
-import atn.atn_circle_thread;
 
 /// The debug level switch, controlled from the conceptual level.
-int dynDebug = 2;
+int dynDebug = 0;
 
 /**
         Workspace for a reasoning branch. It contains its own set of live concepts, can process messages coming to it
@@ -91,7 +90,10 @@ class Caldron {
     /// Send children the termination signal and wait their termination.
     final void terminateChildren() {
         foreach (child; childCaldrons_.byKey)
-            child.send(new immutable TerminateApp_msg);
+            try {
+                child.send(new immutable TerminateApp_msg);
+            } catch(Throwable){}
+        childCaldrons_ = null;
     }
 
     /// Caldron's name (based on the seed), if exist, else "noname".
@@ -112,7 +114,7 @@ class Caldron {
     /// Raise the checkPt_ flag. It is raised by the checkup action, checked in the reasoning cycle and then immediately
     /// reset. Designed as a condition on which the debugger break point could be set.
     final void checkUp() {
-        checkPt_ = true;
+        debug checkPt_ = true;
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -139,7 +141,7 @@ class Caldron {
                 (cast(IbrStartReasoning_msg)msg)
         {   // kick off the reasoning loop
             if (dynDebug >= 1)
-                logit(format!"%s, message StartReasoningMsg has come"(cldName), TermColor.brown);
+                logit("%s, message StartReasoningMsg has come".format(cldName), TermColor.brown);
 
             reasoning_;
             return true;
@@ -148,8 +150,8 @@ class Caldron {
                 (auto m = cast(immutable IbrSetActivation_msg)msg)
         {
             if(dynDebug >= 1)
-                logit(format!"%s, message IbrSetActivationMsg has come, %s.activation = %s"
-                        (cldName, cptName(m.destConceptCid), m.activation), TermColor.brown);
+                logit("%s, message IbrSetActivationMsg has come, %s.activation = %s".format(cldName,
+                        cptName(m.destConceptCid), m.activation), TermColor.brown);
 
             if      // is it bin activation?
                     (auto cpt = cast(BinActivationIfc)this[m.destConceptCid])
@@ -167,8 +169,8 @@ class Caldron {
                 (auto m = cast(immutable IbrSingleConceptPackage_msg)msg)
         {   //yes: it's already a clone, inject into the current name space (may be with overriding)
             if (dynDebug >= 1)
-                logit(format!"%s, message SingleConceptPackageMsg has come, load: %s(%,?s)"
-                        (cldName, cptName(m.load.cid), '_', m.load.cid), TermColor.brown);
+                logit("%s, message SingleConceptPackageMsg has come, load: %s(%,?s)".format(cldName,
+                        cptName(m.load.cid), '_', m.load.cid), TermColor.brown);
 
             this[] = cast()m.load;      // inject
             reasoning_;                 // kick off
@@ -178,7 +180,7 @@ class Caldron {
                 (auto m = cast(immutable UserTalksToCircle_msg)msg)
         {   //yes: put the text into the userInput_strprem concept
             if (dynDebug >= 1)
-                logit(format!"%s, message UserTalksToCircleMsg has come, text: %s"(cldName, m.line), TermColor.brown);
+                logit("%s, message UserTalksToCircleMsg has come, text: %s".format(cldName, m.line), TermColor.brown);
 
             auto cpt = scast!StringQueuePrem(this[HardCid.userInputBuffer_strqprem_hcid]);
             cpt.push(m.line);
@@ -224,6 +226,7 @@ class Caldron {
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     private void reasoning_() {
+//int i; if(i == 0) return;
         if (dynDebug >= 1) logit("%s, entering".format(cldName), TermColor.blue);
         //if (dynDebug >= 1) logit("%s, entering level %s".format(cldName, depth_), TermColor.blue);
 //        depth_++;
@@ -323,9 +326,13 @@ final class AttentionCircle: Caldron {
         else if      // is it a Tid of the client sent by Dispatcher?
                 (auto m = cast(immutable DispatcherProvidesCircleWithUserTid_msg)msg)
         {   //yes: wind up the userThread_tidprem concept
+            if(dynDebug >= 1)
+                    logit("%s, message DispatcherProvidesCircleWithUserTid_msg has come, %s".format(cldName,
+                    m.tid), TermColor.brown);
             auto userThreadTidprem = (scast!TidPrem(this[HardCid.userTid_tidprem_hcid]));
             userThreadTidprem.tid = cast()m.tid;
             userThreadTidprem.activate;
+            reasoning_;
             return true;
         }
         else
@@ -441,7 +448,7 @@ class CaldronThread {
 
     /// Destructor terminates thread. To terminate it explicitely call destroy(this).
     ~this() {
-        send(myTid_, cast(shared) new TerminationRequest);
+        send(myTid_, cast(shared) new CaldronThreadTerminationRequest);
     }
 
     /**
@@ -480,12 +487,12 @@ class CaldronThread {
 
             immutable Msg msg;
             Throwable ex;
-            TerminationRequest term;
+            CaldronThreadTerminationRequest term;
             Variant var;    // the catchall type
 
             receive(
                 (immutable Msg m) { (cast()msg) = cast()m; },
-                (shared TerminationRequest t) { term = cast()t; },
+                (shared CaldronThreadTerminationRequest t) { term = cast()t; },
                 (shared Throwable e) { ex = cast()e; },
                 (Variant v) { var = v; }          // the catchall clause
             );
@@ -502,21 +509,22 @@ class CaldronThread {
                         (cast(TerminateApp_msg)msg)
                 {   //yes: terminate me and all my subthreads
                     if (dynDebug >= 1)
-                        logit("terminating caldron " ~ circle.cldName);
-                    circle.terminateChildren;
+                            logit("%s, message TerminateApp_msg has come, terminating caldron".format(
+                            (cast()caldron_).cldName), TermColor.brown);
+                    (cast()caldron_).terminateChildren;
 
                     // terminate itself
                     goto FINISH_THREAD;
                 }
                 else
                 {  // unrecognized message of type Msg. Log it.
-                    logit("Unexpected message to the caldron %s: %s".format(circle.cldName, typeid(msg)),
+                    logit("Unexpected message to the caldron %s: %s".format((cast()caldron_).cldName, typeid(msg)),
                             TermColor.brown);
                     continue ;
                 }
             }
             else if // is it a request for the thread termination?
-                    (cast(TerminationRequest)term)
+                    (cast(CaldronThreadTerminationRequest)term)
             {   //yes: terminate itself
                 goto FINISH_THREAD;
             }
@@ -529,13 +537,17 @@ class CaldronThread {
                     (var.hasValue)
             {  // unrecognized message of type Variant. Log it.
                 logit(format!"Unexpected message of type Variant to the caldron %s: %s"
-                        (circle.cldName, var.toString), TermColor.brown);
+                        ((cast()caldron_).cldName, var.toString), TermColor.brown);
                 continue;
             }
 
         }
         FINISH_THREAD:
-    } catch(Throwable e) { send(ownerTid, cast(shared)e); }}
+    } catch(Throwable e) {
+        (cast()caldron_).terminateChildren;
+        send(ownerTid, cast(shared)e);
+    }
+}
 
     //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
     //
@@ -550,7 +562,7 @@ class CaldronThread {
     private Caldron caldron_;
 
     /// Message to itself to terminate.
-    private class TerminationRequest {}
+    private class CaldronThreadTerminationRequest {}
 }
 
 

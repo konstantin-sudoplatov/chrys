@@ -8,7 +8,6 @@ import proj_data, proj_funcs;
 
 import cpt.cpt_types, cpt.cpt_registry;
 import chri_types, chri_data;
-import atn.atn_circle_thread;
 import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_interfaces;
 
 /// External runtime function, that creates a new object by its ClassInfo. No constructors are called, though static

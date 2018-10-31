@@ -10,7 +10,7 @@ import proj_data, proj_funcs;
 
 import chri_types, chri_data;
 import cpt.cpt_types, cpt.abs.abs_concept, cpt.cpt_stat;
-import atn.atn_caldron, atn.atn_circle_thread;
+import atn.atn_caldron;
 
 /// Spirit Action. Runs a static concept function with signature p0Cal.
 @(1) class SpA: SpiritDynamicConcept {

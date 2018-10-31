@@ -1,4 +1,5 @@
 module atn.atn_dispatcher_thread;
+import std.stdio;
 import std.concurrency;
 import std.format;
 
@@ -68,6 +69,9 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
         else if // exception message?
                 (ex)
         {   // rethrow exception
+            foreach(circle; circleRegister_.byValue){
+                circle.tid.send(new immutable TerminateApp_msg);
+            }
             throw ex;
         }
         else if // has come an unexpected message?

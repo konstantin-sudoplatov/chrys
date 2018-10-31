@@ -7,7 +7,7 @@ import proj_data, proj_funcs;
 import cpt.cpt_types, cpt.abs.abs_concept;
 import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises;
 
-import atn.atn_caldron, atn.atn_circle_thread;
+import atn.atn_caldron;
 import chri_types, chri_data;
 import cpt.cpt_interfaces;
 

@@ -1,5 +1,7 @@
 /// Unsorted static concepts
 module stat.stat_main;
+import std.stdio;
+import std.string;
 
 import proj_data, proj_funcs;
 
@@ -45,7 +47,7 @@ void logConcept_stat(Caldron cld, Cid conceptCid) {
 */
 @(3, StatCallType.p0Cal)
 void setDebugLevel_1_stat(Caldron ) {
-    import atn.atn_circle_thread: dynDebug;
+    import atn.atn_caldron: dynDebug;
     dynDebug = 1;
 }
 
@@ -56,7 +58,7 @@ void setDebugLevel_1_stat(Caldron ) {
 */
 @(4, StatCallType.p0Cal)
 void setDebugLevel_2_stat(Caldron ) {
-    import atn.atn_circle_thread: dynDebug;
+    import atn.atn_caldron: dynDebug;
     dynDebug = 2;
 }
 
@@ -67,7 +69,7 @@ void setDebugLevel_2_stat(Caldron ) {
 */
 @(5, StatCallType.p0Cal)
 void setDebugLevel_0_stat(Caldron ) {
-    import atn.atn_circle_thread: dynDebug;
+    import atn.atn_caldron: dynDebug;
     dynDebug = 0;
 }
 
@@ -174,7 +176,7 @@ void anactivateRemotely_stat(Caldron cld, Cid destBreedCid, Cid cptCid) {
 }
 
 /**
-        Send concept object to a branch. The concept is injected into the branch's name space. If there is already such a concept
+        Send concept object to a branch. The concept is injected into the branch's name space. If there is already such concept
     in the branch name space, it will be overriden. The concept is cloned on sending, so that receiving side will get the
     concept as it was at the moment of calling this function. If it were cloned on the receiving side it could get changed
     during the traveling time.
@@ -188,6 +190,9 @@ void sendConceptToBranch_stat(Caldron cld, Cid breedCid, Cid loadCid) {
     import std.concurrency: Tid, send;
     import messages: IbrSingleConceptPackage_msg;
     checkCid!Concept(cld, loadCid);
+    Concept cpt = cld[loadCid];
+    assert(!cast(ActivationIfc)cpt || (cast(ActivationIfc)cpt).activation > 0,
+            "%s, %s(%,?s) is anactivated, which should not be.".format(cld.cldName, cptName(loadCid), '_', loadCid));
 
     Breed br = scast!(Breed)(cld[breedCid]);
     try {

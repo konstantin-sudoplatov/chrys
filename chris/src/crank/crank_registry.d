@@ -48,11 +48,10 @@ DynDescriptor[] createDynDescriptors() {
     dds.sort;
 
     // Check if cids in the array are unique.
-    Cid lastCid = 0;
+    DynDescriptor lastD;
     foreach(d; dds) {
-        assert(d.cid > lastCid, "cid: "~ to!string(d.cid) ~ ", name: " ~ d.name ~
-                " - cids cannot be used multiple times.");
-        lastCid = d.cid;
+        assert(d.cid > lastD.cid, "cid "~ to!string(d.cid) ~ "(" ~ d.name ~ ") is already used by " ~ lastD.name);
+        lastD = d;
     }
 
     return dds;

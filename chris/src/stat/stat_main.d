@@ -12,7 +12,19 @@ import chri_data, chri_types;
 /// Raise stop flag on a caldron.
 @(1, StatCallType.p0Cal)
 void wait_stat(Caldron cld){
-    cld.requestWait();
+    cld.requestWait;
+}
+
+/// Raise stop flag on a caldron.
+@(15, StatCallType.p0Cal)
+void stop_stat(Caldron cld){
+    cld.requestStop;
+}
+
+/// Raise stop flag on a caldron.
+@(16, StatCallType.p0Cal)
+void checkUp_stat(Caldron cld){
+    cld.checkUp;
 }
 
 /**

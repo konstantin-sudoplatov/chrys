@@ -1,6 +1,6 @@
 module base_proba;
 import std.stdio: writeln, writefln, stdout;
-import std.typecons;
+import std.string, std.typecons;
 
 import base_proba2;
 
@@ -12,3 +12,4 @@ version(unittest) {
 // We need an executable in debug and unittest modes in order to run the Gnu Debugger on.
 debug void main() {
 }
+

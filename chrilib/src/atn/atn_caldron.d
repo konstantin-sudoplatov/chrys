@@ -78,9 +78,14 @@ class Caldron {
         return lm_[cpt.cid] = cpt;
     }
 
-    /// Request exiting from the reasoning_() function. This flag is lower on coming next StartReasoningMsg message.
+    /// Request for leaving the reasoning_() function and receiving next message. This flag is lower at the start of the reasoning cycle.
     final void requestWait() {
         wait_ = true;
+    }
+
+    /// Request for finishing a branch. This flag is lower at the start of the reasoning cycle.
+    final void requestStop() {
+        stop_ = true;
     }
 
     /// Send children the termination signal and wait their termination.
@@ -102,6 +107,12 @@ class Caldron {
     /// Get breed of the caldron
     final Breed breed() {
         return scast!Breed(this[breedCid_]);
+    }
+
+    /// Raise the checkPt_ flag. It is raised by the checkup action, checked in the reasoning cycle and then immediately
+    /// reset. Designed as a condition on which the debugger break point could be set.
+    final void checkUp() {
+        checkPt_ = true;
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -169,7 +180,7 @@ class Caldron {
             if (dynDebug >= 1)
                 logit(format!"%s, message UserTalksToCircleMsg has come, text: %s"(cldName, m.line), TermColor.brown);
 
-            auto cpt = scast!StringQueuePrem(this[HardCid.userInputBuffer_hardcid_strqprem]);
+            auto cpt = scast!StringQueuePrem(this[HardCid.userInputBuffer_strqprem_hcid]);
             cpt.push(m.line);
             cpt.activate;       // the premise is ready
             reasoning_;         // kick off
@@ -206,6 +217,10 @@ class Caldron {
     /// Level of recursion of the reasoning_() function. 0 - the lowest
     private int depth_;
 
+    debug
+        /// Raised by the checkup action and reset at the beginning of the next reasoning cycle
+        private bool checkPt_;
+
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     private void reasoning_() {
@@ -213,6 +228,7 @@ class Caldron {
         //if (dynDebug >= 1) logit("%s, entering level %s".format(cldName, depth_), TermColor.blue);
 //        depth_++;
         wait_ = stop_ = false;
+        debug checkPt_ = false;
 
         Neuron head = scast!Neuron(this[headCid_]);
         while(true) {
@@ -227,6 +243,11 @@ class Caldron {
                     logit("%s, action: %s(%,?s)".format(cldName, cptName(actCid), '_', actCid), TermColor.blue);
                 A act = scast!A(this[actCid]);
                 act.run(this);
+
+                // Check the checkPt_ flag, that could be raised by an action
+                debug if(checkPt_) {
+                    int dummy;      // point for debugger to break
+                }
             }
 
             // Do branching and extract the grafts and the new head neuron.
@@ -293,7 +314,7 @@ final class AttentionCircle: Caldron {
     /**
             Constructor.
     */
-    this() { super(HardCid.chatBreed_hardcid_breed.cid); }
+    this() { super(HardCid.chatBreed_breed_hcid.cid); }
 
     override bool _processMessage(immutable Msg msg) {
 
@@ -302,7 +323,7 @@ final class AttentionCircle: Caldron {
         else if      // is it a Tid of the client sent by Dispatcher?
                 (auto m = cast(immutable DispatcherProvidesCircleWithUserTid_msg)msg)
         {   //yes: wind up the userThread_tidprem concept
-            auto userThreadTidprem = (scast!(TidPrem)(this[HardCid.userThread_hardcid_tidprem]));
+            auto userThreadTidprem = (scast!TidPrem(this[HardCid.userTid_tidprem_hcid]));
             userThreadTidprem.tid = cast()m.tid;
             userThreadTidprem.activate;
             return true;

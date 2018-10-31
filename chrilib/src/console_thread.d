@@ -33,8 +33,6 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
     // Request creation of an attention circle thread and receive its Tid
     do {
         send(cast()_attnDispTid_, new immutable UserRequestsCircleTid_msg());
-//(cast()_mainTid_).send(new immutable TerminateApp_msg());
-//int i; if(i==0) goto FINISH_THREAD;
         CircleProvidesUserWithItsTid_msg msg;
         bool gotMsg = receiveTimeout(
             msgTimeout.seconds,

@@ -226,7 +226,7 @@ class Caldron {
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     private void reasoning_() {
-//int i; if(i == 0) return;
+
         if (dynDebug >= 1) logit("%s, entering".format(cldName), TermColor.blue);
         //if (dynDebug >= 1) logit("%s, entering level %s".format(cldName, depth_), TermColor.blue);
 //        depth_++;
@@ -448,7 +448,9 @@ class CaldronThread {
 
     /// Destructor terminates thread. To terminate it explicitely call destroy(this).
     ~this() {
-        send(myTid_, cast(shared) new CaldronThreadTerminationRequest);
+        try {
+            send(myTid_, cast(shared) new CaldronThreadTerminationRequest);
+        } catch(Throwable) {}
     }
 
     /**

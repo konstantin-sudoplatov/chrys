@@ -91,8 +91,11 @@ class Caldron {
     final void terminateChildren() {
         foreach (child; childCaldrons_.byKey)
             try {
-                child.send(new immutable TerminateApp_msg);
-            } catch(Throwable){}
+                if(!childCaldrons_[child].isFinished) child.send(new immutable TerminateApp_msg);
+            } catch(Throwable){
+                Caldron cld = childCaldrons_[child].caldron;
+                logit("Error happened while terminating thread %s".format(cld? cld.cldName: "???"), TermColor.red);
+            }
         childCaldrons_ = null;
     }
 
@@ -449,7 +452,7 @@ class CaldronThread {
     /// Destructor terminates thread. To terminate it explicitely call destroy(this).
     ~this() {
         try {
-            send(myTid_, cast(shared) new CaldronThreadTerminationRequest);
+            if(!isFinished_) send(myTid_, cast(shared) new CaldronThreadTerminationRequest);
         } catch(Throwable) {}
     }
 
@@ -467,6 +470,9 @@ class CaldronThread {
         myTid_.send(new immutable IbrStartReasoning_msg);
     }
 
+    /// Get caldron.
+    Caldron caldron() { return caldron_; }
+
     /**
             Deactivate Thread.
     */
@@ -475,14 +481,42 @@ class CaldronThread {
     }
 
     /// Get Tid.
-    Tid tid() {
-        return myTid_;
-    }
+    Tid tid() { return myTid_; }
+
+    /// Up if the caldronThreadFunc() function exited normally or on exception.
+    bool isFinished() { return isFinished_; }
+
+    /// Shows if the thread was canned (see the mothBall() function).
+    bool isCanned() { return isCanned_; }
+
+    //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
+    //
+    //                               Private
+    //
+    //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
+
+    /// Own Tid.
+    private Tid myTid_;
+
+    /// Caldron instance to call the Caldron._processMessage() function.
+    private Caldron caldron_;
+
+    /// This flag is raised if the caldronThreadFunc() function exited normally or on exception.
+    private bool isFinished_;
+
+    /// This flag is raised if the caldron_ field has been nulled by call to the mothBall() function. Thread is not
+    /// finished, it is sleeping on the receive function and may be reused by assignin new caldron in the reset() func.
+    private bool isCanned_;
+
+    //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     /**
             Main thread function. Basically it is receiving and processing messages that come to the thread.
     */
-    shared void caldronThreadFunc() { try {
+    private shared void caldronThreadFunc() { try {
+
+        scope(exit) isFinished_ = true;
+
         // Receive messages in a cycle
         while(true) {
             import std.variant: Variant;
@@ -542,26 +576,15 @@ class CaldronThread {
                         ((cast()caldron_).cldName, var.toString), TermColor.brown);
                 continue;
             }
-
         }
+
         FINISH_THREAD:
     } catch(Throwable e) {
         (cast()caldron_).terminateChildren;
         send(ownerTid, cast(shared)e);
-    }
-}
+    }}
 
-    //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
-    //
-    //                               Private
-    //
-    //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
-
-    /// Own Tid.
-    private Tid myTid_;
-
-    /// Caldron instance to call to call the Caldron._processMessage() function.
-    private Caldron caldron_;
+    //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     /// Message to itself to terminate.
     private class CaldronThreadTerminationRequest {}

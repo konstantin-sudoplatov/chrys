@@ -1,7 +1,6 @@
 module chris;
 import std.stdio;
 import std.format, std.concurrency, core.thread;
-
 import proj_data, proj_funcs;
 
 import stat.stat_registry;

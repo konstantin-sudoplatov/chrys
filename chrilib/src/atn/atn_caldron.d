@@ -9,9 +9,6 @@ import messages;
 import cpt.abs.abs_concept, cpt.abs.abs_neuron;
 import cpt.cpt_interfaces, cpt.cpt_neurons, cpt.cpt_actions, cpt.cpt_premises;
 
-/// The debug level switch, controlled from the conceptual level.
-int dynDebug = 0;
-
 /**
         Workspace for a reasoning branch. It contains its own set of live concepts, can process messages coming to it
     from user or other caldrons. The processing is done in the reasoning_() function, that proceses the head concept of
@@ -23,6 +20,13 @@ int dynDebug = 0;
         To speed up the work pools of fibers and threads are provided.
 */
 class Caldron {
+    debug {
+        /// The debug level switch, controlled from the conceptual level.
+        int dynDebug = 0;
+
+        /// Raised by the checkup action and reset at the beginning of the next reasoning cycle
+        bool checkPt;
+    }
 
     /**
             Constructor.
@@ -117,7 +121,7 @@ class Caldron {
     /// Raise the checkPt_ flag. It is raised by the checkup action, checked in the reasoning cycle and then immediately
     /// reset. Designed as a condition on which the debugger break point could be set.
     final void checkUp() {
-        debug checkPt_ = true;
+        debug checkPt = true;
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -143,7 +147,7 @@ class Caldron {
         if      // is it a request for starting reasoning?
                 (cast(IbrStartReasoning_msg)msg)
         {   // kick off the reasoning loop
-            if (dynDebug >= 1)
+            debug if (dynDebug >= 1)
                 logit("%s, message StartReasoningMsg has come".format(cldName), TermColor.brown);
 
             reasoning_;
@@ -152,7 +156,7 @@ class Caldron {
         else if // is it a request for setting activation?
                 (auto m = cast(immutable IbrSetActivation_msg)msg)
         {
-            if(dynDebug >= 1)
+            debug if(dynDebug >= 1)
                 logit("%s, message IbrSetActivationMsg has come, %s.activation = %s".format(cldName,
                         cptName(m.destConceptCid), m.activation), TermColor.brown);
 
@@ -171,7 +175,7 @@ class Caldron {
         else if // A concept was posted by another caldron?
                 (auto m = cast(immutable IbrSingleConceptPackage_msg)msg)
         {   //yes: it's already a clone, inject into the current name space (may be with overriding)
-            if (dynDebug >= 1)
+            debug if (dynDebug >= 1)
                 logit("%s, message SingleConceptPackageMsg has come, load: %s(%,?s)".format(cldName,
                         cptName(m.load.cid), '_', m.load.cid), TermColor.brown);
 
@@ -182,7 +186,7 @@ class Caldron {
         else if // new text line from user?
                 (auto m = cast(immutable UserTalksToCircle_msg)msg)
         {   //yes: put the text into the userInput_strprem concept
-            if (dynDebug >= 1)
+            debug if (dynDebug >= 1)
                 logit("%s, message UserTalksToCircleMsg has come, text: %s".format(cldName, m.line), TermColor.brown);
 
             auto cpt = scast!StringQueuePrem(this[HardCid.userInputBuffer_strqprem_hcid]);
@@ -222,36 +226,32 @@ class Caldron {
     /// Level of recursion of the reasoning_() function. 0 - the lowest
     private int depth_;
 
-    debug
-        /// Raised by the checkup action and reset at the beginning of the next reasoning cycle
-        private bool checkPt_;
-
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     private void reasoning_() {
 
-        if (dynDebug >= 1) logit("%s, entering".format(cldName), TermColor.blue);
+        debug if (dynDebug >= 1) logit("%s, entering".format(cldName), TermColor.blue);
         //if (dynDebug >= 1) logit("%s, entering level %s".format(cldName, depth_), TermColor.blue);
 //        depth_++;
         wait_ = stop_ = false;
-        debug checkPt_ = false;
+        debug checkPt = false;
 
         Neuron head = scast!Neuron(this[headCid_]);
         while(true) {
             // Put on the head
-            if (dynDebug >= 1)
+            debug if (dynDebug >= 1)
                     logit("%s, headCid_: %s(%,?s)".format(cldName, cptName(headCid_), '_', headCid_), TermColor.blue);
 
             // Process the head, determine effects and do the actions.
             auto effect = head.calculate_activation_and_get_effects(this);
             foreach(actCid; effect.actions) {
-                if (dynDebug >= 1)
+                debug if (dynDebug >= 1)
                     logit("%s, action: %s(%,?s)".format(cldName, cptName(actCid), '_', actCid), TermColor.blue);
                 A act = scast!A(this[actCid]);
                 act.run(this);
 
                 // Check the checkPt_ flag, that could be raised by an action
-                debug if(checkPt_) {
+                debug if(checkPt) {
                     int dummy;      // point for debugger to break
                 }
             }
@@ -264,7 +264,7 @@ class Caldron {
                 if      // is it a breed?
                         (auto breed = cast(Breed)cpt)
                 {   //yes: spawn the new branch
-                    if(dynDebug >= 1) logit("%s, spawning %s(%,?s)".format(cldName, cptName(cid), '_', cid),
+                    debug if(dynDebug >= 1) logit("%s, spawning %s(%,?s)".format(cldName, cptName(cid), '_', cid),
                             TermColor.blue);
                     CaldronThread thread = _threadPool_.pop(new Caldron(cid));
                     breed.tid = thread.tid;     // wind up our instance
@@ -279,7 +279,7 @@ class Caldron {
                 {
                     enforce(head is null, "Neuron %s(%,?s) is the second neuron in branches, and there can" ~
                             "only be one. effec.branches = %s".format(cptName(cid), '_', cid, effect.branches));
-                    if(dynDebug >= 2) logit("%s, assigned new head %s(%,?s)".format(cldName, cptName(cid), '_', cid),
+                    debug if(dynDebug >= 2) logit("%s, assigned new head %s(%,?s)".format(cldName, cptName(cid), '_', cid),
                             TermColor.green);
                     head = nrn;         // new head
                     headCid_ = cid;
@@ -292,7 +292,7 @@ class Caldron {
 
             // May be the actions raised the stop_ or wait_ flags.
             if (wait_ || head is null) {
-                if (dynDebug >= 1) logit("%s, leaving".format(cldName), TermColor.blue);
+                debug if (dynDebug >= 1) logit("%s, leaving".format(cldName), TermColor.blue);
                 return;
                 //if (dynDebug >= 1) logit("%s, yielding level %s on wait".format(cldName, depth_),
                 //        TermColor.blue);
@@ -329,7 +329,7 @@ final class AttentionCircle: Caldron {
         else if      // is it a Tid of the client sent by Dispatcher?
                 (auto m = cast(immutable DispatcherProvidesCircleWithUserTid_msg)msg)
         {   //yes: wind up the userThread_tidprem concept
-            if(dynDebug >= 1)
+            debug if(dynDebug >= 1)
                     logit("%s, message DispatcherProvidesCircleWithUserTid_msg has come, %s".format(cldName,
                     m.tid), TermColor.brown);
             auto userThreadTidprem = (scast!TidPrem(this[HardCid.userTid_tidprem_hcid]));
@@ -544,7 +544,7 @@ class CaldronThread {
                 else if // is it a request for the circle termination?
                         (cast(TerminateApp_msg)msg)
                 {   //yes: terminate me and all my subthreads
-                    if (dynDebug >= 1)
+                    debug if (caldron_.dynDebug >= 1)
                             logit("%s, message TerminateApp_msg has come, terminating caldron".format(
                             (cast()caldron_).cldName), TermColor.brown);
                     (cast()caldron_).terminateChildren;

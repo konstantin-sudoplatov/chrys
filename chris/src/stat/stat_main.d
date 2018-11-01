@@ -46,9 +46,8 @@ void logConcept_stat(Caldron cld, Cid conceptCid) {
         cld = caldron as a name space for cids (not used here)
 */
 @(3, StatCallType.p0Cal)
-void setDebugLevel_1_stat(Caldron ) {
-    import atn.atn_caldron: dynDebug;
-    dynDebug = 1;
+void setDebugLevel_1_stat(Caldron cld) {
+    debug cld.dynDebug = 1;
 }
 
 /**
@@ -57,9 +56,8 @@ void setDebugLevel_1_stat(Caldron ) {
         cld = caldron as a name space for cids (not used here)
 */
 @(4, StatCallType.p0Cal)
-void setDebugLevel_2_stat(Caldron ) {
-    import atn.atn_caldron: dynDebug;
-    dynDebug = 2;
+void setDebugLevel_2_stat(Caldron cld) {
+    debug cld.dynDebug = 2;
 }
 
 /**
@@ -68,9 +66,8 @@ void setDebugLevel_2_stat(Caldron ) {
         cld = caldron as a name space for cids (not used here)
 */
 @(5, StatCallType.p0Cal)
-void setDebugLevel_0_stat(Caldron ) {
-    import atn.atn_caldron: dynDebug;
-    dynDebug = 0;
+void setDebugLevel_0_stat(Caldron cld) {
+    debug cld.dynDebug = 0;
 }
 
 /**

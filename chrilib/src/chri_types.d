@@ -1,15 +1,25 @@
 module chri_types;
 import std.stdio;
-import std.conv, std.format, core.exception;
+import std.conv, std.format, std.string, core.exception, core.thread;
 
-import proj_data, proj_funcs;
+import proj_data, proj_funcs, proj_types;
 import db.db_main, db.db_concepts_table;
 
 import chri_data;
 import cpt.cpt_types, cpt.abs.abs_concept, cpt.cpt_stat;
-import atn.atn_circle_thread;
+import atn.atn_caldron;
 
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+/// Get name of a concept, if exists.
+string cptName(Cid cid) {
+    return cid in _nm_? _nm_[cid]: "noname";
+}
+
+/// Adapter.
+string cptName(DcpDescriptor dc) {
+    return dc.cid in _nm_? _nm_[dc.cid]: "noname";
+}
 
 /**
             Check up availability and type of a concept by its cid.
@@ -19,9 +29,9 @@ import atn.atn_circle_thread;
 */
 void checkCid(T: SpiritConcept)(Cid cid) {
     debug if(_maps_filled_) {
-        assert(cid in _sm_, format!"Cid: %s(%s) do not exist in the holy map."(cid, cid in _nm_? _nm_[cid]: "noname"));
+        assert(cid in _sm_, "Cid: %s(%s) do not exist in the holy map.".format(cid, cid in _nm_? _nm_[cid]: "noname"));
         assert(cast(T)_sm_[cid],
-                format!"Cid: %s, must be of type %s and it is of type %s."(cid, T.stringof, typeid(_sm_[cid])));
+                "Cid: %s, must be of type %s and it is of type %s.".format(cid, T.stringof, typeid(_sm_[cid])));
     }
 }
 
@@ -166,8 +176,14 @@ synchronized final pure nothrow class SpiritMap {
             if(cpt)
                 return cpt;
             else
-                throw new RangeError;
+                throw new RangeError("There is no concept cid = %s(\"%s\") in DB.".format(cid,
+                        cid in _nm_? _nm_[cid]: "noname"));
         }
+    }
+
+    /// Adapter
+    SpiritConcept opIndex(DcpDescriptor dc) {
+        return this[dc.cid];
     }
 
     /**
@@ -363,16 +379,6 @@ struct DcpDescriptor {
 /// Enum template for declaring named dynamic concepts. Used in the crank modules.
 enum cd(T : SpiritDynamicConcept, Cid cid)  = DcpDescriptor(T.stringof, cid);
 
-
-/// Call types of the static concept functions.
-enum StatCallType: string {
-    p0Cal = "void function(Caldron)",                              // void function(Caldron nameSpace)
-    p0Calp1Cid = "void function(Caldron, Cid)",                         // void function(Caldron nameSpace, Cid operandCid)
-    p0Calp1Cidp2Cid = "void function(Caldron, Cid, Cid)",                    // void function(Caldron nameSpace, Cid firstoperandCid, Cid secondOperandCid)
-    p0Calp1Cidp2Int = "void function(Caldron, Cid, int)",                    // void function(Caldron nameSpace, Cid conceptCid, int intValue)
-    p0Calp1Cidp2Float = "void function(Caldron, Cid, float)",                  // void function(Caldron nameSpace, Cid conceptCid, float floatValue)
-    p0Calp1Cidp2Cidp3Float = "void function(Caldron, Cid, Cid, float)",             // void function(Caldron nameSpace, Cid branchBreedCid, Cid conceptCid, float floatValue)
-}
 
 
 

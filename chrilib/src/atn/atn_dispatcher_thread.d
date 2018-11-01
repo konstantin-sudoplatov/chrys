@@ -1,11 +1,12 @@
 module atn.atn_dispatcher_thread;
+import std.stdio;
 import std.concurrency;
 import std.format;
 
 import proj_data, proj_funcs;
 
 import messages;
-import atn.atn_circle_thread;
+import atn.atn_caldron;
 
 /**
         Thread function for attention dispatcher.
@@ -39,14 +40,14 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                 // Create and start an attention circle thread if it doesn't exist yet, send back its Tid.
                 Tid circleTid;
                 if      // is client in the register already?
-                        (auto circleTidPtr = clientTid in circleRegister_)
+                        (auto circleThread = clientTid in circleRegister_)
                 {   //yes: take the circle's Tid from the register
-                    circleTid = *circleTidPtr;
+                    circleTid = circleThread.tid;
                 }
                 else {  //no: create the circle, tell him the client's Tid and put the pair in the circle register
-                    circleTid = spawn(&caldron_thread_func, true, 0);
-                    circleTid.send(new immutable DispatcherSuppliesCircleWithUserTid_msg(clientTid));
-                    circleRegister_[clientTid] = circleTid;
+                    CaldronThread circleThread = new CaldronThread(new AttentionCircle);
+                    circleRegister_[clientTid] = circleThread;
+                    circleThread.tid.send(new immutable DispatcherProvidesCircleWithUserTid_msg(clientTid));
                 }
                 continue;
             }
@@ -54,8 +55,8 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                     (cast(TerminateApp_msg)msg) // || var.hasValue)
             {   //yes: terminate me and all my subthreads
                 // send terminating message to all circles
-                foreach(cir; circleRegister_.byValue){
-                    cir.send(new immutable TerminateApp_msg);
+                foreach(circle; circleRegister_.byValue){
+                    circle.tid.send(new immutable TerminateApp_msg);
                 }
 
                 // terminate itself
@@ -68,6 +69,9 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
         else if // exception message?
                 (ex)
         {   // rethrow exception
+            foreach(circle; circleRegister_.byValue){
+                circle.tid.send(new immutable TerminateApp_msg);
+            }
             throw ex;
         }
         else if // has come an unexpected message?
@@ -93,7 +97,7 @@ private:
 //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
 /// Circle's Tids by client's Tids.
-Tid[Tid] circleRegister_;
+CaldronThread[Tid] circleRegister_;
 
 //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 

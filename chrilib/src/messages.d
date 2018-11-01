@@ -39,7 +39,7 @@ immutable class UserRequestsCircleTid_msg: Msg {
 
 /// In response to the client request dispatcher creates an attention circle thread and that thread sends user its tid.
 /// Actually, it is be the circle's branch uline, that will send back its Tid.
-immutable class CircleSuppliesUserWithItsTid_msg: Msg {
+immutable class CircleProvidesUserWithItsTid_msg: Msg {
 
     /**
         Constructor.
@@ -61,7 +61,7 @@ private:
 }
 
 /// In response to the client request dispatcher creates an attention circle thread and sends it the client Tid.
-immutable class DispatcherSuppliesCircleWithUserTid_msg: Msg {
+immutable class DispatcherProvidesCircleWithUserTid_msg: Msg {
 
     /**
         Constructor.

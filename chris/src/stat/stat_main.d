@@ -1,18 +1,32 @@
 /// Unsorted static concepts
 module stat.stat_main;
+import std.stdio;
+import std.string;
 
 import proj_data, proj_funcs;
 
 import stat.stat_types;
 import cpt.cpt_interfaces, cpt.abs.abs_concept, cpt.cpt_premises;
-import atn.atn_circle_thread;
-import chri_types;
+import atn.atn_caldron;
+import chri_data, chri_types;
 
 
 /// Raise stop flag on a caldron.
 @(1, StatCallType.p0Cal)
-void stopAndWait_stat(Caldron cld){
-    cld.requestStopAndWait;
+void wait_stat(Caldron cld){
+    cld.requestWait;
+}
+
+/// Raise stop flag on a caldron.
+@(15, StatCallType.p0Cal)
+void stop_stat(Caldron cld){
+    cld.requestStop;
+}
+
+/// Raise stop flag on a caldron.
+@(16, StatCallType.p0Cal)
+void checkUp_stat(Caldron cld){
+    cld.checkUp;
 }
 
 /**
@@ -32,9 +46,8 @@ void logConcept_stat(Caldron cld, Cid conceptCid) {
         cld = caldron as a name space for cids (not used here)
 */
 @(3, StatCallType.p0Cal)
-void setDebugLevel_1_stat(Caldron ) {
-    import atn.atn_circle_thread: dynDebug;
-    dynDebug = 1;
+void setDebugLevel_1_stat(Caldron cld) {
+    debug cld.dynDebug = 1;
 }
 
 /**
@@ -43,9 +56,8 @@ void setDebugLevel_1_stat(Caldron ) {
         cld = caldron as a name space for cids (not used here)
 */
 @(4, StatCallType.p0Cal)
-void setDebugLevel_2_stat(Caldron ) {
-    import atn.atn_circle_thread: dynDebug;
-    dynDebug = 2;
+void setDebugLevel_2_stat(Caldron cld) {
+    debug cld.dynDebug = 2;
 }
 
 /**
@@ -54,9 +66,8 @@ void setDebugLevel_2_stat(Caldron ) {
         cld = caldron as a name space for cids (not used here)
 */
 @(5, StatCallType.p0Cal)
-void setDebugLevel_0_stat(Caldron ) {
-    import atn.atn_circle_thread: dynDebug;
-    dynDebug = 0;
+void setDebugLevel_0_stat(Caldron cld) {
+    debug cld.dynDebug = 0;
 }
 
 /**
@@ -68,13 +79,13 @@ void setDebugLevel_0_stat(Caldron ) {
 @(6, StatCallType.p0Calp1Cidp2Cid)
 void sendTidToUser_stat(Caldron cld, Cid userTidPremCid, Cid ulineBreedCid) {
     import std.concurrency: Tid, send;
-    import messages: CircleSuppliesUserWithItsTid_msg;
+    import messages: CircleProvidesUserWithItsTid_msg;
     checkCid!TidPrem(cld, userTidPremCid);
     checkCid!Breed(cld, ulineBreedCid);
 
     auto userTidPrem = cast(TidPrem)cld[userTidPremCid];
     auto ulineBreed = cast(Breed)cld[ulineBreedCid];
-    send(userTidPrem.tid, new immutable CircleSuppliesUserWithItsTid_msg(ulineBreed.tid));
+    send(userTidPrem.tid, new immutable CircleProvidesUserWithItsTid_msg(ulineBreed.tid));
 }
 
 /**
@@ -162,7 +173,7 @@ void anactivateRemotely_stat(Caldron cld, Cid destBreedCid, Cid cptCid) {
 }
 
 /**
-        Send concept object to a branch. The concept is injected into the branch's name space. If there is already such a concept
+        Send concept object to a branch. The concept is injected into the branch's name space. If there is already such concept
     in the branch name space, it will be overriden. The concept is cloned on sending, so that receiving side will get the
     concept as it was at the moment of calling this function. If it were cloned on the receiving side it could get changed
     during the traveling time.
@@ -176,6 +187,9 @@ void sendConceptToBranch_stat(Caldron cld, Cid breedCid, Cid loadCid) {
     import std.concurrency: Tid, send;
     import messages: IbrSingleConceptPackage_msg;
     checkCid!Concept(cld, loadCid);
+    Concept cpt = cld[loadCid];
+    assert(!cast(ActivationIfc)cpt || (cast(ActivationIfc)cpt).activation > 0,
+            "%s, %s(%,?s) is anactivated, which should not be.".format(cld.cldName, cptName(loadCid), '_', loadCid));
 
     Breed br = scast!(Breed)(cld[breedCid]);
     try {

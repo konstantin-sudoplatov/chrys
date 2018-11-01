@@ -27,7 +27,7 @@ T scast(T, S)(S o)
             && (is(S: Object) || is(S: shared Object) || is(S: immutable Object) || is(S: const Object)
             || is(S: const shared Object)))
 {
-    assert(cast(T)o, format!"Object %s cannot be casted to class(interface) %s"(typeid(o), T.stringof));
+    assert(cast(T)o, format!"Object %s cannot be cast to class(interface) %s"(typeid(o), T.stringof));
     return cast(T)o;
 }
 ///

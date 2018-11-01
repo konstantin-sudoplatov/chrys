@@ -1,7 +1,6 @@
 module chris;
 import std.stdio;
 import std.format, std.concurrency, core.thread;
-
 import proj_data, proj_funcs;
 
 import stat.stat_registry;
@@ -14,6 +13,7 @@ import chri_types, chri_data;
 
 void main()
 {
+
 	preloadConceptMaps(_sm_, _nm_);
 
     // Capture Tid of the main thread.
@@ -56,11 +56,9 @@ void main()
         }
     }
 
-TERMINATE_APPLICATION:
-    scope(exit) {
-        thread_joinAll;
-        writeln("good bye, world!"); stdout.flush;
-    }
+    TERMINATE_APPLICATION:
+    thread_joinAll;
+    writeln("good bye, world!"); stdout.flush;
 }
 
 /**

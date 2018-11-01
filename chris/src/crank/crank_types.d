@@ -4,7 +4,7 @@ import std.format;
 import proj_data, proj_funcs;
 
 import chri_types, chri_data;
-import atn.atn_circle_thread;
+import atn.atn_caldron;
 import cpt.abs.abs_concept, cpt.cpt_actions, cpt.cpt_premises, cpt.cpt_neurons;
 import stat.stat_types: statCid;
 

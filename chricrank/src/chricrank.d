@@ -85,8 +85,11 @@ private void loadAndCrank_(ref shared SpiritMap sm, ref immutable string[Cid] nm
 
     // Crank the system, i.e. setup manually programed dynamic concepts
     runCranks;
-    import std.stdio: writefln;
-    writefln("Some free dynamic cids: %s", sm.generate_some_cids(5));
+    import std.stdio: writeln, writef;
+    writef("Some free dynamic cids: %,?s", '_', sm.generate_some_cids(1)[0]);
+    foreach(cid; sm.generate_some_cids(7))
+        writef(", %,?s", '_', cid);
+    writeln;
 
     // Remove from the name map entries that have no corresponding the concepts.
     cleanupNotUsedNames;

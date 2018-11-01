@@ -141,16 +141,16 @@ interface PremiseIfc {
     const(Cid[]) premises();
 
     /// Add premises by cid.
-    void addPremises(Cid[] premCids);
+    void addPrems(Cid[] premCids);
 
     /// Add premise by cid.
-    void addPremises(Cid premCid);
+    void addPrems(Cid premCid);
 
     /// Adapter.
-    void addPremises(DcpDescriptor[] premDescs);
+    void addPrems(DcpDescriptor[] premDescs);
 
     /// Adapter.
-    void addPremises(DcpDescriptor premDesc);
+    void addPrems(DcpDescriptor premDesc);
 }
 
 /**
@@ -166,7 +166,7 @@ mixin template PremiseImpl(T : PremiseIfc) {
     }
 
     /// Add premises by cid.
-    void addPremises(Cid[] premCids) {
+    void addPrems(Cid[] premCids) {
         debug foreach(cid; premCids)
             assert(!_maps_filled_ || cast(BinActivationIfc)_sm_[cid].live_factory,    // !_maps_filled_ in case of calls from unittest
                     format!"Cid %s must implement BinActivationIfc. Check the class %s."(cid, typeid(_sm_[cid])));
@@ -175,7 +175,7 @@ mixin template PremiseImpl(T : PremiseIfc) {
     }
 
     /// Add premise by cid.
-    void addPremises(Cid premCid) {
+    void addPrems(Cid premCid) {
         debug assert(!_maps_filled_ || cast(BinActivationIfc)_sm_[premCid].live_factory,     // !_maps_filled_ in case of calls from unittest
                 format!"Cid %s must implement BinActivationIfc. Check the class %s."(premCid, typeid(_sm_[premCid])));
 
@@ -183,17 +183,17 @@ mixin template PremiseImpl(T : PremiseIfc) {
     }
 
     /// Adapter.
-    void addPremises(DcpDescriptor[] premDescs) {
+    void addPrems(DcpDescriptor[] premDescs) {
         Cid[] cids;
         foreach(cd; premDescs)
             cids ~= cd.cid;
 
-        addPremises(cids);
+        addPrems(cids);
     }
 
     /// Adapter.
-    void addPremises(DcpDescriptor premDesc) {
-        addPremises(premDesc.cid);
+    void addPrems(DcpDescriptor premDesc) {
+        addPrems(premDesc.cid);
     }
 
     /// Array of premise cids.

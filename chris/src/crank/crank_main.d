@@ -95,7 +95,7 @@ void chatBranch() {
 
     // Setup the breed and seed
     cp!chatBreed_breed_hcid.load(chat_seed);
-    cp!chat_seed.addEffects(
+    cp!chat_seed.addEffs(
         //[   // acts
         //],
         null,
@@ -107,14 +107,14 @@ void chatBranch() {
 
     // Handshake with uline
         //prems
-    cp!shakeHandsWithUline_andnrn_chat.addPremises(userTid_tidprem_hcid);
+    cp!shakeHandsWithUline_andnrn_chat.addPrems(userTid_tidprem_hcid);
         // acts
     cp!sendUlineChatBreed_c2act_chat.load(statCid!sendConceptToBranch_stat, uline_breed, chatBreed_breed_hcid);
     cp!sendUlineUserTid_c2act_chat.load(statCid!sendConceptToBranch_stat, uline_breed, userTid_tidprem_hcid);
     cp!activateRemotely_readyForUlineInput_c2act_chat.load(statCid!activateRemotely_stat, uline_breed,
     chatReadyForUlineInputPeg_pegprem_uline);
         // nrn
-    cp!shakeHandsWithUline_andnrn_chat.addEffects(
+    cp!shakeHandsWithUline_andnrn_chat.addEffs(
         float.infinity,
         [   // acts
             sendUlineChatBreed_c2act_chat,       // give uline own breed
@@ -125,8 +125,8 @@ void chatBranch() {
     );
 
     // Wait on the user input
-    cp!valveOnUlineInput_andnrn_chat.addPremises(userInputLine_strprem);
-    cp!valveOnUlineInput_andnrn_chat.addEffects(
+    cp!valveOnUlineInput_andnrn_chat.addPrems(userInputLine_strprem);
+    cp!valveOnUlineInput_andnrn_chat.addEffs(
         float.infinity,
         [
             anactivateUserInputLine_cact,
@@ -177,7 +177,7 @@ void ulineBranch() {
     cp!uline_breed.load(uline_seed);
 
     // Setup the uline_seed
-    cp!uline_seed.addEffects(
+    cp!uline_seed.addEffs(
         null,
         shakeHandsWithChat_andnrn_uline       // branch
     );
@@ -185,11 +185,11 @@ void ulineBranch() {
     // Handshaker. The chat breed and the user thread tid will be sent by the chat branch, wait for them.
     // The uline breed will be set up in the chat name space.
     cp!sendUserUlineTid_c2act_uline.load(statCid!sendTidToUser_stat, userTid_tidprem_hcid, uline_breed);
-    cp!shakeHandsWithChat_andnrn_uline.addPremises([
+    cp!shakeHandsWithChat_andnrn_uline.addPrems([
         chatBreed_breed_hcid,
         userTid_tidprem_hcid
     ]);
-    cp!shakeHandsWithChat_andnrn_uline.addEffects(
+    cp!shakeHandsWithChat_andnrn_uline.addEffs(
         float.infinity,
         [   // acts
             sendUserUlineTid_c2act_uline,
@@ -200,7 +200,7 @@ void ulineBranch() {
 
     // User input valve. The handshake is over. Now, wait for user input and send it to chat, in a cycle.
         // Premises
-    cp!userInputValve_andnrn_uline.addPremises([
+    cp!userInputValve_andnrn_uline.addPrems([
         userInputBuffer_strqprem_hcid,
         chatReadyForUlineInputPeg_pegprem_uline
     ]);
@@ -211,7 +211,7 @@ void ulineBranch() {
     cp!anactivateChatReadyForUlineInputPeg_cact_uline.load(statCid!anactivate_stat, chatReadyForUlineInputPeg_pegprem_uline);
     cp!sendUserRequestForNextLine_cact_uline.load(statCid!requestUserInput, userTid_tidprem_hcid);
         // Effects
-    cp!userInputValve_andnrn_uline.addEffects(
+    cp!userInputValve_andnrn_uline.addEffs(
         float.infinity,
         [
             moveLineFromUserInuputBufferToUserInputLine_c2act_uline,

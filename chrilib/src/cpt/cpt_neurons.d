@@ -39,8 +39,8 @@ import chri_types;
             act = either Action or Action[] or Cid or Cid[]
             bran = either Neuron or Neuron[] or Cid or Cid[]
     */
-    void addEffects(Ta, Tb)(Ta act, Tb bran) {
-        super.addEffects(float.infinity, act, bran);
+    void addEffs(Ta, Tb)(Ta act, Tb bran) {
+        super.addEffs(float.infinity, act, bran);
     }
 
     /**
@@ -48,35 +48,35 @@ import chri_types;
         Parameters:
             actCids = array of cids of appended actions.
     */
-    final void addActions(Cid[] actCids) {
+    final void addActs(Cid[] actCids) {
         if(_effects.length == 0)
-            addEffects(actCids, null);
+            addEffs(actCids, null);
         else
-            super.appendActions(float.infinity, actCids);
+            super.appendActs(float.infinity, actCids);
     }
 
     /// Adapter.
-    final void addActions(Cid actCid) {
+    final void addActs(Cid actCid) {
         if(_effects.length == 0)
-            addEffects(actCid, null);
+            addEffs(actCid, null);
         else
-            super.appendActions(float.infinity, actCid);
+            super.appendActs(float.infinity, actCid);
     }
 
     /// Adapter.
-    final void addActions(DcpDescriptor actDesc) {
+    final void addActs(DcpDescriptor actDesc) {
         if(_effects.length == 0)
-            addEffects(actDesc, null);
+            addEffs(actDesc, null);
         else
-            super.appendActions(float.infinity, actDesc);
+            super.appendActs(float.infinity, actDesc);
     }
 
     /// Adapter.
-    final void addActions(DcpDescriptor[] actDescs) {
+    final void addActs(DcpDescriptor[] actDescs) {
         if(_effects.length == 0)
-            addEffects(actDescs, null);
+            addEffs(actDescs, null);
         else
-            super.appendActions(float.infinity, actDescs);
+            super.appendActs(float.infinity, actDescs);
     }
 
     /**
@@ -84,35 +84,35 @@ import chri_types;
         Parameters:
             branchCids = array of cids of appended branches.
     */
-    final void addBranches(Cid[] branchCids) {
+    final void addBrans(Cid[] branchCids) {
         if(_effects.length == 0)
-            addEffects(branchCids, null);
+            addEffs(branchCids, null);
         else
-            super.appendBranches(float.infinity, branchCids);
+            super.appendBrans(float.infinity, branchCids);
     }
 
     /// Adapter.
-    final void addBranches(Cid branchCid) {
+    final void addBrans(Cid branchCid) {
         if(_effects.length == 0)
-            addEffects(branchCid, null);
+            addEffs(branchCid, null);
         else
-            super.appendBranches(float.infinity, branchCid);
+            super.appendBrans(float.infinity, branchCid);
     }
 
     /// Adapter.
-    final void addBranches(DcpDescriptor branchDesc) {
+    final void addBrans(DcpDescriptor branchDesc) {
         if(_effects.length == 0)
-            addEffects(branchDesc, null);
+            addEffs(branchDesc, null);
         else
-            super.appendBranches(float.infinity, branchDesc);
+            super.appendBrans(float.infinity, branchDesc);
     }
 
     /// Adapter.
-    final void addBranches(DcpDescriptor[] branchDescs) {
+    final void addBrans(DcpDescriptor[] branchDescs) {
         if(_effects.length == 0)
-            addEffects(branchDescs, null);
+            addEffs(branchDescs, null);
         else
-            super.appendBranches(float.infinity, branchDescs);
+            super.appendBrans(float.infinity, branchDescs);
     }
 }
 
@@ -191,10 +191,10 @@ final class Seed: ActionNeuron {
 
 unittest {
     auto a = new SpAndNeuron(42);
-    a.addEffects(1, [5_000_000, 5_000_001], [5_000_010, 5_000_011]);
-    a.addEffects(10, [5_000_002, 5_000_003], [5_000_012, 5_000_013]);
+    a.addEffs(1, [5_000_000, 5_000_001], [5_000_010, 5_000_011]);
+    a.addEffs(10, [5_000_002, 5_000_003], [5_000_012, 5_000_013]);
 
-    a.addPremises([5_000_0100, 5_000_0101, 5_000_0102]);
+    a.addPrems([5_000_0100, 5_000_0101, 5_000_0102]);
     Serial ser = a.serialize;
 
     auto b = cast(SpAndNeuron)SpiritConcept.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
@@ -255,8 +255,8 @@ final class AndNeuron: LogicalNeuron {
 
 unittest {
     auto a = new SpWeightNeuron(42);
-    a.addEffects(1, [5_000_000, 5_000_001], [5_000_010, 5_000_011]);
-    a.addEffects(10, [5_000_002, 5_000_003], [5_000_012, 5_000_013]);
+    a.addEffs(1, [5_000_000, 5_000_001], [5_000_010, 5_000_011]);
+    a.addEffs(10, [5_000_002, 5_000_003], [5_000_012, 5_000_013]);
 
     Serial ser = a.serialize;
 

@@ -14,7 +14,7 @@ import chri_types;
             An uncontitional neuron.
         It is a degenerate neuron, capable only of applying its effects without consulting any premises. Its activation is always 1.
  */
-@(7) class SpActionNeuron: SpiritNeuron {
+@(8) class SpActionNeuron: SpiritNeuron {
 
     /**
                 Constructor
@@ -149,7 +149,7 @@ class ActionNeuron: Neuron, ActivationIfc {
     left in the parent branch, so there is no way to communicate to it except waiting for a result concept or set of concepts,
     that the branch will send to the parent when it finishes.
 */
-@(8) final class SpSeed: SpActionNeuron {
+@(9) final class SpSeed: SpActionNeuron {
 
     /// Constructor
     this(Cid cid) { super(cid); }
@@ -172,7 +172,7 @@ final class Seed: ActionNeuron {
 /**
             Base for neurons, that take its decisions by pure logic on premises, as opposed to weighing them.
 */
-@(9) final class SpAndNeuron: SpiritLogicalNeuron {
+@(10) final class SpAndNeuron: SpiritLogicalNeuron {
 
     /**
                 Constructor
@@ -236,7 +236,7 @@ final class AndNeuron: LogicalNeuron {
 /**
             Base for all weighing neurons.
 */
-@(10) final class SpWeightNeuron: SpiritNeuron {
+@(11) final class SpWeightNeuron: SpiritNeuron {
 
     /**
                 Constructor

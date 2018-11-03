@@ -77,15 +77,15 @@ enum Chat: DcpDescriptor {
     shakeHandsWithUline_andnrn_chat = cd!(SpAndNeuron, 3_996_466_002),
 
     /// The action for the handshaker. After chat starts the uline branch, it sends user its own breed.
-    sendUlineChatBreed_c2act_chat = cd!(SpA_CidCid, 553_436_801),
+    sendUlineChatBreed_c2act_chat = cd!(SpA_2Cid, 553_436_801),
 
     /// The action for the handshaker. It sends uline Tid of the user thread (console or http), so that uline could be able
     /// to talk to the user.
-    sendUlineUserTid_c2act_chat = cd!(SpA_CidCid, 3_408_832_589),
+    sendUlineUserTid_c2act_chat = cd!(SpA_2Cid, 3_408_832_589),
 
     /// A valve for waiting for a line of text from uline, which it gets from user with tools
     valveOnUlineInput_andnrn_chat = cd!(SpAndNeuron, 497_144_117),
-    activateRemotely_readyForUlineInput_c2act_chat = cd!(SpA_CidCid, 3_702_223_557),
+    activateRemotely_readyForUlineInput_c2act_chat = cd!(SpA_2Cid, 3_702_223_557),
 
 }
 
@@ -137,7 +137,7 @@ void chatBranch() {
 }
 
 // User line branch enums
-// 4_122_865_703, 2_594_815_860, 188_095_368, 254_056_846, 1_906_470_662, 3_186_686_771, 1_099_498_783, 3_758_390_978
+// , 2_594_815_860, 188_095_368, 254_056_846, 1_906_470_662, 3_186_686_771, 1_099_498_783, 3_758_390_978
 enum Uline {
     /// uline branch identifier
     uline_breed = cd!(SpBreed, 4_021_308_401),
@@ -149,7 +149,7 @@ enum Uline {
     shakeHandsWithChat_andnrn_uline = cd!(SpAndNeuron, 226_154_664),
 
     /// After the handshaking with chat uline has user tid and can send back its own
-    sendUserUlineTid_c2act_uline = cd!(SpA_CidCid, 2_277_726_710),
+    sendUserUlineTid_c2act_uline = cd!(SpA_2Cid, 2_277_726_710),
 
     /// wait neuron. Wait on it for the next line of text from user.
     userInputValve_andnrn_uline = cd!(SpAndNeuron, 732_066_873),
@@ -159,10 +159,10 @@ enum Uline {
     anactivateChatReadyForUlineInputPeg_cact_uline = cd!(SpA_Cid, 409_329_855),
 
     /// Call stat action of moving line from buffer to string peg.
-    moveLineFromUserInuputBufferToUserInputLine_c2act_uline = cd!(SpA_CidCid, 2_949_480_003),
+    moveLineFromUserInuputBufferToUserInputLine_c2act_uline = cd!(SpA_2Cid, 2_949_480_003),
 
     /// Send user line premise to chat (together with the activation value)
-    sendUserInputLineToChat_c2act_uline = cd!(SpA_CidCid, 3_447_310_214),
+    sendUserInputLineToChat_c2act_uline = cd!(SpA_2Cid, 3_447_310_214),
 
     /// Send user a prompt for the next input
     sendUserRequestForNextLine_cact_uline = cd!(SpA_Cid, 1_439_958_318),
@@ -171,7 +171,6 @@ enum Uline {
 /// Setup the uline branch.
 void ulineBranch() {
     mixin(dequalify_enums!(HardCid, CommonConcepts, Uline, Chat));
-
 
     // Mate uline seed and breed.
     cp!uline_breed.load(uline_seed);
@@ -196,7 +195,6 @@ void ulineBranch() {
         ],
         userInputValve_andnrn_uline
     );
-
 
     // User input valve. The handshake is over. Now, wait for user input and send it to chat, in a cycle.
         // Premises
@@ -224,7 +222,9 @@ void ulineBranch() {
     );
 }
 
-
+enum Ask {
+    askString_c2act = cd!(SpA_2Cid, 4_122_865_703),
+}
 
 
 

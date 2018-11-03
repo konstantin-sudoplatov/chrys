@@ -10,7 +10,7 @@ import cpt.cpt_types, cpt.abs.abs_primitive;
         Mark primitive. It contains no data, only its cid carries some meaning. So, its live part may even naver be instantiated.
     It is used in the SpiritPrimitive to mark its type.
 */
-@(17) final class SpMarkPrim: SpiritPrimitive {
+@(18) final class SpMarkPrim: SpiritPrimitive {
 
     this(Cid cid) { super(cid); }
 
@@ -31,7 +31,7 @@ final class MarkPrim: Primitive {
 /**
             String primitive. Contains a line of text.
 */
-@(18)final class SpStringPrim: SpiritPrimitive {
+@(19)final class SpStringPrim: SpiritPrimitive {
 
     /// The string
     string text;

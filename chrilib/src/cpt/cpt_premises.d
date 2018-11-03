@@ -15,7 +15,7 @@ import cpt.abs.abs_concept, cpt.abs.abs_premise;
     to a child to send it messages. This concept will be that handler. After the new branch started, its tid will be put
     in the tid_ field of the live part.
 */
-@(11) final class SpBreed: SpiritPremise {
+@(12) final class SpBreed: SpiritPremise {
     import cpt.cpt_neurons: SpSeed;
 
     /**
@@ -123,7 +123,7 @@ final class Breed: Premise {
     }
 }
 
-@(12) final class SpGraft: SpiritPremise {
+@(13) final class SpGraft: SpiritPremise {
     import cpt.cpt_neurons: SpSeed;
 
     /**
@@ -224,7 +224,7 @@ final class Graft: Premise {
 /**
         Tid premise.
 */
-@(13) final class SpTidPrem: SpiritPremise {
+@(14) final class SpTidPrem: SpiritPremise {
 
     /// Constructor
     this(Cid cid) { super(cid); }
@@ -255,7 +255,7 @@ final class TidPrem: Premise {
 /**
             Peg premise.
 */
-@(14) final class SpPegPrem: SpiritPremise {
+@(15) final class SpPegPrem: SpiritPremise {
 
     /// Constructor
     this(Cid cid) { super(cid); }
@@ -277,7 +277,7 @@ final class PegPrem: Premise {
             String premise.
     The string field is in the live part.
 */
-@(15)final class SpStringPrem: SpiritPremise {
+@(16)final class SpStringPrem: SpiritPremise {
 
     /**
                 Constructor
@@ -314,7 +314,7 @@ final class StringPrem: Premise {
             Queue premise. This concept is capable of accumulating a queue of strings. For example, when messages from
     user come, they may be coming faster than they get processed. In that case such queue will help.
 */
-@(16)final class SpStringQueuePrem: SpiritPremise {
+@(17)final class SpStringQueuePrem: SpiritPremise {
 
     /// Constructor.
     this(Cid cid) { super(cid); }

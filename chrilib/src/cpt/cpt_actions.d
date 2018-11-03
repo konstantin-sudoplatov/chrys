@@ -4,7 +4,7 @@
 */
 module cpt.cpt_actions;
 import std.stdio;
-import std.format, std.typecons;
+import std.string, std.typecons;
 
 import proj_data, proj_funcs;
 
@@ -53,8 +53,8 @@ import atn.atn_caldron;
     */
     void run(Caldron caldron) {
         assert((cast(SpStaticConcept)_sm_[_statActionCid]).callType == StatCallType.p0Cal,
-                format!"Static concept: %s( cid:%s) in SpAction must have StatCallType none and it has %s."
-                      (_nm_[_statActionCid], _statActionCid, (cast(SpStaticConcept)_sm_[_statActionCid]).callType));
+                "Static concept: %s( cid:%s) in SpAction must have StatCallType none and it has %s.".
+                format(_nm_[_statActionCid], _statActionCid, (cast(SpStaticConcept)_sm_[_statActionCid]).callType));
 
         auto statCpt = (cast(SpStaticConcept)_sm_[_statActionCid]);
         (cast(void function(Caldron))statCpt.fp)(caldron);
@@ -149,7 +149,7 @@ class A: DynamicConcept {
             caldron = name space it which static concept function will be working.
     */
     void run(Caldron caldron) {
-        assert((cast(SpA)spirit).statAction != 0, format!"Cid: %s, static action must be assigned."(this.cid));
+        assert((cast(SpA)spirit).statAction != 0, "Cid: %s, static action must be assigned.".format(this.cid));
         (cast(SpA)spirit).run(caldron);
     }
 }
@@ -195,8 +195,8 @@ class A: DynamicConcept {
     override void run(Caldron caldron) {
         auto statAct = (scast!SpStaticConcept(_sm_[_statActionCid]));
         assert(statAct.callType == StatCallType.p0Calp1Cid,
-                format!"Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cid and it has %s."
-                        (typeid(statAct), _statActionCid, statAct.callType));
+                "Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cid and it has %s.".
+                format(typeid(statAct), _statActionCid, statAct.callType));
         checkCid!DynamicConcept(caldron, _p1Cid);
 
         (cast(void function(Caldron, Cid))statAct.fp)(caldron, _p1Cid);
@@ -288,14 +288,14 @@ final class A_Cid: A {
     Actions, that operate on two concepts. Examples: sending a message - the first operand breed of the correspondent,
     the second operand concept object to send.
 */
-@(3) final class SpA_CidCid: SpA {
+@(3) final class SpA_2Cid: SpA {
 
     /// Constructor
     this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the holy static concept.
-    override A_CidCid live_factory() const {
-        return new A_CidCid(cast(immutable)this);
+    override A_2Cid live_factory() const {
+        return new A_2Cid(cast(immutable)this);
     }
 
     /// Serialize concept
@@ -328,8 +328,8 @@ final class A_Cid: A {
     override void run(Caldron caldron) {
         auto statAct = (scast!SpStaticConcept(_sm_[_statActionCid]));
         assert(statAct.callType == StatCallType.p0Calp1Cidp2Cid,
-                format!"Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Cid and it has %s."
-                        (typeid(statAct), _statActionCid, statAct.callType));
+                "Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Cid and it has %s.".
+                format(typeid(statAct), _statActionCid, statAct.callType));
         checkCid!DynamicConcept(caldron, _p1Cid);
         checkCid!DynamicConcept(caldron, _p2Cid);
 
@@ -406,30 +406,186 @@ final class A_Cid: A {
 }
 
 unittest {
-    auto a = new SpA_CidCid(42);
+    auto a = new SpA_2Cid(42);
     a.ver = 5;
     a._statActionCid = 43;
     a._p1Cid = 44;
     a._p2Cid = 45;
 
     Serial ser = a.serialize;
-    auto b = cast(SpA_CidCid)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
-    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_CidCid) &&
+    auto b = cast(SpA_2Cid)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
+    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_2Cid) &&
             b._statActionCid == 43 && b._p1Cid == 44 && b._p2Cid == 45);
 
     assert(a == b);
 }
 
 /// Live.
-final class A_CidCid: A {
+final class A_2Cid: A {
 
     /// Private constructor. Use live_factory() instead.
-    private this(immutable SpA_CidCid spBinaryAction) { super(spBinaryAction); }
+    private this(immutable SpA_2Cid spBinaryAction) { super(spBinaryAction); }
+}
+
+/**
+        SpA - spirit action, 3Cid - p0Calp1Cidp2Cidp3Cid
+    Actions, that operate on two concepts. Examples: sending a message - the first operand breed of the correspondent,
+    the second operand concept object to send.
+*/
+@(4) final class SpA_3Cid: SpA {
+
+    /// Constructor
+    this(Cid cid) { super(cid); }
+
+    /// Create live wrapper for the holy static concept.
+    override A_3Cid live_factory() const {
+        return new A_3Cid(cast(immutable)this);
+    }
+
+    /// Serialize concept
+    override Serial serialize() const {
+        Serial res = super.serialize;
+
+        res.stable.length = St.length;  // allocate
+        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
+        *cast(Cid*)&res.stable[St._p1Cid_ofs] = _p1Cid;
+        *cast(Cid*)&res.stable[St._p2Cid_ofs] = _p2Cid;
+        *cast(Cid*)&res.stable[St._p3Cid_ofs] = _p3Cid;
+
+        return res;
+    }
+
+    /// Equality test
+    override bool opEquals(Object sc) const {
+
+        if(!super.opEquals(sc)) return false;
+        auto o = scast!(typeof(this))(sc);
+        return _p1Cid == o._p1Cid && _p2Cid == o._p2Cid && _p3Cid == o._p3Cid;
+    }
+
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /**
+                Call static concept function.
+        Parameters:
+            caldron = name space it which static concept function will be working.
+    */
+    override void run(Caldron caldron) {
+        auto statAct = (scast!SpStaticConcept(_sm_[_statActionCid]));
+        assert(statAct.callType == StatCallType.p0Calp1Cidp2Cidp3Cid,
+                "Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Cid3Cid and it has %s.".
+                format(typeid(statAct), _statActionCid, statAct.callType));
+        checkCid!DynamicConcept(caldron, _p1Cid);
+        checkCid!DynamicConcept(caldron, _p2Cid);
+        checkCid!DynamicConcept(caldron, _p3Cid);
+
+        (cast(void function(Caldron, Cid, Cid, Cid))statAct.fp)(caldron, _p1Cid, _p2Cid, _p3Cid);
+    }
+
+    /// Allow loading only static action using load(Cid statAction) of the SpA class.
+    alias load = SpA.load;
+
+    /// Full setup
+    void load(Cid statAction, DcpDescriptor firstOperand, DcpDescriptor secondOperand, DcpDescriptor thirdOperand) {
+        checkCid!SpStaticConcept(statAction);
+
+        _statActionCid = statAction;
+        checkCid!SpiritDynamicConcept(firstOperand.cid);
+        _p1Cid = firstOperand.cid;
+        checkCid!SpiritDynamicConcept(secondOperand.cid);
+        _p2Cid = secondOperand.cid;
+        checkCid!SpiritDynamicConcept(thirdOperand.cid);
+        _p3Cid = thirdOperand.cid;
+    }
+
+    /// Partial setup, without the static action
+    void load(DcpDescriptor firstOperand, DcpDescriptor secondOperand, DcpDescriptor thirdOperand) {
+        checkCid!SpiritDynamicConcept(firstOperand.cid);
+        _p1Cid = firstOperand.cid;
+        checkCid!SpiritDynamicConcept(secondOperand.cid);
+        _p2Cid = secondOperand.cid;
+        checkCid!SpiritDynamicConcept(thirdOperand.cid);
+        _p3Cid = thirdOperand.cid;
+    }
+
+    //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+    /// Cid of the first concept
+    protected Cid _p1Cid;
+
+    /// Cid of the second concept
+    protected Cid _p2Cid;
+
+    /// Cid of the third concept
+    protected Cid _p3Cid;
+
+    //---%%%---%%%---%%%---%%%---%%% funcs ---%%%---%%%---%%%---%%%---%%%---%%%
+
+    /**
+            Initialize concept from its serialized form.
+        Parameters:
+            stable = stable part of data
+            transient = unstable part of data
+        Returns: unconsumed slices of the stable and transient byte arrays.
+    */
+    protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
+            const byte[] transient)
+    {
+        _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
+        _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
+        _p2Cid = *cast(Cid*)&stable[St._p2Cid_ofs];
+        _p3Cid = *cast(Cid*)&stable[St._p3Cid_ofs];
+
+        return tuple!(const byte[], "stable", const byte[], "transient")(stable[St.length..$], transient);
+    }
+
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+    //
+    //                                  Private
+    //
+    //===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@===@@@
+
+    /// Stable offsets. Used by serialize()/_deserialize()
+    private enum St {
+        _statActionCid_ofs = 0,
+        _p1Cid_ofs = _statActionCid_ofs + _statActionCid.sizeof,
+        _p2Cid_ofs = _p1Cid_ofs + _p1Cid.sizeof,
+        _p3Cid_ofs = _p2Cid_ofs + _p2Cid.sizeof,
+        length = _p3Cid_ofs + _p3Cid.sizeof
+    }
+
+    /// Tranzient offsets. Used by serialize()/_deserialize()
+    private enum Tr {
+        length = 0
+    }
+}
+
+unittest {
+    auto a = new SpA_3Cid(42);
+    a.ver = 5;
+    a._statActionCid = 43;
+    a._p1Cid = 44;
+    a._p2Cid = 45;
+    a._p3Cid = 46;
+
+    Serial ser = a.serialize;
+    auto b = cast(SpA_3Cid)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
+    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_3Cid) &&
+            b._statActionCid == 43 && b._p1Cid == 44 && b._p2Cid == 45 && b._p3Cid == 46);
+
+    assert(a == b);
+}
+
+/// Live.
+final class A_3Cid: A {
+
+    /// Private constructor. Use live_factory() instead.
+    private this(immutable SpA_3Cid spBinaryAction) { super(spBinaryAction); }
 }
 
 /// SpA - spirit action, CidFloat - p0Calp1Cidp2Float
 /// Action, that works on a concept and a float value
-@(4) final class SpA_CidFloat: SpA {
+@(5) final class SpA_CidFloat: SpA {
 
     /// Constructor
     this(Cid cid) { super(cid); }
@@ -465,8 +621,8 @@ final class A_CidCid: A {
     override void run(Caldron caldron) {
         auto statAct = (scast!SpStaticConcept(_sm_[_statActionCid]));
         assert(statAct.callType == StatCallType.p0Calp1Cidp2Float,
-                format!"Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Float and it has %s."
-                        (typeid(statAct), _statActionCid, statAct.callType));
+                "Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Float and it has %s.".
+                format(typeid(statAct), _statActionCid, statAct.callType));
         checkCid!DynamicConcept(caldron, _p1Cid);
 
         (cast(void function(Caldron, Cid, float))statAct.fp)(caldron, _p1Cid, _p2Float);
@@ -570,14 +726,14 @@ final class A_CidFloat: A {
 
 /// SpA - spirit action, CidCidFloat stands for p0Calp1Cidp2Cidp3Float
 /// Action, that involves two concepts and a float value
-@(5) final class SpA_CidCidFloat: SpA {
+@(6) final class SpA_2CidFloat: SpA {
 
     /// Constructor
     this(Cid cid) { super(cid); }
 
     /// Create live wrapper for the holy static concept.
-    override A_CidCidFloat live_factory() const {
-        return new A_CidCidFloat(cast(immutable)this);
+    override A_2CidFloat live_factory() const {
+        return new A_2CidFloat(cast(immutable)this);
     }
 
     /// Serialize concept
@@ -607,8 +763,8 @@ final class A_CidFloat: A {
     override void run(Caldron caldron) {
         auto statAct = (scast!SpStaticConcept(_sm_[_statActionCid]));
         assert(statAct.callType == StatCallType.p0Calp1Cidp2Cidp3Float,
-                    format!"Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Cidp3Float and it has %s."
-                    (typeid(statAct), _statActionCid, statAct.callType));
+                    "Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Cidp3Float and it has %s.".
+                    format(typeid(statAct), _statActionCid, statAct.callType));
         checkCid!DynamicConcept(caldron, _p1Cid);
         checkCid!DynamicConcept(caldron, _p2Cid);
 
@@ -700,7 +856,7 @@ final class A_CidFloat: A {
 }
 
 unittest {
-    auto a = new SpA_CidCidFloat(42);
+    auto a = new SpA_2CidFloat(42);
     a.ver = 5;
     a._statActionCid = 43;
     a._p1Cid = 44;
@@ -708,23 +864,23 @@ unittest {
     a._p3Float = 4.5;
 
     Serial ser = a.serialize;
-    auto b = cast(SpA_CidCidFloat)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
-    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_CidCidFloat) &&
+    auto b = cast(SpA_2CidFloat)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
+    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_2CidFloat) &&
             b._statActionCid == 43 && b._p1Cid == 44 && b._p2Cid == 45 && b._p3Float == 4.5);
 
     assert(a == b);
 }
 
 /// Live.
-final class A_CidCidFloat: A {
+final class A_2CidFloat: A {
 
     /// Private constructor. Use live_factory() instead.
-    private this(immutable SpA_CidCidFloat spBinaryFloatAction) { super(spBinaryFloatAction); }
+    private this(immutable SpA_2CidFloat spBinaryFloatAction) { super(spBinaryFloatAction); }
 }
 
 /// SpA - spirit action, CidInt - p0Calp1Cidp2Int
 /// Action, that involves a concept and a float value
-@(6) final class SpA_CidInt: SpA {
+@(7) final class SpA_CidInt: SpA {
 
     /// Constructor
     this(Cid cid) { super(cid); }
@@ -760,8 +916,8 @@ final class A_CidCidFloat: A {
     override void run(Caldron caldron) {
         auto statAct = (scast!SpStaticConcept(_sm_[_statActionCid]));
         assert(statAct.callType == StatCallType.p0Calp1Cidp2Int,
-                format!"Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Int and it has %s."
-                        (typeid(statAct), _statActionCid, statAct.callType));
+                "Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Int and it has %s.".
+                format(typeid(statAct), _statActionCid, statAct.callType));
         checkCid!DynamicConcept(caldron, _p1Cid);
 
         (cast(void function(Caldron, Cid, int))statAct.fp)(caldron, _p1Cid, _p2Int);

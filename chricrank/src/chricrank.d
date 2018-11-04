@@ -9,7 +9,7 @@ import chri_types, chri_data;
 import stat.stat_registry;
 import cpt.cpt_registry, cpt.abs.abs_concept;
 import crank.crank_registry;
-import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_stat;
+import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_primitives, cpt.cpt_stat;
 
 void main()
 {

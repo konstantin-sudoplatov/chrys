@@ -6,7 +6,7 @@ import core.exception;
 import proj_data, proj_types;
 
 import chri_types;
-import cpt.cpt_premises, cpt.cpt_registry;
+import cpt.cpt_premises, cpt.cpt_primitives, cpt.cpt_registry;
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--
 
@@ -68,6 +68,12 @@ enum HardCid: DcpDescriptor {
     /// and the primitive is valid only for chat branch, since the Tid field is stored in the live part of the concept.
     /// Used in the attention circle thread.
     userTid_tidprem_hcid = cd!(SpTidPrem, 217_397_612),
+
+    /// Breed concepts contain these marks to specify how the branch must be started: as a separate thread, as a fiber or
+    /// any way at discretion of the Caldron.reasoning_() function.
+    threadStartType_mark_hcid = cd!(SpMarkPrim, 2_295_052_561),
+    fiberStartType_mark_hcid = cd!(SpMarkPrim, 2_421_473_041),
+    autoStartType_mark_hcid = cd!(SpMarkPrim, 3_679_431_450),
 }
 
 shared static this(){

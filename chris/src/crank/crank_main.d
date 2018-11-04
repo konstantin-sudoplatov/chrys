@@ -5,12 +5,12 @@ import proj_data;
 
 import chri_types, chri_data;
 import crank.crank_types, crank.crank_registry;
-import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises;
+import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_primitives;
 
 import stat.stat_types, stat.stat_main;
 
 /// Dynamic concept names and cids.
-// 2_295_052_561, 2_421_473_041, 3_679_431_450, 33_533_622, 2_142_584_142, 3_372_907_570, 2_800_603_496, 3_786_801_661
+// , , , 33_533_622, 2_142_584_142, 3_372_907_570, 2_800_603_496, 3_786_801_661
 enum CommonConcepts: DcpDescriptor {
 
     // Service concepts
@@ -94,7 +94,7 @@ void chatBranch() {
     mixin(dequalify_enums!(HardCid, CommonConcepts, Chat, Uline));    // anonymizes the concept enums, so we don't need use their full names.
 
     // Setup the breed and seed
-    cp!chatBreed_breed_hcid.load(chat_seed);
+    cp!chatBreed_breed_hcid.load(chat_seed, threadStartType_mark_hcid);
     cp!chat_seed.addEffs(
         //[   // acts
         //],
@@ -136,8 +136,8 @@ void chatBranch() {
     );
 }
 
-// User line branch enums
-// , 2_594_815_860, 188_095_368, 254_056_846, 1_906_470_662, 3_186_686_771, 1_099_498_783, 3_758_390_978
+/// User line branch enums
+// , , , , 1_906_470_662, 3_186_686_771, 1_099_498_783, 3_758_390_978
 enum Uline {
     /// uline branch identifier
     uline_breed = cd!(SpBreed, 4_021_308_401),
@@ -173,7 +173,7 @@ void ulineBranch() {
     mixin(dequalify_enums!(HardCid, CommonConcepts, Uline, Chat));
 
     // Mate uline seed and breed.
-    cp!uline_breed.load(uline_seed);
+    cp!uline_breed.load(uline_seed, threadStartType_mark_hcid);
 
     // Setup the uline_seed
     cp!uline_seed.addEffs(
@@ -222,10 +222,17 @@ void ulineBranch() {
     );
 }
 
-enum Ask {
-    askString_c2act = cd!(SpA_2Cid, 4_122_865_703),
+// 1_688_870_095, 338_100_057, 2_739_882_662, 642_918_001, 2_337_467_201, 580_962_659, 3_399_694_389, 2_877_036_599
+enum AskUline {
+    askUline_breed_askuln = cd!(SpBreed, 188_095_368),
+    askUline_seed_askuln = cd!(SpSeed, 2_594_815_860),
+    askUline_c2act_askuln = cd!(SpA_2Cid, 4_122_865_703),
+    askUline_strprem_askuln = cd!(SpStringPrem, 254_056_846),
 }
 
+void askUline() {
+
+}
 
 
 

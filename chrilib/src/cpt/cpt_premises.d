@@ -6,6 +6,7 @@ import proj_data, proj_types, proj_funcs;
 import chri_types, chri_data;
 import cpt.cpt_types;
 import cpt.abs.abs_concept, cpt.abs.abs_premise;
+import cpt.cpt_primitives;
 
 /**
             Branch identifier. On one hand it is a container for TID. TID itself is stored in the live part, since it is
@@ -15,6 +16,7 @@ import cpt.abs.abs_concept, cpt.abs.abs_premise;
     to a child to send it messages. This concept will be that handler. After the new branch started, its tid will be put
     in the tid_ field of the live part.
 */
+// todo: add arrays for IN parameters and OUT parameters, methods to fill them, change ser/deser opEquals and toString.
 @(12) final class SpBreed: SpiritPremise {
     import cpt.cpt_neurons: SpSeed;
 
@@ -37,7 +39,7 @@ import cpt.abs.abs_concept, cpt.abs.abs_premise;
         Serial res = super.serialize;
 
         res.stable.length = Cid.sizeof;  // allocate
-        *cast(Cid*)&res.stable[0] = seedCid_;
+        *cast(Cid*)&res.stable[0] = seed_;
 
         return res;
     }
@@ -47,25 +49,30 @@ import cpt.abs.abs_concept, cpt.abs.abs_premise;
 
         if(!super.opEquals(sc)) return false;
         auto o = scast!(typeof(this))(sc);
-        return seedCid_ == o.seedCid_;
+        return seed_ == o.seed_;
     }
 
     override string toString() const {
         string s = super.toString;
-        s ~= "\n    seedCid_ = %s(%,?s)".format(_nm_[seedCid_], '_', seedCid_);
+        s ~= "\n    seedCid_ = %s(%,?s)".format(_nm_[seed_], '_', seed_);
         return s;
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
-    void load(DcpDescriptor seedDsc) {
+    void load(DcpDescriptor seedDsc, DcpDescriptor startTypeDsc) {
         checkCid!SpSeed(seedDsc.cid);
-        seedCid_ = seedDsc.cid;
+        seed_ = seedDsc.cid;
+
+        checkCid!SpMarkPrim(startTypeDsc.cid);
+        assert(startTypeDsc == HardCid.threadStartType_mark_hcid || startTypeDsc == HardCid.fiberStartType_mark_hcid ||
+            startTypeDsc == HardCid.autoStartType_mark_hcid);
+        startType_ = startTypeDsc.cid;
     }
 
     /// Getter.
     @property Cid seed() const {
-        return seedCid_;
+        return seed_;
     }
 
     /**
@@ -78,15 +85,18 @@ import cpt.abs.abs_concept, cpt.abs.abs_premise;
     protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
             const byte[] transient)
     {
-        seedCid_ = *cast(Cid*)&stable[0];
+        seed_ = *cast(Cid*)&stable[0];
 
         return tuple!(const byte[], "stable", const byte[], "transient")(stable[Cid.sizeof..$], transient);
     }
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
+    /// Start type: CommonConcepts.threadStartType_mark, fiberStartType_mark or 0 for auto.
+    private Cid startType_;
+
     /// The seed of the branch.
-    private Cid seedCid_;
+    private Cid seed_;
 }
 
 unittest {

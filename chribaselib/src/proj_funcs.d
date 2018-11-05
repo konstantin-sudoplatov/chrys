@@ -211,10 +211,10 @@ Object clone (Object srcObject)
 
 /**
         Serialize an arbitrary array into a byte buffer. Works in pair with the deserializeArray() function.
-    Note: null or empty arrays after serialization/deserialization becomes null.
+    Note: either null or an empty array after serialization/deserialization becomes null.
     Parameters:
         ar = array to serialize
-    Returns: byte array with first Cind as the length and the rest as the elements of the array.
+    Returns: byte array with first Cind as the length and the rest the elements of the array.
 */
 pure nothrow byte[] serializeArray(T)(const T[] ar) {
     byte[] rs;

@@ -90,15 +90,17 @@ abstract class SpiritConcept {
     }
 
     /**
-            "==" operation overload. Test for equality excluding unsignigicant information like usage statistics. Onle check data
-        that influence behavior of the concept and logic it implements. For example the cid and ver fields are not checked.
-        Must be realised in every concrete concept since it is used in versioning.
+            "==" operation overload. Test for equality excluding unsignigicant information like usage statistics. it only
+        checks data that influence behavior of the concept and logic it implements. For example the cid and ver fields
+        are not checked.$(BR)
+            It must be realised in code of every concrete concept since it is used in versioning.
     */
     override bool opEquals(Object sc) const {
-        assert(typeid(this) == typeid(sc), "Type of this %s(clid %s) is not the same as type of sc %s(clid %s).".
-                format(typeid(this), _spReg_[typeid(this)], typeid(sc), _spReg_[typeid(sc)]));
+        debug if(typeid(this) != typeid(sc))
+                logit("Warnig. Type of this %s(clid %s) is not the same as type of sc %s(clid %s).".format(typeid(this),
+                _spReg_[typeid(this)], typeid(sc), _spReg_[typeid(sc)]), TermColor.red);
 
-        return true;
+        return typeid(this) == typeid(sc);
     }
 
     /// To human readable string.

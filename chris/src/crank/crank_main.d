@@ -94,7 +94,7 @@ void chatBranch() {
     mixin(dequalify_enums!(HardCid, CommonConcepts, Chat, Uline));    // anonymizes the concept enums, so we don't need use their full names.
 
     // Setup the breed and seed
-    cp!chatBreed_breed_hcid.load(chat_seed, threadStartType_mark_hcid);
+    cp!chatBreed_breed_hcid.load(threadStartType_mark_hcid, chat_seed, null, null);
     cp!chat_seed.addEffs(
         //[   // acts
         //],
@@ -173,7 +173,7 @@ void ulineBranch() {
     mixin(dequalify_enums!(HardCid, CommonConcepts, Uline, Chat));
 
     // Mate uline seed and breed.
-    cp!uline_breed.load(uline_seed, threadStartType_mark_hcid);
+    cp!uline_breed.load(threadStartType_mark_hcid, uline_seed, null, null);
 
     // Setup the uline_seed
     cp!uline_seed.addEffs(

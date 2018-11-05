@@ -1,4 +1,5 @@
 module cpt.cpt_premises;
+import std.stdio;
 import std.string, std.typecons;
 
 import proj_data, proj_types, proj_funcs;
@@ -16,7 +17,6 @@ import cpt.cpt_primitives;
     to a child to send it messages. This concept will be that handler. After the new branch started, its tid will be put
     in the tid_ field of the live part.
 */
-// todo: add arrays for IN parameters and OUT parameters, methods to fill them, change ser/deser opEquals and toString.
 @(12) final class SpBreed: SpiritPremise {
     import cpt.cpt_neurons: SpSeed;
 
@@ -38,8 +38,13 @@ import cpt.cpt_primitives;
     override Serial serialize() const {
         Serial res = super.serialize;
 
-        res.stable.length = Cid.sizeof;  // allocate
-        *cast(Cid*)&res.stable[0] = seed_;
+        res.stable.reserve(2*Cid.sizeof + Clid.sizeof + inPars_.length*Cid.sizeof +
+                Clid.sizeof + outPars_.length*Cid.sizeof);   // reserve
+        res.stable.length = 2*Cid.sizeof;  // allocate
+        *cast(Cid*)&res.stable[0] = startType_;
+        *cast(Cid*)&res.stable[Cid.sizeof] = seed_;
+        res.stable ~= serializeArray(inPars_);
+        res.stable ~= serializeArray(outPars_);
 
         return res;
     }
@@ -49,7 +54,7 @@ import cpt.cpt_primitives;
 
         if(!super.opEquals(sc)) return false;
         auto o = scast!(typeof(this))(sc);
-        return seed_ == o.seed_;
+        return startType_ == o.startType_ && seed_ == o.seed_ && inPars_ == o.inPars_ && outPars_ == o.outPars_;
     }
 
     override string toString() const {
@@ -60,13 +65,19 @@ import cpt.cpt_primitives;
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
-    void load(DcpDescriptor seedDsc, DcpDescriptor startTypeDsc) {
+    void load(DcpDescriptor startTypeDsc, DcpDescriptor seedDsc, DcpDescriptor[] inPars, DcpDescriptor[] outPars)
+    in {
         checkCid!SpSeed(seedDsc.cid);
-        seed_ = seedDsc.cid;
-
         checkCid!SpMarkPrim(startTypeDsc.cid);
         assert(startTypeDsc == HardCid.threadStartType_mark_hcid || startTypeDsc == HardCid.fiberStartType_mark_hcid ||
             startTypeDsc == HardCid.autoStartType_mark_hcid);
+        foreach(cd; inPars) {
+            checkCid!SpiritConcept(cd.cid);
+        }
+    }
+    do {
+        seed_ = seedDsc.cid;
+
         startType_ = startTypeDsc.cid;
     }
 
@@ -85,9 +96,13 @@ import cpt.cpt_primitives;
     protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
             const byte[] transient)
     {
-        seed_ = *cast(Cid*)&stable[0];
+        startType_ = *cast(Cid*)&stable[0];
+        seed_ = *cast(Cid*)&stable[Cid.sizeof];
+        auto ds1 = deserializeArray!(Cid[])(stable[2*Cid.sizeof..$]);
+        inPars_ = ds1.array;
+        auto ds2 = deserializeArray!(Cid[])(ds1.restOfBuffer);
 
-        return tuple!(const byte[], "stable", const byte[], "transient")(stable[Cid.sizeof..$], transient);
+        return tuple!(const byte[], "stable", const byte[], "transient")(ds2.restOfBuffer, transient);
     }
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
@@ -97,16 +112,25 @@ import cpt.cpt_primitives;
 
     /// The seed of the branch.
     private Cid seed_;
+
+    /// Concepts, that are injected into the name space by the parent on the start of the thread.
+    private Cid[] inPars_;
+
+    // Concepts, that are injected back to the parent's name space at the finish.
+    private Cid[] outPars_;
 }
 
 unittest {
+    import chri_data: HardCid;
     auto a = new SpBreed(42);
     a.ver = 5;
-    a.seedCid_ = 43;
+    a.startType_ = HardCid.threadStartType_mark_hcid.cid;
+    a.seed_ = 43;
 
     Serial ser = a.serialize;
     auto b = cast(SpBreed)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
-    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpBreed) && b.seedCid_ == 43);
+    assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpBreed) && b.seed_ == 43 && a.inPars_ == b.inPars_ &&
+            a.outPars_ == b.outPars_);
 
     assert(a == b);
 }

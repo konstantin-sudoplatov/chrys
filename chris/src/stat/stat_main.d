@@ -141,59 +141,61 @@ void anactivate_stat(Caldron cld, Cid cptCid) {
 }
 
 /**
-            Activate a concept in a given name space
+        Activate a concept in a given name space. The receiving side will also get a tid premise with tid of the
+    caller branch.
     Parameters:
         cld = current caldron
         destBreedCid = breed of the destination branch
         cptCid = concept to activate
 */
 @(11, StatCallType.p0Calp1Cidp2Cid)
-void activateRemotely_stat(Caldron cld, Cid destBreedCid, Cid cptCid) {
+void activateRemotely_stat(Caldron cld, Cid destBreed, Cid cpt) {
     import std.concurrency: Tid, send;
     import messages: IbrSetActivation_msg;
-    checkCid!BinActivationIfc(cld, cptCid);
-    auto br = scast!Breed(cld[destBreedCid]);
-    send(br.tid, new immutable IbrSetActivation_msg(cptCid, +1));
+    checkCid!BinActivationIfc(cld, cpt);
+    auto br = scast!Breed(cld[destBreed]);
+    send(br.tid, new immutable IbrSetActivation_msg(cpt, +1));
 }
 
 /**
-            Anactivate a concept in a given name space
+        Anactivate a concept in a given name space. The receiving side will also get a tid premise with tid of the
+    caller branch.
     Parameters:
         cld = current caldron
         destBreedCid = breed of the destination branch
         cptCid = concept to anactivate
 */
 @(12, StatCallType.p0Calp1Cidp2Cid)
-void anactivateRemotely_stat(Caldron cld, Cid destBreedCid, Cid cptCid) {
+void anactivateRemotely_stat(Caldron cld, Cid destBreed, Cid cpt) {
     import std.concurrency: Tid, send;
     import messages: IbrSetActivation_msg;
-    checkCid!BinActivationIfc(cld, cptCid);
-    auto br = scast!Breed(cld[destBreedCid]);
-    send(br.tid, new immutable IbrSetActivation_msg(cptCid, -1));
+    checkCid!BinActivationIfc(cld, cpt);
+    auto br = scast!Breed(cld[destBreed]);
+    send(br.tid, new immutable IbrSetActivation_msg(cpt, -1));
 }
 
 /**
         Send concept object to a branch. The concept is injected into the branch's name space. If there is already such concept
     in the branch name space, it will be overriden. The concept is cloned on sending, so that receiving side will get the
     concept as it was at the moment of calling this function. If it were cloned on the receiving side it could get changed
-    during the traveling time.
+    during the traveling time. The receiving side will also get a tid premise with tid of the caller branch.
     Parameters:
         cld = caldron as a name space for cids.
         breedCid = breed of the addressed branch as its identifier
         loadCid = concept to send
 */
 @(13, StatCallType.p0Calp1Cidp2Cid)
-void sendConceptToBranch_stat(Caldron cld, Cid breedCid, Cid loadCid) {
+void sendConceptToBranch_stat(Caldron cld, Cid destBreed, Cid load) {
     import std.concurrency: Tid, send;
     import messages: IbrSingleConceptPackage_msg;
-    checkCid!Concept(cld, loadCid);
-    Concept cpt = cld[loadCid];
+    checkCid!Concept(cld, load);
+    Concept cpt = cld[load];
     assert(!cast(ActivationIfc)cpt || (cast(ActivationIfc)cpt).activation > 0,
-            "%s, %s(%,?s) is anactivated, which should not be.".format(cld.cldName, cptName(loadCid), '_', loadCid));
+            "%s, %s(%,?s) is anactivated, which should not be.".format(cld.cldName, cptName(load), '_', load));
 
-    Breed br = scast!(Breed)(cld[breedCid]);
+    Breed br = scast!(Breed)(cld[destBreed]);
     try {
-        send(br.tid, new immutable IbrSingleConceptPackage_msg(cld[loadCid].clone));
+        send(br.tid, new immutable IbrSingleConceptPackage_msg(cld[load].clone));
     } catch(Exception e) {  // Something happened with the destination thread
         // anactivate the destination thread breed
         br.anactivate;

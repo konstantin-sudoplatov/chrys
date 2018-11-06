@@ -38,6 +38,8 @@ class Caldron {
 
         auto breed = cast(Breed)this[breedCid];
         breedCid_ = breed.cid;
+
+        checkCid!SpiritNeuron(breed.seed);
         headCid_ = breed.seed;
     }
 
@@ -169,18 +171,22 @@ class Caldron {
             else    //no: it is esquash
                 (cast(EsquashActivationIfc)this[m.destConceptCid]).activation = m.activation;
 
+            scast!TidPrem(this[HardCid.callerTid_tidprem_hcid]).tid = msg.senderTid;    // caller's tid. must be used durig this call of the reasoning_()
             reasoning_;
+
             return true;
         }
         else if // A concept was posted by another caldron?
                 (auto m = cast(immutable IbrSingleConceptPackage_msg)msg)
         {   //yes: it's already a clone, inject into the current name space (may be with overriding)
             debug if (dynDebug >= 1)
-                logit("%s, message SingleConceptPackageMsg has come, load: %s(%,?s)".format(cldName,
-                        cptName(m.load.cid), '_', m.load.cid), TermColor.brown);
+                logit("%s, message SingleConceptPackageMsg has come from %s, load: %s(%,?s)".format(cldName,
+                        msg.senderTid, cptName(m.load.cid), '_', m.load.cid), TermColor.brown);
 
-            this[] = cast()m.load;      // inject
+            this[] = cast()m.load;      // inject load
+            scast!TidPrem(this[HardCid.callerTid_tidprem_hcid]).tid = msg.senderTid;    // caller's tid. must be used durig this call of the reasoning_()
             reasoning_;                 // kick off
+
             return true;
         }
         else if // new text line from user?

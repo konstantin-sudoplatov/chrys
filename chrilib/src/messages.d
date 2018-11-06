@@ -16,8 +16,8 @@ immutable abstract class Msg {
     }
 
     /// Getter
-    @property immutable(Tid) senderTid() immutable {
-        return _senderTid;
+    @property Tid senderTid() immutable {
+        return cast()_senderTid;
     }
 
 protected:

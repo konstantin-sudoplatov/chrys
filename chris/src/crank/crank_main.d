@@ -222,16 +222,31 @@ void ulineBranch() {
     );
 }
 
-// 1_688_870_095, 338_100_057, 2_739_882_662, 642_918_001, 2_337_467_201, 580_962_659, 3_399_694_389, 2_877_036_599
+// , 338_100_057, 2_739_882_662, 642_918_001, 2_337_467_201, 580_962_659, 3_399_694_389, 2_877_036_599
 enum AskUline {
     askUline_breed_askuln = cd!(SpBreed, 188_095_368),
     askUline_seed_askuln = cd!(SpSeed, 2_594_815_860),
     askUline_c2act_askuln = cd!(SpA_2Cid, 4_122_865_703),
+    askUline_peg_askuln = cd!(SpPegPrem, 1_688_870_095),
     askUline_strprem_askuln = cd!(SpStringPrem, 254_056_846),
 }
 
 void askUline() {
+    mixin(dequalify_enums!(HardCid, AskUline, Uline));
 
+    // Setup breed
+    cp!askUline_breed_askuln.load(
+        threadStartType_mark_hcid,          // branch by thread or fiber?
+        askUline_seed_askuln,               // seed to branch
+        [uline_breed],                      // in params, will be injected into the branch by parent
+        [askUline_strprem_askuln]           // out params, will be injected back to parent's branch on finishing
+    );
+
+    cp!askUline_c2act_askuln.load(statCid!activateRemotely_stat, uline_breed, askUline_peg_askuln);
+    cp!askUline_seed_askuln.addEffs(
+        askUline_c2act_askuln,
+        null
+    );
 }
 
 

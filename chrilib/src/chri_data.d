@@ -53,7 +53,7 @@ immutable CrossMap!(ClassInfo, Clid) _spReg_;
 
 /// Concepts, that are not code-agnostic. They are used in static concept functions, for example, so code has to know
 /// its cids (not names. The concept names still shouldn't be used in code).
-/// 1373740169, 1354580365, 9082381, 584599776, 1722596122
+/// , 1354580365, 9082381, 584599776, 1722596122
 enum HardCid: DcpDescriptor {
     /// In this buffer the attention circle thread puts user lines of text, where they wait to get processed. Used in
     /// the attention circle thread.
@@ -68,6 +68,10 @@ enum HardCid: DcpDescriptor {
     /// and the primitive is valid only for chat branch, since the Tid field is stored in the live part of the concept.
     /// Used in the attention circle thread.
     userTid_tidprem_hcid = cd!(SpTidPrem, 217_397_612),
+
+    /// This tid premise is injected to the called caldron on coming some messages like sendConceptToBranch_stat based on
+    /// the Msg._senderTid field.
+    callerTid_tidprem_hcid = cd!(SpTidPrem, 1_373_740_169),
 
     /// Breed concepts contain these marks to specify how the branch must be started: as a separate thread, as a fiber or
     /// any way at discretion of the Caldron.reasoning_() function.

@@ -6,7 +6,7 @@ import proj_data, proj_types, proj_funcs;
 
 import chri_types, chri_data;
 import cpt.cpt_types;
-import cpt.abs.abs_concept, cpt.abs.abs_premise;
+import cpt.abs.abs_concept, cpt.abs.abs_neuron, cpt.abs.abs_premise;
 import cpt.cpt_primitives;
 
 /**
@@ -65,20 +65,28 @@ import cpt.cpt_primitives;
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
-    void load(DcpDescriptor startTypeDsc, DcpDescriptor seedDsc, DcpDescriptor[] inPars, DcpDescriptor[] outPars)
+    /**
+            Load.
+        Parameters:
+            startType = type of starting the branch - thread, fiber or auto.
+            seed = starting neuron.
+            itPars = array of input concepts. The parent injects them when preparing the branch.
+            outPars = array of output concepts. They are injected into parent at the end of the branch.
+    */
+    void load(DcpDescriptor startType, DcpDescriptor seed, DcpDescriptor[] inPars, DcpDescriptor[] outPars)
     in {
-        checkCid!SpSeed(seedDsc.cid);
-        checkCid!SpMarkPrim(startTypeDsc.cid);
-        assert(startTypeDsc == HardCid.threadStartType_mark_hcid || startTypeDsc == HardCid.fiberStartType_mark_hcid ||
-            startTypeDsc == HardCid.autoStartType_mark_hcid);
+        checkCid!SpMarkPrim(startType.cid);
+        checkCid!SpiritNeuron(seed.cid);
+        assert(startType == HardCid.threadStartType_mark_hcid || startType == HardCid.fiberStartType_mark_hcid ||
+            startType == HardCid.autoStartType_mark_hcid);
         foreach(cd; inPars) {
             checkCid!SpiritConcept(cd.cid);
         }
     }
     do {
-        seed_ = seedDsc.cid;
+        seed_ = seed.cid;
 
-        startType_ = startTypeDsc.cid;
+        startType_ = startType.cid;
     }
 
     /// Getter.

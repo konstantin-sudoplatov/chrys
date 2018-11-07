@@ -25,20 +25,20 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     this(Cid cid) { super(cid); }
 
     /// Ditto.
-    override SpiritNeuron clone() const {
-
-        // Take shallow copy
-        SpiritNeuron clon = cast(SpiritNeuron)super.clone;
-
-        // Make it deep.
-        clon._effects = (cast(Effect[])this._effects).dup;
-        foreach(int i, eff; clon._effects) {
-            clon._effects[i].branches = _effects[i].branches.dup;
-            clon._effects[i].actions = _effects[i].actions.dup;
-        }
-
-        return clon;
-    }
+    //override SpiritNeuron clone() const {
+    //
+    //    // Take shallow copy
+    //    SpiritNeuron clon = cast(SpiritNeuron)super.clone;
+    //
+    //    // Make it deep.
+    //    clon._effects = (cast(Effect[])this._effects).dup;
+    //    foreach(int i, eff; clon._effects) {
+    //        clon._effects[i].branches = _effects[i].branches.dup;
+    //        clon._effects[i].actions = _effects[i].actions.dup;
+    //    }
+    //
+    //    return clon;
+    //}
 
     /// Serialize concept
     override Serial serialize() const {
@@ -202,9 +202,9 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     */
     void addEffs(Tu: float, Ta, Tb)(Tu upperBound, Ta acts, Tb brans)
     if
-            ((isOf!(Ta, Cid) || isArrayOf!(Ta, Cid) || isOf!(Ta, DcpDescriptor) || isArrayOf!(Ta, DcpDescriptor))
+            ((isOf!(Ta, Cid) || isArrayOf!(Ta, Cid) || isOf!(Ta, DcpDsc) || isArrayOf!(Ta, DcpDsc))
                                                     &&
-            (isOf!(Tb, Cid) || isArrayOf!(Tb, Cid) || isOf!(Tb, DcpDescriptor) || isArrayOf!(Tb, DcpDescriptor)))
+            (isOf!(Tb, Cid) || isArrayOf!(Tb, Cid) || isOf!(Tb, DcpDsc) || isArrayOf!(Tb, DcpDsc)))
     {
         // convert act to Cid[]
         static if      // is array of actions null?
@@ -215,7 +215,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         else static if   // is Ta an array?
                 (is(Ta T : T[]))
             static if // is it array of the concept descriptors?
-                    (is(T == DcpDescriptor))
+                    (is(T == DcpDsc))
             {   //yes: convert it into array of cids
                 Cid[] a;
                 foreach (cd; acts) {
@@ -235,7 +235,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
                 Cid[] a = acts;
             }
         else static if // is it a concept descriptor?
-                    (is(Ta == DcpDescriptor))
+                    (is(Ta == DcpDsc))
             {  //yes: convert it to array of cids
                 debug if(_maps_filled_)
                     assert(cast(shared SpA)_sm_[acts.cid],
@@ -259,7 +259,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         else static if   // is Tb an array?
                 (is(Tb TT : TT[]))
             static if // is it array of the concept descriptors?
-                    (is(TT == DcpDescriptor))
+                    (is(TT == DcpDsc))
             {   //yes: convert it into array of cids
                 Cid[] b;
                 foreach (cd; brans) {
@@ -282,7 +282,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
             }
         else    //no: it is a single value
             static if // is it a concept descriptor?
-                    (is(Tb == DcpDescriptor))
+                    (is(Tb == DcpDsc))
             {  //yes: convert it to array of cids
                 debug if(_maps_filled_)
                     assert(cast(shared SpBreed)_sm_[brans.cid] || cast(shared SpiritNeuron)_sm_[brans.cid],
@@ -337,12 +337,12 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     }
 
     /// Adapter.
-    final void appendActs(float activation, DcpDescriptor actDesc) {
+    final void appendActs(float activation, DcpDsc actDesc) {
         appendActs(activation, [actDesc.cid]);
     }
 
     /// Adapter.
-    final void appendActs(float activation, DcpDescriptor[] actDescs) {
+    final void appendActs(float activation, DcpDsc[] actDescs) {
         Cid[] actCids;
         foreach(ad; actDescs)
             actCids ~= ad.cid;
@@ -383,12 +383,12 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
     }
 
     /// Ditto.
-    final void appendBrans(float activation, DcpDescriptor branchDesc) {
+    final void appendBrans(float activation, DcpDsc branchDesc) {
         appendBrans(activation, [branchDesc.cid]);
     }
 
     /// Ditto.
-    final void appendBrans(float activation, DcpDescriptor[] branchDescs) {
+    final void appendBrans(float activation, DcpDsc[] branchDescs) {
         Cid[] brCids;
         foreach(ad; branchDescs)
             brCids ~= ad.cid;
@@ -522,12 +522,12 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
     this(Cid cid) { super(cid); }
 
     /// Clone
-    override SpiritLogicalNeuron clone() const {
-        SpiritLogicalNeuron cpt = cast(SpiritLogicalNeuron)super.clone;
-        cpt._premises = this._premises.dup;      // deep copy of premises
-
-        return cpt;
-    }
+    //override SpiritLogicalNeuron clone() const {
+    //    SpiritLogicalNeuron cpt = cast(SpiritLogicalNeuron)super.clone;
+    //    cpt._premises = this._premises.dup;      // deep copy of premises
+    //
+    //    return cpt;
+    //}
 
     /// Serialize concept
     override Serial serialize() const {

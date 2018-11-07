@@ -112,10 +112,10 @@ void requestUserInput(Caldron cld, Cid userTidPremCid) {
 @(8, StatCallType.p0Calp1Cidp2Cid)
 void sendUserOutput(Caldron cld, Cid userTidPremCid, Cid stringPremCid) {
     import std.concurrency: Tid, send;
-    import messages: CircleTalksToUser_msg;
+    import messages: CircleTellsUser_msg;
     Tid tid = scast!TidPrem(cld[userTidPremCid]).tid;
     string s = scast!StringPrem(cld[stringPremCid]).text;
-    send(tid, new immutable CircleTalksToUser_msg(s));
+    send(tid, new immutable CircleTellsUser_msg(s));
 }
 
 /**
@@ -154,6 +154,8 @@ void activateRemotely_stat(Caldron cld, Cid destBreed, Cid cpt) {
     import messages: IbrSetActivation_msg;
     checkCid!BinActivationIfc(cld, cpt);
     auto br = scast!Breed(cld[destBreed]);
+    assert(br.tid != Tid.init, "%s, %s(%,?s) is not initialized: tid = %s".format(cld.cldName, cptName(destBreed),
+            '_', destBreed, '_', br.tid));
     send(br.tid, new immutable IbrSetActivation_msg(cpt, +1));
 }
 
@@ -171,6 +173,8 @@ void anactivateRemotely_stat(Caldron cld, Cid destBreed, Cid cpt) {
     import messages: IbrSetActivation_msg;
     checkCid!BinActivationIfc(cld, cpt);
     auto br = scast!Breed(cld[destBreed]);
+    assert(br.tid != Tid.init, "%s, %s(%,?s) is not initialized: tid = %s".format(cld.cldName, cptName(destBreed),
+            '_', destBreed, '_', br.tid));
     send(br.tid, new immutable IbrSetActivation_msg(cpt, -1));
 }
 
@@ -194,6 +198,8 @@ void sendConceptToBranch_stat(Caldron cld, Cid destBreed, Cid load) {
             "%s, %s(%,?s) is anactivated, which should not be.".format(cld.cldName, cptName(load), '_', load));
 
     Breed br = scast!(Breed)(cld[destBreed]);
+    assert(br.tid != Tid.init, "%s, %s(%,?s) is not initialized: tid = %s".format(cld.cldName, cptName(destBreed),
+            '_', destBreed, '_', br.tid));
     try {
         send(br.tid, new immutable IbrSingleConceptPackage_msg(cld[load].clone));
     } catch(Exception e) {  // Something happened with the destination thread

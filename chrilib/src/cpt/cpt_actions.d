@@ -206,7 +206,7 @@ class A: DynamicConcept {
     alias load = SpA.load;
 
     /// Full setup
-    void load(Cid statAction, DcpDescriptor operand) {
+    void load(Cid statAction, DcpDsc operand) {
         checkCid!SpStaticConcept(statAction);
         _statActionCid = statAction;
         checkCid!SpiritDynamicConcept(operand.cid);
@@ -214,7 +214,7 @@ class A: DynamicConcept {
     }
 
     /// Partial setup, only operand
-    void load(DcpDescriptor operand) {
+    void load(DcpDsc operand) {
         checkCid!SpiritDynamicConcept(operand.cid);
         _p1Cid = operand.cid;
     }
@@ -340,7 +340,7 @@ final class A_Cid: A {
     alias load = SpA.load;
 
     /// Full setup
-    void load(Cid statAction, DcpDescriptor firstOperand, DcpDescriptor secondOperand) {
+    void load(Cid statAction, DcpDsc firstOperand, DcpDsc secondOperand) {
         checkCid!SpStaticConcept(statAction);
 
         _statActionCid = statAction;
@@ -351,7 +351,7 @@ final class A_Cid: A {
     }
 
     /// Partial setup, without the static action
-    void load(DcpDescriptor firstOperand, DcpDescriptor secondOperand) {
+    void load(DcpDsc firstOperand, DcpDsc secondOperand) {
         checkCid!SpiritDynamicConcept(firstOperand.cid);
         _p1Cid = firstOperand.cid;
         checkCid!SpiritDynamicConcept(secondOperand.cid);
@@ -486,7 +486,7 @@ final class A_2Cid: A {
     alias load = SpA.load;
 
     /// Full setup
-    void load(Cid statAction, DcpDescriptor firstOperand, DcpDescriptor secondOperand, DcpDescriptor thirdOperand) {
+    void load(Cid statAction, DcpDsc firstOperand, DcpDsc secondOperand, DcpDsc thirdOperand) {
         checkCid!SpStaticConcept(statAction);
 
         _statActionCid = statAction;
@@ -499,7 +499,7 @@ final class A_2Cid: A {
     }
 
     /// Partial setup, without the static action
-    void load(DcpDescriptor firstOperand, DcpDescriptor secondOperand, DcpDescriptor thirdOperand) {
+    void load(DcpDsc firstOperand, DcpDsc secondOperand, DcpDsc thirdOperand) {
         checkCid!SpiritDynamicConcept(firstOperand.cid);
         _p1Cid = firstOperand.cid;
         checkCid!SpiritDynamicConcept(secondOperand.cid);
@@ -638,7 +638,7 @@ final class A_3Cid: A {
             p1 = concept, that takes the float value
             p2 = float value
     */
-    void load(Cid statActionCid, DcpDescriptor p1, float p2) {
+    void load(Cid statActionCid, DcpDsc p1, float p2) {
         checkCid!SpStaticConcept(statActionCid);
         checkCid!SpiritDynamicConcept(p1.cid);
 
@@ -648,7 +648,7 @@ final class A_3Cid: A {
     }
 
     /// Partial setup, without the static action
-    void load(DcpDescriptor p1, float p2) {
+    void load(DcpDsc p1, float p2) {
         checkCid!SpiritDynamicConcept(p1.cid);
 
         _p1Cid = p1.cid;
@@ -782,7 +782,7 @@ final class A_CidFloat: A {
             p2 = second concept
             p3 = float value
     */
-    void load(Cid statActionCid, DcpDescriptor p1, DcpDescriptor p2, float p3) {
+    void load(Cid statActionCid, DcpDsc p1, DcpDsc p2, float p3) {
         checkCid!SpStaticConcept(statActionCid);
         checkCid!SpiritDynamicConcept(p1.cid);
         checkCid!SpiritDynamicConcept(p2.cid);
@@ -794,7 +794,7 @@ final class A_CidFloat: A {
     }
 
     /// Partial setup, without the static action
-    void load(DcpDescriptor p1, DcpDescriptor p2, float p3) {
+    void load(DcpDsc p1, DcpDsc p2, float p3) {
         checkCid!SpiritDynamicConcept(p1.cid);
         checkCid!SpiritDynamicConcept(p2.cid);
 
@@ -933,7 +933,7 @@ final class A_2CidFloat: A {
             p1 = concept, that takes the int value
             p2 = int value
     */
-    void load(Cid statActionCid, DcpDescriptor p1, int p2) {
+    void load(Cid statActionCid, DcpDsc p1, int p2) {
         checkCid!SpStaticConcept(statActionCid);
         checkCid!SpiritDynamicConcept(p1.cid);
 
@@ -943,7 +943,7 @@ final class A_2CidFloat: A {
     }
 
     /// Partial setup, without the static action
-    void load(DcpDescriptor p1, int p2) {
+    void load(DcpDsc p1, int p2) {
         checkCid!SpiritDynamicConcept(p1.cid);
 
         _p1Cid = p1.cid;

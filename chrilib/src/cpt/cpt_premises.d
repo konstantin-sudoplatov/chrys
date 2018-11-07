@@ -1,6 +1,6 @@
 module cpt.cpt_premises;
 import std.stdio;
-import std.string, std.typecons;
+import std.string, std.typecons, std.algorithm;
 
 import proj_data, proj_types, proj_funcs;
 
@@ -59,7 +59,14 @@ import cpt.cpt_primitives;
 
     override string toString() const {
         string s = super.toString;
-        s ~= "\n    seedCid_ = %s(%,?s)".format(_nm_[seed_], '_', seed_);
+        s ~= "\n    startType_ = %s(%,?s)".format(cptName(startType_), '_', startType_);
+        s ~= "\n    seed_ = %s(%,?s)".format(cptName(seed_), '_', seed_);
+        s ~= "\n    inPars_ = [";
+        foreach(cid; inPars_) s ~= "\n        %s(%,?s)".format(cptName(cid), '_', cid);
+        s ~= "\n    ]";
+        s ~= "\n    outPars_ = [";
+        foreach(cid; outPars_) s ~= "\n        %s(%,?s)".format(cptName(cid), '_', cid);
+        s ~= "\n    ]";
         return s;
     }
 
@@ -73,26 +80,32 @@ import cpt.cpt_primitives;
             itPars = array of input concepts. The parent injects them when preparing the branch.
             outPars = array of output concepts. They are injected into parent at the end of the branch.
     */
-    void load(DcpDescriptor startType, DcpDescriptor seed, DcpDescriptor[] inPars, DcpDescriptor[] outPars)
+    void load(DcpDsc startType, DcpDsc seed, DcpDsc[] inPars, DcpDsc[] outPars)
     in {
         checkCid!SpMarkPrim(startType.cid);
         checkCid!SpiritNeuron(seed.cid);
         assert(startType == HardCid.threadStartType_mark_hcid || startType == HardCid.fiberStartType_mark_hcid ||
             startType == HardCid.autoStartType_mark_hcid);
-        foreach(cd; inPars) {
-            checkCid!SpiritConcept(cd.cid);
-        }
+        foreach(cd; inPars) checkCid!SpiritConcept(cd.cid);
+        foreach(cd; outPars) checkCid!SpiritConcept(cd.cid);
     }
     do {
-        seed_ = seed.cid;
-
         startType_ = startType.cid;
+        seed_ = seed.cid;
+        inPars.each!(dd => inPars_ ~= dd.cid);
+        outPars.each!(dd => outPars_ ~= dd.cid);
     }
 
     /// Getter.
-    @property Cid seed() const {
+    Cid seed() const {
         return seed_;
     }
+
+    /// Getter.
+    const(Cid[]) inPars() const { return inPars_; }
+
+    /// Getter.
+    const(Cid[]) outPars() const { return outPars_; }
 
     /**
             Initialize concept from its serialized form.
@@ -109,6 +122,7 @@ import cpt.cpt_primitives;
         auto ds1 = deserializeArray!(Cid[])(stable[2*Cid.sizeof..$]);
         inPars_ = ds1.array;
         auto ds2 = deserializeArray!(Cid[])(ds1.restOfBuffer);
+        outPars_ = ds2.array;
 
         return tuple!(const byte[], "stable", const byte[], "transient")(ds2.restOfBuffer, transient);
     }
@@ -160,9 +174,13 @@ final class Breed: Premise {
     }
 
     /// Getter.
-    Cid seed() const {
-        return (cast(immutable SpBreed)spirit).seed;
-    }
+    Cid seed() const { return (cast(immutable SpBreed)spirit).seed; }
+
+    /// Getter.
+    const(Cid[]) inPars() const { return (cast(immutable SpBreed)spirit).inPars; }
+
+    /// Getter.
+    const(Cid[]) outPars() const { return (cast(immutable SpBreed)spirit).outPars; }
 }
 
 @(13) final class SpGraft: SpiritPremise {
@@ -208,7 +226,7 @@ final class Breed: Premise {
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
-    void load(DcpDescriptor seedDsc) {
+    void load(DcpDsc seedDsc) {
         checkCid!SpSeed(seedDsc.cid);
         seedCid_ = seedDsc.cid;
     }

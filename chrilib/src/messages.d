@@ -83,7 +83,7 @@ private:
 }
 
 /// Message to display on the console_thread, usually by an attention circle.
-immutable class CircleTalksToUser_msg: Msg {
+immutable class CircleTellsUser_msg: Msg {
 
     /**
         Constructor.
@@ -111,7 +111,7 @@ immutable class CircleListensToUser_msg: Msg {
 }
 
 /// Console sends a line of text to an attention circle
-immutable class UserTalksToCircle_msg: Msg {
+immutable class UserTellsCircle_msg: Msg {
 
     /**
         Constructor.

@@ -31,13 +31,27 @@ class Caldron {
     /**
             Constructor.
         Parameters:
+            parent = parent caldron
             breedCid = breed to start with
+            inPars = input parameter cancepts (those from the breed). They are injected into the caldron.
     */
-    this(Cid breedCid) {
-        checkCid!SpBreed(breedCid);
+    this(Caldron parent, Cid breedCid, Concept[] inPars) {
+        import std.algorithm: map, each, canFind;
 
-        auto breed = cast(Breed)this[breedCid];
-        breedCid_ = breed.cid;
+        parent_ = parent;
+
+        checkCid!SpBreed(breedCid);
+        breedCid_ = breedCid;
+        auto breed = scast!Breed(this[breedCid]);
+
+        debug {
+            if (inPars) {
+                assert(breed.inPars.length == inPars.length);
+                inPars.map!(cpt => cpt.cid).each!(cid => assert(canFind(breed.inPars, cid),
+                        "Different set of Cids in the parameter and breed inPars."));
+            }
+        }
+        foreach(cpt; inPars) this[] = cpt;
 
         checkCid!SpiritNeuron(breed.seed);
         headCid_ = breed.seed;
@@ -55,7 +69,7 @@ class Caldron {
         Returns: the live concept object
     */
     final Concept opIndex(Cid cid) {
-        assert(cid in _sm_, "Cid %s(%s) is not there in the spirit map.".format(cid, cptName(cid)));
+        assert(cid in _sm_, "Cid %s(%,?s) is not in the spirit map.".format(cptName(cid), '_', cid));
         if
                 (auto p = cid in lm_)
             return *p;
@@ -64,7 +78,7 @@ class Caldron {
     }
 
     /// Adapter
-    final Concept opIndex(DcpDescriptor cd) {
+    final Concept opIndex(DcpDsc cd) {
         return this[cd.cid];
     }
 
@@ -107,10 +121,10 @@ class Caldron {
 
     /// Caldron's name (based on the seed), if exist, else "noname".
     final string cldName() {
-        import std.array: replace;
+        import std.string: indexOf;
 
         if (auto nmp = breed.seed in _nm_)
-            return (*nmp).replace("_seed", "");
+            return (*nmp)[0..(*nmp).indexOf("_seed")];
         else
             return "noname";
     }
@@ -190,10 +204,10 @@ class Caldron {
             return true;
         }
         else if // new text line from user?
-                (auto m = cast(immutable UserTalksToCircle_msg)msg)
+                (auto m = cast(immutable UserTellsCircle_msg)msg)
         {   //yes: put the text into the userInput_strprem concept
             debug if (dynDebug >= 1)
-                logit("%s, message UserTalksToCircleMsg has come, text: %s".format(cldName, m.line), TermColor.brown);
+                logit("%s, message UserTellsCircleMsg has come, text: %s".format(cldName, m.line), TermColor.brown);
 
             auto cpt = scast!StringQueuePrem(this[HardCid.userInputBuffer_strqprem_hcid]);
             cpt.push(m.line);
@@ -209,6 +223,9 @@ class Caldron {
     //                               Private
     //
     //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
+
+    /// Parent caldron.
+    private Caldron parent_;
 
     /// Breed for this caldron.
     private Cid breedCid_;
@@ -272,10 +289,19 @@ class Caldron {
                 {   //yes: spawn the new branch
                     debug if(dynDebug >= 1) logit("%s, spawning %s(%,?s)".format(cldName, cptName(cid), '_', cid),
                             TermColor.blue);
-                    CaldronThread thread = _threadPool_.pop(new Caldron(cid));
+
+                    Concept[] inPars;
+                        foreach(c; breed.inPars) inPars ~= this[c].clone;
+
+                    CaldronThread thread = _threadPool_.pop(new Caldron(
+                        this,       // parent
+                        cid,        // breed
+                        inPars      // input concepts
+                    ));
+                    childCaldrons_[thread.tid] = thread;
+
                     breed.tid = thread.tid;     // wind up our instance
                     breed.activate;             // of the breed
-                    childCaldrons_[thread.tid] = thread;
                 }
                 else if
                         (auto graft = cast(Graft)cpt)
@@ -326,7 +352,13 @@ final class AttentionCircle: Caldron {
     /**
             Constructor.
     */
-    this() { super(HardCid.chatBreed_breed_hcid.cid); }
+    this() {
+        super(
+            null,       // parent
+            HardCid.chatBreed_breed_hcid.cid,   // breed
+            null        // inPars
+        );
+    }
 
     override bool _processMessage(immutable Msg msg) {
 
@@ -449,8 +481,8 @@ class CaldronThread {
         assert(cld !is null);
         caldron_ = cld;
         myTid_ = spawn(&(cast(shared)this).caldronThreadFunc);
-        Breed cldBreed = cld.breed;
-        cldBreed.tid = myTid_;
+        Breed cldBreed = cld.breed;     // it is legal, since we setup
+        cldBreed.tid = myTid_;          // the new caldrons's breed prior to kicking off the reasoning.
         cldBreed.activate;         // the local instance of the breed is setup and ready
         myTid_.send(new immutable IbrStartReasoning_msg);   // kick off the reasoning cycle
     }

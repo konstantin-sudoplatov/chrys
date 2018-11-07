@@ -5,7 +5,7 @@ import proj_data;
 
 import crank.crank_types;
 import chri_data;
-import chri_types: DcpDescriptor;
+import chri_types: DcpDsc;
 
 /// Full list of modules, that contain dynamic concept names in enums of the type DcpDescriptor. This list is used
 /// at compile time to gather together all dynamic concept names along with cids and put them in the name map.
@@ -32,7 +32,7 @@ DynDescriptor[] createDynDescriptors() {
     static foreach(moduleName; [EnumMembers!CrankModules]) {
         mixin("import " ~ moduleName ~ ";");
         static foreach(memberName; __traits(allMembers, mixin(moduleName))) {
-            static if(mixin("is(" ~ memberName ~ "==enum)") && mixin("is(" ~ memberName ~ ": DcpDescriptor)")) {
+            static if(mixin("is(" ~ memberName ~ "==enum)") && mixin("is(" ~ memberName ~ ": DcpDsc)")) {
                 static foreach(enumElem; __traits(allMembers, mixin(memberName))) {
                     dd.cid = mixin(memberName ~ "." ~ enumElem ~ ".cid");
                     dd.name = enumElem;

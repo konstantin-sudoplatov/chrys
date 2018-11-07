@@ -64,7 +64,7 @@ import chri_types;
     }
 
     /// Adapter.
-    final void addActs(DcpDescriptor actDesc) {
+    final void addActs(DcpDsc actDesc) {
         if(_effects.length == 0)
             addEffs(actDesc, null);
         else
@@ -72,7 +72,7 @@ import chri_types;
     }
 
     /// Adapter.
-    final void addActs(DcpDescriptor[] actDescs) {
+    final void addActs(DcpDsc[] actDescs) {
         if(_effects.length == 0)
             addEffs(actDescs, null);
         else
@@ -100,7 +100,7 @@ import chri_types;
     }
 
     /// Adapter.
-    final void addBrans(DcpDescriptor branchDesc) {
+    final void addBrans(DcpDsc branchDesc) {
         if(_effects.length == 0)
             addEffs(branchDesc, null);
         else
@@ -108,7 +108,7 @@ import chri_types;
     }
 
     /// Adapter.
-    final void addBrans(DcpDescriptor[] branchDescs) {
+    final void addBrans(DcpDsc[] branchDescs) {
         if(_effects.length == 0)
             addEffs(branchDescs, null);
         else

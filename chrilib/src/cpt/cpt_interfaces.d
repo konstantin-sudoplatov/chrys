@@ -147,10 +147,10 @@ interface PremiseIfc {
     void addPrems(Cid premCid);
 
     /// Adapter.
-    void addPrems(DcpDescriptor[] premDescs);
+    void addPrems(DcpDsc[] premDescs);
 
     /// Adapter.
-    void addPrems(DcpDescriptor premDesc);
+    void addPrems(DcpDsc premDesc);
 }
 
 /**
@@ -183,7 +183,7 @@ mixin template PremiseImpl(T : PremiseIfc) {
     }
 
     /// Adapter.
-    void addPrems(DcpDescriptor[] premDescs) {
+    void addPrems(DcpDsc[] premDescs) {
         Cid[] cids;
         foreach(cd; premDescs)
             cids ~= cd.cid;
@@ -192,7 +192,7 @@ mixin template PremiseImpl(T : PremiseIfc) {
     }
 
     /// Adapter.
-    void addPrems(DcpDescriptor premDesc) {
+    void addPrems(DcpDsc premDesc) {
         addPrems(premDesc.cid);
     }
 

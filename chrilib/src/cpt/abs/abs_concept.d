@@ -52,6 +52,7 @@ abstract class SpiritConcept {
         object in the its body.
         Returns: deep clone of itself
     */
+    deprecated("Should not be normally used, no compelling reason so far.")
     SpiritConcept clone() const {
 
         void* copy = cast(void*)_d_newclass(this.classinfo);

@@ -76,7 +76,7 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
         }
         else//no: the line is intended for the attention circle, send it there
         {
-            (cast()attnCircleTid_).send(new immutable UserTalksToCircle_msg(s));
+            (cast()attnCircleTid_).send(new immutable UserTellsCircle_msg(s));
         }
 
         // receive response from the attention circle/dispatcher
@@ -99,7 +99,7 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
                     continue;
                 }
                 else if // has cirle anything to tell to user?
-                        (auto m = cast(immutable CircleTalksToUser_msg)msg)
+                        (auto m = cast(immutable CircleTellsUser_msg)msg)
                 {
                     writeln(m.line); stdout.flush;
                 }

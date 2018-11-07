@@ -53,10 +53,10 @@ unittest {
     Returns: string, containing the resulting enum statement, ready to be mixed in the code.
 */
 string dequalify_enums(enumList...)() {
-    string res = "enum : DcpDescriptor {\n";
+    string res = "enum : DcpDsc {\n";
     static foreach (enuM; enumList)     // each enum en in the list of enums
     {
-        static assert(is(enuM == enum) && is(enuM: DcpDescriptor));
+        static assert(is(enuM == enum) && is(enuM: DcpDsc));
         static foreach(enEl; __traits(allMembers, enuM)) {         // each enum element
             res ~= format!"    %s = %s.%s,\n"(enEl, enuM.stringof, enEl);
         }
@@ -68,12 +68,12 @@ unittest {
     import std.conv: asOriginalType;
     import cpt.cpt_neurons: SpSeed;
     import cpt.cpt_premises: SpBreed;
-    enum CommonConcepts: DcpDescriptor {
+    enum CommonConcepts: DcpDsc {
         chat_seed = cd!(SpSeed, 2_500_739_441),                  // this is the root branch of the chat
         do_not_know_what_it_is = cd!(SpSeed, 580_052_493),
     }
 
-    enum Chat: DcpDescriptor {
+    enum Chat: DcpDsc {
         console_breed = cd!(SpBreed, 4_021_308_401),
         console_seed = cd!(SpSeed, 1_771_384_341),
     }

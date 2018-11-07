@@ -17,7 +17,7 @@ string cptName(Cid cid) {
 }
 
 /// Adapter.
-string cptName(DcpDescriptor dc) {
+string cptName(DcpDsc dc) {
     return dc.cid in _nm_? _nm_[dc.cid]: "noname";
 }
 
@@ -182,7 +182,7 @@ synchronized final pure nothrow class SpiritMap {
     }
 
     /// Adapter
-    SpiritConcept opIndex(DcpDescriptor dc) {
+    SpiritConcept opIndex(DcpDsc dc) {
         return this[dc.cid];
     }
 
@@ -370,14 +370,14 @@ immutable struct SpiritManager {
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 }
 
-/// Structure of the crank enums.
-struct DcpDescriptor {
+/// Dynamic concept descriptor - structure of the crank enums.
+struct DcpDsc {
     string className;      // named concept's class
     Cid cid;                // named concept's cid
 }
 
 /// Enum template for declaring named dynamic concepts. Used in the crank modules.
-enum cd(T : SpiritDynamicConcept, Cid cid)  = DcpDescriptor(T.stringof, cid);
+enum cd(T : SpiritDynamicConcept, Cid cid)  = DcpDsc(T.stringof, cid);
 
 
 

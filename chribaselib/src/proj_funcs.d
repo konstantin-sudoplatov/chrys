@@ -1,5 +1,6 @@
 module proj_funcs;
 import std.stdio;
+import std.exception;
 import std.format, std.typecons;
 
 import proj_data;
@@ -248,7 +249,9 @@ pure Tuple!(T[], "array", const byte[], "restOfBuffer") deserializeArray(T: T[])
     // Check for emptiness. If empty return null array and consumed by Cind.sizeof buffer
     if(len == 0) return tuple!(T[], "array", const byte[], "restOfBuffer")(null, buf[Cind.sizeof..$]);
 
-    assert(Cind.sizeof + len*T.sizeof <= buf.length,
+    // can be caugt and corrected (in chricrank.d, while error out reading a concept from DB, it can be replaced with
+    // the newly cranked one).
+    enforce(Cind.sizeof + len*T.sizeof <= buf.length,
             format!"The buf of length %s is not enough to contain %s elements of type %s"
             (buf.length, len, T.stringof));
 

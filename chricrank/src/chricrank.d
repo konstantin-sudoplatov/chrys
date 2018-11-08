@@ -32,7 +32,12 @@ void main()
             // no DB for it
             continue;
 
-        const SpiritConcept dbCpt = spiritMan.retrieveConcept(cid, 0);
+        SpiritConcept dbCpt;
+        try {
+            dbCpt = spiritMan.retrieveConcept(cid, 0);
+        } catch(Exception e) {
+            goto UPDATE;
+        }
         if      // isn't the concept in DP?
                 (!dbCpt)
         {   //no: add it
@@ -42,6 +47,7 @@ void main()
         else if // is the concept in DP different from the newly cranked?
                 (dbCpt != smCpt)
         {   //yes: update it
+        UPDATE:
             enforce(cid in _nm_, format!("Cid %s is used by for a concept in DB, and it's not present in the name map." ~
                     " May be we are trying to reuse this cid?")(cid));
             spiritMan.updateConcept(smCpt);

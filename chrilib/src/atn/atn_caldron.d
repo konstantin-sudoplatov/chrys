@@ -123,8 +123,8 @@ class Caldron {
     final string cldName() {
         import std.string: indexOf;
 
-        if (auto nmp = breed.seed in _nm_)
-            return (*nmp)[0..(*nmp).indexOf("_seed")];
+        if (auto nmp = breedCid_ in _nm_)
+            return (*nmp)[0..(*nmp).indexOf("_breed")];
         else
             return "noname";
     }
@@ -355,7 +355,7 @@ final class AttentionCircle: Caldron {
     this() {
         super(
             null,       // parent
-            HardCid.chatBreed_breed_hcid.cid,   // breed
+            HardCid.chat_breed_hcid.cid,   // breed
             null        // inPars
         );
     }

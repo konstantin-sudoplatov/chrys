@@ -511,7 +511,7 @@ abstract class Neuron: DynamicConcept, ActivationIfc {
 /**
             Base for neurons, that take its decisions by pure logic on premises, as opposed to weighing them.
 */
-abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
+abstract class SpiritLogicalNeuron: SpiritNeuron {
 
     /**
                 Constructor
@@ -551,7 +551,7 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
         auto s = super.toString;
         s ~= "\n    premises: [";
         foreach(pr; _premises)
-            if(auto p = pr in _nm_)
+            if(auto p = pr.cid in _nm_)
                 s ~= format!"\n        %s(%,?s),"(*p, '_', pr);
             else
                 s ~= format!"\n        noname(%,?s),"('_', pr);
@@ -562,7 +562,56 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
-    mixin PremiseImpl!SpiritLogicalNeuron;
+    /// Getter.
+    const(Premise[]) premises() const {
+        return cast(const Premise[])_premises;
+    }
+
+    /// Add premise by cid.
+    void addPrem(Flag!"negate" negation, Cid premise) {
+        debug assert(!_maps_filled_ || cast(BinActivationIfc)_sm_[premise].live_factory,     // !_maps_filled_ in case of calls from unittest
+                "Cid %s must implement BinActivationIfc. Check the class %s.".format(premise, typeid(_sm_[premise])));
+
+        _premises ~= Premise(negation, premise);
+    }
+
+    /// Adapter.
+    void addPrem(Flag!"negate" negation, DcpDsc premise) {
+        addPrem(negation, premise.cid);
+    }
+
+    /// Adapter.
+    void addPrem(Cid premise) {
+        addPrem(No.negate, premise);
+    }
+
+    /// Adapter.
+    void addPrem(DcpDsc premise) {
+        addPrem(No.negate, premise.cid);
+    }
+
+    static struct Premise {
+        Cid cid;
+        Flag!"negate" negation;
+
+        this(Flag!"negate" negation, Cid premiseCid) {
+            this.cid = premiseCid;
+            this.negation = negation;
+        }
+    }
+
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+    //
+    //                                 Protected
+    //
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+
+    //---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
+
+    /// Array of premise cids.
+    protected Premise[] _premises;
+
+    //---$$$---$$$---$$$---$$$---$$$--- functions ---$$$---$$$---$$$---$$$---$$$---
 
     /**
             Initialize concept from its serialized form.
@@ -576,7 +625,7 @@ abstract class SpiritLogicalNeuron: SpiritNeuron, PremiseIfc {
     {
         auto theRest = super._deserialize(stable, transient);
 
-        auto dser = deserializeArray!(Cind[])(theRest.stable);
+        auto dser = deserializeArray!(Premise[])(theRest.stable);
         _premises = dser.array;
 
         return tuple!(const byte[], "stable", const byte[], "transient")(dser.restOfBuffer, transient);

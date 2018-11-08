@@ -1,5 +1,6 @@
 module cpt.cpt_interfaces;
-import std.format;
+import std.string;
+import std.typecons;
 
 import proj_data;
 
@@ -128,76 +129,6 @@ unittest {
     assert(a.activation == 1);
     a.anactivate;
     assert(a.activation == -1);
-}
-
-/**
-            Interface for logical (boolean logic) premises.
-    Note: the interface must be "shared" for it would be overrided by shared functions. Else it causes strange errors
-          "not implemented interface functions".
-*/
-interface PremiseIfc {
-
-    /// Getter.
-    const(Cid[]) premises();
-
-    /// Add premises by cid.
-    void addPrems(Cid[] premCids);
-
-    /// Add premise by cid.
-    void addPrems(Cid premCid);
-
-    /// Adapter.
-    void addPrems(DcpDsc[] premDescs);
-
-    /// Adapter.
-    void addPrems(DcpDsc premDesc);
-}
-
-/**
-    Imlementation of the PremiseIfc.
-*/
-mixin template PremiseImpl(T : PremiseIfc) {
-    static assert (is(typeof(this) == T), `You introduced yourself as a "` ~ T.stringof ~ `" and you are a "` ~
-            this.stringof ~ `". Are you an imposter?`);
-
-    /// Getter.
-    const(Cid[]) premises() const {
-        return cast(const Cid[])_premises;
-    }
-
-    /// Add premises by cid.
-    void addPrems(Cid[] premCids) {
-        debug foreach(cid; premCids)
-            assert(!_maps_filled_ || cast(BinActivationIfc)_sm_[cid].live_factory,    // !_maps_filled_ in case of calls from unittest
-                    format!"Cid %s must implement BinActivationIfc. Check the class %s."(cid, typeid(_sm_[cid])));
-
-        _premises ~= premCids;
-    }
-
-    /// Add premise by cid.
-    void addPrems(Cid premCid) {
-        debug assert(!_maps_filled_ || cast(BinActivationIfc)_sm_[premCid].live_factory,     // !_maps_filled_ in case of calls from unittest
-                format!"Cid %s must implement BinActivationIfc. Check the class %s."(premCid, typeid(_sm_[premCid])));
-
-        _premises ~= premCid;
-    }
-
-    /// Adapter.
-    void addPrems(DcpDsc[] premDescs) {
-        Cid[] cids;
-        foreach(cd; premDescs)
-            cids ~= cd.cid;
-
-        addPrems(cids);
-    }
-
-    /// Adapter.
-    void addPrems(DcpDsc premDesc) {
-        addPrems(premDesc.cid);
-    }
-
-    /// Array of premise cids.
-    protected Cid[] _premises;
 }
 
 /**

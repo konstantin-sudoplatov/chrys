@@ -61,7 +61,7 @@ enum HardCid: DcpDsc {
 
     /// This is the root branch of the attention circle. It is set up in the attention circle constructor. Used in the
     /// attention circle thread.
-    chatBreed_breed_hcid = cd!(SpBreed, 1_719_007_030),
+    chat_breed_hcid = cd!(SpBreed, 1_719_007_030),
 
     /// It is a very special and narrow case of concept. We have in it Tid of the thread, that maintains dialog with user.
     /// It is the thread that controls the console or http connection. The Tid is put in it on start of the chat caldron,

@@ -1,3 +1,5 @@
+module crank.stash;
+/+
 /// Dynamic concept names
 module crank.crank_main;
 
@@ -109,7 +111,7 @@ void chat() {
 
     // Handshake with uline
         //prems
-    cp!shakeHandsWithUline_andnrn_chat.addPrem(userTid_tidprem_hcid);
+    cp!shakeHandsWithUline_andnrn_chat.addPrems(userTid_tidprem_hcid);
         // acts
     cp!sendUlineChatBreed_c2act_chat.load(statCid!sendConceptToBranch_stat, uline_breed, chat_breed_hcid);
     cp!sendUlineUserTid_c2act_chat.load(statCid!sendConceptToBranch_stat, uline_breed, userTid_tidprem_hcid);
@@ -130,7 +132,7 @@ askUserLine_breed_askuln,
     );
 
     // Wait on the user input
-    cp!valveOnUlineInput_andnrn_chat.addPrem(userInputLine_strprem);
+    cp!valveOnUlineInput_andnrn_chat.addPrems(userInputLine_strprem);
     cp!valveOnUlineInput_andnrn_chat.addEffs(
         float.infinity,
         [
@@ -142,7 +144,7 @@ askUserLine_breed_askuln,
 }
 
 /// User line branch enums
-// , , , , , 3_186_686_771, 1_099_498_783, 3_758_390_978
+// , , , , 1_906_470_662, 3_186_686_771, 1_099_498_783, 3_758_390_978
 enum Uline {
     /// uline branch identifier
     uline_breed = cd!(SpBreed, 4_021_308_401),
@@ -158,8 +160,6 @@ enum Uline {
 
     /// wait neuron. Wait on it for the next line of text from user.
     userInputValve_andnrn_uline = cd!(SpAndNeuron, 732_066_873),
-
-requestForUserLine_peg_uline = cd!(SpPegPrem, 1_906_470_662),
 
     /// Flag for uline to feed the next input from user to chat and anactivation action for it
     chatReadyForUlineInputPeg_pegprem_uline = cd!(SpPegPrem, 1_456_194_005),
@@ -177,7 +177,7 @@ requestForUserLine_peg_uline = cd!(SpPegPrem, 1_906_470_662),
 
 /// Setup the uline branch.
 void uline() {
-    mixin(dequalify_enums!(HardCid, CommonConcepts, Uline, Chat));
+    mixin(dequalify_enums!(HardCid, CommonConcepts, Uline, Chat, GiveUserline));
 
     // Mate uline seed and breed.
     cp!uline_breed.load(threadStartType_mark_hcid, uline_seed, null, null);
@@ -192,22 +192,38 @@ void uline() {
     // Handshaker. The chat breed and the user thread tid will be sent by the chat branch, wait for them.
     // The uline breed will be set up in the chat name space.
     cp!sendUserUlineTid_c2act_uline.load(statCid!sendTidToUser_stat, userTid_tidprem_hcid, uline_breed);
-    cp!shakeHandsWithChat_andnrn_uline.addPrem(chat_breed_hcid);
-    cp!shakeHandsWithChat_andnrn_uline.addPrem(userTid_tidprem_hcid);
+    cp!shakeHandsWithChat_andnrn_uline.addPrems([
+        chat_breed_hcid,
+        userTid_tidprem_hcid
+    ]);
     cp!shakeHandsWithChat_andnrn_uline.addEffs(
         float.infinity,
         [   // acts
             sendUserUlineTid_c2act_uline,
         ],
+        //[
+        //    userInputValve_andnrn_uline,
+        //]
         [
-            userInputValve_andnrn_uline,
+            zond_0_anrn,
         ]
     );
+    cp!zond_0_anrn.addEffs(
+        cast(DcpDsc[])[
+            //setDebugLevel_2_act,
+            //logCpt_0_cact,
+            //checkUp_act,
+        ],
+        giveUserLine_breed_givuln,
+    );
+
 
         // User input valve. The handshake is over. Now, wait for user input and send it to chat, in a cycle.
     // Premises
-    cp!userInputValve_andnrn_uline.addPrem(userInputBuffer_strqprem_hcid);
-    cp!userInputValve_andnrn_uline.addPrem(chatReadyForUlineInputPeg_pegprem_uline);
+    cp!userInputValve_andnrn_uline.addPrems([
+        userInputBuffer_strqprem_hcid,
+        chatReadyForUlineInputPeg_pegprem_uline
+    ]);
     // Actions
     cp!moveLineFromUserInuputBufferToUserInputLine_c2act_uline.load(statCid!getUserInputLineFromBuffer_stat,
             userInputBuffer_strqprem_hcid, userInputLine_strprem);
@@ -239,7 +255,7 @@ enum AskUserline {
 }
 
 void askUserline() {
-    mixin(dequalify_enums!(HardCid, CommonConcepts, Uline, AskUserline));
+    mixin(dequalify_enums!(HardCid, CommonConcepts, AskUserline, GiveUserline, Uline));
 
     // Setup breed
     cp!askUserLine_breed_askuln.load(
@@ -249,7 +265,7 @@ void askUserline() {
         [userline_strprem_askuln]           // out params, will be injected back to parent's branch on finishing
     );
 
-    cp!askUserline_c2act_askuln.load(statCid!activateRemotely_stat, uline_breed, requestForUserLine_peg_uline);
+    cp!askUserline_c2act_askuln.load(statCid!activateRemotely_stat, uline_breed, requestForUserLine_peg_givuln);
     cp!askUserLine_seed_askuln.addEffs(
         cast(DcpDsc[])[
 setDebugLevel_2_act,
@@ -264,14 +280,31 @@ cp!logCpt_0_cact.load(uline_breed);
 cp!logCpt_1_cact.load(askUserLine_breed_askuln);
 }
 
+enum GiveUserline {
+    giveUserLine_breed_givuln = cd!(SpBreed, 338_100_057),
+    seed_andnrn_givuln = cd!(SpAndNeuron, 2_739_882_662),
+    requestForUserLine_peg_givuln = cd!(SpPegPrem, 1_688_870_095),
+    giveUline_c2act_givuln = cd!(SpA_2Cid, 642_918_001),
+}
 
+void giveUserline() {
+    mixin(dequalify_enums!(HardCid, CommonConcepts, GiveUserline, AskUserline));
 
+    cp!giveUserLine_breed_givuln.load(
+        threadStartType_mark_hcid,
+        seed_andnrn_givuln,
+        null,
+        null
+    );
 
-
-
-
-
-
-
-
-
+    cp!seed_andnrn_givuln.addPrems(requestForUserLine_peg_givuln);
+    cp!seed_andnrn_givuln.addEffs(
+        float.infinity,
+        cast(DcpDsc[])[
+//            setDebugLevel_2_act,
+//            checkUp_act
+        ],
+        null
+    );
+}
++/

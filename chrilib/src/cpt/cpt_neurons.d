@@ -1,6 +1,6 @@
 module cpt.cpt_neurons;
 import std.stdio;
-import std.format;
+import std.string, std.typecons;
 
 import proj_data, proj_funcs;
 
@@ -194,7 +194,9 @@ unittest {
     a.addEffs(1, [5_000_000, 5_000_001], [5_000_010, 5_000_011]);
     a.addEffs(10, [5_000_002, 5_000_003], [5_000_012, 5_000_013]);
 
-    a.addPrems([5_000_0100, 5_000_0101, 5_000_0102]);
+    a.addPrem(5_000_0100);
+    a.addPrem(5_000_0101);
+    a.addPrem(5_000_0102);
     Serial ser = a.serialize;
 
     auto b = cast(SpAndNeuron)SpiritConcept.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
@@ -218,9 +220,12 @@ final class AndNeuron: LogicalNeuron {
     override float calculate_activation(Caldron cald) {
         float res = 1;
         foreach(pr; (scast!(immutable SpiritLogicalNeuron)(spirit)).premises) {
-            assert(cast(ActivationIfc)cald[pr],
-                    format!"Cid %s, ActivationIfs must be realised for %s"(pr, typeid(cald[pr])));
-            if ((cast(ActivationIfc)cald[pr]).activation <= 0) {
+            assert(cast(ActivationIfc)cald[pr.cid],
+                    "Cid %s, ActivationIfs must be realised for %s".format(pr, typeid(cald[pr.cid])));
+            if ((cast(ActivationIfc)cald[pr.cid]).activation <= 0 && pr.negation == No.negate
+                                                    ||
+                (cast(ActivationIfc)cald[pr.cid]).activation > 0 && pr.negation == Yes.negate)
+            {
                 res = -1;
                 anactivate;
                 goto FINISH;

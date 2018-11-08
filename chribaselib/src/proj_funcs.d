@@ -243,7 +243,7 @@ pure nothrow byte[] serializeArray(T)(const T[] ar) {
 pure Tuple!(T[], "array", const byte[], "restOfBuffer") deserializeArray(T: T[])(const byte[] buf) {
     assert(buf.length >= Cind.sizeof, format!"Buffer must be at least %s bytes and it is %s"(Cind.sizeof, buf.length));
 
-    size_t len = *cast(T*)&buf[0];        // length of the array
+    size_t len = *cast(Cind*)&buf[0];        // length of the array
 
     // Check for emptiness. If empty return null array and consumed by Cind.sizeof buffer
     if(len == 0) return tuple!(T[], "array", const byte[], "restOfBuffer")(null, buf[Cind.sizeof..$]);

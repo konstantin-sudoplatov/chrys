@@ -10,6 +10,37 @@ import cpt.abs.abs_concept, cpt.abs.abs_neuron, cpt.abs.abs_premise;
 import cpt.cpt_primitives;
 
 /**
+        Tid premise.
+*/
+@(12) class SpTidPrem: SpiritPremise {
+
+    /// Constructor
+    this(Cid cid) { super(cid); }
+
+    /// Create live wrapper for the holy static concept.
+    override TidPrem live_factory() const {
+        return new TidPrem(cast(immutable)this);
+    }
+}
+
+/// Live.
+class TidPrem: Premise {
+    import std.concurrency: Tid;
+
+    /// The tid field
+    Tid tid;
+
+    /// Private constructor. Use spiritual live_factory() instead.
+    private this(immutable SpTidPrem SpTidPremise) { super(SpTidPremise); }
+
+    override string toString() const {
+        string s = super.toString;
+        s ~= "\n    tid = %s".format(cast()tid);
+        return s;
+    }
+}
+
+/**
             Branch identifier. On one hand it is a container for TID. TID itself is stored in the live part, since it is
     a changeable entity. On the other, it is a pointer to the seed of the branch. Its cid is stored in the holy part.
 
@@ -17,8 +48,7 @@ import cpt.cpt_primitives;
     to a child to send it messages. This concept will be that handler. After the new branch started, its tid will be put
     in the tid_ field of the live part.
 */
-@(12) final class SpBreed: SpiritPremise {
-    import cpt.cpt_neurons: SpSeed;
+@(13) final class SpBreed: SpTidPrem {
 
     /**
                 Constructor
@@ -97,9 +127,10 @@ import cpt.cpt_primitives;
     }
 
     /// Getter.
-    Cid seed() const {
-        return seed_;
-    }
+    Cid startType() const { return startType_; }
+
+    /// Getter.
+    Cid seed() const { return seed_; }
 
     /// Getter.
     const(Cid[]) inPars() const { return inPars_; }
@@ -158,11 +189,7 @@ unittest {
 }
 
 /// Live.
-final class Breed: Premise {
-    import std.concurrency: Tid;
-
-    /// The thread identifier.
-    Tid tid;
+final class Breed: TidPrem {
 
     /// Private constructor. Use spiritual live_factory() instead.
     private this(immutable SpBreed spBreed) { super(spBreed); }
@@ -174,17 +201,19 @@ final class Breed: Premise {
     }
 
     /// Getter.
-    Cid seed() const { return (cast(immutable SpBreed)spirit).seed; }
+    Cid startType() const { return scast!(immutable SpBreed)(spirit).startType; }
 
     /// Getter.
-    const(Cid[]) inPars() const { return (cast(immutable SpBreed)spirit).inPars; }
+    Cid seed() const { return scast!(immutable SpBreed)(spirit).seed; }
 
     /// Getter.
-    const(Cid[]) outPars() const { return (cast(immutable SpBreed)spirit).outPars; }
+    const(Cid[]) inPars() const { return scast!(immutable SpBreed)(spirit).inPars; }
+
+    /// Getter.
+    const(Cid[]) outPars() const { return scast!(immutable SpBreed)(spirit).outPars; }
 }
 
-@(13) final class SpGraft: SpiritPremise {
-    import cpt.cpt_neurons: SpSeed;
+@(14) final class SpGraft: SpiritPremise {
 
     /**
                 Constructor
@@ -227,7 +256,7 @@ final class Breed: Premise {
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     void load(DcpDsc seedDsc) {
-        checkCid!SpSeed(seedDsc.cid);
+        checkCid!SpiritNeuron(seedDsc.cid);
         seedCid_ = seedDsc.cid;
     }
 
@@ -278,37 +307,6 @@ final class Graft: Premise {
     /// Getter.
     const(Cid) seed() const {
         return (cast(immutable SpGraft)spirit).seed;
-    }
-}
-
-/**
-        Tid premise.
-*/
-@(14) final class SpTidPrem: SpiritPremise {
-
-    /// Constructor
-    this(Cid cid) { super(cid); }
-
-    /// Create live wrapper for the holy static concept.
-    override TidPrem live_factory() const {
-        return new TidPrem(cast(immutable)this);
-    }
-}
-
-/// Live.
-final class TidPrem: Premise {
-    import std.concurrency: Tid;
-
-    /// The tid field
-    Tid tid;
-
-    /// Private constructor. Use spiritual live_factory() instead.
-    private this(immutable SpTidPrem SpTidPremise) { super(SpTidPremise); }
-
-    override string toString() const {
-        string s = super.toString;
-        s ~= "\n    tid = %s".format(cast()tid);
-        return s;
     }
 }
 
@@ -394,6 +392,8 @@ final class StringQueuePrem: Premise {
     private this(immutable SpStringQueuePrem spStrQuePrem) { super(spStrQuePrem); }
 
     override string toString() const {
-        return "\n    deq = %s".format(deque.toString);
+        string s = super.toString;
+        s ~= "\n    deq = %s".format(deque.toString);
+        return s;
     }
 }

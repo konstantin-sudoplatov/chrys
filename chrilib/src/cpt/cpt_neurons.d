@@ -144,32 +144,6 @@ class ActionNeuron: Neuron, ActivationIfc {
 }
 
 /**
-            Seed. It is a special case of the action neuron.
-        It used for anonymous branching as apposed to the Breed. After a branch is started with seed there is no branch identifier
-    left in the parent branch, so there is no way to communicate to it except waiting for a result concept or set of concepts,
-    that the branch will send to the parent when it finishes.
-*/
-@(9) final class SpSeed: SpActionNeuron {
-
-    /// Constructor
-    this(Cid cid) { super(cid); }
-
-    /// Create live wrapper for the holy static concept.
-    override Seed live_factory() const {
-        return new Seed(cast(immutable)this);
-    }
-
-    //---***---***---***---***---***--- functions ---***---***---***---***---***--
-}
-
-/// Live.
-final class Seed: ActionNeuron {
-
-    /// Private constructor. Use HolyTidPrimitive.live_factory() instead.
-    private this(immutable SpSeed spSeed) { super(spSeed); }
-}
-
-/**
             Base for neurons, that take its decisions by pure logic on premises, as opposed to weighing them.
 */
 @(10) final class SpAndNeuron: SpiritLogicalNeuron {

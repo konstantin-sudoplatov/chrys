@@ -31,14 +31,14 @@ class Caldron {
     /**
             Constructor.
         Parameters:
-            parent = parent caldron
+            parent = parent caldron thread
             breedCid = breed to start with
             inPars = input parameter cancepts (those from the breed). They are injected into the caldron.
     */
-    this(Caldron parent, Cid breedCid, Concept[] inPars) {
+    this(CaldronThread parent, Cid breedCid, Concept[] inPars) {
         import std.algorithm: map, each, canFind;
 
-        parent_ = parent;
+        parentThread_ = parent;
 
         checkCid!SpBreed(breedCid);
         breedCid_ = breedCid;
@@ -107,16 +107,20 @@ class Caldron {
         stop_ = true;
     }
 
+    @property void myThread(CaldronThread thread) { myThread_ = thread; }
+
+    @property CaldronThread parentThread() { return parentThread_; }
+
     /// Send children the termination signal and wait their termination.
     final void terminateChildren() {
-        foreach (child; childCaldrons_.byKey)
+        foreach (child; childThreads_.byKey)
             try {
-                if(!childCaldrons_[child].isFinished) child.send(new immutable TerminateApp_msg);
+                if(!childThreads_[child].isFinished) child.send(new immutable TerminateApp_msg);
             } catch(Throwable){
-                Caldron cld = childCaldrons_[child].caldron;
+                Caldron cld = childThreads_[child].caldron;
                 logit("Error happened while terminating thread %s".format(cld? cld.cldName: "???"), TermColor.red);
             }
-        childCaldrons_ = null;
+        childThreads_ = null;
     }
 
     /// Caldron's name (based on the seed), if exist, else "noname".
@@ -164,16 +168,16 @@ class Caldron {
                 (cast(IbrStartReasoning_msg)msg)
         {   // kick off the reasoning loop
             debug if (dynDebug >= 1)
-                logit("%s, message StartReasoningMsg has come".format(cldName), TermColor.brown);
+                logit("%s, message IbrStartReasoning_msg has come".format(cldName), TermColor.brown);
 
             reasoning_;
             return true;
         }
         else if // is it a request for setting activation?
-                (auto m = cast(immutable IbrSetActivation_msg)msg)
+                (auto m = cast(immutable IbrSetActivation_msg) msg)
         {
             debug if(dynDebug >= 1)
-                logit("%s, message IbrSetActivationMsg has come, %s.activation = %s".format(cldName,
+                logit("%s, message IbrSetActivation_msg has come, %s.activation = %s".format(cldName,
                         cptName(m.destConceptCid), m.activation), TermColor.brown);
 
             if      // is it bin activation?
@@ -191,10 +195,10 @@ class Caldron {
             return true;
         }
         else if // A concept was posted by another caldron?
-                (auto m = cast(immutable IbrSingleConceptPackage_msg)msg)
+                (auto m = cast(immutable IbrSingleConceptPackage_msg) msg)
         {   //yes: it's already a clone, inject into the current name space (may be with overriding)
             debug if (dynDebug >= 1)
-                logit("%s, message SingleConceptPackageMsg has come from %s, load: %s(%,?s)".format(cldName,
+                logit("%s, message IbrSingleConceptPackage_msg has come from %s, load: %s(%,?s)".format(cldName,
                         msg.senderTid, cptName(m.load.cid), '_', m.load.cid), TermColor.brown);
 
             this[] = cast()m.load;      // inject load
@@ -203,16 +207,33 @@ class Caldron {
 
             return true;
         }
+        else if // a branch sent its devise?
+                (auto m = cast(immutable IbrBranchDevise_msg) msg)
+        {   //yes: take outPars and anactivate its breed
+            debug if (dynDebug >= 1)
+                logit("%s, message IbrBranchDevise_msg has come from %s.".format(cldName, msg.senderTid),
+                        TermColor.brown);
+
+            Caldron sender = childThreads_[msg.senderTid].caldron;
+            Breed breed = sender.breed;
+            foreach(p; breed.outPars)
+                this[] = sender[p];     // inject
+            scast!Breed(this[breed.cid]).anactivate;
+            reasoning_;                 // kick off
+
+            return true;
+        }
         else if // new text line from user?
-                (auto m = cast(immutable UserTellsCircle_msg)msg)
+                (auto m = cast(immutable UserTellsCircle_msg) msg)
         {   //yes: put the text into the userInput_strprem concept
             debug if (dynDebug >= 1)
-                logit("%s, message UserTellsCircleMsg has come, text: %s".format(cldName, m.line), TermColor.brown);
+                logit("%s, message UserTellsCircle_msg has come, text: %s".format(cldName, m.line), TermColor.brown);
 
             auto cpt = scast!StringQueuePrem(this[HardCid.userInputBuffer_strqprem_hcid]);
             cpt.push(m.line);
             cpt.activate;       // the premise is ready
             reasoning_;         // kick off
+
             return true;
         }
         return false;
@@ -224,14 +245,17 @@ class Caldron {
     //
     //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
 
-    /// Parent caldron.
-    private Caldron parent_;
+    /// My thread.
+    private CaldronThread myThread_;
+
+    /// Parent thread.
+    private CaldronThread parentThread_;
 
     /// Breed for this caldron.
     private Cid breedCid_;
 
     /// Caldrons, that were parented here.
-    private CaldronThread[Tid] childCaldrons_;
+    private CaldronThread[Tid] childThreads_;
 
     /// Live map. All holy concepts, that are ever addressed by the caldron are wrapped in corresponding live object and
     /// put in this map. So, caldron always works with its own instance of a concept.
@@ -290,15 +314,19 @@ class Caldron {
                     debug if(dynDebug >= 1) logit("%s, spawning %s(%,?s)".format(cldName, cptName(cid), '_', cid),
                             TermColor.blue);
 
+                    // Prepare input concepts to inject
                     Concept[] inPars;
                         foreach(c; breed.inPars) inPars ~= this[c].clone;
 
-                    CaldronThread thread = _threadPool_.pop(new Caldron(
-                        this,       // parent
-                        cid,        // breed
-                        inPars      // input concepts
-                    ));
-                    childCaldrons_[thread.tid] = thread;
+                    Caldron cld = new Caldron(
+                        this.myThread_,         // parent
+                        cid,                    // breed
+                        inPars                  // input concepts
+                    );
+                    CaldronThread thread = _threadPool_.pop(cld);
+                    cld.myThread = thread;
+
+                    childThreads_[thread.tid] = thread;
 
                     breed.tid = thread.tid;     // wind up our instance
                     breed.activate;             // of the breed
@@ -512,14 +540,14 @@ class CaldronThread {
     Caldron caldron() { return caldron_; }
 
     /**
-            Deactivate Thread.
+            Cann the thread.
     */
     void mothball() {
         caldron_ = null;
     }
 
     /// Get Tid.
-    Tid tid() { return myTid_; }
+    @property Tid tid() { return myTid_; }
 
     /// Up if the caldronThreadFunc() function exited normally or on exception.
     bool isFinished() { return isFinished_; }
@@ -575,6 +603,7 @@ class CaldronThread {
             if      // is it a regular message?
                     (msg)
             {   // yes: send the message to caldron
+                assert(caldron_, "Message %s has come to a canned caldron.".format(msg));
                 if      // recognized and processed by caldron?
                         ((cast()caldron_)._processMessage(msg))
                     //yes: go for a new message

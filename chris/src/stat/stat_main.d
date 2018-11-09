@@ -18,13 +18,21 @@ void wait_stat(Caldron cld){
 }
 
 /// Raise stop flag on a caldron.
-@(15, StatCallType.p0Cal)
+@(2, StatCallType.p0Cal)
 void stop_stat(Caldron cld){
+    import std.concurrency: Tid, send;
+    import messages: IbrBranchDevise_msg;
+    Breed breed = cld.breed;
+    if      // is it a threaded branch?
+            (breed.startType == HardCid.threadStartType_mark_hcid.cid)
+    {   //yes: send to the parent my devise
+        send(cld.parentThread.tid, new immutable IbrBranchDevise_msg);
+    }
     cld.requestStop;
 }
 
 /// Raise stop flag on a caldron.
-@(16, StatCallType.p0Cal)
+@(3, StatCallType.p0Cal)
 void checkUp_stat(Caldron cld){
     cld.checkUp;
 }
@@ -35,7 +43,7 @@ void checkUp_stat(Caldron cld){
         cld = caldron as a name space for cids.
         operandCid = a concept from the caldron's name space to print out
 */
-@(2, StatCallType.p0Calp1Cid)
+@(4, StatCallType.p0Calp1Cid)
 void logConcept_stat(Caldron cld, Cid conceptCid) {
     logit(cld[conceptCid].toString, TermColor.blue);
 }
@@ -45,7 +53,7 @@ void logConcept_stat(Caldron cld, Cid conceptCid) {
     Parameters:
         cld = caldron as a name space for cids (not used here)
 */
-@(3, StatCallType.p0Cal)
+@(5, StatCallType.p0Cal)
 void setDebugLevel_1_stat(Caldron cld) {
     debug cld.dynDebug = 1;
 }
@@ -55,7 +63,7 @@ void setDebugLevel_1_stat(Caldron cld) {
     Parameters:
         cld = caldron as a name space for cids (not used here)
 */
-@(4, StatCallType.p0Cal)
+@(6, StatCallType.p0Cal)
 void setDebugLevel_2_stat(Caldron cld) {
     debug cld.dynDebug = 2;
 }
@@ -65,7 +73,7 @@ void setDebugLevel_2_stat(Caldron cld) {
     Parameters:
         cld = caldron as a name space for cids (not used here)
 */
-@(5, StatCallType.p0Cal)
+@(7, StatCallType.p0Cal)
 void setDebugLevel_0_stat(Caldron cld) {
     debug cld.dynDebug = 0;
 }
@@ -76,7 +84,7 @@ void setDebugLevel_0_stat(Caldron cld) {
         cld = caldron as a name space for cids.
         operandCid = a tid primitive, containing the user Tid.
 */
-@(6, StatCallType.p0Calp1Cidp2Cid)
+@(8, StatCallType.p0Calp1Cidp2Cid)
 void sendTidToUser_stat(Caldron cld, Cid userTidPremCid, Cid ulineBreedCid) {
     import std.concurrency: Tid, send;
     import messages: CircleProvidesUserWithItsTid_msg;
@@ -94,7 +102,7 @@ void sendTidToUser_stat(Caldron cld, Cid userTidPremCid, Cid ulineBreedCid) {
         cld = caldron as a name space for cids.
         operandCid = a tid primitive, containing the user Tid.
 */
-@(7, StatCallType.p0Calp1Cid)
+@(9, StatCallType.p0Calp1Cid)
 void requestUserInput(Caldron cld, Cid userTidPremCid) {
     import std.concurrency: Tid, send;
     import messages: CircleListensToUser_msg;
@@ -109,7 +117,7 @@ void requestUserInput(Caldron cld, Cid userTidPremCid) {
         operandCid = a tid primitive, containing the user Tid.
         stringPremCid = string premise, containing the text
 */
-@(8, StatCallType.p0Calp1Cidp2Cid)
+@(10, StatCallType.p0Calp1Cidp2Cid)
 void sendUserOutput(Caldron cld, Cid userTidPremCid, Cid stringPremCid) {
     import std.concurrency: Tid, send;
     import messages: CircleTellsUser_msg;
@@ -124,7 +132,7 @@ void sendUserOutput(Caldron cld, Cid userTidPremCid, Cid stringPremCid) {
         cld = current caldron
         cptCid = concept to activate
 */
-@(9, StatCallType.p0Calp1Cid)
+@(11, StatCallType.p0Calp1Cid)
 void activate_stat(Caldron cld, Cid cptCid) {
     (scast!BinActivationIfc(cld[cptCid])).activate;
 }
@@ -135,7 +143,7 @@ void activate_stat(Caldron cld, Cid cptCid) {
         cld = current caldron
         cptCid = concept to anactivate
 */
-@(10, StatCallType.p0Calp1Cid)
+@(12, StatCallType.p0Calp1Cid)
 void anactivate_stat(Caldron cld, Cid cptCid) {
     (scast!BinActivationIfc(cld[cptCid])).anactivate;
 }
@@ -148,15 +156,15 @@ void anactivate_stat(Caldron cld, Cid cptCid) {
         destBreedCid = breed of the destination branch
         cptCid = concept to activate
 */
-@(11, StatCallType.p0Calp1Cidp2Cid)
-void activateRemotely_stat(Caldron cld, Cid destBreed, Cid cpt) {
+@(13, StatCallType.p0Calp1Cidp2Cid)
+void activateRemotely_stat(Caldron cld, Cid destTidCid, Cid cptCid) {
     import std.concurrency: Tid, send;
     import messages: IbrSetActivation_msg;
-    checkCid!BinActivationIfc(cld, cpt);
-    auto br = scast!Breed(cld[destBreed]);
-    assert(br.tid != Tid.init, "%s, %s(%,?s) is not initialized: tid = %s".format(cld.cldName, cptName(destBreed),
-            '_', destBreed, '_', br.tid));
-    send(br.tid, new immutable IbrSetActivation_msg(cpt, +1));
+    checkCid!BinActivationIfc(cld, cptCid);
+    auto br = scast!TidPrem(cld[destTidCid]);
+    assert(br.tid != Tid.init, "%s, %s(%,?s) is not initialized: tid = %s".format(cld.cldName, cptName(destTidCid),
+            '_', destTidCid, '_', br.tid));
+    send(br.tid, new immutable IbrSetActivation_msg(cptCid, +1));
 }
 
 /**
@@ -167,15 +175,15 @@ void activateRemotely_stat(Caldron cld, Cid destBreed, Cid cpt) {
         destBreedCid = breed of the destination branch
         cptCid = concept to anactivate
 */
-@(12, StatCallType.p0Calp1Cidp2Cid)
-void anactivateRemotely_stat(Caldron cld, Cid destBreed, Cid cpt) {
+@(14, StatCallType.p0Calp1Cidp2Cid)
+void anactivateRemotely_stat(Caldron cld, Cid destTidCid, Cid cptCid) {
     import std.concurrency: Tid, send;
     import messages: IbrSetActivation_msg;
-    checkCid!BinActivationIfc(cld, cpt);
-    auto br = scast!Breed(cld[destBreed]);
-    assert(br.tid != Tid.init, "%s, %s(%,?s) is not initialized: tid = %s".format(cld.cldName, cptName(destBreed),
-            '_', destBreed, '_', br.tid));
-    send(br.tid, new immutable IbrSetActivation_msg(cpt, -1));
+    checkCid!BinActivationIfc(cld, cptCid);
+    auto br = scast!TidPrem(cld[destTidCid]);
+    assert(br.tid != Tid.init, "%s, %s(%,?s) is not initialized: tid = %s".format(cld.cldName, cptName(destTidCid),
+            '_', destTidCid, '_', br.tid));
+    send(br.tid, new immutable IbrSetActivation_msg(cptCid, -1));
 }
 
 /**
@@ -188,20 +196,20 @@ void anactivateRemotely_stat(Caldron cld, Cid destBreed, Cid cpt) {
         breedCid = breed of the addressed branch as its identifier
         loadCid = concept to send
 */
-@(13, StatCallType.p0Calp1Cidp2Cid)
-void sendConceptToBranch_stat(Caldron cld, Cid destBreed, Cid load) {
+@(15, StatCallType.p0Calp1Cidp2Cid)
+void sendConceptToBranch_stat(Caldron cld, Cid destTidCid, Cid loadCid) {
     import std.concurrency: Tid, send;
     import messages: IbrSingleConceptPackage_msg;
-    checkCid!Concept(cld, load);
-    Concept cpt = cld[load];
+    checkCid!Concept(cld, loadCid);
+    Concept cpt = cld[loadCid];
     assert(!cast(ActivationIfc)cpt || (cast(ActivationIfc)cpt).activation > 0,
-            "%s, %s(%,?s) is anactivated, which should not be.".format(cld.cldName, cptName(load), '_', load));
+            "%s, %s(%,?s) is anactivated, which should not be.".format(cld.cldName, cptName(loadCid), '_', loadCid));
 
-    Breed br = scast!(Breed)(cld[destBreed]);
-    assert(br.tid != Tid.init, "%s, %s(%,?s) is not initialized: tid = %s".format(cld.cldName, cptName(destBreed),
-            '_', destBreed, '_', br.tid));
+    auto br = scast!TidPrem(cld[destTidCid]);
+    assert(br.tid != Tid.init, "%s, %s(%,?s) is not initialized: tid = %s".format(cld.cldName, cptName(destTidCid),
+            '_', destTidCid, '_', br.tid));
     try {
-        send(br.tid, new immutable IbrSingleConceptPackage_msg(cld[load].clone));
+        send(br.tid, new immutable IbrSingleConceptPackage_msg(cld[loadCid].clone));
     } catch(Exception e) {  // Something happened with the destination thread
         // anactivate the destination thread breed
         br.anactivate;
@@ -214,8 +222,8 @@ void sendConceptToBranch_stat(Caldron cld, Cid destBreed, Cid load) {
         bufPrem = string queue premise to take lines from
         strPrem = string premise to put the line in
 */
-@(14, StatCallType.p0Calp1Cidp2Cid)
-void getUserInputLineFromBuffer_stat(Caldron cld, Cid bufPrem, Cid strPrem) {
+@(16, StatCallType.p0Calp1Cidp2Cid)
+void popUserInputLineFromBuffer_stat(Caldron cld, Cid bufPrem, Cid strPrem) {
     checkCid!(BinActivationIfc)(cld, bufPrem);
     checkCid!(BinActivationIfc)(cld, strPrem);
     auto uBuf = scast!StringQueuePrem(cld[bufPrem]);

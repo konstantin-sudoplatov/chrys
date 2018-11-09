@@ -45,7 +45,9 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                     circleTid = circleThread.tid;
                 }
                 else {  //no: create the circle, tell him the client's Tid and put the pair in the circle register
-                    CaldronThread circleThread = new CaldronThread(new AttentionCircle);
+                    auto atnCircle = new AttentionCircle;
+                    CaldronThread circleThread = new CaldronThread(atnCircle);
+                    atnCircle.myThread = circleThread;
                     circleRegister_[clientTid] = circleThread;
                     circleThread.tid.send(new immutable DispatcherProvidesCircleWithUserTid_msg(clientTid));
                 }

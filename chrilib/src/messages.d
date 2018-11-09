@@ -137,20 +137,10 @@ immutable class IbrStartReasoning_msg: Msg {
     this() {super();}
 }
 
-/// Interbranching. Used by caldrons to send live concepts to each other.
-immutable class IbrSingleConceptPackage_msg: Msg {
-
-    this(Concept load) {
-        super();
-        load_ = cast(immutable)load;
-    }
-
-    /// Getter.
-    @property immutable(Concept) load() {
-        return load_;
-    }
-
-    private Concept load_;
+/// This message is sent to the parent on finishing in order to pass output concepts. Only sender's tid is important
+/// and it is always in Msg.
+immutable class IbrBranchDevise_msg: Msg {
+    this() { super(); }
 }
 
 /// Interbranching. Used by a caldron to set an activation value for a concept in given caldron.
@@ -177,4 +167,20 @@ immutable class IbrSetActivation_msg: Msg {
 
     /// Activation
     private float activation_;
+}
+
+/// Interbranching. Used by caldrons to send live concepts to each other.
+immutable class IbrSingleConceptPackage_msg: Msg {
+
+    this(Concept load) {
+        super();
+        load_ = cast(immutable)load;
+    }
+
+    /// Getter.
+    @property immutable(Concept) load() {
+        return load_;
+    }
+
+    private Concept load_;
 }

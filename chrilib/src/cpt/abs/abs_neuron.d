@@ -315,8 +315,6 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
             assert(act > MAX_STATIC_CID,
                     format!"The action cid %s is laying within the static concept range, which is not allowed."(act));
             assert(act in _sm_, format!"Cid %s must be present in the holy map"(act));
-            assert(cast(Seed)_sm_[act] || cast(Breed)_sm_[act],
-                    format!"Cid %s - must be the Seed or Breed concept"(act));
         }
     }
     do {
@@ -362,7 +360,7 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
             assert(br > MAX_STATIC_CID,
                     format!"The action cid %s is laying within the static concept range, which is not allowed."(br));
             assert(br in _sm_, format!"Cid %s must be present in the holy map"(br));
-            assert(cast(Seed)_sm_[br] || cast(Breed)_sm_[br], format!"Cid %s - must be the Seed or Breed concept"(br));
+            assert(cast(Neuron)_sm_[br] || cast(Breed)_sm_[br], format!"Cid %s - must be the Seed or Breed concept"(br));
         }
     }
     do {

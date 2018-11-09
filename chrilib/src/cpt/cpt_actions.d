@@ -32,7 +32,7 @@ import atn.atn_caldron;
         Serial res = super.serialize;
 
         res.stable.length = St.length;  // allocate
-        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
+        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statAction;
 
         return res;
     }
@@ -41,7 +41,13 @@ import atn.atn_caldron;
     override bool opEquals(Object sc) const {
 
         if(!super.opEquals(sc)) return false;
-        return _statActionCid == scast!(typeof(this))(sc)._statActionCid;
+        return _statAction == scast!(typeof(this))(sc)._statAction;
+    }
+
+    override string toString() const {
+        string s = super.toString;
+        s ~= format!"\n    _statAction = %s(%s)"(cptName(_statAction), _statAction);
+        return s;
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
@@ -52,23 +58,23 @@ import atn.atn_caldron;
             caldron = name space it which static concept function will be working.
     */
     void run(Caldron caldron) {
-        assert((cast(SpStaticConcept)_sm_[_statActionCid]).callType == StatCallType.p0Cal,
+        assert((cast(SpStaticConcept)_sm_[_statAction]).callType == StatCallType.p0Cal,
                 "Static concept: %s( cid:%s) in SpAction must have StatCallType none and it has %s.".
-                format(_nm_[_statActionCid], _statActionCid, (cast(SpStaticConcept)_sm_[_statActionCid]).callType));
+                format(_nm_[_statAction], _statAction, (cast(SpStaticConcept)_sm_[_statAction]).callType));
 
-        auto statCpt = (cast(SpStaticConcept)_sm_[_statActionCid]);
+        auto statCpt = (cast(SpStaticConcept)_sm_[_statAction]);
         (cast(void function(Caldron))statCpt.fp)(caldron);
     }
 
     /// Full setup
     final void load(Cid statAction) {
         checkCid!SpStaticConcept(statAction);
-        _statActionCid = statAction;
+        _statAction = statAction;
     }
 
     /// Getter
     final @property Cid statAction() {
-        return _statActionCid;
+        return _statAction;
     }
 
     /// Setter
@@ -86,7 +92,7 @@ import atn.atn_caldron;
     //---$$$---$$$---$$$---$$$---$$$--- data ---$$$---$$$---$$$---$$$---$$$--
 
     // Static action.
-    protected Cid _statActionCid;
+    protected Cid _statAction;
 
     //---$$$---$$$---$$$---$$$---$$$--- functions ---$$$---$$$---$$$---$$$---$$$---
 
@@ -100,7 +106,7 @@ import atn.atn_caldron;
     protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
             const byte[] transient)
     {
-        _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
+        _statAction = *cast(Cid*)&stable[St._statActionCid_ofs];
 
         return tuple!(const byte[], "stable", const byte[], "transient")(stable[St.length..$], transient);
     }
@@ -114,7 +120,7 @@ import atn.atn_caldron;
     /// Stable offsets. Used by serialize()/_deserialize()
     private enum St {
         _statActionCid_ofs = 0,
-        length = _statActionCid_ofs + _statActionCid.sizeof
+        length = _statActionCid_ofs + _statAction.sizeof
     }
 
     /// Tranzient offsets. Used by serialize()/_deserialize()
@@ -171,7 +177,7 @@ class A: DynamicConcept {
         Serial res = super.serialize;
 
         res.stable.length = St.length;  // allocate
-        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
+        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statAction;
         *cast(Cid*)&res.stable[St._p1Cid_ofs] = _p1Cid;
 
         return res;
@@ -185,6 +191,12 @@ class A: DynamicConcept {
         return _p1Cid == o._p1Cid;
     }
 
+    override string toString() const {
+        string s = super.toString;
+        s ~= format!"\n    _p1Cid = %s(%,?s)"(cptName(_p1Cid), '_', _p1Cid);
+        return s;
+    }
+
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     /**
@@ -193,10 +205,10 @@ class A: DynamicConcept {
             caldron = name space it which static concept function will be working.
     */
     override void run(Caldron caldron) {
-        auto statAct = (scast!SpStaticConcept(_sm_[_statActionCid]));
+        auto statAct = (scast!SpStaticConcept(_sm_[_statAction]));
         assert(statAct.callType == StatCallType.p0Calp1Cid,
                 "Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cid and it has %s.".
-                format(typeid(statAct), _statActionCid, statAct.callType));
+                format(typeid(statAct), _statAction, statAct.callType));
         checkCid!DynamicConcept(caldron, _p1Cid);
 
         (cast(void function(Caldron, Cid))statAct.fp)(caldron, _p1Cid);
@@ -208,7 +220,7 @@ class A: DynamicConcept {
     /// Full setup
     void load(Cid statAction, DcpDsc operand) {
         checkCid!SpStaticConcept(statAction);
-        _statActionCid = statAction;
+        _statAction = statAction;
         checkCid!SpiritDynamicConcept(operand.cid);
         _p1Cid = operand.cid;
     }
@@ -236,7 +248,7 @@ class A: DynamicConcept {
     protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
             const byte[] transient)
     {
-        _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
+        _statAction = *cast(Cid*)&stable[St._statActionCid_ofs];
         _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
 
         return tuple!(const byte[], "stable", const byte[], "transient")(stable[St.length..$], transient);
@@ -251,7 +263,7 @@ class A: DynamicConcept {
     /// Stable offsets. Used by serialize()/_deserialize()
     private enum St {
         _statActionCid_ofs = 0,
-        _p1Cid_ofs = _statActionCid_ofs + _statActionCid.sizeof,
+        _p1Cid_ofs = _statActionCid_ofs + _statAction.sizeof,
         length = _p1Cid_ofs + _p1Cid.sizeof
     }
 
@@ -264,13 +276,13 @@ class A: DynamicConcept {
 unittest {
     auto a = new SpA_Cid(42);
     a.ver = 5;
-    a._statActionCid = 43;
+    a._statAction = 43;
     a._p1Cid = 44;
 
     Serial ser = a.serialize;
     auto b = cast(SpA_Cid)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
     assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_Cid) &&
-            b._statActionCid == 43 && b._p1Cid == 44);
+            b._statAction == 43 && b._p1Cid == 44);
 
     assert(a == b);
 }
@@ -303,7 +315,7 @@ final class A_Cid: A {
         Serial res = super.serialize;
 
         res.stable.length = St.length;  // allocate
-        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
+        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statAction;
         *cast(Cid*)&res.stable[St._p1Cid_ofs] = _p1Cid;
         *cast(Cid*)&res.stable[St._p2Cid_ofs] = _p2Cid;
 
@@ -318,6 +330,13 @@ final class A_Cid: A {
         return _p1Cid == o._p1Cid && _p2Cid == o._p2Cid;
     }
 
+    override string toString() const {
+        string s = super.toString;
+        s ~= format!"\n    _p1Cid = %s(%,?s)"(cptName(_p1Cid), '_', _p1Cid);
+        s ~= format!"\n    _p2Cid = %s(%,?s)"(cptName(_p2Cid), '_', _p2Cid);
+        return s;
+    }
+
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     /**
@@ -326,10 +345,10 @@ final class A_Cid: A {
             caldron = name space it which static concept function will be working.
     */
     override void run(Caldron caldron) {
-        auto statAct = (scast!SpStaticConcept(_sm_[_statActionCid]));
+        auto statAct = (scast!SpStaticConcept(_sm_[_statAction]));
         assert(statAct.callType == StatCallType.p0Calp1Cidp2Cid,
                 "Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Cid and it has %s.".
-                format(typeid(statAct), _statActionCid, statAct.callType));
+                format(typeid(statAct), _statAction, statAct.callType));
         checkCid!DynamicConcept(caldron, _p1Cid);
         checkCid!DynamicConcept(caldron, _p2Cid);
 
@@ -343,7 +362,7 @@ final class A_Cid: A {
     void load(Cid statAction, DcpDsc firstOperand, DcpDsc secondOperand) {
         checkCid!SpStaticConcept(statAction);
 
-        _statActionCid = statAction;
+        _statAction = statAction;
         checkCid!SpiritDynamicConcept(firstOperand.cid);
         _p1Cid = firstOperand.cid;
         checkCid!SpiritDynamicConcept(secondOperand.cid);
@@ -378,7 +397,7 @@ final class A_Cid: A {
     protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
             const byte[] transient)
     {
-        _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
+        _statAction = *cast(Cid*)&stable[St._statActionCid_ofs];
         _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
         _p2Cid = *cast(Cid*)&stable[St._p2Cid_ofs];
 
@@ -394,7 +413,7 @@ final class A_Cid: A {
     /// Stable offsets. Used by serialize()/_deserialize()
     private enum St {
         _statActionCid_ofs = 0,
-        _p1Cid_ofs = _statActionCid_ofs + _statActionCid.sizeof,
+        _p1Cid_ofs = _statActionCid_ofs + _statAction.sizeof,
         _p2Cid_ofs = _p1Cid_ofs + _p1Cid.sizeof,
         length = _p2Cid_ofs + _p2Cid.sizeof
     }
@@ -408,14 +427,14 @@ final class A_Cid: A {
 unittest {
     auto a = new SpA_2Cid(42);
     a.ver = 5;
-    a._statActionCid = 43;
+    a._statAction = 43;
     a._p1Cid = 44;
     a._p2Cid = 45;
 
     Serial ser = a.serialize;
     auto b = cast(SpA_2Cid)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
     assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_2Cid) &&
-            b._statActionCid == 43 && b._p1Cid == 44 && b._p2Cid == 45);
+            b._statAction == 43 && b._p1Cid == 44 && b._p2Cid == 45);
 
     assert(a == b);
 }
@@ -447,7 +466,7 @@ final class A_2Cid: A {
         Serial res = super.serialize;
 
         res.stable.length = St.length;  // allocate
-        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
+        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statAction;
         *cast(Cid*)&res.stable[St._p1Cid_ofs] = _p1Cid;
         *cast(Cid*)&res.stable[St._p2Cid_ofs] = _p2Cid;
         *cast(Cid*)&res.stable[St._p3Cid_ofs] = _p3Cid;
@@ -463,6 +482,14 @@ final class A_2Cid: A {
         return _p1Cid == o._p1Cid && _p2Cid == o._p2Cid && _p3Cid == o._p3Cid;
     }
 
+    override string toString() const {
+        string s = super.toString;
+        s ~= format!"\n    _p1Cid = %s(%,?s)"(cptName(_p1Cid), '_', _p1Cid);
+        s ~= format!"\n    _p2Cid = %s(%,?s)"(cptName(_p2Cid), '_', _p2Cid);
+        s ~= format!"\n    _p3Cid = %s(%,?s)"(cptName(_p3Cid), '_', _p3Cid);
+        return s;
+    }
+
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     /**
@@ -471,10 +498,10 @@ final class A_2Cid: A {
             caldron = name space it which static concept function will be working.
     */
     override void run(Caldron caldron) {
-        auto statAct = (scast!SpStaticConcept(_sm_[_statActionCid]));
+        auto statAct = (scast!SpStaticConcept(_sm_[_statAction]));
         assert(statAct.callType == StatCallType.p0Calp1Cidp2Cidp3Cid,
                 "Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Cid3Cid and it has %s.".
-                format(typeid(statAct), _statActionCid, statAct.callType));
+                format(typeid(statAct), _statAction, statAct.callType));
         checkCid!DynamicConcept(caldron, _p1Cid);
         checkCid!DynamicConcept(caldron, _p2Cid);
         checkCid!DynamicConcept(caldron, _p3Cid);
@@ -489,7 +516,7 @@ final class A_2Cid: A {
     void load(Cid statAction, DcpDsc firstOperand, DcpDsc secondOperand, DcpDsc thirdOperand) {
         checkCid!SpStaticConcept(statAction);
 
-        _statActionCid = statAction;
+        _statAction = statAction;
         checkCid!SpiritDynamicConcept(firstOperand.cid);
         _p1Cid = firstOperand.cid;
         checkCid!SpiritDynamicConcept(secondOperand.cid);
@@ -531,7 +558,7 @@ final class A_2Cid: A {
     protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
             const byte[] transient)
     {
-        _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
+        _statAction = *cast(Cid*)&stable[St._statActionCid_ofs];
         _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
         _p2Cid = *cast(Cid*)&stable[St._p2Cid_ofs];
         _p3Cid = *cast(Cid*)&stable[St._p3Cid_ofs];
@@ -548,7 +575,7 @@ final class A_2Cid: A {
     /// Stable offsets. Used by serialize()/_deserialize()
     private enum St {
         _statActionCid_ofs = 0,
-        _p1Cid_ofs = _statActionCid_ofs + _statActionCid.sizeof,
+        _p1Cid_ofs = _statActionCid_ofs + _statAction.sizeof,
         _p2Cid_ofs = _p1Cid_ofs + _p1Cid.sizeof,
         _p3Cid_ofs = _p2Cid_ofs + _p2Cid.sizeof,
         length = _p3Cid_ofs + _p3Cid.sizeof
@@ -563,7 +590,7 @@ final class A_2Cid: A {
 unittest {
     auto a = new SpA_3Cid(42);
     a.ver = 5;
-    a._statActionCid = 43;
+    a._statAction = 43;
     a._p1Cid = 44;
     a._p2Cid = 45;
     a._p3Cid = 46;
@@ -571,7 +598,7 @@ unittest {
     Serial ser = a.serialize;
     auto b = cast(SpA_3Cid)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
     assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_3Cid) &&
-            b._statActionCid == 43 && b._p1Cid == 44 && b._p2Cid == 45 && b._p3Cid == 46);
+            b._statAction == 43 && b._p1Cid == 44 && b._p2Cid == 45 && b._p3Cid == 46);
 
     assert(a == b);
 }
@@ -600,7 +627,7 @@ final class A_3Cid: A {
         Serial res = super.serialize;
 
         res.stable.length = St.length;  // allocate
-        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
+        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statAction;
         *cast(Cid*)&res.stable[St._p1Cid_ofs] = _p1Cid;
         *cast(float*)&res.stable[St._p2Float_ofs] = _p2Float;
 
@@ -615,14 +642,21 @@ final class A_3Cid: A {
         return _p1Cid == o._p1Cid && _p2Float == o._p2Float;
     }
 
+    override string toString() const {
+        string s = super.toString;
+        s ~= format!"\n    _p1Cid = %s(%,?s)"(cptName(_p1Cid), '_', _p1Cid);
+        s ~= format!"\n    _p2Float = %s"(_p2Float);
+        return s;
+    }
+
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     /// Run the static action.
     override void run(Caldron caldron) {
-        auto statAct = (scast!SpStaticConcept(_sm_[_statActionCid]));
+        auto statAct = (scast!SpStaticConcept(_sm_[_statAction]));
         assert(statAct.callType == StatCallType.p0Calp1Cidp2Float,
                 "Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Float and it has %s.".
-                format(typeid(statAct), _statActionCid, statAct.callType));
+                format(typeid(statAct), _statAction, statAct.callType));
         checkCid!DynamicConcept(caldron, _p1Cid);
 
         (cast(void function(Caldron, Cid, float))statAct.fp)(caldron, _p1Cid, _p2Float);
@@ -642,7 +676,7 @@ final class A_3Cid: A {
         checkCid!SpStaticConcept(statActionCid);
         checkCid!SpiritDynamicConcept(p1.cid);
 
-        _statActionCid = statActionCid;
+        _statAction = statActionCid;
         _p1Cid = p1.cid;
         _p2Float = p2;
     }
@@ -675,7 +709,7 @@ final class A_3Cid: A {
     protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
             const byte[] transient)
     {
-        _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
+        _statAction = *cast(Cid*)&stable[St._statActionCid_ofs];
         _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
         _p2Float = *cast(float*)&stable[St._p2Float_ofs];
 
@@ -691,7 +725,7 @@ final class A_3Cid: A {
     /// Stable offsets. Used by serialize()/_deserialize()
     private enum St {
         _statActionCid_ofs = 0,
-        _p1Cid_ofs = _statActionCid_ofs + _statActionCid.sizeof,
+        _p1Cid_ofs = _statActionCid_ofs + _statAction.sizeof,
         _p2Float_ofs = _p1Cid_ofs + _p1Cid.sizeof,
         length = _p2Float_ofs + _p2Float.sizeof
     }
@@ -705,14 +739,14 @@ final class A_3Cid: A {
 unittest {
     auto a = new SpA_CidFloat(42);
     a.ver = 5;
-    a._statActionCid = 43;
+    a._statAction = 43;
     a._p1Cid = 44;
     a._p2Float = 4.5;
 
     Serial ser = a.serialize;
     auto b = cast(SpA_CidFloat)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
     assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_CidFloat) &&
-            b._statActionCid == 43 && b._p1Cid == 44 && b._p2Float == 4.5);
+            b._statAction == 43 && b._p1Cid == 44 && b._p2Float == 4.5);
 
     assert(a == b);
 }
@@ -741,7 +775,7 @@ final class A_CidFloat: A {
         Serial res = super.serialize;
 
         res.stable.length = St.length;  // allocate
-        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
+        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statAction;
         *cast(Cid*)&res.stable[St._p1Cid_ofs] = _p1Cid;
         *cast(Cid*)&res.stable[St._p2Cid_ofs] = _p2Cid;
         *cast(float*)&res.stable[St._p3Float_ofs] = _p3Float;
@@ -757,14 +791,22 @@ final class A_CidFloat: A {
         return _p1Cid == o._p1Cid && _p2Cid == o._p2Cid && _p3Float == o._p3Float;
     }
 
+    override string toString() const {
+        string s = super.toString;
+        s ~= format!"\n    _p1Cid = %s(%,?s)"(cptName(_p1Cid), '_', _p1Cid);
+        s ~= format!"\n    _p2Cid = %s(%,?s)"(cptName(_p2Cid), '_', _p2Cid);
+        s ~= format!"\n    _p3Float = %s"(_p3Float);
+        return s;
+    }
+
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     /// Run the static action.
     override void run(Caldron caldron) {
-        auto statAct = (scast!SpStaticConcept(_sm_[_statActionCid]));
+        auto statAct = (scast!SpStaticConcept(_sm_[_statAction]));
         assert(statAct.callType == StatCallType.p0Calp1Cidp2Cidp3Float,
                     "Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Cidp3Float and it has %s.".
-                    format(typeid(statAct), _statActionCid, statAct.callType));
+                    format(typeid(statAct), _statAction, statAct.callType));
         checkCid!DynamicConcept(caldron, _p1Cid);
         checkCid!DynamicConcept(caldron, _p2Cid);
 
@@ -787,7 +829,7 @@ final class A_CidFloat: A {
         checkCid!SpiritDynamicConcept(p1.cid);
         checkCid!SpiritDynamicConcept(p2.cid);
 
-        _statActionCid = statActionCid;
+        _statAction = statActionCid;
         _p1Cid = p1.cid;
         _p2Cid = p2.cid;
         _p3Float = p3;
@@ -826,7 +868,7 @@ final class A_CidFloat: A {
     protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
             const byte[] transient)
     {
-        _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
+        _statAction = *cast(Cid*)&stable[St._statActionCid_ofs];
         _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
         _p2Cid = *cast(Cid*)&stable[St._p2Cid_ofs];
         _p3Float = *cast(float*)&stable[St._p3Float_ofs];
@@ -843,7 +885,7 @@ final class A_CidFloat: A {
     /// Stable offsets. Used by serialize()/_deserialize()
     private enum St {
         _statActionCid_ofs = 0,
-        _p1Cid_ofs = _statActionCid_ofs + _statActionCid.sizeof,
+        _p1Cid_ofs = _statActionCid_ofs + _statAction.sizeof,
         _p2Cid_ofs = _p1Cid_ofs + _p1Cid.sizeof,
         _p3Float_ofs = _p2Cid_ofs + _p2Cid.sizeof,
         length = _p3Float_ofs + _p3Float.sizeof
@@ -858,7 +900,7 @@ final class A_CidFloat: A {
 unittest {
     auto a = new SpA_2CidFloat(42);
     a.ver = 5;
-    a._statActionCid = 43;
+    a._statAction = 43;
     a._p1Cid = 44;
     a._p2Cid = 45;
     a._p3Float = 4.5;
@@ -866,7 +908,7 @@ unittest {
     Serial ser = a.serialize;
     auto b = cast(SpA_2CidFloat)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
     assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_2CidFloat) &&
-            b._statActionCid == 43 && b._p1Cid == 44 && b._p2Cid == 45 && b._p3Float == 4.5);
+            b._statAction == 43 && b._p1Cid == 44 && b._p2Cid == 45 && b._p3Float == 4.5);
 
     assert(a == b);
 }
@@ -895,7 +937,7 @@ final class A_2CidFloat: A {
         Serial res = super.serialize;
 
         res.stable.length = St.length;  // allocate
-        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statActionCid;
+        *cast(Cid*)&res.stable[St._statActionCid_ofs] = _statAction;
         *cast(Cid*)&res.stable[St._p1Cid_ofs] = _p1Cid;
         *cast(int*)&res.stable[St._p2Int_ofs] = _p2Int;
 
@@ -910,14 +952,21 @@ final class A_2CidFloat: A {
         return _p1Cid == o._p1Cid && _p2Int == o._p2Int;
     }
 
+    override string toString() const {
+        string s = super.toString;
+        s ~= format!"\n    _p1Cid = %s(%,?s)"(cptName(_p1Cid), '_', _p1Cid);
+        s ~= format!"\n    _p2Int = %s"(_p2Int);
+        return s;
+    }
+
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     /// Run the static action.
     override void run(Caldron caldron) {
-        auto statAct = (scast!SpStaticConcept(_sm_[_statActionCid]));
+        auto statAct = (scast!SpStaticConcept(_sm_[_statAction]));
         assert(statAct.callType == StatCallType.p0Calp1Cidp2Int,
                 "Static concept: %s( cid:%s) in SpAction must have StatCallType p0Calp1Cidp2Int and it has %s.".
-                format(typeid(statAct), _statActionCid, statAct.callType));
+                format(typeid(statAct), _statAction, statAct.callType));
         checkCid!DynamicConcept(caldron, _p1Cid);
 
         (cast(void function(Caldron, Cid, int))statAct.fp)(caldron, _p1Cid, _p2Int);
@@ -937,7 +986,7 @@ final class A_2CidFloat: A {
         checkCid!SpStaticConcept(statActionCid);
         checkCid!SpiritDynamicConcept(p1.cid);
 
-        _statActionCid = statActionCid;
+        _statAction = statActionCid;
         _p1Cid = p1.cid;
         _p2Int = p2;
     }
@@ -970,7 +1019,7 @@ final class A_2CidFloat: A {
     protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
             const byte[] transient)
     {
-        _statActionCid = *cast(Cid*)&stable[St._statActionCid_ofs];
+        _statAction = *cast(Cid*)&stable[St._statActionCid_ofs];
         _p1Cid = *cast(Cid*)&stable[St._p1Cid_ofs];
         _p2Int = *cast(int*)&stable[St._p2Int_ofs];
 
@@ -986,7 +1035,7 @@ final class A_2CidFloat: A {
     /// Stable offsets. Used by serialize()/_deserialize()
     private enum St {
         _statActionCid_ofs = 0,
-        _p1Cid_ofs = _statActionCid_ofs + _statActionCid.sizeof,
+        _p1Cid_ofs = _statActionCid_ofs + _statAction.sizeof,
         _p2Int_ofs = _p1Cid_ofs + _p1Cid.sizeof,
         length = _p2Int_ofs + _p2Int.sizeof
     }
@@ -1000,14 +1049,14 @@ final class A_2CidFloat: A {
 unittest {
     auto a = new SpA_CidInt(42);
     a.ver = 5;
-    a._statActionCid = 43;
+    a._statAction = 43;
     a._p1Cid = 44;
     a._p2Int = 45;
 
     Serial ser = a.serialize;
     auto b = cast(SpA_CidInt)a.deserialize(ser.cid, ser.ver, ser.clid, ser.stable, ser.transient);
     assert(b.cid == 42 && b.ver == 5 && typeid(b) == typeid(SpA_CidInt) &&
-            b._statActionCid == 43 && b._p1Cid == 44 && b._p2Int == 45);
+            b._statAction == 43 && b._p1Cid == 44 && b._p2Int == 45);
 
     assert(a == b);
 }

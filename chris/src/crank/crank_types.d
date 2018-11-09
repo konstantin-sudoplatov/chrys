@@ -66,16 +66,16 @@ string dequalify_enums(enumList...)() {
 
 unittest {
     import std.conv: asOriginalType;
-    import cpt.cpt_neurons: SpSeed;
+    import cpt.cpt_neurons: SpActionNeuron;
     import cpt.cpt_premises: SpBreed;
     enum CommonConcepts: DcpDsc {
-        chat_seed = cd!(SpSeed, 2_500_739_441),                  // this is the root branch of the chat
-        do_not_know_what_it_is = cd!(SpSeed, 580_052_493),
+        chat_seed = cd!(SpActionNeuron, 2_500_739_441),                  // this is the root branch of the chat
+        do_not_know_what_it_is = cd!(SpActionNeuron, 580_052_493),
     }
 
     enum Chat: DcpDsc {
         console_breed = cd!(SpBreed, 4_021_308_401),
-        console_seed = cd!(SpSeed, 1_771_384_341),
+        console_seed = cd!(SpActionNeuron, 1_771_384_341),
     }
 
     // Declare enums with the same members as in the CommonConcepts and Chat

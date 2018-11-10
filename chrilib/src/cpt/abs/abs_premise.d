@@ -27,5 +27,19 @@ abstract class Premise: DynamicConcept, BinActivationIfc {
         return s;
     }
 
+    //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /**
+            Copy meaningful fields of this concept to the destination. Both concepts must be exactly the same runtime type.
+        Such fields as cid, ver or the usage statistics, for example, are left intact.
+        Parameters:
+            destination = concept to copy data to
+        Returns: changed destination concept
+    */
+    void copy(ref Premise destination) {
+        assert(typeid(this) is typeid(destination));
+        destination._activation = _activation;
+    }
+
     mixin BinActivationImpl!Premise;
 }

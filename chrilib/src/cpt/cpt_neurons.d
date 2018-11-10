@@ -34,7 +34,7 @@ import chri_types;
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
     /**
-                Adding effects analogous to the holy neuron concept, except that the span is not needed in this case.
+                Adding effects analogous to the spirit neuron concept, except that the span is not needed in this case.
         Parameters:
             act = either Action or Action[] or Cid or Cid[]
             bran = either Neuron or Neuron[] or Cid or Cid[]
@@ -161,6 +161,20 @@ class ActionNeuron: Neuron, ActivationIfc {
     }
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
+
+    /// Allow using overloads along with virtuals.
+    alias addEffs = SpiritNeuron.addEffs;
+
+    /**
+                Adding effects for only one span, the one, that is selected if activation > 0. If activation <= 0, then
+        the cutoff would work out and the branch will wait.
+        Parameters:
+            act = either Action or Action[] or Cid or Cid[]
+            bran = either Neuron or Neuron[] or Cid or Cid[]
+    */
+    void addEffs(Ta, Tb)(Ta act, Tb bran) {
+        super.addEffs(float.infinity, act, bran);
+    }
 }
 
 unittest {

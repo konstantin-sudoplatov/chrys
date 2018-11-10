@@ -56,7 +56,8 @@ void main()
         }
     }
 
-    TERMINATE_APPLICATION:
+TERMINATE_APPLICATION:
+    _threadPool_.terminate;
     thread_joinAll;
     writeln("good bye, world!"); stdout.flush;
 }

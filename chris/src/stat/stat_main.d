@@ -6,7 +6,7 @@ import std.string;
 import proj_data, proj_funcs;
 
 import stat.stat_types;
-import cpt.cpt_interfaces, cpt.abs.abs_concept, cpt.cpt_premises;
+import cpt.cpt_interfaces, cpt.abs.abs_concept, cpt.abs.abs_premise, cpt.cpt_premises;
 import atn.atn_caldron;
 import chri_data, chri_types;
 
@@ -219,6 +219,7 @@ void sendConceptToBranch_stat(Caldron cld, Cid destTidCid, Cid loadCid) {
 /**
             Move the last in queue line from a string buffer to a string premise.
     Parameters:
+        cld = caldron
         bufPrem = string queue premise to take lines from
         strPrem = string premise to put the line in
 */
@@ -229,7 +230,22 @@ void popUserInputLineFromBuffer_stat(Caldron cld, Cid bufPrem, Cid strPrem) {
     auto uBuf = scast!StringQueuePrem(cld[bufPrem]);
     assert(!uBuf.empty && uBuf.activation == 1, "Must not get called if the user buffer is empty.");
     auto uline = scast!StringPrem(cld[strPrem]);
-    uline.text = uBuf.pull;
+    uline.text = uBuf.popFront;
     uline.activate;
     if(uBuf.empty) uBuf.anactivate;
+}
+
+/**
+        Copy content of one premise to another (only live part, exluding cid, ver, and all data not relevant to logic).
+    Concepts must be exactly the same runtime type.
+    Parameters:
+        cld = caldron
+        fromCid = source premise
+        toCid = destination premise
+*/
+@(17, StatCallType.p0Calp1Cidp2Cid)
+void copyPremise(Caldron cld, Cid fromCid, Cid toCid) {
+    auto from = scast!Premise(cld[fromCid]);
+    auto to = scast!Premise(cld[toCid]);
+    from.copy(to);      // the copy() will check for the type identity
 }

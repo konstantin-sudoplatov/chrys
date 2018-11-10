@@ -38,6 +38,18 @@ class TidPrem: Premise {
         s ~= "\n    tid = %s".format(cast()tid);
         return s;
     }
+
+    /**
+            Copy meaningful fields of this concept to the destination. Both concepts must be exactly the same runtime type.
+        Such fields as cid, ver or the usage statistics, for example, are left intact.
+        Parameters:
+            destination = concept to copy data to
+        Returns: changed destination concept
+    */
+    override void copy(ref Premise destination) {
+        super.copy(destination);
+        (cast(typeof(this))destination).tid = tid;
+    }
 }
 
 /**
@@ -193,12 +205,6 @@ final class Breed: TidPrem {
 
     /// Private constructor. Use spiritual live_factory() instead.
     private this(immutable SpBreed spBreed) { super(spBreed); }
-
-    override string toString() const {
-        string s = super.toString;
-        s ~= "\n    tid = %s".format(cast()tid);
-        return s;
-    }
 
     /// Getter.
     Cid startType() const { return scast!(immutable SpBreed)(spirit).startType; }
@@ -366,6 +372,18 @@ final class StringPrem: Premise {
         s ~= "\n    text = %s".format(text);
         return s;
     }
+
+    /**
+            Copy meaningful fields of this concept to the destination. Both concepts must be exactly the same runtime type.
+        Such fields as cid, ver or the usage statistics, for example, are left intact.
+        Parameters:
+            destination = concept to copy data to
+        Returns: changed destination concept
+    */
+    override void copy(ref Premise destination) {
+        super.copy(destination);
+        (cast(typeof(this))destination).text = text;
+    }
 }
 
 /**
@@ -395,5 +413,17 @@ final class StringQueuePrem: Premise {
         string s = super.toString;
         s ~= "\n    deq = %s".format(deque.toString);
         return s;
+    }
+
+    /**
+            Copy meaningful fields of this concept to the destination. Both concepts must be exactly the same runtime type.
+        Such fields as cid, ver or the usage statistics, for example, are left intact.
+        Parameters:
+            destination = concept to copy data to
+        Returns: changed destination concept
+    */
+    override void copy(ref Premise destination) {
+        super.copy(destination);
+        (cast(typeof(this))destination).deque = deque;
     }
 }

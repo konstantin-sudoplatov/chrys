@@ -588,6 +588,7 @@ abstract class SpiritLogicalNeuron: SpiritNeuron {
         addPrem(No.negate, premise.cid);
     }
 
+    /// Structure of logical premises.
     static struct Premise {
         Cid cid;
         Flag!"negate" negation;

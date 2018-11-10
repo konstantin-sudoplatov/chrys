@@ -27,6 +27,7 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
             yield("hello");
             yield("world!");
             yield("p");
+//            Thread.sleep(1.seconds);    // this time will actually pass BEFORE the "p" would work (giving chat time to process the last word).
         });
     }
 

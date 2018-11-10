@@ -213,12 +213,20 @@ class Caldron {
             debug if (dynDebug >= 1)
                 logit("%s, message IbrBranchDevise_msg has come from %s.".format(cldName, msg.senderTid),
                         TermColor.brown);
+            Tid tid = msg.senderTid;
+            CaldronThread thread = childThreads_[tid];
+            Caldron cld = thread.caldron;
+            Breed breed = cld.breed;
 
-            Caldron sender = childThreads_[msg.senderTid].caldron;
-            Breed breed = sender.breed;
+            // Take outPars and anactivate breed
             foreach(p; breed.outPars)
-                this[] = sender[p];     // inject
+                this[] = cld[p];     // inject
             scast!Breed(this[breed.cid]).anactivate;
+
+            // Remove the thread from caldron's children and put it in the pool
+            childThreads_.remove(tid);
+            _threadPool_.push(thread);
+
             reasoning_;                 // kick off
 
             return true;
@@ -230,7 +238,7 @@ class Caldron {
                 logit("%s, message UserTellsCircle_msg has come, text: %s".format(cldName, m.line), TermColor.brown);
 
             auto cpt = scast!StringQueuePrem(this[HardCid.userInputBuffer_strqprem_hcid]);
-            cpt.push(m.line);
+            cpt.pushBack(m.line);
             cpt.activate;       // the premise is ready
             reasoning_;         // kick off
 
@@ -427,7 +435,7 @@ synchronized class CaldronFiberPool {
             return new Fiber(&cld.reasoning_);
         }
         else { //no: reset and return a fiber
-            auto fiber = cast(Fiber)(cast()fibers_).pull;
+            auto fiber = cast(Fiber)(cast()fibers_).pop;
             fiber.reset(&cld.reasoning_);
 
             return fiber;
@@ -463,7 +471,7 @@ synchronized class CaldronThreadPool {
             return new CaldronThread(cld);
         }
         else { //no: reset and return a fiber
-            auto cldThread = cast(CaldronThread)(cast()threads_).pull;
+            auto cldThread = cast(CaldronThread)(cast()threads_).pop;
             cldThread.reset(cld);
 
             return cldThread;
@@ -486,6 +494,12 @@ synchronized class CaldronThreadPool {
         else { //no: terminate the thread
             thread.destroy;
         }
+    }
+
+    /// Request terminating all canned threads.
+    void terminate() {
+        while(!(cast()threads_).empty)
+            (cast()threads_).pop.destroy;
     }
 
     //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%

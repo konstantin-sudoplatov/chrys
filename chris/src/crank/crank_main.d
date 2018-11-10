@@ -1,5 +1,6 @@
 /// Dynamic concept names
 module crank.crank_main;
+import std.typecons;
 
 import proj_data;
 
@@ -10,19 +11,23 @@ import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_primitives;
 import stat.stat_types, stat.stat_main;
 
 /// Dynamic concept names and cids.
-// 3_372_907_570, 2_800_603_496, 3_786_801_661, 4_220_759_348, 1_278_962_165, 49_787_120
+// , , , , 1_278_962_165, 49_787_120
 enum CommonConcepts: DcpDsc {
 
     // Service concepts
     checkUp_act = cd!(SpA, 3_525_361_282),              // raise the CheckPt_ flag of the caldron
-    logCpt_0_cact = cd!(SpA_Cid, 246_390_338),          // log a concept, using concept.toString()
-    logCpt_1_cact = cd!(SpA_Cid, 1_005_527_366),        // ditto
-    logCpt_2_cact = cd!(SpA_Cid, 122_016_958),          // ditto
-    zond_0_anrn = cd!(SpActionNeuron, 2_279_163_875),       // test action neuron to inject into different points of workflow
-    zond_1_anrn = cd!(SpActionNeuron, 2_025_623_255),       // ditto
-    zond_2_anrn = cd!(SpActionNeuron, 1_321_617_741),       // ditto
-    circus_anrn = cd!(SpActionNeuron, 33_533_622),          // an endless waiting
-    circus_andnrn = cd!(SpAndNeuron, 2_142_584_142),        // ditto
+    logCpt0_cact = cd!(SpA_Cid, 246_390_338),          // log a concept, using concept.toString()
+    logCpt1_cact = cd!(SpA_Cid, 1_005_527_366),        // ditto
+    logCpt2_cact = cd!(SpA_Cid, 122_016_958),          // ditto
+    zond0_anrn = cd!(SpActionNeuron, 2_279_163_875),       // test action neuron to inject into different points of workflow
+    zond1_anrn = cd!(SpActionNeuron, 2_025_623_255),       // ditto
+    zond2_anrn = cd!(SpActionNeuron, 1_321_617_741),       // ditto
+    circus1_anrn = cd!(SpActionNeuron, 33_533_622),        // temporary while name not yet invented
+    circus1_andnrn = cd!(SpAndNeuron, 2_142_584_142),      // ditto
+    circus2_anrn = cd!(SpActionNeuron, 3_372_907_570),     // ditto
+    circus2_andnrn = cd!(SpAndNeuron, 2_800_603_496),      // ditto
+    circus3_anrn = cd!(SpActionNeuron, 3_786_801_661),     // ditto
+    circus3_andnrn = cd!(SpAndNeuron, 4_220_759_348),      // ditto
 
     /// Controlling the debug level inside the caldron
     setDebugLevel_0_act = cd!(SpA, 3_426_667_410),
@@ -44,9 +49,9 @@ void commonConcepts() {
     cp!checkUp_act.load(statCid!checkUp_stat);
 
     // Setup the log actions
-    cp!logCpt_0_cact.load(statCid!logConcept_stat);
-    cp!logCpt_1_cact.load(statCid!logConcept_stat);
-    cp!logCpt_2_cact.load(statCid!logConcept_stat);
+    cp!logCpt0_cact.load(statCid!logConcept_stat);
+    cp!logCpt1_cact.load(statCid!logConcept_stat);
+    cp!logCpt2_cact.load(statCid!logConcept_stat);
 
     // Setup controlling the debug level
     cp!setDebugLevel_0_act.load(statCid!setDebugLevel_0_stat);
@@ -76,6 +81,9 @@ enum Chat: DcpDsc {
     /// The action for the handshaker. It sends uline Tid of the user thread (console or http), so that uline could be able
     /// to talk to the user.
     sendUlineUserTid_c2act_chat = cd!(SpA_2Cid, 3_408_832_589),
+
+    /// Prepare inPars for the putUserLine branch
+    copyUserInputToOutput_c2act_uline = cd!(SpA_2Cid, 1_099_498_783),
 }
 
 /// Setup the chat branch.
@@ -100,8 +108,7 @@ void chat() {
             sendUlineUserTid_c2act_chat,         // give uline user's Tid
         ],
         [
-            getUserLine_breed_getuln,
-            circus_andnrn,
+            circus1_anrn,
         ]
     );
     //prems
@@ -110,17 +117,28 @@ void chat() {
     cp!sendUlineChatBreed_c2act_chat.load(statCid!sendConceptToBranch_stat, uline_breed, chat_breed_hcid);
     cp!sendUlineUserTid_c2act_chat.load(statCid!sendConceptToBranch_stat, uline_breed, userTid_tidprem_hcid);
 
-    cp!circus_andnrn.addPrem(userInputLine_strprem_uline);
-    cp!circus_andnrn.addEffs(
-        float.infinity,
+    cp!circus1_anrn.addEffs(
+        cast(DcpDsc[])[],
+        [
+            getUserLine_breed_getuln,
+            circus1_andnrn,
+        ]
+    );
+
+    cp!circus1_andnrn.addPrem(userInput_strprem_uline);
+    cp!circus1_andnrn.addEffs(
         cast(DcpDsc[])[
+        anactivateUserInput_cact_uline
         ],
-        putUserLine_breed_putuln
+        [
+            putUserLine_breed_putuln,
+            circus1_anrn,
+        ]
     );
 }
 
 /// User line branch enums
-// 3_186_686_771, 1_099_498_783, 3_758_390_978
+// , , 3_758_390_978
 enum Uline {
     /// uline branch identifier
     uline_breed = cd!(SpBreed, 4_021_308_401),
@@ -135,24 +153,27 @@ enum Uline {
     sendUserUlineTid_c2act_uline = cd!(SpA_2Cid, 2_277_726_710),
 
     /// line of text from the user, string premise.
-    userInputLine_strprem_uline = cd!(SpStringPrem, 3_622_010_989),
-    anactivateUserInputLine_cact_uline = cd!(SpA_Cid, 1_733_678_366),
+    userInput_strprem_uline = cd!(SpStringPrem, 3_622_010_989),
+    anactivateUserInput_cact_uline = cd!(SpA_Cid, 1_733_678_366),
 
     /// Wait on this neuror for the next line of text from user.
     userInputValve_andnrn_uline = cd!(SpAndNeuron, 732_066_873),
 
     /// askUserline branch is ready to receive next user line.
-    requestForUserLine_peg_uline = cd!(SpPegPrem, 1_906_470_662),
-    anactivateRequestForUserLine_cact_uline = cd!(SpA_Cid, 409_329_855),
+    requestForUserInput_peg_uline = cd!(SpPegPrem, 1_906_470_662),
+    anactivateRequestForUserInput_cact_uline = cd!(SpA_Cid, 409_329_855),
 
     /// Call stat action of moving line from buffer to string peg.
-    popLineFromUserInuputBufferToUserInputLine_c2act_uline = cd!(SpA_2Cid, 2_949_480_003),
+    popLineFromUserInuputBuffer_c2act_uline = cd!(SpA_2Cid, 2_949_480_003),
 
-    /// Send user line premise to chat (together with the activation value)
-    sendUserInputLineToChat_c2act_uline = cd!(SpA_2Cid, 3_447_310_214),
+    /// Send user line to whatever branch the request came from (with set activation)
+    sendUserInputToCaller_c2act_uline = cd!(SpA_2Cid, 3_447_310_214),
 
     /// Send user a prompt for the next input
-    sendUserRequestForNextLine_cact_uline = cd!(SpA_Cid, 1_439_958_318),
+    requestUserForNextInput_cact_uline = cd!(SpA_Cid, 1_439_958_318),
+
+    /// Watever branch wants to send user a line of text sets up this concept along with activation.
+    userOutput_strprem_uline = cd!(SpStringPrem, 3_186_686_771),
 }
 
 /// Setup the uline branch.
@@ -187,27 +208,27 @@ void uline() {
         // User input valve. The handshake is over. Now, wait for user input and send it to the askUserLine branch in a cycle.
     // Premises
     cp!userInputValve_andnrn_uline.addPrem(userInputBuffer_strqprem_hcid);
-    cp!userInputValve_andnrn_uline.addPrem(requestForUserLine_peg_uline);
+    cp!userInputValve_andnrn_uline.addPrem(requestForUserInput_peg_uline);
     // Effects
     cp!userInputValve_andnrn_uline.addEffs(
         float.infinity,
         [   // acts
-            popLineFromUserInuputBufferToUserInputLine_c2act_uline,
-            sendUserInputLineToChat_c2act_uline,
-            anactivateRequestForUserLine_cact_uline,
-            anactivateUserInputLine_cact_uline,
-            sendUserRequestForNextLine_cact_uline,
+            popLineFromUserInuputBuffer_c2act_uline,
+            sendUserInputToCaller_c2act_uline,
+            anactivateRequestForUserInput_cact_uline,
+            anactivateUserInput_cact_uline,
+            requestUserForNextInput_cact_uline,
         ],
         null
     );
     // acts
-    cp!popLineFromUserInuputBufferToUserInputLine_c2act_uline.load(statCid!popUserInputLineFromBuffer_stat,
-            userInputBuffer_strqprem_hcid, userInputLine_strprem_uline);
-    cp!sendUserInputLineToChat_c2act_uline.load(statCid!sendConceptToBranch_stat, callerTid_tidprem_hcid,
-    userInputLine_strprem_uline);
-    cp!anactivateRequestForUserLine_cact_uline.load(statCid!anactivate_stat, requestForUserLine_peg_uline);
-    cp!anactivateUserInputLine_cact_uline.load(statCid!anactivate_stat, userInputLine_strprem_uline);
-    cp!sendUserRequestForNextLine_cact_uline.load(statCid!requestUserInput, userTid_tidprem_hcid);
+    cp!popLineFromUserInuputBuffer_c2act_uline.load(statCid!popUserInputLineFromBuffer_stat,
+            userInputBuffer_strqprem_hcid, userInput_strprem_uline);
+    cp!sendUserInputToCaller_c2act_uline.load(statCid!sendConceptToBranch_stat, callerTid_tidprem_hcid,
+    userInput_strprem_uline);
+    cp!anactivateRequestForUserInput_cact_uline.load(statCid!anactivate_stat, requestForUserInput_peg_uline);
+    cp!anactivateUserInput_cact_uline.load(statCid!anactivate_stat, userInput_strprem_uline);
+    cp!requestUserForNextInput_cact_uline.load(statCid!requestUserInput, userTid_tidprem_hcid);
 }
 
 // 580_962_659, 3_399_694_389, 2_877_036_599
@@ -226,11 +247,11 @@ void getUserline() {
         threadStartType_mark_hcid,          // branch by thread or fiber?
         seed_anrn_getuln,                   // the seed to branch
         [uline_breed],                      // in params, will be injected into the branch by parent
-        [userInputLine_strprem_uline]       // out params, will be injected back to parent's branch on finishing
+        [userInput_strprem_uline]       // out params, will be injected back to parent's branch on finishing
     );
 
     // Seed - asks uline to give new user line
-    cp!getUserline_c2act_getuln.load(statCid!activateRemotely_stat, uline_breed, requestForUserLine_peg_uline);
+    cp!getUserline_c2act_getuln.load(statCid!activateRemotely_stat, uline_breed, requestForUserInput_peg_uline);
     cp!seed_anrn_getuln.addEffs(
         cast(DcpDsc[])[
             getUserline_c2act_getuln,
@@ -239,7 +260,7 @@ void getUserline() {
     );
 
     // Wait for user line and finish the branch
-    cp!waitUlineResponse_andnrn_getuln.addPrem(userInputLine_strprem_uline);
+    cp!waitUlineResponse_andnrn_getuln.addPrem(userInput_strprem_uline);
     cp!waitUlineResponse_andnrn_getuln.addEffs(
         float.infinity,
         cast(DcpDsc[])[
@@ -263,13 +284,14 @@ void putUserLine() {
     cp!putUserLine_breed_putuln.load(
         threadStartType_mark_hcid,
         seed_anrn_putuln,
-        [userInputLine_strprem_uline],
+        [uline_breed, userInput_strprem_uline],
         null
     );
 
     // seed
     cp!seed_anrn_putuln.addEffs(
         cast(DcpDsc[])[
+            stop_act
         ],
         null
     );

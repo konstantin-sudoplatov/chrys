@@ -393,7 +393,6 @@ private struct DequeImpl(E, Sz=uint)
     }
 
     /// Take out an element from the front of the queue. Part of the input range interface.
-    alias pull = popFront;
     E popFront() {
         if(length_ == 0)
             throw new RangeError;

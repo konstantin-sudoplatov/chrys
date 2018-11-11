@@ -22,11 +22,10 @@ void wait_stat(Caldron cld){
 void stop_stat(Caldron cld){
     import std.concurrency: Tid, send;
     import messages: IbrBranchDevise_msg;
-    Breed breed = cld.breed;
     if      // is it a threaded branch?
-            (breed.startType == HardCid.threadStartType_mark_hcid.cid)
+            (cld.breed.startType == HardCid.threadStartType_mark_hcid.cid)
     {   //yes: send to the parent my devise
-        send(cld.parentThread.tid, new immutable IbrBranchDevise_msg);
+        send(cld.parentThread.tid, new immutable IbrBranchDevise_msg(cld.breedCid));
     }
     cld.requestStop;
 }

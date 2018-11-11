@@ -113,11 +113,11 @@ class Caldron {
 
     /// Send children the termination signal and wait their termination.
     final void terminateChildren() {
-        foreach (child; childThreads_.byKey)
+        foreach (child; childThreads_.byValue)
             try {
-                if(!childThreads_[child].isFinished) child.send(new immutable TerminateApp_msg);
+                if(!child.isFinished) child.tid.send(new immutable TerminateApp_msg);
             } catch(Throwable){
-                Caldron cld = childThreads_[child].caldron;
+                Caldron cld = child.caldron;
                 logit("Error happened while terminating thread %s".format(cld? cld.cldName: "???"), TermColor.red);
             }
         childThreads_ = null;
@@ -132,6 +132,8 @@ class Caldron {
         else
             return "noname";
     }
+
+    @property Cid breedCid() { return breedCid_; }
 
     /// Get breed of the caldron
     final Breed breed() {
@@ -213,10 +215,10 @@ class Caldron {
             debug if (dynDebug >= 1)
                 logit("%s, message IbrBranchDevise_msg has come from %s.".format(cldName, msg.senderTid),
                         TermColor.brown);
-            Tid tid = msg.senderTid;
-            CaldronThread thread = childThreads_[tid];
+            CaldronThread thread = childThreads_[m.breedCid];
             Caldron cld = thread.caldron;
             Breed breed = cld.breed;
+            assert(breed.cid == m.breedCid);
 
             // Take outPars and anactivate breed
             foreach(p; breed.outPars)
@@ -224,7 +226,7 @@ class Caldron {
             scast!Breed(this[breed.cid]).anactivate;
 
             // Remove the thread from caldron's children and put it in the pool
-            childThreads_.remove(tid);
+            childThreads_.remove(m.breedCid);
             _threadPool_.push(thread);
 
             reasoning_;                 // kick off
@@ -262,8 +264,8 @@ class Caldron {
     /// Breed for this caldron.
     private Cid breedCid_;
 
-    /// Caldrons, that were parented here.
-    private CaldronThread[Tid] childThreads_;
+    /// Caldrons, that were parented here. Key is a breed.
+    private CaldronThread[Cid] childThreads_;
 
     /// Live map. All holy concepts, that are ever addressed by the caldron are wrapped in corresponding live object and
     /// put in this map. So, caldron always works with its own instance of a concept.
@@ -319,6 +321,15 @@ class Caldron {
                 if      // is it a breed?
                         (auto breed = cast(Breed)cpt)
                 {   //yes: spawn the new branch
+                    if      // does this breed have already an active branch?
+                            (cid in childThreads_)
+                    {   //yes: skip spawning, may be log a warning
+                        debug if(dynDebug >= 1)
+                                logit("Warning: attempt to respawn already runnig breed %s(%,?s) is ignored.".
+                                format(cptName(cid), '_', cid));
+                        continue;
+                    }
+
                     debug if(dynDebug >= 1) logit("%s, spawning %s(%,?s)".format(cldName, cptName(cid), '_', cid),
                             TermColor.blue);
 
@@ -334,7 +345,7 @@ class Caldron {
                     CaldronThread thread = _threadPool_.pop(cld);
                     cld.myThread = thread;
 
-                    childThreads_[thread.tid] = thread;
+                    childThreads_[cid] = thread;
 
                     breed.tid = thread.tid;     // wind up our instance
                     breed.activate;             // of the breed

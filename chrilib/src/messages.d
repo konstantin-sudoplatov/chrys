@@ -140,7 +140,15 @@ immutable class IbrStartReasoning_msg: Msg {
 /// This message is sent to the parent on finishing in order to pass output concepts. Only sender's tid is important
 /// and it is always in Msg.
 immutable class IbrBranchDevise_msg: Msg {
-    this() { super(); }
+    import cpt.cpt_premises: Breed;
+
+    /// Bread of the deseased branch
+    Cid breedCid;
+
+    this(Cid breed) {
+        super();
+        this.breedCid = breed;
+    }
 }
 
 /// Interbranching. Used by a caldron to set an activation value for a concept in given caldron.

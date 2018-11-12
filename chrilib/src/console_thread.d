@@ -46,7 +46,7 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
             break;
         }
         else {
-            logit(format!"Message timeout %s in console thread while getting the circle's Tid."(msgTimeout));
+            logit("Message timeout %s in console thread while getting the circle's Tid.".format(msgTimeout));
         }
     }
     while(attnCircleTid_ == Tid.init);      // until get the circle's Tid
@@ -105,14 +105,14 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
                     writeln(m.line); stdout.flush;
                 }
                 else
-                    logit(format!"Unexpected message of Msg type in console thread: %s"(msg));
+                    logit("Unexpected message of Msg type in console thread: %s".format(msg), TermColor.red);
             }
             else {  //no: that was variant. Log an error, continue
-                logit(format!"Unexpected message of Variable type in console thread: %s"(var.toString));
+                logit("Unexpected message of Variable type in console thread: %s".format(var.toString), TermColor.red);
             }
         }
         else {  //no: log it, continue
-            logit(format!"Message timeout %s in console thread while waiting for the line request."(msgTimeout));
+            logit("Message timeout %s in console thread while waiting for the line request.".format(msgTimeout));
             continue;
         }
     }

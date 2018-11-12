@@ -101,6 +101,8 @@ void chat() {
     );
 
     // Handshake with uline
+    //prems: wait for tid from user. no point in waiting uline breed, it is activated in the same iteration with spawnig
+    cp!shakeHandsWithUline_andnrn_chat.addPrem(userTid_tidprem_hcid);
     cp!shakeHandsWithUline_andnrn_chat.addEffs(
         float.infinity,
         [   // acts
@@ -111,8 +113,6 @@ void chat() {
             circus1_anrn,
         ]
     );
-    //prems
-    cp!shakeHandsWithUline_andnrn_chat.addPrem(userTid_tidprem_hcid);
     // acts
     cp!sendUlineChatBreed_c2act_chat.load(statCid!sendConceptToBranch_stat, uline_breed, chat_breed_hcid);
     cp!sendUlineUserTid_c2act_chat.load(statCid!sendConceptToBranch_stat, uline_breed, userTid_tidprem_hcid);

@@ -80,11 +80,10 @@ class TidPrem: Premise {
     override Serial serialize() const {
         Serial res = super.serialize;
 
-        res.stable.reserve(2*Cid.sizeof + Clid.sizeof + inPars_.length*Cid.sizeof +
+        res.stable.reserve(Cid.sizeof + Clid.sizeof + inPars_.length*Cid.sizeof +
                 Clid.sizeof + outPars_.length*Cid.sizeof);   // reserve
-        res.stable.length = 2*Cid.sizeof;  // allocate
-        *cast(Cid*)&res.stable[0] = startType_;
-        *cast(Cid*)&res.stable[Cid.sizeof] = seed_;
+        res.stable.length = Cid.sizeof;  // allocate
+        *cast(Cid*)&res.stable[0] = seed_;
         res.stable ~= serializeArray(inPars_);
         res.stable ~= serializeArray(outPars_);
 
@@ -96,12 +95,11 @@ class TidPrem: Premise {
 
         if(!super.opEquals(sc)) return false;
         auto o = scast!(typeof(this))(sc);
-        return startType_ == o.startType_ && seed_ == o.seed_ && inPars_ == o.inPars_ && outPars_ == o.outPars_;
+        return seed_ == o.seed_ && inPars_ == o.inPars_ && outPars_ == o.outPars_;
     }
 
     override string toString() const {
         string s = super.toString;
-        s ~= "\n    startType_ = %s(%,?s)".format(cptName(startType_), '_', startType_);
         s ~= "\n    seed_ = %s(%,?s)".format(cptName(seed_), '_', seed_);
         s ~= "\n    inPars_ = [";
         foreach(cid; inPars_) s ~= "\n        %s(%,?s)".format(cptName(cid), '_', cid);
@@ -117,29 +115,21 @@ class TidPrem: Premise {
     /**
             Load.
         Parameters:
-            startType = type of starting the branch - thread, fiber or auto.
             seed = starting neuron.
             itPars = array of input concepts. The parent injects them when preparing the branch.
             outPars = array of output concepts. They are injected into parent at the end of the branch.
     */
-    void load(DcpDsc startType, DcpDsc seed, DcpDsc[] inPars, DcpDsc[] outPars)
+    void load(DcpDsc seed, DcpDsc[] inPars, DcpDsc[] outPars)
     in {
-        checkCid!SpMarkPrim(startType.cid);
         checkCid!SpiritNeuron(seed.cid);
-        assert(startType == HardCid.threadStartType_mark_hcid || startType == HardCid.fiberStartType_mark_hcid ||
-            startType == HardCid.autoStartType_mark_hcid);
         foreach(cd; inPars) checkCid!SpiritConcept(cd.cid);
         foreach(cd; outPars) checkCid!SpiritConcept(cd.cid);
     }
     do {
-        startType_ = startType.cid;
         seed_ = seed.cid;
         inPars.each!(dd => inPars_ ~= dd.cid);
         outPars.each!(dd => outPars_ ~= dd.cid);
     }
-
-    /// Getter.
-    Cid startType() const { return startType_; }
 
     /// Getter.
     Cid seed() const { return seed_; }
@@ -160,9 +150,8 @@ class TidPrem: Premise {
     protected override Tuple!(const byte[], "stable", const byte[], "transient") _deserialize(const byte[] stable,
             const byte[] transient)
     {
-        startType_ = *cast(Cid*)&stable[0];
-        seed_ = *cast(Cid*)&stable[Cid.sizeof];
-        auto ds1 = deserializeArray!(Cid[])(stable[2*Cid.sizeof..$]);
+        seed_ = *cast(Cid*)&stable[0];
+        auto ds1 = deserializeArray!(Cid[])(stable[Cid.sizeof..$]);
         inPars_ = ds1.array;
         auto ds2 = deserializeArray!(Cid[])(ds1.restOfBuffer);
         outPars_ = ds2.array;
@@ -171,9 +160,6 @@ class TidPrem: Premise {
     }
 
     //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
-
-    /// Start type: CommonConcepts.threadStartType_mark, fiberStartType_mark or 0 for auto.
-    private Cid startType_;
 
     /// The seed of the branch.
     private Cid seed_;
@@ -205,9 +191,6 @@ final class Breed: TidPrem {
 
     /// Private constructor. Use spiritual live_factory() instead.
     private this(immutable SpBreed spBreed) { super(spBreed); }
-
-    /// Getter.
-    Cid startType() const { return scast!(immutable SpBreed)(spirit).startType; }
 
     /// Getter.
     Cid seed() const { return scast!(immutable SpBreed)(spirit).seed; }

@@ -72,12 +72,6 @@ enum HardCid: DcpDsc {
     /// This tid premise is injected to the called caldron on coming some messages like sendConceptToBranch_stat based on
     /// the Msg._senderTid field.
     callerTid_tidprem_hcid = cd!(SpTidPrem, 1_373_740_169),
-
-    /// Breed concepts contain these marks to specify how the branch must be started: as a separate thread, as a fiber or
-    /// any way at discretion of the Caldron.reasoning_() function.
-    threadStartType_mark_hcid = cd!(SpMarkPrim, 2_295_052_561),
-    fiberStartType_mark_hcid = cd!(SpMarkPrim, 2_421_473_041),
-    autoStartType_mark_hcid = cd!(SpMarkPrim, 3_679_431_450),
 }
 
 shared static this(){

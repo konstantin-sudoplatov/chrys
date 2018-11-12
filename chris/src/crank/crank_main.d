@@ -91,7 +91,7 @@ void chat() {
     mixin(dequalify_enums!(HardCid, CommonConcepts, Chat, Uline, GetUserline, PutUserLine));    // anonymizes the concept enums, so we don't need use their full names.
 
     // Setup the breed and seed
-    cp!chat_breed_hcid.load(threadStartType_mark_hcid, chat_seed, null, null);
+    cp!chat_breed_hcid.load(chat_seed, null, null);
     cp!chat_seed.addEffs(
         null,
         [   // brans
@@ -128,7 +128,7 @@ void chat() {
     cp!circus1_andnrn.addPrem(userInput_strprem_uline);
     cp!circus1_andnrn.addEffs(
         cast(DcpDsc[])[
-        anactivateUserInput_cact_uline
+            anactivateUserInput_cact_uline
         ],
         [
             putUserLine_breed_putuln,
@@ -181,7 +181,7 @@ void uline() {
     mixin(dequalify_enums!(HardCid, CommonConcepts, Uline, Chat));
 
     // Mate uline seed and breed and choose the start type.
-    cp!uline_breed.load(threadStartType_mark_hcid, uline_seed, null, null);
+    cp!uline_breed.load(uline_seed, null, null);
 
     // Setup the uline_seed
     cp!uline_seed.addEffs(
@@ -244,7 +244,6 @@ void getUserline() {
 
     // Breed
     cp!getUserLine_breed_getuln.load(
-        threadStartType_mark_hcid,          // branch by thread or fiber?
         seed_anrn_getuln,                   // the seed to branch
         [uline_breed],                      // in params, will be injected into the branch by parent
         [userInput_strprem_uline]       // out params, will be injected back to parent's branch on finishing
@@ -282,7 +281,6 @@ void putUserLine() {
 
     // breed
     cp!putUserLine_breed_putuln.load(
-        threadStartType_mark_hcid,
         seed_anrn_putuln,
         [uline_breed, userInput_strprem_uline],
         null

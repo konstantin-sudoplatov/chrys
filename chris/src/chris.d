@@ -28,12 +28,14 @@ void main()
 
     // Wait for messages. Those should be only requests for termination from console or exceptions that should be rethrown.
     while(true) {
-        TerminateApp_msg termMsg;
-        Throwable ex;
 
+        TerminateApp_msg termMsg;
+        CirclesAreFinished_msg finMsg;
+        Throwable ex;
         Variant var;
         receive(
             (immutable TerminateApp_msg m){termMsg = cast()m;},
+            (immutable CirclesAreFinished_msg m){finMsg = cast()m;},
             (shared Throwable e){ex = cast()e;},
             (Variant v) {var = v;}
         );
@@ -42,6 +44,10 @@ void main()
                 (termMsg)
         {   //yes: terminate other subthreads, terminate application
             (cast()_attnDispTid_).send(new immutable TerminateApp_msg());
+        }
+        else if // are all attention circles finished?
+                (finMsg)
+        {   //yes: can clear up the thread pool and exit
             goto TERMINATE_APPLICATION;
         }
         else if // has one of the thead thrown an exception?

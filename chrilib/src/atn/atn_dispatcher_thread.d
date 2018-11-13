@@ -1,10 +1,11 @@
 module atn.atn_dispatcher_thread;
 import std.stdio;
-import std.concurrency;
+import std.concurrency, core.thread;
 import std.format;
 
 import proj_data, proj_funcs;
 
+import chri_data;
 import messages;
 import atn.atn_caldron;
 
@@ -59,7 +60,11 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                 // send terminating message to all circles
                 foreach(circle; circleRegister_.byValue){
                     circle.tid.send(new immutable TerminateApp_msg);
+                    while(!circle.isFinished) {
+                        Thread.sleep(10.msecs);
+                    }   // wait while terminated
                 }
+                send(cast()_mainTid_, new immutable CirclesAreFinished_msg);    // tell to main func
 
                 // terminate itself
                 goto FINISH_THREAD;
@@ -95,11 +100,11 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
 //                               Private
 //
 //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-private:
+
 //---%%%---%%%---%%%---%%%---%%% data ---%%%---%%%---%%%---%%%---%%%---%%%
 
 /// Circle's Tids by client's Tids.
-CaldronThread[Tid] circleRegister_;
+private CaldronThread[Tid] circleRegister_;
 
 //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 

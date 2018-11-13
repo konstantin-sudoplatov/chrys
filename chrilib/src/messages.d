@@ -30,6 +30,12 @@ immutable class TerminateApp_msg: Msg {
     this() {super();}
 }
 
+/// Dispatcher sends this messag to the main thread after fulfilling request for termination
+immutable class CirclesAreFinished_msg: Msg {
+    /// Constructor
+    this() {super();}
+}
+
 /// Request for the attention dispatcher start an attention circle thread and send back its Tid. Actually, it is be the
 /// circle's branch uline, that will send back its Tid.
 immutable class UserRequestsCircleTid_msg: Msg {

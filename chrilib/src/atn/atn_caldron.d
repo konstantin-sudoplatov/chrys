@@ -1,5 +1,6 @@
 module atn.atn_caldron;
 import std.stdio, std.string;
+import std.algorithm;
 import core.thread, std.concurrency, std.exception;
 
 import proj_data, proj_funcs;
@@ -115,7 +116,10 @@ class Caldron {
     final void terminateChildren() {
         foreach (child; childThreads_.byValue)
             try {
-                if(!child.isFinished) child.tid.send(new immutable TerminateApp_msg);
+                if(!child.isFinished) {
+                    child.tid.send(new immutable TerminateApp_msg);
+                    while(!child.isFinished) Thread.sleep(10.msecs);
+                }
             } catch(Throwable){
                 Caldron cld = child.caldron;
                 logit("Error happened while terminating thread %s".format(cld? cld.cldName: "???"), TermColor.red);
@@ -364,7 +368,7 @@ class Caldron {
                     {   //yes: skip spawning, may be log a warning
                         debug if(dynDebug >= 1)
                                 logit("Warning: attempt to respawn breed that is already runnig %s(%,?s), ignored.".
-                                format(cptName(cid), '_', cid));
+                                format(cptName(cid), '_', cid), TermColor.red);
                         continue;
                     }
 
@@ -391,6 +395,15 @@ class Caldron {
                 else if // is it a graft?
                         (auto graft = cast(Graft)cpt)
                 {   // create a fiber
+                    if      // does this fiber already exist?
+                            (cid in grafts)
+                    {   //yes: skip creating fiber, may be log a warning
+                        debug if(dynDebug >= 1)
+                                logit("Warning: attempt to recreate fiber that already exists %s(%,?s), ignored.".
+                                format(cptName(cid), '_', cid), TermColor.red);
+                        continue;
+                    }
+
                     Cid savedHeadCid = headCid_;
                     headCid_ = cid;     // make the graft new head for the fiber
                     Fiber fiber = _fiberPool_.pop(this);
@@ -424,7 +437,8 @@ class Caldron {
                     // yes: leave
                     return;
                 else {  //no: it is a fiber, yield it
-                    if (dynDebug >= 1) logit("%s, yielding level %s".format(cldName, recurDepth_), TermColor.blue);
+                    debug if (dynDebug >= 1) logit("%s, yielding level %s".format(cldName, recurDepth_),
+                            TermColor.blue);
                     Fiber.yield;
                 }
             }
@@ -554,8 +568,12 @@ synchronized class CaldronThreadPool {
 
     /// Request terminating all canned threads.
     void terminate() {
-        while(!(cast()threads_).empty)
-            (cast()threads_).pop.destroy;
+        while(!(cast()threads_).empty) {
+            CaldronThread thread = scast!CaldronThread((cast()threads_).pop);
+            send(thread.tid, cast(shared) new CaldronThreadTerminationRequest);
+                while(thread.isFinished)
+                    Thread.sleep(10.msecs);
+        }
     }
 
     //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
@@ -585,13 +603,6 @@ class CaldronThread {
         myTid_.send(new immutable IbrStartReasoning_msg);   // kick off the reasoning cycle
     }
 
-    /// Destructor terminates thread. To terminate it explicitely call destroy(this).
-    ~this() {
-        try {
-            if(!isFinished_) send(myTid_, cast(shared) new CaldronThreadTerminationRequest);
-        } catch(Throwable) {}
-    }
-
     /**
             Reassociate thread with the new caldron.
         Parameters:
@@ -610,7 +621,8 @@ class CaldronThread {
     Caldron caldron() { return caldron_; }
 
     /**
-            Cann the thread.
+            Cann the thread. Thread is not finished, it is sleeping on the receive function and may be reused by
+        assigning new caldron in the reset() func.
     */
     void mothball() {
         caldron_ = null;
@@ -623,7 +635,7 @@ class CaldronThread {
     bool isFinished() { return isFinished_; }
 
     /// Shows if the thread was canned (see the mothBall() function).
-    bool isCanned() { return isCanned_; }
+    bool isCanned() { return caldron is null; }
 
     //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
     //
@@ -640,10 +652,6 @@ class CaldronThread {
     /// This flag is raised if the caldronThreadFunc() function exited normally or on exception.
     private bool isFinished_;
 
-    /// This flag is raised if the caldron_ field has been nulled by call to the mothBall() function. Thread is not
-    /// finished, it is sleeping on the receive function and may be reused by assignin new caldron in the reset() func.
-    private bool isCanned_;
-
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     /**
@@ -651,7 +659,9 @@ class CaldronThread {
     */
     private shared void caldronThreadFunc() { try {
 
-        scope(exit) isFinished_ = true;
+        scope(exit) {
+            isFinished_ = true;
+        }
 
         // Receive messages in a cycle
         while(true) {
@@ -685,7 +695,6 @@ class CaldronThread {
                             logit("%s, message TerminateApp_msg has come, terminating caldron".format(
                             (cast()caldron_).cldName), TermColor.brown);
                     (cast()caldron_).terminateChildren;
-
                     // terminate itself
                     goto FINISH_THREAD;
                 }
@@ -709,8 +718,10 @@ class CaldronThread {
             else if
                     (var.hasValue)
             {  // unrecognized message of type Variant. Log it.
-                logit(format!"Unexpected message of type Variant to the caldron %s: %s"
-                        ((cast()caldron_).cldName, var.toString), TermColor.brown);
+                if      // not canned?
+                        (caldron_)
+                    logit(format!"Unexpected message of type Variant to the caldron %s: %s"
+                            ((cast()caldron_).cldName, var.toString), TermColor.brown);
                 continue;
             }
         }
@@ -722,10 +733,10 @@ class CaldronThread {
     }}
 
     //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-    /// Message to itself to terminate.
-    private class CaldronThreadTerminationRequest {}
 }
+
+/// Message to terminate caldron thread.
+private class CaldronThreadTerminationRequest {}
 
 
 

@@ -128,6 +128,7 @@ void chat() {
     cp!circus1_andnrn.addPrem(userInput_strprem_uline);
     cp!circus1_andnrn.addEffs(
         cast(DcpDsc[])[
+            copyUserInputToOutput_c2act_uline,
             anactivateUserInput_cact_uline
         ],
         [
@@ -135,6 +136,7 @@ void chat() {
             circus1_anrn,
         ]
     );
+    cp!copyUserInputToOutput_c2act_uline.load(statCid!copyPremise, userInput_strprem_uline, userOutput_strprem_uline);
 }
 
 /// User line branch enums
@@ -282,17 +284,19 @@ void putUserLine() {
     // breed
     cp!putUserLine_breed_putuln.load(
         seed_anrn_putuln,
-        [uline_breed, userInput_strprem_uline],
+        [uline_breed, userOutput_strprem_uline],
         null
     );
 
     // seed
     cp!seed_anrn_putuln.addEffs(
         cast(DcpDsc[])[
+logCpt0_cact,
             stop_act
         ],
         null
     );
+cp!logCpt0_cact.load(userOutput_strprem_uline);
 }
 
 

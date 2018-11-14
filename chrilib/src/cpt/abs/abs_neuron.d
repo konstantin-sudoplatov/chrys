@@ -1,6 +1,6 @@
 module cpt.abs.abs_neuron;
 import std.stdio;
-import std.format, std.typecons, std.math;
+import std.string, std.typecons, std.math;
 
 import proj_data, proj_funcs;
 
@@ -264,9 +264,10 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
                 Cid[] b;
                 foreach (cd; brans) {
                     debug if(_maps_filled_)
-                        assert(cast(shared SpBreed)_sm_[cd.cid] || cast(shared SpiritNeuron)_sm_[cd.cid],
-                                format!"Cid: %s must be HolyNeuron, including HolySeed or HolyBreed, and it is a %s."
-                                        (cd.cid, cd.className));
+                        assert(cast(shared SpBreed)_sm_[cd.cid] || cast(shared SpGraft)_sm_[cd.cid] ||
+                                cast(shared SpiritNeuron)_sm_[cd.cid],
+                                "Cid: %s(%,?s) must be SpiritNeuron, or SpBreed, or SpGraft and it is a %s.".
+                                format(cptName(cd.cid), '_', cd.cid, '_', cd.className));
                     b ~= cd.cid;
                 }
             }
@@ -274,9 +275,10 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
             {
                 debug if(_maps_filled_)
                     foreach (cid; brans) {
-                        assert(cast(shared SpBreed)_sm_[cid] || cast(shared SpiritNeuron)_sm_[cid],
-                                format!"Cid: %s must be HolyNeuron, including HolySeed or HolyBreed, and it is a %s"
-                                        (cid, typeid(_sm_[cid])));
+                        assert(cast(shared SpBreed)_sm_[cid] || cast(shared SpGraft)_sm_[cid] ||
+                        cast(shared SpiritNeuron)_sm_[cid],
+                                "Cid: %s(%,?s) must be SpiritNeuron, or SpBreed, or SpGraft and it is a %s.".
+                                format(cptName(cid), '_', cid, '_', typeid(_sm_[cid])));
                     }
                 Cid[] b = brans;
             }
@@ -285,17 +287,18 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
                     (is(Tb == DcpDsc))
             {  //yes: convert it to array of cids
                 debug if(_maps_filled_)
-                    assert(cast(shared SpBreed)_sm_[brans.cid] || cast(shared SpiritNeuron)_sm_[brans.cid],
-                            format!"Cid: %s must be HolyNeuron, including HolySeed or HolyBreed, and it is a %s."
-                                    (brans.cid, brans.className));
+                    assert(cast(shared SpBreed)_sm_[brans.cid] || cast(shared SpBreed)_sm_[brans.cid] ||
+                    cast(shared SpiritNeuron)_sm_[brans.cid],
+                            "Cid: %s(%,?s) must be SpiritNeuron, or SpBreed, or SpGraft and it is a %s.".
+                            format(cptName(brans.cid), '_', brans.cid, '_', brans.className));
                 Cid[] b = [brans.cid];
             }
             else//no: it is a cid; convert it an to array of cids
             {
                 debug if(_maps_filled_)
                     assert(cast(shared SpBreed)_sm_[brans] || cast(shared SpiritNeuron)_sm_[brans],
-                            format!"Cid: %s must be HolyNeuron, including HolySeed or HolyBreed, and it is a %s."
-                                    (brans, typeid(_sm_[brans])));
+                            "Cid: %s(%,?s) must be SpiritNeuron, or SpBreed, or SpGraft and it is a %s.".
+                            format(cptNamp(brans), '_', brans, '_', typeid(_sm_[brans])));
                 Cid[] b = [brans];
             }
 

@@ -75,6 +75,11 @@ enum HardCid: DcpDsc {
 }
 
 shared static this(){
+
+    // Very important! It allows the NullPointerError happen when in debug mode (the assert(), see?).
+    import proj_memoryerror: registerMemoryErrorHandler;
+    assert(registerMemoryErrorHandler);
+
     CrossMap!(ClassInfo, Clid) spReg;
     foreach(i, sc; createSpiritClassesRegistry) {
         if(sc) spReg[cast(Clid)i] = sc;

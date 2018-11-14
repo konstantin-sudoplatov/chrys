@@ -22,10 +22,13 @@ enum DbCreds {
 /**
         Static constructor
 */
-//shared static this() {
+shared static this() {
+    import proj_memoryerror: registerMemoryErrorHandler;
+    assert(registerMemoryErrorHandler());       // Will allow the NullPointerError happen when in debug mode
+
     // Add shared library /usr/lib/x_86-64-linux-gnu/libpq.so (In case of dynamic binding.)
 //    DerelictPQ.load();
-//}
+}
 
 //---***---***---***---***---***--- functions ---***---***---***---***---***--
 

@@ -175,7 +175,6 @@ unittest {
     import chri_data: HardCid;
     auto a = new SpBreed(42);
     a.ver = 5;
-    a.startType_ = HardCid.threadStartType_mark_hcid.cid;
     a.seed_ = 43;
 
     Serial ser = a.serialize;
@@ -244,6 +243,11 @@ final class Breed: TidPrem {
 
     //---***---***---***---***---***--- functions ---***---***---***---***---***--
 
+    /**
+            Load the seed.
+        Parameters:
+            seedDsc = descriptor of the seed
+    */
     void load(DcpDsc seedDsc) {
         checkCid!SpiritNeuron(seedDsc.cid);
         seedCid_ = seedDsc.cid;

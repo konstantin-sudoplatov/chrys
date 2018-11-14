@@ -131,10 +131,26 @@ class Caldron {
     final string cldName() {
         import std.string: indexOf;
 
+        string cldNm;
         if (auto nmp = breedCid_ in _nm_)
-            return (*nmp)[0..(*nmp).indexOf("_breed")];
+            cldNm = (*nmp)[0..(*nmp).indexOf("_breed")];
         else
-            return "noname";
+            cldNm = "noname";
+
+        debug
+            if        // not in fiber?
+                        (recurDepth_ == 0)
+                return cldNm;
+            else {
+                string s = cldNm;
+                if
+                (auto nmp = currentGraftCid_ in _nm_)
+                    return s ~= " %s %s".format((*nmp)[0..(*nmp).indexOf("_graft")], recurDepth_);
+                else
+                    return s ~= " noname %s".format(recurDepth_);
+            }
+        else
+            return cldNm;
     }
 
     @property Cid breedCid() { return breedCid_; }
@@ -148,6 +164,11 @@ class Caldron {
     /// reset. Designed as a condition on which the debugger break point could be set.
     final void checkUp() {
         debug checkPt = true;
+    }
+
+    /// Is it doing a fiber call right now?
+    final bool isInFiber() {
+        return recurDepth_ != 0;
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -174,7 +195,7 @@ class Caldron {
                 (cast(IbrStartReasoning_msg)msg)
         {   // kick off the reasoning loop
             debug if (dynDebug >= 1)
-                logit("%s, message IbrStartReasoning_msg has come".format(cldName), TermColor.brown);
+                logit("%s: message IbrStartReasoning_msg has come".format(cldName), TermColor.brown);
 
             reasoning_;
             return true;
@@ -183,7 +204,7 @@ class Caldron {
                 (auto m = cast(immutable IbrSetActivation_msg) msg)
         {
             debug if(dynDebug >= 1)
-                logit("%s, message IbrSetActivation_msg has come, %s.activation = %s".format(cldName,
+                logit("%s: message IbrSetActivation_msg has come, %s.activation = %s".format(cldName,
                         cptName(m.destConceptCid), m.activation), TermColor.brown);
 
             if      // is it bin activation?
@@ -204,7 +225,7 @@ class Caldron {
                 (auto m = cast(immutable IbrSingleConceptPackage_msg) msg)
         {   //yes: it's already a clone, inject into the current name space (may be with overriding)
             debug if (dynDebug >= 1)
-                logit("%s, message IbrSingleConceptPackage_msg has come from %s, load: %s(%,?s)".format(cldName,
+                logit("%s: message IbrSingleConceptPackage_msg has come from %s, load: %s(%,?s)".format(cldName,
                         msg.senderTid, cptName(m.load.cid), '_', m.load.cid), TermColor.brown);
 
             this[] = cast()m.load;      // inject load
@@ -217,7 +238,7 @@ class Caldron {
                 (auto m = cast(immutable IbrBranchDevise_msg) msg)
         {   //yes: take outPars and anactivate its breed
             debug if (dynDebug >= 1)
-                logit("%s, message IbrBranchDevise_msg has come from %s.".format(cldName, msg.senderTid),
+                logit("%s: message IbrBranchDevise_msg has come from %s.".format(cldName, msg.senderTid),
                         TermColor.brown);
             CaldronThread thread = childThreads_[m.breedCid];
             Caldron cld = thread.caldron;
@@ -241,7 +262,7 @@ class Caldron {
                 (auto m = cast(immutable UserTellsCircle_msg) msg)
         {   //yes: put the text into the userInput_strprem concept
             debug if (dynDebug >= 1)
-                logit("%s, message UserTellsCircle_msg has come, text: %s".format(cldName, m.line), TermColor.brown);
+                logit("%s: message UserTellsCircle_msg has come, text: %s".format(cldName, m.line), TermColor.brown);
 
             auto cpt = scast!StringQueuePrem(this[HardCid.userInputBuffer_strqprem_hcid]);
             cpt.pushBack(m.line);
@@ -285,10 +306,13 @@ class Caldron {
     private bool stop_;
 
     /// Level of recursion of the reasoning_() function. 0 - the lowest
-    private int recurDepth_ = -1;
+    private int recurDepth_;
 
     /// Graft registry: caldron's root grafts.
     private Fiber[Cid] grafts_;
+
+    /// In debug time we should know what graft (fiber) currently we are in
+    debug private Cid currentGraftCid_;
 
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
@@ -297,48 +321,52 @@ class Caldron {
         // Create environment for recursive calls of fibers
         Cid lastHeadCid = headCid_;     // last used head
         Fiber[Cid] grafts;
-        recurDepth_++;
         if      // is it zero (not fiber) level?
                 (recurDepth_ == 0)
         {   // yes: use root grafts as the graft registry
             grafts = grafts_;
-            debug if (dynDebug >= 1) logit("%s, entering".format(cldName), TermColor.blue);
         }
-        else {
-            debug if (dynDebug >= 1) logit("%s, entering level %s".format(cldName, recurDepth_), TermColor.blue);
-        }
+        debug if (dynDebug >= 1) logit("%s: entering".format(cldName), TermColor.blue);
 
         // Save initial state for the next call
         scope(exit) {
-            if      // is it zero level?
+            debug if (dynDebug >= 1) logit("%s: leaving %s".format(cldName, stop_? "on stop": ""), TermColor.blue);
+            if      // not in fiber?
                     (recurDepth_ == 0)
-            {   // yes: save the last head cid and the grafts
-                debug if (dynDebug >= 1) logit("%s, leaving %s".format(cldName, stop_? "on stop": ""), TermColor.blue);
+            {   // no: save the last head cid and the grafts
                 headCid_ = lastHeadCid;
                 grafts_ = grafts;
             }
-            else {
-                debug if (dynDebug >= 1) logit("%s, leaving level %s %s".format(cldName, recurDepth_,
-                        stop_? "on stop": ""), TermColor.blue);
-            }
-            recurDepth_--;
         }
 
         // Main reasoning cycle
         wait_ = stop_ = false;
         debug checkPt = false;
         Neuron head = scast!Neuron(this[headCid_]);
+        if      // is in fiber?
+                (recurDepth_ > 0)
+        {   //yes: it is the first call of a fiber: to be clear and pure it should be only winding up, no any logic work done, just branching-like.
+            debug if (dynDebug >= 1) logit("%s: yielding after setting the fiber up".format(cldName), TermColor.blue);
+            Fiber.yield;
+        }
         while(true) {
             // Put on the head
             debug if (dynDebug >= 1)
-                    logit("%s, head: %s(%,?s)".format(cldName, cptName(head.cid), '_', head.cid), TermColor.blue);
+                    logit("%s: head %s(%,?s)".format(cldName, cptName(head.cid), '_', head.cid), TermColor.blue);
 
             // Resume waiting fibers, order is unpredictable; remove finished ones from grafts
             foreach(cid, fiber; grafts) {
+                debug currentGraftCid_ = cid;
+                recurDepth_++;
+                debug if (dynDebug >= 1) logit("%s: reentering".format(cldName), TermColor.blue);
                 fiber.call;
-                if(fiber.state == Fiber.State.TERM) {
-                    grafts.remove(cid);         // remove firber from grafts
-                    _fiberPool_.push(fiber);    // return it to the pool
+                recurDepth_--;
+                debug currentGraftCid_ = 0;
+                if      // is the fiber terminated?
+                        (fiber.state == Fiber.State.TERM)
+                {   //yes: remove it from the grafts and return to the pool
+                    grafts.remove(cid);
+                    _fiberPool_.push(fiber);
                 }
             }
 
@@ -346,7 +374,7 @@ class Caldron {
             auto effect = head.calculate_activation_and_get_effects(this);
             foreach(actCid; effect.actions) {
                 debug if (dynDebug >= 1)
-                    logit("%s, action: %s(%,?s)".format(cldName, cptName(actCid), '_', actCid), TermColor.blue);
+                    logit("%s: action: %s(%,?s)".format(cldName, cptName(actCid), '_', actCid), TermColor.blue);
                 A act = scast!A(this[actCid]);
                 act.run(this);
 
@@ -357,6 +385,7 @@ class Caldron {
             }
 
             // Do branching and extract the grafts and the new head neuron.
+            typeof(head) savedHead = head;      // in case there would be specified no explicit head
             head = null;
             foreach(cid; effect.branches) {
                 const Concept cpt = this[cid];
@@ -372,7 +401,7 @@ class Caldron {
                         continue;
                     }
 
-                    debug if(dynDebug >= 1) logit("%s, spawning %s(%,?s)".format(cldName, cptName(cid), '_', cid),
+                    debug if(dynDebug >= 1) logit("%s: spawning %s(%,?s)".format(cldName, cptName(cid), '_', cid),
                             TermColor.blue);
 
                     // Prepare input concepts to inject
@@ -399,33 +428,36 @@ class Caldron {
                             (cid in grafts)
                     {   //yes: skip creating fiber, may be log a warning
                         debug if(dynDebug >= 1)
-                                logit("Warning: attempt to recreate fiber that already exists %s(%,?s), ignored.".
-                                format(cptName(cid), '_', cid), TermColor.red);
+                                logit("%s: warning, attempt to recreate fiber that already exists %s(%,?s), ignored.".
+                                format(cldName, cptName(cid), '_', cid), TermColor.red);
                         continue;
                     }
 
                     Cid savedHeadCid = headCid_;
-                    headCid_ = cid;     // make the graft new head for the fiber
+                    headCid_ = scast!Graft(this[cid]).seed;     // make the seed provided by graft the new head for the fiber
                     Fiber fiber = _fiberPool_.pop(this);
+                    debug if(dynDebug >= 1) logit("%s: grafting fiber %s(%,?s)".format(cldName, cptName(cid), '_', cid),
+                            TermColor.blue);
+                    debug currentGraftCid_ = cid;
+                    recurDepth_++;
                     fiber.call;
+                    recurDepth_--;
+                    debug currentGraftCid_ = 0;
+                    grafts[cid] = fiber;        // put it into the set of grafts
                     headCid_ = savedHeadCid;    // restore the head
-                    if      // did the fiber yield?
-                            (fiber.state == Fiber.State.HOLD)
-                        //yes: it can be resumed, put it into the grafts
-                        grafts[cid] = fiber;
                 }
                 else if
                         (auto nrn = cast(Neuron)cpt)
                 {
                     enforce(head is null, "Neuron %s(%,?s) is the second neuron and there can " ~
                             "only be one. effect.branches = %s".format(cptName(cid), '_', cid, effect.branches));
-                    debug if(dynDebug >= 2) logit("%s, assigned new head %s(%,?s)".format(cldName, cptName(cid), '_', cid),
+                    debug if(dynDebug >= 2) logit("%s: assigned new head %s(%,?s)".format(cldName, cptName(cid), '_', cid),
                             TermColor.green);
                     head = nrn;         // new head
                     lastHeadCid = cid;
                 }
                 else {
-                    logit("%s, unexpected concept %s(%,?s) %s".format(cldName, cptName(cid), '_', cid,
+                    logit("%s: unexpected concept %s(%,?s) %s".format(cldName, cptName(cid), '_', cid,
                             cid in _sm_? _sm_[cid].toString: "not in _sm_"), TermColor.red);
                 }
             }
@@ -437,7 +469,11 @@ class Caldron {
                     // yes: leave
                     return;
                 else {  //no: it is a fiber, yield it
-                    debug if (dynDebug >= 1) logit("%s, yielding level %s".format(cldName, recurDepth_),
+                    assert(Fiber.getThis, "An attempt to leave a fiber while being not in a fiber.");
+                    if      // the head was not changed?
+                            (!head)
+                        head = savedHead;
+                    debug if (dynDebug >= 1) logit("%s: yielding".format(cldName),
                             TermColor.blue);
                     Fiber.yield;
                 }
@@ -474,7 +510,7 @@ final class AttentionCircle: Caldron {
                 (auto m = cast(immutable DispatcherProvidesCircleWithUserTid_msg)msg)
         {   //yes: wind up the userThread_tidprem concept
             debug if(dynDebug >= 1)
-                    logit("%s, message DispatcherProvidesCircleWithUserTid_msg has come, %s".format(cldName,
+                    logit("%s: message DispatcherProvidesCircleWithUserTid_msg has come, %s".format(cldName,
                     m.tid), TermColor.brown);
             auto userThreadTidprem = (scast!TidPrem(this[HardCid.userTid_tidprem_hcid]));
             userThreadTidprem.tid = cast()m.tid;
@@ -692,7 +728,7 @@ class CaldronThread {
                         (cast(TerminateApp_msg)msg)
                 {   //yes: terminate me and all my subthreads
                     debug if (caldron_.dynDebug >= 1)
-                            logit("%s, message TerminateApp_msg has come, terminating caldron".format(
+                            logit("%s: message TerminateApp_msg has come, terminating caldron".format(
                             (cast()caldron_).cldName), TermColor.brown);
                     (cast()caldron_).terminateChildren;
                     // terminate itself

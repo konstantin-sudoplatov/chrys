@@ -180,7 +180,7 @@ enum Uline {
 
 /// Setup the uline branch.
 void uline() {
-    mixin(dequalify_enums!(HardCid, CommonConcepts, Uline, Chat));
+    mixin(dequalify_enums!(HardCid, CommonConcepts, Chat, OutputUserLine, Uline));
 
     // Mate uline seed and breed and choose the start type.
     cp!uline_breed.load(uline_seed, null, null);
@@ -200,8 +200,10 @@ void uline() {
         float.infinity,
         [   // acts
             sendUserUlineTid_c2act_uline,   // give user the means to communicate to this branch
+setDebugLevel_2_act,
         ],
         [
+            outputUserLine_graft_oputuln,   // endless graft, forwarding outputs from outside to user
             userInputValve_andnrn_uline,    // the successor neuron
         ]
     );
@@ -215,6 +217,7 @@ void uline() {
     cp!userInputValve_andnrn_uline.addEffs(
         float.infinity,
         [   // acts
+setDebugLevel_0_act,
             popLineFromUserInuputBuffer_c2act_uline,
             sendUserInputToCaller_c2act_uline,
             anactivateRequestForUserInput_cact_uline,
@@ -231,6 +234,26 @@ void uline() {
     cp!anactivateRequestForUserInput_cact_uline.load(statCid!anactivate_stat, requestForUserInput_peg_uline);
     cp!anactivateUserInput_cact_uline.load(statCid!anactivate_stat, userInput_strprem_uline);
     cp!requestUserForNextInput_cact_uline.load(statCid!requestUserInput, userTid_tidprem_hcid);
+}
+
+/// Endless graft, used in uline to forward lines of text from other branches to user.
+// , , 2_535_811_603, 1_086_012_647, 1_922_712_729, 2_281_377_307, 2_882_879_983, 2_631_252_357
+enum OutputUserLine {
+    outputUserLine_graft_oputuln = cd!(SpGraft, 2_243_064_562),
+
+    /// Waits for the userOutput_strprem_uline from an external branch and sends it to user
+    valve_andnrn_oputuln = cd!(SpAndNeuron, 3_020_567_833),
+}
+
+void outputUserLine() {
+    mixin(dequalify_enums!(Uline, OutputUserLine));
+
+    // Graft
+    cp!outputUserLine_graft_oputuln.load(valve_andnrn_oputuln);
+
+    // Seed
+//    cp!valve_andnrn_oputuln.addPrem(userOutput_strprem_uline);
+//    cp!valve_andnrn_oputuln
 }
 
 // 580_962_659, 3_399_694_389, 2_877_036_599
@@ -271,7 +294,7 @@ void getUserline() {
     );
 }
 
-//, , , 1_921_957_812, 2_266_507_232, 3_663_063_770, 3_011_995_072, 2_565_596_668
+// 1_921_957_812, 2_266_507_232, 3_663_063_770, 3_011_995_072, 2_565_596_668
 enum PutUserLine {
     putUserLine_breed_putuln = cd!(SpBreed, 2_558_694_764),
     seed_anrn_putuln = cd!(SpActionNeuron, 2_076_317_570),
@@ -291,13 +314,15 @@ void putUserLine() {
     // seed
     cp!seed_anrn_putuln.addEffs(
         cast(DcpDsc[])[
-logCpt0_cact,
+            putUserLine_c2act_putuln,
             stop_act
         ],
         null
     );
-cp!logCpt0_cact.load(userOutput_strprem_uline);
+    cp!putUserLine_c2act_putuln.load(statCid!sendConceptToBranch_stat, uline_breed, userOutput_strprem_uline);
 }
+
+
 
 
 

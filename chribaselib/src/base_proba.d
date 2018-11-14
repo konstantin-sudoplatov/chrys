@@ -1,4 +1,5 @@
 module base_proba;
+import proj_memoryerror;
 import std.stdio: writeln, writefln, stdout;
 import std.string, std.typecons;
 
@@ -11,4 +12,5 @@ version(unittest) {
 
 // We need an executable in debug and unittest modes in order to run the Gnu Debugger on.
 debug void main() {
+
 }

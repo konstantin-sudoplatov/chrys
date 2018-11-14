@@ -23,8 +23,8 @@ void stop_stat(Caldron cld){
     import std.concurrency: Tid, send;
     import messages: IbrBranchDevise_msg;
 
-    //yes: send to the parent my devise
-    send(cld.parentThread.tid, new immutable IbrBranchDevise_msg(cld.breedCid));
+    // If stopping a regular branch (not a fiber), send to the parent the branch's devise
+    if(!cld.isInFiber) send(cld.parentThread.tid, new immutable IbrBranchDevise_msg(cld.breedCid));
 
     // request leaving the reasoning
     cld.requestStop;

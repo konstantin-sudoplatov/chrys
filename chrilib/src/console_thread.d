@@ -10,7 +10,7 @@ import proj_data, proj_funcs;
 import chri_data;
 import messages;
 
-enum msgTimeout = 10;    // seconds
+enum msgTimeout = 1;    // seconds
 /+
 /**
                             Thread function for console.
@@ -161,6 +161,8 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
         auto r = new Generator!string({
             yield("hello");
             yield("world!");
+            yield("world!");
+            yield("world!");
             yield("p");
             //Thread.sleep(1000.msecs);    // this time will actually pass BEFORE the "p" would work (giving chat time to process the last word).
         });
@@ -186,7 +188,7 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
             }
             else
                 timedOut = !receiveTimeout(
-                    msgTimeout.seconds,
+                    100.msecs,
                     (immutable Msg m){ msg = cast()m; },
                     (Variant v) { var = v; }
                 );
@@ -201,15 +203,18 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
 
         if      // requested stop and nothing has come during timeout?
                 (timedOut && requestedStop)
-            return;     // finish
+        {   //yes: send termination request to the main thread and finish ours.
+            (cast()_mainTid_).send(new immutable TerminateApp_msg());
+            Thread.sleep(500.msecs);
+            return ;     // finish
+        }
 
         if      // from user?
                 (userLine)
         {
             if      // termination of the application was requested?
                     (userLine == "p" || userLine == "п")
-            {   //yes: send termination request to the main thread and finish ours.
-                (cast()_mainTid_).send(new immutable TerminateApp_msg());
+            {
                 requestedStop = true;
             }
             else {//no: the line is intended for the attention circle, send it there

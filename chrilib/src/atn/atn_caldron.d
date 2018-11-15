@@ -114,17 +114,19 @@ class Caldron {
 
     /// Send children the termination signal and wait their termination.
     final void terminateChildren() {
-        foreach (child; childThreads_.byValue)
-            try {
-                if(!child.isFinished) {
-                    child.tid.send(new immutable TerminateApp_msg);
-                    while(!child.isFinished) Thread.sleep(10.msecs);
+        if (childThreads_) {
+            foreach (child; childThreads_.byValue)
+                try {
+                    if (!child.isFinished) {
+                        child.tid.send(new immutable TerminateApp_msg);
+                        while(!child.isFinished) Thread.sleep(10.msecs);
+                    }
+                } catch(Throwable){
+                    Caldron cld = child.caldron;
+                    logit("Error happened while terminating thread %s".format(cld? cld.cldName: "???"), TermColor.red);
                 }
-            } catch(Throwable){
-                Caldron cld = child.caldron;
-                logit("Error happened while terminating thread %s".format(cld? cld.cldName: "???"), TermColor.red);
-            }
-        childThreads_ = null;
+            childThreads_ = null;
+        }
     }
 
     /// Caldron's name (based on the seed), if exist, else "noname".

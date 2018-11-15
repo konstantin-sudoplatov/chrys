@@ -46,21 +46,21 @@ void commonConcepts() {
     mixin(dequalify_enums!(CommonConcepts));
 
     // Setup the checkup
-    cp!checkUp_act.load(statCid!checkUp_stat);
+    cp!checkUp_act.load(st!checkUp_stat);
 
     // Setup the log actions
-    cp!logCpt0_cact.load(statCid!logConcept_stat);
-    cp!logCpt1_cact.load(statCid!logConcept_stat);
-    cp!logCpt2_cact.load(statCid!logConcept_stat);
+    cp!logCpt0_cact.load(st!logConcept_stat);
+    cp!logCpt1_cact.load(st!logConcept_stat);
+    cp!logCpt2_cact.load(st!logConcept_stat);
 
     // Setup controlling the debug level
-    cp!setDebugLevel_0_act.load(statCid!setDebugLevel_0_stat);
-    cp!setDebugLevel_1_act.load(statCid!setDebugLevel_1_stat);
-    cp!setDebugLevel_2_act.load(statCid!setDebugLevel_2_stat);
+    cp!setDebugLevel_0_act.load(st!setDebugLevel_0_stat);
+    cp!setDebugLevel_1_act.load(st!setDebugLevel_1_stat);
+    cp!setDebugLevel_2_act.load(st!setDebugLevel_2_stat);
 
     // Setup the stop and wait actions
-    cp!wait_act.load(statCid!wait_stat);
-    cp!stop_act.load(statCid!stop_stat);
+    cp!wait_act.load(st!wait_stat);
+    cp!stop_act.load(st!stop_stat);
 }
 
 /// Chat branch enums
@@ -88,7 +88,7 @@ enum Chat: DcpDsc {
 
 /// Setup the chat branch.
 void chat() {
-    mixin(dequalify_enums!(HardCid, CommonConcepts, Chat, Uline, GetUserline, PutUserLine));    // anonymizes the concept enums, so we don't need use their full names.
+    mixin(dequalify_enums!(HardCids, CommonConcepts, Chat, Uline, GetUserline, PutUserLine));    // anonymizes the concept enums, so we don't need use their full names.
 
     // Setup the breed and seed
     cp!chat_breed_hcid.load(chat_seed, null, null);
@@ -114,13 +114,13 @@ void chat() {
         ]
     );
     // acts
-    cp!sendUlineChatBreed_c2act_chat.load(statCid!sendConceptToBranch_stat, uline_breed, chat_breed_hcid);
-    cp!sendUlineUserTid_c2act_chat.load(statCid!sendConceptToBranch_stat, uline_breed, userTid_tidprem_hcid);
+    cp!sendUlineChatBreed_c2act_chat.load(st!sendConceptToBranch_stat, uline_breed, chat_breed_hcid);
+    cp!sendUlineUserTid_c2act_chat.load(st!sendConceptToBranch_stat, uline_breed, userTid_tidprem_hcid);
 
     cp!circus1_anrn.addEffs(
         cast(DcpDsc[])[],
         [
-            getUserLine_breed_getuln,
+            getUserInput_breed_getuln,
             circus1_andnrn,
         ]
     );
@@ -132,15 +132,15 @@ void chat() {
             anactivateUserInput_cact_uline
         ],
         [
-            putUserLine_breed_putuln,
+            putUserOutput_breed_putuln,
             circus1_anrn,
         ]
     );
-    cp!copyUserInputToOutput_c2act_uline.load(statCid!copyPremise, userInput_strprem_uline, userOutput_strprem_uline);
+    cp!copyUserInputToOutput_c2act_uline.load(st!copyPremise, userInput_strprem_uline, userOutput_strprem_uline);
 }
 
 /// User line branch enums
-// , , 3_758_390_978
+// 2_882_879_983, 2_631_252_357
 enum Uline {
     /// uline branch identifier
     uline_breed = cd!(SpBreed, 4_021_308_401),
@@ -176,11 +176,12 @@ enum Uline {
 
     /// Watever branch wants to send user a line of text sets up this concept along with activation.
     userOutput_strprem_uline = cd!(SpStringPrem, 3_186_686_771),
+    anactivateUserOutput_cact_uline = cd!(SpA_Cid, 3_758_390_978),
 }
 
 /// Setup the uline branch.
 void uline() {
-    mixin(dequalify_enums!(HardCid, CommonConcepts, Chat, OutputUserLine, Uline));
+    mixin(dequalify_enums!(HardCids, CommonConcepts, Chat, OutputUserLine, Uline));
 
     // Mate uline seed and breed and choose the start type.
     cp!uline_breed.load(uline_seed, null, null);
@@ -200,14 +201,13 @@ void uline() {
         float.infinity,
         [   // acts
             sendUserUlineTid_c2act_uline,   // give user the means to communicate to this branch
-setDebugLevel_2_act,
         ],
         [
             outputUserLine_graft_oputuln,   // endless graft, forwarding outputs from outside to user
             userInputValve_andnrn_uline,    // the successor neuron
         ]
     );
-    cp!sendUserUlineTid_c2act_uline.load(statCid!sendTidToUser_stat, userTid_tidprem_hcid, uline_breed);
+    cp!sendUserUlineTid_c2act_uline.load(st!sendTidToUser_stat, userTid_tidprem_hcid, uline_breed);
 
         // User input valve. The handshake is over. Now, wait for user input and send it to the askUserLine branch in a cycle.
     // Premises
@@ -217,68 +217,82 @@ setDebugLevel_2_act,
     cp!userInputValve_andnrn_uline.addEffs(
         float.infinity,
         [   // acts
-setDebugLevel_0_act,
             popLineFromUserInuputBuffer_c2act_uline,
             sendUserInputToCaller_c2act_uline,
             anactivateRequestForUserInput_cact_uline,
             anactivateUserInput_cact_uline,
-            requestUserForNextInput_cact_uline,
+//            requestUserForNextInput_cact_uline,
         ],
         null
     );
     // acts
-    cp!popLineFromUserInuputBuffer_c2act_uline.load(statCid!popUserInputLineFromBuffer_stat,
+    cp!popLineFromUserInuputBuffer_c2act_uline.load(st!popUserInputLineFromBuffer_stat,
             userInputBuffer_strqprem_hcid, userInput_strprem_uline);
-    cp!sendUserInputToCaller_c2act_uline.load(statCid!sendConceptToBranch_stat, callerTid_tidprem_hcid,
+    cp!sendUserInputToCaller_c2act_uline.load(st!sendConceptToBranch_stat, callerTid_tidprem_hcid,
     userInput_strprem_uline);
-    cp!anactivateRequestForUserInput_cact_uline.load(statCid!anactivate_stat, requestForUserInput_peg_uline);
-    cp!anactivateUserInput_cact_uline.load(statCid!anactivate_stat, userInput_strprem_uline);
-    cp!requestUserForNextInput_cact_uline.load(statCid!requestUserInput, userTid_tidprem_hcid);
+    cp!anactivateRequestForUserInput_cact_uline.load(st!anactivate_stat, requestForUserInput_peg_uline);
+    cp!anactivateUserInput_cact_uline.load(st!anactivate_stat, userInput_strprem_uline);
+    cp!requestUserForNextInput_cact_uline.load(st!requestUserInput, userTid_tidprem_hcid);
+
+    // Other
+    cp!anactivateUserOutput_cact_uline.load(st!anactivate_stat, userOutput_strprem_uline);
 }
 
-/// Endless graft, used in uline to forward lines of text from other branches to user.
-// , , 2_535_811_603, 1_086_012_647, 1_922_712_729, 2_281_377_307, 2_882_879_983, 2_631_252_357
+/// Endless uline's graft, used in uline to forward lines of text from other branches to user. Works only in the uline
+/// branch since it uses its concepts, e.g. local copy of the userTid_tidprem_hcid.
+//1_086_012_647, 1_922_712_729, 2_281_377_307,
 enum OutputUserLine {
     outputUserLine_graft_oputuln = cd!(SpGraft, 2_243_064_562),
 
     /// Waits for the userOutput_strprem_uline from an external branch and sends it to user
     valve_andnrn_oputuln = cd!(SpAndNeuron, 3_020_567_833),
+
+    /// Send content of the userOutput_strprem_uline to user
+    outputUserLine_c2act_oputuln = cd!(SpA_2Cid, 2_535_811_603),
 }
 
 void outputUserLine() {
-    mixin(dequalify_enums!(Uline, OutputUserLine));
+    mixin(dequalify_enums!(HardCids, CommonConcepts, Uline, OutputUserLine));
 
     // Graft
     cp!outputUserLine_graft_oputuln.load(valve_andnrn_oputuln);
 
     // Seed
-//    cp!valve_andnrn_oputuln.addPrem(userOutput_strprem_uline);
-//    cp!valve_andnrn_oputuln
+    cp!valve_andnrn_oputuln.addPrem(userOutput_strprem_uline);
+    cp!valve_andnrn_oputuln.addEffs(
+        float.infinity,
+        [
+            outputUserLine_c2act_oputuln,
+            anactivateUserOutput_cact_uline
+        ],
+        null
+    );
+    cp!outputUserLine_c2act_oputuln.load(st!sendOutputToUser, userTid_tidprem_hcid, userOutput_strprem_uline);
 }
 
 // 580_962_659, 3_399_694_389, 2_877_036_599
 enum GetUserline {
-    getUserLine_breed_getuln = cd!(SpBreed, 188_095_368),
+    getUserInput_breed_getuln = cd!(SpBreed, 188_095_368),
     seed_anrn_getuln = cd!(SpActionNeuron, 2_594_815_860),
-    getUserline_c2act_getuln = cd!(SpA_2Cid, 4_122_865_703),
+    getUserInput_c2act_getuln = cd!(SpA_2Cid, 4_122_865_703),
     waitUlineResponse_andnrn_getuln = cd!(SpAndNeuron, 2_337_467_201),
 }
 
 void getUserline() {
-    mixin(dequalify_enums!(HardCid, CommonConcepts, Uline, GetUserline));
+    mixin(dequalify_enums!(HardCids, CommonConcepts, Uline, GetUserline));
 
     // Breed
-    cp!getUserLine_breed_getuln.load(
+    cp!getUserInput_breed_getuln.load(
         seed_anrn_getuln,                   // the seed to branch
         [uline_breed],                      // in params, will be injected into the branch by parent
         [userInput_strprem_uline]       // out params, will be injected back to parent's branch on finishing
     );
 
     // Seed - asks uline to give new user line
-    cp!getUserline_c2act_getuln.load(statCid!activateRemotely_stat, uline_breed, requestForUserInput_peg_uline);
+    cp!getUserInput_c2act_getuln.load(st!activateRemotely_stat, uline_breed, requestForUserInput_peg_uline);
     cp!seed_anrn_getuln.addEffs(
         cast(DcpDsc[])[
-            getUserline_c2act_getuln,
+            getUserInput_c2act_getuln,
         ],
         waitUlineResponse_andnrn_getuln
     );
@@ -296,16 +310,16 @@ void getUserline() {
 
 // 1_921_957_812, 2_266_507_232, 3_663_063_770, 3_011_995_072, 2_565_596_668
 enum PutUserLine {
-    putUserLine_breed_putuln = cd!(SpBreed, 2_558_694_764),
+    putUserOutput_breed_putuln = cd!(SpBreed, 2_558_694_764),
     seed_anrn_putuln = cd!(SpActionNeuron, 2_076_317_570),
-    putUserLine_c2act_putuln = cd!(SpA_2Cid, 1_226_307_907),
+    putUserOutput_c2act_putuln = cd!(SpA_2Cid, 1_226_307_907),
 }
 
 void putUserLine() {
-    mixin(dequalify_enums!(HardCid, CommonConcepts, PutUserLine, Uline));
+    mixin(dequalify_enums!(HardCids, CommonConcepts, PutUserLine, Uline));
 
     // breed
-    cp!putUserLine_breed_putuln.load(
+    cp!putUserOutput_breed_putuln.load(
         seed_anrn_putuln,
         [uline_breed, userOutput_strprem_uline],
         null
@@ -314,12 +328,12 @@ void putUserLine() {
     // seed
     cp!seed_anrn_putuln.addEffs(
         cast(DcpDsc[])[
-            putUserLine_c2act_putuln,
+            putUserOutput_c2act_putuln,
             stop_act
         ],
         null
     );
-    cp!putUserLine_c2act_putuln.load(statCid!sendConceptToBranch_stat, uline_breed, userOutput_strprem_uline);
+    cp!putUserOutput_c2act_putuln.load(st!sendConceptToBranch_stat, uline_breed, userOutput_strprem_uline);
 }
 
 

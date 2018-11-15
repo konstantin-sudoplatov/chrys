@@ -6,7 +6,6 @@ import proj_data, proj_funcs;
 import chri_types, chri_data;
 import atn.atn_caldron;
 import cpt.abs.abs_concept, cpt.cpt_actions, cpt.cpt_premises, cpt.cpt_neurons;
-import stat.stat_types: statCid;
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--
 
@@ -37,10 +36,11 @@ auto cp(alias cd)() {
 
 ///
 unittest {
+import stat.stat_types: st;
     @(1, StatCallType.p0Calp1Cid) static void fun(Caldron spaceName, Cid cid) {}
 
     const Cid cid = __traits(getAttributes, fun)[0];      // its cid
-    assert(statCid!fun == cid);    // check cid
+    assert(st!fun == cid);    // check cid
 }
 
 /**

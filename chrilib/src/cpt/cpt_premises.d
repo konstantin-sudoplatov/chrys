@@ -172,7 +172,7 @@ class TidPrem: Premise {
 }
 
 unittest {
-    import chri_data: HardCid;
+    import chri_data: HardCids;
     auto a = new SpBreed(42);
     a.ver = 5;
     a.seed_ = 43;

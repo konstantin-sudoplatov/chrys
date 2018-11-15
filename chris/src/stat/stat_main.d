@@ -117,7 +117,7 @@ void requestUserInput(Caldron cld, Cid userTidPremCid) {
         stringPremCid = string premise, containing the text
 */
 @(10, StatCallType.p0Calp1Cidp2Cid)
-void sendUserOutput(Caldron cld, Cid userTidPremCid, Cid stringPremCid) {
+void sendOutputToUser(Caldron cld, Cid userTidPremCid, Cid stringPremCid) {
     import std.concurrency: Tid, send;
     import messages: CircleTellsUser_msg;
     Tid tid = scast!TidPrem(cld[userTidPremCid]).tid;

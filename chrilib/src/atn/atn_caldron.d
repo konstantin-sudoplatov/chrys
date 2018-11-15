@@ -17,7 +17,7 @@ import cpt.cpt_interfaces, cpt.cpt_neurons, cpt.cpt_actions, cpt.cpt_premises;
     as fibers and/or breeds, that spawn new caldrons and are processed in their own spaces. If there is no new head or
     the stop_ flag is raised by an action concept, the caldron finishes its work, except when the caldron is an attention
     circle, which cannot be finished that way. If the wait_ flag is raised, caldron pauses its work until a new message
-    comes and the reasoning_() function is called again. Br
+    comes and the reasoning_() function is called again. $(Br)
         To speed up the work pools of fibers and threads are provided.
 */
 class Caldron {
@@ -216,7 +216,7 @@ class Caldron {
             else    //no: it is esquash
                 (cast(EsquashActivationIfc)this[m.destConceptCid]).activation = m.activation;
 
-            scast!TidPrem(this[HardCid.callerTid_tidprem_hcid]).tid = msg.senderTid;    // caller's tid. must be used durig this call of the reasoning_()
+            scast!TidPrem(this[HardCids.callerTid_tidprem_hcid]).tid = msg.senderTid;    // caller's tid. must be used durig this call of the reasoning_()
             reasoning_;
 
             return true;
@@ -229,7 +229,7 @@ class Caldron {
                         msg.senderTid, cptName(m.load.cid), '_', m.load.cid), TermColor.brown);
 
             this[] = cast()m.load;      // inject load
-            scast!TidPrem(this[HardCid.callerTid_tidprem_hcid]).tid = msg.senderTid;    // caller's tid. must be used durig this call of the reasoning_()
+            scast!TidPrem(this[HardCids.callerTid_tidprem_hcid]).tid = msg.senderTid;    // caller's tid. must be used durig this call of the reasoning_()
             reasoning_;                 // kick off
 
             return true;
@@ -240,6 +240,7 @@ class Caldron {
             debug if (dynDebug >= 1)
                 logit("%s: message IbrBranchDevise_msg has come from %s.".format(cldName, msg.senderTid),
                         TermColor.brown);
+//writefln("m.breed = %s(%,?s), childThreads_ = %s", cptName(m.breedCid), '_', m.breedCid, '_', childThreads_);
             CaldronThread thread = childThreads_[m.breedCid];
             Caldron cld = thread.caldron;
             Breed breed = cld.breed;
@@ -264,7 +265,7 @@ class Caldron {
             debug if (dynDebug >= 1)
                 logit("%s: message UserTellsCircle_msg has come, text: %s".format(cldName, m.line), TermColor.brown);
 
-            auto cpt = scast!StringQueuePrem(this[HardCid.userInputBuffer_strqprem_hcid]);
+            auto cpt = scast!StringQueuePrem(this[HardCids.userInputBuffer_strqprem_hcid]);
             cpt.pushBack(m.line);
             cpt.activate;       // the premise is ready
             reasoning_;         // kick off
@@ -319,7 +320,6 @@ class Caldron {
     private void reasoning_() {
 
         // Create environment for recursive calls of fibers
-        Cid lastHeadCid = headCid_;     // last used head
         Fiber[Cid] grafts;
         if      // is it zero (not fiber) level?
                 (recurDepth_ == 0)
@@ -329,6 +329,7 @@ class Caldron {
         debug if (dynDebug >= 1) logit("%s: entering".format(cldName), TermColor.blue);
 
         // Save initial state for the next call
+        Cid lastHeadCid;     // last used head
         scope(exit) {
             debug if (dynDebug >= 1) logit("%s: leaving %s".format(cldName, stop_? "on stop": ""), TermColor.blue);
             if      // not in fiber?
@@ -342,13 +343,8 @@ class Caldron {
         // Main reasoning cycle
         wait_ = stop_ = false;
         debug checkPt = false;
+        lastHeadCid = headCid_;     // last used head
         Neuron head = scast!Neuron(this[headCid_]);
-        if      // is in fiber?
-                (recurDepth_ > 0)
-        {   //yes: it is the first call of a fiber: to be clear and pure it should be only winding up, no any logic work done, just branching-like.
-            debug if (dynDebug >= 1) logit("%s: yielding after setting the fiber up".format(cldName), TermColor.blue);
-            Fiber.yield;
-        }
         while(true) {
             // Put on the head
             debug if (dynDebug >= 1)
@@ -374,7 +370,7 @@ class Caldron {
             auto effect = head.calculate_activation_and_get_effects(this);
             foreach(actCid; effect.actions) {
                 debug if (dynDebug >= 1)
-                    logit("%s: action: %s(%,?s)".format(cldName, cptName(actCid), '_', actCid), TermColor.blue);
+                    logit("%s: action, %s(%,?s)".format(cldName, cptName(actCid), '_', actCid), TermColor.blue);
                 A act = scast!A(this[actCid]);
                 act.run(this);
 
@@ -392,14 +388,8 @@ class Caldron {
                 if      // is it a breed?
                         (auto breed = cast(Breed)cpt)
                 {   //yes: spawn the new branch
-                    if      // does this breed have already an active branch?
-                            (cid in childThreads_)
-                    {   //yes: skip spawning, may be log a warning
-                        debug if(dynDebug >= 1)
-                                logit("Warning: attempt to respawn breed that is already runnig %s(%,?s), ignored.".
-                                format(cptName(cid), '_', cid), TermColor.red);
-                        continue;
-                    }
+                    assert(cid !in childThreads_,
+                            "%s(%,?s) attempt to spawn breed that is already runnig".format(cptName(cid), '_', cid));
 
                     debug if(dynDebug >= 1) logit("%s: spawning %s(%,?s)".format(cldName, cptName(cid), '_', cid),
                             TermColor.blue);
@@ -408,6 +398,7 @@ class Caldron {
                     Concept[] inPars;
                         foreach(c; breed.inPars) inPars ~= this[c].clone;
 
+                    // and start it
                     Caldron cld = new Caldron(
                         this.myThread_,         // parent
                         cid,                    // breed
@@ -416,22 +407,20 @@ class Caldron {
                     CaldronThread thread = _threadPool_.pop(cld);
                     cld.myThread = thread;
 
+                    // register a child
                     childThreads_[cid] = thread;
 
                     breed.tid = thread.tid;     // wind up our instance
                     breed.activate;             // of the breed
+
+                    // only after all is set up, kick off the thread
+                    thread.tid.send(new immutable IbrStartReasoning_msg);
                 }
                 else if // is it a graft?
                         (auto graft = cast(Graft)cpt)
                 {   // create a fiber
-                    if      // does this fiber already exist?
-                            (cid in grafts)
-                    {   //yes: skip creating fiber, may be log a warning
-                        debug if(dynDebug >= 1)
-                                logit("%s: warning, attempt to recreate fiber that already exists %s(%,?s), ignored.".
-                                format(cldName, cptName(cid), '_', cid), TermColor.red);
-                        continue;
-                    }
+                    assert(cid !in grafts, "%s: attempt to create fiber that already exists %s(%,?s)".format(cldName,
+                            cptName(cid), '_', cid));
 
                     Cid savedHeadCid = headCid_;
                     headCid_ = scast!Graft(this[cid]).seed;     // make the seed provided by graft the new head for the fiber
@@ -443,7 +432,11 @@ class Caldron {
                     fiber.call;
                     recurDepth_--;
                     debug currentGraftCid_ = 0;
-                    grafts[cid] = fiber;        // put it into the set of grafts
+                    if      // is the fiber not finished after the call?
+                            (fiber.state == Fiber.State.HOLD)
+                    {   // no: add it to the fiber registry
+                        grafts[cid] = fiber;        // put it into the set of grafts
+                    }
                     headCid_ = savedHeadCid;    // restore the head
                 }
                 else if
@@ -497,7 +490,7 @@ final class AttentionCircle: Caldron {
     this() {
         super(
             null,       // parent
-            HardCid.chat_breed_hcid.cid,   // breed
+            HardCids.chat_breed_hcid.cid,   // breed
             null        // inPars
         );
     }
@@ -512,7 +505,7 @@ final class AttentionCircle: Caldron {
             debug if(dynDebug >= 1)
                     logit("%s: message DispatcherProvidesCircleWithUserTid_msg has come, %s".format(cldName,
                     m.tid), TermColor.brown);
-            auto userThreadTidprem = (scast!TidPrem(this[HardCid.userTid_tidprem_hcid]));
+            auto userThreadTidprem = (scast!TidPrem(this[HardCids.userTid_tidprem_hcid]));
             userThreadTidprem.tid = cast()m.tid;
             userThreadTidprem.activate;
             reasoning_;
@@ -650,7 +643,6 @@ class CaldronThread {
         cld.breed.tid = myTid_;
         cld.breed.activate;
         caldron_ = cld;
-        myTid_.send(new immutable IbrStartReasoning_msg);
     }
 
     /// Get caldron.
@@ -719,7 +711,13 @@ class CaldronThread {
             if      // is it a regular message?
                     (msg)
             {   // yes: send the message to caldron
-                assert(caldron_, "Message %s has come to a canned caldron.".format(msg));
+                if      // is caldron canned?
+                        (!caldron_)
+                {
+                    logit( "Warning. Message %s has come to a canned caldron.".format(typeid(msg)), TermColor.red);
+                    continue;
+                }
+
                 if      // recognized and processed by caldron?
                         ((cast()caldron_)._processMessage(msg))
                     //yes: go for a new message
@@ -754,8 +752,6 @@ class CaldronThread {
             else if
                     (var.hasValue)
             {  // unrecognized message of type Variant. Log it.
-                if      // not canned?
-                        (caldron_)
                     logit(format!"Unexpected message of type Variant to the caldron %s: %s"
                             ((cast()caldron_).cldName, var.toString), TermColor.brown);
                 continue;

@@ -10,13 +10,13 @@ import chri_data: StatCallType;
         cptName = name of the static concept function
     Returns: its cid (from the annotation) as int enum.
 */
-template statCid(alias cptName)
+template st(alias cptName)
     if      // annotation consists of two elements and their types are int and StatCallType?
             (__traits(getAttributes, cptName).length == 2 &&
             is(typeof(__traits(getAttributes, cptName)[0]) == int) &&
             is(typeof(__traits(getAttributes, cptName)[1]) == StatCallType))
 {   // extract the first element of annotation, which is cid
-    enum Cid statCid = __traits(getAttributes, cptName)[0];
+    enum Cid st = __traits(getAttributes, cptName)[0];
 }
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--

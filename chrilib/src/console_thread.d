@@ -163,6 +163,12 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
             yield("world!");
             yield("world!");
             yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
             yield("p");
             //Thread.sleep(1000.msecs);    // this time will actually pass BEFORE the "p" would work (giving chat time to process the last word).
         });
@@ -205,7 +211,6 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
                 (timedOut && requestedStop)
         {   //yes: send termination request to the main thread and finish ours.
             (cast()_mainTid_).send(new immutable TerminateApp_msg());
-            Thread.sleep(500.msecs);
             return ;     // finish
         }
 

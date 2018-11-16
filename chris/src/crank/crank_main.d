@@ -125,6 +125,7 @@ void chat() {
         ]
     );
 
+    cp!circus1_andnrn.addPrem(Yes.negate, putUserOutput_breed_putuln);
     cp!circus1_andnrn.addPrem(userInput_strprem_uline);
     cp!circus1_andnrn.addEffs(
         cast(DcpDsc[])[
@@ -240,7 +241,7 @@ void uline() {
 
 /// Endless uline's graft, used in uline to forward lines of text from other branches to user. Works only in the uline
 /// branch since it uses its concepts, e.g. local copy of the userTid_tidprem_hcid.
-//1_086_012_647, 1_922_712_729, 2_281_377_307,
+// 1_086_012_647, 1_922_712_729, 2_281_377_307,
 enum OutputUserLine {
     outputUserLine_graft_oputuln = cd!(SpGraft, 2_243_064_562),
 

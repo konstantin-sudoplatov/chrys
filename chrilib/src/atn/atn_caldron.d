@@ -114,7 +114,7 @@ class Caldron {
 
     /// Send children the termination signal and wait their termination.
     final void terminateChildren() {
-        if (childThreads_) {
+        if(childThreads_) {
             foreach (child; childThreads_.byValue)
                 try {
                     if (!child.isFinished) {
@@ -601,9 +601,10 @@ synchronized class CaldronThreadPool {
     void terminate() {
         while(!(cast()threads_).empty) {
             CaldronThread thread = scast!CaldronThread((cast()threads_).pop);
-            send(thread.tid, cast(shared) new CaldronThreadTerminationRequest);
-                while(thread.isFinished)
-                    Thread.sleep(10.msecs);
+            while(!thread.isFinished) {
+                send(thread.tid, cast(shared) new CaldronThreadTerminationRequest);
+                Thread.sleep(10.msecs);
+            }
         }
     }
 

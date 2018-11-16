@@ -396,6 +396,11 @@ abstract class SpiritNeuron: SpiritDynamicConcept {
         appendBrans(activation, brCids);
     }
 
+    // Effects r/o.
+    const(Effect[]) effects() const {
+        return _effects;
+    }
+
     //---***---***---***---***---***--- types ---***---***---***---***---***---***
 
     /// Element of the effects_ array.

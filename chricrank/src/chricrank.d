@@ -1,15 +1,17 @@
 module chricrank;
 import std.stdio;
-import std.conv, std.format, std.exception;
+import std.conv, std.format, std.exception, std.algorithm, std.typecons;
 
 import proj_data, proj_funcs;
 import db.db_main, db.db_concepts_table;
 
 import chri_types, chri_data;
-import stat.stat_registry;
-import cpt.cpt_registry, cpt.abs.abs_concept;
-import crank.crank_registry;
+import cpt.cpt_registry, cpt.abs.abs_concept, cpt.abs.abs_neuron;
 import cpt.cpt_actions, cpt.cpt_neurons, cpt.cpt_premises, cpt.cpt_primitives, cpt.cpt_stat;
+
+import stat.stat_registry;
+import crank.crank_registry;
+import crank.crank_types;
 
 void main()
 {
@@ -21,6 +23,9 @@ void main()
 
     // Fill and crank main maps with static and hardcoded dynamic concepts and their names.
     loadAndCrank_(_sm_, _nm_);
+
+    // Additional logical verification of the cranked concepts.
+    checkCranking_;
 
     // Add or update spirit concepts in DB
     Cind added;
@@ -138,3 +143,118 @@ private void loadConceptMaps_(shared SpiritMap sm, ref immutable string[Cid] nm)
         sm.add(mixin("new " ~ dd.class_name ~ "(" ~ to!string(dd.cid) ~ ")"));
     }
 }
+
+/**
+        Check logical consistency of concepts. It'll the checks that might be cumbersome in the asserts and contracts
+        of the main code.
+*/
+private void checkCranking_() {
+    foreach(cid, cpt; _sm_.spiritMap)
+        if(auto c = cast(SpiritNeuron)cpt)
+            checkNeuron(cid, c);
+}
+
+private void checkNeuron(Cid cid, SpiritNeuron cpt) {
+
+    // There can be no more then one next head
+    foreach(effect; cpt.effects) {
+        Cind cnt = effect.branches.fold!((c, cid){ return (cast(SpiritNeuron)_sm_[cid])? ++c: c; })(0);
+        assert(cnt <= 1, "There are %s next heads in the %s(%,?s), but there can only be one or zero.".format(cnt,
+                cptName(cid), '_', cid));
+    }
+
+    // Currently only AndNeurons are allowed to breed
+    if(!cast(SpAndNeuron)cpt)
+        foreach(effect; cpt.effects) {
+            bool hasBreed = effect.branches.canFind!(cid => cast(SpBreed)_sm_[cid] !is null);
+            assert(!hasBreed, "%s(%,?s) of type %s has breeds, but currently only SpAndNeuron allowed to have them.".
+                    format(cptName(cid), '_', cid, '_', typeid(_sm_[cid])));
+        }
+
+    // When the AndReurons are going to breed, there must be a check that the branch is not breeded already.
+    if(auto an = cast(SpAndNeuron)cpt){
+        foreach(effect; cpt.effects) {
+            auto effBreeds = effect.branches.filter!(cid => cast(SpBreed)_sm_[cid]);   // range of breeds in the effects array
+            foreach(breed; effBreeds) {
+                auto premBreeds = an.premises.filter!(prem => cast(SpBreed)_sm_[prem.cid] && // range of negated breeds in premises
+                        prem.negation).map!(prem => prem.cid);
+                assert(premBreeds.canFind(breed),
+                        "In %s(%,?s) breed %s(%,?s) has no corresponding check for inactivity in premises %s".
+                        format(cptName(cid), '_', cid, '_', cptName(breed), '_', breed, '_', an.premises));
+            }
+        }
+    }
+}
+
+// Enums for unittests
+debug enum {
+    nrn = cd!(SpAndNeuron, 3_462_176_707),
+    headNrn1 = cd!(SpAndNeuron, 494_288_204),
+    headNrn2 = cd!(SpAndNeuron, 2_698_686_338),
+    graft1 = cd!(SpGraft, 2_421_951_107),
+    breed1 = cd!(SpBreed, 2_258_569_046),
+    peg1 = cd!(SpPegPrem, 1_985_996_641),
+    peg2 = cd!(SpPegPrem, 17_020_653),
+}
+
+// Test neuron
+//, , , , , , , 3_356_847_540
+unittest {
+    createTestEnvironment;
+
+    cp!nrn.addEffs(
+        float.infinity,
+        null,
+        [
+            headNrn1,
+            headNrn2,
+            graft1,
+        ]
+    );
+    //checkNeuron(nrn.cid, cast(SpiritNeuron)_sm_[nrn.cid]);    // error - 2 new heads
+    _sm_.remove(nrn.cid); _sm_[] = new SpAndNeuron(nrn.cid);    // reset the neuron
+
+    cp!nrn.addPrem(peg1);
+    cp!nrn.addPrem(peg2);
+    cp!nrn.addEffs(
+        float.infinity,
+        null,
+        [
+            headNrn1,
+            breed1,
+        ]
+    );
+    //checkNeuron(nrn.cid, cast(SpiritNeuron)_sm_[nrn.cid]);       // error - no check in premises for a breed
+    cp!nrn.addPrem(Yes.negate, breed1);
+    checkNeuron(nrn.cid, cast(SpiritNeuron)_sm_[nrn.cid]);       // ok
+
+    clearTestEnvironment;
+}
+
+debug void createTestEnvironment() {
+    import proj_memoryerror: registerMemoryErrorHandler;
+    registerMemoryErrorHandler;
+    _sm_ = new shared SpiritMap;
+    _sm_[] = new SpAndNeuron(nrn.cid);  cast()_nm_[nrn.cid] = nrn.stringof;
+    _sm_[] = new SpAndNeuron(headNrn1.cid);  cast()_nm_[headNrn1.cid] = headNrn1.stringof;
+    _sm_[] = new SpAndNeuron(headNrn2.cid);  cast()_nm_[headNrn2.cid] = headNrn2.stringof;
+    _sm_[] = new SpGraft(graft1.cid);  cast()_nm_[graft1.cid] = graft1.stringof;
+    _sm_[] = new SpBreed(breed1.cid);  cast()_nm_[breed1.cid] = breed1.stringof;
+    _sm_[] = new SpPegPrem(peg1.cid);  cast()_nm_[peg1.cid] = peg1.stringof;
+    _sm_[] = new SpPegPrem(peg2.cid);  cast()_nm_[peg2.cid] = peg2.stringof;
+}
+
+debug void clearTestEnvironment() {
+    import proj_memoryerror: deregisterMemoryErrorHandler;
+    _sm_ = null;
+    cast()_nm_ = null;
+    deregisterMemoryErrorHandler;
+}
+
+
+
+
+
+
+
+

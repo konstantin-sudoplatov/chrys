@@ -65,7 +65,6 @@ void main()
 TERMINATE_APPLICATION:
     _threadPool_.terminate;
     thread_joinAll;
-    Thread.sleep(1000.msecs);
     writeln("good bye, world!"); stdout.flush;
 }
 

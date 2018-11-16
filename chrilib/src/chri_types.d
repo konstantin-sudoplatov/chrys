@@ -84,9 +84,6 @@ void cleanupNotUsedNames() {
 import std.random;
 synchronized final pure nothrow class SpiritMap {
 
-    // Forward
-    alias spiritMan_ this;
-
     /**
         Constructor
     */
@@ -149,6 +146,11 @@ synchronized final pure nothrow class SpiritMap {
         spiritMap_[cpt.cid] = cast(shared)cpt;
 
         return cpt;
+    }
+
+    /// Ditto, only in formp this[] = cpt
+    SpiritConcept opIndexAssign(SpiritConcept cpt) {
+        return add(cpt);
     }
 
     /**
@@ -232,6 +234,10 @@ synchronized final pure nothrow class SpiritMap {
             sids ~= generateDynamicCid_;
 
         return sids;
+    }
+
+    const(SpiritConcept[Cid]) spiritMap() const {
+        return cast(const SpiritConcept[Cid])spiritMap_;
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%

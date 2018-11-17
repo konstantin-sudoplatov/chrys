@@ -68,7 +68,7 @@ void commonConcepts() {
 enum Chat: DcpDsc {
 
     /// This is the root branch of the attention circle. It heads the handshaker and spawns the uline
-    chat_seed = cd!(SpActionNeuron, 2_500_739_441),
+    chat_seed = cd!(SpAndNeuron, 2_500_739_441),
 
     /// Setting up the uline branch (see actions below)
     /// After chat starts the uline branch, it sends user its own breed. Also it sends uline Tid of the user thread
@@ -92,6 +92,7 @@ void chat() {
 
     // Setup the breed and seed
     cp!chat_breed_hcid.load(chat_seed, null, null);
+    cp!chat_seed.addPrem(Yes.negate, uline_breed);
     cp!chat_seed.addEffs(
         null,
         [   // brans
@@ -110,31 +111,32 @@ void chat() {
             sendUlineUserTid_c2act_chat,         // give uline user's Tid
         ],
         [
-            circus1_anrn,
+            circus1_andnrn,
         ]
     );
     // acts
     cp!sendUlineChatBreed_c2act_chat.load(st!sendConceptToBranch_stat, uline_breed, chat_breed_hcid);
     cp!sendUlineUserTid_c2act_chat.load(st!sendConceptToBranch_stat, uline_breed, userTid_tidprem_hcid);
 
-    cp!circus1_anrn.addEffs(
+    cp!circus1_andnrn.addPrem(Yes.negate, getUserInput_breed_getuln);
+    cp!circus1_andnrn.addEffs(
         cast(DcpDsc[])[],
         [
             getUserInput_breed_getuln,
-            circus1_andnrn,
+            circus2_andnrn,
         ]
     );
 
-    cp!circus1_andnrn.addPrem(Yes.negate, putUserOutput_breed_putuln);
-    cp!circus1_andnrn.addPrem(userInput_strprem_uline);
-    cp!circus1_andnrn.addEffs(
+    cp!circus2_andnrn.addPrem(Yes.negate, putUserOutput_breed_putuln);
+    cp!circus2_andnrn.addPrem(userInput_strprem_uline);
+    cp!circus2_andnrn.addEffs(
         cast(DcpDsc[])[
             copyUserInputToOutput_c2act_uline,
             anactivateUserInput_cact_uline
         ],
         [
             putUserOutput_breed_putuln,
-            circus1_anrn,
+            circus1_andnrn,
         ]
     );
     cp!copyUserInputToOutput_c2act_uline.load(st!copyPremise, userInput_strprem_uline, userOutput_strprem_uline);

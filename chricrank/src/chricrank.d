@@ -53,8 +53,8 @@ void main()
                 (dbCpt != smCpt)
         {   //yes: update it
         UPDATE:
-            enforce(cid in _nm_, format!("Cid %s is used by for a concept in DB, and it's not present in the name map." ~
-                    " May be we are trying to reuse this cid?")(cid));
+            enforce(cid in _nm_, format!("Cid %s is used by for a concept in DB, and it's not present " ~
+                    "in the name map. Are we trying to reuse this cid?")(cid));
             spiritMan.updateConcept(smCpt);
             updated++;
         }
@@ -167,7 +167,7 @@ private void checkNeuron(Cid cid, SpiritNeuron cpt) {
     if(!cast(SpAndNeuron)cpt)
         foreach(effect; cpt.effects) {
             bool hasBreed = effect.branches.canFind!(cid => cast(SpBreed)_sm_[cid] !is null);
-            assert(!hasBreed, "%s(%,?s) of type %s has breeds, but currently only SpAndNeuron allowed to have them.".
+            assert(!hasBreed, "%s(%,?s) of type %s has breeds, but currently only SpAndNeuron is allowed to have them.".
                     format(cptName(cid), '_', cid, '_', typeid(_sm_[cid])));
         }
 

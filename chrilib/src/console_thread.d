@@ -145,8 +145,7 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
         );
         if
                 (gotMsg)
-        {
-            attnCircleTid_ = (cast(immutable)msg).tid;
+        { attnCircleTid_ = (cast(immutable)msg).tid;
             break;
         }
         else {
@@ -160,14 +159,6 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
         // define a generator function as a series of lines, that user was supposed to enter.
         auto r = new Generator!string({
             yield("hello");
-            yield("world!");
-            yield("world!");
-            yield("world!");
-            yield("world!");
-            yield("world!");
-            yield("world!");
-            yield("world!");
-            yield("world!");
             yield("world!");
             yield("p");
             //Thread.sleep(1000.msecs);    // this time will actually pass BEFORE the "p" would work (giving chat time to process the last word).
@@ -194,7 +185,7 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
             }
             else
                 timedOut = !receiveTimeout(
-                    100.msecs,
+                    50.msecs,
                     (immutable Msg m){ msg = cast()m; },
                     (Variant v) { var = v; }
                 );

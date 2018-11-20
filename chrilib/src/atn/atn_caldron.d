@@ -117,9 +117,9 @@ class Caldron {
         if(childThreads_) {
             foreach (child; childThreads_.byValue)
                 try {
-                    if (!child.isFinished) {
+                    if (!(cast(shared)child).isFinished) {
                         child.tid.send(new immutable TerminateApp_msg);
-                        while(!child.isFinished) Thread.sleep(10.msecs);
+                        while(!(cast(shared)child).isFinished) Thread.sleep(10.msecs);
                     }
                 } catch(Throwable){
                     Caldron cld = child.caldron;
@@ -424,7 +424,7 @@ class Caldron {
                     assert(cid !in grafts, "%s: attempt to create fiber that already exists %s(%,?s)".format(cldName,
                             cptName(cid), '_', cid));
 
-                    Cid savedHeadCid = headCid_;
+                    const Cid savedHeadCid = headCid_;
                     headCid_ = scast!Graft(this[cid]).seed;     // make the seed provided by graft the new head for the fiber
                     Fiber fiber = _fiberPool_.pop(this);
                     debug if(dynDebug >= 1) logit("%s: grafting fiber %s(%,?s)".format(cldName, cptName(cid), '_', cid),
@@ -446,8 +446,8 @@ class Caldron {
                 {
                     enforce(head is null, "Neuron %s(%,?s) is the second neuron and there can " ~
                             "only be one. effect.branches = %s".format(cptName(cid), '_', cid, effect.branches));
-                    debug if(dynDebug >= 2) logit("%s: assigned new head %s(%,?s)".format(cldName, cptName(cid), '_', cid),
-                            TermColor.green);
+                    debug if(dynDebug >= 2) logit("%s: assigned new head %s(%,?s)".
+                            format(cldName, cptName(cid), '_', cid), TermColor.green);
                     head = nrn;         // new head
                     lastHeadCid = cid;
                 }
@@ -586,7 +586,8 @@ synchronized class CaldronThreadPool {
             thread = caldron thread to stack
     */
     void push(CaldronThread thread) {
-        assert(!thread.isFinished, "Thread %s must not be finished and it is.".format(thread.caldron.cldName));
+        assert(!(cast(shared)thread).isFinished, "Thread %s must not be finished and it is.".
+                format(thread.caldron.cldName));
         if      // is pool able of storing the thread?
                 ((cast()threads_).length <= CALDRON_THREAD_POOL_SIZE)
         {   //yes: disassociate it from the caldron and save it
@@ -603,7 +604,8 @@ synchronized class CaldronThreadPool {
         while(!(cast()threads_).empty) {
             CaldronThread thread = scast!CaldronThread((cast()threads_).pop);
             assert(thread.caldron is null, "Thread should be mothballed.");
-            assert(!thread.isFinished, "Thread %s must not be finished and it is.".format(thread.previousCaldron_));
+            debug assert(!(cast(shared)thread).isFinished, "Thread %s must not be finished and it is.".
+                    format(thread.previousCaldron_));
 
             // Stop the thread
             send(thread.tid, cast(shared) new CaldronThreadTerminationRequest);
@@ -667,8 +669,11 @@ class CaldronThread {
     /// Get Tid.
     @property Tid tid() { return myTid_; }
 
-    /// Up if the caldronThreadFunc() function exited normally or on exception.
-    bool isFinished() { return isFinished_; }
+    /// Getter. Up if the caldronThreadFunc() function exited normally or on exception.
+    @property synchronized bool isFinished() { return isFinished_; }
+
+    /// Setter.
+    @property synchronized void isFinished(bool isFinished) { isFinished_ = isFinished; }
 
     /// Shows if the thread was canned (see the mothBall() function).
     bool isCanned() { return caldron is null; }
@@ -700,7 +705,7 @@ class CaldronThread {
     private shared void caldronThreadFunc() { try {
 
         scope(exit) {
-            isFinished_ = true;
+            isFinished = true;
         }
 
         // Receive messages in a cycle
@@ -741,11 +746,11 @@ class CaldronThread {
                             logit("%s: message TerminateApp_msg has come, terminating caldron".format(
                             (cast()caldron_).cldName), TermColor.brown);
 foreach(thread; cast()_threadPool_.threads_) {
-    writefln("Thread %s, isFinished %s", thread.caldron.cldName, thread.isFinished); stdout.flush;
+    writefln("in caldronThreadFunc: thread %s, isFinished %s", thread.caldron.cldName, (cast(shared)thread).isFinished); stdout.flush;
 }
                     (cast()caldron_).terminateChildren;
 foreach(thread; cast()_threadPool_.threads_) {
-    writefln("Thread %s, isFinished %s", thread.caldron.cldName, thread.isFinished); stdout.flush;
+    writefln("in caldronThreadFunc: thread %s, isFinished %s", thread.caldron.cldName, (cast(shared)thread).isFinished); stdout.flush;
 }
                     // terminate itself
                     goto FINISH_THREAD;

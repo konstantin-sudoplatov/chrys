@@ -1,0 +1,25 @@
+name "chritest"
+description "Various test/development area."
+authors "su"
+copyright "Copyright © 2018, su"
+license "proprietary"
+
+sourcePaths "src"
+importPaths "src"
+targetPath "bin"
+
+dependency "chrilib" version="*"
+dependency "chris" version="*"
+
+configuration "release" {
+    targetType "executable"
+}
+
+configuration "debug" {
+    targetType "executable"
+}
+
+configuration "unittest" {
+    targetType "executable"
+    mainSourceFile "src/chritest.d"
+}

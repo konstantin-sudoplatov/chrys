@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="src1" type="DLangLib">
+    <CLASSES>
+      <root url="file://$PROJECT_DIR$/../chrilib/src" />
+    </CLASSES>
+    <JAVADOC />
+    <LIBRARY_FILE />
+    <SOURCES />
+  </library>
+</component>

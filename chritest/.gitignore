@@ -1,0 +1,17 @@
+.dub
+bin
+.idea/workspace.xml
+
+docs.json
+__dummy.html
+docs/
+chricrank.so
+chricrank.dylib
+chricrank.dll
+chricrank.a
+chricrank.lib
+chricrank-test-*
+*.exe
+*.o
+*.obj
+*.lst

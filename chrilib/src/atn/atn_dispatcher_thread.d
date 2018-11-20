@@ -60,7 +60,7 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                 // send terminating message to all circles
                 foreach(circle; circleRegister_.byValue){
                     circle.tid.send(new immutable TerminateApp_msg);
-                    while(!circle.isFinished) {
+                    while(!(cast(shared)circle).isFinished) {
                         Thread.sleep(10.msecs);
                     }   // wait while terminated
                 }

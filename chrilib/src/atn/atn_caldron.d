@@ -586,6 +586,7 @@ synchronized class CaldronThreadPool {
             thread = caldron thread to stack
     */
     void push(CaldronThread thread) {
+        assert(!thread.isFinished, "Thread %s must not be finished and it is.".format(thread.caldron.cldName));
         if      // is pool able of storing the thread?
                 ((cast()threads_).length <= CALDRON_THREAD_POOL_SIZE)
         {   //yes: disassociate it from the caldron and save it
@@ -593,7 +594,7 @@ synchronized class CaldronThreadPool {
             (cast()threads_).push(thread);
         }
         else { //no: terminate the thread
-            thread.destroy;
+            send(thread.tid, cast(shared) new CaldronThreadTerminationRequest);
         }
     }
 
@@ -601,10 +602,12 @@ synchronized class CaldronThreadPool {
     void terminate() {
         while(!(cast()threads_).empty) {
             CaldronThread thread = scast!CaldronThread((cast()threads_).pop);
-            while(!thread.isFinished) {
-                send(thread.tid, cast(shared) new CaldronThreadTerminationRequest);
-                Thread.sleep(10.msecs);
-            }
+            assert(thread.caldron is null, "Thread should be mothballed.");
+            assert(!thread.isFinished, "Thread %s must not be finished and it is.".format(thread.previousCaldron_));
+
+            // Stop the thread
+            send(thread.tid, cast(shared) new CaldronThreadTerminationRequest);
+            Thread.sleep(10.msecs);
         }
     }
 
@@ -656,6 +659,8 @@ class CaldronThread {
         assigning new caldron in the reset() func.
     */
     void mothball() {
+        debug
+            previousCaldron_ = caldron_.cldName;
         caldron_ = null;
     }
 
@@ -679,6 +684,10 @@ class CaldronThread {
 
     /// Caldron instance to call the Caldron._processMessage() function.
     private Caldron caldron_;
+
+    /// Field is filled with mothballed caldron in the debug mode
+    debug
+        private string previousCaldron_;
 
     /// This flag is raised if the caldronThreadFunc() function exited normally or on exception.
     private bool isFinished_;
@@ -731,7 +740,13 @@ class CaldronThread {
                     debug if (caldron_.dynDebug >= 1)
                             logit("%s: message TerminateApp_msg has come, terminating caldron".format(
                             (cast()caldron_).cldName), TermColor.brown);
+foreach(thread; cast()_threadPool_.threads_) {
+    writefln("Thread %s, isFinished %s", thread.caldron.cldName, thread.isFinished); stdout.flush;
+}
                     (cast()caldron_).terminateChildren;
+foreach(thread; cast()_threadPool_.threads_) {
+    writefln("Thread %s, isFinished %s", thread.caldron.cldName, thread.isFinished); stdout.flush;
+}
                     // terminate itself
                     goto FINISH_THREAD;
                 }

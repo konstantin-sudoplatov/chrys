@@ -84,6 +84,10 @@ class NullPointerError : InvalidPointerError
 version (unittest)
 {
     int* getNull() { return null; }
+
+    class A {
+        void foo() {}
+    }
 }
 
 unittest
@@ -110,6 +114,20 @@ unittest
         *getNull() = 42;
     }
     catch (InvalidPointerError)
+    {
+        b = true;
+    }
+
+    assert(b);
+
+    b = false;
+
+    try
+    {
+        A a;
+        a.foo();
+    }
+    catch (NullPointerError)
     {
         b = true;
     }

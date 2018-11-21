@@ -160,6 +160,28 @@ void console_thread_func() {try {   // catchall try block for catching flying ex
         auto r = new Generator!string({
             yield("hello");
             yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
+            yield("world!");
             yield("p");
             //Thread.sleep(1000.msecs);    // this time will actually pass BEFORE the "p" would work (giving chat time to process the last word).
         });

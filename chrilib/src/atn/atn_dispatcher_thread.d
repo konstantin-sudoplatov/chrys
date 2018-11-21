@@ -64,6 +64,7 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                         Thread.sleep(10.msecs);
                     }   // wait while terminated
                 }
+
                 send(cast()_mainTid_, new immutable CirclesAreFinished_msg);    // tell to main func
 
                 // terminate itself

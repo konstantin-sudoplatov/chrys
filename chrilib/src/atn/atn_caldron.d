@@ -242,9 +242,10 @@ class Caldron {
             debug if (dynDebug >= 1)
                 logit("%s: message IbrBranchDevise_msg has come from %s.".format(cldName, msg.senderTid),
                         TermColor.brown);
-//writefln("m.breed = %s(%,?s), childThreads_ = %s", cptName(m.breedCid), '_', m.breedCid, '_', childThreads_);
+//writefln("%s: m.breed = %s(%,?s), childThreads_ = %s", cldName, cptName(m.breedCid), '_', m.breedCid, '_', childThreads_);
             CaldronThread thread = childThreads_[m.breedCid];
             Caldron cld = thread.caldron;
+//writefln("%s: deseised caldron %s", cldName, cld.cldName); stdout.flush;
             Breed breed = cld.breed;
             assert(breed.cid == m.breedCid);
 
@@ -256,6 +257,10 @@ class Caldron {
             // Remove the thread from caldron's children and put it in the pool
             childThreads_.remove(m.breedCid);
             _threadPool_.push(thread);
+
+//thread.tid.send(new immutable CaldronThreadTerminationRequest);
+//while(!(cast(shared)thread).isFinished)
+//    Thread.sleep(1.msecs);
 
             reasoning_;                 // kick off
 
@@ -341,7 +346,6 @@ class Caldron {
                 grafts_ = grafts;
             }
         }
-
         // Main reasoning cycle
         wait_ = stop_ = false;
         debug checkPt = false;
@@ -613,6 +617,8 @@ synchronized class CaldronThreadPool {
         }
     }
 
+@property Deque!(CaldronThread) threads() {return cast()threads_;}
+
     //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
     //
     //                               Private
@@ -692,7 +698,7 @@ class CaldronThread {
 
     /// Field is filled with mothballed caldron in the debug mode
     debug
-        private string previousCaldron_;
+        string previousCaldron_;
 
     /// This flag is raised if the caldronThreadFunc() function exited normally or on exception.
     private bool isFinished_;
@@ -706,6 +712,7 @@ class CaldronThread {
 
         scope(exit) {
             isFinished = true;
+//writefln("%s: finishing", (cast()caldron_).cldName); stdout.flush;
         }
 
         // Receive messages in a cycle
@@ -719,7 +726,7 @@ class CaldronThread {
 
             receive(
                 (immutable Msg m) { (cast()msg) = cast()m; },
-                (shared CaldronThreadTerminationRequest t) { term = cast()t; },
+                (immutable CaldronThreadTerminationRequest t) { term = cast()t; },
                 (shared Throwable e) { ex = cast()e; },
                 (Variant v) { var = v; }          // the catchall clause
             );
@@ -737,21 +744,18 @@ class CaldronThread {
 
                 if      // recognized and processed by caldron?
                         ((cast()caldron_)._processMessage(msg))
-                    //yes: go for a new message
+                {    //yes: go for a new message
                     continue ;
+                }
                 else if // is it a request for the circle termination?
                         (cast(TerminateApp_msg)msg)
                 {   //yes: terminate me and all my subthreads
                     debug if (caldron_.dynDebug >= 1)
                             logit("%s: message TerminateApp_msg has come, terminating caldron".format(
                             (cast()caldron_).cldName), TermColor.brown);
-foreach(thread; cast()_threadPool_.threads_) {
-    writefln("in caldronThreadFunc: thread %s, isFinished %s", thread.caldron.cldName, (cast(shared)thread).isFinished); stdout.flush;
-}
+
                     (cast()caldron_).terminateChildren;
-foreach(thread; cast()_threadPool_.threads_) {
-    writefln("in caldronThreadFunc: thread %s, isFinished %s", thread.caldron.cldName, (cast(shared)thread).isFinished); stdout.flush;
-}
+
                     // terminate itself
                     goto FINISH_THREAD;
                 }
@@ -784,7 +788,7 @@ foreach(thread; cast()_threadPool_.threads_) {
         FINISH_THREAD:
     } catch(Throwable e) {
         (cast()caldron_).terminateChildren;
-        send(ownerTid, cast(shared)e);
+        send(cast()_mainTid_, cast(shared)e);
     }}
 
     //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--

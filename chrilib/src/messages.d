@@ -26,14 +26,17 @@ protected:
 
 /// Request for termination of application, usually from console_thread, after that from the main thread over all the structure.
 immutable class TerminateApp_msg: Msg {
-    /// Constructor
     this() {super();}
 }
 
 /// Dispatcher sends this messag to the main thread after fulfilling request for termination
 immutable class CirclesAreFinished_msg: Msg {
-    /// Constructor
     this() {super();}
+}
+
+/// Caldron thead pool has been asked for a thread and id doesn't have any more. It asks dispatcher to create some.
+immutable class CaldronThreadPoolAsksDispatcherForThreadBatch_msg: Msg {
+    this() { super(); }
 }
 
 /// Request for the attention dispatcher start an attention circle thread and send back its Tid. Actually, it is be the

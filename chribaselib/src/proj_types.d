@@ -139,14 +139,14 @@ pure nothrow struct CrossMap(FirstT, SecondT) {
     /**
             Check if the first key present in the cross. Analogous to the D "in" statement.
     */
-    const(SecondT*) opBinaryRight(string op)(FirstT first) const {
+    const(SecondT*) opBinaryRight(string op)(FirstT first) const if(op == "in") {
         return first in seconds;
     }
 
     /**
             Check if the second key present in the cross. Analogous to the D "in" statement.
     */
-    const(FirstT*) opBinaryRight(string op)(SecondT second) const {
+    const(FirstT*) opBinaryRight(string op)(SecondT second) const if(op == "in") {
         return second in firsts;
     }
 

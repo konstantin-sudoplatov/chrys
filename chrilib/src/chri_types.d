@@ -194,7 +194,7 @@ synchronized final pure nothrow class SpiritMap {
             cid = cid of the concept.
         Returns: pointer to the concept or null
     */
-    SpiritConcept* opBinaryRight(string op)(Cid cid) {
+    SpiritConcept* opBinaryRight(string op)(Cid cid) const if(op == "in") {
         if      // is the concept in the map?
                 (auto p = cid in spiritMap_)
             return cast(SpiritConcept*)p;

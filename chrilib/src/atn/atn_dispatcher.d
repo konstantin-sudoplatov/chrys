@@ -1,4 +1,4 @@
-module atn.atn_dispatcher_thread;
+module atn.atn_dispatcher;
 import std.stdio;
 import std.concurrency, core.thread;
 import std.format;
@@ -33,7 +33,14 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
         if      // is it a regular message?
                 (msg)
         {   // process it
-            if      // is that client's request for circle's Tid?
+            if      // is it the pool's request for threads?
+                    (auto m = cast(immutable CaldronThreadPoolAsksDispatcherForThreadBatch_msg)msg)
+            {   // yes: create and push them to the pool
+                //foreach(unused; 0..CALDRON_THREAD_BATCH_SIZE) {
+                //    auto thread = new CaldronThread;
+                //}
+            }
+            else if      // is that client's request for circle's Tid?
                     (auto m = cast(immutable UserRequestsCircleTid_msg)msg)
             {   //yes: create new attention circle thread and send back its Tid
                 Tid clientTid = cast()m.senderTid();
@@ -47,7 +54,8 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                 }
                 else {  //no: create the circle, tell him the client's Tid and put the pair in the circle register
                     auto atnCircle = new AttentionCircle;
-                    CaldronThread circleThread = new CaldronThread(atnCircle);
+                    addThreadBatchToPool;   // to guarantee that the pool is not empty
+                    CaldronThread circleThread = _threadPool_.pop(atnCircle);
                     atnCircle.myThread = circleThread;
                     circleRegister_[clientTid] = circleThread;
                     circleThread.tid.send(new immutable DispatcherProvidesCircleWithUserTid_msg(clientTid));
@@ -60,8 +68,8 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                 // send terminating message to all circles
                 foreach(circle; circleRegister_.byValue){
                     circle.tid.send(new immutable TerminateApp_msg);
-                    while(!(cast(shared)circle).isFinished) {
-                        Thread.sleep(10.msecs);
+                    while(circle.tid in _threadPool_) {
+                        Thread.sleep(SPIN_WAIT);
                     }   // wait while terminated
                 }
 
@@ -108,5 +116,17 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
 private CaldronThread[Tid] circleRegister_;
 
 //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
+
+/// Create and add to the pool CALDRON_THREAD_BATCH_SIZE threads.
+void addThreadBatchToPool() {
+    assert(CALDRON_THREAD_BATCH_SIZE > 0);
+
+    foreach(unused; 0.. CALDRON_THREAD_BATCH_SIZE) {
+        auto thread = new CaldronThread(_threadPool_);
+        thread.spawn;
+        _threadPool_.push(thread);
+    }
+    _threadPool_.resetCreatingBatchFlag;
+}
 
 //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--

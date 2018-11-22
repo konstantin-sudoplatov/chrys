@@ -6,7 +6,7 @@ import proj_data, proj_funcs;
 import stat.stat_registry;
 import crank.crank_registry;
 import cpt.cpt_stat;
-import atn.atn_dispatcher_thread;
+import atn.atn_dispatcher;
 import console_thread;
 import messages;
 import chri_types, chri_data;
@@ -63,7 +63,7 @@ void main()
     }
 
 TERMINATE_APPLICATION:
-    _threadPool_.terminate;
+    _threadPool_.terminate_canned;
     thread_joinAll;
     writeln("good bye, world!"); stdout.flush;
 }

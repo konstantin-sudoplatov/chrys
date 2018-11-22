@@ -10,12 +10,6 @@ import cpt.cpt_premises, cpt.cpt_primitives, cpt.cpt_registry;
 
 //---***---***---***---***---***--- data ---***---***---***---***---***--
 
-/// Maximum number of fibers in the fiber pool
-enum CALDRON_FIBER_POOL_SIZE = 30;
-
-/// Maximum number of threads in the caldron thread pool
-enum CALDRON_THREAD_POOL_SIZE = 50;
-
 /// Call types of the static concept functions.
 enum StatCallType: string {
     p0Cal = "void function(Caldron)",                              // void function(Caldron nameSpace)

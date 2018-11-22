@@ -117,9 +117,10 @@ class Caldron {
         if(childThreads_) {
             foreach (child; childThreads_.byValue)
                 try {
-                    if (!(cast(shared)child).isFinished) {
+                    if (child.tid in _threadPool_) {
                         child.tid.send(new immutable TerminateApp_msg);
-                        while(!(cast(shared)child).isFinished) Thread.sleep(10.msecs);
+                        while(child.tid in _threadPool_)
+                            Thread.sleep(SPIN_WAIT);
                     }
                 } catch(Throwable){
                     Caldron cld = child.caldron;
@@ -191,7 +192,8 @@ class Caldron {
         Returns: true if the message was recognized, else false.
 
     */
-    protected bool _processMessage(immutable Msg msg) {
+//    protected bool _processMessage(immutable Msg msg) {
+    bool _processMessage(immutable Msg msg) {           // the "protected" attr was removed to get visible from chritest project
 
         if      // is it a request for starting reasoning?
                 (cast(IbrStartReasoning_msg)msg)
@@ -560,64 +562,99 @@ synchronized class CaldronFiberPool {
     private Deque!(Fiber) fibers_;
 }
 
+/**
+        Object of this class creates caldron threads. It does it from the dispatcher thread, to avoid possible problems with
+    the parentage. Never use the push method it add a thread from anyware except the dispatcher thread! It keeps inactive
+    (canned) threads, and active (handed out) ones in separate arrays to be able to keep track of them.${BR}
+    The object is concieved to be shared and synchronized.
+*/
 synchronized class CaldronThreadPool {
 
     /**
-            Get a stacked or generate new thread for the Caldron._processMessage() delegate.
+            Get stacked thread, or if the stack is empty, ask attention dispatcher to create some more.
         Parameters:
             cld = caldron to setup the thread for. This caldron is associated with the thread and from now on is used
-                  by the thread to call the _processMessage() function on new messages coming.
-        Returns: the CaldronThread object.
+                  by the thread to call the _processMessage() function if new messages come.
+        Returns: the CaldronThread object or null if the stack is currently empty. In that case repeat the call.
     */
     CaldronThread pop(Caldron cld) {
         if      // is the stack empty?
-                ((cast()threads_).empty)
-        {
-            return new CaldronThread(cld);
+                ((cast()cannedThreads_).empty)
+        {   // yes: ask dispatcher to create some
+            if(!creatingBatchInProgressFlag) {
+                send(cast()_attnDispTid_, new immutable CaldronThreadPoolAsksDispatcherForThreadBatch_msg);
+                creatingBatchInProgressFlag = true;
+            }
+            return null;
         }
-        else { //no: reset and return a fiber
-            auto cldThread = cast(CaldronThread)(cast()threads_).pop;
+        else { //no: reset it with the caldron and return the thread
+            auto cldThread = cast(CaldronThread)(cast()cannedThreads_).pop;
             cldThread.reset(cld);
+            activeThreads_[cldThread.tid] = cast(shared)cldThread;
 
             return cldThread;
         }
     }
 
     /**
-            Get a caldron thread stacked if there is space in the stack. The caldron object is disassociated from the thread.
-        The thread meanwhile is not terminated, it waits on new messages.
+            Get a caldron thread stacked if the limit is not reached. The caldron object is disassociated from the thread.
+        The thread itself is not terminated, it waits on for new messages.${BR}
+            New threads are added to the pool through this function and that should be done from the dispatcher thread.
         Parameters:
             thread = caldron thread to stack
     */
     void push(CaldronThread thread) {
-        assert(!(cast(shared)thread).isFinished, "Thread %s must not be finished and it is.".
-                format(thread.caldron.cldName));
-        if      // is pool able of storing the thread?
-                ((cast()threads_).length <= CALDRON_THREAD_POOL_SIZE)
+        debug
+            assert(!(cast(shared)thread).isFinished_, "Thread %s must not be finished!".format(thread.caldron.cldName));
+        assert(thread.tid != Tid.init, "Thread must be spawned before pushing.");
+
+        if      // isn't the limit reached?
+                ((cast()cannedThreads_).length <= CALDRON_THREAD_POOL_SIZE)
         {   //yes: disassociate it from the caldron and save it
-            thread.mothball;
-            (cast()threads_).push(thread);
+            activeThreads_.remove(thread.tid);      // in case it was in use.
+            thread.mothball;    // cann it
+            (cast()cannedThreads_).push(thread);
         }
         else { //no: terminate the thread
-            send(thread.tid, cast(shared) new CaldronThreadTerminationRequest);
+            thread.tid.send(cast(shared) new CaldronThreadTerminationRequest);
         }
+    }
+
+
+    CaldronThread* opBinaryRight(string op)(Tid tid)
+        if(op == "in")
+    {
+        return cast(CaldronThread*)(tid in activeThreads_);
+    }
+
+    /**
+            Remove active thread from the AA of active threads. Called on exit of the thread function of the caldron thread
+        object.
+        Parameters:
+            tid = tid of the thread, that should be deregistered
+    */
+    void deregister(const Tid tid) {
+        activeThreads_.remove(cast()tid);
     }
 
     /// Request terminating all canned threads.
-    void terminate() {
-        while(!(cast()threads_).empty) {
-            CaldronThread thread = scast!CaldronThread((cast()threads_).pop);
+    void terminate_canned() {
+        while(!(cast()cannedThreads_).empty) {
+            CaldronThread thread = scast!CaldronThread((cast()cannedThreads_).pop);
             assert(thread.caldron is null, "Thread should be mothballed.");
-            debug assert(!(cast(shared)thread).isFinished, "Thread %s must not be finished and it is.".
+            debug assert(!(cast(shared)thread).isFinished_, "Thread %s must not be finished and it is.".
                     format(thread.previousCaldron_));
 
             // Stop the thread
-            send(thread.tid, cast(shared) new CaldronThreadTerminationRequest);
-            Thread.sleep(10.msecs);
+            send(thread.tid, new immutable CaldronThreadTerminationRequest);
         }
     }
 
-@property Deque!(CaldronThread) threads() {return cast()threads_;}
+    /// Called by dispatcher after pushing newly created threads.
+    void resetCreatingBatchFlag() {
+        creatingBatchInProgressFlag = false;
+    }
+//@property Deque!(CaldronThread) threads() {return cast()cannedThreads_;}
 
     //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
     //
@@ -625,25 +662,30 @@ synchronized class CaldronThreadPool {
     //
     //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
 
-    /// Stack of threads.
-    private Deque!(CaldronThread) threads_;
+    /// Stack of canned threads.
+    private Deque!(CaldronThread) cannedThreads_;
+
+    /// Threads, that were handed out.
+    private CaldronThread[Tid] activeThreads_;
+
+    /// This flag is raised when the pop() func sends the dispatcher request for new batch of threads. It is lowered
+    /// from outside by the dispatcher.
+    private bool creatingBatchInProgressFlag;
 }
 
+/**
+        This class represent a thread in which caldron object does the reasoning for its branch. A caldron works
+    in conjuction with the CaldronThreadPool object, which stores the threads when they are inactive (canned) and keeps
+    track of them when they are active.${BR}
+        The last, but not least reason of it working under the pool's control is that all threads are created centrally
+    in one (the dispatcher's) thread, thus having only one parent. I'm not sure at the moment, but it seems that current problem
+    with stability may be connected to the chaotic way of spawning and finishing threads regardless of their parentage.
+    In any case, doing that centrally is more regular and elegant aprouch.
+*/
 class CaldronThread {
 
-    /**
-            Constructor.
-        Parameters:
-            cld = caldron to associate with the thread
-    */
-    this(Caldron cld) {
-        assert(cld !is null);
-        caldron_ = cld;
-        myTid_ = spawn(&(cast(shared)this).caldronThreadFunc);
-        Breed cldBreed = cld.breed;     // it is legal, since we setup
-        cldBreed.tid = myTid_;          // the new caldrons's breed prior to kicking off the reasoning.
-        cldBreed.activate;         // the local instance of the breed is setup and ready
-        myTid_.send(new immutable IbrStartReasoning_msg);   // kick off the reasoning cycle
+    this(shared CaldronThreadPool pool) {
+        pool_ = pool;
     }
 
     /**
@@ -654,13 +696,10 @@ class CaldronThread {
     void reset(Caldron cld) {
         assert(cld);
         assert(caldron_ is null);
-        cld.breed.tid = myTid_;
+        cld.breed.tid = cast()myTid_;
         cld.breed.activate;
         caldron_ = cld;
     }
-
-    /// Get caldron.
-    Caldron caldron() { return caldron_; }
 
     /**
             Cann the thread. Thread is not finished, it is sleeping on the receive function and may be reused by
@@ -668,21 +707,25 @@ class CaldronThread {
     */
     void mothball() {
         debug
-            previousCaldron_ = caldron_.cldName;
+            if(caldron_) previousCaldron_ = caldron_.cldName;
         caldron_ = null;
     }
 
+    /**
+            Start the thread.
+    */
+    void spawn() {
+        assert(myTid_ == Tid.init, "The thread can only be spawned ones. myTid_ = %s.".format(cast()myTid_));
+        debug assert(!isFinished_, "Reusing of the CaldronThread object is not allowed.");
+
+        cast()myTid_ = std.concurrency.spawn(cast(shared void delegate()) &caldronThreadFunc);
+    }
+
     /// Get Tid.
-    @property Tid tid() { return myTid_; }
+    @property Tid tid() { return cast()myTid_; }
 
-    /// Getter. Up if the caldronThreadFunc() function exited normally or on exception.
-    @property synchronized bool isFinished() { return isFinished_; }
-
-    /// Setter.
-    @property synchronized void isFinished(bool isFinished) { isFinished_ = isFinished; }
-
-    /// Shows if the thread was canned (see the mothBall() function).
-    bool isCanned() { return caldron is null; }
+    /// Get caldron.
+    Caldron caldron() { return caldron_; }
 
     //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
     //
@@ -691,28 +734,33 @@ class CaldronThread {
     //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
 
     /// Own Tid.
-    private Tid myTid_;
+    private immutable Tid myTid_ = Tid();
 
     /// Caldron instance to call the Caldron._processMessage() function.
     private Caldron caldron_;
+
+    /// My pool
+    private shared CaldronThreadPool pool_;
 
     /// Field is filled with mothballed caldron in the debug mode
     debug
         string previousCaldron_;
 
     /// This flag is raised if the caldronThreadFunc() function exited normally or on exception.
-    private bool isFinished_;
+    debug
+        private bool isFinished_;
 
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     /**
             Main thread function. Basically it is receiving and processing messages that come to the thread.
     */
-    private shared void caldronThreadFunc() { try {
+    private void caldronThreadFunc() { try {
 
         scope(exit) {
-            isFinished = true;
-//writefln("%s: finishing", (cast()caldron_).cldName); stdout.flush;
+            debug
+                isFinished_ = true;
+            pool_.deregister(myTid_);
         }
 
         // Receive messages in a cycle
@@ -788,14 +836,252 @@ class CaldronThread {
         FINISH_THREAD:
     } catch(Throwable e) {
         (cast()caldron_).terminateChildren;
-        send(cast()_mainTid_, cast(shared)e);
+        send(cast()ownerTid, cast(shared)e);
     }}
 
     //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
 }
 
 /// Message to terminate caldron thread.
-private class CaldronThreadTerminationRequest {}
+private immutable class CaldronThreadTerminationRequest {}
+
+//
+//synchronized class CaldronThreadPool {
+//
+//    /**
+//            Get a stacked or generate new thread for the Caldron._processMessage() delegate.
+//        Parameters:
+//            cld = caldron to setup the thread for. This caldron is associated with the thread and from now on is used
+//                  by the thread to call the _processMessage() function on new messages coming.
+//        Returns: the CaldronThread object.
+//    */
+//    CaldronThread pop(Caldron cld) {
+//        if      // is the stack empty?
+//                ((cast()threads_).empty)
+//        {
+//            return new CaldronThread(cld);
+//        }
+//        else { //no: reset and return a fiber
+//            auto cldThread = cast(CaldronThread)(cast()threads_).pop;
+//            cldThread.reset(cld);
+//
+//            return cldThread;
+//        }
+//    }
+//
+//    /**
+//            Get a caldron thread stacked if there is space in the stack. The caldron object is disassociated from the thread.
+//        The thread meanwhile is not terminated, it waits on new messages.
+//        Parameters:
+//            thread = caldron thread to stack
+//    */
+//    void push(CaldronThread thread) {
+//        assert(!(cast(shared)thread).isFinished, "Thread %s must not be finished and it is.".
+//                format(thread.caldron.cldName));
+//        if      // is pool able of storing the thread?
+//                ((cast()threads_).length <= CALDRON_THREAD_POOL_SIZE)
+//        {   //yes: disassociate it from the caldron and save it
+//            thread.mothball;
+//            (cast()threads_).push(thread);
+//        }
+//        else { //no: terminate the thread
+//            send(thread.tid, cast(shared) new CaldronThreadTerminationRequest);
+//        }
+//    }
+//
+//    /// Request terminating all canned threads.
+//    void terminate() {
+//        while(!(cast()threads_).empty) {
+//            CaldronThread thread = scast!CaldronThread((cast()threads_).pop);
+//            assert(thread.caldron is null, "Thread should be mothballed.");
+//            debug assert(!(cast(shared)thread).isFinished, "Thread %s must not be finished and it is.".
+//                    format(thread.previousCaldron_));
+//
+//            // Stop the thread
+//            send(thread.tid, cast(shared) new CaldronThreadTerminationRequest);
+//            Thread.sleep(10.msecs);
+//        }
+//    }
+//
+//@property Deque!(CaldronThread) threads() {return cast()threads_;}
+//
+//    //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
+//    //
+//    //                               Private
+//    //
+//    //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
+//
+//    /// Stack of threads.
+//    private Deque!(CaldronThread) threads_;
+//}
+//
+//class CaldronThread {
+//
+//    /**
+//            Constructor.
+//        Parameters:
+//            cld = caldron to associate with the thread
+//    */
+//    this(Caldron cld) {
+//        assert(cld !is null);
+//        caldron_ = cld;
+//        myTid_ = spawn(&(cast(shared)this).caldronThreadFunc);
+//        Breed cldBreed = cld.breed;     // it is legal, since we setup
+//        cldBreed.tid = myTid_;          // the new caldrons's breed prior to kicking off the reasoning.
+//        cldBreed.activate;         // the local instance of the breed is setup and ready
+//        myTid_.send(new immutable IbrStartReasoning_msg);   // kick off the reasoning cycle
+//    }
+//
+//    /**
+//            Reassociate thread with the new caldron.
+//        Parameters:
+//            cld = caldron to associate the thread with.
+//    */
+//    void reset(Caldron cld) {
+//        assert(cld);
+//        assert(caldron_ is null);
+//        cld.breed.tid = myTid_;
+//        cld.breed.activate;
+//        caldron_ = cld;
+//    }
+//
+//    /// Get caldron.
+//    Caldron caldron() { return caldron_; }
+//
+//    /**
+//            Cann the thread. Thread is not finished, it is sleeping on the receive function and may be reused by
+//        assigning new caldron in the reset() func.
+//    */
+//    void mothball() {
+//        debug
+//            previousCaldron_ = caldron_.cldName;
+//        caldron_ = null;
+//    }
+//
+//    /// Get Tid.
+//    @property Tid tid() { return myTid_; }
+//
+//    /// Getter. Up if the caldronThreadFunc() function exited normally or on exception.
+//    @property synchronized bool isFinished() { return isFinished_; }
+//
+//    /// Setter.
+//    @property synchronized void isFinished(bool isFinished) { isFinished_ = isFinished; }
+//
+//    /// Shows if the thread was canned (see the mothBall() function).
+//    bool isCanned() { return caldron is null; }
+//
+//    //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
+//    //
+//    //                               Private
+//    //
+//    //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
+//
+//    /// Own Tid.
+//    private Tid myTid_;
+//
+//    /// Caldron instance to call the Caldron._processMessage() function.
+//    private Caldron caldron_;
+//
+//    /// Field is filled with mothballed caldron in the debug mode
+//    debug
+//        string previousCaldron_;
+//
+//    /// This flag is raised if the caldronThreadFunc() function exited normally or on exception.
+//    private bool isFinished_;
+//
+//    //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
+//
+//    /**
+//            Main thread function. Basically it is receiving and processing messages that come to the thread.
+//    */
+//    private shared void caldronThreadFunc() { try {
+//
+//        scope(exit) {
+//            isFinished = true;
+////writefln("%s: finishing", (cast()caldron_).cldName); stdout.flush;
+//        }
+//
+//        // Receive messages in a cycle
+//        while(true) {
+//            import std.variant: Variant;
+//
+//            immutable Msg msg;
+//            Throwable ex;
+//            CaldronThreadTerminationRequest term;
+//            Variant var;    // the catchall type
+//
+//            receive(
+//                (immutable Msg m) { (cast()msg) = cast()m; },
+//                (immutable CaldronThreadTerminationRequest t) { term = cast()t; },
+//                (shared Throwable e) { ex = cast()e; },
+//                (Variant v) { var = v; }          // the catchall clause
+//            );
+//
+//            // Recognize and process the message
+//            if      // is it a regular message?
+//                    (msg)
+//            {   // yes: send the message to caldron
+//                if      // is caldron canned?
+//                        (!caldron_)
+//                {
+//                    logit( "Warning. Message %s has come to a canned caldron.".format(typeid(msg)), TermColor.red);
+//                    continue;
+//                }
+//
+//                if      // recognized and processed by caldron?
+//                        ((cast()caldron_)._processMessage(msg))
+//                {    //yes: go for a new message
+//                    continue ;
+//                }
+//                else if // is it a request for the circle termination?
+//                        (cast(TerminateApp_msg)msg)
+//                {   //yes: terminate me and all my subthreads
+//                    debug if (caldron_.dynDebug >= 1)
+//                            logit("%s: message TerminateApp_msg has come, terminating caldron".format(
+//                            (cast()caldron_).cldName), TermColor.brown);
+//
+//                    (cast()caldron_).terminateChildren;
+//
+//                    // terminate itself
+//                    goto FINISH_THREAD;
+//                }
+//                else
+//                {  // unrecognized message of type Msg. Log it.
+//                    logit("Unexpected message to the caldron %s: %s".format((cast()caldron_).cldName, typeid(msg)),
+//                            TermColor.brown);
+//                    continue ;
+//                }
+//            }
+//            else if // is it a request for the thread termination?
+//                    (cast(CaldronThreadTerminationRequest)term)
+//            {   //yes: terminate itself
+//                goto FINISH_THREAD;
+//            }
+//            else if // exception message?
+//                    (ex)
+//            {   // rethrow exception
+//                throw ex;
+//            }
+//            else if
+//                    (var.hasValue)
+//            {  // unrecognized message of type Variant. Log it.
+//                    logit(format!"Unexpected message of type Variant to the caldron %s: %s"
+//                            ((cast()caldron_).cldName, var.toString), TermColor.brown);
+//                continue;
+//            }
+//        }
+//
+//        FINISH_THREAD:
+//    } catch(Throwable e) {
+//        (cast()caldron_).terminateChildren;
+//        send(cast()_mainTid_, cast(shared)e);
+//    }}
+//
+//    //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--
+//}
+//
+///// Message to terminate caldron thread.
+//private class CaldronThreadTerminationRequest {}
 
 
 

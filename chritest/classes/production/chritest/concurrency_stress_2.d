@@ -3,7 +3,7 @@ import std.stdio;
 import std.concurrency, core.thread;
 import std.datetime.stopwatch;
 
-import proj_data;
+import proj_memoryerror, proj_data;
 
 import chri_data, chri_types;
 import cpt.cpt_neurons, cpt.cpt_premises;
@@ -11,12 +11,11 @@ import messages;
 
 import atn.atn_dispatcher, atn.atn_caldron;
 
-enum MAX_THREADS = 5;
+enum MAX_THREADS = 100;
 enum MAX_MESSAGES = 10000;
 enum MAX_HOPS = 1000;
 
 shared static this() {
-    import proj_memoryerror;
     assert(registerMemoryErrorHandler);
 
     // Create infrastructure
@@ -39,7 +38,16 @@ shared static this() {
     writefln("Threads created: %s [ms]", sw.peek.total!"msecs"); stdout.flush;
     sw.start;
 
-    MessagePool msgPool = new MessagePool;
+    // Create  and inject messages
+    shared static MessagePool msgPool = new MessagePool;
+    foreach(i; 0..MAX_MESSAGES) {
+        auto m = new immutable TestMessage(i);
+        msgPool.add(cast()m);
+        portal.tid.send(cast(shared) m);
+    }
+    sw.stop;
+    writefln("Messages created&injected: %s [ms]", sw.peek.total!"msecs"); stdout.flush;
+    sw.start;
 
     // Terminate workers
     wrkPool.expellAll;
@@ -47,9 +55,6 @@ shared static this() {
     // Terminate all canned threads
     for(; !_threadPool_.requestTerminatingCanned;)
         Thread.sleep(SPIN_WAIT);
-    sw.stop;
-    writefln("Threads stopped: %s [ms]", sw.peek.total!"msecs"); stdout.flush;
-    sw.start;
 
     // Request terminating dispatcher
     (cast()_attnDispTid_).send(new immutable TerminateApp_msg);
@@ -60,27 +65,14 @@ shared static this() {
     writefln("Total: %s [ms]", sw.peek.total!"msecs"); stdout.flush;
 }
 
-/// Create new caldron with empty seed (it will be waiting on the seed).
-private Caldron getCaldron_() {
-    static Cid newCid = MIN_DYNAMIC_CID;
-
-    SpActionNeuron seed = new SpActionNeuron(newCid++);
-    _sm_.add(seed);
-
-    DcpDsc breedDynCptDesc = DcpDsc("SpBreed", newCid++);
-    SpBreed breed = new SpBreed(breedDynCptDesc.cid);
-    breed.load(breedDynCptDesc, null, null);
-    _sm_.add(breed);
-
-    return new Caldron(null, breedDynCptDesc.cid, null);
-}
-
 /// Get thread from the pool
 private CaldronThread getThread() {
 
+    TestCaldron cld = new TestCaldron;
     CaldronThread thread;
-    for(; (thread = _threadPool_.pop(getCaldron_)) is null;)
+    for(; (thread = _threadPool_.pop(cld)) is null;) {
         Thread.sleep(SPIN_WAIT);
+    }
 
     return thread;
 }
@@ -113,20 +105,20 @@ synchronized class WorkerPool {
 
 synchronized class MessagePool {
 
-    void add(Message msg) {
+    void add(TestMessage msg) {
         messages_[msg.id] = cast(shared)msg;
     }
 
-    void remove(Message msg) {
+    void remove(TestMessage msg) {
         messages_.remove(msg.id);
     }
 
     ulong length() { return messages_.length; }
 
-    private Message[int] messages_;
+    private TestMessage[int] messages_;
 }
 
-class Message: Msg {
+class TestMessage: Msg {
 
     immutable int id;
     int numberOfHops = 0;
@@ -134,5 +126,21 @@ class Message: Msg {
     this(int id) {
         super();
         this.id = id;
+    }
+}
+
+class TestCaldron: Caldron {
+
+    this() {
+        static Cid newCid = MIN_DYNAMIC_CID;
+
+        SpActionNeuron seed = new SpActionNeuron(newCid++);
+        _sm_.add(seed);
+
+        DcpDsc breedDynCptDesc = DcpDsc("SpBreed", newCid++);
+        SpBreed breed = new SpBreed(breedDynCptDesc.cid);
+        breed.load(breedDynCptDesc, null, null);
+        _sm_.add(breed);
+        super(null, breedDynCptDesc.cid, null);
     }
 }

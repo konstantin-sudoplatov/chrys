@@ -115,7 +115,8 @@ class Caldron {
     /// Send children the termination signal and wait their termination.
     final void terminateChildren() {
         if(childThreads_) {
-            foreach (child; childThreads_.byValue)
+            foreach (child; childThreads_.byValue) {
+                assert(child);
                 try {
                     if (child.tid in _threadPool_) {
                         child.tid.send(new immutable TerminateApp_msg);
@@ -126,6 +127,7 @@ class Caldron {
                     Caldron cld = child.caldron;
                     logit("Error happened while terminating thread %s".format(cld? cld.cldName: "???"), TermColor.red);
                 }
+            }
             childThreads_ = null;
         }
     }
@@ -604,7 +606,6 @@ synchronized class CaldronThreadPool {
             thread = caldron thread to stack
     */
     void push(CaldronThread thread) {
-        assert(thread.tid in activeThreads_, "Thread %s must not be finished!".format(thread.caldron.cldName));
         assert(thread.tid != Tid.init, "Thread must be spawned before pushing.");
 
         if      // isn't the limit reached?
@@ -663,6 +664,11 @@ synchronized class CaldronThreadPool {
             activeThreads_[thread.tid] = cast(shared)thread;
         }
         return true;
+    }
+
+    /// Check is all threads a finished
+    bool isFinished() {
+        return (cast()cannedThreads_).empty && activeThreads_.length == 0;
     }
 
     /// Called by dispatcher after pushing newly created threads.
@@ -741,6 +747,11 @@ class CaldronThread {
 
     /// Get caldron.
     Caldron caldron() { return caldron_; }
+
+    /// Get caldron name.
+    string cldName() {
+        return caldron is null? "null": caldron.cldName;
+    }
 
     //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
     //
@@ -844,7 +855,7 @@ class CaldronThread {
 
         FINISH_THREAD:
     } catch(Throwable e) {
-        (cast()caldron_).terminateChildren;
+//        (cast()caldron_).terminateChildren;
         send(cast()ownerTid, cast(shared)e);
     }}
 

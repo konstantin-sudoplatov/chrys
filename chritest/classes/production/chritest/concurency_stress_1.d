@@ -1,3 +1,9 @@
+/**
+        This test is fully self-contained and independent.
+    There is a pool of threads, size MAX_THREADS, and pool of messages, of MAX_MESSAGES. Messages are randomly bounced
+    between threads. Each message has the counter of hops. When the counter reaches the limit of MAX_HOPS, the message
+    is withdrawn from ciculation. When there are no messages remaind, test stops.
+*/
 module concurency_stress_1;
 import std.stdio;
 import std.concurrency, core.thread;
@@ -27,7 +33,7 @@ bool yes = true;if(yes) return;     // bypass this test
     }
     Thread_ portal = new Thread_(MAX_THREADS-1, threadPool, msgPool);     // to it we will forward newly created messages
     sw.stop;
-    writefln("Creating threads: %s [ms]", sw.peek.total!"msecs"); stdout.flush;
+    writefln("Threads created: %s [ms]", sw.peek.total!"msecs"); stdout.flush;
     sw.start;
 
     // Create  and inject messages
@@ -37,7 +43,7 @@ bool yes = true;if(yes) return;     // bypass this test
         portal.tid.send(cast(shared) m);
     }
     sw.stop;
-    writefln("Creating&injecting messages: %s [ms]", sw.peek.total!"msecs"); stdout.flush;
+    writefln("Messages created&injected: %s [ms]", sw.peek.total!"msecs"); stdout.flush;
     sw.start;
 
     // Let messages travel
@@ -45,7 +51,7 @@ bool yes = true;if(yes) return;     // bypass this test
         Thread.sleep(100.usecs);
     }
     sw.stop;
-    writefln("Traveling messages: %s [ms]", sw.peek.total!"msecs"); stdout.flush;
+    writefln("Messages stopped traveling: %s [ms]", sw.peek.total!"msecs"); stdout.flush;
     sw.start;
 
     // Stop threads

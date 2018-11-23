@@ -604,26 +604,28 @@ synchronized class CaldronThreadPool {
             thread = caldron thread to stack
     */
     void push(CaldronThread thread) {
-        debug
-            assert(!(cast(shared)thread).isFinished_, "Thread %s must not be finished!".format(thread.caldron.cldName));
+        assert(thread.tid in activeThreads_, "Thread %s must not be finished!".format(thread.caldron.cldName));
         assert(thread.tid != Tid.init, "Thread must be spawned before pushing.");
 
         if      // isn't the limit reached?
                 ((cast()cannedThreads_).length <= CALDRON_THREAD_POOL_SIZE)
         {   //yes: disassociate it from the caldron and save it
-            activeThreads_.remove(thread.tid);      // in case it was in use.
             thread.mothball;    // cann it
             (cast()cannedThreads_).push(thread);
         }
         else { //no: terminate the thread
-            thread.tid.send(cast(shared) new CaldronThreadTerminationRequest);
+            thread.tid.send(new immutable CaldronThreadTerminationRequest);
         }
+        activeThreads_.remove(thread.tid);      // in case it was in use.
     }
 
-
-    CaldronThread* opBinaryRight(string op)(Tid tid)
-        if(op == "in")
-    {
+    /**
+            Overload the "in" operation. It checks if the tid is among active threads.
+        Parameters:
+            tid = tid to check
+        Returns: pointer to the caldron thread object or null if not found.
+    */
+    CaldronThread* opBinaryRight(string op)(Tid tid) if(op == "in") {
         return cast(CaldronThread*)(tid in activeThreads_);
     }
 
@@ -637,23 +639,37 @@ synchronized class CaldronThreadPool {
         activeThreads_.remove(cast()tid);
     }
 
-    /// Request terminating all canned threads.
-    void terminate_canned() {
+    /**
+            Request terminating all canned threads. It just sends to all canned threads termination request, delete them
+        from the stack and returns true, except when it is waiting for finishing creating new threads by the dispatcher.
+        In that case it returns false.
+        Returns: true/false
+    */
+    bool requestTerminatingCanned() {
+
+        // Check if creating branches is in process
+        if(creatingBatchInProgressFlag) return false;
+
         while(!(cast()cannedThreads_).empty) {
             CaldronThread thread = scast!CaldronThread((cast()cannedThreads_).pop);
             assert(thread.caldron is null, "Thread should be mothballed.");
-            debug assert(!(cast(shared)thread).isFinished_, "Thread %s must not be finished and it is.".
+            debug assert(thread.tid !in activeThreads_, "Thread %s must not be finished and it is.".
                     format(thread.previousCaldron_));
 
             // Stop the thread
             send(thread.tid, new immutable CaldronThreadTerminationRequest);
+
+            // Add to active to allow thread remove it when it is finished
+            activeThreads_[thread.tid] = cast(shared)thread;
         }
+        return true;
     }
 
     /// Called by dispatcher after pushing newly created threads.
     void resetCreatingBatchFlag() {
         creatingBatchInProgressFlag = false;
     }
+
 //@property Deque!(CaldronThread) threads() {return cast()cannedThreads_;}
 
     //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
@@ -716,7 +732,6 @@ class CaldronThread {
     */
     void spawn() {
         assert(myTid_ == Tid.init, "The thread can only be spawned ones. myTid_ = %s.".format(cast()myTid_));
-        debug assert(!isFinished_, "Reusing of the CaldronThread object is not allowed.");
 
         cast()myTid_ = std.concurrency.spawn(cast(shared void delegate()) &caldronThreadFunc);
     }
@@ -746,10 +761,6 @@ class CaldronThread {
     debug
         string previousCaldron_;
 
-    /// This flag is raised if the caldronThreadFunc() function exited normally or on exception.
-    debug
-        private bool isFinished_;
-
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     /**
@@ -758,8 +769,6 @@ class CaldronThread {
     private void caldronThreadFunc() { try {
 
         scope(exit) {
-            debug
-                isFinished_ = true;
             pool_.deregister(myTid_);
         }
 

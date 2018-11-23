@@ -36,9 +36,7 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
             if      // is it the pool's request for threads?
                     (auto m = cast(immutable CaldronThreadPoolAsksDispatcherForThreadBatch_msg)msg)
             {   // yes: create and push them to the pool
-                //foreach(unused; 0..CALDRON_THREAD_BATCH_SIZE) {
-                //    auto thread = new CaldronThread;
-                //}
+                addThreadBatchToPool_;
             }
             else if      // is that client's request for circle's Tid?
                     (auto m = cast(immutable UserRequestsCircleTid_msg)msg)
@@ -54,7 +52,7 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                 }
                 else {  //no: create the circle, tell him the client's Tid and put the pair in the circle register
                     auto atnCircle = new AttentionCircle;
-                    addThreadBatchToPool;   // to guarantee that the pool is not empty
+                    addThreadBatchToPool_;   // to guarantee that the pool is not empty
                     CaldronThread circleThread = _threadPool_.pop(atnCircle);
                     atnCircle.myThread = circleThread;
                     circleRegister_[clientTid] = circleThread;
@@ -118,7 +116,7 @@ private CaldronThread[Tid] circleRegister_;
 //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
 /// Create and add to the pool CALDRON_THREAD_BATCH_SIZE threads.
-void addThreadBatchToPool() {
+private void addThreadBatchToPool_() {
     assert(CALDRON_THREAD_BATCH_SIZE > 0);
 
     foreach(unused; 0.. CALDRON_THREAD_BATCH_SIZE) {

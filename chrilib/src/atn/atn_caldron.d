@@ -676,7 +676,7 @@ synchronized class CaldronThreadPool {
         creatingBatchInProgressFlag = false;
     }
 
-//@property Deque!(CaldronThread) threads() {return cast()cannedThreads_;}
+@property Deque!(CaldronThread) threads() {return cast()cannedThreads_;}
 
     //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
     //

@@ -21,6 +21,8 @@ enum StatCallType: string {
     p0Calp1Cidp2Cidp3Float = "void function(Caldron, Cid, Cid, float)",             // void function(Caldron nameSpace, Cid branchBreedCid, Cid conceptCid, float floatValue)
 }
 
+shared bool _globFlag1_;      // debugging
+
 //      Key threads of the project. The console thead will be spawned, but we don't need to remember its Tid. The circle
 // knows it, it's enough.
 shared const Tid _mainTid_;         /// Tid of the main thread

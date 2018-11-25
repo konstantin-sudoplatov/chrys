@@ -36,7 +36,7 @@ bool yes = true;if(yes) return;     // bypass this test
     writefln("Threads created: %s [ms]", sw.peek.total!"msecs"); stdout.flush;
     sw.start;
 
-    // Create  and inject messages
+    // Create and inject messages
     foreach(i; 0..MAX_MESSAGES) {
         Message m = new Message(i);
         msgPool.add(m);

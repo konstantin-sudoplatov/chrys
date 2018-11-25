@@ -116,6 +116,7 @@ synchronized final pure nothrow class SpiritMap {
     SpiritConcept add(SpiritConcept cpt)
     in {
         assert(cpt.cid !in spiritMap_, "Cid " ~ to!string(cpt.cid) ~ " - this cid already exists in the spirit map.");
+
         if      // dynamic?
                 (cast(shared SpiritDynamicConcept)cpt)
             if      // with preset cid?

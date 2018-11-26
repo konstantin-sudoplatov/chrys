@@ -615,7 +615,7 @@ synchronized class CaldronThreadPool {
             (cast()cannedThreads_).push(thread);
         }
         else { //no: terminate the thread
-            thread.tid.send(new immutable CaldronThreadTerminationRequest);
+            thread.tid.send(new immutable PoolRequestsThreadToTerminate);
         }
         activeThreads_.remove(thread.tid);      // in case it was in use.
     }
@@ -631,13 +631,14 @@ synchronized class CaldronThreadPool {
     }
 
     /**
-            Remove active thread from the AA of active threads. Called on exit of the thread function of the caldron thread
-        object.
+            Remove active thread from the AA of active threads and push it back to pool. Called on exit of the thread
+        function of the caldron thread object.
         Parameters:
             tid = tid of the thread, that should be deregistered
     */
-    void deregister(const Tid tid) {
-        activeThreads_.remove(cast()tid);
+    void returnThreadToPool(CaldronThread thread) {
+        activeThreads_.remove((cast()thread).tid);
+        push(thread);
     }
 
     /**
@@ -658,7 +659,7 @@ synchronized class CaldronThreadPool {
                     format(thread.previousCaldron_));
 
             // Stop the thread
-            send(thread.tid, new immutable CaldronThreadTerminationRequest);
+            send(thread.tid, new immutable PoolRequestsThreadToTerminate);
 
             // Add to active to allow thread remove it when it is finished
             activeThreads_[thread.tid] = cast(shared)thread;
@@ -666,7 +667,7 @@ synchronized class CaldronThreadPool {
         return true;
     }
 
-    /// Check is all threads a finished
+    /// Check if all threads are finished
     bool isFinished() {
         return (cast()cannedThreads_).empty && activeThreads_.length == 0;
     }
@@ -708,6 +709,14 @@ class CaldronThread {
 
     this(shared CaldronThreadPool pool) {
         pool_ = pool;
+    }
+
+    override string toString() const {
+        string s = "myTid_ = %s".format(myTid_);
+        s ~= "\ncaldron_ = %s".format(caldron_);
+        debug s ~= "\npreviousCaldron_ = %s".format(previousCaldron_);
+
+        return s;
     }
 
     /**
@@ -780,7 +789,7 @@ class CaldronThread {
     private void caldronThreadFunc() { try {
 
         scope(exit) {
-            pool_.deregister(myTid_);
+            pool_.returnThreadToPool(this);
         }
 
         // Receive messages in a cycle
@@ -789,12 +798,12 @@ class CaldronThread {
 
             immutable Msg msg;
             Throwable ex;
-            CaldronThreadTerminationRequest term;
+            PoolRequestsThreadToTerminate term;
             Variant var;    // the catchall type
 
             receive(
                 (immutable Msg m) { (cast()msg) = cast()m; },
-                (immutable CaldronThreadTerminationRequest t) { term = cast()t; },
+                (immutable PoolRequestsThreadToTerminate t) { term = cast()t; },
                 (shared Throwable e) { ex = cast()e; },
                 (Variant v) { var = v; }          // the catchall clause
             );
@@ -835,7 +844,7 @@ class CaldronThread {
                 }
             }
             else if // is it a request for the thread termination?
-                    (cast(CaldronThreadTerminationRequest)term)
+                    (cast(PoolRequestsThreadToTerminate)term)
             {   //yes: terminate itself
                 goto FINISH_THREAD;
             }
@@ -863,7 +872,8 @@ class CaldronThread {
 }
 
 /// Message to terminate caldron thread.
-private immutable class CaldronThreadTerminationRequest {}
+//private immutable class PoolRequestsThreadToTerminate {}
+immutable class PoolRequestsThreadToTerminate {}
 
 //
 //synchronized class CaldronThreadPool {

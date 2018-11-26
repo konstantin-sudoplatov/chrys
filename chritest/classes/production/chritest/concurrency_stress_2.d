@@ -14,11 +14,11 @@ import messages;
 
 import atn.atn_dispatcher, atn.atn_caldron;
 
-enum MAX_THREADS = 98;
+enum MAX_THREADS = 5;
 static assert(MAX_THREADS >= 4, "Total number of threads cannot be less than 4.");
-enum MAX_MESSAGES = 10_000;
-enum MAX_HOPS = 1000;
-enum ROTATION_THRESHOLD = 10000;     // number of hops before adding/subtracting threads in wrkPool
+enum MAX_MESSAGES = 1;
+enum MAX_HOPS = 10000;
+enum ROTATION_THRESHOLD = 1000;     // number of hops before adding/subtracting threads in wrkPool
 enum ROTATION_UP_TO = 10;           // on reachin threshold add up to -/+ ROTATION_UP_TO threads
 
 shared WorkerPool wrkPool;
@@ -31,7 +31,7 @@ shared static this() {
     cast()_attnDispTid_ = spawn(&attention_dispatcher_thread_func);
     cast()_mainTid_ = thisTid;
     _sm_ = new shared SpiritMap;
-    cast(shared)_threadPool_ = new shared CaldronThreadPool;
+    cast(shared)_threadPool_ = new shared TestCaldronThreadPool;
     wrkPool = new WorkerPool;
 
     StopWatch sw;
@@ -128,33 +128,45 @@ synchronized class WorkerPool {
         if(hopCount_ >= ROTATION_THRESHOLD) {
             hopCount_ = 0;
             int addThreads = uniform!"[]"(-ROTATION_UP_TO, ROTATION_UP_TO);
-//writefln("generated addThreads %s, activeThreads_.length %s, retiringThreads_.length %s", addThreads,
-//        activeThreads_.length, retiringThreads_.length); stdout.flush;
+writefln("addThreads %s, activeThreads_.length %s, retiringThreads_.length %s, _threadPool_.threads.length %s", addThreads,
+        activeThreads_.length, retiringThreads_.length, _threadPool_.threads.length); stdout.flush;
             addThreads = max(2-cast(int)activeThreads_.length, addThreads);     // add >= 2 - activeThreads_.length;
             addThreads = min(MAX_THREADS-activeThreads_.length, addThreads);    // add <= MAX_THREADS - activeThreads_.length;
-//writefln("addThreads limited to %s\n", addThreads); stdout.flush;
+writefln("tempered addThreads %s", addThreads); stdout.flush;
             assert(activeThreads_.length+addThreads >=2 && activeThreads_.length+addThreads <= MAX_THREADS);
             if      //need to add threads?
                     (addThreads > 0)
             {
-                foreach(unused; 0..addThreads)
+                foreach(unused; 0..addThreads) {
+writefln("before adding activeThreads_.length %s\nactiveThreads_ %s", activeThreads_.length, activeThreads_); stdout.flush;
                     addActive(getThread);
+writefln("after adding activeThreads_.length %s\nactiveThreads_ %s\n", activeThreads_.length, activeThreads_); stdout.flush;
+                }
             }
             else {
                 foreach(unused; 0..-addThreads) {
+writefln("before deleting activeThreads_.length %s\nactiveThreads_ %s", activeThreads_.length, activeThreads_); stdout.flush;
                     shared CaldronThread thread = activeThreads_[$-1];
                     activeThreads_ = activeThreads_.remove(activeThreads_.length-1);
+writefln("after deleting activeThreads_.length %s\nactiveThreads_ %s\n", activeThreads_.length, activeThreads_); stdout.flush;
                     retiringThreads_[(cast()thread).tid] = thread;
+                    send((cast()thread).tid, new immutable PoolRequestsThreadToTerminate);
                 }
             }
         }
-
     }
 
     /// Randomly choose an active thread and send it a message
-    void randomlySendToActiveThread(Msg msg) {
+    void randomlySendToActiveThread(TestMessage msg) {
         const ulong destThreadInd = uniform(0, wrkPool.activeLength);
+//writefln("m.id %s, m.numberOfHops %s, destThreadInd %s, wrkPool.activeLength %s", msg.id, msg.numberOfHops,
+//        destThreadInd, wrkPool.activeLength); stdout.flush;
         wrkPool.getActiveThread(destThreadInd).tid.send(cast(immutable)msg);
+    }
+
+    /// Remove from list of retiring threads
+    void removeFromRetiring(CaldronThread thread) {
+        retiringThreads_.remove(thread.tid);
     }
 
     @property activeLength() { return activeThreads_.length; }
@@ -219,11 +231,20 @@ class TestCaldron: Caldron {
 
             m.incrementNumberOfHops;
             wrkPool.countHop;
-            wrkPool.randomlySendToActiveThread(cast()msg);
+            wrkPool.randomlySendToActiveThread(cast()m);
             return true;
         }
 
         return false;
     }
 }
-shared Cid newCid = MIN_DYNAMIC_CID;
+shared Cid newCid = MIN_DYNAMIC_CID;    // unique cid for creating concepts
+
+/// The same as the CaldronThreadPool, but with cleaning retiring threads from wrkPool.
+synchronized class TestCaldronThreadPool: CaldronThreadPool {
+
+    override void returnThreadToPool(CaldronThread thread) {
+        wrkPool.removeFromRetiring(thread);
+        super.returnThreadToPool(thread);
+    }
+}

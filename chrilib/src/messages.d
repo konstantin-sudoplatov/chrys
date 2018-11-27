@@ -1,5 +1,5 @@
 module messages;
-import std.concurrency;
+import std.concurrency, core.thread;
 
 import proj_data;
 
@@ -37,6 +37,22 @@ immutable class CirclesAreFinished_msg: Msg {
 /// Caldron thead pool has been asked for a thread and id doesn't have any more. It asks dispatcher to create some.
 immutable class CaldronThreadPoolAsksDispatcherForThreadBatch_msg: Msg {
     this() { super(); }
+}
+
+/// Caldron thread pool has been given a thread to stash, but it reached the limit and wants to stop the thread. So, it
+/// asks the dispatcher to do the join on it, since the dispatcher it its direct parent.
+immutable class CaldronThreadPoolAsksDispatcherToJoinThread_msg: Msg {
+    Thread thread;
+
+    /**
+            Constructor.
+        Parameters:
+            thread = thread to stop.
+    */
+    this(Thread thread) {
+        super();
+        (cast()this.thread) = thread;
+    }
 }
 
 /// Request for the attention dispatcher start an attention circle thread and send back its Tid. Actually, it is be the

@@ -33,12 +33,17 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
         if      // is it a regular message?
                 (msg)
         {   // process it
-            if      // is it the pool's request for threads?
+            if      // is it the pool's request for creating threads?
                     (auto m = cast(immutable CaldronThreadPoolAsksDispatcherForThreadBatch_msg)msg)
             {   // yes: create and push them to the pool
-                addThreadBatchToPool_;
+                _threadPool_.addThreadBatch;
             }
-            else if      // is that client's request for circle's Tid?
+            else if // is it the pool's request for stopping a thread?
+                    (auto m = cast(CaldronThreadPoolAsksDispatcherToJoinThread_msg)msg)
+            {
+                (cast()m.thread).join;
+            }
+            else if // is that client's request for circle's Tid?
                     (auto m = cast(immutable UserRequestsCircleTid_msg)msg)
             {   //yes: create new attention circle thread and send back its Tid
                 Tid clientTid = cast()m.senderTid();
@@ -52,13 +57,12 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                 }
                 else {  //no: create the circle, tell him the client's Tid and put the pair in the circle register
                     auto atnCircle = new AttentionCircle;
-                    addThreadBatchToPool_;   // to guarantee that the pool is not empty
+                    _threadPool_.addThreadBatch;   // to guarantee that the pool is not empty
                     CaldronThread circleThread = _threadPool_.pop(atnCircle);
                     atnCircle.myThread = circleThread;
                     circleRegister_[clientTid] = circleThread;
                     circleThread.tid.send(new immutable DispatcherProvidesCircleWithUserTid_msg(clientTid));
                 }
-                continue;
             }
             else if // TerminateAppMsg message has come?
                     (cast(TerminateApp_msg)msg) // || var.hasValue)
@@ -95,7 +99,6 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                 send(thisTid, new immutable TerminateApp_msg);
 
             logit(format!"Unexpected message of type Variant to the attention dispatcher thread: %s"(var.toString));
-            continue;
         }
     }
 
@@ -114,17 +117,5 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
 private CaldronThread[Tid] circleRegister_;
 
 //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
-
-/// Create and add to the pool CALDRON_THREAD_BATCH_SIZE threads.
-private void addThreadBatchToPool_() {
-    assert(CALDRON_THREAD_BATCH_SIZE > 0);
-
-    foreach(unused; 0.. CALDRON_THREAD_BATCH_SIZE) {
-        auto thread = new CaldronThread(_threadPool_);
-        thread.spawn;
-        _threadPool_.push(thread);
-    }
-    _threadPool_.resetCreatingBatchFlag;
-}
 
 //---%%%---%%%---%%%---%%%---%%% types ---%%%---%%%---%%%---%%%---%%%---%%%--

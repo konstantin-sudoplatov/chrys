@@ -585,9 +585,9 @@ synchronized class CaldronThreadPool {
         if      // is the stack empty?
                 ((cast()cannedThreads_).empty)
         {   // yes: ask dispatcher to create some
-            if(!creatingBatchInProgressFlag) {
+            if(!creatingBatchInProgressFlag_) {
                 send(cast()_attnDispTid_, new immutable CaldronThreadPoolAsksDispatcherForThreadBatch_msg);
-                creatingBatchInProgressFlag = true;
+                creatingBatchInProgressFlag_ = true;
             }
             return null;
         }
@@ -602,25 +602,53 @@ synchronized class CaldronThreadPool {
 
     /**
             Get a caldron thread stacked if the limit is not reached. The caldron object is disassociated from the thread.
-        The thread itself is not terminated, it waits on for new messages.${BR}
+        The thread itself is not terminated, it waits on for new messages. If the CALDRON_THREAD_POOL_SIZE limit is
+        reached, then the thread is terminated. It is not enough just exit the thread function on the termination
+        message. The resources allocated to the thread by OS still remain allocated and the OS limit on the number
+        of threads can be reached eventually. So, we ask dispatcher as the direct parent of the thread to do the join
+        operation on it.${BR}
             New threads are added to the pool through this function and that should be done from the dispatcher thread.
         Parameters:
             thread = caldron thread to stack
     */
-    void push(CaldronThread thread) {
-        assert(thread.tid != Tid.init, "Thread must be spawned before pushing.");
-        debug assert(!thread.isFinished_, "Finished thread must not be pushed.");
+    void push(CaldronThread cldThread) {
+        assert(cldThread.tid != Tid.init, "Caldron thread must be spawned before pushing.");
+        debug assert(!cldThread.isFinished_, "Finished thread must not be pushed.");
 
         if      // isn't the limit reached?
-                ((cast()cannedThreads_).length <= CALDRON_THREAD_POOL_SIZE)
+                ((cast()cannedThreads_).length < CALDRON_THREAD_POOL_SIZE)
         {   //yes: disassociate it from the caldron and save it
-            thread.mothball;    // cann it
-            (cast()cannedThreads_).push(thread);
+            cldThread.mothball;    // cann it
+            (cast()cannedThreads_).push(cldThread);
         }
         else { //no: terminate the thread
-            thread.tid.send(new immutable PoolRequestsThreadToTerminate);
+            assert(cldThread.thread, "The thread object must be set in the thread function.");
+            (cast()_attnDispTid_).send(new immutable CaldronThreadPoolAsksDispatcherToJoinThread_msg(cldThread.thread));
+            cldThread.tid.send(new immutable PoolRequestsThreadToTerminate);
         }
-        activeThreads_.remove(thread.tid);      // in case it was in use.
+        activeThreads_.remove(cldThread.tid);      // in case it was in use.
+    }
+
+    /// Create and add to the pool CALDRON_THREAD_BATCH_SIZE threads. Important: this function is called only from
+    /// the dispatcher thread in order to maintain right parentage.
+    void addThreadBatch() {
+        assert(CALDRON_THREAD_BATCH_SIZE > 0);
+
+        foreach(unused; 0.. CALDRON_THREAD_BATCH_SIZE) {
+            if      // isn't the limit reached?
+                    ((cast()cannedThreads_).length < CALDRON_THREAD_POOL_SIZE)
+            {
+                auto thread = new CaldronThread(_threadPool_);
+                thread.spawn;
+                (cast()cannedThreads_).push(thread);
+            }
+        }
+        creatingBatchInProgressFlag_ = false;
+
+        debug {
+            import core.atomic: atomicOp;
+            atomicOp!"+="(_spawnedThreads_, CALDRON_THREAD_BATCH_SIZE);
+        }
     }
 
     /**
@@ -653,7 +681,7 @@ synchronized class CaldronThreadPool {
     bool requestTerminatingCanned() {
 
         // Check if creating branches is in process
-        if(creatingBatchInProgressFlag) return false;
+        if(creatingBatchInProgressFlag_) return false;
 
         while(!(cast()cannedThreads_).empty) {
             CaldronThread thread = scast!CaldronThread((cast()cannedThreads_).pop);
@@ -675,11 +703,6 @@ synchronized class CaldronThreadPool {
         return (cast()cannedThreads_).empty && activeThreads_.length == 0;
     }
 
-    /// Called by dispatcher after pushing newly created threads.
-    void resetCreatingBatchFlag() {
-        creatingBatchInProgressFlag = false;
-    }
-
 @property ulong cannedThreads() { return (cast()cannedThreads_).length; }
 
 @property ulong activeThreads() { return (cast()activeThreads_).length; }
@@ -698,7 +721,13 @@ synchronized class CaldronThreadPool {
 
     /// This flag is raised when the pop() func sends the dispatcher request for new batch of threads. It is lowered
     /// from outside by the dispatcher.
-    private bool creatingBatchInProgressFlag;
+    private bool creatingBatchInProgressFlag_;
+
+    //invariant {
+    //    assert((cast()cannedThreads_).length <= CALDRON_THREAD_POOL_SIZE,
+    //            "cannedThreads_.length = %s which is bigger than CALDRON_THREAD_POOL_SIZE = %s.".format(
+    //            (cast()cannedThreads_).length, CALDRON_THREAD_POOL_SIZE));
+    //}
 }
 
 /**
@@ -761,6 +790,9 @@ class CaldronThread {
     /// Get Tid.
     @property Tid tid() { return cast()myTid_; }
 
+    /// Get thread.
+    @property Thread thread() { return cast()myThread_; }
+
     /// Get caldron.
     Caldron caldron() { return caldron_; }
 
@@ -777,6 +809,9 @@ class CaldronThread {
 
     /// Own Tid.
     private immutable Tid myTid_ = Tid();
+
+    /// Own thread.
+    private immutable Thread myThread_ = null;
 
     /// Caldron instance to call the Caldron._processMessage() function.
     private Caldron caldron_;
@@ -799,10 +834,15 @@ class CaldronThread {
     private void caldronThreadFunc() { try {
 
         scope(exit) {
-            debug
+            debug {
+                import core.atomic: atomicOp;
+                atomicOp!"+="(_stoppedThreads_, 1);
                 isFinished_ = true;
+            }
             pool_.discardThread(this);
         }
+
+        cast()myThread_ = Thread.getThis;
 
         // Receive messages in a cycle
         while(true) {

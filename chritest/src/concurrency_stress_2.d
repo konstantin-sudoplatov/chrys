@@ -1,3 +1,12 @@
+/**
+        Using the project's caldrons, caldron thread pool, generating the threads in the dispatcher do the same test as in
+    the concurrency_stress_1 module, except number of threads is constantly changing. Here we have new shared structure,
+    the worker pool. It contains a list of threads, that are actively working on the message bouncing, and the list of
+    retiring threads, which are excluded from the regular bouncing, but some messages send to them before the moment
+    their transfer from active list to the retiring may still come. After the ROTATION_TIMEOUT of not coming messages,
+    the thread is pushed back to the thread pool. Addin new threads to the active banch or moving them to the retiring
+    happanes every ROTATION_THRESHOLD hops (each hope is counted by the worker pool).
+*/
 module concurrency_stress_2;
 import std.stdio;
 import std.concurrency, core.thread, core.atomic;
@@ -14,18 +23,19 @@ import messages;
 
 import atn.atn_dispatcher, atn.atn_caldron;
 
-enum MAX_THREADS = 100;
-static assert(MAX_THREADS >= 4, "Total number of threads cannot be less than 4.");
+enum MAX_ACTIVE_THREADS = 50;
+static assert(MAX_ACTIVE_THREADS >= 4, "Total number of threads cannot be less than 4.");
 enum MAX_MESSAGES = 100_000;
-enum MAX_HOPS = 5_000;
-enum ROTATION_THRESHOLD = 500;     // number of hops before adding/subtracting threads in wrkPool
+enum MAX_HOPS = 1000;
+enum ROTATION_THRESHOLD = 1000;     // number of hops before adding/subtracting threads in wrkPool
 enum ROTATION_UP_TO = 5;            // on reaching threshold add up to -/+ ROTATION_UP_TO threads
-enum ROTATION_TIMEOUT = 10.msecs;   // waiting for belated test messages before returning thread to the pool
+enum ROTATION_TIMEOUT = 10.msecs;   // waiting for belated test messages come to the retiring thread before returning it to pool
 
 shared WorkerPool wrkPool;
 shared MessagePool msgPool;
 
 shared static this() {
+//bool yes = true;if(yes) return;     // bypass this test
     assert(registerMemoryErrorHandler);
 
     // Create infrastructure
@@ -40,7 +50,7 @@ shared static this() {
     sw.start;
 
     // Create threads
-    foreach(unused; 0..MAX_THREADS/2-1)
+    foreach(unused; 0..MAX_ACTIVE_THREADS/2-1)
         wrkPool.addActive(getThread);
     CaldronThread portal = getThread;
     wrkPool.addActive(portal);
@@ -70,9 +80,11 @@ shared static this() {
 
 //        Thread.sleep(SPIN_WAIT);
 Thread.sleep(1.seconds);
-writefln("msgPool.length %s, wrkPool.active %s, wrkPool.retiring %s, _threadPool_.cannedThreads %s, _threadPool_.activeThreads %s",
-        msgPool.length, wrkPool.activeThreads_.length, wrkPool.retiringThreads_.length, _threadPool_.cannedThreads,
-        _threadPool_.activeThreads); stdout.flush;
+debug
+    writefln("msgPool %s, wrkPool.active %s, wrkPool.retiring %s, _threadPool_.cannedThreads %s, " ~
+            "_threadPool_.activeThreads %s, spawned %s, stopped %s",
+            msgPool.length, wrkPool.activeThreads_.length, wrkPool.retiringThreads_.length, _threadPool_.cannedThreads,
+            _threadPool_.activeThreads, _spawnedThreads_, _stoppedThreads_); stdout.flush;
     }
     sw.stop;
     writefln("Messages stopped traveling: %s [ms]", sw.peek.total!"msecs"); stdout.flush;
@@ -136,9 +148,9 @@ synchronized class WorkerPool {
 //writefln("addThreads %s, activeThreads_.length %s, retiringThreads_.length %s, _threadPool_.threads.length %s", addThreads,
 //        activeThreads_.length, retiringThreads_.length, _threadPool_.threads.length); stdout.flush;
             addThreads = max(2-cast(int)activeThreads_.length, addThreads);     // add >= 2 - activeThreads_.length;
-            addThreads = min(MAX_THREADS-activeThreads_.length, addThreads);    // add <= MAX_THREADS - activeThreads_.length;
+            addThreads = min(MAX_ACTIVE_THREADS-activeThreads_.length, addThreads);    // add <= MAX_THREADS - activeThreads_.length;
 //writefln("tempered addThreads %s", addThreads); stdout.flush;
-            assert(activeThreads_.length+addThreads >=2 && activeThreads_.length+addThreads <= MAX_THREADS);
+            assert(activeThreads_.length+addThreads >=2 && activeThreads_.length+addThreads <= MAX_ACTIVE_THREADS);
             if      //need to add threads?
                     (addThreads > 0)
             {

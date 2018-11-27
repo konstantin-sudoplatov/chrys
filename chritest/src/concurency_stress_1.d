@@ -15,8 +15,8 @@ enum MAX_THREADS = 100;
 enum MAX_MESSAGES = 10000;
 enum MAX_HOPS = 1000;
 
-shared ThreadPool threadPool = new shared ThreadPool;
-shared MessagePool msgPool = new shared MessagePool;
+shared TestThreadPool threadPool = new shared TestThreadPool;
+shared TestMessagePool msgPool = new shared TestMessagePool;
 
 shared static this() {
 bool yes = true;if(yes) return;     // bypass this test
@@ -29,16 +29,16 @@ bool yes = true;if(yes) return;     // bypass this test
 
     // Create threads
     foreach(i; 0..MAX_THREADS-1) {
-        new Thread_(i, threadPool, msgPool);
+        new TestThread(i, threadPool, msgPool);
     }
-    Thread_ portal = new Thread_(MAX_THREADS-1, threadPool, msgPool);     // to it we will forward newly created messages
+    TestThread portal = new TestThread(MAX_THREADS-1, threadPool, msgPool);     // to it we will forward newly created messages
     sw.stop;
     writefln("Threads created: %s [ms]", sw.peek.total!"msecs"); stdout.flush;
     sw.start;
 
     // Create and inject messages
     foreach(i; 0..MAX_MESSAGES) {
-        Message m = new Message(i);
+        TestMessage m = new TestMessage(i);
         msgPool.add(m);
         portal.tid.send(cast(shared) m);
     }
@@ -63,17 +63,17 @@ bool yes = true;if(yes) return;     // bypass this test
     writefln("Total: %s [ms]", sw.peek.total!"msecs"); stdout.flush;
 }
 
-synchronized class ThreadPool {
+synchronized class TestThreadPool {
 
-    void add(Thread_ thread) {
+    void add(TestThread thread) {
         threads_[thread.id] = cast(shared)thread;
     }
 
-    void remove(Thread_ thread) {
+    void remove(TestThread thread) {
         threads_.remove(thread.id);
     }
 
-    Thread_ get(int id) {
+    TestThread get(int id) {
         return cast()threads_[id];
     }
 
@@ -84,14 +84,14 @@ synchronized class ThreadPool {
 
     ulong length() { return threads_.length; }
 
-    private Thread_[int] threads_;
+    private TestThread[int] threads_;
 }
 
-class Thread_ {
+class TestThread {
 
     int id;
 
-    this(int id, shared ThreadPool threadPool, shared MessagePool msgPool) {
+    this(int id, shared TestThreadPool threadPool, shared TestMessagePool msgPool) {
         this.id = id;
         threadPool_ = threadPool;
         msgPool_ = msgPool;
@@ -105,10 +105,10 @@ class Thread_ {
         }
 
         while(true) {
-            Message msg;
+            TestMessage msg;
             Terminate_msg term;
             receive(
-                (shared Message m) { msg = cast()m; },
+                (shared TestMessage m) { msg = cast()m; },
                 (shared Terminate_msg t) { term = cast()t; }
             );
 
@@ -123,7 +123,7 @@ class Thread_ {
             else {
                 msg.numberOfHops++;
                 int destThreadId = uniform(0, MAX_THREADS);
-                Thread_ destThread = threadPool_.get(destThreadId);
+                TestThread destThread = threadPool_.get(destThreadId);
                 destThread.tid.send(cast(shared) msg);
             }
         }
@@ -131,27 +131,27 @@ class Thread_ {
 
     @property Tid tid() { return tid_; }
 
-    private shared ThreadPool threadPool_;
-    private shared MessagePool msgPool_;
+    private shared TestThreadPool threadPool_;
+    private shared TestMessagePool msgPool_;
     private Tid tid_;
 }
 
-synchronized class MessagePool {
+synchronized class TestMessagePool {
 
-    void add(Message msg) {
+    void add(TestMessage msg) {
         messages_[msg.id] = cast(shared)msg;
     }
 
-    void remove(Message msg) {
+    void remove(TestMessage msg) {
         messages_.remove(msg.id);
     }
 
     ulong length() { return messages_.length; }
 
-    private Message[int] messages_;
+    private TestMessage[int] messages_;
 }
 
-class Message {
+class TestMessage {
     int id;
     int numberOfHops;
 

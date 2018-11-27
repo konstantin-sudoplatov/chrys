@@ -108,6 +108,8 @@ class Caldron {
         stop_ = true;
     }
 
+    @property CaldronThread myThread() { return myThread_; }
+
     @property void myThread(CaldronThread thread) { myThread_ = thread; }
 
     @property CaldronThread parentThread() { return parentThread_; }
@@ -607,6 +609,7 @@ synchronized class CaldronThreadPool {
     */
     void push(CaldronThread thread) {
         assert(thread.tid != Tid.init, "Thread must be spawned before pushing.");
+        debug assert(!thread.isFinished_, "Finished thread must not be pushed.");
 
         if      // isn't the limit reached?
                 ((cast()cannedThreads_).length <= CALDRON_THREAD_POOL_SIZE)
@@ -631,14 +634,14 @@ synchronized class CaldronThreadPool {
     }
 
     /**
-            Remove active thread from the AA of active threads and push it back to pool. Called on exit of the thread
+            Remove active thread from the AA of active threads. Called on exit of the thread
         function of the caldron thread object.
         Parameters:
             tid = tid of the thread, that should be deregistered
     */
-    void returnThreadToPool(CaldronThread thread) {
-        activeThreads_.remove((cast()thread).tid);
-        push(thread);
+    void discardThread(CaldronThread thread) {
+        debug assert(thread.isFinished_, "To discard a thread it must be finished.");
+        activeThreads_.remove(thread.tid);
     }
 
     /**
@@ -677,7 +680,9 @@ synchronized class CaldronThreadPool {
         creatingBatchInProgressFlag = false;
     }
 
-@property Deque!(CaldronThread) threads() {return cast()cannedThreads_;}
+@property ulong cannedThreads() { return (cast()cannedThreads_).length; }
+
+@property ulong activeThreads() { return (cast()activeThreads_).length; }
 
     //---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%---%%%
     //
@@ -712,7 +717,7 @@ class CaldronThread {
     }
 
     override string toString() const {
-        string s = "myTid_ = %s".format(myTid_);
+        string s = "myTid_ = %s".format(cast()myTid_);
         s ~= "\ncaldron_ = %s".format(caldron_);
         debug s ~= "\npreviousCaldron_ = %s".format(previousCaldron_);
 
@@ -727,6 +732,8 @@ class CaldronThread {
     void reset(Caldron cld) {
         assert(cld);
         assert(caldron_ is null);
+
+        cld.myThread = this;
         cld.breed.tid = cast()myTid_;
         cld.breed.activate;
         caldron_ = cld;
@@ -781,6 +788,9 @@ class CaldronThread {
     debug
         string previousCaldron_;
 
+    debug
+        private bool isFinished_;
+
     //---%%%---%%%---%%%---%%%---%%% functions ---%%%---%%%---%%%---%%%---%%%---%%%--
 
     /**
@@ -789,7 +799,9 @@ class CaldronThread {
     private void caldronThreadFunc() { try {
 
         scope(exit) {
-            pool_.returnThreadToPool(this);
+            debug
+                isFinished_ = true;
+            pool_.discardThread(this);
         }
 
         // Receive messages in a cycle
@@ -838,7 +850,7 @@ class CaldronThread {
                 }
                 else
                 {  // unrecognized message of type Msg. Log it.
-                    logit("Unexpected message to the caldron %s: %s".format((cast()caldron_).cldName, typeid(msg)),
+                    logit("Unexpected message to the caldron %s: %s".format(cldName, typeid(msg)),
                             TermColor.brown);
                     continue ;
                 }
@@ -872,8 +884,7 @@ class CaldronThread {
 }
 
 /// Message to terminate caldron thread.
-//private immutable class PoolRequestsThreadToTerminate {}
-immutable class PoolRequestsThreadToTerminate {}
+private immutable class PoolRequestsThreadToTerminate {}
 
 //
 //synchronized class CaldronThreadPool {

@@ -17,8 +17,8 @@ import atn.atn_dispatcher, atn.atn_caldron;
 enum MAX_THREADS = 100;
 static assert(MAX_THREADS >= 4, "Total number of threads cannot be less than 4.");
 enum MAX_MESSAGES = 100_000;
-enum MAX_HOPS = 1000;
-enum ROTATION_THRESHOLD = 100;     // number of hops before adding/subtracting threads in wrkPool
+enum MAX_HOPS = 5_000;
+enum ROTATION_THRESHOLD = 500;     // number of hops before adding/subtracting threads in wrkPool
 enum ROTATION_UP_TO = 5;            // on reaching threshold add up to -/+ ROTATION_UP_TO threads
 enum ROTATION_TIMEOUT = 10.msecs;   // waiting for belated test messages before returning thread to the pool
 

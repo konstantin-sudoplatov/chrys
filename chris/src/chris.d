@@ -63,7 +63,6 @@ void main()
     }
 
 TERMINATE_APPLICATION:
-    _threadPool_.requestTerminatingCanned;
     thread_joinAll;
     writeln("good bye, world!"); stdout.flush;
 }

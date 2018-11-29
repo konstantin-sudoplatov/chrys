@@ -23,12 +23,12 @@ import messages;
 
 import atn.atn_dispatcher, atn.atn_caldron;
 
-enum MAX_ACTIVE_THREADS = 50;
+enum MAX_ACTIVE_THREADS = 4;
 static assert(MAX_ACTIVE_THREADS >= 4, "Total number of threads cannot be less than 4.");
-enum MAX_MESSAGES = 100_000;
+enum MAX_MESSAGES = 1000;
 enum MAX_HOPS = 1000;
 enum ROTATION_THRESHOLD = 1000;     // number of hops before adding/subtracting threads in wrkPool
-enum ROTATION_UP_TO = 5;            // on reaching threshold add up to -/+ ROTATION_UP_TO threads
+enum ROTATION_UP_TO = 0;            // on reaching threshold add up to -/+ ROTATION_UP_TO threads
 enum ROTATION_TIMEOUT = 10.msecs;   // waiting for belated test messages come to the retiring thread before returning it to pool
 
 shared WorkerPool wrkPool;
@@ -78,13 +78,12 @@ shared static this() {
         );
         if(ex) throw ex;
 
-//        Thread.sleep(SPIN_WAIT);
-Thread.sleep(1.seconds);
-debug
-    writefln("msgPool %s, wrkPool.active %s, wrkPool.retiring %s, _threadPool_.cannedThreads %s, " ~
-            "_threadPool_.activeThreads %s, spawned %s, stopped %s",
-            msgPool.length, wrkPool.activeThreads_.length, wrkPool.retiringThreads_.length, _threadPool_.cannedThreads,
-            _threadPool_.activeThreads, _spawnedThreads_, _stoppedThreads_); stdout.flush;
+        //        Thread.sleep(SPIN_WAIT);
+        Thread.sleep(1.seconds);
+        debug
+            writefln("msgPool %s, wrkPool.active %s, wrkPool.retiring %s, spawned %s, stopped %s",
+                    msgPool.length, wrkPool.activeThreads_.length, wrkPool.retiringThreads_.length,
+                    _spawnedThreads_, _stoppedThreads_); stdout.flush;
     }
     sw.stop;
     writefln("Messages stopped traveling: %s [ms]", sw.peek.total!"msecs"); stdout.flush;
@@ -92,10 +91,6 @@ debug
 
     // Terminate workers
     wrkPool.returnAllThreadsToPool;
-
-    // Terminate all canned threads
-    for(; !_threadPool_.requestTerminatingCanned;)
-        Thread.sleep(SPIN_WAIT);
 
     // Request terminating dispatcher
     (cast()_attnDispTid_).send(new immutable TerminateApp_msg);
@@ -145,11 +140,8 @@ synchronized class WorkerPool {
         if(hopCount_ >= ROTATION_THRESHOLD) {
             hopCount_ = 0;
             int addThreads = uniform!"[]"(-ROTATION_UP_TO, ROTATION_UP_TO);
-//writefln("addThreads %s, activeThreads_.length %s, retiringThreads_.length %s, _threadPool_.threads.length %s", addThreads,
-//        activeThreads_.length, retiringThreads_.length, _threadPool_.threads.length); stdout.flush;
             addThreads = max(2-cast(int)activeThreads_.length, addThreads);     // add >= 2 - activeThreads_.length;
             addThreads = min(MAX_ACTIVE_THREADS-activeThreads_.length, addThreads);    // add <= MAX_THREADS - activeThreads_.length;
-//writefln("tempered addThreads %s", addThreads); stdout.flush;
             assert(activeThreads_.length+addThreads >=2 && activeThreads_.length+addThreads <= MAX_ACTIVE_THREADS);
             if      //need to add threads?
                     (addThreads > 0)
@@ -172,8 +164,6 @@ synchronized class WorkerPool {
     /// Randomly choose an active thread and send it a message
     void randomlySendToActiveThread(Test_msg msg) {
         const ulong destThreadInd = uniform(0, wrkPool.activeLength);
-//writefln("m.id %s, m.numberOfHops %s, destThreadInd %s, wrkPool.activeLength %s", msg.id, msg.numberOfHops,
-//        destThreadInd, wrkPool.activeLength); stdout.flush;
         wrkPool.getActiveThread(destThreadInd).tid.send(cast(immutable)msg);
     }
 
@@ -271,6 +261,7 @@ class TestCaldron: Caldron {
             }
 
             wrkPool.removeFromRetiring(myThread);
+            assert(myThread.thread.isRunning);
             _threadPool_.push(myThread);
             return true;
         }

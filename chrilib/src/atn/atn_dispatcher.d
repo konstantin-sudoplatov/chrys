@@ -41,17 +41,29 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
             else if // is it the pool's request for stopping a thread?
                     (auto m = cast(CaldronThreadPoolAsksDispatcherToJoinThread_msg)msg)
             {
-                (cast()m.thread).join;
+                // In unlikely case when the CaldronThread.myThread_ field was not yet set up in the thread function,
+                // wait a bit, and if not still resolved, crash
+                if(m.thread is null) {
+                    Thread.sleep(1.seconds);
+                    assert(m.thread, "CaldronTread.myThread_ field must be set.");
+                }
+
+                // Finish the thread. The check for m.thread is for the case when in the release mode the previous check not worked.
+                if(m.thread) (cast()m.thread).join;
+                debug {
+                    import core.atomic: atomicOp;
+                    atomicOp!"+="(_stoppedThreads_, 1);
+                }
             }
             else if // is that client's request for circle's Tid?
                     (auto m = cast(immutable UserRequestsCircleTid_msg)msg)
             {   //yes: create new attention circle thread and send back its Tid
-                Tid clientTid = cast()m.senderTid();
+                Tid userTid = cast()m.senderTid();
 
                 // Create and start an attention circle thread if it doesn't exist yet, send back its Tid.
                 Tid circleTid;
                 if      // is client in the register already?
-                        (auto circleThread = clientTid in circleRegister_)
+                        (auto circleThread = userTid in circleRegister_)
                 {   //yes: take the circle's Tid from the register
                     circleTid = circleThread.tid;
                 }
@@ -60,8 +72,8 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                     _threadPool_.addThreadBatch;   // to guarantee that the pool is not empty
                     CaldronThread circleThread = _threadPool_.pop(atnCircle);
                     atnCircle.myThread = circleThread;
-                    circleRegister_[clientTid] = circleThread;
-                    circleThread.tid.send(new immutable DispatcherProvidesCircleWithUserTid_msg(clientTid));
+                    circleRegister_[userTid] = circleThread;
+                    circleThread.tid.send(new immutable DispatcherProvidesCircleWithUserTid_msg(userTid));
                 }
             }
             else if // TerminateAppMsg message has come?
@@ -70,15 +82,26 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
                 // send terminating message to all circles
                 foreach(circle; circleRegister_.byValue){
                     circle.tid.send(new immutable TerminateApp_msg);
-                    while(circle.tid in _threadPool_) {
+
+                    // wait while terminated
+                    while(circle.tid in _threadPool_)
                         Thread.sleep(SPIN_WAIT);
-                    }   // wait while terminated
                 }
 
-                send(cast()_mainTid_, new immutable CirclesAreFinished_msg);    // tell to main func
+                // Stop all canned threads in the thread pool
+                while(true) {
+                    CaldronThread cldThread = _threadPool_.extract;
+                    if(cldThread is null)
+                        break;
+                    else
+                        cldThread.tid.send(new immutable PoolRequestsThreadToTerminate);
+                }
+
+                // tell main that we are finished
+                send(cast()_mainTid_, new immutable CirclesAreFinished_msg);
 
                 // terminate itself
-                goto FINISH_THREAD;
+                return;
             }
             else {  // unrecognized message of type Msg. Log it.
                 logit(format!"Unexpected message to the attention dispatcher thread: %s"(typeid(msg)));
@@ -102,8 +125,10 @@ void attention_dispatcher_thread_func() {try {   // catchall try block for catch
         }
     }
 
-    FINISH_THREAD:
-} catch(Throwable e) { ownerTid.send(cast(shared)e); } }
+} catch(Throwable e) {
+//writeln(e); stdout.flush;
+    ownerTid.send(cast(shared)e);
+} }
 
 //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 //

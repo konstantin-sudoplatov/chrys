@@ -1,5 +1,5 @@
 /**
-        Using the project's caldrons, caldron thread pool, generating the threads in the dispatcher do the same test as in
+        Using the project's caldrons, caldron thread pool, generating the threads in the dispatcher. It does the same test as in
     the concurrency_stress_1 module, except number of threads is constantly changing. Here we have new shared structure,
     the worker pool. It contains a list of threads, that are actively working on the message bouncing, and the list of
     retiring threads, which are excluded from the regular bouncing, but some messages send to them before the moment

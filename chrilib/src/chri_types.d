@@ -176,8 +176,10 @@ synchronized final pure nothrow class SpiritMap {
             return cast()*p;
         else {
             SpiritConcept cpt = spiritMan_.retrieveConcept(cid, 0);     // is ver=0 ok? it is for now.
-            if(cpt)
+            if(cpt) {
+                spiritMap_[cid] = cast(shared)cpt;
                 return cpt;
+            }
             else
                 throw new RangeError("There is no concept cid = %s(\"%s\") in DB.".format(cid,
                         cid in _nm_? _nm_[cid]: "noname"));

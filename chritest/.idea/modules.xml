@@ -2,6 +2,9 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/../chribaselib/chribaselib.iml" filepath="$PROJECT_DIR$/../chribaselib/chribaselib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../chrilib/chrilib.iml" filepath="$PROJECT_DIR$/../chrilib/chrilib.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../chris/chris.iml" filepath="$PROJECT_DIR$/../chris/chris.iml" />
       <module fileurl="file://$PROJECT_DIR$/chritest.iml" filepath="$PROJECT_DIR$/chritest.iml" />
     </modules>
   </component>

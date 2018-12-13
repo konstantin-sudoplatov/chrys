@@ -1,4 +1,7 @@
-package chribaselib
+package base
+
+/** Debug level. Since it is a Java static final, the if(debug>0) {} would not compile if the debug is 0. So, no runtime overhead. */
+const val debug = 0
 
 /** Type of the concept identifier. */
 typealias Cid = Int

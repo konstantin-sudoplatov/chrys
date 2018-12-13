@@ -2,104 +2,31 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="cbb797bb-4a3d-49a2-ada8-0377f7ea29e9" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../chribaselib/.idea/kotlinc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/.idea/libraries/KotlinJavaRuntime.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/chribaselib.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/out/production/chribaselib/ChriBaseLibProba.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/out/production/chribaselib/ChribaselibKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/out/production/chribaselib/Chribaselib_probaKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/out/production/chribaselib/META-INF/chribaselib.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/src/chribaselib.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chribaselib/src/chribaselib_proba.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/.idea/kotlinc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/.idea/libraries/KotlinJavaRuntime.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/chricrank.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/out/production/chribaselib/ChriBaseLibProba.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/out/production/chribaselib/ChribaselibKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/out/production/chribaselib/Chribaselib_probaKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/out/production/chribaselib/META-INF/chribaselib.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/out/production/chricrank/ChricrankKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/out/production/chricrank/META-INF/chricrank.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/out/production/chrilib/ChrilibKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/out/production/chrilib/ChrilibProba.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/out/production/chrilib/Chrilib_probaKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/out/production/chrilib/META-INF/chrilib.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/out/production/chris/ChrisKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/out/production/chris/META-INF/chris.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/out/production/chris/Proba.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/out/production/chris/ProbaKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chricrank/src/chricrank.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/.idea/kotlinc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/.idea/libraries/KotlinJavaRuntime.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/chrilib.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/out/production/chribaselib/ChriBaseLibProba.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/out/production/chribaselib/ChribaselibKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/out/production/chribaselib/Chribaselib_probaKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/out/production/chribaselib/META-INF/chribaselib.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/out/production/chrilib/ChrilibKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/out/production/chrilib/ChrilibProba.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/out/production/chrilib/Chrilib_probaKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/out/production/chrilib/META-INF/chrilib.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/chrilib.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chrilib/src/chrilib_proba.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/kotlinc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/kotlinc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/libraries/KotlinJavaRuntime.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/modules.xml" beforeDir="false" />
+      <change afterPath="$PROJECT_DIR$/../chribaselib/src/main/base_thread/MessageMsg.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/.gradle/4.8/fileHashes/fileHashes.bin" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/.gradle/4.8/fileHashes/fileHashes.bin" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/.gradle/4.8/fileHashes/fileHashes.lock" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/.gradle/4.8/fileHashes/fileHashes.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/out/production/classes/META-INF/chribaselib_main.kotlin_module" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/out/production/classes/META-INF/chribaselib_main.kotlin_module" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/out/production/classes/MainKt.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/out/production/classes/base_thread/BaseMessage.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/out/production/classes/base_thread/ThreadQueue.class" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/out/production/classes/base_thread/ThreadQueue.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/out/production/classes/chribaselib/Base_dataKt.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/out/test/classes/base_thread/ThreadQueueTest$put_in_queue$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/out/test/classes/base_thread/ThreadQueueTest$put_in_queue$thread$1.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/out/test/classes/base_thread/ThreadQueueTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/out/test/classes/base_thread/ThreadQueueTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/settings.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/settings.gradle" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/src/main/base_thread/BaseMessage.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/src/main/base_thread/ThreadQueue.java" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/main/base_thread/ThreadQueue.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/src/main/chribaselib/base_data.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/main/base/base_data.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/src/main/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/main/chribaselib.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chribaselib/src/test/base_thread/ThreadQueueTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../chribaselib/src/test/base_thread/ThreadQueueTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chricrank/src/main/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../chricrank/src/main/chricrank.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/out/production/classes/META-INF/chrilib_main.kotlin_module" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/out/production/classes/MainKt.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/../chrilib/src/main/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/../chrilib/src/main/chrilib.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chris.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/chribaselib/ChriBaseLibProba.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/chribaselib/ChribaselibKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/chribaselib/Chribaselib_probaKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/chribaselib/META-INF/chribaselib.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/chricrank/ChricrankKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/chricrank/META-INF/chricrank.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/chrilib/ChrilibKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/chrilib/ChrilibProba.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/chrilib/Chrilib_probaKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/chrilib/META-INF/chrilib.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/chris/ChrisKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/chris/META-INF/chris.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/chris/Proba.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/chris/ProbaKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/chritest/ChritestKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/out/production/chritest/META-INF/chritest.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/chris.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/proba.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/.idea/kotlinc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/.idea/libraries/KotlinJavaRuntime.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/.idea/libraries/KotlinJavaRuntime__2_.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/.idea/misc.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/.idea/modules.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/.idea/vcs.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/.idea/workspace.xml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/chritest.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/out/production/chribaselib/ChriBaseLibProba.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/out/production/chribaselib/ChribaselibKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/out/production/chribaselib/Chribaselib_probaKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/out/production/chribaselib/META-INF/chribaselib.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/out/production/chrilib/ChrilibKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/out/production/chrilib/ChrilibProba.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/out/production/chrilib/Chrilib_probaKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/out/production/chrilib/META-INF/chrilib.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/out/production/chris/ChrisKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/out/production/chris/META-INF/chris.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/out/production/chris/Proba.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/out/production/chris/ProbaKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/out/production/chritest/ChritestKt.class" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/out/production/chritest/META-INF/chritest.kotlin_module" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../chritest/src/chritest.kt" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../old/d/chribaselib/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../old/d/chribaselib/.idea/vcs.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../old/d/chris/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../old/d/chris/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/META-INF/chris_main.kotlin_module" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/classes/META-INF/chris_main.kotlin_module" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/classes/MainKt.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/chris.kt" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -121,6 +48,14 @@
   </component>
   <component name="CodeInsightWorkspaceSettings">
     <option name="optimizeImportsOnTheFly" value="true" />
+  </component>
+  <component name="CoverageDataManager">
+    <SUITE FILE_PATH="coverage/chris$ThreadQueueTest.ic" NAME="ThreadQueueTest Coverage Results" MODIFIED="1544683790056" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false">
+      <FILTER>base_thread.*</FILTER>
+    </SUITE>
+  </component>
+  <component name="CoverageViewManager">
+    <option name="myElementSize" value="240" />
   </component>
   <component name="ExternalProjectsData">
     <projectState path="$PROJECT_DIR$/../chribaselib">
@@ -147,82 +82,62 @@
     <session id="-1552580023">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="6" />
+          <entry key="project.closed" value="17" />
           <entry key="project.open.time.0" value="2" />
-          <entry key="project.open.time.1" value="3" />
+          <entry key="project.open.time.1" value="4" />
           <entry key="project.open.time.6" value="1" />
-          <entry key="project.open.time.7" value="1" />
-          <entry key="project.opened" value="7" />
+          <entry key="project.open.time.7" value="6" />
+          <entry key="project.open.time.8" value="3" />
+          <entry key="project.open.time.9" value="1" />
+          <entry key="project.opened" value="17" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
+          <entry key="class" value="1" />
           <entry key="gradle" value="2" />
           <entry key="java" value="8" />
-          <entry key="kt" value="9" />
+          <entry key="kt" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
+          <entry key="CLASS" value="1" />
           <entry key="Groovy" value="2" />
           <entry key="JAVA" value="8" />
-          <entry key="Kotlin" value="9" />
+          <entry key="Kotlin" value="18" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="310" />
-          <entry key="kt" value="427" />
+          <entry key="java" value="1950" />
+          <entry key="kt" value="2050" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="310" />
-          <entry key="Kotlin" value="427" />
+          <entry key="JAVA" value="1950" />
+          <entry key="Kotlin" value="2050" />
         </counts>
       </usages-collector>
     </session>
   </component>
   <component name="FileEditorManager">
-    <leaf>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../chribaselib/src/main/base_thread/ThreadQueue.java">
+    <leaf SIDE_TABS_SIZE_LIMIT_KEY="300">
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/src/main/chris.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="266">
-              <caret line="38" selection-start-line="38" selection-end-line="38" />
-              <folding>
-                <element signature="e#1027#1028#0" expanded="true" />
-                <element signature="e#1068#1069#0" expanded="true" />
-                <element signature="e#1181#1182#0" expanded="true" />
-                <element signature="e#1219#1220#0" expanded="true" />
-              </folding>
+            <state relative-caret-position="95">
+              <caret line="5" column="1" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
             </state>
           </provider>
         </entry>
       </file>
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/../chribaselib/src/test/base_thread/ThreadQueueTest.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="646">
-              <caret line="34" column="16" selection-start-line="34" selection-start-column="16" selection-end-line="34" selection-end-column="16" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../chribaselib/src/main/chribaselib/base_data.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="114">
-              <caret line="6" column="31" selection-start-line="6" selection-start-column="10" selection-end-line="6" selection-end-column="31" />
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/../chribaselib/src/main/base_thread/BaseMessage.kt">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="38">
-              <caret line="2" column="17" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
+            <state relative-caret-position="418">
+              <caret line="22" column="13" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
             </state>
           </provider>
         </entry>
@@ -232,8 +147,8 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="Kotlin File" />
         <option value="Kotlin Class" />
+        <option value="Kotlin File" />
       </list>
     </option>
   </component>
@@ -999,12 +914,12 @@
     </option>
     <option name="modificationStamps">
       <map>
-        <entry key="$PROJECT_DIR$/../chribaselib" value="7722932848000" />
+        <entry key="$PROJECT_DIR$/../chribaselib" value="7723032744000" />
         <entry key="$PROJECT_DIR$/../chribaselib/.gradle" value="0" />
         <entry key="$PROJECT_DIR$/../chribaselib/build.gradle" value="3825854097" />
         <entry key="$PROJECT_DIR$/../chribaselib/gradle.properties" value="1857391091" />
         <entry key="$PROJECT_DIR$/../chribaselib/gradle/wrapper/gradle-wrapper.properties" value="2585518924" />
-        <entry key="$PROJECT_DIR$/../chribaselib/settings.gradle" value="1134380219" />
+        <entry key="$PROJECT_DIR$/../chribaselib/settings.gradle" value="2840836988" />
         <entry key="$PROJECT_DIR$/../chricrank" value="7723036602000" />
         <entry key="$PROJECT_DIR$/../chricrank/.gradle" value="0" />
         <entry key="$PROJECT_DIR$/../chricrank/build.gradle" value="3825854097" />
@@ -1791,13 +1706,18 @@
   <component name="IdeDocumentHistory">
     <option name="CHANGED_PATHS">
       <list>
-        <option value="$PROJECT_DIR$/src/main/main.kt" />
         <option value="$PROJECT_DIR$/../chribaselib/src/main/main.kt" />
         <option value="$PROJECT_DIR$/../chribaselib/src/main/thread/ThreadQueue.java" />
-        <option value="$PROJECT_DIR$/../chribaselib/src/main/base_thread/BaseMessage.kt" />
-        <option value="$PROJECT_DIR$/../chribaselib/src/main/base_thread/ThreadQueue.java" />
         <option value="$PROJECT_DIR$/../chribaselib/src/test/base_thread/ThreadQueueTest.java" />
+        <option value="$PROJECT_DIR$/src/main/main.kt" />
+        <option value="$PROJECT_DIR$/../chribaselib/src/main/base_thread/BaseMessage.kt" />
+        <option value="$PROJECT_DIR$/../chribaselib/src/main/base_thread/Message_Msg.kt" />
+        <option value="$PROJECT_DIR$/../chribaselib/src/main/base_thread/MessageMsg.kt" />
+        <option value="$PROJECT_DIR$/../chribaselib/src/main/base_thread/ThreadQueue.java" />
         <option value="$PROJECT_DIR$/../chribaselib/src/test/base_thread/ThreadQueueTest.kt" />
+        <option value="$PROJECT_DIR$/../chribaselib/src/main/chribaselib/base_funcs.kt" />
+        <option value="$PROJECT_DIR$/../chribaselib/src/main/chribaselib/base_data.kt" />
+        <option value="$PROJECT_DIR$/src/main/chris.kt" />
       </list>
     </option>
   </component>
@@ -1809,50 +1729,22 @@
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectView">
-    <navigator currentView="PackagesPane" proportions="" version="1">
+    <navigator proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="PackagesPane">
         <subPane>
           <expand>
             <path>
               <item name="chris" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chribaselib" type="eaaa3913:PackageViewModuleGroupNode" />
-            </path>
-            <path>
-              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chribaselib" type="eaaa3913:PackageViewModuleGroupNode" />
-              <item name="chribaselib_main" type="616d4139:PackageViewModuleNode" />
-            </path>
-            <path>
-              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chribaselib" type="eaaa3913:PackageViewModuleGroupNode" />
-              <item name="chribaselib_main" type="616d4139:PackageViewModuleNode" />
-              <item name="base_thread" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chribaselib" type="eaaa3913:PackageViewModuleGroupNode" />
-              <item name="chribaselib_main" type="616d4139:PackageViewModuleNode" />
-              <item name="chribaselib" type="1f31426a:PackageElementNode" />
-            </path>
-            <path>
-              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chribaselib" type="eaaa3913:PackageViewModuleGroupNode" />
-              <item name="chribaselib_test" type="616d4139:PackageViewModuleNode" />
-            </path>
-            <path>
-              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
-              <item name="chribaselib" type="eaaa3913:PackageViewModuleGroupNode" />
-              <item name="chribaselib_test" type="616d4139:PackageViewModuleNode" />
-              <item name="base_thread" type="1f31426a:PackageElementNode" />
+              <item name="base_main" type="616d4139:PackageViewModuleNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -1873,37 +1765,18 @@
             </path>
             <path>
               <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chribaselib" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="chris" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+            </path>
+            <path>
+              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chris" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chris" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="chribaselib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chricrank" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chricrank" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chrilib" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chrilib" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chris" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chris" type="8a07ba80:GradleTreeStructureProvider$GradleModuleDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
             </path>
           </expand>
           <select />
@@ -1917,7 +1790,7 @@
     <property name="Repository.Attach.Sources" value="false" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$" />
+    <property name="last_opened_file_path" value="$USER_HOME$/tmp/test" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.16605437" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -1948,89 +1821,23 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.ThreadQueueTest.put_in_queue">
-    <configuration name="ThreadQueueTest.put_in_queue" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="chribaselib_test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="base_thread.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="base_thread" />
-      <option name="MAIN_CLASS_NAME" value="base_thread.ThreadQueueTest" />
-      <option name="METHOD_NAME" value="put_in_queue" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="chribaselib" type="JetRunConfigurationType" factoryName="Kotlin" temporary="true">
-      <module name="chribaselib_main" />
-      <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" value="MainKt" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="chricrank" type="JetRunConfigurationType" factoryName="Kotlin" temporary="true">
-      <module name="chricrank_main" />
-      <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" value="MainKt" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="chrilib" type="JetRunConfigurationType" factoryName="Kotlin" temporary="true">
-      <module name="chrilib_main" />
-      <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="" />
-      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
-      <option name="ALTERNATIVE_JRE_PATH" />
-      <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" value="MainKt" />
-      <option name="WORKING_DIRECTORY" value="" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="chris" type="JetRunConfigurationType" factoryName="Kotlin" temporary="true">
+  <component name="RunManager">
+    <configuration name="ChrisKt" type="JetRunConfigurationType" factoryName="Kotlin" temporary="true" nameIsGenerated="true">
       <module name="chris_main" />
-      <option name="VM_PARAMETERS" value="" />
-      <option name="PROGRAM_PARAMETERS" value="" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
       <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
       <option name="ALTERNATIVE_JRE_PATH" />
       <option name="PASS_PARENT_ENVS" value="true" />
-      <option name="MAIN_CLASS_NAME" value="MainKt" />
-      <option name="WORKING_DIRECTORY" value="" />
+      <option name="MAIN_CLASS_NAME" value="ChrisKt" />
+      <option name="WORKING_DIRECTORY" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <list>
-      <item itemvalue="Kotlin.chris" />
-      <item itemvalue="Kotlin.chrilib" />
-      <item itemvalue="Kotlin.chribaselib" />
-      <item itemvalue="Kotlin.chricrank" />
-      <item itemvalue="JUnit.ThreadQueueTest.put_in_queue" />
-    </list>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ThreadQueueTest.put_in_queue" />
-        <item itemvalue="Kotlin.chribaselib" />
-        <item itemvalue="Kotlin.chricrank" />
-        <item itemvalue="Kotlin.chrilib" />
-        <item itemvalue="Kotlin.chris" />
+        <item itemvalue="Kotlin.ChrisKt" />
       </list>
     </recent_temporary>
   </component>
@@ -2045,48 +1852,47 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="ThreadQueueTest_put_in_queue - 2018.12.12 at 15h 06m 18s.xml">
-      <configuration name="ThreadQueueTest.put_in_queue" configurationId="JUnit" />
+    <history-entry file="ThreadQueueTest_waitWithTimeout - 2018.12.13 at 09h 01m 00s.xml">
+      <configuration name="ThreadQueueTest.waitWithTimeout" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ThreadQueueTest_put_in_queue - 2018.12.12 at 15h 10m 40s.xml">
-      <configuration name="ThreadQueueTest.put_in_queue" configurationId="JUnit" />
+    <history-entry file="ThreadQueueTest_waitWithTimeout - 2018.12.13 at 09h 03m 51s.xml">
+      <configuration name="ThreadQueueTest.waitWithTimeout" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ThreadQueueTest_put_in_queue - 2018.12.12 at 15h 25m 26s.xml">
-      <configuration name="ThreadQueueTest.put_in_queue" configurationId="JUnit" />
+    <history-entry file="ThreadQueueTest_waitWithTimeout - 2018.12.13 at 09h 04m 03s.xml">
+      <configuration name="ThreadQueueTest.waitWithTimeout" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ThreadQueueTest_put_in_queue - 2018.12.12 at 15h 28m 45s.xml">
-      <configuration name="ThreadQueueTest.put_in_queue" configurationId="JUnit" />
+    <history-entry file="ThreadQueueTest_waitWithTimeout - 2018.12.13 at 09h 04m 10s.xml">
+      <configuration name="ThreadQueueTest.waitWithTimeout" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ThreadQueueTest_put_in_queue - 2018.12.12 at 15h 31m 19s.xml">
-      <configuration name="ThreadQueueTest.put_in_queue" configurationId="JUnit" />
+    <history-entry file="ThreadQueueTest_waitWithTimeout - 2018.12.13 at 09h 04m 19s.xml">
+      <configuration name="ThreadQueueTest.waitWithTimeout" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ThreadQueueTest_put_in_queue - 2018.12.12 at 15h 32m 18s.xml">
-      <configuration name="ThreadQueueTest.put_in_queue" configurationId="JUnit" />
+    <history-entry file="ThreadQueueTest_waitWithTimeout - 2018.12.13 at 09h 23m 35s.xml">
+      <configuration name="ThreadQueueTest.waitWithTimeout" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ThreadQueueTest_put_in_queue - 2018.12.12 at 15h 32m 58s.xml">
-      <configuration name="ThreadQueueTest.put_in_queue" configurationId="JUnit" />
+    <history-entry file="ThreadQueueTest_waitWithTimeout - 2018.12.13 at 10h 43m 38s.xml">
+      <configuration name="ThreadQueueTest.waitWithTimeout" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ThreadQueueTest_put_in_queue - 2018.12.12 at 15h 46m 28s.xml">
-      <configuration name="ThreadQueueTest.put_in_queue" configurationId="JUnit" />
+    <history-entry file="ThreadQueueTest - 2018.12.13 at 10h 43m 56s.xml">
+      <configuration name="ThreadQueueTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ThreadQueueTest_put_in_queue - 2018.12.12 at 15h 49m 10s.xml">
-      <configuration name="ThreadQueueTest.put_in_queue" configurationId="JUnit" />
+    <history-entry file="ThreadQueueTest - 2018.12.13 at 10h 49m 54s.xml">
+      <configuration name="ThreadQueueTest" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="ThreadQueueTest_put_in_queue - 2018.12.12 at 15h 49m 26s.xml">
-      <configuration name="ThreadQueueTest.put_in_queue" configurationId="JUnit" />
+    <history-entry file="ThreadQueueTest - 2018.12.13 at 11h 18m 20s.xml">
+      <configuration name="ThreadQueueTest" configurationId="JUnit" />
     </history-entry>
   </component>
   <component name="ToolWindowManager">
     <frame x="-2" y="-3" width="1924" height="1087" extended-state="6" />
-    <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.26627535" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.22572039" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.32916668" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.221875" />
+      <window_info anchor="bottom" x="864" y="427" width="1040" height="649" id="Run" order="2" weight="0.29270834" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.4" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -2102,6 +1908,7 @@
       <window_info anchor="right" id="Gradle" order="3" />
       <window_info anchor="right" id="Palette&#9;" order="4" />
       <window_info anchor="right" id="Maven Projects" order="5" />
+      <window_info anchor="right" id="Coverage" order="6" side_tool="true" weight="0.32977587" />
     </layout>
   </component>
   <component name="VcsContentAnnotationSettings">
@@ -2111,44 +1918,14 @@
     <entry file="file://$PROJECT_DIR$/build.gradle">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/main.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="76">
-          <caret line="4" column="1" selection-start-line="4" selection-start-column="1" selection-end-line="4" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../chrilib/src/main/main.kt">
+    <entry file="file://$PROJECT_DIR$/../chricrank/src/main/chricrank.kt">
       <provider selected="true" editor-type-id="text-editor" />
     </entry>
-    <entry file="file://$PROJECT_DIR$/../chricrank/src/main/main.kt">
-      <provider selected="true" editor-type-id="text-editor" />
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../chribaselib/src/test/ChribaselibProbaKtTest.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="3" column="6" selection-start-line="3" selection-start-column="6" selection-end-line="3" selection-end-column="6" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../chribaselib/src/main/main.kt">
+    <entry file="file://$PROJECT_DIR$/../chribaselib/src/test/ChribaselibProbaKtTest.kt" />
+    <entry file="file://$PROJECT_DIR$/../chribaselib/src/main/chribaselib.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="57">
           <caret line="3" column="1" lean-forward="true" selection-start-line="3" selection-start-column="1" selection-end-line="3" selection-end-column="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../chribaselib/src/main/base_thread/BaseMessage.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="38">
-          <caret line="2" column="17" selection-start-line="2" selection-start-column="17" selection-end-line="2" selection-end-column="17" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/../chribaselib/src/main/chribaselib/base_data.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="6" column="31" selection-start-line="6" selection-start-column="10" selection-end-line="6" selection-end-column="31" />
         </state>
       </provider>
     </entry>
@@ -2166,23 +1943,66 @@
         </state>
       </provider>
     </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/junit/junit/4.12/junit-4.12.jar!/org/junit/Assert.class">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="133">
+          <caret line="22" column="5" selection-start-line="22" selection-start-column="5" selection-end-line="22" selection-end-column="5" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$USER_HOME$/.gradle/caches/modules-2/files-2.1/org.jetbrains.kotlin/kotlin-stdlib/1.3.11/d46e00faac79f8ec6bb956154ecde4282871a6bf/kotlin-stdlib-1.3.11-sources.jar!/kotlin/util/AssertionsJVM.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="208">
+          <caret line="21" column="18" selection-start-line="21" selection-start-column="18" selection-end-line="21" selection-end-column="18" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../chrilib/src/main/chrilib.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="1" lean-forward="true" selection-start-line="2" selection-start-column="1" selection-end-line="2" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../chribaselib/src/main/base_thread/MessageMsg.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="8" column="112" selection-start-line="8" selection-start-column="112" selection-end-line="8" selection-end-column="112" />
+        </state>
+      </provider>
+    </entry>
     <entry file="file://$PROJECT_DIR$/../chribaselib/src/main/base_thread/ThreadQueue.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="266">
-          <caret line="38" selection-start-line="38" selection-end-line="38" />
-          <folding>
-            <element signature="e#1027#1028#0" expanded="true" />
-            <element signature="e#1068#1069#0" expanded="true" />
-            <element signature="e#1181#1182#0" expanded="true" />
-            <element signature="e#1219#1220#0" expanded="true" />
-          </folding>
+        <state relative-caret-position="250">
+          <caret line="35" column="42" selection-start-line="35" selection-start-column="42" selection-end-line="35" selection-end-column="42" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../chribaselib/src/main/base/base_funcs.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="76">
+          <caret line="4" column="31" selection-start-line="4" selection-start-column="31" selection-end-line="4" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/../chribaselib/src/main/base/base_data.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" column="31" selection-start-line="2" selection-start-column="31" selection-end-line="2" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/chris.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="95">
+          <caret line="5" column="1" selection-start-line="5" selection-start-column="1" selection-end-line="5" selection-end-column="1" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/../chribaselib/src/test/base_thread/ThreadQueueTest.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="646">
-          <caret line="34" column="16" selection-start-line="34" selection-start-column="16" selection-end-line="34" selection-end-column="16" />
+        <state relative-caret-position="418">
+          <caret line="22" column="13" selection-start-line="22" selection-start-column="13" selection-end-line="22" selection-end-column="13" />
         </state>
       </provider>
     </entry>
@@ -2243,6 +2063,7 @@
             <option name="proportions">
               <list>
                 <option value="0.2" />
+                <option value="0.6" />
               </list>
             </option>
           </splitter-proportions>

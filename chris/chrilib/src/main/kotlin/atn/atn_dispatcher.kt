@@ -1,12 +1,33 @@
 package atn
 
 import chribase_thread.CuteThread
+import chribase_thread.MessageMsg
+import chribase_thread.TerminationRequestMsg
+import chrilib.CircleSendsUserItsBridMsg
+import chrilib.UserRequestsDispatcherCreateNewCircleMsg
+import chrilib._console_
 
 /**
  *      Attention dispatcher:
  *  1. On user request starts and and registers an attention circle and sends it reference to the user thread.
  *  2. On the termination message from main initiates termination of all the attention threads
  */
-class AttentionDispatcher(): CuteThread(0, 0)
+class AttentionDispatcher(threadName: String = "dispatcher"): CuteThread(0, 0, threadName)
 {
+    override fun _messageProc(msg: MessageMsg): Boolean {
+        when(msg) {
+            is UserRequestsDispatcherCreateNewCircleMsg -> {
+                //Todo: this is for debagging, need real implementation
+                _console_.putInQueuePriority(CircleSendsUserItsBridMsg(Brid(Pod("dummy_pod"), 0)))
+                return true
+            }
+
+            is TerminationRequestMsg -> {
+                //todo: not forget to terminate all circles and pods
+                return true    // let the base class terminate the thread
+            }
+        }
+
+        return false    // message not recognized
+    }
 }

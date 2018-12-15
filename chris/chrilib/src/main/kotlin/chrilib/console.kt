@@ -5,7 +5,8 @@ import atn.Brid
 import chribase.EMULATE_CONSOLE
 import chribase_thread.MessageMsg
 import chribase_thread.CuteThread
-import chribase_thread.RequestTerminationMsg
+import chribase_thread.TerminationRequestMsg
+import chribase_thread.TimeoutMsg
 
 /**
  * This class waits for messages from the attention circle which it prints on the console on one hand and user lines from
@@ -13,7 +14,7 @@ import chribase_thread.RequestTerminationMsg
  * attention circle. This request on initialization it sends to attention dispatcher. Also it termination of work is
  * originated in here and the request is sent to the main thread, which sends it to all subsystems.
  */
-class ConsoleThread(): CuteThread(0, 0) {
+class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadName) {
 
     /**
      *      Request creation the attention circle and wait for its brid before doing start() on this thread.
@@ -25,7 +26,7 @@ class ConsoleThread(): CuteThread(0, 0) {
         atnDisp.putInQueue(UserRequestsDispatcherCreateNewCircleMsg(this))
         while(true) {
             val msg = _getBlocking()
-            if(msg is CirleSendsUserItsBridMsg) {
+            if(msg is CircleSendsUserItsBridMsg) {
                 circleBrid_ = msg.circleBrid
                 break
             }
@@ -48,8 +49,8 @@ class ConsoleThread(): CuteThread(0, 0) {
                 if      // did user request termination?
                         (msg.text == "p")
                 {   //yes: request termination from dispatcher and pass it to the ancesstor
-                    _atnDispatcher_.putInQueue(RequestTerminationMsg())
-                    this.putInQueue(RequestTerminationMsg())
+                    _atnDispatcher_.putInQueue(TerminationRequestMsg())
+                    this.putInQueue(TerminationRequestMsg())
                 }
                 else {//no: resend the console line to the circle
                     circleBrid_.pod.putInQueue(UserTellsCircleIbr(circleBrid_.branchInd, msg.text))
@@ -60,21 +61,42 @@ class ConsoleThread(): CuteThread(0, 0) {
             is CirclePromptsUserMsg -> {
                 if(!EMULATE_CONSOLE)
                     print("> ")
-                else {
-                    // Send to the circle next line from the list
+                else {  // Send to the circle next line from the list or request termination
                     val line = userLinesIterator_.next()
                     print("> $line")
                     if      // did the emulator request termination?
                             (line == "p")
                     {   //yes: request termination from dispatcher and to itself
-                        _atnDispatcher_.putInQueue(RequestTerminationMsg())
-                        this.putInQueue(RequestTerminationMsg())
+                        _atnDispatcher_.putInQueue(TerminationRequestMsg())
+                        this.putInQueue(TerminationRequestMsg())
                     }
                     else {//no: resend the console line to the circle
                         circleBrid_.pod.putInQueue(UserTellsCircleIbr(circleBrid_.branchInd, line))
                     }
                 }
                 return true
+            }
+
+            is TimeoutMsg -> {
+                if(EMULATE_CONSOLE)
+                {  // Send to the circle next line from the list or request termination
+                    val line = userLinesIterator_.next()
+                    println("> $line")
+                    if      // did the emulator request termination?
+                            (line == "p")
+                    {   //yes: request termination from dispatcher and to itself
+                        _atnDispatcher_.putInQueue(TerminationRequestMsg())
+                        this.putInQueue(TerminationRequestMsg())
+                    }
+                    else {//no: resend the console line to the circle
+                        circleBrid_.pod.putInQueue(UserTellsCircleIbr(circleBrid_.branchInd, line))
+                    }
+                }
+                return true
+            }
+
+            is TerminationRequestMsg -> {
+                return true    // let the base class terminate the thread
             }
         }
         return false    // the "false" will make the CuteThread object to log an unrecognized message

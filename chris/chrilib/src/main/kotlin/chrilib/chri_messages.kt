@@ -9,7 +9,7 @@ class CirclePromptsUserMsg(): MessageMsg()
 
 class UserRequestsDispatcherCreateNewCircleMsg(val userThread: Thread): MessageMsg()
 
-class CirleSendsUserItsBridMsg(val circleBrid: Brid): MessageMsg()
+class CircleSendsUserItsBridMsg(val circleBrid: Brid): MessageMsg()
 
 /**
  *      Base for messages addressed to pods (inter branch messages)

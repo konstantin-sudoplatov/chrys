@@ -21,29 +21,21 @@ public class CuteThread extends Thread {
         super();
         timeout = DEFAULT_THREAD_QUEUE_TIMEOUT;
         maxQueueSize = DEFAULT_MAX_THREAD_QUEUE;
+        threadName_ = "noname";
     }
 
     /**
      *      Constructor.
-     * @param timeoutMsecs timeout for waiting new messages in the queue. If timeout happens new message TimeoutMsg is
-     *                     generated and sent for processing. 0 disables the timeout.
+     * @param timeoutMsecs  timeout for waiting new messages in the queue. If timeout happens new message TimeoutMsg is
+     *                      generated and sent for processing. 0 disables the timeout.
+     * @param maxQueueSize  maximum number of messages in the queue. After that the putInQueue() method blocks. 0 - no limit.
+     * @param threadName    thread name for debugging purposes.
      */
-    public CuteThread(int timeoutMsecs) {
-        super();
-        timeout = timeoutMsecs;
-        maxQueueSize = DEFAULT_MAX_THREAD_QUEUE;
-    }
-
-    /**
-     *      Constructor.
-     * @param timeoutMsecs timeout for waiting new messages in the queue. If timeout happens new message TimeoutMsg is
-     *                     generated and sent for processing. 0 disables the timeout.
-     * @param maxQueueSize maximum number of messages in the queue. After that the putInQueue() method blocks. 0 - no limit.
-     */
-    public CuteThread(int timeoutMsecs, int maxQueueSize) {
+    public CuteThread(int timeoutMsecs, int maxQueueSize, String threadName) {
         super();
         timeout = timeoutMsecs;
         this.maxQueueSize = maxQueueSize != 0? maxQueueSize: Integer.MAX_VALUE;
+        threadName_ = threadName;
     }
 
     //^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v
@@ -59,11 +51,13 @@ public class CuteThread extends Thread {
     public void run() {
         while(true) {
             MessageMsg msg = _getBlocking();
-            if (!_messageProc(msg))
-                logit("Unexpected message in " + this.getClass().getName());
+            if (!_messageProc(msg)) {
+                String threadName = threadName_ != "noname"? threadName_: this.getClass().getName();
+                logit("Unexpected message in " + threadName + ": " + msg.getClass().getName());
+            }
 
             if      // is termination requested?
-            (msg instanceof RequestTerminationMsg)
+                    (msg instanceof TerminationRequestMsg)
                 break;
         }
     }
@@ -112,6 +106,10 @@ public class CuteThread extends Thread {
     public final synchronized void putInQueuePriority(MessageMsg msg) {
         _msgQueue.addFirst(msg);
         notifyAll();
+    }
+
+    public String getThreadName() {
+        return threadName_;
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -178,6 +176,8 @@ public class CuteThread extends Thread {
 
     /** Number of messages that can be put into the queue before the putInQueue() method blocks. */
     final private int maxQueueSize;
+
+    final private String threadName_;
 
     //---%%%---%%%---%%%---%%%--- private methods ---%%%---%%%---%%%---%%%---%%%---%%%
 }

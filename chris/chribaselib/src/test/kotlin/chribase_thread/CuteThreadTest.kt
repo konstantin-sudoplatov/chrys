@@ -3,7 +3,7 @@ package chribase_thread
 import chribase.DEFAULT_MAX_THREAD_QUEUE
 import org.junit.Test
 
-class ThreadQueueTest {
+class CuteThreadTest {
 
     /**
      * Create a thread queue with overriden run() method. Put chribase.DEFAULT_MAX_THREAD_QUEUE messages into it, the thread that puts

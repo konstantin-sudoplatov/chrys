@@ -4,7 +4,7 @@ package chribase_thread
 open class MessageMsg
 
 /** Request for termination of a thread and all its successors. */
-class RequestTerminationMsg(): MessageMsg()
+class TerminationRequestMsg(): MessageMsg()
 
 /** If timeout happens in the CuteThread object, this message is send for processing instead of a real message. */
 class TimeoutMsg(): MessageMsg()

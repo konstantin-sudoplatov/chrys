@@ -1,0 +1,5 @@
+package libmain
+
+class SpiritMap {
+
+}

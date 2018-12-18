@@ -26,11 +26,21 @@ class SpiritMap {
         spMap_[crankEnum.cid] = cpt
     }
 
+    @Synchronized operator fun contains(cid: Cid) = cid in spMap_
+
+    @Synchronized operator fun contains(crankEnum: CrankEnumIfc) = crankEnum.cid in spMap_
+
+    /**
+     *          Generate cid in the dynamic range not used in the spirit map.
+     */
     @Synchronized fun generateDynamicCid(): Cid {
         var cid: Cid
+        @UseExperimental(ExperimentalUnsignedTypes::class)
         do {
             cid = Random.nextULong(MIN_DYNAMIC_CID.toULong(), (MAX_DINAMIC_CID).toULong() + 1u).toInt()
-        } while(cid !in this)
+        } while(cid in this)
+
+        return cid
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%

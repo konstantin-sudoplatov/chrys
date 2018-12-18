@@ -10,6 +10,7 @@ typealias Cvr = Short
 const val MIN_STATIC_CID = 1;
 const val MAX_STATIC_CID = 1_000_000;
 const val MIN_DYNAMIC_CID = 2_000_000;
+@ExperimentalUnsignedTypes
 const val MAX_DINAMIC_CID = UInt.MAX_VALUE;
 
 /** Debug level. Since it is a Java static final, the if(basemain.debug>0) {} would not compile if the basemain.debug is 0. So, no runtime overhead. */

@@ -1,21 +1,26 @@
 package crank
 
+import libmain.CrankEnumIfc
 import org.junit.Test
-import kotlin.reflect.KClass
-import kotlin.reflect.full.declaredMembers
-import kotlin.reflect.full.memberFunctions
+import kotlin.reflect.full.*
 
 class Crank_mainKtTest {
 
-    enum class hello {
-        aaa,
-        bbb
-    }
-
     @Test
     fun testCranking() {
-        val crankClass = ReflectionTest.getFileClass()
-//        for(method in crankClass.getDeclaredCl)
-//            println(method)
+        val mainCrank = CrankMain()
+        val mainCrankClass = CrankMain::class
+        for(kfun in mainCrankClass.declaredMemberFunctions) {
+            kfun.call(mainCrank)
+        }
+
+
+        for(enClass in mainCrankClass.nestedClasses)
+            for(en in enClass.java.enumConstants) {
+                println(en.toString())
+                println((en as CrankEnumIfc).cid)
+            }
+
+        val funRef = ::testEnum3
     }
 }

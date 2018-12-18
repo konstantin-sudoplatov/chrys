@@ -2,14 +2,29 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="ef8251e8-57a7-4e45-9f0b-7b76045ce05a" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/chrilib/src/main/libmain/chri_types.kt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chribaselib/chribaselib.iml" beforeDir="false" afterPath="$PROJECT_DIR$/chribaselib/chribaselib.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chricrank/chricrank.iml" beforeDir="false" afterPath="$PROJECT_DIR$/chricrank/chricrank.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chricrank/src/main/chricrank_main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/chricrank/src/main/chricrank_main.kt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chrilib/chrilib.iml" beforeDir="false" afterPath="$PROJECT_DIR$/chrilib/chrilib.iml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/chris.iml" beforeDir="false" afterPath="$PROJECT_DIR$/chris.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chribaselib/src/main/basemain/base_data.kt" beforeDir="false" afterPath="$PROJECT_DIR$/chribaselib/src/main/basemain/base_data.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrilib/src/main/libmain/chri_classes.kt" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/chrilib/src/main/libmain/chri_data.kt" beforeDir="false" afterPath="$PROJECT_DIR$/chrilib/src/main/libmain/chri_data.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chribaselib/Chribaselib_mainKt.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/chribaselib/Chribaselib_mainKt.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chrilib/libmain/Chri_dataKt.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/chrilib/libmain/Chri_dataKt.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chrilib/libmain/SpiritMap.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/chrilib/libmain/SpiritMap.class" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/out/production/chris/META-INF/chris.kotlin_module" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/chris/META-INF/chris.kotlin_module" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../old/d/chricrank/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../old/d/chricrank/.idea/vcs.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chris/crank/CrankEnumIfc$DefaultImpls.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chris/crank/CrankEnumIfc.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chris/crank/Crank_mainKt.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/chris/crank/Crank_mainKt.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chris/crank/ReflectionTest.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chris/crank/TestEnum.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/chris/crank/TestEnum2.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/chris/crank/Crank_mainKtTest$hello.class" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/test/chris/crank/Crank_mainKtTest.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/test/chris/crank/Crank_mainKtTest.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/crank/ReflectionTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/crank/crank_main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/crank/crank_main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/crank/crank_registry.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/crank/crank_registry.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/stat/stat_main.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/stat/stat_main.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/crank/Crank_mainKtTest.kt" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/crank/Crank_mainKtTest.kt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../old/d/chrilib/.idea/vcs.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../old/d/chrilib/.idea/vcs.xml" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/.gradle/" />
@@ -31,47 +46,56 @@
   </component>
   <component name="FileEditorManager">
     <leaf SIDE_TABS_SIZE_LIMIT_KEY="225">
-      <file pinned="false" current-in-tab="true">
+      <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/crank/crank_main.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="247">
-              <caret line="13" column="84" lean-forward="true" selection-start-line="13" selection-start-column="84" selection-end-line="13" selection-end-column="84" />
+            <state relative-caret-position="494">
+              <caret line="26" selection-start-line="26" selection-end-line="26" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/test/crank/Crank_mainKtTest.kt">
+        <entry file="file://$PROJECT_DIR$/chrilib/src/main/cpt/cpt_interfaces.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="380">
-              <caret line="20" column="1" lean-forward="true" selection-start-line="20" selection-start-column="1" selection-end-line="20" selection-end-column="1" />
+            <state relative-caret-position="703">
+              <caret line="37" selection-start-line="37" selection-end-line="37" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/crank/ReflectionTest.java">
+        <entry file="file://$PROJECT_DIR$/src/main/chris_main.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="1" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="23" />
+            <state relative-caret-position="114">
+              <caret line="6" column="41" selection-start-line="6" selection-start-column="41" selection-end-line="6" selection-end-column="41" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/stat/stat_main.kt">
+        <entry file="file://$PROJECT_DIR$/chrilib/src/main/libmain/chri_data.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="19">
-              <caret line="1" selection-start-line="1" selection-end-line="1" />
+            <state relative-caret-position="266">
+              <caret line="14" column="21" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="true">
+        <entry file="file://$PROJECT_DIR$/chrilib/src/main/libmain/chri_types.kt">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="367">
+              <caret line="32" column="28" selection-start-line="32" selection-start-column="28" selection-end-line="32" selection-end-column="28" />
             </state>
           </provider>
         </entry>
       </file>
       <file pinned="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/main/crank/crank_registry.kt">
+        <entry file="file://$PROJECT_DIR$/chribaselib/src/main/basemain/base_data.kt">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="209">
-              <caret line="11" column="8" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
+            <state relative-caret-position="152">
+              <caret line="8" column="104" selection-start-line="8" selection-start-column="104" selection-end-line="8" selection-end-column="104" />
             </state>
           </provider>
         </entry>
@@ -81,9 +105,9 @@
   <component name="FileTemplateManagerImpl">
     <option name="RECENT_TEMPLATES">
       <list>
-        <option value="JUnit4 Test Class" />
         <option value="Kotlin File" />
         <option value="Class" />
+        <option value="JUnit4 Test Class" />
       </list>
     </option>
   </component>
@@ -103,36 +127,41 @@
         <option value="$PROJECT_DIR$/src/test/Chris_mainKtTest.kt" />
         <option value="$PROJECT_DIR$/chrilib/src/main/cpt/abs/abs_concept.kt" />
         <option value="$PROJECT_DIR$/chrilib/src/main/cpt/abs/abs_premises.kt" />
-        <option value="$PROJECT_DIR$/chrilib/src/main/cpt/cpt_interfaces.kt" />
         <option value="$PROJECT_DIR$/chrilib/src/main/cpt/cpt_premises.kt" />
-        <option value="$PROJECT_DIR$/src/main/crank/crank_registry.kt" />
         <option value="$PROJECT_DIR$/chricrank/src/main/chricrank_main.kt" />
         <option value="$PROJECT_DIR$/src/test/crank/TestEnumTest.java" />
         <option value="$PROJECT_DIR$/src/test/crank/TestEnumTest.kt" />
         <option value="$PROJECT_DIR$/src/test/crank/Crank_mainKtTest.java" />
-        <option value="$PROJECT_DIR$/src/main/stat/stat_main.kt" />
         <option value="$PROJECT_DIR$/src/main/chris_main.kt" />
         <option value="$PROJECT_DIR$/src/main/crank/ReflectionTest.kt" />
         <option value="$PROJECT_DIR$/src/main/crank/ReflectionTest.java" />
+        <option value="$PROJECT_DIR$/src/main/stat/stat_main.kt" />
+        <option value="$PROJECT_DIR$/chrilib/src/main/libmain/chri_data.kt" />
+        <option value="$PROJECT_DIR$/chrilib/src/test/libmain/SpiritMapTest.java" />
+        <option value="$PROJECT_DIR$/chrilib/src/test/libmain/SpiritMapTest.kt" />
+        <option value="$PROJECT_DIR$/chrilib/src/main/libmain/chri_classes.kt" />
         <option value="$PROJECT_DIR$/src/test/crank/Crank_mainKtTest.kt" />
+        <option value="$PROJECT_DIR$/src/main/crank/crank_registry.kt" />
         <option value="$PROJECT_DIR$/src/main/crank/crank_main.kt" />
+        <option value="$PROJECT_DIR$/chrilib/src/main/cpt/cpt_interfaces.kt" />
+        <option value="$PROJECT_DIR$/chribaselib/src/main/chribaselib_main.kt" />
+        <option value="$PROJECT_DIR$/chribaselib/src/main/basemain/base_data.kt" />
+        <option value="$PROJECT_DIR$/chrilib/src/main/libmain/chri_types.kt" />
       </list>
     </option>
   </component>
-  <component name="ProjectFrameBounds" extendedState="6">
-    <option name="x" value="114" />
-    <option name="width" value="1714" />
+  <component name="ProjectFrameBounds">
+    <option name="width" value="1920" />
     <option name="height" value="1080" />
   </component>
   <component name="ProjectLevelVcsManager" settingsEditedManually="true">
     <ConfirmationsSetting value="1" id="Add" />
   </component>
   <component name="ProjectView">
-    <navigator proportions="" version="1">
+    <navigator currentView="PackagesPane" proportions="" version="1">
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -143,100 +172,13 @@
             <path>
               <item name="chris" type="b2602c69:ProjectViewProjectNode" />
               <item name="chris" type="462c0819:PsiDirectoryNode" />
-              <item name="chribaselib" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chris" type="462c0819:PsiDirectoryNode" />
-              <item name="chribaselib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chris" type="462c0819:PsiDirectoryNode" />
-              <item name="chribaselib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chris" type="462c0819:PsiDirectoryNode" />
-              <item name="chribaselib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-              <item name="chribase_thread" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chris" type="462c0819:PsiDirectoryNode" />
-              <item name="chribaselib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chris" type="462c0819:PsiDirectoryNode" />
-              <item name="chribaselib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="chribase_thread" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chris" type="462c0819:PsiDirectoryNode" />
-              <item name="chricrank" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chris" type="462c0819:PsiDirectoryNode" />
-              <item name="chricrank" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chris" type="462c0819:PsiDirectoryNode" />
-              <item name="chricrank" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chris" type="462c0819:PsiDirectoryNode" />
               <item name="chrilib" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="chris" type="b2602c69:ProjectViewProjectNode" />
               <item name="chris" type="462c0819:PsiDirectoryNode" />
               <item name="chrilib" type="462c0819:PsiDirectoryNode" />
-              <item name="out" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chris" type="462c0819:PsiDirectoryNode" />
-              <item name="chrilib" type="462c0819:PsiDirectoryNode" />
               <item name="src" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chris" type="462c0819:PsiDirectoryNode" />
-              <item name="chrilib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="main" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chris" type="462c0819:PsiDirectoryNode" />
-              <item name="chrilib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-            </path>
-            <path>
-              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
-              <item name="chris" type="462c0819:PsiDirectoryNode" />
-              <item name="chrilib" type="462c0819:PsiDirectoryNode" />
-              <item name="src" type="462c0819:PsiDirectoryNode" />
-              <item name="test" type="462c0819:PsiDirectoryNode" />
-              <item name="atn" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="chris" type="b2602c69:ProjectViewProjectNode" />
@@ -260,6 +202,13 @@
               <item name="src" type="462c0819:PsiDirectoryNode" />
               <item name="main" type="462c0819:PsiDirectoryNode" />
               <item name="crank" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="chris" type="b2602c69:ProjectViewProjectNode" />
+              <item name="chris" type="462c0819:PsiDirectoryNode" />
+              <item name="src" type="462c0819:PsiDirectoryNode" />
+              <item name="main" type="462c0819:PsiDirectoryNode" />
+              <item name="stat" type="462c0819:PsiDirectoryNode" />
             </path>
             <path>
               <item name="chris" type="b2602c69:ProjectViewProjectNode" />
@@ -292,11 +241,26 @@
             </path>
             <path>
               <item name="chris" type="58d84e3e:PackageViewProjectNode" />
+              <item name="chribaselib" type="616d4139:PackageViewModuleNode" />
+              <item name="chribase_thread" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
               <item name="chricrank" type="616d4139:PackageViewModuleNode" />
             </path>
             <path>
               <item name="chris" type="58d84e3e:PackageViewProjectNode" />
               <item name="chrilib" type="616d4139:PackageViewModuleNode" />
+            </path>
+            <path>
+              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
+              <item name="chrilib" type="616d4139:PackageViewModuleNode" />
+              <item name="cpt" type="1f31426a:PackageElementNode" />
+            </path>
+            <path>
+              <item name="chris" type="58d84e3e:PackageViewProjectNode" />
+              <item name="chrilib" type="616d4139:PackageViewModuleNode" />
+              <item name="libmain" type="1f31426a:PackageElementNode" />
             </path>
             <path>
               <item name="chris" type="58d84e3e:PackageViewProjectNode" />
@@ -311,6 +275,7 @@
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
     </panes>
   </component>
   <component name="PropertiesComponent">
@@ -318,9 +283,10 @@
     <property name="Repository.Attach.Annotations" value="false" />
     <property name="Repository.Attach.JavaDocs" value="false" />
     <property name="Repository.Attach.Sources" value="false" />
+    <property name="TODO_SCOPE" value="Module 'chrilib'" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrary" value="JUnit4" />
     <property name="com.intellij.testIntegration.createTest.CreateTestDialog.defaultLibrarySuperClass.JUnit4" value="" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/../old/d/chricrank" />
+    <property name="last_opened_file_path" value="$PROJECT_DIR$/../old/d/chrilib" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
     <property name="project.structure.side.proportion" value="0.2" />
@@ -328,6 +294,7 @@
   </component>
   <component name="RecentsManager">
     <key name="CreateTestDialog.RecentsKey">
+      <recent name="libmain" />
       <recent name="crank" />
       <recent name="" />
     </key>
@@ -347,7 +314,7 @@
       </list>
     </option>
   </component>
-  <component name="RunManager" selected="JUnit.Crank_mainKtTest.testCranking">
+  <component name="RunManager" selected="Kotlin.Chribaselib_mainKt">
     <configuration name="Crank_mainKtTest.testCranking" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="chris" />
       <extension name="coverage">
@@ -360,6 +327,35 @@
       <option name="MAIN_CLASS_NAME" value="crank.Crank_mainKtTest" />
       <option name="METHOD_NAME" value="testCranking" />
       <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SpiritMapTest.synchronizedMethod" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="chrilib" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="libmain.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="libmain" />
+      <option name="MAIN_CLASS_NAME" value="libmain.SpiritMapTest" />
+      <option name="METHOD_NAME" value="synchronizedMethod" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Chribaselib_mainKt" type="JetRunConfigurationType" factoryName="Kotlin" temporary="true" nameIsGenerated="true">
+      <module name="chribaselib" />
+      <option name="VM_PARAMETERS" />
+      <option name="PROGRAM_PARAMETERS" />
+      <option name="ALTERNATIVE_JRE_PATH_ENABLED" value="false" />
+      <option name="ALTERNATIVE_JRE_PATH" />
+      <option name="PASS_PARENT_ENVS" value="true" />
+      <option name="MAIN_CLASS_NAME" value="Chribaselib_mainKt" />
+      <option name="WORKING_DIRECTORY" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -379,8 +375,10 @@
     </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.Crank_mainKtTest.testCranking" />
+        <item itemvalue="Kotlin.Chribaselib_mainKt" />
         <item itemvalue="Kotlin.Chris_mainKt" />
+        <item itemvalue="JUnit.SpiritMapTest.synchronizedMethod" />
+        <item itemvalue="JUnit.Crank_mainKtTest.testCranking" />
       </list>
     </recent_temporary>
   </component>
@@ -395,56 +393,65 @@
     <servers />
   </component>
   <component name="TestHistory">
-    <history-entry file="Crank_mainKtTest_testCranking - 2018.12.17 at 18h 33m 16s.xml">
-      <configuration name="Crank_mainKtTest.testCranking" configurationId="JUnit" />
+    <history-entry file="SpiritMapTest_synchronizedMethod - 2018.12.18 at 16h 36m 55s.xml">
+      <configuration name="SpiritMapTest.synchronizedMethod" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="Crank_mainKtTest_testCranking - 2018.12.17 at 18h 34m 01s.xml">
-      <configuration name="Crank_mainKtTest.testCranking" configurationId="JUnit" />
+    <history-entry file="SpiritMapTest_synchronizedMethod - 2018.12.18 at 16h 37m 04s.xml">
+      <configuration name="SpiritMapTest.synchronizedMethod" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="Crank_mainKtTest_testCranking - 2018.12.17 at 18h 34m 46s.xml">
-      <configuration name="Crank_mainKtTest.testCranking" configurationId="JUnit" />
+    <history-entry file="SpiritMapTest_synchronizedMethod - 2018.12.18 at 16h 37m 24s.xml">
+      <configuration name="SpiritMapTest.synchronizedMethod" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="Crank_mainKtTest_testCranking - 2018.12.17 at 18h 41m 42s.xml">
-      <configuration name="Crank_mainKtTest.testCranking" configurationId="JUnit" />
+    <history-entry file="SpiritMapTest_synchronizedMethod - 2018.12.18 at 16h 38m 25s.xml">
+      <configuration name="SpiritMapTest.synchronizedMethod" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="Crank_mainKtTest_testCranking - 2018.12.17 at 18h 52m 42s.xml">
-      <configuration name="Crank_mainKtTest.testCranking" configurationId="JUnit" />
+    <history-entry file="SpiritMapTest_synchronizedMethod - 2018.12.18 at 16h 38m 56s.xml">
+      <configuration name="SpiritMapTest.synchronizedMethod" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="Crank_mainKtTest_testCranking - 2018.12.17 at 18h 53m 46s.xml">
-      <configuration name="Crank_mainKtTest.testCranking" configurationId="JUnit" />
+    <history-entry file="SpiritMapTest_synchronizedMethod - 2018.12.18 at 16h 39m 58s.xml">
+      <configuration name="SpiritMapTest.synchronizedMethod" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="Crank_mainKtTest_testCranking - 2018.12.17 at 18h 54m 42s.xml">
-      <configuration name="Crank_mainKtTest.testCranking" configurationId="JUnit" />
+    <history-entry file="SpiritMapTest_synchronizedMethod - 2018.12.18 at 16h 40m 54s.xml">
+      <configuration name="SpiritMapTest.synchronizedMethod" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="Crank_mainKtTest_testCranking - 2018.12.17 at 18h 55m 44s.xml">
-      <configuration name="Crank_mainKtTest.testCranking" configurationId="JUnit" />
+    <history-entry file="SpiritMapTest_synchronizedMethod - 2018.12.18 at 16h 41m 56s.xml">
+      <configuration name="SpiritMapTest.synchronizedMethod" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="Crank_mainKtTest_testCranking - 2018.12.17 at 18h 57m 59s.xml">
-      <configuration name="Crank_mainKtTest.testCranking" configurationId="JUnit" />
+    <history-entry file="SpiritMapTest_synchronizedMethod - 2018.12.18 at 16h 44m 18s.xml">
+      <configuration name="SpiritMapTest.synchronizedMethod" configurationId="JUnit" />
     </history-entry>
-    <history-entry file="Crank_mainKtTest_testCranking - 2018.12.17 at 19h 21m 10s.xml">
-      <configuration name="Crank_mainKtTest.testCranking" configurationId="JUnit" />
+    <history-entry file="SpiritMapTest_synchronizedMethod - 2018.12.18 at 16h 44m 42s.xml">
+      <configuration name="SpiritMapTest.synchronizedMethod" configurationId="JUnit" />
     </history-entry>
   </component>
+  <component name="TodoView" selected-index="2">
+    <todo-panel id="selected-file">
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+    <todo-panel id="all">
+      <are-packages-shown value="true" />
+      <is-autoscroll-to-source value="true" />
+    </todo-panel>
+  </component>
   <component name="ToolWindowManager">
-    <frame x="-2" y="-3" width="1924" height="1087" extended-state="6" />
+    <frame x="0" y="0" width="1920" height="1080" extended-state="0" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.19423692" />
+      <window_info active="true" content_ui="combo" id="Project" order="0" visible="true" weight="0.19679144" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Designer" order="2" />
       <window_info id="Favorites" order="3" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" weight="0.3298647" />
-      <window_info active="true" anchor="bottom" x="852" y="488" width="1068" height="592" id="Run" order="2" type="WINDOWED" visible="true" weight="0.3298647" />
-      <window_info anchor="bottom" id="Debug" order="3" weight="0.39958376" />
+      <window_info anchor="bottom" x="801" y="481" width="1074" height="595" id="Run" order="2" type="WINDOWED" visible="true" weight="0.3298647" />
+      <window_info anchor="bottom" id="Debug" order="3" weight="0.39937106" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
-      <window_info anchor="bottom" id="TODO" order="6" />
+      <window_info anchor="bottom" id="TODO" order="6" weight="0.32914045" />
       <window_info anchor="bottom" id="Version Control" order="7" weight="0.3298647" />
       <window_info anchor="bottom" id="Terminal" order="8" />
       <window_info anchor="bottom" id="Event Log" order="9" side_tool="true" />
-      <window_info anchor="bottom" id="Messages" order="10" visible="true" weight="0.3298647" />
+      <window_info anchor="bottom" id="Messages" order="10" weight="0.32914045" />
       <window_info anchor="right" id="Commander" internal_type="SLIDING" order="0" type="SLIDING" weight="0.4" />
       <window_info anchor="right" id="Ant Build" order="1" weight="0.25" />
       <window_info anchor="right" content_ui="combo" id="Hierarchy" order="2" weight="0.25" />
@@ -466,13 +473,6 @@
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="160">
           <caret line="8" column="8" selection-start-line="8" selection-start-column="8" selection-end-line="8" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/chribaselib/src/main/chribase_thread/CuteThread.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="529">
-          <caret line="74" column="5" lean-forward="true" selection-start-line="74" selection-start-column="5" selection-end-line="74" selection-end-column="5" />
         </state>
       </provider>
     </entry>
@@ -507,20 +507,6 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/chrilib/src/main/cpt/cpt_interfaces.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="570">
-          <caret line="30" selection-start-line="30" selection-end-line="30" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/chribaselib/src/main/basemain/base_data.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="57">
-          <caret line="3" column="10" selection-start-line="3" selection-start-column="10" selection-end-line="3" selection-end-column="10" />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/chrilib/src/main/cpt/cpt_premises.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="589">
@@ -536,27 +522,6 @@
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/test/crank/TestEnumTest.kt" />
-    <entry file="file://$PROJECT_DIR$/src/main/stat/stat_main.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" selection-start-line="1" selection-end-line="1" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/crank/crank_registry.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="209">
-          <caret line="11" column="8" selection-start-line="11" selection-start-column="8" selection-end-line="11" selection-end-column="8" />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/chris_main.kt">
-      <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="114">
-          <caret line="6" column="41" lean-forward="true" selection-start-line="6" selection-start-column="41" selection-end-line="6" selection-end-column="41" />
-        </state>
-      </provider>
-    </entry>
     <entry file="jar://$KOTLIN_BUNDLED$/lib/kotlin-reflect-sources.jar!/kotlin/reflect/full/KClasses.kt">
       <provider selected="true" editor-type-id="text-editor">
         <state relative-caret-position="-228">
@@ -564,24 +529,92 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/test/crank/Crank_mainKtTest.kt">
+    <entry file="file://$PROJECT_DIR$/src/main/crank/ReflectionTest.java" />
+    <entry file="file://$PROJECT_DIR$/src/main/stat/stat_main.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="380">
-          <caret line="20" column="1" lean-forward="true" selection-start-line="20" selection-start-column="1" selection-end-line="20" selection-end-column="1" />
+        <state relative-caret-position="114">
+          <caret line="6" column="22" selection-start-line="6" selection-start-column="22" selection-end-line="6" selection-end-column="22" />
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/crank/ReflectionTest.java">
+    <entry file="file://$PROJECT_DIR$/chrilib/src/main/libmain/chri_messages.kt">
+      <provider selected="true" editor-type-id="text-editor" />
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chrilib/src/test/libmain/SpiritMapTest.kt" />
+    <entry file="file://$PROJECT_DIR$/src/test/crank/Crank_mainKtTest.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="19">
-          <caret line="1" selection-start-line="4" selection-start-column="18" selection-end-line="4" selection-end-column="23" />
+        <state relative-caret-position="475">
+          <caret line="25" column="1" lean-forward="true" selection-start-line="25" selection-start-column="1" selection-end-line="25" selection-end-column="1" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chribaselib/src/main/chribase_thread/CuteThread.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="576">
+          <caret line="184" lean-forward="true" selection-start-line="176" selection-end-line="184" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/crank/crank_registry.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="38">
+          <caret line="2" selection-start-line="2" selection-end-line="2" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/crank/crank_main.kt">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="247">
-          <caret line="13" column="84" lean-forward="true" selection-start-line="13" selection-start-column="84" selection-end-line="13" selection-end-column="84" />
+        <state relative-caret-position="494">
+          <caret line="26" selection-start-line="26" selection-end-line="26" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chrilib/src/main/cpt/cpt_interfaces.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="703">
+          <caret line="37" selection-start-line="37" selection-end-line="37" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/chris_main.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="114">
+          <caret line="6" column="41" selection-start-line="6" selection-start-column="41" selection-end-line="6" selection-end-column="41" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chrilib/src/main/libmain/chri_data.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="266">
+          <caret line="14" column="21" selection-start-line="14" selection-start-column="21" selection-end-line="14" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$KOTLIN_BUNDLED$/lib/kotlin-stdlib-sources.jar!/common/kotlin/random/Random.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="1388">
+          <caret line="247" column="21" selection-start-line="247" selection-start-column="21" selection-end-line="247" selection-end-column="21" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chribaselib/src/main/chribaselib_main.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="19">
+          <caret line="1" column="31" lean-forward="true" selection-start-line="1" selection-start-column="31" selection-end-line="1" selection-end-column="31" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chribaselib/src/main/basemain/base_data.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="152">
+          <caret line="8" column="104" selection-start-line="8" selection-start-column="104" selection-end-line="8" selection-end-column="104" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/chrilib/src/main/libmain/chri_types.kt">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="367">
+          <caret line="32" column="28" selection-start-line="32" selection-start-column="28" selection-end-line="32" selection-end-column="28" />
         </state>
       </provider>
     </entry>

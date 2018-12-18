@@ -10,3 +10,6 @@ val _atnDispatcher_ = AttentionDispatcher()
 
 /** Shared console thread object */
 val _console_ = ConsoleThread()
+
+/** Shered spirit map object */
+val _sm_ = SpiritMap()

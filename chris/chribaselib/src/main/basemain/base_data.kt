@@ -6,6 +6,12 @@ typealias Cid = Int
 /** Concept version type. */
 typealias Cvr = Short
 
+// Ranges of cids as unsigned - generated as ulong, then assigned to Cid and Cvr. 0 excluded as special.
+const val MIN_STATIC_CID = 1;
+const val MAX_STATIC_CID = 1_000_000;
+const val MIN_DYNAMIC_CID = 2_000_000;
+const val MAX_DINAMIC_CID = UInt.MAX_VALUE;
+
 /** Debug level. Since it is a Java static final, the if(basemain.debug>0) {} would not compile if the basemain.debug is 0. So, no runtime overhead. */
 const val DEBUG = 0
 

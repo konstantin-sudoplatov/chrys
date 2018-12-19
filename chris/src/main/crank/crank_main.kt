@@ -9,7 +9,7 @@ object crankMain: CrankModule() {
 
     object crankGroup1: CrankGroup {
         val testConcept1_pegprem = SpPegPrem(1_000_001)
-        val testConcept2_strprem = SpStringPrem(1_000_001)
+        val testConcept2_strprem = SpStringPrem(1_000_002)
 
         override fun crank() {
             testConcept1_pegprem.ver = 1

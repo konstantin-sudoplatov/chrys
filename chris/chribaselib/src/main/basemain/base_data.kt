@@ -8,7 +8,7 @@ typealias Cvr = Short
 
 // Ranges of cids as unsigned - generated as ulong, then assigned to Cid and Cvr. 0 excluded as special.
 const val MIN_STATIC_CID = 1;
-const val MAX_STATIC_CID = 1_000_000;
+const val MAX_STATIC_CID = 100_000;
 const val MIN_DYNAMIC_CID = 2_000_000;
 @ExperimentalUnsignedTypes
 const val MAX_DINAMIC_CID = UInt.MAX_VALUE;

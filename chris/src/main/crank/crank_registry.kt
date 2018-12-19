@@ -1,5 +1,7 @@
 package crank
 
+import basemain.logit
+import libmain._sm_
 import stat.statMain
 
 /**
@@ -38,4 +40,19 @@ fun loadAndCrankDynamicConcepts() {
     // Crank
     for(crankModule in crankModues)
         crankModule.doCranking()
+}
+
+fun logSomeFreeCids() {
+
+    val s = StringBuilder()
+    s.append("Dynamic: ")
+    for(cid in _sm_.generateListOfDynamicCids(7)){
+        s.append("%,d ".format(cid).replace(",", "_"))
+    }
+    s.append("\nStatic:  ")
+    for(cid in _sm_.generateListOfStaticCids(7)){
+        s.append("%,d ".format(cid).replace(",", "_"))
+    }
+
+    logit(s.toString())
 }

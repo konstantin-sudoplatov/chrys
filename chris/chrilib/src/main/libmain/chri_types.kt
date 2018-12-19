@@ -1,44 +1,37 @@
 package libmain
 
 import atn.Branch
-import basemain.Cid
-import basemain.MAX_DINAMIC_CID
-import basemain.MIN_DYNAMIC_CID
-import cpt.SpPegPrem
+import basemain.*
+import cpt.SpiritStaticConcept
 import cpt.abs.SpiritConcept
 import kotlin.random.Random
-import kotlin.random.nextLong
 import kotlin.random.nextULong
-import kotlin.reflect.KClass
-import kotlin.reflect.KProperty
-import kotlin.reflect.KProperty1
 import kotlin.reflect.full.createType
 import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.isSubtypeOf
-import kotlin.reflect.jvm.javaField
 
 /**
  *          Synchronized map cid/spiritConcept.
  */
 class SpiritMap {
 
-    @Synchronized fun add(cpt: SpiritConcept) { spMap_[cpt.cid] = cpt }
+    val size
+        get() = spMap_.size
+
+    @Synchronized fun add(cpt: SpiritConcept) {
+        spMap_[cpt.cid] = cpt
+    }
 
     @Synchronized operator fun get(cid: Cid) = spMap_[cid]
 
     @Synchronized operator fun contains(cid: Cid) = cid in spMap_
 
-    /**
-     *          Generate cid in the dynamic range not used in the spirit map.
-     */
-    @Synchronized fun generateDynamicCid(): Cid {
-        var cid: Cid
-        @UseExperimental(ExperimentalUnsignedTypes::class)
-        do {
-            cid = Random.nextULong(MIN_DYNAMIC_CID.toULong(), (MAX_DINAMIC_CID).toULong() + 1u).toInt()
-        } while(cid in this)
+    @Synchronized fun generateListOfDynamicCids(size: Int): List<Cid> {
+        return listOf<Cid>(*Array<Cid>(size, {generateDynamicCid()}))
+    }
 
-        return cid
+    @Synchronized fun generateListOfStaticCids(size: Int): List<Cid> {
+        return listOf<Cid>(*Array<Cid>(size, {generateStaticCid()}))
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -53,6 +46,34 @@ class SpiritMap {
     private val spMap_ = mutableMapOf<Cid, SpiritConcept>()
 
     //---%%%---%%%---%%%---%%%--- private funcs ---%%%---%%%---%%%---%%%---%%%---%%%
+
+    /**
+     *          Generate cid in the dynamic range that is not used in the spirit map.
+     */
+    @UseExperimental(ExperimentalUnsignedTypes::class)
+    private fun generateDynamicCid(): Cid {
+
+        var cid: Cid
+        do {
+            cid = Random.nextULong(MIN_DYNAMIC_CID.toULong(), (MAX_DINAMIC_CID).toULong() + 1u).toInt()
+        } while(cid in this)
+
+        return cid
+    }
+
+    /**
+     *          Generate cid in the static range that is not used in the spirit map.
+     */
+    @UseExperimental(ExperimentalUnsignedTypes::class)
+    private fun generateStaticCid(): Cid {
+
+        var cid: Cid
+        do {
+            cid = Random.nextULong(MIN_STATIC_CID.toULong(), (MAX_STATIC_CID).toULong() + 1u).toInt()
+        } while(cid in this)
+
+        return cid
+    }
 }
 
 /**
@@ -68,7 +89,7 @@ open class CrankModule() {
         // Extract list of crank groups
         @Suppress("UNCHECKED_CAST")
         val crankGroups = this::class.nestedClasses.map { it.objectInstance }
-            .filter { it != null && CrankGroup::class.isInstance(it)} as List<Any>
+            .filter { it != null && CrankGroup::class.isInstance(it)} as List<CrankGroup>
 
         // For every group load its concepts into the spirit map
         for(crankGroup in crankGroups) {
@@ -114,32 +135,32 @@ open class StatModule {
     fun loadSpiritMap() {
 
         // Extract list of stat functors
+        @Suppress("UNCHECKED_CAST")
         val statFuncs = this::class.nestedClasses.map { it.objectInstance }
             .filter { it != null && SF::class.isInstance(it) || SFC::class.isInstance(it)
-                    || SFLC::class.isInstance(it)} as List<*>
+                    || SFLC::class.isInstance(it)} as List<StaticConceptFunctor>
 
-        for(statFunc in statFuncs) {
-            _sm_.add(SpStatConcept(statFunc))
-        }
+        for(statFunc in statFuncs)
+            _sm_.add(SpiritStaticConcept(statFunc))
     }
 }
 
 /**
  *      Base for static function functors.
  */
-abstract class BaseStaticFunction(val cid: Cid)
+abstract class StaticConceptFunctor(val cid: Cid)
 
-abstract class StaticFunction(cid: Cid): BaseStaticFunction(cid) {
+abstract class StaticConceptFunctorReturnUnit(cid: Cid): StaticConceptFunctor(cid) {
     abstract fun func(br: Branch, vararg par: Cid): Unit
 }
-typealias SF = StaticFunction
+typealias SF = StaticConceptFunctorReturnUnit
 
-abstract class StaticFunctionReturnCid(cid: Cid): BaseStaticFunction(cid) {
+abstract class StaticConceptFunctorReturnCid(cid: Cid): StaticConceptFunctor(cid) {
     abstract fun func(br: Branch, vararg par: Cid): Cid
 }
-typealias SFC = StaticFunctionReturnCid
+typealias SFC = StaticConceptFunctorReturnCid
 
-abstract class StaticFunctionReturnListOfCids(cid: Cid): BaseStaticFunction(cid) {
+abstract class StaticConceptFunctorReturnListOfCids(cid: Cid): StaticConceptFunctor(cid) {
     abstract fun func(br: Branch, vararg par: Cid): List<Cid>
 }
-typealias SFLC = StaticFunctionReturnListOfCids
+typealias SFLC = StaticConceptFunctorReturnListOfCids

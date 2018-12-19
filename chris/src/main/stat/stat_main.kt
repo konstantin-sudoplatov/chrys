@@ -14,12 +14,12 @@ object statMain: StatModule() {
         println("in test1Stat()")
     }}
 
-    object test2Stat: SFC(1) { override fun func(br: Branch, vararg par: Cid): Cid {
+    object test2Stat: SFC(2) { override fun func(br: Branch, vararg par: Cid): Cid {
         println("in test1Stat()")
         return 0
     }}
 
-    object test3Stat: SFLC(1) { override fun func(br: Branch, vararg par: Cid): List<Cid> {
+    object test3Stat: SFLC(3) { override fun func(br: Branch, vararg par: Cid): List<Cid> {
         println("in test1Stat()")
         return listOf()
     }}

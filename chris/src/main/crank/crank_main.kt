@@ -1,43 +1,73 @@
 package crank
 
-import basemain.Cid
 import cpt.SpPegPrem
 import cpt.SpStringPrem
-import cpt.abs.SpiritConcept
-import libmain.CrankEnumIfc
-import sun.security.provider.ConfigFile
-import kotlin.reflect.KClass
+import libmain.CrankGroup
+import libmain.CrankModule
 
-/** Crank container */
-class CrankMain {
-    enum class TestEnum(concept: SpiritConcept) : CrankEnumIfc {
-        aaa(SpPegPrem(1)),
-        bbb(SpStringPrem(2));
+object crankMain: CrankModule() {
 
-        override val conceptClass: KClass<out SpiritConcept> = concept::class
-        override val cid = concept.cid
+    object crankGroup1: CrankGroup {
+        val testConcept1_pegprem = SpPegPrem(1_000_001)
+        val testConcept2_strprem = SpStringPrem(1_000_001)
+
+        override fun crank() {
+            testConcept1_pegprem.ver = 1
+            testConcept2_strprem.ver = 1
+        }
     }
 
-    enum class TestEnum2(concept: SpiritConcept) : CrankEnumIfc {
-        aaa(SpPegPrem(1)),
-        bbb(SpStringPrem(2));
+    object crankGroup2: CrankGroup {
+        val testConcept1_pegprem = SpPegPrem(1_000_003)
+        val testConcept2_strprem = SpStringPrem(1_000_004)
 
-        override val conceptClass: KClass<out SpiritConcept> = concept::class
-        override val cid = concept.cid
+        override fun crank() {
+            testConcept1_pegprem.ver = 2
+            testConcept2_strprem.ver = 2
+        }
     }
 
-    fun testEnum() {
-        println("in testEnum")
-    }
 
-
-    fun testEnum2() {
-        println("in testEnum2")
-        (::testEnum3)()
-    }
 }
 
-fun testEnum3() {
-
-    println("in testEnum3")
-}
+//import cpt.SpPegPrem
+//import cpt.SpStringPrem
+//import cpt.abs.SpiritConcept
+//import libmain.CrankEnumIfc
+//import kotlin.reflect.KClass
+//
+///** Crank container */
+//object crankMain {
+//    enum class TestEnum(concept: SpiritConcept) : CrankEnumIfc {
+//        aaa(SpPegPrem(1)),
+//        bbb(SpStringPrem(2));
+//
+//        override val conceptClass: KClass<out SpiritConcept> = concept::class
+//        override val cid = concept.cid
+//    }
+//
+//    enum class TestEnum2(concept: SpiritConcept) : CrankEnumIfc {
+//        aaa(SpPegPrem(11)),
+//        bbb(SpStringPrem(12));
+//
+//        override val conceptClass: KClass<out SpiritConcept> = concept::class
+//        override val cid = concept.cid
+//    }
+//
+//    fun TestEnum.testEnum() {
+//        println("in testEnum")
+//        val en = TestEnum.aaa
+//        val en1 = cid
+////        println("aaa ${this.aaa}")
+//    }
+//
+//
+//    fun TestEnum2.testEnum2() {
+//        println("in testEnum2")
+//    }
+//}
+//
+//fun testEnum3() {
+//
+//    println("in testEnum3")
+//}

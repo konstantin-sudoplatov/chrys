@@ -1,7 +1,12 @@
+import crank.loadAndCrankDynamicConcepts
+import crank.loadStaticConcepts
 import libmain._atnDispatcher_
 import libmain._console_
 
 fun main(args: Array<String>) {
+
+    loadStaticConcepts()
+    loadAndCrankDynamicConcepts()
 
     _atnDispatcher_.start()
     _console_.initialize(_atnDispatcher_)

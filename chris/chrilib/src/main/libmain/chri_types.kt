@@ -4,6 +4,7 @@ import atn.Branch
 import basemain.*
 import cpt.SpiritStaticConcept
 import cpt.abs.SpiritConcept
+import cpt.abs.SpiritDynamicConcept
 import kotlin.random.Random
 import kotlin.random.nextULong
 import kotlin.reflect.full.createType
@@ -18,7 +19,26 @@ class SpiritMap {
     val size
         get() = spMap_.size
 
+    /**
+     *      Add a concept to the spirit map. If cid of the concept is not set (0), then it will be generated.
+     *  @param cpt concept to add
+     */
+    @UseExperimental(ExperimentalUnsignedTypes::class)
     @Synchronized fun add(cpt: SpiritConcept) {
+
+        if
+                (cpt.cid == 0)
+        {
+            assert(cpt is SpiritDynamicConcept)
+            cpt.cid = generateDynamicCid()
+        }
+        else {
+            assert((cpt.cid.toULong() >= MIN_DYNAMIC_CID.toULong() && cpt.cid.toULong() <= MAX_DYNAMIC_CID.toULong() &&
+                cpt is SpiritDynamicConcept) ||
+                (cpt.cid.toULong() >= MIN_STATIC_CID.toULong() && cpt.cid.toULong() <= MAX_STATIC_CID.toULong() &&
+                cpt is SpiritStaticConcept))
+        }
+
         spMap_[cpt.cid] = cpt
     }
 
@@ -55,7 +75,7 @@ class SpiritMap {
 
         var cid: Cid
         do {
-            cid = Random.nextULong(MIN_DYNAMIC_CID.toULong(), (MAX_DINAMIC_CID).toULong() + 1u).toInt()
+            cid = Random.nextULong(MIN_DYNAMIC_CID.toULong(), (MAX_DYNAMIC_CID).toULong() + 1u).toInt()
         } while(cid in this)
 
         return cid

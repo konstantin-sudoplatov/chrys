@@ -9,8 +9,8 @@ fun main(args: Array<String>) {
     loadAndCrankDynamicConcepts()
 
     _atnDispatcher_.start()
-    _console_.initialize(_atnDispatcher_)
     _console_.start()
+    _console_.requestCreationOfAttentionCircle(_atnDispatcher_)
 
     _atnDispatcher_.join()
     _console_.join()

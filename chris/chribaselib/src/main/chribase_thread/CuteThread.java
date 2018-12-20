@@ -57,11 +57,11 @@ public class CuteThread extends Thread {
      */
     @Override
     public void run() {
-//System.out.println(threadName_ + ": in run");     //todo: debugging
+//System.out.printf("%s: in run, size = %s\n", threadName_, _msgQueue.size());     //todo: debugging
         while(true) {
             MessageMsg msg = _getBlocking();
             if (!_messageProc(msg)) {
-                String threadName = threadName_ != "noname"? threadName_: this.getClass().getName();
+                String threadName = !threadName_.equals("noname")? threadName_: this.getClass().getName();
                 logit("Unexpected message in " + threadName + ": " + msg.getClass().getName());
             }
 
@@ -159,8 +159,9 @@ public class CuteThread extends Thread {
                 wait();
             else {
                 wait(timeout, 0);
-                assert _msgQueue.isEmpty(): "" + size() + " messages in queue. Someone forgot to notify us.";
-                return new TimeoutMsg();
+                if      // is timeout happened?
+                        (_msgQueue.isEmpty())
+                    return new TimeoutMsg();
             }
         } catch (InterruptedException ignored) {}
 

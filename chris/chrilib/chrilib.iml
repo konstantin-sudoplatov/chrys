@@ -8,6 +8,9 @@
         </compilerSettings>
         <compilerArguments>
           <option name="jvmTarget" value="1.8" />
+          <option name="errors">
+            <ArgumentParseErrors />
+          </option>
         </compilerArguments>
       </configuration>
     </facet>

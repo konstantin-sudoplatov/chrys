@@ -21,16 +21,9 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
      *  The attention dispatcher thread must be already started.
      *  @param atnDisp initialized and started attention dispatcher thread
      */
-    fun initialize(atnDisp: AttentionDispatcher) {
+    fun requestCreationOfAttentionCircle(atnDisp: AttentionDispatcher) {
         // Require circle creation and wait for its brid
         atnDisp.putInQueue(UserRequestsDispatcherCreateNewCircleMsg(this))
-        while(true) {
-            val msg = _getBlocking()
-            if(msg is CircleSendsUserItsBridMsg) {
-                circleBrid_ = msg.circleBrid
-                break
-            }
-        }
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -74,6 +67,11 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
                         circleBrid_.pod.putInQueue(UserTellsCircleIbr(circleBrid_.podInd, line))
                     }
                 }
+                return true
+            }
+
+            is CircleSendsUserItsBridMsg -> {
+                circleBrid_ = msg.circleBrid
                 return true
             }
 

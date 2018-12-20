@@ -12,7 +12,7 @@ import basemain.Cvr
 abstract class SpiritConcept(cid: Cid) {
 
     /** Concept identifier */
-    val cid: Cid = cid
+    var cid: Cid = cid
 
     /** Version number */
     var ver: Cvr = 0

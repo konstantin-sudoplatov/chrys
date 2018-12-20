@@ -8,8 +8,8 @@ import libmain.CrankModule
 object crankMain: CrankModule() {
 
     object crankGroup1: CrankGroup {
-        val testConcept1_pegprem = SpPegPrem(1_000_001)
-        val testConcept2_strprem = SpStringPrem(1_000_002)
+        val testConcept1_pegprem = SpPegPrem(2_000_001)
+        val testConcept2_strprem = SpStringPrem(2_000_002)
 
         override fun crank() {
             testConcept1_pegprem.ver = 1
@@ -18,8 +18,8 @@ object crankMain: CrankModule() {
     }
 
     object crankGroup2: CrankGroup {
-        val testConcept1_pegprem = SpPegPrem(1_000_003)
-        val testConcept2_strprem = SpStringPrem(1_000_004)
+        val testConcept1_pegprem = SpPegPrem(2_000_003)
+        val testConcept2_strprem = SpStringPrem(2_000_004)
 
         override fun crank() {
             testConcept1_pegprem.ver = 2

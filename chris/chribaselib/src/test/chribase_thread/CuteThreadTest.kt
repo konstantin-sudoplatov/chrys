@@ -12,6 +12,7 @@ class CuteThreadTest {
      */
     @Test fun fillFreeQueueWithCongestion () {
         val thread = object : CuteThread(0, DEFAULT_MAX_THREAD_QUEUE, "primary") {
+
             override fun run() {
                 Thread.sleep(1000)
                 var i = 0
@@ -20,6 +21,10 @@ class CuteThreadTest {
                     i++
                     //println("got = $i")
                 }
+            }
+
+            override fun _messageProc(msg: MessageMsg?): Boolean {
+                return true
             }
         }.also { it.start() }
 
@@ -53,6 +58,10 @@ class CuteThreadTest {
                 _getBlocking()
                 exitOnTimeout = true
                 println("Finish on timeout")
+            }
+
+            override fun _messageProc(msg: MessageMsg?): Boolean {
+                return true
             }
         }.also { it.start() }
 

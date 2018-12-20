@@ -8,8 +8,6 @@ fun main(args: Array<String>) {
     loadStaticConcepts()
     loadAndCrankDynamicConcepts()
 
-    _atnDispatcher_.start()
-    _console_.start()
     _console_.requestCreationOfAttentionCircle(_atnDispatcher_)
 
     _atnDispatcher_.join()

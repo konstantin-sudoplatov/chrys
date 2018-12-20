@@ -20,7 +20,5 @@ class PodPoolTest {
     fun poolCreationTest() {
         val pool = PodPool()
         assert(pool.size == POD_POOL_SIZE)
-        assert(pool.podArray.size == pool.size)
-        assert(pool.podSet.size == pool.size)
     }
 }

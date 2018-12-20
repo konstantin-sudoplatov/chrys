@@ -12,7 +12,7 @@ import static basemain.Base_funcsKt.logit;
  * This class extends the Thread class, not just implements the runnable interface, since it gets us access to the
  * Thread class, for example we would be able to use chribase_thread.currentThread().
  */
-public class CuteThread extends Thread {
+abstract public class CuteThread extends Thread {
 
     /**
      *      Default constructor.
@@ -140,13 +140,10 @@ public class CuteThread extends Thread {
     /**
      *      Message processing. Successors define its logic. This method is not to be syncrhonized, since it or its
      *  inheritors are always called from the thread running this object. No contention here.
-     *  This method is not abstract since we want to create the object in JUnit tests.
      * @param msg message to process
      * @return true - message accepted, false - message is not recognized.
      */
-    protected boolean _messageProc(MessageMsg msg) {
-        return true;
-    }
+    abstract protected boolean _messageProc(MessageMsg msg);
 
     /**
      * Wait until there is a message in the queue and extract if from the head of the queue.

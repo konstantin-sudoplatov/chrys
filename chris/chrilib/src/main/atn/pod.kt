@@ -2,7 +2,11 @@ package atn
 
 import basemain.DEFAULT_MAX_THREAD_QUEUE
 import basemain.DEFAULT_THREAD_QUEUE_TIMEOUT
+import basemain.MAX_POD_THREAD_QUEUE
+import basemain.POD_THREAD_QUEUE_TIMEOUT
 import chribase_thread.CuteThread
+import chribase_thread.MessageMsg
+import chribase_thread.TerminationRequestMsg
 import libmain.POD_POOL_SIZE
 import java.util.*
 import kotlin.Comparator
@@ -19,7 +23,7 @@ data class Brid(val pod: Pod, val podInd: Int)
  *  @param podName Alias for threadName
  *  @param podIndex Index of the pod in the pool's array of pods
  */
-class Pod(podName: String, val podIndex: Int): CuteThread(DEFAULT_THREAD_QUEUE_TIMEOUT, DEFAULT_MAX_THREAD_QUEUE, podName)
+class Pod(podName: String, val podIndex: Int): CuteThread(POD_THREAD_QUEUE_TIMEOUT, MAX_POD_THREAD_QUEUE, podName)
 {
     /** Alias for threadName */
     val podName: String
@@ -33,6 +37,26 @@ class Pod(podName: String, val podIndex: Int): CuteThread(DEFAULT_THREAD_QUEUE_T
         s += "\n    numOfBranches = ${numOfBranches}"
         s += "\n    podIndex = ${podIndex}"
         return s
+    }
+
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+    //
+    //                                  Protected
+    //
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+
+    //---$$$---$$$---$$$---$$$---$$$ protected data ---$$$---$$$---$$$---$$$---$$$--
+
+    //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
+
+    override protected fun _messageProc(msg: MessageMsg): Boolean {
+
+        when(msg) {
+            is TerminationRequestMsg -> {
+                return true
+            }
+        }
+        return false
     }
 }
 
@@ -60,13 +84,28 @@ class PodComparator: Comparator<Pod>
  *      Pool of pods. It is of fixed size and populated with running pods (they are started on the pool construction).
  *  @param size number of pods in the pool
  */
-class PodPool(val size: Int = POD_POOL_SIZE)
+class PodPool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
 {
+    override fun _messageProc(msg: MessageMsg?): Boolean {
+        when(msg) {
+            is TerminationRequestMsg -> {
+
+                // Terminate pods
+                for(pod in podArray)
+                    pod.putInQueue(msg)
+
+                return true
+            }
+        }
+
+        return false
+    }
+
     // Create and start all pods
-    internal var podArray: Array<Pod> = Array<Pod>(size, {Pod("pod_$it", it).also {it.start()}})
+    private var podArray: Array<Pod> = Array<Pod>(size, {Pod("pod_$it", it).also {it.start()}})
 
     /** Sorted set of pods. Pods are sorted by their usage number, plus a unique id to avoid repetition. */
-    internal val podSet = TreeSet<Pod>(PodComparator())
+    private val podSet = TreeSet<Pod>(PodComparator())
 
     init {
         // Register all pods in the tree set

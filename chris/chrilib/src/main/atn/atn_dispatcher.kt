@@ -6,13 +6,14 @@ import chribase_thread.TerminationRequestMsg
 import libmain.CircleSendsUserItsBridMsg
 import libmain.UserRequestsDispatcherCreateNewCircleMsg
 import libmain._console_
+import libmain._pp_
 
 /**
  *      Attention dispatcher:
  *  1. On user request starts and and registers an attention circle and sends it reference to the user thread.
  *  2. On the termination message from libmain initiates termination of all the attention threads
  */
-class AttentionDispatcher(threadName: String = "dispatcher"): CuteThread(0, 0, threadName)
+class AttentionDispatcher(): CuteThread(0, 0, "dispatcher")
 {
     override fun _messageProc(msg: MessageMsg): Boolean {
         when(msg) {
@@ -23,7 +24,7 @@ class AttentionDispatcher(threadName: String = "dispatcher"): CuteThread(0, 0, t
             }
 
             is TerminationRequestMsg -> {
-                //todo: not forget to terminate all circles and pods
+                _pp_.putInQueue(msg)    // terminate pod pool
                 return true    // let the base class terminate the thread
             }
         }

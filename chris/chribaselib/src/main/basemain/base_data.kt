@@ -24,8 +24,14 @@ const val EMULATE_CONSOLE = true
 
 /** Maximum number of messages that can be put into the CuteThread object. If more, the putInQueue() method blocks.
     Can be changed on creation the object. */
-const val DEFAULT_MAX_THREAD_QUEUE = 250
+const val DEFAULT_MAX_THREAD_QUEUE = 0
 
 /** Time in miliseconds the thread is waiting for messages. When it elapses, the TimeoutMsg message is generated.
     Can be changed on creation the object. */
-const val DEFAULT_THREAD_QUEUE_TIMEOUT = 1000
+const val DEFAULT_THREAD_QUEUE_TIMEOUT = 0
+
+/** Maximum messages in the pod thread */
+const val MAX_POD_THREAD_QUEUE = 250
+
+/** Timeout in miliseconds for the pod thread. */
+const val POD_THREAD_QUEUE_TIMEOUT = 3000

@@ -7,6 +7,7 @@ import basemain.POD_THREAD_QUEUE_TIMEOUT
 import chribase_thread.CuteThread
 import chribase_thread.MessageMsg
 import chribase_thread.TerminationRequestMsg
+import chribase_thread.TimeoutMsg
 import libmain.POD_POOL_SIZE
 import java.util.*
 import kotlin.Comparator
@@ -52,8 +53,16 @@ class Pod(podName: String, val podIndex: Int): CuteThread(POD_THREAD_QUEUE_TIMEO
     override protected fun _messageProc(msg: MessageMsg): Boolean {
 
         when(msg) {
+
             is TerminationRequestMsg -> {
                 return true
+            }
+
+            is TimeoutMsg -> {
+                if      //is this pod idle?
+                        (numOfBranches == 0)
+                    //yes: it's ok, silence the timeout
+                    return true
             }
         }
         return false

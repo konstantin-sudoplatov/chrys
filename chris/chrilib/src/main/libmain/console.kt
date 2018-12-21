@@ -46,7 +46,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
                     this.putInQueue(TerminationRequestMsg())
                 }
                 else {//no: resend the console line to the circle
-                    circleBrid_.pod.putInQueue(UserTellsCircleIbr(circleBrid_.podInd, msg.text))
+                    circleBrid_?.pod?.putInQueue(UserTellsCircleIbr(circleBrid_!!.podInd, msg.text))
                 }
                 return true
             }
@@ -64,7 +64,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
                         this.putInQueue(TerminationRequestMsg())
                     }
                     else {//no: resend the console line to the circle
-                        circleBrid_.pod.putInQueue(UserTellsCircleIbr(circleBrid_.podInd, line))
+                        circleBrid_?.pod?.putInQueue(UserTellsCircleIbr(circleBrid_!!.podInd, line))
                     }
                 }
                 return true
@@ -87,7 +87,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
                         this.putInQueue(TerminationRequestMsg())
                     }
                     else {//no: resend the console line to the circle
-                        circleBrid_.pod.putInQueue(UserTellsCircleIbr(circleBrid_.podInd, line))
+                        circleBrid_?.pod?.putInQueue(UserTellsCircleIbr(circleBrid_!!.podInd, line))
                     }
                 }
                 return true
@@ -108,7 +108,8 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
 
     //---%%%---%%%---%%%---%%%--- private data ---%%%---%%%---%%%---%%%---%%%---%%%
 
-    private lateinit var circleBrid_: Brid
+    /** The circle branch to talk to. */
+    private var circleBrid_: Brid? = null
 
     /** This iterator used to answer circle's prompts at debugging */
     private lateinit var userLinesIterator_: ListIterator<String>

@@ -7,6 +7,7 @@ import libmain.CircleSendsUserItsBridMsg
 import libmain.UserRequestsDispatcherCreateNewCircleMsg
 import libmain._console_
 import libmain._pp_
+import kotlin.reflect.jvm.internal.impl.types.checker.TypeCheckerContext
 
 /**
  *      Attention dispatcher:
@@ -18,7 +19,10 @@ class AttentionDispatcher(): CuteThread(0, 0, "dispatcher")
     override fun _messageProc(msg: MessageMsg): Boolean {
         when(msg) {
             is UserRequestsDispatcherCreateNewCircleMsg -> {
-                //Todo: this is for debagging, need real implementation
+                circleRegistry_[msg.userThread] = null
+//                _pp_.putInQueue(Disp)
+
+                //Todo: this is a dummy to send user someone to talk to. Remove it when real circle is created.
                 _console_.putInQueuePriority(CircleSendsUserItsBridMsg(Brid(Pod("dummy_pod", 0), 0)))
                 return true
             }
@@ -31,4 +35,7 @@ class AttentionDispatcher(): CuteThread(0, 0, "dispatcher")
 
         return false    // message not recognized
     }
+
+    /** Map of Circle branch/user. The branch can be temporarily null, until it is defined on the circle initialization */
+    private val circleRegistry_ = mutableMapOf<CuteThread, Branch?>()
 }

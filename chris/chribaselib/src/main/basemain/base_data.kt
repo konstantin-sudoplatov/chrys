@@ -34,4 +34,4 @@ const val DEFAULT_THREAD_QUEUE_TIMEOUT = 0
 const val MAX_POD_THREAD_QUEUE = 250
 
 /** Timeout in miliseconds for the pod thread. */
-const val POD_THREAD_QUEUE_TIMEOUT = 3000
+const val POD_THREAD_QUEUE_TIMEOUT = 1000

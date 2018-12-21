@@ -1,13 +1,14 @@
 package libmain
 
 import atn.Brid
+import chribase_thread.CuteThread
 import chribase_thread.MessageMsg
 
 class ReaderSendsConsoleLineMsg(val text: String): MessageMsg()
 
 class CirclePromptsUserMsg(): MessageMsg()
 
-class UserRequestsDispatcherCreateNewCircleMsg(val userThread: Thread): MessageMsg()
+class UserRequestsDispatcherCreateNewCircleMsg(val userThread: CuteThread): MessageMsg()
 
 class CircleSendsUserItsBridMsg(val circleBrid: Brid): MessageMsg()
 

@@ -116,15 +116,11 @@ class PodComparator: Comparator<Pod>
     override fun compare(o1: Pod?, o2: Pod?): Int {
         assert(value = o1 != null && o2 != null)
 
-        if
-                (o1!!.numOfBranches != o2!!.numOfBranches)
-            return if(o1.numOfBranches < o2.numOfBranches) -1 else 1
-        else
-            if
-                    (o1.pid != o2.pid)
-                return if(o1.pid < o2.pid) -1 else 1
-            else
-                return 0
+        return when {
+            o1!!.numOfBranches != o2!!.numOfBranches -> if(o1.numOfBranches < o2.numOfBranches) -1 else 1
+            o1.pid != o2.pid -> if(o1.pid < o2.pid) -1 else 1
+            else -> 0
+        }
     }
 }
 

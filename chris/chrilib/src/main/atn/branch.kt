@@ -6,6 +6,10 @@ package atn
  *  are children of the libmain branch, where they are started. Branches are born, live and terminate in their own logical
  *  hierarchy.
  */
-class Branch {
+open class Branch {
+
+}
+
+class AttentionCircle: Branch() {
 
 }

@@ -53,7 +53,7 @@ abstract public class CuteThread extends Thread {
     //v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^v^
 
     /**
-     * Main cycle of taking out and processing messages from the queue.
+     * Main cycle of taking out and processing messages from the queue. Not synchronized, called only once by the Thread.start()
      */
     @Override
     public void run() {
@@ -78,7 +78,7 @@ abstract public class CuteThread extends Thread {
      * Shows if the queue is empty.
      * @return true/false
      */
-    public synchronized  boolean empty() {
+    public synchronized boolean empty() {
         return _msgQueue.isEmpty();
     }
 

@@ -8,13 +8,15 @@ class ReaderSendsConsoleLineMsg(val text: String): MessageMsg()
 
 class CirclePromptsUserMsg(): MessageMsg()
 
-class UserRequestsDispatcherCreateNewCircleMsg(val userThread: CuteThread): MessageMsg()
+class UserRequestsDispatcherCreateAttentionCircleMsg(val user: CuteThread): MessageMsg()
+
+class AttentionCircleReportsPodpoolDispatcherUserItsCreation(val user: CuteThread, val bridObj: Brid): MessageMsg()
 
 class CircleSendsUserItsBridMsg(val circleBrid: Brid): MessageMsg()
 
 /**
  *      Base for messages addressed to pods (inter branch messages)
- *  @param destBridInd branch podIndex of the destination branch in the pod
+ *  @param destBridInd branch pid of the destination branch in the pod
  */
 abstract class PodIbr(val destBridInd: Int): MessageMsg()
 

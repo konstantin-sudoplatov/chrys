@@ -5,22 +5,31 @@ import cpt.abs.Concept
 import cpt.abs.Premise
 import cpt.abs.SpiritPremise
 
-class SpPegPrem(cid: Cid = 0): SpiritPremise(cid) {
+class SpBreed(cid: Cid): SpiritPremise(cid) {
 
-    override fun live_factory(): Concept {
+    override fun liveFactory(): Breed {
+        return Breed(this)
+    }
+}
+
+class Breed internal constructor(spBreed: SpBreed): Premise(spBreed)
+
+class SpPegPrem(cid: Cid): SpiritPremise(cid) {
+
+    override fun liveFactory(): PegPrem {
         return PegPrem(this)
     }
 }
 
-class PegPrem internal constructor(spiritPegPrem: SpPegPrem): Premise(spiritPegPrem)
+class PegPrem internal constructor(spPegPrem: SpPegPrem): Premise(spPegPrem)
 
-class SpStringPrem(cid: Cid = 0): SpiritPremise(cid) {
-    override fun live_factory(): Concept {
+class SpStringPrem(cid: Cid): SpiritPremise(cid) {
+    override fun liveFactory(): StringPrem {
         return StringPrem(this)
     }
 }
 
-class StringPrem(spiritStringPrem: SpStringPrem): Premise(spiritStringPrem) {
+class StringPrem(spStringPrem: SpStringPrem): Premise(spStringPrem) {
 
     var text: String = ""
 

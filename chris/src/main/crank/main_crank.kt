@@ -5,9 +5,9 @@ import cpt.SpStringPrem
 import libmain.CrankGroup
 import libmain.CrankModule
 
-object crankMain: CrankModule() {
+object mainCrank: CrankModule() {
 
-    object crankGroup1: CrankGroup {
+    object circle: CrankGroup {
         val testConcept1_pegprem = SpPegPrem(2_000_001)
         val testConcept2_strprem = SpStringPrem(2_000_002)
 
@@ -37,7 +37,7 @@ object crankMain: CrankModule() {
 //import kotlin.reflect.KClass
 //
 ///** Crank container */
-//object crankMain {
+//object mainCrank {
 //    enum class TestEnum(concept: SpiritConcept) : CrankEnumIfc {
 //        aaa(SpPegPrem(1)),
 //        bbb(SpStringPrem(2));

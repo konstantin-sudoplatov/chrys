@@ -8,6 +8,9 @@ package atn
  */
 open class Branch {
 
+    fun reasoning() {
+
+    }
 }
 
 class AttentionCircle: Branch() {

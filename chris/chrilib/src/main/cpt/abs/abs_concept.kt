@@ -20,7 +20,7 @@ abstract class SpiritConcept(cid: Cid) {
     /**
         Create "live" wrapper for this object.
     */
-    abstract fun live_factory(): Concept;
+    abstract fun liveFactory(): Concept;
 }
 
 /**
@@ -29,7 +29,7 @@ abstract class SpiritConcept(cid: Cid) {
  *  operate with changeable data, like activation or prerequisites. While the spiritConcept concepts are shared by all caldrons,
  *  the live ones are referenced only in their own branches.
  *
- *  We don't create live concepts directly through constructors, instead we use the live_factory() method of their
+ *  We don't create live concepts directly through constructors, instead we use the liveFactory() method of their
  *  holy partners.
  *
  *  @param spiritConcept

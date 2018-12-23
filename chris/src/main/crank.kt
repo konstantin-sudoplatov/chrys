@@ -1,7 +1,8 @@
 import crank.loadAndCrankDynamicConcepts
-import crank.loadStaticConcepts
-import crank.logSomeFreeCids
+import crank.logSomeFreeDynamicCids
 import libmain._sm_
+import stat.loadStaticConcepts
+import stat.logSomeFreeStaticCids
 
 fun main(args: Array<String>) {
     loadStaticConcepts()
@@ -9,5 +10,6 @@ fun main(args: Array<String>) {
     loadAndCrankDynamicConcepts()
     println(_sm_.size)
 
-    logSomeFreeCids()
+    logSomeFreeStaticCids()
+    logSomeFreeDynamicCids()
 }

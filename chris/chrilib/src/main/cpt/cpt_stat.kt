@@ -7,7 +7,7 @@ import java.lang.UnsupportedOperationException
 
 class SpiritStaticConcept(val func: StaticConceptFunctor): SpiritConcept(func.cid) {
 
-    override fun live_factory(): Concept {
+    override fun liveFactory(): Concept {
         throw UnsupportedOperationException("Not aplicable here.")
     }
 

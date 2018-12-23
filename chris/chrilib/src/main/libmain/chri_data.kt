@@ -12,7 +12,7 @@ val _atnDispatcher_ = AttentionDispatcher()
 /** Shared console thread object */
 val _console_ = ConsoleThread()
 
-/** Pool of pods. The pod thread started in the constructor. */
+/** Pool of pods. */
 val _pp_ = Podpool()
 
 /** Shered spirit map object */

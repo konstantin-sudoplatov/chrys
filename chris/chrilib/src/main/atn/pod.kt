@@ -57,12 +57,15 @@ class Pod(podName: String, val pid: Int): CuteThread(POD_THREAD_QUEUE_TIMEOUT, M
                 return true
             }
 
+            // Create new branch
             is UserRequestsDispatcherCreateAttentionCircleMsg -> {
                 val circle = AttentionCircle()
                 val brid = generateBrid()
                 branchMap[brid] = circle
                 numOfBranches++
                 _pp_.putInQueue(AttentionCircleReportsPodpoolDispatcherUserItsCreation(msg.user, Brid(this, brid)))
+
+                circle.reasoning()
 
                 return true
             }
@@ -185,6 +188,14 @@ class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
         return false
     }
 
+    /**
+     *      Start all pods of the pool.
+     */
+    fun startPods() {
+        for(pod in podArray)
+            pod.start()
+    }
+
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //                               Private
@@ -193,8 +204,8 @@ class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
 
     //---%%%---%%%---%%%---%%%--- private data ---%%%---%%%---%%%---%%%---%%%---%%%
 
-    // Create and start all pods
-    private var podArray: Array<Pod> = Array<Pod>(size, {Pod("pod_$it", it).also {it.start()}})
+    // Create all pods
+    private var podArray: Array<Pod> = Array<Pod>(size, { Pod("pod_$it", it) })
 
     /** Sorted set of pods. Pods are sorted by their usage number, plus a unique id to avoid repetition. */
     private val podSet = TreeSet<Pod>(PodComparator())

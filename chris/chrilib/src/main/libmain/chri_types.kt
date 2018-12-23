@@ -26,17 +26,19 @@ class SpiritMap {
     @UseExperimental(ExperimentalUnsignedTypes::class)
     @Synchronized fun add(cpt: SpiritConcept) {
 
-        if
+        if      // is cid not set up?
                 (cpt.cid == 0)
-        {
-            assert(cpt is SpiritDynamicConcept)
+        {   // no: generate cid
+            assert(cpt is SpiritDynamicConcept) {"Only dynamic concepts can be assigned with generated cid. Concept: $cpt"}
             cpt.cid = generateDynamicCid()
         }
-        else {
+        else
+        {   // yes: check it
             assert((cpt.cid.toULong() >= MIN_DYNAMIC_CID.toULong() && cpt.cid.toULong() <= MAX_DYNAMIC_CID.toULong() &&
                 cpt is SpiritDynamicConcept) ||
                 (cpt.cid.toULong() >= MIN_STATIC_CID.toULong() && cpt.cid.toULong() <= MAX_STATIC_CID.toULong() &&
-                cpt is SpiritStaticConcept))
+                cpt is SpiritStaticConcept)) {"Cid ${cpt.cid} is out of its range. Concept: $cpt"}
+            assert(cpt.cid !in spMap_) {"Cid ${cpt.cid} is already in the map. Concept: $cpt"}
         }
 
         spMap_[cpt.cid] = cpt
@@ -145,42 +147,35 @@ interface CrankGroup {
 }
 
 /**
- *          Base for the stat modules.
- */
-open class StatModule {
-
-    /**
-     *      Load concepts declared in this module into the spirit map
-     */
-    fun loadSpiritMap() {
-
-        // Extract list of stat functors
-        @Suppress("UNCHECKED_CAST")
-        val statFuncs = this::class.nestedClasses.map { it.objectInstance }
-            .filter { it != null && SF::class.isInstance(it) || SFC::class.isInstance(it)
-                    || SFLC::class.isInstance(it)} as List<StaticConceptFunctor>
-
-        for(statFunc in statFuncs)
-            _sm_.add(SpiritStaticConcept(statFunc))
-    }
-}
-
-/**
  *      Base for static function functors.
  */
 abstract class StaticConceptFunctor(val cid: Cid)
 
-abstract class StaticConceptFunctorReturnUnit(cid: Cid): StaticConceptFunctor(cid) {
-    abstract fun func(br: Branch, vararg par: Cid): Unit
+/**
+ *      Functor: fun(Branch): Unit
+ */
+abstract class F(cid: Cid): StaticConceptFunctor(cid) {
+    abstract fun func(br: Branch): Unit
 }
-typealias SF = StaticConceptFunctorReturnUnit
 
-abstract class StaticConceptFunctorReturnCid(cid: Cid): StaticConceptFunctor(cid) {
-    abstract fun func(br: Branch, vararg par: Cid): Cid
-}
-typealias SFC = StaticConceptFunctorReturnCid
 
-abstract class StaticConceptFunctorReturnListOfCids(cid: Cid): StaticConceptFunctor(cid) {
-    abstract fun func(br: Branch, vararg par: Cid): List<Cid>
+/**
+ *      Functor: fun(Branch, Cid): Unit
+ */
+abstract class FCid(cid: Cid): StaticConceptFunctor(cid) {
+    abstract fun func(br: Branch, cid: Cid): Unit
 }
-typealias SFLC = StaticConceptFunctorReturnListOfCids
+
+/**
+ *      Functor: fun(Branch, Cid, Cid): Unit
+ */
+abstract class F2Cid(cid: Cid): StaticConceptFunctor(cid) {
+    abstract fun func(br: Branch, cid0: Cid, cid1: Cid): Unit
+}
+
+/**
+ *      Functor: fun(Branch, vararg Cid): Unit
+ */
+abstract class FLCid(cid: Cid): StaticConceptFunctor(cid) {
+    abstract fun func(br: Branch, vararg cids: Cid): Unit
+}

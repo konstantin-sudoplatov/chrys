@@ -1,8 +1,8 @@
 import crank.loadAndCrankDynamicConcepts
-import crank.loadStaticConcepts
 import libmain._atnDispatcher_
 import libmain._console_
 import libmain._pp_
+import stat.loadStaticConcepts
 
 /**
  * Initiation of a new session goes as following: this function starts the sequence by calling the
@@ -21,6 +21,7 @@ fun main(args: Array<String>) {
     loadAndCrankDynamicConcepts()
 
     _pp_.start()
+    _pp_.startPods()
     _atnDispatcher_.start()
     _console_.requestCreationOfAttentionCircle(_atnDispatcher_)
     _console_.start()

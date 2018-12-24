@@ -40,7 +40,7 @@ abstract public class CuteThread extends Thread {
 
     @Override
     public String toString() {
-        String s= this.getClass().getSimpleName();
+        String s= this.getClass().getName();
         s += "\n    threadName = " + threadName_;
 
         return s;

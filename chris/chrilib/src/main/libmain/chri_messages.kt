@@ -10,7 +10,7 @@ class CirclePromptsUserMsg(): MessageMsg()
 
 class UserRequestsDispatcherCreateAttentionCircleMsg(val user: CuteThread): MessageMsg()
 
-class AttentionCircleReportsPodpoolDispatcherUserItsCreation(val user: CuteThread, val bridObj: Brid): MessageMsg()
+class AttentionCircleReportsPodpoolDispatcherUserItsCreation(val user: CuteThread, val brid: Brid): MessageMsg()
 
 class CircleSendsUserItsBridMsg(val circleBrid: Brid): MessageMsg()
 

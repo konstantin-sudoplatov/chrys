@@ -17,6 +17,14 @@ abstract class SpiritConcept(cid: Cid) {
     /** Version number */
     var ver: Cvr = 0
 
+    override fun toString(): String {
+        var s = this::class.qualifiedName as String
+        s += "\n    cid = $cid"
+        s += "\n    ver = $ver"
+
+        return s
+    }
+
     /**
         Create "live" wrapper for this object.
     */
@@ -44,7 +52,7 @@ abstract class Concept(spiritConcept: SpiritConcept): Cloneable {
     }
 
     override fun toString(): String {
-        var s = this::class.simpleName as String
+        var s = this::class.qualifiedName as String
         s += "\nsp = $sp".replace("\n", "\n    ")
         return s
     }

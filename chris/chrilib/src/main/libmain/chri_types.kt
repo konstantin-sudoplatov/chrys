@@ -2,7 +2,7 @@ package libmain
 
 import atn.Branch
 import basemain.*
-import cpt.SpiritStaticConcept
+import cpt.SpStaticConcept
 import cpt.abs.SpiritConcept
 import cpt.abs.SpiritDynamicConcept
 import kotlin.random.Random
@@ -37,7 +37,7 @@ class SpiritMap {
             assert((cpt.cid.toULong() >= MIN_DYNAMIC_CID.toULong() && cpt.cid.toULong() <= MAX_DYNAMIC_CID.toULong() &&
                 cpt is SpiritDynamicConcept) ||
                 (cpt.cid.toULong() >= MIN_STATIC_CID.toULong() && cpt.cid.toULong() <= MAX_STATIC_CID.toULong() &&
-                cpt is SpiritStaticConcept)) {"Cid ${cpt.cid} is out of its range. Concept: $cpt"}
+                cpt is SpStaticConcept)) {"Cid ${cpt.cid} is out of its range. Concept: $cpt"}
             assert(cpt.cid !in spMap_) {"Cid ${cpt.cid} is already in the map. Concept: $cpt"}
         }
 

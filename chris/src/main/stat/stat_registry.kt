@@ -1,7 +1,7 @@
 package stat
 
 import basemain.logit
-import cpt.SpiritStaticConcept
+import cpt.SpStaticConcept
 import libmain.*
 
 
@@ -28,7 +28,7 @@ open class StatModule {
             .filter { it != null && StaticConceptFunctor::class.isInstance(it) } as List<StaticConceptFunctor>
 
         for(statFunc in statFuncs)
-            _sm_.add(SpiritStaticConcept(statFunc))
+            _sm_.add(SpStaticConcept(statFunc))
     }
 }
 

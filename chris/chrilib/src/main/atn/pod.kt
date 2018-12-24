@@ -5,6 +5,7 @@ import chribase_thread.CuteThread
 import chribase_thread.MessageMsg
 import chribase_thread.TerminationRequestMsg
 import chribase_thread.TimeoutMsg
+import cpt.Breed
 import libmain.*
 import java.util.*
 import kotlin.Comparator
@@ -13,17 +14,30 @@ import kotlin.random.Random
 /**
  *      Full address of branch in the pod pool
  *  @param pod pod object
- *  @param brid branch identifier in pod. It is an integer key in the branch map the pod object.
+ *  @param sockid Socket identifier - branch identifier in pod. It is an integer key in the branch map the pod object.
  */
-data class Brid(val pod: Pod, val brid: Int)
+data class Brid(val pod: Pod, val sockid: Int) {
+
+    override fun toString(): String {
+        var s = this::class.qualifiedName as String
+        s += "\npod = $pod".replace("\n", "\n    ")
+        s += "\n    sockid = $sockid"
+
+        return s
+    }
+}
+
 
 /**
  *      This is a thread, that contains a number of branches.
  *  @param podName Alias for threadName
  *  @param pid Pod identifier. It is the index of the pod in the pool's array of pods
  */
-class Pod(podName: String, val pid: Int): CuteThread(POD_THREAD_QUEUE_TIMEOUT, MAX_POD_THREAD_QUEUE, podName)
+class Pod(podName: String, pid: Int): CuteThread(POD_THREAD_QUEUE_TIMEOUT, MAX_POD_THREAD_QUEUE, podName)
 {
+    /** Index of the pod in the podArray of the pod pool. */
+    val pid = pid
+
     /** Alias for threadName */
     val podName: String
         inline get() = threadName
@@ -59,11 +73,12 @@ class Pod(podName: String, val pid: Int): CuteThread(POD_THREAD_QUEUE_TIMEOUT, M
 
             // Create new branch
             is UserRequestsDispatcherCreateAttentionCircleMsg -> {
-                val circle = AttentionCircle()
-                val brid = generateBrid()
-                branchMap[brid] = circle
+                val breedCid = hardCrank.hardCids.circle_breed.cid
+                val sockid = generateSockid()
+                val circle = AttentionCircle(breedCid, Brid(this, sockid))
+                branchMap_[sockid] = circle
                 numOfBranches++
-                _pp_.putInQueue(AttentionCircleReportsPodpoolDispatcherUserItsCreation(msg.user, Brid(this, brid)))
+                _pp_.putInQueue(AttentionCircleReportsPodpoolDispatcherUserItsCreation(msg.user, Brid(this, sockid)))
 
                 circle.reasoning()
 
@@ -95,17 +110,20 @@ class Pod(podName: String, val pid: Int): CuteThread(POD_THREAD_QUEUE_TIMEOUT, M
 
     //---%%%---%%%---%%%---%%%--- private data ---%%%---%%%---%%%---%%%---%%%---%%%
 
-    /** Map Branch/bridObj. */
-    private val branchMap = hashMapOf<Int, Branch>()
+    /** Map Branch/brid. */
+    private val branchMap_ = hashMapOf<Int, Branch>()
 
     //---%%%---%%%---%%%---%%%--- private funcs ---%%%---%%%---%%%---%%%---%%%---%%%
 
-    private fun generateBrid(): Int {
+    /**
+     *      Generate socket identifier of a branch in the pod, that is guaranteed in no use.
+     */
+    private fun generateSockid(): Int {
 
         var brid: Int
         do {
             brid = Random.nextInt(Int.MIN_VALUE, Int.MAX_VALUE)
-        } while(brid in branchMap)
+        } while(brid in branchMap_)
 
         return brid
     }
@@ -167,7 +185,7 @@ class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
 
             is AttentionCircleReportsPodpoolDispatcherUserItsCreation -> {
 
-                podSet.add(msg.bridObj.pod)
+                podSet.add(msg.brid.pod)
                 podpoolOverflowReported = false
                 borrowedPodNum--
                 _atnDispatcher_.putInQueue(msg)

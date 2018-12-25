@@ -44,7 +44,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
 
-    protected override fun _messageProc(msg: MessageMsg?): Boolean {
+    override protected fun _messageProc_(msg: MessageMsg?): Boolean {
         when (msg) {
             is ReaderSendsConsoleLineMsg -> {
                 if      // did user request termination?
@@ -75,11 +75,6 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
                         circleBrid_!!.pod.putInQueue(UserTellsCircleIbr(circleBrid_!!.sockid, line))
                     }
                 }
-                return true
-            }
-
-            is CircleSendsUserItsBridMsg -> {
-                circleBrid_ = msg.circleBrid
                 return true
             }
 
@@ -128,7 +123,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
     init {
         if(!EMULATE_CONSOLE)
             // Thread for asynchronous reading from console
-            Thread() {
+            Thread {
                 print("> ")
                 while(true) {
                     val line = readLine()

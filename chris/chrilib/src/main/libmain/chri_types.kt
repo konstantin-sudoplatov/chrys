@@ -44,7 +44,16 @@ class SpiritMap {
         spMap_[cpt.cid] = cpt
     }
 
-    @Synchronized operator fun get(cid: Cid) = spMap_[cid]
+    /**
+     *      Get concept by cid. If no such concept, the IndexOutOfBoundsException is thrown.
+     */
+    @Synchronized operator fun get(cid: Cid): SpiritConcept {
+        val cpt = spMap_[cid]
+        if(cpt != null)
+            return cpt
+        else
+            throw IndexOutOfBoundsException("There is no concept with cid $cid in the spirit map.")
+    }
 
     @Synchronized operator fun contains(cid: Cid) = cid in spMap_
 
@@ -65,7 +74,7 @@ class SpiritMap {
     //---%%%---%%%---%%%---%%%--- private data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /**  The spirit map */
-    private val spMap_ = mutableMapOf<Cid, SpiritConcept>()
+    private val spMap_ = hashMapOf<Cid, SpiritConcept>()
 
     //---%%%---%%%---%%%---%%%--- private funcs ---%%%---%%%---%%%---%%%---%%%---%%%
 

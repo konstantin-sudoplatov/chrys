@@ -14,6 +14,8 @@ open class SpActionNeuron(cid: Cid): SpiritNeuron(cid) {
 
 open class ActionNeuron(spActionNeuron: SpActionNeuron): Neuron(spActionNeuron) {
 
+    override fun normalization() = ActivationIfc.NormalizationType.NONE
+
 }
 
 class SpSeed(cid: Cid): SpActionNeuron(cid) {
@@ -33,6 +35,8 @@ class SpWeightNeuron(cid: Cid): SpiritNeuron(cid) {
 }
 
 class WeightNeuron(spWeightNeuron: SpWeightNeuron): Neuron(spWeightNeuron) {
+
+    override fun normalization() = ActivationIfc.NormalizationType.ESQUASH
 
 }
 

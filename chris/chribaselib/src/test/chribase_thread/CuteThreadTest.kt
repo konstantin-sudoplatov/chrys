@@ -23,7 +23,7 @@ class CuteThreadTest {
                 }
             }
 
-            override fun _messageProc(msg: MessageMsg?): Boolean {
+            override fun _messageProc_(msg: MessageMsg?): Boolean {
                 return true
             }
         }.also { it.start() }
@@ -32,7 +32,7 @@ class CuteThreadTest {
         var totalMessages = 0
         object : Thread() {
             override fun run() {
-                for (i in 1..2* DEFAULT_MAX_THREAD_QUEUE) {
+                for (i in 1..2*DEFAULT_MAX_THREAD_QUEUE) {
                     thread.putInQueue(MessageMsg())
                     totalMessages++
                     //println("put = $i")
@@ -60,7 +60,7 @@ class CuteThreadTest {
                 println("Finish on timeout")
             }
 
-            override fun _messageProc(msg: MessageMsg?): Boolean {
+            override fun _messageProc_(msg: MessageMsg?): Boolean {
                 return true
             }
         }.also { it.start() }

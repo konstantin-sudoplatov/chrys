@@ -5,7 +5,6 @@ import chribase_thread.CuteThread
 import chribase_thread.MessageMsg
 import chribase_thread.TerminationRequestMsg
 import chribase_thread.TimeoutMsg
-import cpt.Breed
 import libmain.*
 import java.util.*
 import kotlin.Comparator
@@ -62,7 +61,7 @@ class Pod(podName: String, pid: Int): CuteThread(POD_THREAD_QUEUE_TIMEOUT, MAX_P
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
 
-    override fun _messageProc(msg: MessageMsg): Boolean {
+    protected override fun _messageProc_(msg: MessageMsg): Boolean {
 
         when(msg) {
 
@@ -75,8 +74,8 @@ class Pod(podName: String, pid: Int): CuteThread(POD_THREAD_QUEUE_TIMEOUT, MAX_P
             is UserRequestsDispatcherCreateAttentionCircleMsg -> {
                 val breedCid = hardCrank.hardCids.circle_breed.cid
                 val sockid = generateSockid()
-                val circle = AttentionCircle(breedCid, Brid(this, sockid))
-                branchMap_[sockid] = circle
+                val circle = AttentionCircle(breedCid, Brid(this, sockid), msg.user)
+                _branchMap[sockid] = circle
                 numOfBranches++
                 _pp_.putInQueue(AttentionCircleReportsPodpoolDispatcherUserItsCreation(msg.user, Brid(this, sockid)))
 
@@ -111,7 +110,7 @@ class Pod(podName: String, pid: Int): CuteThread(POD_THREAD_QUEUE_TIMEOUT, MAX_P
     //---%%%---%%%---%%%---%%%--- private data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /** Map Branch/brid. */
-    private val branchMap_ = hashMapOf<Int, Branch>()
+    private val _branchMap = hashMapOf<Int, Branch>()
 
     //---%%%---%%%---%%%---%%%--- private funcs ---%%%---%%%---%%%---%%%---%%%---%%%
 
@@ -123,7 +122,7 @@ class Pod(podName: String, pid: Int): CuteThread(POD_THREAD_QUEUE_TIMEOUT, MAX_P
         var brid: Int
         do {
             brid = Random.nextInt(Int.MIN_VALUE, Int.MAX_VALUE)
-        } while(brid in branchMap_)
+        } while(brid in _branchMap)
 
         return brid
     }
@@ -151,7 +150,7 @@ class PodComparator: Comparator<Pod>
  */
 class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
 {
-    override fun _messageProc(msg: MessageMsg?): Boolean {
+    protected override fun _messageProc_(msg: MessageMsg?): Boolean {
         when(msg) {
 
             is UserRequestsDispatcherCreateAttentionCircleMsg -> {
@@ -223,7 +222,7 @@ class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
     //---%%%---%%%---%%%---%%%--- private data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     // Create all pods
-    private var podArray: Array<Pod> = Array<Pod>(size, { Pod("pod_$it", it) })
+    private var podArray = Array(size) { Pod("pod_$it", it) }
 
     /** Sorted set of pods. Pods are sorted by their usage number, plus a unique id to avoid repetition. */
     private val podSet = TreeSet<Pod>(PodComparator())

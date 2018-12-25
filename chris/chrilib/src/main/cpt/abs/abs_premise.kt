@@ -1,7 +1,7 @@
 package cpt.abs
 
 import basemain.Cid
-import cpt.BinActivationIfc
+import cpt.ActivationIfc
 import java.lang.IllegalArgumentException
 
 
@@ -17,16 +17,16 @@ abstract class SpiritPremise(cid: Cid): SpiritDynamicConcept(cid)
 /**
  *          Base for live premises.
  */
-abstract class Premise(spiritDynamicConcept: SpiritDynamicConcept): DynamicConcept(spiritDynamicConcept),
-    BinActivationIfc
-{
+abstract class Premise(spiritDynamicConcept: SpiritDynamicConcept): DynamicConcept(spiritDynamicConcept), ActivationIfc {
+    override var activation: Float = -1f
+
+    override fun normalization() = ActivationIfc.NormalizationType.BIN
+
     override fun toString(): String {
-        var s = super<DynamicConcept>.toString()
+        var s = super.toString()
         s += "\n    activation = $activation"
         return s
     }
-
-    override var activation: Float = -1f
 
     /**
             Copy meaningful fields of this concept to the destination. Both concepts must be exactly the same runtime type.
@@ -36,6 +36,6 @@ abstract class Premise(spiritDynamicConcept: SpiritDynamicConcept): DynamicConce
     */
     fun copy(destination: Premise) {
         assert(this::class == destination::class)
-        destination.activation == activation
+        destination.activation = activation
     }
 }

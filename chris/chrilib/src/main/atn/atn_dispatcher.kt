@@ -12,15 +12,13 @@ import libmain.*
  */
 class AttentionDispatcher: CuteThread(0, 0, "dispatcher")
 {
-    override fun _messageProc(msg: MessageMsg): Boolean {
+    protected override fun _messageProc_(msg: MessageMsg): Boolean {
         when(msg) {
 
             is UserRequestsDispatcherCreateAttentionCircleMsg -> {
                 circleRegistry_[msg.user] = null
                 _pp_.putInQueue(UserRequestsDispatcherCreateAttentionCircleMsg(msg.user))
 
-                //Todo: this is a dummy to send user someone to talk to. Remove it when real circle is created.
-                _console_.putInQueuePriority(CircleSendsUserItsBridMsg(Brid(Pod("dummy_pod", 0), 0)))
                 return true
             }
 

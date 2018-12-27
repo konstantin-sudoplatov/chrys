@@ -12,7 +12,14 @@ import java.lang.IllegalArgumentException
  *
  *  @param cid
  */
-abstract class SpiritPremise(cid: Cid): SpiritDynamicConcept(cid)
+abstract class SpiritPremise(cid: Cid): SpiritDynamicConcept(cid) {
+
+    /**
+     *      An overload of the "!" operator that returns this object wrapped in the NegatedPremise object.
+     *  It is used in the SpiritLogicalNeuron.addPrems() func to distinguish between the premise and its negation.
+     */
+    operator fun not() = NegatedPremise(this)
+}
 
 /**
  *          Base for live premises.
@@ -39,3 +46,5 @@ abstract class Premise(spiritDynamicConcept: SpiritDynamicConcept): DynamicConce
         destination.activation = activation
     }
 }
+
+class NegatedPremise(val spiritPremise: SpiritPremise)

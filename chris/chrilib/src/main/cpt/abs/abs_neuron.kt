@@ -2,19 +2,148 @@ package cpt.abs
 
 import basemain.Cid
 import cpt.ActivationIfc
+import java.util.*
 
+/**
+        Base for all neurons.
+*/
 abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
 
+    /** If activation <= cutoff then result of the selectEffects() function is automatically Effect(cutoff, 0, null, null),
+        which means action stopAndWait and no branches. This allows to get rid of the first span from -infinity to 0, which
+        is most often used as an antiactive span. */
+    var cutoff: Float = 0f
+        set(value) {
+            assert( _effects.isEmpty() || value.isNaN() || value < _effects[0]!!.upperBound) {
+                "cutoff = $value must be less then upper bound of the first span ${_effects[0]!!.upperBound}"
+            }
+            field = value
+        }
+
+    val isCutoff: Boolean
+        get() = !cutoff.isNaN()
+
+    override fun toString(): String {
+        var s = super.toString()
+        s += "\n    _effects = $_effects"
+        for((eff, i) in _effects.)
+            s += "\n".replace("\n", "\n    ")
+
+        return s
+    }
+
+    /**
+     *      Set cutoff to Float.NaN.
+     */
+    fun disableCutoff() { cutoff = Float.NaN }
+
+    /**
+                Get effects corresponding to given activation.
+        Parameters:
+            activation = activation value
+        Returns:
+            the Effect struct as the Voldemort value.
+    */
+    fun selectEffect(activation: Float): Effect {
+        if      // is activation falling into the cutoff span?
+                (activation <= cutoff)
+            // return an empty effect
+            return Effect(cutoff)
+
+        for(eff in _effects)
+            if      // is activation fitting a span?
+                    (activation <= eff!!.upperBound)
+                return eff
+
+        // Activation not found? Return the last empty span
+        return Effect(Float.POSITIVE_INFINITY)
+    }
+
+    /**
+     *      Add actions and branches for a new span of the activation values. If cutoff is enabled, which is the default,
+     *  the the number of spans is bigger by one, than defined in the effects array. The first dummy span of
+     *  Effect(cutoff, null, null) ocupies the region [-float.infinity, cutoff].
+     *
+     *      You can disable cutoff in three ways:
+     *
+     *      1. the function disableCutoff()
+     *      2. the property neuron.cutoff = float.nan
+     *      3. defining the first span with the upperBound <= cutoff.
+     *
+     *  @param upperBound The upper boundary of the span, including.
+     *  @param actions Array of cids of actions. null or [] - no actions for this span.
+     *  @param stem Neuron of new stemCid. null - stay on the current stemCid.
+     *  @param branches Array of cids of branches. null or [] - no new branches for this span.
+     */
+    fun addEff(upperBound: Float, actions: IntArray? = null, stem: SpiritNeuron? = null, branches: IntArray? = null) {
+
+        val eff = Effect(upperBound, actions, stem?.cid?: 0, branches)
+
+        if(_effects.isEmpty()) {
+            if      // is the upper bound of the first span overlaps cutoff?
+                    (eff.upperBound <= cutoff)
+                disableCutoff()
+        }
+        else {
+            assert(_effects[_effects.lastIndex] != null) {"Elements of _effects cannot be null"}
+            assert(eff.upperBound > _effects[_effects.lastIndex]!!.upperBound)
+                { "Upper bound ${eff.upperBound} must be greater than the upper bound of the last span " +
+                "${_effects[_effects.lastIndex]!!.upperBound}"}
+        }
+
+        _effects = Arrays.copyOf(_effects, _effects.size+1)
+        _effects[_effects.lastIndex] = eff
+    }
+
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+    //
+    //                               Private
+    //
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+
+    //---%%%---%%%---%%%---%%%--- private data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+    private var _effects = Array<Effect?>(0) {null}
 }
 
+/** Live. */
 abstract class Neuron(spNeuron: SpiritNeuron): DynamicConcept(spNeuron), ActivationIfc {
 
-    override var activation = -1F
+    override var activation = -1f   // anactivated by default
 
+
+    /**
+                Calculate activation based on premises or lots.
+    */
+    abstract fun calculateActivation(): Float
 }
 
 abstract class SpiritLogicalNeuron(cid: Cid): SpiritNeuron(cid) {
 
+    fun addPrems(vararg premoids: Any) {
+        assert(!premoids.isEmpty()) {"It makes no sense to construct empty array of premises"}
+
+        // Form list of Prem objects based on the premoids array
+        val premList = mutableListOf<Prem>()
+        for(ind in premoids.indices) {
+            assert(premoids[ind] is NegatedPremise || premoids[ind] is SpiritPremise)
+            val premoid = premoids[ind]
+            when(premoid) {
+                is SpiritPremise -> {
+                    premList.add(Prem(premoid.cid, false))
+                }
+
+                is NegatedPremise -> {
+                    premList.add(Prem(premoid.spiritPremise.cid, true))
+                }
+            }
+        }
+
+        // Move the Prem objects to the _premises_ array
+        _premises_ = Array<Prem>(premoids.size) { premList[it]}
+    }
+
+    protected var _premises_: Array<Prem>? = null
 }
 
 abstract class LogicalNeuron(spLogicalNeuron: SpiritLogicalNeuron): Neuron(spLogicalNeuron) {
@@ -22,14 +151,42 @@ abstract class LogicalNeuron(spLogicalNeuron: SpiritLogicalNeuron): Neuron(spLog
     override fun normalization() = ActivationIfc.NormalizationType.BIN
 }
 
-class Effects {
+/**
+ *      Defines a span of activation values ]previous span's upper boundary, the new upper boundary].
+ *  For the first span it is [Float.NEGATIVE_INFINITY, upperBound]. If the last span is unspecified, it's
+ *  ]upperBound, Float.POSITIVE_INFINITY].
+ *
+ *  For typealias Cid=Int used the IntArray arrays. If Cid changes for Long, for example, it also must be changed.
+ */
+class Effect(
+    val upperBound: Float,              // the upper boundary of the span, including
+    val actions: IntArray? = null,      // Array of cids of actions. null or [] - no actions for this span
+    val stemCid: Cid = 0,               // 0 - stay on the current stemCid
+    val branches: IntArray? = null      // Array of cids of branches. null or [] - no new branches for this span
+) {
+    override fun toString(): String {
+        var s = this::class.qualifiedName?: ""
+        s += "\n    upperBound = $upperBound"
+        s += "\n    actions = $actions"
+        s += "\n    stemCid = $stemCid"
+        s += "\n    branches = $branches"
 
-    private val _effects_ = mutableListOf<Effect>()
+        return s
+    }
 }
 
-class Effect(
-    val upperBound: Float,
-    val stem: Cid = 0,
-    val actions: IntArray? = null,
-    val branches: IntArray? = null
-)
+/**
+ *      Defines an element of the premises array of a logical neuron.
+ */
+class Prem(
+    val prem: Cid,
+    val negated: Boolean
+) {
+    override fun toString(): String {
+        var s = this::class.qualifiedName?: ""
+        s += "\n    prem = $prem"
+        s += "\n    negated = $negated"
+
+        return s
+    }
+}

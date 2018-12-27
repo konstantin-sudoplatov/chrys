@@ -2,6 +2,9 @@ package cpt.abs
 
 import basemain.Cid
 import basemain.Cvr
+import basemain.MAX_DYNAMIC_CID
+import basemain.MIN_DYNAMIC_CID
+import kotlin.test.assert
 
 /**
  *      Base class for all concepts.
@@ -18,7 +21,7 @@ abstract class SpiritConcept(cid: Cid) {
     var ver: Cvr = 0
 
     override fun toString(): String {
-        var s = this::class.qualifiedName as String
+        var s = this::class.qualifiedName?: ""
         s += "\n    cid = $cid"
         s += "\n    ver = $ver"
 
@@ -28,7 +31,7 @@ abstract class SpiritConcept(cid: Cid) {
     /**
         Create "live" wrapper for this object.
     */
-    abstract fun liveFactory(): Concept;
+    abstract fun liveFactory(): Concept
 }
 
 /**
@@ -47,7 +50,7 @@ abstract class Concept(spiritConcept: SpiritConcept): Cloneable {
     /** Spiritual part */
     val sp = spiritConcept
 
-    override public fun clone(): Any {
+    public override fun clone(): Any {
         return super.clone()
     }
 
@@ -64,7 +67,9 @@ abstract class Concept(spiritConcept: SpiritConcept): Cloneable {
  *  @param cid
 */
 abstract class SpiritDynamicConcept(cid: Cid): SpiritConcept(cid) {
-
+    init {
+        assert(cid.toULong() >= MIN_DYNAMIC_CID.toULong() && cid.toULong() <= MAX_DYNAMIC_CID.toULong())
+    }
 }
 
 /**

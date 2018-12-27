@@ -2,6 +2,7 @@ package cpt
 
 import basemain.Cid
 import cpt.abs.*
+import libmain._sm_
 
 /**
  *          Unconditionally, i.e. without consulting any premises, applies its actions stemCid and branches.
@@ -55,8 +56,25 @@ class SpAndNeuron(cid: Cid): SpiritLogicalNeuron(cid) {
 }
 
 class AndNeuron(spAndNeuron: SpAndNeuron): LogicalNeuron(spAndNeuron) {
+
+    /**
+                Calculate activation based on premises.
+        Returns: activation value. Activation is 1 if all premises are active, else it is -1. If list of premises is empty,
+                activation is 1.
+    */
     override fun calculateActivation(): Float {
-        TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
+
+        val premises = (sp as SpiritLogicalNeuron).premises
+        if (premises != null)
+            for(prem in premises) {
+                val premCpt = _sm_[prem.premCid] as ActivationIfc
+                if(premCpt.activation <= 0 && !prem.negated || premCpt.activation > 0 && prem.negated)
+                    anactivate()
+                    return activation
+            }
+
+        activate()
+        return activation
     }
 
 }

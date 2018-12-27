@@ -14,8 +14,8 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
         is most often used as an antiactive span. */
     var cutoff: Float = 0f
         set(value) {
-            assert( _effects.isEmpty() || value.isNaN() || value < _effects[0]!!.upperBound) {
-                "cutoff = $value must be less then upper bound of the first span ${_effects[0]!!.upperBound}"
+            assert( _effects == null || _effects!!.isEmpty() || value.isNaN() || value < _effects!![0].upperBound) {
+                "cutoff = $value must be less then upper bound of the first span ${_effects!![0].upperBound}"
             }
             field = value
         }
@@ -26,8 +26,9 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
     override fun toString(): String {
         var s = super.toString()
         s += "\n    _effects = $_effects"
-        for((eff, i) in _effects.)
-            s += "\n".replace("\n", "\n    ")
+        if(_effects != null)
+            for((i, eff) in _effects!!.withIndex())
+                s += "\nEffect[$i] = $eff".replace("\n", "\n    ")
 
         return s
     }
@@ -50,10 +51,11 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
             // return an empty effect
             return Effect(cutoff)
 
-        for(eff in _effects)
-            if      // is activation fitting a span?
-                    (activation <= eff!!.upperBound)
-                return eff
+        if(_effects != null)
+            for(eff in _effects!!)
+                if      // is activation fitting a span?
+                        (activation <= eff.upperBound)
+                    return eff
 
         // Activation not found? Return the last empty span
         return Effect(Float.POSITIVE_INFINITY)
@@ -79,20 +81,25 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
 
         val eff = Effect(upperBound, actions, stem?.cid?: 0, branches)
 
-        if(_effects.isEmpty()) {
+        // May be disable cutoff
+        if(_effects == null || _effects!!.isEmpty()) {
             if      // is the upper bound of the first span overlaps cutoff?
                     (eff.upperBound <= cutoff)
                 disableCutoff()
         }
         else {
-            assert(_effects[_effects.lastIndex] != null) {"Elements of _effects cannot be null"}
-            assert(eff.upperBound > _effects[_effects.lastIndex]!!.upperBound)
+            assert(eff.upperBound > _effects!![_effects!!.lastIndex].upperBound)
                 { "Upper bound ${eff.upperBound} must be greater than the upper bound of the last span " +
-                "${_effects[_effects.lastIndex]!!.upperBound}"}
+                "${_effects!![_effects!!.lastIndex].upperBound}"}
         }
 
-        _effects = Arrays.copyOf(_effects, _effects.size+1)
-        _effects[_effects.lastIndex] = eff
+        // Add new effect to the _effects array
+        if(_effects == null)
+            _effects = Array<Effect>(1){ eff }
+        else {
+            _effects = Arrays.copyOf(_effects, _effects!!.size+1)
+            _effects!![_effects!!.lastIndex] = eff
+        }
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -103,7 +110,7 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
 
     //---%%%---%%%---%%%---%%%--- private data ---%%%---%%%---%%%---%%%---%%%---%%%
 
-    private var _effects = Array<Effect?>(0) {null}
+    private var _effects: Array<Effect>? = null
 }
 
 /** Live. */
@@ -114,14 +121,42 @@ abstract class Neuron(spNeuron: SpiritNeuron): DynamicConcept(spNeuron), Activat
 
     /**
                 Calculate activation based on premises or lots.
+
+        @return activation value
     */
     abstract fun calculateActivation(): Float
 }
 
 abstract class SpiritLogicalNeuron(cid: Cid): SpiritNeuron(cid) {
 
-    fun addPrems(vararg premoids: Any) {
-        assert(!premoids.isEmpty()) {"It makes no sense to construct empty array of premises"}
+    val premises: Array<Prem>?
+        get() = _premises_
+
+    override fun toString(): String {
+        var s = super.toString()
+        s += "\n    _premises_ = $_premises_"
+        if(_premises_ != null)
+            for((i, prem) in _premises_!!.withIndex())
+                s += "\n_premises_[$i] = $prem".replace("\n", "\n    ")
+
+        return s
+    }
+
+    /**
+     *      Load a number of premises' cids along with their possible negations.
+     *  @param premoids objects of premises possibly wrapped int the NegatedPremise objects to show that in the _premises_
+     *          array they should appear with the negation flag, i.e. it's their negatives that will be considered when
+     *          calculating the activation value of the neuron. The wrapping is caused by prefixing the premise object with
+     *          the ! sign.
+     */
+    fun loadPrems(vararg premoids: Any) {
+
+        if      // nothing to add?
+                (premoids.isEmpty())
+        {   //no: clear premises, return
+            _premises_ = null
+            return
+        }
 
         // Form list of Prem objects based on the premoids array
         val premList = mutableListOf<Prem>()
@@ -179,12 +214,12 @@ class Effect(
  *      Defines an element of the premises array of a logical neuron.
  */
 class Prem(
-    val prem: Cid,
-    val negated: Boolean
+    val premCid: Cid,       // premise concept cid
+    val negated: Boolean    // possibly the negation of the premise is to be considered
 ) {
     override fun toString(): String {
         var s = this::class.qualifiedName?: ""
-        s += "\n    prem = $prem"
+        s += "\n    premCid = $premCid"
         s += "\n    negated = $negated"
 
         return s

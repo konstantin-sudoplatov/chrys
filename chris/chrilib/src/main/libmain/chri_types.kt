@@ -34,9 +34,9 @@ class SpiritMap {
         }
         else
         {   // yes: check it
-            assert((cpt.cid.toULong() >= MIN_DYNAMIC_CID.toULong() && cpt.cid.toULong() <= MAX_DYNAMIC_CID.toULong() &&
+            assert((cpt.cid.toUInt() >= MIN_DYNAMIC_CID && cpt.cid.toUInt() <= MAX_DYNAMIC_CID &&
                 cpt is SpiritDynamicConcept) ||
-                (cpt.cid.toULong() >= MIN_STATIC_CID.toULong() && cpt.cid.toULong() <= MAX_STATIC_CID.toULong() &&
+                (cpt.cid.toUInt() >= MIN_STATIC_CID && cpt.cid.toUInt() <= MAX_STATIC_CID &&
                 cpt is SpStaticConcept)) {"Cid ${cpt.cid} is out of its range. Concept: $cpt"}
             assert(cpt.cid !in spMap_) {"Cid ${cpt.cid} is already in the map. Concept: $cpt"}
         }

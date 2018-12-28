@@ -9,7 +9,7 @@ import chribase_thread.TerminationRequestMsg
 import chribase_thread.TimeoutMsg
 
 /**
- * This class waits for messages from the attention circle which it prints on the console on one hand and user lines from
+ * This class waits for messages from the attention circle which it prints on the console on one hand and userThread lines from
  * the Readln thread on, which it sends to the circle the other hand. It is also responsible for requesting start of the
  * attention circle. This request on initialization it sends to attention dispatcher. Also it termination of work is
  * originated in here and the request is sent to the libmain thread, which sends it to all subsystems.
@@ -30,7 +30,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
         var msg: MessageMsg
         do {
             msg = _getBlocking()
-        } while(msg !is AttentionCircleReportsPodpoolDispatcherUserItsCreation)
+        } while(msg !is AttentionCircleReportsPodpoolDispatcherUserItsCreationMsg)
         circleBrid_ = msg.brid
     }
 
@@ -47,7 +47,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
     override protected fun _messageProc_(msg: MessageMsg?): Boolean {
         when (msg) {
             is ReaderSendsConsoleLineMsg -> {
-                if      // did user request termination?
+                if      // did userThread request termination?
                         (msg.text == "p")
                 {   //yes: request termination from dispatcher and pass it to the ancesstor
                     _atnDispatcher_.putInQueue(TerminationRequestMsg())

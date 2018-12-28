@@ -1,5 +1,6 @@
 package cpt
 
+import atn.Branch
 import basemain.Cid
 import cpt.abs.*
 import libmain._sm_
@@ -11,11 +12,22 @@ open class SpActionNeuron(cid: Cid): SpiritNeuron(cid) {
     override fun liveFactory(): ActionNeuron {
         return ActionNeuron(this)
     }
+
+    /**
+     *      Load the action neuron with the actions, branches and stem.
+     */
+    fun load(actions: Array<out SpA>? = null, branches: Array<SpBreed>? = null, stem: SpiritNeuron? = null) {
+        super.addEff(Float.POSITIVE_INFINITY, actions, branches, stem)
+    }
+
+    init {
+        disableCutoff()
+    }
 }
 
 open class ActionNeuron(spActionNeuron: SpActionNeuron): Neuron(spActionNeuron) {
 
-    override fun calculateActivation(): Float {
+    override fun calculateActivation(br: Branch): Float {
         return 1f
     }
 
@@ -41,7 +53,7 @@ class SpWeightNeuron(cid: Cid): SpiritNeuron(cid) {
 
 class WeightNeuron(spWeightNeuron: SpWeightNeuron): Neuron(spWeightNeuron) {
 
-    override fun calculateActivation(): Float {
+    override fun calculateActivation(br: Branch): Float {
         TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
     }
 
@@ -62,12 +74,12 @@ class AndNeuron(spAndNeuron: SpAndNeuron): LogicalNeuron(spAndNeuron) {
         Returns: activation value. Activation is 1 if all premises are active, else it is -1. If list of premises is empty,
                 activation is 1.
     */
-    override fun calculateActivation(): Float {
+    override fun calculateActivation(br: Branch): Float {
 
         val premises = (sp as SpiritLogicalNeuron).premises
         if (premises != null)
             for(prem in premises) {
-                val premCpt = _sm_[prem.premCid] as ActivationIfc
+                val premCpt = br[prem.premCid] as ActivationIfc
                 if(premCpt.activation <= 0 && !prem.negated || premCpt.activation > 0 && prem.negated)
                     anactivate()
                     return activation

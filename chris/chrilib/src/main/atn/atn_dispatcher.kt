@@ -7,7 +7,7 @@ import libmain.*
 
 /**
  *      Attention dispatcher:
- *  1. On user request starts and and registers an attention circle and sends it reference to the user thread.
+ *  1. On userThread request starts and and registers an attention circle and sends it reference to the userThread thread.
  *  2. On the termination message from libmain initiates termination of all the attention threads
  */
 class AttentionDispatcher: CuteThread(0, 0, "dispatcher")
@@ -16,15 +16,15 @@ class AttentionDispatcher: CuteThread(0, 0, "dispatcher")
         when(msg) {
 
             is UserRequestsDispatcherCreateAttentionCircleMsg -> {
-                circleRegistry_[msg.user] = null
-                _pp_.putInQueue(UserRequestsDispatcherCreateAttentionCircleMsg(msg.user))
+                circleRegistry_[msg.userThread] = null
+                _pp_.putInQueue(UserRequestsDispatcherCreateAttentionCircleMsg(msg.userThread))
 
                 return true
             }
 
-            is AttentionCircleReportsPodpoolDispatcherUserItsCreation -> {
-                circleRegistry_[msg.user] = msg.brid
-                msg.user.putInQueue(msg)
+            is AttentionCircleReportsPodpoolDispatcherUserItsCreationMsg -> {
+                circleRegistry_[msg.userThread] = msg.brid
+                msg.userThread.putInQueue(msg)
                 return true
             }
 
@@ -37,6 +37,6 @@ class AttentionDispatcher: CuteThread(0, 0, "dispatcher")
         return false    // message not recognized
     }
 
-    /** Map of Circle branch/user. The branch can be temporarily null, until it is defined on the circle initialization */
+    /** Map of Circle branch/userThread. The branch can be temporarily null, until it is defined on the circle initialization */
     private val circleRegistry_ = hashMapOf<CuteThread, Brid?>()
 }

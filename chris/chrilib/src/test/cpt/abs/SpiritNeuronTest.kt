@@ -16,10 +16,10 @@ class SpiritNeuronTest {
         }
 
         assert(nrn.isCutoff)
-        nrn.addEff(0f, null, SpActionNeuron(2_000_001), null)
+        nrn.addEff(0f, null, null, SpActionNeuron(2_000_001))
         nrn.cutoff = -1f
         assert(nrn.isCutoff)
-        nrn.addEff(1f, null, SpActionNeuron(2_000_002), null)
+        nrn.addEff(1f, null, null, SpActionNeuron(2_000_002))
         assert(nrn.isCutoff)
 
         println(nrn)

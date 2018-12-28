@@ -8,18 +8,19 @@ typealias Cvr = Short
 
 // Ranges of cids as unsigned - generated as ulong, then assigned to Cid and Cvr. 0 excluded as special.
 @ExperimentalUnsignedTypes
-const val MIN_STATIC_CID: Cid = 1
+const val MIN_STATIC_CID: ULong = 1u
 @ExperimentalUnsignedTypes
-const val MAX_STATIC_CID: Cid = 100_000
+const val MAX_STATIC_CID: ULong = 100_000u
 @ExperimentalUnsignedTypes
-const val MIN_DYNAMIC_CID: Cid = 2_000_000
+const val MIN_DYNAMIC_CID: ULong = 2_000_000u
 @ExperimentalUnsignedTypes
-const val MAX_DYNAMIC_CID: Cid = Int.MIN_VALUE    // UInt.MAX_VALUE (can't be casted statically)
+const val MAX_DYNAMIC_CID: ULong = 4_294_967_295u    // UInt.MAX_VALUE (can't be casted statically)
 
 /** for improving readability of adding premises in the cranks. */
 const val NEGATE = true
 
-/** Debug level. Since it is a Java static final, the if(basemain.debug>0) {} would not compile if the basemain.debug is 0. So, no runtime overhead. */
+/** Debug level. Since it is a Java static final, the if(DEBUG > 0) {} would not be compiled into the code if
+    the DEBUG is 0. So, no runtime overhead. */
 const val DEBUG = 0
 
 /** Enable/disable manual console input. */

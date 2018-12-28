@@ -1,21 +1,25 @@
 package libmain
 
 import atn.Brid
+import basemain.Cid
 import chribase_thread.CuteThread
 import chribase_thread.MessageMsg
+import cpt.Breed
 
 class ReaderSendsConsoleLineMsg(val text: String): MessageMsg()
 
 class CirclePromptsUserMsg(): MessageMsg()
 
-class UserRequestsDispatcherCreateAttentionCircleMsg(val user: CuteThread): MessageMsg()
+class UserRequestsDispatcherCreateAttentionCircleMsg(val userThread: CuteThread): MessageMsg()
 
-class AttentionCircleReportsPodpoolDispatcherUserItsCreation(val user: CuteThread, val brid: Brid): MessageMsg()
+class AttentionCircleReportsPodpoolDispatcherUserItsCreationMsg(val userThread: CuteThread, val brid: Brid): MessageMsg()
+
+class BranchRequestsCreationChildMsg(val destBreedCid: Cid, parentBrid: Brid): MessageMsg()
 
 /**
  *      Base for messages addressed to pods (inter branch messages)
- *  @param destBridInd branch pid of the destination branch in the pod
+ *  @param destBrid identifier of the destination branch
  */
-abstract class PodIbr(val destBridInd: Int): MessageMsg()
+abstract class PodIbr(val destBrid: Int): MessageMsg()
 
-class UserTellsCircleIbr(destBridInd: Int, val text: String): PodIbr(destBridInd)
+class UserTellsCircleIbr(destBrid: Int, val text: String): PodIbr(destBrid)

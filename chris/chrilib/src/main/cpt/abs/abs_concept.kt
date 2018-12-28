@@ -68,7 +68,7 @@ abstract class Concept(spiritConcept: SpiritConcept): Cloneable {
 */
 abstract class SpiritDynamicConcept(cid: Cid): SpiritConcept(cid) {
     init {
-        assert(cid.toULong() >= MIN_DYNAMIC_CID.toULong() && cid.toULong() <= MAX_DYNAMIC_CID.toULong())
+        assert(cid.toUInt() >= MIN_DYNAMIC_CID && cid.toUInt() <= MAX_DYNAMIC_CID)
     }
 }
 

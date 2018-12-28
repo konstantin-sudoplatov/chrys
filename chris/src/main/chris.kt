@@ -11,7 +11,7 @@ import stat.loadStaticConcepts
  * the uline branch, which sends the dispacher its brid. Dispatcher stores the brid along with the console thread reference
  * in its map and forwards the brid to console. Since then the console talks to the circle directly, bypassing the dispatcher.
  *
- * The termination sequence is following: user enters "p" for the application terminatination, the termination request
+ * The termination sequence is following: userThread enters "p" for the application terminatination, the termination request
  * is sent ot the attention dispatcher, it in its turn sends it to the pod pool, which sends it to all pods and pods
  * terminate their branches. This function waits for termination of all threads, then finishes.
  */

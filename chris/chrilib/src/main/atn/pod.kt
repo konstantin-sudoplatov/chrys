@@ -74,10 +74,10 @@ class Pod(podName: String, pid: Int): CuteThread(POD_THREAD_QUEUE_TIMEOUT, MAX_P
             is UserRequestsDispatcherCreateAttentionCircleMsg -> {
                 val breedCid = hardCrank.hardCids.circle_breed.cid
                 val sockid = generateSockid()
-                val circle = AttentionCircle(breedCid, Brid(this, sockid), msg.user)
+                val circle = AttentionCircle(breedCid, Brid(this, sockid), msg.userThread)
                 _branchMap[sockid] = circle
                 numOfBranches++
-                _pp_.putInQueue(AttentionCircleReportsPodpoolDispatcherUserItsCreation(msg.user, Brid(this, sockid)))
+                _pp_.putInQueue(AttentionCircleReportsPodpoolDispatcherUserItsCreationMsg(msg.userThread, Brid(this, sockid)))
 
                 circle.reasoning()
 
@@ -182,7 +182,7 @@ class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
                 }
             }
 
-            is AttentionCircleReportsPodpoolDispatcherUserItsCreation -> {
+            is AttentionCircleReportsPodpoolDispatcherUserItsCreationMsg -> {
 
                 podSet.add(msg.brid.pod)
                 podpoolOverflowReported = false

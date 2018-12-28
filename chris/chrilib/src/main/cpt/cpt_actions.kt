@@ -6,8 +6,8 @@ package cpt
     Essentially what actions do - they call to those functions with given parameters.
 */
 
+import atn.Branch
 import basemain.Cid
-import cpt.abs.Concept
 import cpt.abs.DynamicConcept
 import cpt.abs.SpiritDynamicConcept
 
@@ -20,6 +20,14 @@ open class SpA(cid: Cid): SpiritDynamicConcept(cid) {
     override fun liveFactory(): A {
         return A(this)
     }
+
+    /**
+     *      Run the static concept functor in the context of given branch.
+     *  @param br The branch object to run in
+     */
+    fun run(br: Branch) {
+
+    }
 }
 
 /**
@@ -28,6 +36,11 @@ open class SpA(cid: Cid): SpiritDynamicConcept(cid) {
  */
 open class A(spA: SpA): DynamicConcept(spA) {
 
+    /**
+     *      Run the static concept functor in the context of given branch.
+     *  @param br The branch object to run in
+     */
+    fun run(br: Branch) = (sp as SpA).run(br)
 }
 
 /**

@@ -10,5 +10,4 @@ class SpStaticConcept(val func: StaticConceptFunctor): SpiritConcept(func.cid) {
     override fun liveFactory(): Concept {
         throw UnsupportedOperationException("Not aplicable here.")
     }
-
 }

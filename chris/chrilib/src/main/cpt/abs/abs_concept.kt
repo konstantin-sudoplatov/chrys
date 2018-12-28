@@ -4,6 +4,7 @@ import basemain.Cid
 import basemain.Cvr
 import basemain.MAX_DYNAMIC_CID
 import basemain.MIN_DYNAMIC_CID
+import libmain._nm_
 import kotlin.test.assert
 
 /**
@@ -21,7 +22,14 @@ abstract class SpiritConcept(cid: Cid) {
     var ver: Cvr = 0
 
     override fun toString(): String {
-        var s = this::class.qualifiedName?: ""
+        var s: String
+
+        if      // is there a name for this concept?
+                (_nm_ != null && cid in _nm_)
+            s = "%s (%s)".format(_nm_[cid], this::class.qualifiedName?: "")
+        else
+            s = "%s (%s)".format("noname", this::class.qualifiedName?: "")
+
         s += "\n    cid = $cid"
         s += "\n    ver = $ver"
 
@@ -50,12 +58,15 @@ abstract class Concept(spiritConcept: SpiritConcept): Cloneable {
     /** Spiritual part */
     val sp = spiritConcept
 
-    public override fun clone(): Any {
-        return super.clone()
+    val cid
+        get() = sp.cid
+
+    public override fun clone(): Concept {
+        return super.clone() as Concept
     }
 
     override fun toString(): String {
-        var s = this::class.qualifiedName as String
+        var s: String = this::class.qualifiedName as String
         s += "\nsp = $sp".replace("\n", "\n    ")
         return s
     }
@@ -77,6 +88,4 @@ abstract class SpiritDynamicConcept(cid: Cid): SpiritConcept(cid) {
  *
  *  @param spiritDynamicConcept
  */
-abstract class DynamicConcept(spiritDynamicConcept: SpiritDynamicConcept): Concept(spiritDynamicConcept) {
-
-}
+abstract class DynamicConcept(spiritDynamicConcept: SpiritDynamicConcept): Concept(spiritDynamicConcept)

@@ -10,9 +10,7 @@ class SpMarkPrim(cid: Cid): SpiritPrimitive(cid) {
     }
 }
 
-class MarkPrim(spMarkPrim: SpMarkPrim): Primitive(spMarkPrim) {
-
-}
+class MarkPrim(spMarkPrim: SpMarkPrim): Primitive(spMarkPrim)
 
 class SpStringPrim(cid: Cid): SpiritPrimitive(cid) {
     override fun liveFactory(): StringPrim {
@@ -20,6 +18,4 @@ class SpStringPrim(cid: Cid): SpiritPrimitive(cid) {
     }
 }
 
-class StringPrim(spStringPrim: SpStringPrim): Primitive(spStringPrim) {
-
-}
+class StringPrim(spStringPrim: SpStringPrim): Primitive(spStringPrim)

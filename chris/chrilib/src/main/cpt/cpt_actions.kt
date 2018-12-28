@@ -58,9 +58,7 @@ open class SpA_Cid(cid: Cid): SpA(cid) {
  *      Live. To construct an instance do not use the constructor, use the liveFactory() of the spirit counterpart.
  *  @param spA_Cid - immutable spirit part
  */
-open class A_Cid(spA_Cid: SpA): A(spA_Cid) {
-
-}
+open class A_Cid(spA_Cid: SpA): A(spA_Cid)
 
 /**
  *      Spirit action. It invokes functor of given static concept. The function of the functor has signature:
@@ -77,9 +75,7 @@ class SpA_2Cid(cid: Cid): SpA_Cid(cid) {
  *      Live. To construct an instance do not use the constructor, use the liveFactory() of the spirit counterpart.
  *  @param spA_2Cid - immutable spirit part
  */
-class A_2Cid(spA_2Cid: SpA_2Cid): A_Cid(spA_2Cid) {
-
-}
+class A_2Cid(spA_2Cid: SpA_2Cid): A_Cid(spA_2Cid)
 
 /**
  *      Spirit action. It invokes functor of given static concept. The function of the functor has signature:
@@ -96,6 +92,4 @@ open class SpA_LCid(cid: Cid): SpA(cid) {
  *      Live. To construct an instance do not use the constructor, use the liveFactory() of the spirit counterpart.
  *  @param spA_Cid - immutable spirit part
  */
-open class A_LCid(spA_LCid: SpA_LCid): A(spA_LCid) {
-
-}
+open class A_LCid(spA_LCid: SpA_LCid): A(spA_LCid)

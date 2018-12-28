@@ -16,8 +16,14 @@ fun logit(logLine: String) {
  */
 inline fun<reified T> ar(vararg elem: T) = Array<T>(elem.size){ elem[it]}
 
-/** Adapter for ar() */
-inline fun<reified SpA> acts(vararg elem: SpA) = Array<SpA>(elem.size){ elem[it]}
+/** Alias for the ar() function. */
+inline fun<reified T> acts(vararg elem: T) = Array<T>(elem.size){ elem[it]}
 
-/** Adapter for ar() */
-inline fun<reified SpBreed> brans(vararg elem: SpBreed) = Array<SpBreed>(elem.size){ elem[it]}
+/** Alias for the ar() function. */
+inline fun<reified T> brans(vararg elem: T) = Array<T>(elem.size){ elem[it]}
+
+/** Alias for the ar() function. */
+inline fun<reified T> ins(vararg elem: T) = Array<T>(elem.size){ elem[it]}
+
+/** Alias for the ar() function. */
+inline fun<reified T> outs(vararg elem: T) = Array<T>(elem.size){ elem[it]}

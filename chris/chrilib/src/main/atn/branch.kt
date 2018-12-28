@@ -4,12 +4,15 @@ import basemain.Cid
 import chribase_thread.CuteThread
 import cpt.A
 import cpt.Breed
+import cpt.CuteThreadPrem
 import cpt.SpBreed
 import cpt.abs.Concept
+import cpt.abs.DynamicConcept
 import cpt.abs.Neuron
-import libmain.BranchRequestsCreationChildMsg
+import libmain.BranchRequestsPodpoolCreateChildMsg
 import libmain._pp_
 import libmain._sm_
+import libmain.hardCrank
 
 /**
  *      All reasoning takes place in this class. All branches are packed in pods and those in the pod pool.
@@ -20,11 +23,13 @@ import libmain._sm_
  *  No sharing, no synchronization, all work takes place in one thread.
  *
  *  @param breedCid Cid of the breed concept for the branch.
- *  @param brid Brid object, that identifies its place in the pod and pod pool.
+ *  @param ownBrid Brid object, that identifies its place in the pod and pod pool.
+ *  @param parentBrid parent's ownBrid. Can be null if it's root.
  */
 open class Branch(
     breedCid: Cid,
-    val brid: Brid      // own address
+    val ownBrid: Brid,         // own address
+    val parentBrid: Brid?    // parent's address
 ) {
 
     /**
@@ -33,7 +38,7 @@ open class Branch(
      *  the flow control and wait until conditions change and the next call comes.
      */
     fun reasoning() {
-        var stem = _stem
+        var stem = stem_
 
         // Main reasoning cycle
         while(true) {
@@ -48,8 +53,15 @@ open class Branch(
 
             // Spawn branches, if any
             if(eff.branches != null)
-                for(breedCid in eff.branches)
-                    _pp_.putInQueue(BranchRequestsCreationChildMsg(breedCid, brid))
+                for(destBreedCid in eff.branches) {
+
+                    // Form an array of cloned from the current branch ins of the destination breed
+                    val insCids = (_sm_[destBreedCid] as SpBreed).ins
+                    val clonedIns = if(insCids != null) Array<DynamicConcept>(insCids.size)
+                        { this[insCids[it]].clone() as DynamicConcept} else null
+
+                    _pp_.putInQueue(BranchRequestsPodpoolCreateChildMsg(destBreedCid, destIns = clonedIns, parentBrid = ownBrid))
+                }
 
             // Assign new stem or yield
             if(eff.stemCid != 0)
@@ -59,7 +71,15 @@ open class Branch(
         }
 
         // Save stem and exit
-        _stem = stem
+        stem_ = stem
+    }
+
+    /**
+     *      Add concept to live map bypassing the spirit map. Used for concept injections.
+     *  @param cpt live dynamic concept
+     */
+    fun add(cpt: DynamicConcept) {
+        liveMap_[cpt.cid] = cpt
     }
 
     /**
@@ -67,16 +87,24 @@ open class Branch(
      */
     operator fun get(cid: Cid): Concept {
 
-        var cpt = _liveMap[cid]
+        var cpt = liveMap_[cid]
         if(cpt != null)
-            return _liveMap[cid] as Concept
+            return liveMap_[cid] as Concept
         else
         {
             cpt = _sm_[cid].liveFactory()
-            _liveMap[cid] = cpt
+            liveMap_[cid] = cpt
 
             return cpt
         }
+    }
+
+    /**
+     *      Add a child branch to the list of children.
+     *  @param childBrid
+     */
+    fun addChild(childBrid: Brid) {
+        children.add(childBrid)
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -88,10 +116,13 @@ open class Branch(
     //---%%%---%%%---%%%---%%%--- private data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /** Branch-local map of live concepts */
-    private val _liveMap = hashMapOf<Cid, Concept>()
+    private val liveMap_ = hashMapOf<Cid, Concept>()
 
     /** The head neuron of the branch. Initially it's the seed from the breed concept. */
-    private var _stem: Neuron = this[(this[breedCid].sp as SpBreed).seedCid] as Neuron
+    private var stem_: Neuron = this[(this[breedCid].sp as SpBreed).seedCid] as Neuron
+
+    /** List of child branches. Used to send them the termination message. */
+    private val children = ArrayList<Brid>()
 
     /**
      *      Main constructor.
@@ -100,7 +131,7 @@ open class Branch(
         // Set up the breed
         @Suppress("LeakingThis")
         val breed = this[breedCid] as Breed
-        breed.brid = brid
+        breed.brid = ownBrid
         breed.activate()
     }
 }
@@ -109,8 +140,14 @@ open class Branch(
  *      Attention circle. It is the root branch for all the branch tree that communicates with userThread.
  *  @param breedCid Cid of the breed concept for the branch.
  *  @param brid Brid object, that identifies its place in the pod and pod pool.
- *  @param user User thread.
+ *  @param userThread User thread.
  */
-class AttentionCircle(breedCid: Cid, brid: Brid, user: CuteThread): Branch(breedCid, brid) {
+class AttentionCircle(breedCid: Cid, brid: Brid, userThread: CuteThread): Branch(breedCid, brid, null) {
+    init {
 
+        // Inject the userThread_prem hard cid premise
+        val userThreadPrem = this[hardCrank.hardCids.userThread_prem.cid] as CuteThreadPrem
+        userThreadPrem.thread = userThread
+        userThreadPrem.activate()
+    }
 }

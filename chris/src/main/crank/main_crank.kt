@@ -1,8 +1,7 @@
 package crank
 
-import basemain.acts
-import basemain.ar
 import basemain.brans
+import basemain.ins
 import cpt.*
 import cpt.abs.Eft
 import libmain.CrankGroup
@@ -26,9 +25,13 @@ object mainCrank: CrankModule() {
         val seed = SpSeed(2_063_171_572)
         val shakeHandsWithUline = SpAndNeuron(1_732_167_551)
 
+        // For all branches in the project when branch is started it gets an activated breed with its own ownBrid. This is
+        // true for the circle branch too. Besides, it gets the userThread_prem concept with user's thread reference (also
+        // activated), even if it isn't present in the breed.ins.
         override fun crank() {
 
-            hardCrank.hardCids.circle_breed.load(seed)
+            // Circle's breed. Ins and outs are null since this is a root branch, meaning is is not started/finished the usual way.
+            hardCrank.hardCids.circle_breed.load(seed, null, null)
             seed.load(
                 null,
                 brans(uline.breed),
@@ -62,7 +65,14 @@ object mainCrank: CrankModule() {
         val seed = SpSeed(-2_063_171_572)
 
         override fun crank() {
-            breed.load(seed)
+            breed.load(
+                seed,
+                ins(
+                    hardCrank.hardCids.circle_breed,        // let uline know circle's breed to be able to communicate with it
+                    hardCrank.hardCids.userThread_prem      // let uline know user's thread to be able to communicate with it
+                ),
+                null
+            )
         }
     }
 }

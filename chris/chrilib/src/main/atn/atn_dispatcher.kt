@@ -23,7 +23,7 @@ class AttentionDispatcher: CuteThread(0, 0, "dispatcher")
             }
 
             is AttentionCircleReportsPodpoolDispatcherUserItsCreationMsg -> {
-                circleRegistry_[msg.userThread] = msg.brid
+                circleRegistry_[msg.userThread] = msg.ownBrid
                 msg.userThread.putInQueue(msg)
                 return true
             }

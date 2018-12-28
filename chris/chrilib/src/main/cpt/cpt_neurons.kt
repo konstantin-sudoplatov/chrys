@@ -32,7 +32,6 @@ open class ActionNeuron(spActionNeuron: SpActionNeuron): Neuron(spActionNeuron) 
     }
 
     override fun normalization() = ActivationIfc.NormalizationType.NONE
-
 }
 
 class SpSeed(cid: Cid): SpActionNeuron(cid) {
@@ -41,9 +40,7 @@ class SpSeed(cid: Cid): SpActionNeuron(cid) {
     }
 }
 
-class Seed(spSeed: SpSeed): ActionNeuron(spSeed) {
-
-}
+class Seed(spSeed: SpSeed): ActionNeuron(spSeed)
 
 class SpWeightNeuron(cid: Cid): SpiritNeuron(cid) {
     override fun liveFactory(): WeightNeuron {
@@ -58,7 +55,6 @@ class WeightNeuron(spWeightNeuron: SpWeightNeuron): Neuron(spWeightNeuron) {
     }
 
     override fun normalization() = ActivationIfc.NormalizationType.ESQUASH
-
 }
 
 class SpAndNeuron(cid: Cid): SpiritLogicalNeuron(cid) {
@@ -88,5 +84,4 @@ class AndNeuron(spAndNeuron: SpAndNeuron): LogicalNeuron(spAndNeuron) {
         activate()
         return activation
     }
-
 }

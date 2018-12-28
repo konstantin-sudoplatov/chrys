@@ -5,6 +5,7 @@ import chribase_thread.CuteThread
 import chribase_thread.MessageMsg
 import chribase_thread.TerminationRequestMsg
 import chribase_thread.TimeoutMsg
+import cpt.Breed
 import libmain.*
 import java.util.*
 import kotlin.Comparator
@@ -13,19 +14,22 @@ import kotlin.random.Random
 /**
  *      Full address of branch in the pod pool
  *  @param pod pod object
- *  @param sockid Socket identifier - branch identifier in pod. It is an integer key in the branch map the pod object.
+ *  @param cellid Cell identifier - branch identifier in pod. It is an integer key in the branch map the pod object.
  */
-data class Brid(val pod: Pod, val sockid: Int) {
+data class Brid(val pod: Pod, val cellid: Int): Cloneable {
+
+    public override fun clone(): Brid {
+        return super.clone() as Brid
+    }
 
     override fun toString(): String {
         var s = this::class.qualifiedName as String
         s += "\npod = $pod".replace("\n", "\n    ")
-        s += "\n    sockid = $sockid"
+        s += "\n    sellidcellid = $cellid"
 
         return s
     }
 }
-
 
 /**
  *      This is a thread, that contains a number of branches.
@@ -65,6 +69,42 @@ class Pod(podName: String, pid: Int): CuteThread(POD_THREAD_QUEUE_TIMEOUT, MAX_P
 
         when(msg) {
 
+            is BranchRequestsPodpoolCreateChildMsg -> {
+                val cellid = generateSockid()
+                val destBrid = Brid(this, cellid)
+                val branch = Branch(msg.destBreedCid, destBrid, msg.parentBrid)
+
+                // May be inject ins
+                if(msg.destIns != null)
+                    for(cpt in msg.destIns)
+                        branch.add(cpt)
+
+                branchMap_[cellid] = branch
+                numOfBranches++
+                _pp_.putInQueue(BranchReportsPodpoolAndParentItsCreationMsg(parentBrid = msg.parentBrid,
+                    ownBrid = destBrid, ownBreedCid = msg.destBreedCid
+                ))
+
+                branch.reasoning()      // kick off
+
+                return true
+            }
+
+            // Finish creating branch
+            is BranchReportsPodpoolAndParentItsCreationMsg -> {
+                val branch = branchMap_[msg.parentBrid.cellid]
+                branch!!.addChild(msg.ownBrid)
+
+                // Activate and fill in child's breed
+                val childBreed = branch[msg.ownBreedCid] as Breed
+                childBreed.brid = msg.ownBrid
+                childBreed.activate()
+
+                branch.reasoning()
+
+                return true
+            }
+
             is UserTellsCircleIbr -> {
                 // todo: give it to circle
                 return true
@@ -73,11 +113,11 @@ class Pod(podName: String, pid: Int): CuteThread(POD_THREAD_QUEUE_TIMEOUT, MAX_P
             // Create new branch
             is UserRequestsDispatcherCreateAttentionCircleMsg -> {
                 val breedCid = hardCrank.hardCids.circle_breed.cid
-                val sockid = generateSockid()
-                val circle = AttentionCircle(breedCid, Brid(this, sockid), msg.userThread)
-                _branchMap[sockid] = circle
+                val cellid = generateSockid()
+                val circle = AttentionCircle(breedCid, Brid(this, cellid), msg.userThread)
+                branchMap_[cellid] = circle
                 numOfBranches++
-                _pp_.putInQueue(AttentionCircleReportsPodpoolDispatcherUserItsCreationMsg(msg.userThread, Brid(this, sockid)))
+                _pp_.putInQueue(AttentionCircleReportsPodpoolDispatcherUserItsCreationMsg(msg.userThread, Brid(this, cellid)))
 
                 circle.reasoning()
 
@@ -109,8 +149,8 @@ class Pod(podName: String, pid: Int): CuteThread(POD_THREAD_QUEUE_TIMEOUT, MAX_P
 
     //---%%%---%%%---%%%---%%%--- private data ---%%%---%%%---%%%---%%%---%%%---%%%
 
-    /** Map Branch/brid. */
-    private val _branchMap = hashMapOf<Int, Branch>()
+    /** Map Branch/ownBrid. */
+    private val branchMap_ = hashMapOf<Int, Branch>()
 
     //---%%%---%%%---%%%---%%%--- private funcs ---%%%---%%%---%%%---%%%---%%%---%%%
 
@@ -122,7 +162,7 @@ class Pod(podName: String, pid: Int): CuteThread(POD_THREAD_QUEUE_TIMEOUT, MAX_P
         var brid: Int
         do {
             brid = Random.nextInt(Int.MIN_VALUE, Int.MAX_VALUE)
-        } while(brid in _branchMap)
+        } while(brid in branchMap_)
 
         return brid
     }
@@ -153,6 +193,7 @@ class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
     protected override fun _messageProc_(msg: MessageMsg?): Boolean {
         when(msg) {
 
+            is BranchRequestsPodpoolCreateChildMsg,
             is UserRequestsDispatcherCreateAttentionCircleMsg -> {
 
                 // Take from podSet the pod with smallest usage, so preventing it from dispatching before it will be
@@ -161,7 +202,7 @@ class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
                 if      //are all of the pods busy with dispatching new branches?
                         (podSet.isEmpty())
                 {   //yes: do spin-blocking - sleep for a short wile then redispatch the message
-                    assert(borrowedPodNum == podArray.size)
+                    assert(borrowedPods == podArray.size)
                     if (!podpoolOverflowReported) {
                         logit("no free pods to create a branch")    // log the overflow without flooding
                         podpoolOverflowReported = true
@@ -172,21 +213,29 @@ class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
                     return true
                 }
                 else
-                {   //no: take out a pod from the pod set and request pod to create new attention circle
-
+                {   //no: take out a pod from the pod set and request pod to create new attention circle or branch
                     val pod = podSet.pollFirst()
-                    borrowedPodNum++
+                    borrowedPods++
                     pod.putInQueue(msg)     // forward message to pod
 
                     return true
                 }
             }
 
+            is BranchReportsPodpoolAndParentItsCreationMsg -> {
+                podSet.add(msg.ownBrid.pod)
+                podpoolOverflowReported = false
+                borrowedPods--
+                msg.parentBrid.pod.putInQueue(msg)      // forward this message to the parent's pod
+
+                return true
+            }
+
             is AttentionCircleReportsPodpoolDispatcherUserItsCreationMsg -> {
 
-                podSet.add(msg.brid.pod)
+                podSet.add(msg.ownBrid.pod)
                 podpoolOverflowReported = false
-                borrowedPodNum--
+                borrowedPods--
                 _atnDispatcher_.putInQueue(msg)
 
                 return true
@@ -228,7 +277,7 @@ class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
     private val podSet = TreeSet<Pod>(PodComparator())
 
     /** Number of pods currently creating new branches. */
-    private var borrowedPodNum: Int = 0
+    private var borrowedPods: Int = 0
 
     /** To avoid flooding the log. */
     private var podpoolOverflowReported = false

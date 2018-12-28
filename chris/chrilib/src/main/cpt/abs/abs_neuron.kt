@@ -153,21 +153,21 @@ abstract class Neuron(spNeuron: SpiritNeuron): DynamicConcept(spNeuron), Activat
 abstract class SpiritLogicalNeuron(cid: Cid): SpiritNeuron(cid) {
 
     val premises: Array<Prem>?
-        get() = _premises_
+        get() = _premises
 
     override fun toString(): String {
         var s = super.toString()
-        s += "\n    _premises_ = $_premises_"
-        if(_premises_ != null)
-            for((i, prem) in _premises_!!.withIndex())
-                s += "\n_premises_[$i] = $prem".replace("\n", "\n    ")
+        s += "\n    _premises = $_premises"
+        if(_premises != null)
+            for((i, prem) in _premises!!.withIndex())
+                s += "\n_premises[$i] = $prem".replace("\n", "\n    ")
 
         return s
     }
 
     /**
      *      Load a number of premises' cids along with their possible negations.
-     *  @param premoids objects of premises possibly wrapped int the NegatedPremise objects to show that in the _premises_
+     *  @param premoids objects of premises possibly wrapped int the NegatedPremise objects to show that in the _premises
      *          array they should appear with the negation flag, i.e. it's their negatives that will be considered when
      *          calculating the activation value of the neuron. The wrapping is caused by prefixing the premise object with
      *          the ! sign.
@@ -177,7 +177,7 @@ abstract class SpiritLogicalNeuron(cid: Cid): SpiritNeuron(cid) {
         if      // nothing to add?
                 (premoids.isEmpty())
         {   //no: clear premises, return
-            _premises_ = null
+            _premises = null
             return this
         }
 
@@ -197,13 +197,13 @@ abstract class SpiritLogicalNeuron(cid: Cid): SpiritNeuron(cid) {
             }
         }
 
-        // Move the Prem objects to the _premises_ array
-        _premises_ = Array<Prem>(premoids.size) { premList[it]}
+        // Move the Prem objects to the _premises array
+        _premises = Array<Prem>(premoids.size) { premList[it]}
 
         return this
     }
 
-    protected var _premises_: Array<Prem>? = null
+    protected var _premises: Array<Prem>? = null
 }
 
 abstract class LogicalNeuron(spLogicalNeuron: SpiritLogicalNeuron): Neuron(spLogicalNeuron) {

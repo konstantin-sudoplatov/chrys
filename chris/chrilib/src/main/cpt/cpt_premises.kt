@@ -2,11 +2,14 @@ package cpt
 
 import atn.Brid
 import basemain.Cid
+import chribase_thread.CuteThread
 import cpt.abs.Premise
+import cpt.abs.SpiritConcept
+import cpt.abs.SpiritDynamicConcept
 import cpt.abs.SpiritPremise
 
 /**
- *      Metadata for a branch - the pod, sockid, and seedCid. The branch object is guaranteed to be injected with its
+ *      Metadata for a branch - the pod, cellid, and seedCid. The branch object is guaranteed to be injected with its
  *  breed concept on the start. Likewise it is guaranteed to get a valid breed concept of the child branch, when it
  *  initiates one.
  */
@@ -16,6 +19,14 @@ class SpBreed(cid: Cid): SpiritPremise(cid) {
     var seedCid: Cid = 0
         private set(value) { field = value}     // to disable setter for the outer world
 
+    /** Cids of concepts, that are injected into the branch on its creation by parent. */
+    var ins: IntArray? = null
+        private set(v) {field = v}
+
+    /** Cids of concepts, that are injected into the parent branch on deletion of the child. */
+    var outs: IntArray? = null
+        private set(v) {field = v}
+
     override fun toString(): String {
         var s = super.toString()
         s += "\n    seedCid = $seedCid"
@@ -23,46 +34,64 @@ class SpBreed(cid: Cid): SpiritPremise(cid) {
         return s
     }
 
-    override fun liveFactory(): Breed {
-        return Breed(this)
-    }
+    override fun liveFactory() = Breed(this)
 
     /**
      *      Load concept.
-     *  @param seed The seedCid concept
+     *  @param seed Cid of the seed concept
+     *
      */
-    fun load(seed: SpSeed) {
+    fun load(seed: SpSeed, ins: Array<SpiritDynamicConcept>?, outs: Array<SpiritDynamicConcept>?) {
         this.seedCid = seed.cid
+        this.ins = if(ins == null || ins.size == 0) null else IntArray(ins.size) {ins[it].cid}
+        this.outs = if(outs == null || outs.size == 0) null else IntArray(outs.size) {outs[it].cid}
     }
 }
 
 /** Live */
 class Breed internal constructor(spBreed: SpBreed): Premise(spBreed) {
 
-    /** Branch identifier (pod, sockid) */
+    /** Branch identifier (pod, cellid) */
     var brid: Brid? = null
+
+    override fun clone(): Breed {
+        val o = super.clone() as Breed
+        o.brid = this.brid?.clone()
+
+        return o
+    }
 
     override fun toString(): String {
         var s = super.toString()
-        s += "\nbrid = $brid".replace("\n", "\n    ")
+        s += "\nownBrid = $brid".replace("\n", "\n    ")
 
         return s
     }
 }
 
+/**
+ *      Premise, representing a cute thread object (as a special case a pod object). Used, e.g. for communication with user.
+ */
+class SpCuteThreadPrem(cid: Cid): SpiritPremise(cid) {
+
+    override fun liveFactory() = CuteThreadPrem(this)
+}
+
+/** Live. */
+class CuteThreadPrem(spCuteThreadPrem: SpCuteThreadPrem): Premise(spCuteThreadPrem) {
+
+    var thread: CuteThread? = null      // note: cloned shallowly. Apparently deep cloning is senseless here.
+}
+
 class SpPegPrem(cid: Cid): SpiritPremise(cid) {
 
-    override fun liveFactory(): PegPrem {
-        return PegPrem(this)
-    }
+    override fun liveFactory() = PegPrem(this)
 }
 
 class PegPrem internal constructor(spPegPrem: SpPegPrem): Premise(spPegPrem)
 
 class SpStringPrem(cid: Cid): SpiritPremise(cid) {
-    override fun liveFactory(): StringPrem {
-        return StringPrem(this)
-    }
+    override fun liveFactory() = StringPrem(this)
 }
 
 class StringPrem(spStringPrem: SpStringPrem): Premise(spStringPrem) {

@@ -127,8 +127,13 @@ open class CrankModule() {
             for(prop in crankGroup::class.declaredMemberProperties) {
                 assert(prop.returnType.isSubtypeOf(SpiritConcept::class.createType()))
                     {"Property must be of type SpiritConcept and it is $prop"}
+
+                // Fill in the spirit map
                 val cpt = prop.getter.call(crankGroup) as SpiritConcept
                 _sm_.add(cpt)
+
+                // May be fill in the name map
+                if(ENABLE_NAME_MAP) _nm_!![cpt.cid] = crankGroup::class.simpleName + "." + prop.name
             }
         }
     }

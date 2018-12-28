@@ -9,7 +9,7 @@ class BranchTest {
 
     @Test
     fun get() {
-        val br = Branch(42, Brid(Pod("test pod", 43), 44))
+        val br = Branch(42, Brid(Pod("test pod", 43), 44), null)
         println(br[45])
     }
 }

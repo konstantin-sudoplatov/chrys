@@ -25,7 +25,7 @@ object mainCrank: CrankModule() {
         val seed = SpSeed(2_063_171_572)
         val shakeHandsWithUline = SpAndNeuron(1_732_167_551)
 
-        // For all branches in the project when branch is started it gets an activated breed with its own ownBrid. This is
+        // For all branches in the project when branch is started it gets an activated breed with its own ownBrad. This is
         // true for the circle branch too. Besides, it gets the userThread_prem concept with user's thread reference (also
         // activated), even if it isn't present in the breed.ins.
         override fun crank() {

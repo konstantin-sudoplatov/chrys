@@ -1,10 +1,9 @@
 package cpt
 
-import atn.Brid
+import atn.Brad
 import basemain.Cid
 import chribase_thread.CuteThread
 import cpt.abs.Premise
-import cpt.abs.SpiritConcept
 import cpt.abs.SpiritDynamicConcept
 import cpt.abs.SpiritPremise
 
@@ -52,18 +51,18 @@ class SpBreed(cid: Cid): SpiritPremise(cid) {
 class Breed internal constructor(spBreed: SpBreed): Premise(spBreed) {
 
     /** Branch identifier (pod, cellid) */
-    var brid: Brid? = null
+    var brad: Brad? = null
 
     override fun clone(): Breed {
         val o = super.clone() as Breed
-        o.brid = this.brid?.clone()
+        o.brad = this.brad?.clone()
 
         return o
     }
 
     override fun toString(): String {
         var s = super.toString()
-        s += "\nownBrid = $brid".replace("\n", "\n    ")
+        s += "\nownBrad = $brad".replace("\n", "\n    ")
 
         return s
     }

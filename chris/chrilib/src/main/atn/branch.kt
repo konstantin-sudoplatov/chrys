@@ -23,13 +23,13 @@ import libmain.hardCrank
  *  No sharing, no synchronization, all work takes place in one thread.
  *
  *  @param breedCid Cid of the breed concept for the branch.
- *  @param ownBrid Brid object, that identifies its place in the pod and pod pool.
- *  @param parentBrid parent's ownBrid. Can be null if it's root.
+ *  @param ownBrad Brad object, that identifies its place in the pod pool and pod.
+ *  @param parentBrad parent's ownBrad. Can be null if it's root.
  */
 open class Branch(
     breedCid: Cid,
-    val ownBrid: Brid,         // own address
-    val parentBrid: Brid?    // parent's address
+    val ownBrad: Brad,          // own address
+    val parentBrad: Brad?       // parent's address
 ) {
 
     /**
@@ -55,12 +55,12 @@ open class Branch(
             if(eff.branches != null)
                 for(destBreedCid in eff.branches) {
 
-                    // Form an array of cloned from the current branch ins of the destination breed
+                    // Form an array of cloned from the current branch ins for the destination branch
                     val insCids = (_sm_[destBreedCid] as SpBreed).ins
-                    val clonedIns = if(insCids != null) Array<DynamicConcept>(insCids.size)
+                    val clonedIns = if(insCids != null) Array(insCids.size)
                         { this[insCids[it]].clone() as DynamicConcept} else null
 
-                    _pp_.putInQueue(BranchRequestsPodpoolCreateChildMsg(destBreedCid, destIns = clonedIns, parentBrid = ownBrid))
+                    _pp_.putInQueue(BranchRequestsPodpoolCreateChildMsg(destBreedCid, destIns = clonedIns, parentBrad = ownBrad))
                 }
 
             // Assign new stem or yield
@@ -101,10 +101,10 @@ open class Branch(
 
     /**
      *      Add a child branch to the list of children.
-     *  @param childBrid
+     *  @param childBrad
      */
-    fun addChild(childBrid: Brid) {
-        children.add(childBrid)
+    fun addChild(childBrad: Brad) {
+        children.add(childBrad)
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -122,7 +122,7 @@ open class Branch(
     private var stem_: Neuron = this[(this[breedCid].sp as SpBreed).seedCid] as Neuron
 
     /** List of child branches. Used to send them the termination message. */
-    private val children = ArrayList<Brid>()
+    private val children = ArrayList<Brad>()
 
     /**
      *      Main constructor.
@@ -131,7 +131,7 @@ open class Branch(
         // Set up the breed
         @Suppress("LeakingThis")
         val breed = this[breedCid] as Breed
-        breed.brid = ownBrid
+        breed.brad = ownBrad
         breed.activate()
     }
 }
@@ -139,10 +139,10 @@ open class Branch(
 /**
  *      Attention circle. It is the root branch for all the branch tree that communicates with userThread.
  *  @param breedCid Cid of the breed concept for the branch.
- *  @param brid Brid object, that identifies its place in the pod and pod pool.
+ *  @param brad Brad object, that identifies its place in the pod and pod pool.
  *  @param userThread User thread.
  */
-class AttentionCircle(breedCid: Cid, brid: Brid, userThread: CuteThread): Branch(breedCid, brid, null) {
+class AttentionCircle(breedCid: Cid, brad: Brad, userThread: CuteThread): Branch(breedCid, brad, null) {
     init {
 
         // Inject the userThread_prem hard cid premise

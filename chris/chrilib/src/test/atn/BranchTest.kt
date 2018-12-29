@@ -1,15 +1,12 @@
 package atn
 
-import cpt.Breed
 import org.junit.Test
-
-import org.junit.Assert.*
 
 class BranchTest {
 
     @Test
     fun get() {
-        val br = Branch(42, Brid(Pod("test pod", 43), 44), null)
+        val br = Branch(42, Brad(Pod("test pod", 43), 44), null)
         println(br[45])
     }
 }

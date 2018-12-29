@@ -23,7 +23,7 @@ class AttentionDispatcher: CuteThread(0, 0, "dispatcher")
             }
 
             is AttentionCircleReportsPodpoolDispatcherUserItsCreationMsg -> {
-                circleRegistry_[msg.userThread] = msg.ownBrid
+                circleRegistry_[msg.userThread] = msg.ownBrad
                 msg.userThread.putInQueue(msg)
                 return true
             }
@@ -38,5 +38,5 @@ class AttentionDispatcher: CuteThread(0, 0, "dispatcher")
     }
 
     /** Map of Circle branch/userThread. The branch can be temporarily null, until it is defined on the circle initialization */
-    private val circleRegistry_ = hashMapOf<CuteThread, Brid?>()
+    private val circleRegistry_ = hashMapOf<CuteThread, Brad?>()
 }

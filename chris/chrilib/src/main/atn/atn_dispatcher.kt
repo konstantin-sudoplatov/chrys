@@ -12,7 +12,7 @@ import libmain.*
  */
 class AttentionDispatcher: CuteThread(0, 0, "dispatcher")
 {
-    protected override fun _messageProc_(msg: MessageMsg): Boolean {
+    protected override fun _messageProc(msg: MessageMsg): Boolean {
         when(msg) {
 
             is UserRequestsDispatcherCreateAttentionCircleMsg -> {

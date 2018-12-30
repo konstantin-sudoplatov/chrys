@@ -1,8 +1,6 @@
 package crank
 
-import basemain.Cid
 import basemain.logit
-import cpt.abs.SpiritConcept
 import libmain.CrankModule
 import libmain._sm_
 import libmain.hardCrank

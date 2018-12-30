@@ -1,7 +1,11 @@
 package chribase_thread
 
 /** Ancestor for all messages */
-open class MessageMsg
+open class MessageMsg {
+    override fun toString(): String {
+        return this::class.simpleName?: "noname"
+    }
+}
 
 /** Request for termination of a thread and all its successors. */
 class TerminationRequestMsg(): MessageMsg()

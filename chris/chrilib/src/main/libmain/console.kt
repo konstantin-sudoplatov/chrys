@@ -44,7 +44,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
 
-    override protected fun _messageProc_(msg: MessageMsg?): Boolean {
+    override protected fun _messageProc(msg: MessageMsg?): Boolean {
         when (msg) {
             is ReaderSendsConsoleLineMsg -> {
                 if      // did userThread request termination?
@@ -54,7 +54,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
                     this.putInQueue(TerminationRequestMsg())
                 }
                 else {//no: resend the console line to the circle
-                    circleBrad_!!.pod.putInQueue(UserTellsCircleIbr(circleBrad_!!.cellid, msg.text))
+                    circleBrad_!!.pod.putInQueue(UserTellsCircleIbr(circleBrad_!!.brid, msg.text))
                 }
                 return true
             }
@@ -72,7 +72,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
                         this.putInQueue(TerminationRequestMsg())
                     }
                     else {//no: resend the console line to the circle
-                        circleBrad_!!.pod.putInQueue(UserTellsCircleIbr(circleBrad_!!.cellid, line))
+                        circleBrad_!!.pod.putInQueue(UserTellsCircleIbr(circleBrad_!!.brid, line))
                     }
                 }
                 return true
@@ -90,7 +90,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
                         this.putInQueue(TerminationRequestMsg())
                     }
                     else {//no: resend the console line to the circle
-                        circleBrad_!!.pod.putInQueue(UserTellsCircleIbr(circleBrad_!!.cellid, line))
+                        circleBrad_!!.pod.putInQueue(UserTellsCircleIbr(circleBrad_!!.brid, line))
                     }
                 }
                 return true

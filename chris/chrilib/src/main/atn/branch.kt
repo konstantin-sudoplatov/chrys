@@ -1,6 +1,6 @@
 package atn
 
-import basemain.Cid
+import basemain.*
 import chribase_thread.CuteThread
 import cpt.A
 import cpt.Breed
@@ -9,10 +9,9 @@ import cpt.SpBreed
 import cpt.abs.Concept
 import cpt.abs.DynamicConcept
 import cpt.abs.Neuron
-import libmain.BranchRequestsPodpoolCreateChildMsg
-import libmain._pp_
-import libmain._sm_
-import libmain.hardCrank
+import cpt.abs.SpiritDynamicConcept
+import libmain.*
+import kotlin.math.max
 
 /**
  *      All reasoning takes place in this class. All branches are packed in pods and those in the pod pool.
@@ -27,9 +26,10 @@ import libmain.hardCrank
  *  @param parentBrad parent's ownBrad. Can be null if it's root.
  */
 open class Branch(
-    breedCid: Cid,
+    val breedCid: Cid,
     val ownBrad: Brad,          // own address
-    val parentBrad: Brad?       // parent's address
+    private val parentBrad: Brad?,      // parent's address
+    val dlv: Int = 0            // branch debug level. There is also thread debug level and GLOBAL_DEBUG_LEVEL.
 ) {
 
     /**
@@ -39,6 +39,10 @@ open class Branch(
      */
     fun reasoning() {
         var stem = stem_
+        dlog {ar(
+            "enter, stem = ${stem.toStr()}",
+            "enter, stem = $stem"
+        )}
 
         // Main reasoning cycle
         while(true) {
@@ -72,6 +76,10 @@ open class Branch(
 
         // Save stem and exit
         stem_ = stem
+        dlog {ar(
+            "exit, stem_ = ${stem.toStr()}",
+            "exit, stem_ = $stem"
+        )}
     }
 
     /**
@@ -85,17 +93,13 @@ open class Branch(
     /**
      *          Get live concept from local map. If not present, create it.
      */
-    operator fun get(cid: Cid): Concept {
+    operator fun get(cid: Cid): DynamicConcept {
 
         var cpt = liveMap_[cid]
-        if(cpt != null)
-            return liveMap_[cid] as Concept
-        else
-        {
-            cpt = _sm_[cid].liveFactory()
+        return if(cpt != null) cpt else {
+            cpt = (_sm_[cid] as SpiritDynamicConcept).liveFactory()
             liveMap_[cid] = cpt
-
-            return cpt
+            cpt
         }
     }
 
@@ -107,6 +111,38 @@ open class Branch(
         children.add(childBrad)
     }
 
+    /**
+     *      Log a debugging line. The debug level is taken as a maximum of the global, thread or branch debug level. The lambda
+     *  provides an array of lines, corresponding to the debug levels, where the first array element corresponds to the
+     *  level 1. If there is no corresponding line, than the last line of the array is used. If the line is empty, nothing
+     *  is logged.
+     *  @param lines Lamba, resulting in ar array of strings, one of which will be logged.
+     */
+    inline fun dlog(lines: () -> Array<String>) {
+        if (DEBUG_ON) {
+            val pod = ownBrad.pod
+            val effectiveLvl = max(max(GLOBAL_DEBUG_LEVEL, pod.dlv), this.dlv)
+            if(effectiveLvl <= 0) return
+            if      // is there a line corresponding to the debug level?
+                    (effectiveLvl <= lines().size)
+            {   //yes: log that line
+                if(lines()[effectiveLvl-1] != "") logit("%s, %s: %s".format(pod.podName, branchName(), lines()[effectiveLvl-1]))
+            }
+            else //no: log the last line of the array
+                if(lines()[lines().lastIndex] != "") logit("%s, %s: %s".format(pod.podName, branchName(), lines()[lines().lastIndex]))
+        }
+    }
+
+    fun branchName(): String {
+        var s = if(DEBUG_ON) _nm_!![breedCid]?: "noname" else this::class.qualifiedName?: ""
+        if(s == "hardCids.circle_breed")
+            s = "circle"
+        else
+            s = s.replace(".breed", "")
+
+        return s
+    }
+
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
     //                               Private
@@ -116,7 +152,7 @@ open class Branch(
     //---%%%---%%%---%%%---%%%--- private data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /** Branch-local map of live concepts */
-    private val liveMap_ = hashMapOf<Cid, Concept>()
+    private val liveMap_ = hashMapOf<Cid, DynamicConcept>()
 
     /** The head neuron of the branch. Initially it's the seed from the breed concept. */
     private var stem_: Neuron = this[(this[breedCid].sp as SpBreed).seedCid] as Neuron

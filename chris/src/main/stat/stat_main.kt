@@ -10,7 +10,7 @@ import libmain.FLCid
 /** Stat container */
 object mainStat: StatModule() {
 
-    object test1Stat: F(1) { override fun func(br: Branch) {
+    object test1Stat: F(14_338) { override fun func(br: Branch) {
         println("in test1Stat()")
     }}
 
@@ -18,11 +18,11 @@ object mainStat: StatModule() {
         println("in test1Stat()")
     }}
 
-    object test3Stat: F2Cid(3) { override fun func(br: Branch, cid0: Cid, cid1: Cid) {
+    object sendUserBranchBrad: F2Cid(27_585) { override fun func(br: Branch, cid0: Cid, cid1: Cid) {
         println("in test1Stat()")
     }}
 
     object test4Stat: FLCid(4) { override fun func(br: Branch, vararg cids: Cid) {
         println("in test1Stat()")
     }}
-}   // 14_338 27_585 19_223 47_628 43_137 72_493 53_148 51_211 50_023 62_408 89_866 24_107
+}   //   19_223 47_628 43_137 72_493 53_148 51_211 50_023 62_408 89_866 24_107

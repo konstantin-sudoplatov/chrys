@@ -10,7 +10,7 @@ class SpiritNeuronTest {
     @Test
     fun testSelectEffect() {
         var nrn = object: SpiritNeuron(2_000_042) {
-            override fun liveFactory(): Concept {
+            override fun liveFactory(): DynamicConcept {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         }

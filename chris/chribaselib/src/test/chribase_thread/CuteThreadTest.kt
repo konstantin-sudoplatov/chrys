@@ -23,7 +23,7 @@ class CuteThreadTest {
                 }
             }
 
-            override fun _messageProc_(msg: MessageMsg?): Boolean {
+            override fun _messageProc(msg: MessageMsg?): Boolean {
                 return true
             }
         }.also { it.start() }
@@ -60,7 +60,7 @@ class CuteThreadTest {
                 println("Finish on timeout")
             }
 
-            override fun _messageProc_(msg: MessageMsg?): Boolean {
+            override fun _messageProc(msg: MessageMsg?): Boolean {
                 return true
             }
         }.also { it.start() }

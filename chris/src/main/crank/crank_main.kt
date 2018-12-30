@@ -55,14 +55,15 @@ object mainCrank: CrankModule() {
                 )
             )
 
-        }   //  432_419_405 1_674_041_321 794_381_089 -1_384_487_145 -2_089_689_065 517_308_633
-    }
+        }
+    }   //   1_674_041_321 794_381_089 -1_384_487_145 -2_089_689_065 517_308_633
 
     // User line branch
     object uline: CrankGroup {
 
         val breed = SpBreed(-1_636_443_905)
         val seed = SpSeed(-2_063_171_572)
+        val sendUserUlineBrad_act = SpA_2Cid(432_419_405)
 
         override fun crank() {
             breed.load(
@@ -74,5 +75,5 @@ object mainCrank: CrankModule() {
                 null
             )
         }
-    }
+    }   // 1_145_833_341 -2_067_698_057 -1_438_089_413 -691_499_635 -367_082_727 -1_988_590_990 -1_412_401_364
 }

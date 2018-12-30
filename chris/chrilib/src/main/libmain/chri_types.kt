@@ -133,7 +133,7 @@ open class CrankModule() {
                 _sm_.add(cpt)
 
                 // May be fill in the name map
-                if(ENABLE_NAME_MAP) _nm_!![cpt.cid] = crankGroup::class.simpleName + "." + prop.name
+                if(DEBUG_ON) _nm_!![cpt.cid] = crankGroup::class.simpleName + "." + prop.name
             }
         }
     }

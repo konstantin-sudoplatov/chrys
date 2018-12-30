@@ -60,7 +60,7 @@ abstract public class CuteThread extends Thread {
 //System.out.printf("%s: in run, size = %s\n", threadName_, _msgQueue.size());     //todo: debugging
         while(true) {
             MessageMsg msg = _getBlocking();
-            if (!_messageProc_(msg)) {
+            if (!_messageProc(msg)) {
                 String threadName = !threadName_.equals("noname")? threadName_: this.getClass().getName();
                 logit("Unexpected message in " + threadName + ": " + msg.getClass().getName());
             }
@@ -143,7 +143,7 @@ abstract public class CuteThread extends Thread {
      * @param msg message to process
      * @return true - message accepted, false - message is not recognized.
      */
-    abstract protected boolean _messageProc_(MessageMsg msg);
+    abstract protected boolean _messageProc(MessageMsg msg);
 
     /**
      * Wait until there is a message in the queue and extract if from the head of the queue.

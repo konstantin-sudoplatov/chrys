@@ -8,7 +8,7 @@ import cpt.abs.SpiritDynamicConcept
 import cpt.abs.SpiritPremise
 
 /**
- *      Metadata for a branch - the pod, cellid, and seedCid. The branch object is guaranteed to be injected with its
+ *      Metadata for a branch - the pod, brid, and seedCid. The branch object is guaranteed to be injected with its
  *  breed concept on the start. Likewise it is guaranteed to get a valid breed concept of the child branch, when it
  *  initiates one.
  */
@@ -50,7 +50,7 @@ class SpBreed(cid: Cid): SpiritPremise(cid) {
 /** Live */
 class Breed internal constructor(spBreed: SpBreed): Premise(spBreed) {
 
-    /** Branch identifier (pod, cellid) */
+    /** Branch identifier (pod, brid) */
     var brad: Brad? = null
 
     override fun clone(): Breed {

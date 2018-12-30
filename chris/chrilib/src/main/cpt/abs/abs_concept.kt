@@ -1,9 +1,6 @@
 package cpt.abs
 
-import basemain.Cid
-import basemain.Cvr
-import basemain.MAX_DYNAMIC_CID
-import basemain.MIN_DYNAMIC_CID
+import basemain.*
 import libmain._nm_
 import kotlin.test.assert
 
@@ -37,9 +34,9 @@ abstract class SpiritConcept(cid: Cid) {
     }
 
     /**
-        Create "live" wrapper for this object.
-    */
-    abstract fun liveFactory(): Concept
+     *      Minimal form of toString()
+     */
+    fun toStr() = if(DEBUG_ON) _nm_!![cid]?: "noname" else this::class.qualifiedName
 }
 
 /**
@@ -70,6 +67,11 @@ abstract class Concept(spiritConcept: SpiritConcept): Cloneable {
         s += "\nsp = $sp".replace("\n", "\n    ")
         return s
     }
+
+    /**
+     *      Minimal form of toString()
+     */
+    fun toStr() = if(DEBUG_ON) _nm_!![cid]?: "noname" else this::class.qualifiedName
 }
 
 /**
@@ -78,6 +80,12 @@ abstract class Concept(spiritConcept: SpiritConcept): Cloneable {
  *  @param cid
 */
 abstract class SpiritDynamicConcept(cid: Cid): SpiritConcept(cid) {
+
+    /**
+        Create "live" wrapper for this object.
+    */
+    abstract fun liveFactory(): DynamicConcept
+
     init {
         assert(cid.toUInt() >= MIN_DYNAMIC_CID && cid.toUInt() <= MAX_DYNAMIC_CID)
     }

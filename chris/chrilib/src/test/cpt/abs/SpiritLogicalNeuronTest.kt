@@ -12,7 +12,7 @@ class SpiritLogicalNeuronTest {
     fun addPrems() {
 
         val nrn = object: SpiritLogicalNeuron(2_000_001) {
-            override fun liveFactory(): Concept {
+            override fun liveFactory(): DynamicConcept {
                 TODO("not implemented") //To change body of created functions use File | Settings | File Templates.
             }
         }

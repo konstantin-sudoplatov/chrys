@@ -159,37 +159,3 @@ open class CrankModule() {
 interface CrankGroup {
     fun crank()
 }
-
-/**
- *      Base for static function functors.
- */
-abstract class StaticConceptFunctor(val cid: Cid)
-
-/**
- *      Functor: fun(Branch): Unit
- */
-abstract class F(cid: Cid): StaticConceptFunctor(cid) {
-    abstract fun func(br: Branch): Unit
-}
-
-
-/**
- *      Functor: fun(Branch, Cid): Unit
- */
-abstract class FCid(cid: Cid): StaticConceptFunctor(cid) {
-    abstract fun func(br: Branch, cid: Cid): Unit
-}
-
-/**
- *      Functor: fun(Branch, Cid, Cid): Unit
- */
-abstract class F2Cid(cid: Cid): StaticConceptFunctor(cid) {
-    abstract fun func(br: Branch, cid0: Cid, cid1: Cid): Unit
-}
-
-/**
- *      Functor: fun(Branch, vararg Cid): Unit
- */
-abstract class FLCid(cid: Cid): StaticConceptFunctor(cid) {
-    abstract fun func(br: Branch, vararg cids: Cid): Unit
-}

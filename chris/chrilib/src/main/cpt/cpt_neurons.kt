@@ -16,7 +16,7 @@ open class SpActionNeuron(cid: Cid): SpiritNeuron(cid) {
     /**
      *      Load the action neuron with the actions, branches and stem.
      */
-    fun load(actions: Array<out SpA>? = null, branches: Array<SpBreed>? = null, stem: SpiritNeuron? = null) {
+    fun load(actions: Array<out SpiritAction>? = null, branches: Array<SpBreed>? = null, stem: SpiritNeuron? = null) {
         super.addEff(Float.POSITIVE_INFINITY, actions, branches, stem)
     }
 

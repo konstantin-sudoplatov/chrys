@@ -1,5 +1,6 @@
 package stat
 
+import basemain.DEBUG_ON
 import basemain.logit
 import cpt.SpStaticConcept
 import libmain.*
@@ -25,10 +26,16 @@ open class StatModule {
         // Extract list of stat functors
         @Suppress("UNCHECKED_CAST")
         val statFuncs = this::class.nestedClasses.map { it.objectInstance }
-            .filter { it != null && StaticConceptFunctor::class.isInstance(it) } as List<StaticConceptFunctor>
+            .filter { it != null && SpStaticConcept::class.isInstance(it) } as List<SpStaticConcept>
 
-        for(statFunc in statFuncs)
-            _sm_.add(SpStaticConcept(statFunc))
+        for(statFunc in statFuncs) {
+
+            // Put the static concept into the spirit map
+            _sm_.add(statFunc)
+
+            // May be fill in the name map
+            if(DEBUG_ON) _nm_!![statFunc.cid] = this::class.simpleName + "." + statFunc::class.simpleName
+        }
     }
 }
 

@@ -65,7 +65,7 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
     }
 
     /** Adapter. */
-    fun addEff(upperBound: Float, actions: Array<out SpA>? = null, branches: Array<SpBreed>? = null, stem: SpiritNeuron? = null) {
+    fun addEff(upperBound: Float, actions: Array<out SpiritAction>? = null, branches: Array<SpBreed>? = null, stem: SpiritNeuron? = null) {
         val actCids = if(actions != null) IntArray(actions.size) { actions[it].cid } else null
         val branCids = if(branches != null) IntArray(branches.size, { branches[it].cid }) else null
         addEff_(upperBound, actCids, branCids, stem)

@@ -1,5 +1,7 @@
 package crank
 
+import basemain.acts
+import basemain.ar
 import basemain.brans
 import basemain.ins
 import cpt.*
@@ -7,6 +9,7 @@ import cpt.abs.Eft
 import libmain.CrankGroup
 import libmain.CrankModule
 import libmain.hardCrank
+import stat.mainStat
 
 object mainCrank: CrankModule() {
 
@@ -31,7 +34,7 @@ object mainCrank: CrankModule() {
         override fun crank() {
 
             // Circle's breed. Ins and outs are null since this is a root branch, meaning is is not started/finished the usual way.
-            hardCrank.hardCids.circle_breed.load(seed, null, null)
+            hardCrank.hardCid.circle_breed.load(seed, null, null)
             seed.load(
                 null,
                 brans(uline.breed),
@@ -63,17 +66,24 @@ object mainCrank: CrankModule() {
 
         val breed = SpBreed(-1_636_443_905)
         val seed = SpSeed(-2_063_171_572)
-        val sendUserUlineBrad_act = SpA_2Cid(432_419_405)
+        val sendUserUlineBrad_act = SpA_Cid(432_419_405)
 
         override fun crank() {
             breed.load(
                 seed,
                 ins(
-                    hardCrank.hardCids.circle_breed,        // let uline know circle's breed to be able to communicate with it
-                    hardCrank.hardCids.userThread_prem      // let uline know user's thread to be able to communicate with it
+                    hardCrank.hardCid.circle_breed,        // let uline know circle's breed to be able to communicate with it
+                    hardCrank.hardCid.userThread_prem      // let uline know user's thread to be able to communicate with it
                 ),
+                outs = null
+            )
+
+            seed.load(
+                acts(sendUserUlineBrad_act),
+                null,
                 null
             )
+            sendUserUlineBrad_act.load(mainStat.sendUserBranchBrad, hardCrank.hardCid.userThread_prem)
         }
     }   // 1_145_833_341 -2_067_698_057 -1_438_089_413 -691_499_635 -367_082_727 -1_988_590_990 -1_412_401_364
 }

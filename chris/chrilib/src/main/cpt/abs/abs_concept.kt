@@ -1,5 +1,6 @@
 package cpt.abs
 
+import atn.Branch
 import basemain.*
 import libmain._nm_
 import kotlin.test.assert
@@ -97,3 +98,34 @@ abstract class SpiritDynamicConcept(cid: Cid): SpiritConcept(cid) {
  *  @param spiritDynamicConcept
  */
 abstract class DynamicConcept(spiritDynamicConcept: SpiritDynamicConcept): Concept(spiritDynamicConcept)
+
+/**
+ *       Base for all actions.
+ *
+ *  @param cid
+*/
+abstract class SpiritAction(cid: Cid): SpiritDynamicConcept(cid) {
+
+    /**
+     *      Run the static concept functor in the context of the given branch.
+     *  @param br The branch object to run the functor in
+     */
+    abstract fun run(br: Branch)
+
+    /** Cid of the static concept. */
+    protected var _statCid: Cid = 0
+}
+
+/**
+ *      Base for live actions.
+ *
+ *  @param spiritAction
+ */
+abstract class Action(spiritAction: SpiritAction): DynamicConcept(spiritAction) {
+
+    /**
+     *      Run the static concept functor in the context of given branch.
+     *  @param br The branch object to run in
+     */
+    fun run(br: Branch) = (sp as SpiritAction).run(br)
+}

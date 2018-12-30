@@ -5,7 +5,7 @@ import cpt.SpCuteThreadPrem
 
 object hardCrank: CrankModule() {
 
-    object hardCids: CrankGroup {
+    object hardCid: CrankGroup {
 
         /// This is the root branch of the attention circle. It is set up in the circle crank group and is passed to
         // the attention circle constructor.

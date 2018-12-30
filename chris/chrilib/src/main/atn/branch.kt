@@ -6,7 +6,7 @@ import cpt.A
 import cpt.Breed
 import cpt.CuteThreadPrem
 import cpt.SpBreed
-import cpt.abs.Concept
+import cpt.abs.Action
 import cpt.abs.DynamicConcept
 import cpt.abs.Neuron
 import cpt.abs.SpiritDynamicConcept
@@ -53,7 +53,7 @@ open class Branch(
             // Do actions, if any
             if(eff.actions != null)
                 for(actCid in eff.actions)
-                    (this[actCid] as A).run(this)
+                    (this[actCid] as Action).run(this)
 
             // Spawn branches, if any
             if(eff.branches != null)
@@ -135,7 +135,7 @@ open class Branch(
 
     fun branchName(): String {
         var s = if(DEBUG_ON) _nm_!![breedCid]?: "noname" else this::class.qualifiedName?: ""
-        if(s == "hardCids.circle_breed")
+        if(s == "hardCid.circle_breed")
             s = "circle"
         else
             s = s.replace(".breed", "")
@@ -182,7 +182,7 @@ class AttentionCircle(breedCid: Cid, brad: Brad, userThread: CuteThread): Branch
     init {
 
         // Inject the userThread_prem hard cid premise
-        val userThreadPrem = this[hardCrank.hardCids.userThread_prem.cid] as CuteThreadPrem
+        val userThreadPrem = this[hardCrank.hardCid.userThread_prem.cid] as CuteThreadPrem
         userThreadPrem.thread = userThread
         userThreadPrem.activate()
     }

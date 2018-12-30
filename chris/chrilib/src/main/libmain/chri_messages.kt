@@ -18,7 +18,13 @@ class UserRequestsDispatcherCreateAttentionCircleMsg(val userThread: CuteThread)
  *                      is not, since users could be changing. So, user in order to be found must be identified.
  *  @param ownBrad new branch's address.
  */
-class AttentionCircleReportsPodpoolDispatcherUserItsCreationMsg(val userThread: CuteThread, val ownBrad: Brad): MessageMsg()
+class AttentionCircleReportsPodpoolAndDispatcherItsCreationMsg(val userThread: CuteThread, val ownBrad: Brad): MessageMsg()
+
+/**
+ *      Uline sends its address to user to let him communicate to it.
+ *  @param brad Branch address
+ */
+class BranchSendsUserItsBrad(val brad: Brad): MessageMsg()
 
 /**
  *      Request for creating branch.

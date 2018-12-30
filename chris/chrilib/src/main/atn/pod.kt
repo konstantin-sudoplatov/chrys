@@ -119,12 +119,12 @@ class Pod(
             // Create attention circle
             is UserRequestsDispatcherCreateAttentionCircleMsg -> {
                 dlog_ { ar("msg came: $msg") }
-                val breedCid = hardCrank.hardCids.circle_breed.cid
+                val breedCid = hardCrank.hardCid.circle_breed.cid
                 val cellid = generateSockid()
                 val circle = AttentionCircle(breedCid, Brad(this, cellid), msg.userThread)
                 branchMap_[cellid] = circle
                 numOfBranches++
-                _pp_.putInQueue(AttentionCircleReportsPodpoolDispatcherUserItsCreationMsg(msg.userThread, Brad(this, cellid)))
+                _pp_.putInQueue(AttentionCircleReportsPodpoolAndDispatcherItsCreationMsg(msg.userThread, Brad(this, cellid)))
 
                 circle.reasoning()
 
@@ -287,7 +287,7 @@ class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
                 return true
             }
 
-            is AttentionCircleReportsPodpoolDispatcherUserItsCreationMsg -> {
+            is AttentionCircleReportsPodpoolAndDispatcherItsCreationMsg -> {
 
                 hostCandidates.add(msg.ownBrad.pod)
                 borrowedPods--

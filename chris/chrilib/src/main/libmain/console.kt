@@ -30,8 +30,8 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
         var msg: MessageMsg
         do {
             msg = _getBlocking()
-        } while(msg !is AttentionCircleReportsPodpoolDispatcherUserItsCreationMsg)
-        circleBrad_ = msg.ownBrad
+        } while(msg !is BranchSendsUserItsBrad)
+        circleBrad_ = msg.brad
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$

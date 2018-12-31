@@ -3,7 +3,7 @@ package chribase_thread
 /** Ancestor for all messages */
 open class MessageMsg {
     override fun toString(): String {
-        return this::class.simpleName?: "noname"
+        return this::class.simpleName?: "anonymous"
     }
 }
 
@@ -12,6 +12,3 @@ class TerminationRequestMsg(): MessageMsg()
 
 /** If timeout happens in the CuteThread object, this message is send for processing instead of a real message. */
 class TimeoutMsg(): MessageMsg()
-
-/** Line of text. */
-class TextLineMsg(val text: String): MessageMsg()

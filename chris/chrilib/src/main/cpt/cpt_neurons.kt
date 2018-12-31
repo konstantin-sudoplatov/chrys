@@ -3,10 +3,9 @@ package cpt
 import atn.Branch
 import basemain.Cid
 import cpt.abs.*
-import libmain._sm_
 
 /**
- *          Unconditionally, i.e. without consulting any premises, applies its actions stemCid and branches.
+ *          Unconditionally, i.e. without consulting any premises, applies its acts stemCid and brans.
  */
 open class SpActionNeuron(cid: Cid): SpiritNeuron(cid) {
     override fun liveFactory(): ActionNeuron {
@@ -14,10 +13,10 @@ open class SpActionNeuron(cid: Cid): SpiritNeuron(cid) {
     }
 
     /**
-     *      Load the action neuron with the actions, branches and stem.
+     *      Load the action neuron with the acts, brans and stem.
      */
-    fun load(actions: Array<out SpiritAction>? = null, branches: Array<SpBreed>? = null, stem: SpiritNeuron? = null) {
-        super.addEff(Float.POSITIVE_INFINITY, actions, branches, stem)
+    fun load(acts: Array<out SpiritAction>? = null, brans: Array<SpBreed>? = null, stem: SpiritNeuron? = null) {
+        super.addEff(Float.POSITIVE_INFINITY, acts, brans, stem)
     }
 
     init {

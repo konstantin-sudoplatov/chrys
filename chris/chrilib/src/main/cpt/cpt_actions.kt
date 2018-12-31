@@ -3,7 +3,7 @@ package cpt
 /*
         The action concept is an interface, bridge between the world of dynamic concepts,
     that knows nothing about the code and operates only with cids and the static world, which is a set of functions.
-    Essentially what actions do - they call to those functions with given parameters.
+    Essentially what acts do - they call to those functions with given parameters.
 */
 
 import atn.Branch

@@ -3,7 +3,6 @@ package cpt.abs
 import atn.Branch
 import basemain.*
 import libmain._nm_
-import kotlin.test.assert
 
 /**
  *      Base class for all concepts.
@@ -18,6 +17,11 @@ abstract class SpiritConcept(cid: Cid) {
 
     /** Version number */
     var ver: Cvr = 0
+
+    /**
+     *      Minimal form of toString()
+     */
+    open fun toStr() = if(DEBUG_ON) _nm_!![cid]?: "noname" else this::class.qualifiedName
 
     override fun toString(): String {
         var s: String
@@ -34,17 +38,13 @@ abstract class SpiritConcept(cid: Cid) {
         return s
     }
 
-    /**
-     *      Minimal form of toString()
-     */
-    fun toStr() = if(DEBUG_ON) _nm_!![cid]?: "noname" else this::class.qualifiedName
 }
 
 /**
  *      Live wrapper for the SpiritConcept.
- *  The spiritConcept concepts contain stable data. In fact all branches consider them immutable. Their live mates in contrast
+ *  The spiritConcept concepts contain stable data. In fact all brans consider them immutable. Their live mates in contrast
  *  operate with changeable data, like activation or prerequisites. While the spiritConcept concepts are shared by all caldrons,
- *  the live ones are referenced only in their own branches.
+ *  the live ones are referenced only in their own brans.
  *
  *  We don't create live concepts directly through constructors, instead we use the liveFactory() method of their
  *  holy partners.
@@ -63,16 +63,16 @@ abstract class Concept(spiritConcept: SpiritConcept): Cloneable {
         return super.clone() as Concept
     }
 
+    /**
+     *      Minimal form of toString()
+     */
+    open fun toStr() = if(DEBUG_ON) _nm_!![cid]?: "noname" else this::class.qualifiedName?: "anonymous"
+
     override fun toString(): String {
         var s: String = this::class.qualifiedName as String
         s += "\nsp = $sp".replace("\n", "\n    ")
         return s
     }
-
-    /**
-     *      Minimal form of toString()
-     */
-    fun toStr() = if(DEBUG_ON) _nm_!![cid]?: "noname" else this::class.qualifiedName
 }
 
 /**
@@ -100,7 +100,7 @@ abstract class SpiritDynamicConcept(cid: Cid): SpiritConcept(cid) {
 abstract class DynamicConcept(spiritDynamicConcept: SpiritDynamicConcept): Concept(spiritDynamicConcept)
 
 /**
- *       Base for all actions.
+ *       Base for all acts.
  *
  *  @param cid
 */
@@ -117,7 +117,7 @@ abstract class SpiritAction(cid: Cid): SpiritDynamicConcept(cid) {
 }
 
 /**
- *      Base for live actions.
+ *      Base for live acts.
  *
  *  @param spiritAction
  */

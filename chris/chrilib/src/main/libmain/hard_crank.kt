@@ -2,6 +2,7 @@ package libmain
 
 import cpt.SpBreed
 import cpt.SpCuteThreadPrem
+import cpt.SpStringQueuePrem
 
 object hardCrank: CrankModule() {
 
@@ -14,6 +15,10 @@ object hardCrank: CrankModule() {
         // Injected into the circle branch to make it capable of sending messages to the user.
         val userThread_prem = SpCuteThreadPrem(-83_085_443)
 
+        // In this buffer the attention circle thread keeps user text lines, where they wait until get processed. Used in
+        // the ulread branch.
+        val userInputBuffer_prem = SpStringQueuePrem(852_186_520)
+
         override fun crank() {}
-    }   //   852_186_520 -1_525_585_308 1_639_186_599 1_632_083_895 -308_279_170
+    }   //    -1_525_585_308 1_639_186_599 1_632_083_895 -308_279_170
 }

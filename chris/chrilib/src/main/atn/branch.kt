@@ -2,10 +2,7 @@ package atn
 
 import basemain.*
 import chribase_thread.CuteThread
-import cpt.A
-import cpt.Breed
-import cpt.CuteThreadPrem
-import cpt.SpBreed
+import cpt.*
 import cpt.abs.Action
 import cpt.abs.DynamicConcept
 import cpt.abs.Neuron
@@ -14,8 +11,8 @@ import libmain.*
 import kotlin.math.max
 
 /**
- *      All reasoning takes place in this class. All branches are packed in pods and those in the pod pool.
- *  Parent-child relationships of the branches has nothing to do with parent-child relationships of the threads(pods). Pods
+ *      All reasoning takes place in this class. All brans are packed in pods and those in the pod pool.
+ *  Parent-child relationships of the brans has nothing to do with parent-child relationships of the threads(pods). Pods
  *  are children of the main branch, where they are started. Branches are born, live and terminate in their own logical
  *  hierarchy.
  *
@@ -34,7 +31,7 @@ open class Branch(
 
     /**
      *      It is a heart of the system. In here we calculate activation of a current neuron (the stem) and take decision
-     *  what actions should be done, which branches spawned, and which neuron will become our next stem or should we yield
+     *  what acts should be done, which brans spawned, and which neuron will become our next stem or should we yield
      *  the flow control and wait until conditions change and the next call comes.
      */
     fun reasoning() {
@@ -50,12 +47,12 @@ open class Branch(
             // Do the neuron's assessment and determine effect
             val eff = stem.calculateActivationAndSelectEffect(this)
 
-            // Do actions, if any
+            // Do acts, if any
             if(eff.actions != null)
                 for(actCid in eff.actions)
                     (this[actCid] as Action).run(this)
 
-            // Spawn branches, if any
+            // Spawn brans, if any
             if(eff.branches != null)
                 for(destBreedCid in eff.branches) {
 
@@ -91,15 +88,30 @@ open class Branch(
     }
 
     /**
-     *          Get live concept from local map. If not present, create it.
+     *          Get live concept from local map. If not present, create and set it up.
      */
     operator fun get(cid: Cid): DynamicConcept {
 
         var cpt = liveMap_[cid]
-        return if(cpt != null) cpt else {
-            cpt = (_sm_[cid] as SpiritDynamicConcept).liveFactory()
-            liveMap_[cid] = cpt
-            cpt
+        when {
+            cpt != null -> return cpt
+            else -> {   // Create and setup live concept
+                cpt = (_sm_[cid] as SpiritDynamicConcept).liveFactory()
+                liveMap_[cid] = cpt
+
+                // May be additional setup is needed
+                when(cpt) {
+
+                    // Load the string premise
+                    is ConceptPrem -> {
+                        val strCptCid = (cpt.sp as SpConceptPrem).cptCid
+                        val strCpt = (_sm_[strCptCid] as SpiritDynamicConcept).liveFactory()
+                        liveMap_[strCptCid] = strCpt
+                        cpt.cpt = strCpt
+                    }
+                }
+                return cpt
+            }
         }
     }
 
@@ -157,7 +169,7 @@ open class Branch(
     /** The head neuron of the branch. Initially it's the seed from the breed concept. */
     private var stem_: Neuron = this[(this[breedCid].sp as SpBreed).seedCid] as Neuron
 
-    /** List of child branches. Used to send them the termination message. */
+    /** List of child brans. Used to send them the termination message. */
     private val children = ArrayList<Brad>()
 
     /**

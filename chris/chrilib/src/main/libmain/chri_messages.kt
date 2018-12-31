@@ -43,9 +43,40 @@ class BranchRequestsPodpoolCreateChildMsg(val destBreedCid: Cid, val destIns: Ar
 class BranchReportsPodpoolAndParentItsCreationMsg(val parentBrad: Brad, val ownBrad: Brad, val ownBreedCid: Cid): MessageMsg()
 
 /**
- *      Base for messages addressed to pods (inter branch messages)
- *  @param destBrid identifier of the destination branch
+ *      User sends a line of text to the circle. (Is sent from the user thread to a pod thread).
+ *  @param destBrid Branch identifier in the pod.
  */
-abstract class PodIbr(val destBrid: Int): MessageMsg()
+class UserTellsCircleIbr(val destBrid: Int, val text: String): MessageMsg()
 
-class UserTellsCircleIbr(destBrid: Int, val text: String): PodIbr(destBrid)
+/**
+ *      Base for messages addressed to other brans (inter branch messages). Sent by brans to the pod pool. The
+ *  pod pool forwards them to the destination pod and branch. If cloned concept are passed between brans, they must be
+ *  cloned at the sender's, not the receiving site to prevent possible change during the traveling time.
+ *  @param destBrad address (pod + brid) of the destination branch
+ *  @param sourceBrad address of the originating branch
+ */
+abstract class IbrMsg(val destBrad: Brad, val sourceBrad: Brad): MessageMsg()
+
+/**
+ *      Activate concept remotely (i.e. another's branch live concept).
+ *  @param cptCid Cid of the concept.
+ *  @param destBrad address (pod + brid) of the destination branch
+ *  @param sourceBrad address of the originating branch
+ */
+class ActivateIbr(val cptCid: Cid, destBrad: Brad, sourceBrad: Brad): IbrMsg(destBrad, sourceBrad)
+
+/**
+ *      Anactivate (set activation to -1) concept remotely (i.e. another's branch live concept).
+ *  @param cptCid Cid of the concept.
+ *  @param destBrad address (pod + brid) of the destination branch
+ *  @param sourceBrad address of the originating branch
+ */
+class AnactivateIbr(val cptCid: Cid, destBrad: Brad, sourceBrad: Brad): IbrMsg(destBrad, sourceBrad)
+
+/**
+ *      Passing a single concept. The concept is cloned on sending and injected into the receiver branch on the receiving.
+ *  @param destBrad address (pod + brid) of the destination branch
+ *  @param cpt The concept to pass.
+ *  @param sourceBrad address of the originating branch
+ */
+class TransportSingleConceptIbr(destBrad: Brad, val cpt: DynamicConcept, sourceBrad: Brad): IbrMsg(destBrad, sourceBrad)

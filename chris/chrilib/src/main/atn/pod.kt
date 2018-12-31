@@ -6,9 +6,9 @@ import chribase_thread.MessageMsg
 import chribase_thread.TerminationRequestMsg
 import chribase_thread.TimeoutMsg
 import cpt.Breed
+import cpt.StringQueuePrem
 import libmain.*
 import java.util.*
-import kotlin.Comparator
 import kotlin.math.max
 import kotlin.random.Random
 
@@ -33,7 +33,7 @@ data class Brad(val pod: Pod, val brid: Int): Cloneable {
 }
 
 /**
- *      This is a thread, that contains a number of branches.
+ *      This is a thread, that contains a number of brans.
  *  @param podName Alias for threadName
  *  @param pid Pod identifier. It is the index of the pod in the pool's array of pods
  */
@@ -48,11 +48,11 @@ class Pod(
     val podName: String
         inline get() = threadName
 
-    /** Number of branches currently assigned to the pod. */
+    /** Number of brans currently assigned to the pod. */
     internal var numOfBranches = 0
 
     override fun toString(): String {
-        var s= super.toString()
+        var s = super.toString()
         s += "\n    numOfBranches = $numOfBranches"
         s += "\n    pid = $pid"
         return s
@@ -112,7 +112,11 @@ class Pod(
             }
 
             is UserTellsCircleIbr -> {
-                // todo: give it to circle
+                val branch = branchMap_[msg.destBrid] as Branch
+                val inputBufferCpt = branch[hardCrank.hardCid.userInputBuffer_prem.cid] as StringQueuePrem
+                inputBufferCpt.queue.add(msg.text)
+                inputBufferCpt.activate()
+
                 return true
             }
 
@@ -255,7 +259,7 @@ class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
                 // Take from hostCandidates the pod with smallest usage, i.e. the first one. The pod is taken out of the
                 // set, so it would not get used again before it is loaded with this branch. The pod will be returned back
                 // on getting report message of starting the branch.
-                if      //are all of the pods busy with dispatching new branches?
+                if      //are all of the pods busy with dispatching new brans?
                         (hostCandidates.isEmpty())
                 {   //yes: do spin-blocking - sleep a short wile then redispatch this message
                     assert(borrowedPods == pods.size)
@@ -328,11 +332,11 @@ class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
     // Array of all pods in the pool.
     private var pods = Array(size) { Pod("pod_$it", it) }
 
-    /** Queue of pods, as applicants for hosting new branches. It is a sorted set of pods. Pods are sorted by their
+    /** Queue of pods, as applicants for hosting new brans. It is a sorted set of pods. Pods are sorted by their
         usage number, plus a unique id to avoid repetition. The first element in the set is the most suitable candidate. */
     private val hostCandidates = TreeSet<Pod>(PodComparator())
 
-    /** Number of pods currently creating new branches. */
+    /** Number of pods currently creating new brans. */
     private var borrowedPods: Int = 0
 
     /** To avoid flooding the log. */

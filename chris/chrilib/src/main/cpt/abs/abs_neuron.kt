@@ -3,7 +3,6 @@ package cpt.abs
 import atn.Branch
 import basemain.Cid
 import cpt.ActivationIfc
-import cpt.SpA
 import cpt.SpBreed
 import java.util.*
 
@@ -13,7 +12,7 @@ import java.util.*
 abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
 
     /** If activation <= cutoff then result of the selectEffects() function is automatically Effect(cutoff, 0, null, null),
-        which means action stopAndWait and no branches. This allows to get rid of the first span from -infinity to 0, which
+        which means action stopAndWait and no brans. This allows to get rid of the first span from -infinity to 0, which
         is most often used as an antiactive span. */
     var cutoff: Float = 0f
         set(value) {
@@ -65,10 +64,10 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
     }
 
     /** Adapter. */
-    fun addEff(upperBound: Float, actions: Array<out SpiritAction>? = null, branches: Array<SpBreed>? = null, stem: SpiritNeuron? = null) {
-        val actCids = if(actions != null) IntArray(actions.size) { actions[it].cid } else null
-        val branCids = if(branches != null) IntArray(branches.size, { branches[it].cid }) else null
-        addEff_(upperBound, actCids, branCids, stem)
+    fun addEff(upBound: Float, acts: Array<out SpiritAction>? = null, brans: Array<SpBreed>? = null, stem: SpiritNeuron? = null) {
+        val actCids = if(acts != null) IntArray(acts.size) { acts[it].cid } else null
+        val branCids = if(brans != null) IntArray(brans.size, { brans[it].cid }) else null
+        addEff_(upBound, actCids, branCids, stem)
     }
 
     /**
@@ -76,7 +75,7 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
      */
     fun loadEffs(vararg efs: Eft) {
         for(ef in efs)
-            addEff(ef.upperBound, ef.actions, ef.branches, ef.stem)
+            addEff(ef.upBound, ef.acts, ef.brans, ef.stem)
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
@@ -92,7 +91,7 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
     //---%%%---%%%---%%%---%%%--- private funcs ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /**
-     *      Add actions and branches for a new span of the activation values. If cutoff is enabled, which is the default,
+     *      Add acts and brans for a new span of the activation values. If cutoff is enabled, which is the default,
      *  the the number of spans is bigger by one, than defined in the effects array. The first dummy span of
      *  Effect(cutoff, null, null) ocupies the region [-float.infinity, cutoff].
      *
@@ -100,12 +99,12 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
      *
      *      1. the function disableCutoff()
      *      2. the property neuron.cutoff = float.nan
-     *      3. defining the first span with the upperBound <= cutoff.
+     *      3. defining the first span with the upBound <= cutoff.
      *
      *  @param upperBound The upper boundary of the span, including.
-     *  @param actions Array of cids of actions. null or [] - no actions for this span.
+     *  @param actions Array of cids of acts. null or [] - no acts for this span.
      *  @param stem Neuron of new stemCid. null - stay on the current stemCid.
-     *  @param branches Array of cids of branches. null or [] - no new branches for this span.
+     *  @param branches Array of cids of brans. null or [] - no new brans for this span.
      */
     private fun addEff_(upperBound: Float, actions: IntArray? = null, branches: IntArray? = null, stem: SpiritNeuron? = null) {
 
@@ -213,23 +212,23 @@ abstract class LogicalNeuron(spLogicalNeuron: SpiritLogicalNeuron): Neuron(spLog
 
 /**
  *      Defines a span of activation values ]previous span's upper boundary, the new upper boundary].
- *  For the first span it is [Float.NEGATIVE_INFINITY, upperBound]. If the last span is unspecified, it's
- *  ]upperBound, Float.POSITIVE_INFINITY].
+ *  For the first span it is [Float.NEGATIVE_INFINITY, upBound]. If the last span is unspecified, it's
+ *  ]upBound, Float.POSITIVE_INFINITY].
  *
  *  For typealias Cid=Int used the IntArray arrays. If Cid changes for Long, for example, it also must be changed.
  */
 class Effect(
     val upperBound: Float,              // the upper boundary of the span, including
-    val actions: IntArray? = null,      // Array of cids of actions. null or [] - no actions for this span
-    val branches: IntArray? = null,     // Array of cids of branches. null or [] - no new branches for this span
+    val actions: IntArray? = null,      // Array of cids of acts. null or [] - no acts for this span
+    val branches: IntArray? = null,     // Array of cids of brans. null or [] - no new brans for this span
     val stemCid: Cid = 0                // 0 - stay on the current stemCid
 ) {
     override fun toString(): String {
         var s = this::class.qualifiedName?: ""
-        s += "\n    upperBound = $upperBound"
-        s += "\n    actions = $actions"
+        s += "\n    upBound = $upperBound"
+        s += "\n    acts = $actions"
         s += "\n    stemCid = $stemCid"
-        s += "\n    branches = $branches"
+        s += "\n    brans = $branches"
 
         return s
     }
@@ -255,8 +254,8 @@ class Prem(
  *      Used as a vararg parameters for the loadEffs() function
  */
 class Eft(
-    val upperBound: Float,
-    val actions: Array<out SpA>? = null,
-    val branches: Array<SpBreed>? = null,
+    val upBound: Float,
+    val acts: Array<out SpiritAction>? = null,
+    val brans: Array<SpBreed>? = null,
     val stem: SpiritNeuron? = null
 )

@@ -105,7 +105,7 @@ open class Branch(
                     // Load the string premise
                     is ConceptPrem -> {
                         val strCptCid = (cpt.sp as SpConceptPrem).cptCid
-                        val strCpt = (_sm_[strCptCid] as SpiritDynamicConcept).liveFactory()
+                        val strCpt = liveMap_[strCptCid]?: (_sm_[strCptCid] as SpiritDynamicConcept).liveFactory()
                         liveMap_[strCptCid] = strCpt
                         cpt.cpt = strCpt
                     }

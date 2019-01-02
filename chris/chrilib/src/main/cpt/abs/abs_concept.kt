@@ -21,7 +21,7 @@ abstract class SpiritConcept(cid: Cid) {
     /**
      *      Minimal form of toString()
      */
-    open fun toStr() = if(DEBUG_ON) _nm_!![cid]?: "noname" else this::class.qualifiedName
+    open fun toStr() = if(GDEBUG_LV >= 0) _nm_!![cid]?: "noname" else this::class.qualifiedName
 
     override fun toString(): String {
         var s: String
@@ -76,7 +76,7 @@ abstract class Concept(spiritConcept: SpiritConcept): Cloneable {
     /**
      *      Minimal form of toString()
      */
-    open fun toStr() = if(DEBUG_ON) _nm_!![cid]?: "noname" else this::class.qualifiedName?: "anonymous"
+    open fun toStr() = if(GDEBUG_LV >= 0) _nm_!![cid]?: "noname" else this::class.qualifiedName?: "anonymous"
 
     override fun toString(): String {
         var s: String = this::class.qualifiedName as String

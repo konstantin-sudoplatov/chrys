@@ -1,6 +1,6 @@
 package stat
 
-import basemain.DEBUG_ON
+import basemain.GDEBUG_LV
 import basemain.logit
 import cpt.SpStaticConcept
 import libmain._nm_
@@ -35,7 +35,7 @@ open class StatModule {
             _sm_.add(statFunc)
 
             // May be fill in the name map
-            if(DEBUG_ON) _nm_!![statFunc.cid] = this::class.simpleName + "." + statFunc::class.simpleName
+            if(GDEBUG_LV >= 0) _nm_!![statFunc.cid] = this::class.simpleName + "." + statFunc::class.simpleName
         }
     }
 }

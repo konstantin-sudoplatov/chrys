@@ -1,6 +1,5 @@
 package libmain
 
-import atn.Branch
 import basemain.*
 import cpt.SpStaticConcept
 import cpt.abs.SpiritConcept
@@ -133,7 +132,7 @@ open class CrankModule() {
                 _sm_.add(cpt)
 
                 // May be fill in the name map
-                if(DEBUG_ON) _nm_!![cpt.cid] = crankGroup::class.simpleName + "." + prop.name
+                if(GDEBUG_LV >= 0) _nm_!![cpt.cid] = crankGroup::class.simpleName + "." + prop.name
             }
         }
     }

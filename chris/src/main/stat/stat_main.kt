@@ -48,7 +48,7 @@ object copyCpt0ToCpt1: F2Cid(43_137) {
     }
 }
 
-object transportSingleConcept: F2Cid(43_137) {
+object transportSingleConcept: F2Cid(72_493) {
     /**
      *  @param br current branch
      *  @param whereTo Cid of the destination branch breed
@@ -96,4 +96,4 @@ object transportSingleConcept: F2Cid(43_137) {
 
         }
     }
-}   //      72_493 53_148 51_211 50_023 62_408 89_866 24_107
+}   //       53_148 51_211 50_023 62_408 89_866 24_107

@@ -5,6 +5,10 @@ open class MessageMsg {
     override fun toString(): String {
         return this::class.simpleName?: "anonymous"
     }
+
+    fun toStr(): String {
+        return this::class.simpleName?: "anonymous"
+    }
 }
 
 /** Request for termination of a thread and all its successors. */

@@ -1,11 +1,8 @@
 package basemain
 
-/** Global flag showing that debug is enabled, so the debug code should be generated. Since it is a Java static final,
-    there should be no code generated if it is false. */
-const val DEBUG_ON = true
-
-/** Global debug level. */
-const val GLOBAL_DEBUG_LEVEL = 0
+/** Global debug level. >= 0 means that debug is enabled, so the debug code should be generated including filling up the
+    name map. Since it is a Java static final, there should be no code generated if it is < 0.*/
+const val GDEBUG_LV = 0
 
 /** Concept identifier type. */
 typealias Cid = Int

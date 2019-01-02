@@ -39,8 +39,9 @@ data class Brad(val pod: Pod, val brid: Int): Cloneable {
  */
 class Pod(
     podName: String,
-    val pid: Int,       // Index of the pod in the podArray of the pod pool.
-    val dlv: Int = 0    // Debugging level. There is also branch debug level and GLOBAL_DEBUG_LEVEL.
+    val pid: Int,               // Index of the pod in the podArray of the pod pool.
+    val dlv: Int = -1,          // Debugging level. There is also branch debug level and GDEBUG_LV.
+    val dBranchFilter: Int = -1 // Filter debugging messages for a branch. The field contains a brid. -1: no filtering.
 ): CuteThread(POD_THREAD_QUEUE_TIMEOUT, MAX_POD_THREAD_QUEUE, podName)
 {
 
@@ -67,13 +68,16 @@ class Pod(
     //---$$$---$$$---$$$---$$$---$$$ protected data ---$$$---$$$---$$$---$$$---$$$--
 
     //---$$$---$$$---$$$---$$$---$$$--- protected methods ---$$$---$$$---$$$---$$$---$$$---
-
     protected override fun _messageProc(msg: MessageMsg): Boolean {
 
         when(msg) {
 
             is IbrMsg -> {
-                val br = branchMap_[msg.destBrid]!!
+                val br = branchMap_[msg.destBrid] as Branch
+                dlog_(br) {ar(
+                    "msg came: ${msg.toStr()}",
+                    "msg came: $msg"
+                )}
                 when(msg) {
                     is TransportSingleConceptIbr -> {
                         br.add(msg.load)
@@ -86,7 +90,10 @@ class Pod(
 
             // Create new branch
             is BranchRequestsPodpoolCreateChildMsg -> {
-                dlog_ { ar("msg came: $msg") }
+                dlog_ { ar(
+                    "msg came: ${msg.toStr()}",
+                    "msg came: $msg"
+                )}
                 val brid = generateSockid()
                 val destBrad = Brad(this, brid)
                 val branch = Branch(msg.destBreedCid, destBrad, msg.parentBrad)
@@ -109,7 +116,10 @@ class Pod(
 
             // Parent gets report on creating child branch
             is BranchReportsPodpoolAndParentItsCreationMsg -> {
-                dlog_ { ar("msg came: $msg") }
+                dlog_ { ar(
+                    "msg came: ${msg.toStr()}",
+                    "msg came: $msg"
+                )}
                 val parentBranch = branchMap_[msg.parentBrad.brid]
                 parentBranch!!.addChild(msg.ownBrad)    // add new child to the list of children of the parent branch
 
@@ -124,8 +134,12 @@ class Pod(
             }
 
             is UserTellsCircleIbr -> {
-                val branch = branchMap_[msg.destBrid] as Branch
-                val inputBufferCpt = branch[hardCrank.hardCid.userInputBuffer_prem.cid] as StringQueuePrem
+                val br = branchMap_[msg.destBrid] as Branch
+                dlog_(br) {ar(
+                    "msg came: ${msg.toStr()}",
+                    "msg came: $msg"
+                )}
+                val inputBufferCpt = br[hardCrank.hardCid.userInputBuffer_prem.cid] as StringQueuePrem
                 inputBufferCpt.queue.add(msg.text)
                 inputBufferCpt.activate()
 
@@ -134,7 +148,10 @@ class Pod(
 
             // Create attention circle
             is UserRequestsDispatcherCreateAttentionCircleMsg -> {
-                dlog_ { ar("msg came: $msg") }
+                dlog_ { ar(
+                    "msg came: ${msg.toStr()}",
+                    "msg came: $msg"
+                )}
                 val breedCid = hardCrank.hardCid.circle_breed.cid
                 val cellid = generateSockid()
                 val circle = AttentionCircle(breedCid, Brad(this, cellid), msg.userThread)
@@ -149,7 +166,7 @@ class Pod(
 
             is TerminationRequestMsg -> {
                 dlog_ { ar(
-                    "",
+                    "msg came: ${msg.toStr()}",
                     "msg came: $msg"
                 ) }
                 return true
@@ -182,28 +199,30 @@ class Pod(
     //---%%%---%%%---%%%---%%%--- private funcs ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /**
-     *      Generate socket identifier of a branch in the pod, that is guaranteed in no use.
+     *      Generate socket identifier of a branch in the pod, that is guaranteed in no use. -1 is excluded, so it
+     *  can serve as a "no branch" flag.
      */
     private fun generateSockid(): Int {
 
         var brid: Int
         do {
             brid = Random.nextInt(Int.MIN_VALUE, Int.MAX_VALUE)
-        } while(brid in branchMap_)
+        } while(brid in branchMap_ || brid == -1)
 
         return brid
     }
 
     /**
-     *      Log a debugging line. The debug level is taken as a maximum of the global or thread debug level. The lambda
+     *          Log a debugging line without filtering.
+     *      The debug level is taken as a maximum of the global or thread debug level. The lambda
      *  provides an array of lines, corresponding to the debug levels, where the first array element corresponds to the
      *  level 1. If there is no corresponding line, than the last line of the array is used. If the line is empty, nothing
      *  is logged.
      *  @param lines Lamba, resulting in ar array of strings, one of which will be logged.
      */
     private inline fun dlog_(lines: () -> Array<String>) {
-        if (DEBUG_ON) {
-            val effectiveLvl = max(GLOBAL_DEBUG_LEVEL, this.dlv)
+        if (GDEBUG_LV >= 0) {
+            val effectiveLvl = max(GDEBUG_LV, this.dlv)
             if(effectiveLvl <= 0) return
             if      // is there a line corresponding to the debug level?
                     (effectiveLvl <= lines().size)
@@ -216,27 +235,15 @@ class Pod(
     }
 
     /**
-     *      Log a debugging line. The debug level is taken as a maximum of the global, thread or branch debug level. The lambda
-     *  provides an array of lines, corresponding to the debug levels, where the first array element corresponds to the
-     *  level 1. If there is no corresponding line, than the last line of the array is used. If the line is empty, nothing
-     *  is logged.
-     *  @param brid Branch identifier
+     *          Log a debugging line if it passes the filter
+     *  @param branch Branch, the message is meant for
      *  @param lines Lamba, resulting in ar array of strings, one of which will be logged.
      */
-    private inline fun dlog_(brid: Int, lines: () -> Array<String>) {
-        if (DEBUG_ON) {
-            val branch = branchMap_[brid]
-            val branchLvl = if(branch == null) 0 else branch.dlv
-            val effectiveLvl = max(max(GLOBAL_DEBUG_LEVEL, this.dlv), branchLvl)
-            if(effectiveLvl <= 0) return
-            if      // is there a line corresponding to the debug level?
-                    (effectiveLvl <= lines().size)
-            {   //yes: log that line
-                if(lines()[effectiveLvl-1] != "") logit(this.podName + ": " + lines()[effectiveLvl-1])
-            }
-            else //no: log the last line of the array
-                if(lines()[lines().lastIndex] != "") logit(this.podName + ": " + lines()[lines().lastIndex])
-        }
+    private inline fun dlog_(branch: Branch, lines: () -> Array<String>) {
+        if (GDEBUG_LV >= 0)
+            if      // does the message pass the filter?
+                (dBranchFilter == -1 || dBranchFilter == branch.ownBrad.brid)
+            dlog_ { lines() }
     }
 }
 
@@ -260,19 +267,32 @@ class PodComparator: Comparator<Pod>
  *      Pool of pods. It is of fixed size and populated with running pods (they are started on the pool construction).
  *  @param size number of pods in the pool
  */
-class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
+class Podpool(
+    val size: Int = POD_POOL_SIZE,
+    val dlv: Int = -1,          // Debugging level. There is also branch debug level and GDEBUG_LV.
+    val dPodFilter: Int = -1    // Filter debugging messages for a pod. The field contains a pid. -1: no filtering.
+): CuteThread(0, 0, "pod_pool")
 {
     protected override fun _messageProc(msg: MessageMsg?): Boolean {
         when(msg) {
 
             // Forward all Ibrs to the destination pods
             is IbrMsg -> {
+                val destPod = msg.destPod
+                dlog_(destPod) {ar(
+                    "msg came: ${msg.toStr()}",
+                    "msg came: $msg"
+                )}
                 msg.destPod.putInQueue(msg)
                 return true
             }
 
             is BranchRequestsPodpoolCreateChildMsg,
             is UserRequestsDispatcherCreateAttentionCircleMsg -> {
+                dlog_ { ar(
+                    "msg came: ${msg.toStr()}",
+                    "msg came: $msg"
+                )}
 
                 // Take from hostCandidates the pod with smallest usage, i.e. the first one. The pod is taken out of the
                 // set, so it would not get used again before it is loaded with this branch. The pod will be returned back
@@ -302,6 +322,10 @@ class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
             }
 
             is BranchReportsPodpoolAndParentItsCreationMsg -> {
+                dlog_ { ar(
+                    "msg came: ${msg.toStr()}",
+                    "msg came: $msg"
+                )}
                 hostCandidates.add(msg.ownBrad.pod)
                 borrowedPods--
                 msg.parentBrad.pod.putInQueue(msg)      // forward this message to the parent's pod
@@ -310,6 +334,10 @@ class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
             }
 
             is AttentionCircleReportsPodpoolAndDispatcherItsCreationMsg -> {
+                dlog_ { ar(
+                    "msg came: ${msg.toStr()}",
+                    "msg came: $msg"
+                )}
 
                 hostCandidates.add(msg.ownBrad.pod)
                 borrowedPods--
@@ -319,6 +347,10 @@ class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
             }
 
             is TerminationRequestMsg -> {
+                dlog_ { ar(
+                    "msg came: ${msg.toStr()}",
+                    "msg came: $msg"
+                )}
 
                 // Terminate pods
                 for(pod in pods)
@@ -359,6 +391,40 @@ class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
 
     /** To avoid flooding the log. */
     private var podpoolOverflowReported = false
+
+    /**
+     *          Log a debugging line without filtering.
+     *      The debug level is taken as a maximum of the global or thread debug level. The lambda
+     *  provides an array of lines, corresponding to the debug levels, where the first array element corresponds to the
+     *  level 1. If there is no corresponding line, than the last line of the array is used. If the line is empty, nothing
+     *  is logged.
+     *  @param lines Lamba, resulting in ar array of strings, one of which will be logged.
+     */
+    private inline fun dlog_(lines: () -> Array<String>) {
+        if (GDEBUG_LV >= 0) {
+            val effectiveLvl = max(GDEBUG_LV, this.dlv)
+            if(effectiveLvl <= 0) return
+            if      // is there a line corresponding to the debug level?
+                    (effectiveLvl <= lines().size)
+            {    //yes: log that line
+                if(lines()[effectiveLvl-1] != "") logit(this.threadName + ": " + lines()[effectiveLvl-1])
+            }
+            else //no: log the last line of the array
+                if(lines()[lines().lastIndex] != "") logit(this.threadName + ": " + lines()[lines().lastIndex])
+        }
+    }
+
+    /**
+     *          Log a debugging line if it passes the filter
+     *  @param pod Pod, the message is meant for
+     *  @param lines Lamba, resulting in ar array of strings, one of which will be logged.
+     */
+    private inline fun dlog_(pod: Pod, lines: () -> Array<String>) {
+        if (GDEBUG_LV >= 0)
+            if      // does the message pass the filter?
+                    (dPodFilter == -1 || dPodFilter == pod.pid)
+                dlog_ { lines() }
+    }
 
     init {
         // Register all pods in the tree set

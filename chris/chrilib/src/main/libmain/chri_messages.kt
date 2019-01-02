@@ -6,11 +6,11 @@ import chribase_thread.CuteThread
 import chribase_thread.MessageMsg
 import cpt.abs.DynamicConcept
 
-class ReaderSendsConsoleLineMsg(val text: String): MessageMsg()
+data class ReaderSendsConsoleLineMsg(val text: String): MessageMsg()
 
 class CirclePromptsUserMsg(): MessageMsg()
 
-class UserRequestsDispatcherCreateAttentionCircleMsg(val userThread: CuteThread): MessageMsg()
+data class UserRequestsDispatcherCreateAttentionCircleMsg(val userThread: CuteThread): MessageMsg()
 
 /**
  *      Attention circle reports to pod pool, dispatcher and user that it was created and gives them its ownBrad.
@@ -18,13 +18,13 @@ class UserRequestsDispatcherCreateAttentionCircleMsg(val userThread: CuteThread)
  *                      is not, since users could be changing. So, user in order to be found must be identified.
  *  @param ownBrad new branch's address.
  */
-class AttentionCircleReportsPodpoolAndDispatcherItsCreationMsg(val userThread: CuteThread, val ownBrad: Brad): MessageMsg()
+data class AttentionCircleReportsPodpoolAndDispatcherItsCreationMsg(val userThread: CuteThread, val ownBrad: Brad): MessageMsg()
 
 /**
  *      Uline sends its address to user to let him communicate to it.
  *  @param brad Branch address
  */
-class BranchSendsUserItsBrad(val brad: Brad): MessageMsg()
+data class BranchSendsUserItsBrad(val brad: Brad): MessageMsg()
 
 /**
  *      Request for creating branch.
@@ -32,7 +32,7 @@ class BranchSendsUserItsBrad(val brad: Brad): MessageMsg()
  *  @param destIns Array of live concepts to be injected into new branch
  *  @param parentBrad Address of the parent branch (for sending back report)
  */
-class BranchRequestsPodpoolCreateChildMsg(val destBreedCid: Cid, val destIns: Array<DynamicConcept>?, val parentBrad: Brad): MessageMsg()
+data class BranchRequestsPodpoolCreateChildMsg(val destBreedCid: Cid, val destIns: Array<DynamicConcept>?, val parentBrad: Brad): MessageMsg()
 
 /**
  *      Branch reports to the pod pool and its parent its creation and tells them its ownBrad.
@@ -40,13 +40,13 @@ class BranchRequestsPodpoolCreateChildMsg(val destBreedCid: Cid, val destIns: Ar
  *  @param ownBrad
  *  @param ownBreedCid
  */
-class BranchReportsPodpoolAndParentItsCreationMsg(val parentBrad: Brad, val ownBrad: Brad, val ownBreedCid: Cid): MessageMsg()
+data class BranchReportsPodpoolAndParentItsCreationMsg(val parentBrad: Brad, val ownBrad: Brad, val ownBreedCid: Cid): MessageMsg()
 
 /**
  *      User sends a line of text to the circle. (Is sent from the user thread to a pod thread).
  *  @param destBrid Branch identifier in the pod.
  */
-class UserTellsCircleIbr(val destBrid: Int, val text: String): MessageMsg()
+data class UserTellsCircleIbr(val destBrid: Int, val text: String): MessageMsg()
 
 /**
  *      Base for messages addressed to other brans (inter branch messages). Sent by brans to the pod pool. The
@@ -59,6 +59,13 @@ class UserTellsCircleIbr(val destBrid: Int, val text: String): MessageMsg()
 abstract class IbrMsg(destBrad: Brad): MessageMsg() {
     val destPod = destBrad.pod
     val destBrid = destBrad.brid
+
+    override fun toString(): String {
+        var s = super.toString()
+        s += "\ndestPod = $destPod".replace("\n", "\n    ")
+        s += "\n    destBrid = $destBrid"
+        return s
+    }
 }
 
 /**
@@ -66,18 +73,39 @@ abstract class IbrMsg(destBrad: Brad): MessageMsg() {
  *  @param destBrad address (pod + brid) of the destination branch
  *  @param cptCid Cid of the concept.
  */
-class ActivateIbr(destBrad: Brad, val cptCid: Cid): IbrMsg(destBrad)
+class ActivateIbr(destBrad: Brad, val cptCid: Cid): IbrMsg(destBrad) {
+
+    override fun toString(): String {
+        var s = super.toString()
+        s += "\n    cptCid = $cptCid"
+        return s
+    }
+}
 
 /**
  *      Anactivate (set activation to -1) concept remotely (i.e. another's branch live concept).
  *  @param destBrad address (pod + brid) of the destination branch
  *  @param cptCid Cid of the concept.
  */
-class AnactivateIbr(destBrad: Brad, val cptCid: Cid): IbrMsg(destBrad)
+class AnactivateIbr(destBrad: Brad, val cptCid: Cid): IbrMsg(destBrad) {
+
+    override fun toString(): String {
+        var s = super.toString()
+        s += "\n    cptCid = $cptCid"
+        return s
+    }
+}
 
 /**
  *      Passing a single concept. The concept is cloned on sending and injected into the receiver branch on the receiving.
  *  @param destBrad address (pod + brid) of the destination branch
  *  @param load The concept to pass.
  */
-class TransportSingleConceptIbr(destBrad: Brad, val load: DynamicConcept): IbrMsg(destBrad)
+class TransportSingleConceptIbr(destBrad: Brad, val load: DynamicConcept): IbrMsg(destBrad) {
+
+    override fun toString(): String {
+        var s = super.toString()
+        s += "\nload = $load".replace("\n", "\n    ")
+        return s
+    }
+}

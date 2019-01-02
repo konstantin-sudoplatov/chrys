@@ -3,7 +3,7 @@ package libmain
 import atn.AttentionDispatcher
 import atn.Podpool
 import basemain.Cid
-import basemain.DEBUG_ON
+import basemain.GDEBUG_LV
 
 /** Number of pods in the pool */
 const val POD_POOL_SIZE = 10
@@ -21,4 +21,4 @@ val _pp_ = Podpool()
 val _sm_ = SpiritMap()
 
 /** If the DEBUG_ON flag is on, this map is created and filled up. */
-val _nm_: HashMap<Cid, String>? = if(DEBUG_ON) HashMap() else null
+val _nm_: HashMap<Cid, String>? = if(GDEBUG_LV >= 0) HashMap() else null

@@ -28,7 +28,7 @@ open class Branch(
     val breedCid: Cid,
     val ownBrad: Brad,          // own address
     private val parentBrad: Brad?,      // parent's address
-    val dlv: Int = 0            // branch debug level. There is also thread debug level and GLOBAL_DEBUG_LEVEL.
+    val dlv: Int = -1           // branch debug level. There is also thread debug level and GDEBUG_LV.
 ) {
 
     /**
@@ -135,9 +135,9 @@ open class Branch(
      *  @param lines Lamba, resulting in ar array of strings, one of which will be logged.
      */
     inline fun dlog(lines: () -> Array<String>) {
-        if (DEBUG_ON) {
+        if (GDEBUG_LV >= 0) {
             val pod = ownBrad.pod
-            val effectiveLvl = max(max(GLOBAL_DEBUG_LEVEL, pod.dlv), this.dlv)
+            val effectiveLvl = max(max(GDEBUG_LV, pod.dlv), this.dlv)
             if(effectiveLvl <= 0) return
             if      // is there a line corresponding to the debug level?
                     (effectiveLvl <= lines().size)
@@ -150,7 +150,7 @@ open class Branch(
     }
 
     fun branchName(): String {
-        var s = if(DEBUG_ON) _nm_!![breedCid]?: "noname" else this::class.qualifiedName?: ""
+        var s = if(GDEBUG_LV >= 0) _nm_!![breedCid]?: "noname" else this::class.qualifiedName?: ""
         if(s == "hardCid.circle_breed")
             s = "circle"
         else

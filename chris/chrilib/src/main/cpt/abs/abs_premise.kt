@@ -2,7 +2,6 @@ package cpt.abs
 
 import basemain.Cid
 import cpt.ActivationIfc
-import java.lang.IllegalArgumentException
 
 
 /**
@@ -29,21 +28,15 @@ abstract class Premise(spiritDynamicConcept: SpiritDynamicConcept): DynamicConce
 
     override fun normalization() = ActivationIfc.NormalizationType.BIN
 
+    override fun copy(dest: Concept) {
+        super.copy(dest)
+        (dest as Premise).activation = activation
+    }
+
     override fun toString(): String {
         var s = super.toString()
         s += "\n    activation = $activation"
         return s
-    }
-
-    /**
-            Copy meaningful fields of this concept to the destination. Both concepts must be exactly the same runtime type.
-        Such fields as cid, ver or the usage statistics, for example, are left intact.
-        @param destination = concept to copy data to
-        Returns: changed destination concept
-    */
-    fun copy(destination: Premise) {
-        assert(this::class == destination::class)
-        destination.activation = activation
     }
 }
 

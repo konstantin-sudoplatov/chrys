@@ -54,13 +54,23 @@ abstract class SpiritConcept(cid: Cid) {
 abstract class Concept(spiritConcept: SpiritConcept): Cloneable {
 
     /** Spiritual part */
-    val sp = spiritConcept
+    var sp = spiritConcept
 
     val cid
         get() = sp.cid
 
     public override fun clone(): Concept {
         return super.clone() as Concept
+    }
+
+    /**
+     *      Like cloning, but without copying data not relevant to the reasoning, such as cid, ver, or the usage statistics.
+     *  @param dest Live concept to copy data to
+     */
+    open fun copy(dest: Concept) {
+        assert(dest::class == this::class) { "Types of the concepts must match exactly, we have this = %s, dest = %s".
+            format(this::class.qualifiedName, dest::class.qualifiedName)}
+        dest.sp = sp
     }
 
     /**

@@ -3,7 +3,8 @@ package stat
 import basemain.DEBUG_ON
 import basemain.logit
 import cpt.SpStaticConcept
-import libmain.*
+import libmain._nm_
+import libmain._sm_
 
 
 /**

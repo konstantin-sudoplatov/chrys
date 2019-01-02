@@ -72,6 +72,17 @@ class Pod(
 
         when(msg) {
 
+            is IbrMsg -> {
+                val branch = branchMap_[msg.destBrid]!!
+                when(msg) {
+                    is TransportSingleConceptIbr -> {
+
+                        return true
+                    }
+                }
+            }
+
+
             // Create new branch
             is BranchRequestsPodpoolCreateChildMsg -> {
                 dlog_ { ar("msg came: $msg") }
@@ -252,6 +263,12 @@ class Podpool(val size: Int = POD_POOL_SIZE): CuteThread(0, 0, "pod_pool")
 {
     protected override fun _messageProc(msg: MessageMsg?): Boolean {
         when(msg) {
+
+            // Forward all Ibrs to the destination pods
+            is IbrMsg -> {
+                msg.destPod.putInQueue(msg)
+                return true
+            }
 
             is BranchRequestsPodpoolCreateChildMsg,
             is UserRequestsDispatcherCreateAttentionCircleMsg -> {

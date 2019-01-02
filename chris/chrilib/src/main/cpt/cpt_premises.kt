@@ -3,7 +3,10 @@ package cpt
 import atn.Brad
 import basemain.Cid
 import chribase_thread.CuteThread
-import cpt.abs.*
+import cpt.abs.Concept
+import cpt.abs.Premise
+import cpt.abs.SpiritDynamicConcept
+import cpt.abs.SpiritPremise
 import java.util.*
 
 /**
@@ -37,7 +40,8 @@ class SpBreed(cid: Cid): SpiritPremise(cid) {
     /**
      *      Load concept.
      *  @param seed Cid of the seed concept
-     *
+     *  @param ins Cids of concepts, that must be injected into the created branch
+     *  @param outs Cids of concepts, that are injected back to the parent branch on finishing of the child
      */
     fun load(seed: SpSeed, ins: Array<SpiritDynamicConcept>?, outs: Array<SpiritDynamicConcept>?) {
         this.seedCid = seed.cid
@@ -59,6 +63,12 @@ class Breed internal constructor(spBreed: SpBreed): Premise(spBreed) {
         return o
     }
 
+    override fun copy(dest: Concept) {
+        super.copy(dest)
+        dest as Breed
+        dest.brad = this.brad?.clone()
+    }
+
     override fun toString(): String {
         var s = super.toString()
         s += "\nownBrad = $brad".replace("\n", "\n    ")
@@ -76,9 +86,17 @@ class SpCuteThreadPrem(cid: Cid): SpiritPremise(cid) {
 }
 
 /** Live. */
-class CuteThreadPrem(spCuteThreadPrem: SpCuteThreadPrem): Premise(spCuteThreadPrem) {
+class CuteThreadPrem internal constructor(spCuteThreadPrem: SpCuteThreadPrem): Premise(spCuteThreadPrem) {
 
     var thread: CuteThread? = null      // note: cloned shallowly. Apparently deep cloning is senseless here.
+
+
+    override fun copy(dest: Concept) {
+        super.copy(dest)
+        dest as CuteThreadPrem
+        dest.thread = thread
+    }
+
 }
 
 class SpPegPrem(cid: Cid): SpiritPremise(cid) {
@@ -96,6 +114,12 @@ class StringPrem(spStringPrem: SpStringPrem): Premise(spStringPrem) {
 
     var text: String = ""
 
+    override fun copy(dest: Concept) {
+        super.copy(dest)
+        dest as StringPrem
+        dest.text = text
+    }
+
     override fun toString(): String {
         var s = super.toString()
         s += "\n    text = $text"
@@ -112,7 +136,7 @@ class SpStringQueuePrem(cid: Cid): SpiritPremise(cid) {
 }
 
 /** Live. */
-class StringQueuePrem(spStringQueuePrem: SpStringQueuePrem): Premise(spStringQueuePrem) {
+class StringQueuePrem internal constructor(spStringQueuePrem: SpStringQueuePrem): Premise(spStringQueuePrem) {
 
     /** The queue */
     var queue = ArrayDeque<String>()
@@ -121,6 +145,12 @@ class StringQueuePrem(spStringQueuePrem: SpStringQueuePrem): Premise(spStringQue
         val o = super.clone() as StringQueuePrem
         o.queue = queue.clone()
         return o
+    }
+
+    override fun copy(dest: Concept) {
+        super.copy(dest)
+        dest as StringQueuePrem
+        dest.queue = queue.clone()
     }
 
     override fun toStr(): String {
@@ -140,51 +170,51 @@ class StringQueuePrem(spStringQueuePrem: SpStringQueuePrem): Premise(spStringQue
     }
 }
 
-/**
- *      Premise, which live part holds a concept, may be another premise.
- */
-class SpConceptPrem(cid: Cid): SpiritPremise(cid) {
-
-    /** Cid of the carried concept. If it is 0, the any dynamic concept allowed. */
-    var cptCid: Cid = 0
-
-    override fun toString(): String {
-        var s = super.toString()
-        s += "\n    cptCid = $cptCid"
-        return s
-    }
-
-    override fun liveFactory(): ConceptPrem = ConceptPrem(this)
-
-    /**
-     *      Set up the carried concept cid.
-     *  @param cpt Concept to carry.
-     */
-    fun load(cpt: SpiritDynamicConcept) {
-        cptCid = cpt.cid
-    }
-}
-
-/** Live */
-class ConceptPrem(spConceptPrem: SpConceptPrem): Premise(spConceptPrem) {
-    var cpt: DynamicConcept? = null
-
-    override fun clone(): Concept {
-        var o = super.clone() as ConceptPrem
-        o.cpt = cpt?.clone() as DynamicConcept
-        return o
-    }
-
-    override fun toStr(): String {
-        var s = super.toStr()
-        s += ", cpt = ${cpt?.toStr()}"
-        return s
-    }
-
-    override fun toString(): String {
-        var s = super.toString()
-        s += "\ncpt$cpt".replace("\n", "\n    ")
-
-        return s
-    }
-}
+///**
+// *      Premise, which live part holds a concept, may be another premise.
+// */
+//class SpConceptPrem(cid: Cid): SpiritPremise(cid) {
+//
+//    /** Cid of the carried concept. Currently 0 is not allowed(assert in the Branch.get()). In the future 0 could allow any dynamic concept, may be? */
+//    var cptCid: Cid = 0
+//
+//    override fun toString(): String {
+//        var s = super.toString()
+//        s += "\n    cptCid = $cptCid"
+//        return s
+//    }
+//
+//    override fun liveFactory(): ConceptPrem = ConceptPrem(this)
+//
+//    /**
+//     *      Set up the carried concept cid.
+//     *  @param cpt Concept to carry.
+//     */
+//    fun load(cpt: SpiritDynamicConcept) {
+//        cptCid = cpt.cid
+//    }
+//}
+//
+///** Live */
+//class ConceptPrem(spConceptPrem: SpConceptPrem): Premise(spConceptPrem) {
+//    var cpt: DynamicConcept? = null
+//
+//    override fun clone(): Concept {
+//        var o = super.clone() as ConceptPrem
+//        o.cpt = cpt?.clone() as DynamicConcept
+//        return o
+//    }
+//
+//    override fun toStr(): String {
+//        var s = super.toStr()
+//        s += ", cpt = ${cpt?.toStr()}"
+//        return s
+//    }
+//
+//    override fun toString(): String {
+//        var s = super.toString()
+//        s += "\ncpt$cpt".replace("\n", "\n    ")
+//
+//        return s
+//    }
+//}

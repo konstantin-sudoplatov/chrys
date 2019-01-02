@@ -18,19 +18,19 @@ abstract class F(cid: Cid): SpStaticConcept(cid) {
  *      Functor: fun(Branch, Cid): Unit
  */
 abstract class FCid(cid: Cid): SpStaticConcept(cid) {
-    abstract fun func(br: Branch, cid: Cid): Unit
+    abstract fun func(br: Branch, cptCid: Cid): Unit
 }
 
 /**
  *      Functor: fun(Branch, Cid, Cid): Unit
  */
 abstract class F2Cid(cid: Cid): SpStaticConcept(cid) {
-    abstract fun func(br: Branch, cid0: Cid, cid1: Cid): Unit
+    abstract fun func(br: Branch, cpt0Cid: Cid, cpt1Cid: Cid): Unit
 }
 
 /**
  *      Functor: fun(Branch, vararg Cid): Unit
  */
 abstract class FLCid(cid: Cid): SpStaticConcept(cid) {
-    abstract fun func(br: Branch, vararg cids: Cid): Unit
+    abstract fun func(br: Branch, vararg cptCids: Cid): Unit
 }

@@ -2,7 +2,9 @@ package atn
 
 import basemain.*
 import chribase_thread.CuteThread
-import cpt.*
+import cpt.Breed
+import cpt.CuteThreadPrem
+import cpt.SpBreed
 import cpt.abs.Action
 import cpt.abs.DynamicConcept
 import cpt.abs.Neuron
@@ -98,19 +100,21 @@ open class Branch(
             else -> {   // Create and setup live concept
                 cpt = (_sm_[cid] as SpiritDynamicConcept).liveFactory()
                 liveMap_[cid] = cpt
-
-                // May be additional setup is needed
-                when(cpt) {
-
-                    // Load the string premise
-                    is ConceptPrem -> {
-                        val strCptCid = (cpt.sp as SpConceptPrem).cptCid
-                        val strCpt = liveMap_[strCptCid]?: (_sm_[strCptCid] as SpiritDynamicConcept).liveFactory()
-                        liveMap_[strCptCid] = strCpt
-                        cpt.cpt = strCpt
-                    }
-                }
                 return cpt
+
+//                // May be additional setup is needed
+//                when(cpt) {
+//
+//                    // Load the string sub premise
+//                    is ConceptPrem -> {
+//                        val strCptCid = (cpt.sp as SpConceptPrem).cptCid
+//                        assert(strCptCid != 0) {"Cid: $cid, subpremise cid should not be 0, cpt = $cpt"}
+//                        val strCpt = liveMap_[strCptCid]?: (_sm_[strCptCid] as SpiritDynamicConcept).liveFactory()
+//                        liveMap_[strCptCid] = strCpt
+//                        cpt.cpt = strCpt
+//                    }
+//                }
+//                return cpt
             }
         }
     }

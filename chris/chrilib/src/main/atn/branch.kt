@@ -103,18 +103,18 @@ open class Branch(
                 return cpt
 
 //                // May be additional setup is needed
-//                when(cpt) {
+//                when(load) {
 //
 //                    // Load the string sub premise
 //                    is ConceptPrem -> {
-//                        val strCptCid = (cpt.sp as SpConceptPrem).cptCid
-//                        assert(strCptCid != 0) {"Cid: $cid, subpremise cid should not be 0, cpt = $cpt"}
+//                        val strCptCid = (load.sp as SpConceptPrem).cptCid
+//                        assert(strCptCid != 0) {"Cid: $cid, subpremise cid should not be 0, load = $load"}
 //                        val strCpt = liveMap_[strCptCid]?: (_sm_[strCptCid] as SpiritDynamicConcept).liveFactory()
 //                        liveMap_[strCptCid] = strCpt
-//                        cpt.cpt = strCpt
+//                        load.load = strCpt
 //                    }
 //                }
-//                return cpt
+//                return load
             }
         }
     }

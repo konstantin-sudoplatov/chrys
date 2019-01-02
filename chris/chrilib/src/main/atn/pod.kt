@@ -73,10 +73,11 @@ class Pod(
         when(msg) {
 
             is IbrMsg -> {
-                val branch = branchMap_[msg.destBrid]!!
+                val br = branchMap_[msg.destBrid]!!
                 when(msg) {
                     is TransportSingleConceptIbr -> {
-
+                        br.add(msg.load)
+                        br.reasoning()
                         return true
                     }
                 }

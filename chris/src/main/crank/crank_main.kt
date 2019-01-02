@@ -4,6 +4,7 @@ import basemain.acts
 import basemain.brans
 import basemain.ins
 import cpt.*
+import cpt.abs.Eft
 import libmain.CrankGroup
 import libmain.CrankModule
 import libmain.hardCrank
@@ -29,10 +30,10 @@ object circle: CrankGroup {
     val shakeHandsWithUlread_anrn = SpAndNeuron(1_732_167_551)
 
     // The own breed is formed and active at the start of the branch.
-    val copyOwnBreedToUserInputRequestBreed_act = SpA_2Cid(-2_059_132_975)
+    val copyOwnBreedToUserInputRequest_act = SpA_2Cid(-2_059_132_975)
 
     // Send ulread activated copy of the own breed as both a request for user line and the address of requester
-    val sendUserInputRequestBreed_act = SpA_2Cid(-2_089_689_065)
+    val sendUserInputRequest_act = SpA_2Cid(-2_089_689_065)
 
     // Wait for the user line to become active, then process it
     val userInputValve_anrn = SpAndNeuron(-1_384_487_145)
@@ -52,28 +53,27 @@ object circle: CrankGroup {
         // Circle's breed. Ins and outs are null since this is a root branch, meaning is is not started/finished the usual way.
         hardCrank.hardCid.circle_breed.load(seed, null, null)
         seed.load(
-            // Copy breed to U
-            acts(copyOwnBreedToUserInputRequestBreed_act),
+            // Copy breed to userInputRequest_breed. It is activated on the side.
+            acts(copyOwnBreedToUserInputRequest_act),
 
             // Spawn the ulread branch
             brans(ulread.breed),
 
             stem = shakeHandsWithUlread_anrn
         )
-        copyOwnBreedToUserInputRequestBreed_act.load(mainStat.copyCpt0ToCpt1, hardCrank.hardCid.circle_breed, ulread.userInputRequest_breed)
+        copyOwnBreedToUserInputRequest_act.load(mainStat.copyCpt0ToCpt1, hardCrank.hardCid.circle_breed, ulread.userInputRequest_breed)
 
         shakeHandsWithUlread_anrn.loadPrems(
-
-            // Wait until ulread has started
-            ulread.breed
+            ulread.breed    // Wait until ulread starts
         ).loadEffs(
-//            Eft(
-//                Float.POSITIVE_INFINITY,
-//                acts(requestUserInput_act),
-//                brans = null,
-//                stem = userInputValve_anrn
-//            )
+            Eft(
+                Float.POSITIVE_INFINITY,
+                acts(sendUserInputRequest_act),
+                brans = null,
+                stem = userInputValve_anrn
+            )
         )
+        sendUserInputRequest_act.load(mainStat.transportSingleConcept, ulread.breed, ulread.userInputRequest_breed)
 
         userInputValve_anrn.loadPrems(
 

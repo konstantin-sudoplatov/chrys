@@ -1,10 +1,14 @@
 package stat
 
+import atn.Brad
 import atn.Branch
 import basemain.Cid
 import chribase_thread.CuteThread
 import cpt.*
+import cpt.abs.DynamicConcept
 import libmain.BranchSendsUserItsBrad
+import libmain.TransportSingleConceptIbr
+import libmain._pp_
 
 /** Stat container */
 object mainStat: StatModule() {
@@ -36,12 +40,27 @@ object copyCpt0ToCpt1: F2Cid(43_137) {
 
     /**
      *  @param br current branch
-     *  @param userThread_premCid Cid of the premise, containing the user thread object reference.
+     *  @param cpt0Cid Source concept.
+     *  @param cpt1Cid Destination concept.
     */
     override fun func(br: Branch, cpt0Cid: Cid, cpt1Cid: Cid) {
         br[cpt0Cid].copy(br[cpt1Cid])
     }
 }
+
+object transportSingleConcept: F2Cid(43_137) {
+    /**
+     *  @param br current branch
+     *  @param whereTo Cid of the destination branch breed
+     *  @param load Cid of the concept to transport. The concept is cloned on sending.
+     */
+    override fun func(br: Branch, whereTo: Cid, load: Cid) {
+        val destBrad = (br[whereTo] as Breed).brad as Brad
+        _pp_.putInQueue(TransportSingleConceptIbr(destBrad, br[load].clone() as DynamicConcept))
+    }
+
+}
+
 
 //    /**
 //     *      Send branch address of the current branch to user.
@@ -64,7 +83,7 @@ object copyCpt0ToCpt1: F2Cid(43_137) {
 //        override fun func(br: Branch, destBridCid: Cid, containerCid: Cid) {
 //            val destBrad = (br[destBridCid] as Branch).ownBrad
 //            val remainingContainer = (br[containerCid] as ConceptPrem)
-//            (remainingContainer.cpt as StringPrem).anactivate()     // anactivate load
+//            (remainingContainer.load as StringPrem).anactivate()     // anactivate load
 //            remainingContainer.anactivate()                         // anactivate remaining container
 //            val outgoingContainer = remainingContainer.clone() as ConceptPrem
 //            outgoingContainer.activate()                            // activate outgoing container
@@ -77,4 +96,4 @@ object copyCpt0ToCpt1: F2Cid(43_137) {
 
         }
     }
-}   //     43_137 72_493 53_148 51_211 50_023 62_408 89_866 24_107
+}   //      72_493 53_148 51_211 50_023 62_408 89_866 24_107

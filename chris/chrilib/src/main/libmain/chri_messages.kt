@@ -78,7 +78,6 @@ class AnactivateIbr(destBrad: Brad, val cptCid: Cid): IbrMsg(destBrad)
 /**
  *      Passing a single concept. The concept is cloned on sending and injected into the receiver branch on the receiving.
  *  @param destBrad address (pod + brid) of the destination branch
- *  @param cpt The concept to pass.
- *  @param sourceBrad address of the originating branch
+ *  @param load The concept to pass.
  */
-class TransportSingleConceptIbr(destBrad: Brad, val cpt: DynamicConcept, val sourceBrad: Brad): IbrMsg(destBrad)
+class TransportSingleConceptIbr(destBrad: Brad, val load: DynamicConcept): IbrMsg(destBrad)

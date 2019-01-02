@@ -188,32 +188,32 @@ class StringQueuePrem internal constructor(spStringQueuePrem: SpStringQueuePrem)
 //
 //    /**
 //     *      Set up the carried concept cid.
-//     *  @param cpt Concept to carry.
+//     *  @param load Concept to carry.
 //     */
-//    fun load(cpt: SpiritDynamicConcept) {
-//        cptCid = cpt.cid
+//    fun load(load: SpiritDynamicConcept) {
+//        cptCid = load.cid
 //    }
 //}
 //
 ///** Live */
 //class ConceptPrem(spConceptPrem: SpConceptPrem): Premise(spConceptPrem) {
-//    var cpt: DynamicConcept? = null
+//    var load: DynamicConcept? = null
 //
 //    override fun clone(): Concept {
 //        var o = super.clone() as ConceptPrem
-//        o.cpt = cpt?.clone() as DynamicConcept
+//        o.load = load?.clone() as DynamicConcept
 //        return o
 //    }
 //
 //    override fun toStr(): String {
 //        var s = super.toStr()
-//        s += ", cpt = ${cpt?.toStr()}"
+//        s += ", load = ${load?.toStr()}"
 //        return s
 //    }
 //
 //    override fun toString(): String {
 //        var s = super.toString()
-//        s += "\ncpt$cpt".replace("\n", "\n    ")
+//        s += "\nload$load".replace("\n", "\n    ")
 //
 //        return s
 //    }

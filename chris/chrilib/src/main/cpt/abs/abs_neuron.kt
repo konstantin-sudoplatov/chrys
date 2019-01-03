@@ -63,8 +63,8 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
         return Effect(Float.POSITIVE_INFINITY)
     }
 
-    /** Adapter. */
-    fun addEff(upBound: Float, acts: Array<out SpiritAction>? = null, brans: Array<SpBreed>? = null, stem: SpiritNeuron? = null) {
+    /** Adapter for addEff_(). */
+    fun loadEffs(upBound: Float, acts: Array<out SpiritAction>? = null, brans: Array<SpBreed>? = null, stem: SpiritNeuron? = null) {
         val actCids = if(acts != null) IntArray(acts.size) { acts[it].cid } else null
         val branCids = if(brans != null) IntArray(brans.size, { brans[it].cid }) else null
         addEff_(upBound, actCids, branCids, stem)
@@ -75,7 +75,7 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
      */
     fun loadEffs(vararg efs: Eft) {
         for(ef in efs)
-            addEff(ef.upBound, ef.acts, ef.brans, ef.stem)
+            loadEffs(ef.upBound, ef.acts, ef.brans, ef.stem)
     }
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%

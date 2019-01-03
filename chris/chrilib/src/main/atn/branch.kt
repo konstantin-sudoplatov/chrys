@@ -28,7 +28,7 @@ open class Branch(
     val breedCid: Cid,
     val ownBrad: Brad,          // own address
     private val parentBrad: Brad?,      // parent's address
-    val dlv: Int = -1           // branch debug level. There is also thread debug level and GDEBUG_LV.
+    var dlv: Int = -1           // branch debug level. There is also thread debug level and GDEBUG_LV.
 ) {
 
     /**

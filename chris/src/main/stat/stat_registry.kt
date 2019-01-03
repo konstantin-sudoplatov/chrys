@@ -11,6 +11,7 @@ import libmain._sm_
  *      List of classes, that contain static concepts
  */
 private val statModules = listOf(
+    commonStat,
     mainStat
 )
 

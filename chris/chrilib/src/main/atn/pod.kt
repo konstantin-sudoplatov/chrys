@@ -26,7 +26,7 @@ data class Brad(val pod: Pod, val brid: Int): Cloneable {
     override fun toString(): String {
         var s = this::class.qualifiedName as String
         s += "\npod = $pod".replace("\n", "\n    ")
-        s += "\n    sellidcellid = $brid"
+        s += "\n    brid = $brid"
 
         return s
     }
@@ -40,8 +40,8 @@ data class Brad(val pod: Pod, val brid: Int): Cloneable {
 class Pod(
     podName: String,
     val pid: Int,               // Index of the pod in the podArray of the pod pool.
-    val dlv: Int = -1,          // Debugging level. There is also branch debug level and GDEBUG_LV.
-    val dBranchFilter: Int = -1 // Filter debugging messages for a branch. The field contains a brid. -1: no filtering.
+    var dlv: Int = -1,          // Debugging level. There is also branch debug level and GDEBUG_LV.
+    var dBranchFilter: Int = -1 // Filter debugging messages for a branch. The field contains a brid. -1: no filtering.
 ): CuteThread(POD_THREAD_QUEUE_TIMEOUT, MAX_POD_THREAD_QUEUE, podName)
 {
 
@@ -269,8 +269,8 @@ class PodComparator: Comparator<Pod>
  */
 class Podpool(
     val size: Int = POD_POOL_SIZE,
-    val dlv: Int = -1,          // Debugging level. There is also branch debug level and GDEBUG_LV.
-    val dPodFilter: Int = -1    // Filter debugging messages for a pod. The field contains a pid. -1: no filtering.
+    var dlv: Int = -1,          // Debugging level. There is also branch debug level and GDEBUG_LV.
+    var dPodFilter: Int = -1    // Filter debugging messages for a pod. The field contains a pid. -1: no filtering.
 ): CuteThread(0, 0, "pod_pool")
 {
     protected override fun _messageProc(msg: MessageMsg?): Boolean {

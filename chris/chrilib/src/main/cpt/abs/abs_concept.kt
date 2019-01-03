@@ -3,6 +3,7 @@ package cpt.abs
 import atn.Branch
 import basemain.*
 import libmain._nm_
+import libmain.namedCid
 
 /**
  *      Base class for all concepts.
@@ -24,15 +25,8 @@ abstract class SpiritConcept(cid: Cid) {
     open fun toStr() = if(GDEBUG_LV >= 0) _nm_!![cid]?: "noname" else this::class.qualifiedName
 
     override fun toString(): String {
-        var s: String
-
-        if      // is there a name for this concept?
-                (_nm_ != null && cid in _nm_)
-            s = "%s (%s)".format(_nm_[cid], this::class.qualifiedName?: "")
-        else
-            s = "%s (%s)".format("noname", this::class.qualifiedName?: "")
-
-        s += "\n    cid = $cid"
+        var s = this::class.qualifiedName?: "anonymous"
+        s += "\n    cid = ${namedCid(cid)}"
         s += "\n    ver = $ver"
 
         return s
@@ -115,6 +109,10 @@ abstract class DynamicConcept(spiritDynamicConcept: SpiritDynamicConcept): Conce
  *  @param cid
 */
 abstract class SpiritAction(cid: Cid): SpiritDynamicConcept(cid) {
+
+    override fun toString(): String {
+        return super.toString() + "\n    _statCid = ${namedCid(_statCid)}"
+    }
 
     /**
      *      Run the static concept functor in the context of the given branch.

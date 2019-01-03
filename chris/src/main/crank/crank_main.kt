@@ -5,22 +5,59 @@ import basemain.brans
 import basemain.ins
 import cpt.*
 import cpt.abs.Eft
+import cpt.abs.SpiritConcept
+import cpt.abs.SpiritDynamicConcept
 import libmain.CrankGroup
 import libmain.CrankModule
 import libmain.hardCrank
+import stat.commonStat
 import stat.mainStat
 
+/*
+ *          Main crank module.
+ */
 object mainCrank: CrankModule() {
 
 object common: CrankGroup {
-    val testConcept1_pegprem = SpPegPrem(2_000_001)
-    val testConcept2_strprem = SpStringPrem(2_000_002)
+    val num0_numprim = SpNumPrim(2_059_457_726)
+    val num1_numprim = SpNumPrim(57_701_987)
+    val num2_numprim = SpNumPrim(-1_269_839_473)
+
+    val resetBranchDebugSettings_act = SpA(-1_160_608_042)
+    val setBranchDebugLevelTo1_act = SpA_Cid(608_100_245)
+    val setBranchDebugLevelTo2_act = SpA_Cid(1_523_139_252)
+
+    val resetPodDebugSettings_act = SpA(1_216_614_327)
+    val setPodDebugLevelTo1_act = SpA_Cid(-796_168_638)
+    val setPodDebugLevelTo2_act = SpA_Cid(-1_458_387_333)
+
+    val resetPodpoolDebugSettings_act = SpA(1_527_119_733)
+    val setPodpoolDebugLevelTo1_act = SpA_Cid(-514_014_822)
+    val setPodpoolDebugLevelTo2_act = SpA_Cid(157_492_212)
+
+    val logCpt0_act = SpA_Cid(-1_808_768_002)
+    val logCpt1_act = SpA_Cid(209_458_482)
+    val logCpt2_act = SpA_Cid(-1_380_871_710)
 
     override fun crank() {
-        testConcept1_pegprem.ver = 1
-        testConcept2_strprem.ver = 1
+        num0_numprim.load(0.0)
+        num1_numprim.load(1.0)
+        num2_numprim.load(2.0)
+
+        resetBranchDebugSettings_act.load(commonStat.resetBranchDebugLevel)
+        setBranchDebugLevelTo1_act.load(commonStat.setBranchDebugLevel, num1_numprim)
+        setBranchDebugLevelTo2_act.load(commonStat.setBranchDebugLevel, num2_numprim)
+
+        resetPodDebugSettings_act.load(commonStat.resetPodDebugLevelAndFilter)
+        setPodDebugLevelTo1_act.load(commonStat.setPodDebugLevelAndFilter, num1_numprim)
+        setPodDebugLevelTo2_act.load(commonStat.setPodDebugLevelAndFilter, num2_numprim)
+
+        resetPodpoolDebugSettings_act.load(commonStat.resetPodpoolDebugLevelAndFilter)
+        setPodpoolDebugLevelTo1_act.load(commonStat.setPodpoolDebugLevelAndFilter, num1_numprim)
+        setPodpoolDebugLevelTo2_act.load(commonStat.setPodpoolDebugLevelAndFilter, num2_numprim)
     }
-}   //    2_059_457_726 57_701_987 -1_269_839_473
+
+}   // -1_426_110_123 -937_858_466 -1_491_380_944 -936_769_357 -1_978_110_017 -848_757_907 -1_193_562_290 389_616_405
 
 // Attention circle branch
 object circle: CrankGroup {
@@ -38,7 +75,6 @@ object circle: CrankGroup {
     // Wait for the user line to become active, then process it
     val userInputValve_anrn = SpAndNeuron(-1_384_487_145)
 
-
     // Signal for ulread to send next user line with the userInputLine_strprem premise
     val ActivateUserInputRequest_act = SpA_2Cid(794_381_089)
 
@@ -54,7 +90,9 @@ object circle: CrankGroup {
         hardCrank.hardCid.circle_breed.load(seed, null, null)
         seed.load(
             // Copy breed to userInputRequest_breed. It is activated on the side.
-            acts(copyOwnBreedToUserInputRequest_act),
+            acts(
+                copyOwnBreedToUserInputRequest_act
+            ),
 
             // Spawn the ulread branch
             brans(ulread.breed),
@@ -68,7 +106,10 @@ object circle: CrankGroup {
         ).loadEffs(
             Eft(
                 Float.POSITIVE_INFINITY,
-                acts(sendUserInputRequest_act),
+                acts(
+common.logCpt0_act,
+                    sendUserInputRequest_act
+                ),
                 brans = null,
                 stem = userInputValve_anrn
             )
@@ -88,9 +129,18 @@ object ulread: CrankGroup {
 
     val breed = SpBreed(-1_636_443_905)
     val seed = SpSeed(-2_063_171_572)
+
+    // Send user own address, so enabling him to speak to our branch
     val sendUserUlineBrad_act = SpA_Cid(432_419_405)
-    val userInputLine_strprem = SpStringPrem(1_674_041_321)         // line of text from user.
-    val userInputRequest_breed = SpBreed(1_145_833_341)          // when active it contains injected breed of the branch-requester
+
+    // Line of text from user.
+    val userInputLine_strprem = SpStringPrem(1_674_041_321)
+
+    // When active it contains injected breed of the branch-requester
+    val userInputRequest_breed = SpBreed(1_145_833_341)
+
+    // Waiting for the request and sending him new user input line
+    val userInputRequestValve_anrn = SpAndNeuron(-2_067_698_057)
 
     override fun crank() {
         breed.load(
@@ -107,8 +157,22 @@ object ulread: CrankGroup {
             null
         )
         sendUserUlineBrad_act.load(mainStat.sendUserBranchBrad, hardCrank.hardCid.userThread_prem)
+
+
+        userInputRequestValve_anrn.loadPrems(
+            userInputRequest_breed      // either injected or activated remotely by requester
+        ).loadEffs(
+            Float.POSITIVE_INFINITY,
+            acts(
+common.logCpt0_act
+            ),
+            brans = null,
+            stem = null
+        )
+
+common.logCpt0_act.loadlog(userInputRequest_breed)
     }
-}   //  -2_067_698_057 -1_438_089_413 -691_499_635 -367_082_727 -1_988_590_990 -1_412_401_364 2_074_339_503 -888_399_507
+}   //   -1_438_089_413 -691_499_635 -367_082_727 -1_988_590_990 -1_412_401_364 2_074_339_503 -888_399_507
 
 object ulwrite: CrankGroup {
 

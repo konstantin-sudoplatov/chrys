@@ -12,6 +12,7 @@ import cpt.abs.Action
 import cpt.abs.SpiritAction
 import cpt.abs.SpiritDynamicConcept
 import libmain._sm_
+import libmain.namedCid
 
 /**
  *      Spirit action. It invokes functor of given static concept. The function of the functor has signature:
@@ -54,6 +55,10 @@ class A(spA: SpA): Action(spA)
  */
 class SpA_Cid(cid: Cid): SpiritAction(cid) {
 
+    override fun toStr(): String? {
+        return super.toStr() + "\n    p1Cid_ = ${namedCid(p1Cid_)}"
+    }
+
     override fun liveFactory(): A_Cid {
         return A_Cid(this)
     }
@@ -92,6 +97,12 @@ class A_Cid(spA_Cid: SpA_Cid): Action(spA_Cid)
  *  @param cid Cid of the concept - real one or 0, if it is supposed to be assigned by the spirit map.
  */
 class SpA_2Cid(cid: Cid): SpiritAction(cid) {
+
+    override fun toStr(): String? {
+        return super.toStr() +
+            "\n    p1Cid_ = ${namedCid(p1Cid_)}" +
+            "\n    p2Cid_ = ${namedCid(p2Cid_)}"
+    }
 
     override fun liveFactory(): A_2Cid {
         return A_2Cid(this)
@@ -136,6 +147,20 @@ class A_2Cid(spA_2Cid: SpA_2Cid): Action(spA_2Cid)
  *  @param cid Cid of the concept - real one or 0, if it is supposed to be assigned by the spirit map.
  */
 class SpA_LCid(cid: Cid): SpiritAction(cid) {
+
+    override fun toStr(): String? {
+        var s = super.toStr()
+        s += "\n    pVar = "
+        if(pVar_ == null)
+            s += "null"
+        else {
+            s += "\n    ["
+            for(cid in pVar_!!)
+                s += "\n        ${namedCid(cid)}"
+            s += "\n    ]"
+        }
+        return s
+    }
 
     override fun liveFactory(): A_LCid {
         return A_LCid(this)

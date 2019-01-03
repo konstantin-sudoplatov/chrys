@@ -7,6 +7,7 @@ import cpt.abs.Concept
 import cpt.abs.Premise
 import cpt.abs.SpiritDynamicConcept
 import cpt.abs.SpiritPremise
+import libmain.namedCid
 import java.util.*
 
 /**
@@ -30,7 +31,7 @@ class SpBreed(cid: Cid): SpiritPremise(cid) {
 
     override fun toString(): String {
         var s = super.toString()
-        s += "\n    seedCid = $seedCid"
+        s += "\n    seedCid = ${namedCid(seedCid)}"
 
         return s
     }

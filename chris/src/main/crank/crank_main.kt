@@ -5,8 +5,6 @@ import basemain.brans
 import basemain.ins
 import cpt.*
 import cpt.abs.Eft
-import cpt.abs.SpiritConcept
-import cpt.abs.SpiritDynamicConcept
 import libmain.CrankGroup
 import libmain.CrankModule
 import libmain.hardCrank
@@ -19,9 +17,9 @@ import stat.mainStat
 object mainCrank: CrankModule() {
 
 object common: CrankGroup {
-    val num0_numprim = SpNumPrim(2_059_457_726)
-    val num1_numprim = SpNumPrim(57_701_987)
-    val num2_numprim = SpNumPrim(-1_269_839_473)
+
+    // Raise the Branch.breakPoint flag
+    val setBreakPoint_act = SpA(-1_426_110_123)
 
     val resetBranchDebugSettings_act = SpA(-1_160_608_042)
     val setBranchDebugLevelTo1_act = SpA_Cid(608_100_245)
@@ -35,14 +33,19 @@ object common: CrankGroup {
     val setPodpoolDebugLevelTo1_act = SpA_Cid(-514_014_822)
     val setPodpoolDebugLevelTo2_act = SpA_Cid(157_492_212)
 
+    // Log separate concepts (specified by loading)
     val logCpt0_act = SpA_Cid(-1_808_768_002)
     val logCpt1_act = SpA_Cid(209_458_482)
     val logCpt2_act = SpA_Cid(-1_380_871_710)
 
+    // Some numbers to work with in cranking
+    val num0_numprim = SpNumPrim(2_059_457_726)
+    val num1_numprim = SpNumPrim(57_701_987)
+    val num2_numprim = SpNumPrim(-1_269_839_473)
+
     override fun crank() {
-        num0_numprim.load(0.0)
-        num1_numprim.load(1.0)
-        num2_numprim.load(2.0)
+
+        setBreakPoint_act.load(commonStat.setBreakPoint)
 
         resetBranchDebugSettings_act.load(commonStat.resetBranchDebugLevel)
         setBranchDebugLevelTo1_act.load(commonStat.setBranchDebugLevel, num1_numprim)
@@ -55,9 +58,13 @@ object common: CrankGroup {
         resetPodpoolDebugSettings_act.load(commonStat.resetPodpoolDebugLevelAndFilter)
         setPodpoolDebugLevelTo1_act.load(commonStat.setPodpoolDebugLevelAndFilter, num1_numprim)
         setPodpoolDebugLevelTo2_act.load(commonStat.setPodpoolDebugLevelAndFilter, num2_numprim)
+
+        num0_numprim.load(0.0)
+        num1_numprim.load(1.0)
+        num2_numprim.load(2.0)
     }
 
-}   // -1_426_110_123 -937_858_466 -1_491_380_944 -936_769_357 -1_978_110_017 -848_757_907 -1_193_562_290 389_616_405
+}   //  -937_858_466 -1_491_380_944 -936_769_357 -1_978_110_017 -848_757_907 -1_193_562_290 389_616_405
 
 // Attention circle branch
 object circle: CrankGroup {
@@ -91,7 +98,9 @@ object circle: CrankGroup {
         seed.load(
             // Copy breed to userInputRequest_breed. It is activated on the side.
             acts(
-                copyOwnBreedToUserInputRequest_act
+                copyOwnBreedToUserInputRequest_act,
+common.logCpt0_act.also{ it.loadlog(ulread.userInputRequest_breed) },
+common.setBreakPoint_act
             ),
 
             // Spawn the ulread branch
@@ -107,7 +116,6 @@ object circle: CrankGroup {
             Eft(
                 Float.POSITIVE_INFINITY,
                 acts(
-common.logCpt0_act,
                     sendUserInputRequest_act
                 ),
                 brans = null,
@@ -170,7 +178,6 @@ common.logCpt0_act
             stem = null
         )
 
-common.logCpt0_act.loadlog(userInputRequest_breed)
     }
 }   //   -1_438_089_413 -691_499_635 -367_082_727 -1_988_590_990 -1_412_401_364 2_074_339_503 -888_399_507
 

@@ -2,6 +2,7 @@ package cpt
 
 import atn.Branch
 import basemain.Cid
+import basemain.logit
 import cpt.abs.*
 
 /**
@@ -72,13 +73,17 @@ class AndNeuron(spAndNeuron: SpAndNeuron): LogicalNeuron(spAndNeuron) {
     override fun calculateActivation(br: Branch): Float {
 
         val premises = (sp as SpiritLogicalNeuron).premises
-        if (premises != null)
+        if (premises != null && !premises.isEmpty())
             for(prem in premises) {
                 val premCpt = br[prem.premCid] as ActivationIfc
-                if(premCpt.activation <= 0 && !prem.negated || premCpt.activation > 0 && prem.negated)
+                if(premCpt.activation <= 0 && !prem.negated || premCpt.activation > 0 && prem.negated) {
                     anactivate()
                     return activation
+                }
             }
+        else {
+            logit("Warning: premises are not defined. Assuming contidions are met. \n$this")
+        }
 
         activate()
         return activation

@@ -11,6 +11,15 @@ import libmain._pp_
 object commonStat: StatModule() {
 
 /**
+ *          Set the Branch.breakPoint flag to let the debugger stop at the right moment.
+ */
+object setBreakPoint: F(50_055) {
+    override fun func(br: Branch) {
+        br.breakPoint = true
+    }
+}
+
+/**
  *          Set the branch debug level for the current branch to the specified value
  */
 object setBranchDebugLevel: FCid(14_338) {
@@ -107,4 +116,4 @@ object logConcept: FCid(22_788) {
     }
 }
 
-}   //  50_055 69_448 21_893 69_359 53_479 75_671 59_771 34_395 95_519 40_417 33_598
+}   //   69_448 21_893 69_359 53_479 75_671 59_771 34_395 95_519 40_417 33_598

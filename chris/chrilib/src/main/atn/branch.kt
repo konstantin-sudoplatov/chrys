@@ -1,6 +1,9 @@
 package atn
 
-import basemain.*
+import basemain.Cid
+import basemain.GDEBUG_LV
+import basemain.ar
+import basemain.logit
 import chribase_thread.CuteThread
 import cpt.Breed
 import cpt.CuteThreadPrem
@@ -26,10 +29,12 @@ import kotlin.math.max
  */
 open class Branch(
     val breedCid: Cid,
-    val ownBrad: Brad,          // own address
+    val ownBrad: Brad,                  // own address
     private val parentBrad: Brad?,      // parent's address
-    var dlv: Int = -1           // branch debug level. There is also thread debug level and GDEBUG_LV.
+    var dlv: Int = -1                   // branch debug level. There is also thread debug level and GDEBUG_LV.
 ) {
+    var breakPoint = false              // cranking controlled break point flag (see the common.setBreakPoint functor).
+
 
     /**
      *      It is a heart of the system. In here we calculate activation of a current neuron (the stem) and take decision
@@ -38,6 +43,7 @@ open class Branch(
      */
     fun reasoning() {
         var stem = stem_
+        if(GDEBUG_LV >= 0) breakPoint = false       // reset the break point
         dlog {ar(
             "enter, stem = ${stem.toStr()}",
             "enter, stem = $stem"
@@ -51,8 +57,12 @@ open class Branch(
 
             // Do acts, if any
             if(eff.actions != null)
-                for(actCid in eff.actions)
+                for(actCid in eff.actions) {
                     (this[actCid] as Action).run(this)
+                    if(GDEBUG_LV >= 0 && breakPoint) {
+                        breakPoint = false          // here a debugger break point can be set
+                    }
+                }
 
             // Spawn brans, if any
             if(eff.branches != null)

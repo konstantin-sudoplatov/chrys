@@ -98,9 +98,7 @@ object circle: CrankGroup {
         seed.load(
             // Copy breed to userInputRequest_breed. It is activated on the side.
             acts(
-                copyOwnBreedToUserInputRequest_act,
-common.logCpt0_act.also{ it.loadlog(ulread.userInputRequest_breed) },
-common.setBreakPoint_act
+                copyOwnBreedToUserInputRequest_act
             ),
 
             // Spawn the ulread branch
@@ -116,7 +114,9 @@ common.setBreakPoint_act
             Eft(
                 Float.POSITIVE_INFINITY,
                 acts(
-                    sendUserInputRequest_act
+                    sendUserInputRequest_act,
+common.logCpt0_act.also{ it.loadlog(ulread.userInputRequest_breed) },
+common.setBranchDebugLevelTo1_act
                 ),
                 brans = null,
                 stem = userInputValve_anrn
@@ -139,7 +139,7 @@ object ulread: CrankGroup {
     val seed = SpSeed(-2_063_171_572)
 
     // Send user own address, so enabling him to speak to our branch
-    val sendUserUlineBrad_act = SpA_Cid(432_419_405)
+    val ulreadSendsUserOwnBrad_act = SpA_Cid(432_419_405)
 
     // Line of text from user.
     val userInputLine_strprem = SpStringPrem(1_674_041_321)
@@ -160,19 +160,19 @@ object ulread: CrankGroup {
         )
 
         seed.load(
-            acts(sendUserUlineBrad_act),
+            acts(
+                ulreadSendsUserOwnBrad_act
+            ),
             null,
-            null
+            stem = userInputRequestValve_anrn
         )
-        sendUserUlineBrad_act.load(mainStat.sendUserBranchBrad, hardCrank.hardCid.userThread_prem)
-
+        ulreadSendsUserOwnBrad_act.load(mainStat.sendUserBranchBrad, hardCrank.hardCid.userThread_prem)
 
         userInputRequestValve_anrn.loadPrems(
             userInputRequest_breed      // either injected or activated remotely by requester
         ).loadEffs(
             Float.POSITIVE_INFINITY,
             acts(
-common.logCpt0_act
             ),
             brans = null,
             stem = null

@@ -60,7 +60,7 @@ open class Branch(
                 for(actCid in eff.actions) {
                     (this[actCid] as Action).run(this)
                     if(GDEBUG_LV >= 0 && breakPoint) {
-                        breakPoint = false          // here a debugger break point can be set
+                        breakPoint          // here a debugger break point can be set
                     }
                 }
 

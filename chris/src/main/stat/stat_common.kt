@@ -109,7 +109,7 @@ object resetPodpoolDebugLevelAndFilter: F(89_866) {
 object logConcept: FCid(22_788) {
     /**
      *  @param br current branch
-     *  @param cptCid Concept to log
+     *  @param cptCid Concept to log_act
      */
     override fun func(br: Branch, cptCid: Cid) {
         logit(br[cptCid].toString())

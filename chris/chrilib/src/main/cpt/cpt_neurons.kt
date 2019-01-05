@@ -17,7 +17,8 @@ open class SpActionNeuron(cid: Cid): SpiritNeuron(cid) {
      *      Load the action neuron with the acts, brans and stem.
      */
     fun load(acts: Array<out SpiritAction>? = null, brans: Array<SpBreed>? = null, stem: SpiritNeuron? = null) {
-        super.loadEffs(Float.POSITIVE_INFINITY, acts, brans, stem)
+        assert(_effects == null) {"load() must work only once."}
+        super.addEffs(Float.POSITIVE_INFINITY, acts, brans, stem)
     }
 
     init {

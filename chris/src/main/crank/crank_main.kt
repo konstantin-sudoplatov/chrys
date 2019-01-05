@@ -33,11 +33,6 @@ object common: CrankGroup {
     val setPodpoolDebugLevelTo1_act = SpA_Cid(-514_014_822)
     val setPodpoolDebugLevelTo2_act = SpA_Cid(157_492_212)
 
-    // Log separate concepts (specified by loading)
-    val logCpt0_act = SpA_Cid(-1_808_768_002)
-    val logCpt1_act = SpA_Cid(209_458_482)
-    val logCpt2_act = SpA_Cid(-1_380_871_710)
-
     // Some numbers to work with in cranking
     val num0_numprim = SpNumPrim(2_059_457_726)
     val num1_numprim = SpNumPrim(57_701_987)
@@ -64,7 +59,7 @@ object common: CrankGroup {
         num2_numprim.load(2.0)
     }
 
-}   //  -937_858_466 -1_491_380_944 -936_769_357 -1_978_110_017 -848_757_907 -1_193_562_290 389_616_405
+}   //  -937_858_466 -1_491_380_944 -936_769_357 -1_978_110_017 -848_757_907 -1_193_562_290 389_616_405 -1_808_768_002 209_458_482 -1_380_871_710
 
 // Attention circle branch
 object circle: CrankGroup {
@@ -115,8 +110,8 @@ object circle: CrankGroup {
                 Float.POSITIVE_INFINITY,
                 acts(
                     sendUserInputRequest_act,
-common.logCpt0_act.also{ it.loadlog(ulread.userInputRequest_breed) },
-common.setBranchDebugLevelTo1_act
+log_act(ulread.userInputRequest_breed)
+//common.setBranchDebugLevelTo1_act
                 ),
                 brans = null,
                 stem = userInputValve_anrn
@@ -170,7 +165,7 @@ object ulread: CrankGroup {
 
         userInputRequestValve_anrn.loadPrems(
             userInputRequest_breed      // either injected or activated remotely by requester
-        ).loadEffs(
+        ).addEffs(
             Float.POSITIVE_INFINITY,
             acts(
             ),

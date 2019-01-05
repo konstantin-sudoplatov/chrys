@@ -92,7 +92,7 @@ abstract class SpiritDynamicConcept(cid: Cid): SpiritConcept(cid) {
     abstract fun liveFactory(): DynamicConcept
 
     init {
-        assert(cid.toUInt() >= MIN_DYNAMIC_CID && cid.toUInt() <= MAX_DYNAMIC_CID)
+        assert(cid == 0 || cid.toUInt() >= MIN_DYNAMIC_CID && cid.toUInt() <= MAX_DYNAMIC_CID)
     }
 }
 

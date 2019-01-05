@@ -16,8 +16,8 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
         is most often used as an antiactive span. */
     var cutoff: Float = 0f
         set(value) {
-            assert( effects_ == null || effects_!!.isEmpty() || value.isNaN() || value < effects_!![0].upperBound) {
-                "cutoff = $value must be less then upper bound of the first span ${effects_!![0].upperBound}"
+            assert( _effects == null || _effects!!.isEmpty() || value.isNaN() || value < _effects!![0].upperBound) {
+                "cutoff = $value must be less then upper bound of the first span ${_effects!![0].upperBound}"
             }
             field = value
         }
@@ -27,9 +27,9 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
 
     override fun toString(): String {
         var s = super.toString()
-        s += "\n    effects_ = $effects_"
-        if(effects_ != null)
-            for((i, eff) in effects_!!.withIndex())
+        s += "\n    _effects = $_effects"
+        if(_effects != null)
+            for((i, eff) in _effects!!.withIndex())
                 s += "\nEffect[$i] = $eff".replace("\n", "\n    ")
 
         return s
@@ -53,8 +53,8 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
             // return an empty effect
             return Effect(cutoff)
 
-        if(effects_ != null)
-            for(eff in effects_!!)
+        if(_effects != null)
+            for(eff in _effects!!)
                 if      // is activation fitting a span?
                         (activation <= eff.upperBound)
                     return eff
@@ -64,19 +64,30 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
     }
 
     /** Adapter for addEff_(). */
-    fun loadEffs(upBound: Float, acts: Array<out SpiritAction>? = null, brans: Array<SpBreed>? = null, stem: SpiritNeuron? = null) {
+    fun addEffs(upBound: Float, acts: Array<out SpiritAction>? = null, brans: Array<SpBreed>? = null, stem: SpiritNeuron? = null) {
         val actCids = if(acts != null) IntArray(acts.size) { acts[it].cid } else null
         val branCids = if(brans != null) IntArray(brans.size, { brans[it].cid }) else null
         addEff_(upBound, actCids, branCids, stem)
     }
 
     /**
-     *      Load a group of effects.
+     *      Load an array of effects.
      */
     fun loadEffs(vararg efs: Eft) {
+        assert(_effects == null) {"load() must work only once."}
         for(ef in efs)
-            loadEffs(ef.upBound, ef.acts, ef.brans, ef.stem)
+            addEffs(ef.upBound, ef.acts, ef.brans, ef.stem)
     }
+
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+    //
+    //                                  Protected
+    //
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+
+    //---$$$---$$$---$$$---$$$---$$$ protected data ---$$$---$$$---$$$---$$$---$$$--
+
+    protected var _effects: Array<Effect>? = null
 
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
     //
@@ -85,8 +96,6 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%--- private data ---%%%---%%%---%%%---%%%---%%%---%%%
-
-    private var effects_: Array<Effect>? = null
 
     //---%%%---%%%---%%%---%%%--- private funcs ---%%%---%%%---%%%---%%%---%%%---%%%
 
@@ -111,23 +120,23 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
         val eff = Effect(upperBound, actions, branches, stem?.cid?: 0)
 
         // May be disable cutoff
-        if(effects_ == null || effects_!!.isEmpty()) {
+        if(_effects == null || _effects!!.isEmpty()) {
             if      // is the upper bound of the first span overlaps cutoff?
                     (eff.upperBound <= cutoff)
                 disableCutoff()
         }
         else {
-            assert(eff.upperBound > effects_!![effects_!!.lastIndex].upperBound)
+            assert(eff.upperBound > _effects!![_effects!!.lastIndex].upperBound)
                 { "Upper bound ${eff.upperBound} must be greater than the upper bound of the last span " +
-                "${effects_!![effects_!!.lastIndex].upperBound}"}
+                "${_effects!![_effects!!.lastIndex].upperBound}"}
         }
 
-        // Add new effect to the effects_ array
-        if(effects_ == null)
-            effects_ = Array<Effect>(1){ eff }
+        // Add new effect to the _effects array
+        if(_effects == null)
+            _effects = Array<Effect>(1){ eff }
         else {
-            effects_ = Arrays.copyOf(effects_, effects_!!.size+1)
-            effects_!![effects_!!.lastIndex] = eff
+            _effects = Arrays.copyOf(_effects, _effects!!.size+1)
+            _effects!![_effects!!.lastIndex] = eff
         }
     }
 }
@@ -202,6 +211,14 @@ abstract class SpiritLogicalNeuron(cid: Cid): SpiritNeuron(cid) {
         return this
     }
 
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+    //
+    //                                  Protected
+    //
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+
+    //---$$$---$$$---$$$---$$$---$$$ protected data ---$$$---$$$---$$$---$$$---$$$--
+
     protected var _premises: Array<Prem>? = null
 }
 
@@ -251,7 +268,7 @@ class Prem(
 }
 
 /**
- *      Used as a vararg parameters for the loadEffs() function
+ *      Used as a vararg parameters for the addEffs() function
  */
 class Eft(
     val upBound: Float,

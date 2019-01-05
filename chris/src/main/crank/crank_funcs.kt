@@ -2,10 +2,17 @@ package crank
 
 import cpt.SpA_Cid
 import cpt.abs.SpiritDynamicConcept
+import libmain._sm_
 import stat.commonStat
 
 /**
- *          Extention function for simple loading the common.logCptN_act concept.
- *  @param spCpt Concept to log
+ *          Create and load an action of logging a specified dynamic concept.
+ * @param spCpt Concept to log_act
  */
-fun SpA_Cid.loadlog(spCpt: SpiritDynamicConcept): Unit = load(commonStat.logConcept, spCpt)
+fun log_act(spCpt: SpiritDynamicConcept): SpA_Cid {
+    val logAct = SpA_Cid(0)
+    _sm_.add(logAct)
+    logAct.load(commonStat.logConcept, spCpt)
+
+    return logAct
+}

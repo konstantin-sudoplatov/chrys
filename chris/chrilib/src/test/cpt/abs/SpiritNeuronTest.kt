@@ -3,8 +3,6 @@ package cpt.abs
 import cpt.SpActionNeuron
 import org.junit.Test
 
-import org.junit.Assert.*
-
 class SpiritNeuronTest {
 
     @Test
@@ -16,10 +14,10 @@ class SpiritNeuronTest {
         }
 
         assert(nrn.isCutoff)
-        nrn.loadEffs(0f, null, null, SpActionNeuron(2_000_001))
+        nrn.addEffs(0f, null, null, SpActionNeuron(2_000_001))
         nrn.cutoff = -1f
         assert(nrn.isCutoff)
-        nrn.loadEffs(1f, null, null, SpActionNeuron(2_000_002))
+        nrn.addEffs(1f, null, null, SpActionNeuron(2_000_002))
         assert(nrn.isCutoff)
 
         println(nrn)

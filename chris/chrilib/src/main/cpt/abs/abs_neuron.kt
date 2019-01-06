@@ -4,6 +4,7 @@ import atn.Branch
 import basemain.Cid
 import cpt.ActivationIfc
 import cpt.SpBreed
+import libmain.cidNamed
 import java.util.*
 
 /**
@@ -235,16 +236,16 @@ abstract class LogicalNeuron(spLogicalNeuron: SpiritLogicalNeuron): Neuron(spLog
  *  For typealias Cid=Int used the IntArray arrays. If Cid changes for Long, for example, it also must be changed.
  */
 class Effect(
-    val upperBound: Float,              // the upper boundary of the span, including
-    val actions: IntArray? = null,      // Array of cids of acts. null or [] - no acts for this span
-    val branches: IntArray? = null,     // Array of cids of brans. null or [] - no new brans for this span
-    val stemCid: Cid = 0                // 0 - stay on the current stemCid
+    var upperBound: Float,              // the upper boundary of the span, including
+    var actions: IntArray? = null,      // Array of cids of acts. null or [] - no acts for this span
+    var branches: IntArray? = null,     // Array of cids of brans. null or [] - no new brans for this span
+    var stemCid: Cid = 0                // 0 - stay on the current stemCid
 ) {
     override fun toString(): String {
         var s = this::class.qualifiedName?: ""
         s += "\n    upBound = $upperBound"
         s += "\n    acts = $actions"
-        s += "\n    stemCid = $stemCid"
+        s += "\n    stemCid = ${cidNamed(stemCid)}"
         s += "\n    brans = $branches"
 
         return s
@@ -260,7 +261,7 @@ class Prem(
 ) {
     override fun toString(): String {
         var s = this::class.qualifiedName?: ""
-        s += "\n    premCid = $premCid"
+        s += "\n    premCid = ${cidNamed(premCid)}"
         s += "\n    negated = $negated"
 
         return s

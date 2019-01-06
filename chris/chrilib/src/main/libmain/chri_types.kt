@@ -48,8 +48,10 @@ class SpiritMap {
      */
     @Synchronized operator fun get(cid: Cid): SpiritConcept {
         val cpt = spMap_[cid]
-        if(cpt != null)
+        if(cpt != null) {
+            assert(cpt.cid == cid) {"Cid $cid is not equal cpt.cid = ${cpt.cid}"}
             return cpt
+        }
         else
             throw IndexOutOfBoundsException("There is no concept with cid $cid in the spirit map.")
     }

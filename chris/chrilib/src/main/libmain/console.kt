@@ -17,15 +17,15 @@ import chribase_thread.TimeoutMsg
 class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadName) {
 
     /**
-     *      Request creation the attention circle and wait for its ownBrad before doing start() on this thread.
+     *      Request creation the attention circle and wait for its origBrad before doing start() on this thread.
      *  The attention dispatcher thread must be already started.
      *  @param atnDisp initialized and started attention dispatcher thread
      */
     fun requestCreationOfAttentionCircle(atnDisp: AttentionDispatcher) {
-        // Require circle creation and wait for its ownBrad
+        // Require circle creation and wait for its origBrad
         atnDisp.putInQueue(UserRequestsDispatcherCreateAttentionCircleMsg(this))
 
-        // Get the circle ownBrad.
+        // Get the circle origBrad.
         assert(!this.isAlive) {"This console thread must not be yet started."}
         var msg: MessageMsg
         do {
@@ -54,7 +54,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
                     this.putInQueue(TerminationRequestMsg())
                 }
                 else {//no: resend the console line to the circle
-                    circleBrad_!!.pod.putInQueue(UserTellsCircleIbr(circleBrad_!!.brid, msg.text))
+                    circleBrad_!!.pod.putInQueue(UserTellsCircleMsg(circleBrad_!!.brid, msg.text))
                 }
                 return true
             }
@@ -72,7 +72,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
                         this.putInQueue(TerminationRequestMsg())
                     }
                     else {//no: resend the console line to the circle
-                        circleBrad_!!.pod.putInQueue(UserTellsCircleIbr(circleBrad_!!.brid, line))
+                        circleBrad_!!.pod.putInQueue(UserTellsCircleMsg(circleBrad_!!.brid, line))
                     }
                 }
                 return true
@@ -90,7 +90,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
                         this.putInQueue(TerminationRequestMsg())
                     }
                     else {//no: resend the console line to the circle
-                        circleBrad_!!.pod.putInQueue(UserTellsCircleIbr(circleBrad_!!.brid, line))
+                        circleBrad_!!.pod.putInQueue(UserTellsCircleMsg(circleBrad_!!.brid, line))
                     }
                 }
                 return true

@@ -25,7 +25,7 @@ import kotlin.math.max
  *
  *  @param breedCid Cid of the breed concept for the branch.
  *  @param ownBrad Brad object, that identifies its place in the pod pool and pod.
- *  @param parentBrad parent's ownBrad. Can be null if it's root.
+ *  @param parentBrad parent's origBrad. Can be null if it's root.
  */
 open class Branch(
     val breedCid: Cid,
@@ -54,10 +54,18 @@ open class Branch(
 
             // Do the neuron's assessment and determine effect
             val eff = stem.calculateActivationAndSelectEffect(this)
+            dlog {ar(
+                "activation = ${stem.activation}, actions: ${eff.actions?.size}, branches: ${eff.branches?.size}, stem: ${namedCid(eff.stemCid)}",
+                "activation = ${stem.activation}, $eff"
+            )}
 
             // Do acts, if any
             if(eff.actions != null)
-                for(actCid in eff.actions) {
+                for(actCid in eff.actions!!) {
+                    dlog {ar(
+                        "action = ${this[actCid].toStr()}",
+                        "action = ${this[actCid]}"
+                    )}
                     (this[actCid] as Action).run(this)
                     if(GDEBUG_LV >= 0 && breakPoint) {
                         breakPoint          // here a debugger break point can be set
@@ -66,7 +74,11 @@ open class Branch(
 
             // Spawn brans, if any
             if(eff.branches != null)
-                for(destBreedCid in eff.branches) {
+                for(destBreedCid in eff.branches!!) {
+                    dlog {ar(
+                        "branch = ${this[destBreedCid].toStr()}",
+                        "branch = ${this[destBreedCid]}"
+                    )}
 
                     // Form an array of cloned from the current branch ins for the destination branch
                     val insCids = (_sm_[destBreedCid] as SpBreed).ins
@@ -77,8 +89,13 @@ open class Branch(
                 }
 
             // Assign new stem or yield
-            if(eff.stemCid != 0)
+            if(eff.stemCid != 0) {
                 stem = this[eff.stemCid] as Neuron
+                dlog {ar(
+                    "stem = ${stem.toStr()}",
+                    "stem_ = $stem"
+                )}
+            }
             else
                 break
         }
@@ -112,7 +129,7 @@ open class Branch(
                 liveMap_[cid] = cpt
                 return cpt
 
-//                // May be additional setup is needed
+//                // May be go deeper
 //                when(load) {
 //
 //                    // Load the string sub premise
@@ -152,10 +169,10 @@ open class Branch(
             if      // is there a line corresponding to the debug level?
                     (effectiveLvl <= lines().size)
             {   //yes: log that line
-                if(lines()[effectiveLvl-1] != "") logit("%s, %s: %s".format(pod.podName, branchName(), lines()[effectiveLvl-1]))
+                if(lines()[effectiveLvl-1] != "") logit("%s(%s): %s".format(branchName(), pod.podName, lines()[effectiveLvl-1]))
             }
             else //no: log the last line of the array
-                if(lines()[lines().lastIndex] != "") logit("%s, %s: %s".format(pod.podName, branchName(), lines()[lines().lastIndex]))
+                if(lines()[lines().lastIndex] != "") logit("%s(%s): %s".format(branchName(), pod.podName, lines()[lines().lastIndex]))
         }
     }
 

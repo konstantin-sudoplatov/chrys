@@ -6,7 +6,7 @@ open class MessageMsg {
         return this::class.simpleName?: "anonymous"
     }
 
-    fun toStr(): String {
+    open fun toStr(): String {
         return this::class.simpleName?: "anonymous"
     }
 }

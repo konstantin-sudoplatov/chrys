@@ -2,7 +2,7 @@ package cpt
 
 import atn.Branch
 import basemain.Cid
-import basemain.logit
+import basemain.ar
 import cpt.abs.*
 
 /**
@@ -14,11 +14,20 @@ open class SpActionNeuron(cid: Cid): SpiritNeuron(cid) {
     }
 
     /**
-     *      Load the action neuron with the acts, brans and stem.
+     *          Load the action neuron with the acts, brans and stem.
      */
     fun load(acts: Array<out SpiritAction>? = null, brans: Array<SpBreed>? = null, stem: SpiritNeuron? = null) {
         assert(_effects == null) {"load() must work only once."}
         super.addEffs(Float.POSITIVE_INFINITY, acts, brans, stem)
+    }
+
+    /**
+     *          Assign/reassign the stem.
+     *  @param newStem
+     */
+    fun stem(newStem: SpiritNeuron) {
+        assert(_effects != null && _effects!!.size == 1) {"This neuron action must be loaded by the time."}
+        _effects!![0].stemCid = newStem.cid
     }
 
     init {
@@ -83,7 +92,7 @@ class AndNeuron(spAndNeuron: SpAndNeuron): LogicalNeuron(spAndNeuron) {
                 }
             }
         else {
-            logit("Warning: premises are not defined. Assuming contidions are met. \n$this")
+            br.dlog {ar("Warning: premises are not defined. Assuming conditions are met. \n$this")}
         }
 
         activate()

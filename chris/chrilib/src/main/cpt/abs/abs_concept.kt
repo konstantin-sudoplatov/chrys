@@ -3,7 +3,7 @@ package cpt.abs
 import atn.Branch
 import basemain.*
 import libmain._nm_
-import libmain.namedCid
+import libmain.cidNamed
 
 /**
  *      Base class for all concepts.
@@ -26,7 +26,7 @@ abstract class SpiritConcept(cid: Cid) {
 
     override fun toString(): String {
         var s = this::class.qualifiedName?: "anonymous"
-        s += "\n    cid = ${namedCid(cid)}"
+        s += "\n    cid = ${cidNamed(cid)}"
         s += "\n    ver = $ver"
 
         return s
@@ -58,19 +58,14 @@ abstract class Concept(spiritConcept: SpiritConcept): Cloneable {
     }
 
     /**
-     *      Like cloning, but without copying data not relevant to the reasoning, such as cid, ver, or the usage statistics.
-     *  @param dest Live concept to copy data to
-     */
-    open fun copy(dest: Concept) {
-        assert(dest::class == this::class) { "Types of the concepts must match exactly, we have this = %s, dest = %s".
-            format(this::class.qualifiedName, dest::class.qualifiedName)}
-        dest.sp = sp
-    }
-
-    /**
      *      Minimal form of toString()
      */
-    open fun toStr() = if(GDEBUG_LV >= 0) _nm_!![cid]?: "noname" else this::class.qualifiedName?: "anonymous"
+    open fun toStr(): String {
+        if(GDEBUG_LV >= 0)
+            return (_nm_!![cid]?: "noname") + "(%,d)".format(cid).replace(",", "_")
+        else
+            return (this::class.qualifiedName?: "anonymous") + "(%,d)".format(cid).replace(",", "_")
+    }
 
     override fun toString(): String {
         var s: String = this::class.qualifiedName as String
@@ -111,7 +106,7 @@ abstract class DynamicConcept(spiritDynamicConcept: SpiritDynamicConcept): Conce
 abstract class SpiritAction(cid: Cid): SpiritDynamicConcept(cid) {
 
     override fun toString(): String {
-        return super.toString() + "\n    _statCid = ${namedCid(_statCid)}"
+        return super.toString() + "\n    _statCid = ${cidNamed(_statCid)}"
     }
 
     /**

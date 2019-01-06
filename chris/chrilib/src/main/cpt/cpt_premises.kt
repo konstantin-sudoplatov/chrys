@@ -3,19 +3,53 @@ package cpt
 import atn.Brad
 import basemain.Cid
 import chribase_thread.CuteThread
-import cpt.abs.Concept
 import cpt.abs.Premise
 import cpt.abs.SpiritDynamicConcept
 import cpt.abs.SpiritPremise
-import libmain.namedCid
+import libmain.cidNamed
 import java.util.*
+
+/**
+ *          Premise, whose live part contains address of a branch. Direct ancestor of the breed concept.
+ */
+open class SpBradPrem(cid: Cid): SpiritPremise(cid) {
+    override fun liveFactory(): BradPrem {
+        return BradPrem(this)
+    }
+}
+
+/** Live */
+open class BradPrem internal constructor(spBradPrem: SpBradPrem): Premise(spBradPrem) {
+
+    /** Branch identifier (pod, brid) */
+    var brad: Brad? = null
+
+    override fun clone(): BradPrem {
+        val o = super.clone() as BradPrem
+        o.brad = this.brad?.clone()
+
+        return o
+    }
+
+    override fun copyLive(dest: Premise) {
+        super.copyLive(dest)
+        dest as BradPrem
+        dest.brad = this.brad?.clone()
+    }
+
+    override fun toString(): String {
+        var s = super.toString()
+        s += "\nbrad = $brad".replace("\n", "\n    ")
+        return s
+    }
+}
 
 /**
  *      Metadata for a branch - the pod, brid, and seedCid. The branch object is guaranteed to be injected with its
  *  breed concept on the start. Likewise it is guaranteed to get a valid breed concept of the child branch, when it
  *  initiates one.
  */
-class SpBreed(cid: Cid): SpiritPremise(cid) {
+class SpBreed(cid: Cid): SpBradPrem(cid) {
 
     /** The seedCid's concept cid */
     var seedCid: Cid = 0
@@ -31,7 +65,7 @@ class SpBreed(cid: Cid): SpiritPremise(cid) {
 
     override fun toString(): String {
         var s = super.toString()
-        s += "\n    seedCid = ${namedCid(seedCid)}"
+        s += "\n    seedCid = ${cidNamed(seedCid)}"
 
         return s
     }
@@ -52,56 +86,29 @@ class SpBreed(cid: Cid): SpiritPremise(cid) {
 }
 
 /** Live */
-class Breed internal constructor(spBreed: SpBreed): Premise(spBreed) {
-
-    /** Branch identifier (pod, brid) */
-    var brad: Brad? = null
-
-    override fun clone(): Breed {
-        val o = super.clone() as Breed
-        o.brad = this.brad?.clone()
-
-        return o
-    }
-
-    override fun copy(dest: Concept) {
-        super.copy(dest)
-        dest as Breed
-        dest.brad = this.brad?.clone()
-    }
-
-    override fun toString(): String {
-        var s = super.toString()
-        s += "\nownBrad = $brad".replace("\n", "\n    ")
-
-        return s
-    }
-}
+class Breed internal constructor(spBreed: SpBreed): BradPrem(spBreed)
 
 /**
  *      Premise, representing a cute thread object (as a special case a pod object). Used, e.g. for communication with user.
+ *  It is very similar to the brad premise, except that this one allows to address any cute thread, while the brad premise
+ *  is specialized on the inter branch communication.
  */
 class SpCuteThreadPrem(cid: Cid): SpiritPremise(cid) {
-
     override fun liveFactory() = CuteThreadPrem(this)
 }
 
 /** Live. */
 class CuteThreadPrem internal constructor(spCuteThreadPrem: SpCuteThreadPrem): Premise(spCuteThreadPrem) {
-
     var thread: CuteThread? = null      // note: cloned shallowly. Apparently deep cloning is senseless here.
 
-
-    override fun copy(dest: Concept) {
-        super.copy(dest)
+    override fun copyLive(dest: Premise) {
+        super.copyLive(dest)
         dest as CuteThreadPrem
         dest.thread = thread
     }
-
 }
 
 class SpPegPrem(cid: Cid): SpiritPremise(cid) {
-
     override fun liveFactory() = PegPrem(this)
 }
 
@@ -112,11 +119,10 @@ class SpStringPrem(cid: Cid): SpiritPremise(cid) {
 }
 
 class StringPrem(spStringPrem: SpStringPrem): Premise(spStringPrem) {
-
     var text: String = ""
 
-    override fun copy(dest: Concept) {
-        super.copy(dest)
+    override fun copyLive(dest: Premise) {
+        super.copyLive(dest)
         dest as StringPrem
         dest.text = text
     }
@@ -148,8 +154,8 @@ class StringQueuePrem internal constructor(spStringQueuePrem: SpStringQueuePrem)
         return o
     }
 
-    override fun copy(dest: Concept) {
-        super.copy(dest)
+    override fun copyLive(dest: Premise) {
+        super.copyLive(dest)
         dest as StringQueuePrem
         dest.queue = queue.clone()
     }

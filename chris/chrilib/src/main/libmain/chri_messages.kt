@@ -13,7 +13,7 @@ class CirclePromptsUserMsg(): MessageMsg()
 data class UserRequestsDispatcherCreateAttentionCircleMsg(val userThread: CuteThread): MessageMsg()
 
 /**
- *      Attention circle reports to pod pool, dispatcher and user that it was created and gives them its ownBrad.
+ *      Attention circle reports to pod pool, dispatcher and user that it was created and gives them its origBrad.
  *  @param userThread pod pool and dispatcher are accessible by common variables _pp_ and _attnDispatcher_. The user thread
  *                      is not, since users could be changing. So, user in order to be found must be identified.
  *  @param ownBrad new branch's address.
@@ -35,18 +35,10 @@ data class BranchSendsUserItsBrad(val brad: Brad): MessageMsg()
 data class BranchRequestsPodpoolCreateChildMsg(val destBreedCid: Cid, val destIns: Array<DynamicConcept>?, val parentBrad: Brad): MessageMsg()
 
 /**
- *      Branch reports to the pod pool and its parent its creation and tells them its ownBrad.
- *  @param parentBrad To be able to find parent
- *  @param ownBrad
- *  @param ownBreedCid
- */
-data class BranchReportsPodpoolAndParentItsCreationMsg(val parentBrad: Brad, val ownBrad: Brad, val ownBreedCid: Cid): MessageMsg()
-
-/**
  *      User sends a line of text to the circle. (Is sent from the user thread to a pod thread).
  *  @param destBrid Branch identifier in the pod.
  */
-data class UserTellsCircleIbr(val destBrid: Int, val text: String): MessageMsg()
+data class UserTellsCircleMsg(val destBrid: Int, val text: String): MessageMsg()
 
 /**
  *      Base for messages addressed to other brans (inter branch messages). Sent by brans to the pod pool. The
@@ -64,6 +56,14 @@ abstract class IbrMsg(destBrad: Brad): MessageMsg() {
         var s = super.toString()
         s += "\ndestPod = $destPod".replace("\n", "\n    ")
         s += "\n    destBrid = $destBrid"
+
+        return s
+    }
+
+    override fun toStr(): String {
+        var s = super.toStr()
+        val branchFrom: String
+
         return s
     }
 }
@@ -97,6 +97,14 @@ class AnactivateIbr(destBrad: Brad, val cptCid: Cid): IbrMsg(destBrad) {
 }
 
 /**
+ *      Branch reports to the pod pool and its parent its creation and tells them its origBrad.
+ *  @param destBrad To be able to find parent
+ *  @param origBrad
+ *  @param origBreedCid
+ */
+class BranchReportsPodpoolAndParentItsCreationIbr(destBrad: Brad, val origBrad: Brad, val origBreedCid: Cid): IbrMsg(destBrad)
+
+/**
  *      Passing a single concept. The concept is cloned on sending and injected into the receiver branch on the receiving.
  *  @param destBrad address (pod + brid) of the destination branch
  *  @param load The concept to pass.
@@ -107,5 +115,9 @@ class TransportSingleConceptIbr(destBrad: Brad, val load: DynamicConcept): IbrMs
         var s = super.toString()
         s += "\nload = $load".replace("\n", "\n    ")
         return s
+    }
+
+    override fun toStr(): String {
+        return super.toStr() + ", load = ${load.toStr()}"
     }
 }

@@ -6,6 +6,7 @@ import basemain.Cid
 import chribase_thread.CuteThread
 import cpt.*
 import cpt.abs.DynamicConcept
+import cpt.abs.Premise
 import libmain.BranchSendsUserItsBrad
 import libmain.TransportSingleConceptIbr
 import libmain._pp_
@@ -32,15 +33,15 @@ object sendUserBranchBrad: FCid(19_223) {
 /**
  *      Copy one live concept to another
  */
-object copyCpt0ToCpt1: F2Cid(43_137) {
+object copyPremise: F2Cid(43_137) {
 
     /**
      *  @param br current branch
-     *  @param cpt0Cid Source concept.
-     *  @param cpt1Cid Destination concept.
+     *  @param srcCid Source premise.
+     *  @param destCid Destination premise.
     */
-    override fun func(br: Branch, cpt0Cid: Cid, cpt1Cid: Cid) {
-        br[cpt0Cid].copy(br[cpt1Cid])
+    override fun func(br: Branch, srcCid: Cid, destCid: Cid) {
+        (br[srcCid] as Premise).copyLive(br[destCid] as Premise)
     }
 }
 

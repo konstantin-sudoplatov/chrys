@@ -12,7 +12,7 @@ import cpt.abs.Action
 import cpt.abs.SpiritAction
 import cpt.abs.SpiritDynamicConcept
 import libmain._sm_
-import libmain.namedCid
+import libmain.cidNamed
 
 /**
  *      Spirit action. It invokes functor of given static concept. The function of the functor has signature:
@@ -56,7 +56,7 @@ class A(spA: SpA): Action(spA)
 class SpA_Cid(cid: Cid): SpiritAction(cid) {
 
     override fun toStr(): String? {
-        return super.toStr() + "\n    p1Cid_ = ${namedCid(p1Cid_)}"
+        return super.toStr() + "\n    p1Cid_ = ${cidNamed(p1Cid_)}"
     }
 
     override fun liveFactory(): A_Cid {
@@ -100,8 +100,8 @@ class SpA_2Cid(cid: Cid): SpiritAction(cid) {
 
     override fun toStr(): String? {
         return super.toStr() +
-            "\n    p1Cid_ = ${namedCid(p1Cid_)}" +
-            "\n    p2Cid_ = ${namedCid(p2Cid_)}"
+            "\n    p1Cid_ = ${cidNamed(p1Cid_)}" +
+            "\n    p2Cid_ = ${cidNamed(p2Cid_)}"
     }
 
     override fun liveFactory(): A_2Cid {
@@ -156,7 +156,7 @@ class SpA_LCid(cid: Cid): SpiritAction(cid) {
         else {
             s += "\n    ["
             for(cid in pVar_!!)
-                s += "\n        ${namedCid(cid)}"
+                s += "\n        ${cidNamed(cid)}"
             s += "\n    ]"
         }
         return s

@@ -28,9 +28,13 @@ abstract class Premise(spiritDynamicConcept: SpiritDynamicConcept): DynamicConce
 
     override fun normalization() = ActivationIfc.NormalizationType.BIN
 
-    override fun copy(dest: Concept) {
-        super.copy(dest)
-        (dest as Premise).activation = activation
+
+    /**
+     *      Copy live concepts, without copying spirit part.
+     *  @param dest Live concept to copyLive data to
+     */
+    open fun copyLive(dest: Premise) {
+        dest.activation = activation
     }
 
     override fun toString(): String {

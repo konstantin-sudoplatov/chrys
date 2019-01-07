@@ -13,6 +13,7 @@ import cpt.abs.SpiritAction
 import cpt.abs.SpiritDynamicConcept
 import libmain._sm_
 import libmain.cidNamed
+import libmain.namedCid
 
 /**
  *      Spirit action. It invokes functor of given static concept. The function of the functor has signature:
@@ -30,6 +31,7 @@ class SpA(cid: Cid): SpiritAction(cid) {
      *  @param br The branch object to run the functor in
      */
     override fun run(br: Branch) {
+        assert(_statCid != 0 ) {"Action ${namedCid(cid)} is not initialized"}
         (_sm_[_statCid] as F).func(br)
     }
 
@@ -37,8 +39,9 @@ class SpA(cid: Cid): SpiritAction(cid) {
      *      Load the action of type fun(Branch): Unit
      *  @param statCpt The concept functor.
      */
-    fun load(statCpt: SpStaticConcept) {
+    fun load(statCpt: SpStaticConcept): SpA {
         _statCid = statCpt.cid
+        return this
     }
 }
 
@@ -68,6 +71,7 @@ class SpA_Cid(cid: Cid): SpiritAction(cid) {
      *  @param br The branch object to run the functor in
      */
     override fun run(br: Branch) {
+        assert(_statCid != 0 && p1Cid_ != 0) {"Action ${namedCid(cid)} is not initialized"}
         (_sm_[_statCid] as FCid).func(br, p1Cid_)
     }
 
@@ -76,9 +80,10 @@ class SpA_Cid(cid: Cid): SpiritAction(cid) {
      *  @param statCpt The concept functor.
      *  @param p1 first parameter
      */
-    fun load(statCpt: SpStaticConcept, p1: SpiritDynamicConcept) {
+    fun load(statCpt: SpStaticConcept, p1: SpiritDynamicConcept): SpA_Cid {
         _statCid = statCpt.cid
         p1Cid_ = p1.cid
+        return this
     }
 
     /** Cid of the first parameter. */
@@ -113,6 +118,7 @@ class SpA_2Cid(cid: Cid): SpiritAction(cid) {
      *  @param br The branch object to run the functor in
      */
     override fun run(br: Branch) {
+        assert(_statCid != 0 && p1Cid_ != 0 && p2Cid_ != 0) {"Action ${namedCid(cid)} is not initialized"}
         (_sm_[_statCid] as F2Cid).func(br, p1Cid_, p2Cid_)
     }
 
@@ -122,10 +128,11 @@ class SpA_2Cid(cid: Cid): SpiritAction(cid) {
      *  @param p1 first parameter
      *  @param p2 second parameter
      */
-    fun load(statCpt: SpStaticConcept, p1: SpiritDynamicConcept, p2: SpiritDynamicConcept) {
+    fun load(statCpt: SpStaticConcept, p1: SpiritDynamicConcept, p2: SpiritDynamicConcept): SpA_2Cid {
         _statCid = statCpt.cid
         p1Cid_ = p1.cid
         p2Cid_ = p2.cid
+        return this
     }
 
     /** Cid of the first parameter. */
@@ -171,6 +178,7 @@ class SpA_LCid(cid: Cid): SpiritAction(cid) {
      *  @param br The branch object to run the functor in
      */
     override fun run(br: Branch) {
+        assert(_statCid != 0 && pVar_ != null) {"Action ${namedCid(cid)} is not initialized"}
         (_sm_[_statCid] as FLCid).func(br, *pVar_ as IntArray)
     }
 
@@ -179,9 +187,10 @@ class SpA_LCid(cid: Cid): SpiritAction(cid) {
      *  @param statCpt The concept functor.
      *  @param pVar Variable number of concepts
      */
-    fun load(statCpt: SpStaticConcept, vararg pVar: SpiritDynamicConcept) {
+    fun load(statCpt: SpStaticConcept, vararg pVar: SpiritDynamicConcept): SpA_LCid {
         _statCid = statCpt.cid
         pVar_ = IntArray(pVar.size) { pVar[it].cid }
+        return this
     }
 
     /** Cid of the first parameter. */

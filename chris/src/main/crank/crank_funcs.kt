@@ -5,10 +5,10 @@ import cpt.SpA_Cid
 import cpt.SpActionNeuron
 import cpt.abs.SpiritDynamicConcept
 import cpt.abs.SpiritNeuron
-import crank.mainCrank.common.debugOff_act
-import crank.mainCrank.common.debugOn_act
+import crank.mnCr.cmn.debugOff_act
+import crank.mnCr.cmn.debugOn_act
 import libmain._sm_
-import stat.commonStat
+import stat.cmnSt
 
 /**
  *          Chain stems. All the stems in chain must be action neurons, only the last one can be a something else.
@@ -57,7 +57,7 @@ fun log_acnr(vararg log_act: SpA_Cid): SpActionNeuron {
 fun log_act(spCpt: SpiritDynamicConcept): SpA_Cid {
     val logAct = SpA_Cid(0)
     _sm_.add(logAct)
-    logAct.load(commonStat.logConcept, spCpt)
+    logAct.load(cmnSt.logConcept, spCpt)
 
     return logAct
 }

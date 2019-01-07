@@ -3,14 +3,14 @@ package crank
 import basemain.logit
 import libmain.CrankModule
 import libmain._sm_
-import libmain.hardCrank
+import libmain.hCr
 
 /**
  *      List of classes, that contain crank definitions (enums and functions)
  */
 private val crankModules = listOf<CrankModule>(
-    hardCrank,
-    mainCrank
+    hCr,
+    mnCr
 )
 
 /**

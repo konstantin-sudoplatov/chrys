@@ -8,8 +8,6 @@ import cpt.abs.DynamicConcept
 
 data class ReaderSendsConsoleLineMsg(val text: String): MessageMsg()
 
-class CirclePromptsUserMsg(): MessageMsg()
-
 data class UserRequestsDispatcherCreateAttentionCircleMsg(val userThread: CuteThread): MessageMsg()
 
 /**
@@ -37,8 +35,24 @@ data class BranchRequestsPodpoolCreateChildMsg(val destBreedCid: Cid, val destIn
 /**
  *      User sends a line of text to the circle. (Is sent from the user thread to a pod thread).
  *  @param destBrid Branch identifier in the pod.
+ *  @param text text to send
  */
-data class UserTellsCircleMsg(val destBrid: Int, val text: String): MessageMsg()
+class UserTellsCircleMsg(val destBrid: Int, val text: String): MessageMsg() {
+    override fun toStr(): String {
+        return super.toStr() + ", text = $text"
+    }
+}
+
+/**
+ *      Circle (ulwrite branch) sends a line of text to user.
+ *  @param text text to send
+ */
+class CircleTellsUserMsg(val text: String): MessageMsg()
+
+/**
+ *      Encourage user to sent next input.
+ */
+class CirclePromptsUserMsg(): MessageMsg()
 
 /**
  *      Base for messages addressed to other brans (inter branch messages). Sent by brans to the pod pool. The
@@ -63,7 +77,6 @@ abstract class IbrMsg(destBrad: Brad): MessageMsg() {
     override fun toStr(): String {
         var s = super.toStr()
         val branchFrom: String
-
         return s
     }
 }
@@ -73,12 +86,15 @@ abstract class IbrMsg(destBrad: Brad): MessageMsg() {
  *  @param destBrad address (pod + brid) of the destination branch
  *  @param cptCid Cid of the concept.
  */
-class ActivateIbr(destBrad: Brad, val cptCid: Cid): IbrMsg(destBrad) {
-
+class ActivateRemotelyIbr(destBrad: Brad, val cptCid: Cid): IbrMsg(destBrad) {
     override fun toString(): String {
         var s = super.toString()
         s += "\n    cptCid = $cptCid"
         return s
+    }
+
+    override fun toStr(): String {
+        return super.toStr() + ", concept = ${cidNamed(cptCid)}"
     }
 }
 
@@ -87,12 +103,15 @@ class ActivateIbr(destBrad: Brad, val cptCid: Cid): IbrMsg(destBrad) {
  *  @param destBrad address (pod + brid) of the destination branch
  *  @param cptCid Cid of the concept.
  */
-class AnactivateIbr(destBrad: Brad, val cptCid: Cid): IbrMsg(destBrad) {
-
+class AnactivateRemotelyIbr(destBrad: Brad, val cptCid: Cid): IbrMsg(destBrad) {
     override fun toString(): String {
         var s = super.toString()
         s += "\n    cptCid = $cptCid"
         return s
+    }
+
+    override fun toStr(): String {
+        return super.toStr() + ", concept = ${cidNamed(cptCid)}"
     }
 }
 

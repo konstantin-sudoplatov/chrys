@@ -3,8 +3,8 @@ package libmain
 import atn.AttentionDispatcher
 import atn.Brad
 import basemain.EMULATE_CONSOLE
-import chribase_thread.MessageMsg
 import chribase_thread.CuteThread
+import chribase_thread.MessageMsg
 import chribase_thread.TerminationRequestMsg
 import chribase_thread.TimeoutMsg
 
@@ -56,6 +56,12 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
                 else {//no: resend the console line to the circle
                     circleBrad_!!.pod.putInQueue(UserTellsCircleMsg(circleBrad_!!.brid, msg.text))
                 }
+                return true
+            }
+
+            is CircleTellsUserMsg -> {
+                println(msg.text)
+
                 return true
             }
 

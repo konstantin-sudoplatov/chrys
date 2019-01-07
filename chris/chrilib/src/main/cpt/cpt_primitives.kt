@@ -20,8 +20,9 @@ class SpStringPrim(cid: Cid): SpiritPrimitive(cid) {
 
     override fun liveFactory() = StringPrim(this)
 
-    fun load(string: String) {
+    fun load(string: String): SpStringPrim {
         this.string = string
+        return this
     }
 }
 
@@ -37,8 +38,9 @@ class SpNumPrim(cid: Cid): SpiritPrimitive(cid) {
 
     override fun liveFactory() = NumPrim(this)
 
-    fun load(num: Double) {
+    fun load(num: Double): SpNumPrim {
         this.num = num
+        return this
     }
 }
 

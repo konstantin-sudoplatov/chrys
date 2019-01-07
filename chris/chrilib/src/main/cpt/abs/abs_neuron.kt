@@ -65,10 +65,14 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
     }
 
     /** Adapter for addEff_(). */
-    fun addEffs(upBound: Float, acts: Array<out SpiritAction>? = null, brans: Array<SpBreed>? = null, stem: SpiritNeuron? = null) {
+    fun addEff(upBound: Float, acts: Array<out SpiritAction>? = null, brans: Array<SpBreed>? = null,
+               stem: SpiritNeuron? = null): SpiritNeuron
+    {
         val actCids = if(acts != null) IntArray(acts.size) { acts[it].cid } else null
         val branCids = if(brans != null) IntArray(brans.size, { brans[it].cid }) else null
         addEff_(upBound, actCids, branCids, stem)
+
+        return this
     }
 
     /**
@@ -77,7 +81,7 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
     fun loadEffs(vararg efs: Eft) {
         assert(_effects == null) {"load() must work only once."}
         for(ef in efs)
-            addEffs(ef.upBound, ef.acts, ef.brans, ef.stem)
+            addEff(ef.upBound, ef.acts, ef.brans, ef.stem)
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -194,6 +198,7 @@ abstract class SpiritLogicalNeuron(cid: Cid): SpiritNeuron(cid) {
         val premList = mutableListOf<Prem>()
         for(ind in premoids.indices) {
             assert(premoids[ind] is NegatedPremise || premoids[ind] is SpiritPremise)
+                {"Concept must be either NegatedPremise or SpiritPremise, but it is ${premoids[ind]::class.qualifiedName}"}
             val premoid = premoids[ind]
             when(premoid) {
                 is SpiritPremise -> {
@@ -269,7 +274,7 @@ class Prem(
 }
 
 /**
- *      Used as a vararg parameters for the addEffs() function
+ *      Used as a vararg parameters for the addEff() function
  */
 class Eft(
     val upBound: Float,

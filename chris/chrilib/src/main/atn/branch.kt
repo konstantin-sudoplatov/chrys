@@ -224,8 +224,8 @@ open class Branch(
 class AttentionCircle(breedCid: Cid, brad: Brad, userThread: CuteThread): Branch(breedCid, brad, null) {
     init {
 
-        // Inject the userThread_prem hard cid premise
-        val userThreadPrem = this[hardCrank.hardCid.userThread_prem.cid] as CuteThreadPrem
+        // Inject the userThread_cthreadprem hard cid premise
+        val userThreadPrem = this[hCr.hardCid.userThread_cthreadprem.cid] as CuteThreadPrem
         userThreadPrem.thread = userThread
         userThreadPrem.activate()
     }

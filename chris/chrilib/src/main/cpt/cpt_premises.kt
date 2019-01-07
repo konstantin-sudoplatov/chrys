@@ -78,10 +78,11 @@ class SpBreed(cid: Cid): SpBradPrem(cid) {
      *  @param ins Cids of concepts, that must be injected into the created branch
      *  @param outs Cids of concepts, that are injected back to the parent branch on finishing of the child
      */
-    fun load(seed: SpSeed, ins: Array<SpiritDynamicConcept>?, outs: Array<SpiritDynamicConcept>?) {
+    fun load(seed: SpSeed, ins: Array<SpiritDynamicConcept>? = null, outs: Array<SpiritDynamicConcept>? = null): SpBreed {
         this.seedCid = seed.cid
         this.ins = if(ins == null || ins.size == 0) null else IntArray(ins.size) {ins[it].cid}
         this.outs = if(outs == null || outs.size == 0) null else IntArray(outs.size) {outs[it].cid}
+        return this
     }
 }
 
@@ -168,7 +169,7 @@ class StringQueuePrem internal constructor(spStringQueuePrem: SpStringQueuePrem)
 
     override fun toString(): String {
         var s = super.toString()
-        s += "\n    queue (size ${queue.size} = ["
+        s += "\n    queue (size ${queue.size}) = ["
         for(ss in queue.take(5))
             s += "\n        $ss"
         s += "\n    ]"

@@ -8,6 +8,7 @@ import chribase_thread.CuteThread
 import chribase_thread.MessageMsg
 import chribase_thread.TerminationRequestMsg
 import chribase_thread.TimeoutMsg
+import cpt.ActivationIfc
 import cpt.Breed
 import cpt.StringQueuePrem
 import libmain.*
@@ -82,13 +83,32 @@ class Pod(
             is IbrMsg -> {
                 val br = branchMap_[msg.destBrid] as Branch
                 when(msg) {
+                    is ActivateRemotelyIbr ->
+                    {
+                        dlog_(br, "msg = ${msg.toStr()}")
+
+                        (br[msg.cptCid] as ActivationIfc).activate()
+                        br.reasoning()
+
+                        return true
+                    }
+
+                    is AnactivateRemotelyIbr ->
+                    {
+                        dlog_(br, "msg = ${msg.toStr()}")
+
+                        (br[msg.cptCid] as ActivationIfc).anactivate()
+                        br.reasoning()
+
+                        return true
+                    }
+
                     is TransportSingleConceptIbr ->
                     {
                         dlog_(br, "msg = ${msg.toStr()}")
 
                         // Inject load
                         br.add(msg.load)
-
                         br.reasoning()
 
                         return true
@@ -119,20 +139,20 @@ class Pod(
                 dlog_("msg = ${msg.toStr()}")
                 val brid = generateSockid()
                 val destBrad = Brad(this, brid)
-                val branch = Branch(msg.destBreedCid, destBrad, msg.parentBrad)
+                val br = Branch(msg.destBreedCid, destBrad, msg.parentBrad)
 
                 // May be, inject ins
                 if(msg.destIns != null)
                     for(cpt in msg.destIns)
-                        branch.add(cpt)
+                        br.add(cpt)
 
-                branchMap_[brid] = branch
+                branchMap_[brid] = br
                 numOfBranches++
                 _pp_.putInQueue(BranchReportsPodpoolAndParentItsCreationIbr(destBrad = msg.parentBrad,
                     origBrad = destBrad.clone(), origBreedCid = msg.destBreedCid
                 ))
 
-                branch.reasoning()      // kick off
+                br.reasoning()      // kick off
 
                 return true
             }
@@ -140,9 +160,11 @@ class Pod(
             is UserTellsCircleMsg -> {
                 val br = branchMap_[msg.destBrid] as Branch
                 dlog_(br, "msg = ${msg.toStr()}")
-                val inputBufferCpt = br[hardCrank.hardCid.userInputBuffer_prem.cid] as StringQueuePrem
+                val inputBufferCpt = br[hCr.hardCid.userInputBuffer_strqprem.cid] as StringQueuePrem
                 inputBufferCpt.queue.add(msg.text)
                 inputBufferCpt.activate()
+
+                br.reasoning()
 
                 return true
             }
@@ -150,7 +172,7 @@ class Pod(
             // Create attention circle
             is UserRequestsDispatcherCreateAttentionCircleMsg -> {
                 dlog_("msg = ${msg.toStr()}")
-                val breedCid = hardCrank.hardCid.circle_breed.cid
+                val breedCid = hCr.hardCid.circle_breed.cid
                 val cellid = generateSockid()
                 val circle = AttentionCircle(breedCid, Brad(this, cellid), msg.userThread)
                 branchMap_[cellid] = circle

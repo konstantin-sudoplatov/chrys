@@ -44,4 +44,8 @@ abstract class Premise(spiritDynamicConcept: SpiritDynamicConcept): DynamicConce
     }
 }
 
+/**
+ *          If SpiritPremise is wrapped into this class, it means that the premise's activation should be negated at assessing.
+ *      Used in the SpiritLogicalNeuron.loadPrems()
+ */
 class NegatedPremise(val spiritPremise: SpiritPremise)

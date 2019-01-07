@@ -3,6 +3,8 @@ package crank
 import basemain.acts
 import cpt.SpA_Cid
 import cpt.SpActionNeuron
+import cpt.SpBreed
+import cpt.abs.SpiritAction
 import cpt.abs.SpiritDynamicConcept
 import cpt.abs.SpiritNeuron
 import crank.mnCr.cmn.debugOff_act

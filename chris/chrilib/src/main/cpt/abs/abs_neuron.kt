@@ -64,46 +64,6 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
         return Effect(Float.POSITIVE_INFINITY)
     }
 
-    /** Adapter for addEff_(). */
-    fun addEff(upBound: Float, acts: Array<out SpiritAction>? = null, brans: Array<SpBreed>? = null,
-               stem: SpiritNeuron? = null): SpiritNeuron
-    {
-        val actCids = if(acts != null) IntArray(acts.size) { acts[it].cid } else null
-        val branCids = if(brans != null) IntArray(brans.size, { brans[it].cid }) else null
-        addEff_(upBound, actCids, branCids, stem)
-
-        return this
-    }
-
-    /**
-     *      Load an array of effects.
-     */
-    fun loadEffs(vararg efs: Eft) {
-        assert(_effects == null) {"load() must work only once."}
-        for(ef in efs)
-            addEff(ef.upBound, ef.acts, ef.brans, ef.stem)
-    }
-
-    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
-    //
-    //                                  Protected
-    //
-    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
-
-    //---$$$---$$$---$$$---$$$---$$$ protected data ---$$$---$$$---$$$---$$$---$$$--
-
-    protected var _effects: Array<Effect>? = null
-
-    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-    //
-    //                               Private
-    //
-    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
-
-    //---%%%---%%%---%%%---%%%--- private data ---%%%---%%%---%%%---%%%---%%%---%%%
-
-    //---%%%---%%%---%%%---%%%--- private funcs ---%%%---%%%---%%%---%%%---%%%---%%%
-
     /**
      *      Add acts and brans for a new span of the activation values. If cutoff is enabled, which is the default,
      *  the the number of spans is bigger by one, than defined in the effects array. The first dummy span of
@@ -120,9 +80,9 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
      *  @param stem Neuron of new stemCid. null - stay on the current stemCid.
      *  @param branches Array of cids of brans. null or [] - no new brans for this span.
      */
-    private fun addEff_(upperBound: Float, actions: IntArray? = null, branches: IntArray? = null, stem: SpiritNeuron? = null) {
+    open fun addEffect(upperBound: Float, actions: IntArray? = null, branches: IntArray? = null, stemCid: Cid = 0) {
 
-        val eff = Effect(upperBound, actions, branches, stem?.cid?: 0)
+        val eff = Effect(upperBound, actions, branches, stemCid)
 
         // May be disable cutoff
         if(_effects == null || _effects!!.isEmpty()) {
@@ -144,6 +104,55 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
             _effects!![_effects!!.lastIndex] = eff
         }
     }
+
+    /**
+     *      Adapter for SpiritNeuron.addEffect(). It allows using spirit concepts instead of their cids.
+     */
+    open fun addEff(upBound: Float, acts: Array<out SpiritAction>? = null, brans: Array<SpBreed>? = null,
+                            stem: SpiritNeuron? = null): SpiritNeuron
+    {
+        val actCids = if(acts != null) IntArray(acts.size) { acts[it].cid } else null
+        val branCids = if(brans != null) IntArray(brans.size, { brans[it].cid }) else null
+        addEffect(upBound, actCids, branCids, stem?.cid?: 0)
+
+        return this
+    }
+
+    /**
+     *      Set effects array to null.
+     */
+    fun resetEffects() {
+        _effects = null
+    }
+
+//    /**
+//     *      Load an array of effects.
+//     */
+//    fun loadEffs(vararg efs: Eft) {
+//        assert(_effects == null) {"load() must work only once."}
+//        for(ef in efs)
+//            addEff(ef.upBound, ef.acts, ef.brans, ef.stem)
+//    }
+
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+    //
+    //                                  Protected
+    //
+    //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
+
+    //---$$$---$$$---$$$---$$$---$$$ protected data ---$$$---$$$---$$$---$$$---$$$--
+
+    protected var _effects: Array<Effect>? = null
+
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+    //
+    //                               Private
+    //
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+
+    //---%%%---%%%---%%%---%%%--- private data ---%%%---%%%---%%%---%%%---%%%---%%%
+
+    //---%%%---%%%---%%%---%%%--- private funcs ---%%%---%%%---%%%---%%%---%%%---%%%
 }
 
 /** Live. */
@@ -228,8 +237,8 @@ abstract class SpiritLogicalNeuron(cid: Cid): SpiritNeuron(cid) {
     protected var _premises: Array<Prem>? = null
 }
 
+/** Live. */
 abstract class LogicalNeuron(spLogicalNeuron: SpiritLogicalNeuron): Neuron(spLogicalNeuron) {
-
     override fun normalization() = ActivationIfc.NormalizationType.BIN
 }
 
@@ -273,12 +282,12 @@ class Prem(
     }
 }
 
-/**
- *      Used as a vararg parameters for the addEff() function
- */
-class Eft(
-    val upBound: Float,
-    val acts: Array<out SpiritAction>? = null,
-    val brans: Array<SpBreed>? = null,
-    val stem: SpiritNeuron? = null
-)
+///**
+// *      Used as a vararg parameters for the addEff() function
+// */
+//class Eft(
+//    val upBound: Float,
+//    val acts: Array<out SpiritAction>? = null,
+//    val brans: Array<SpBreed>? = null,
+//    val stem: SpiritNeuron? = null
+//)

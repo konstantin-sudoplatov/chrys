@@ -42,8 +42,8 @@ fun debugOff_actn(): SpActionNeuron {
 }
 
 /**
- *          Compact several log actions into action neuron.
- * @param log_act log actions to pack into the neuron.
+ *          Compact several log actCids into action neuron.
+ * @param log_act log actCids to pack into the neuron.
  */
 fun log_acnr(vararg log_act: SpA_Cid): SpActionNeuron {
     val acnr = SpActionNeuron(0)

@@ -4,6 +4,7 @@ import atn.Branch
 import basemain.Cid
 import cpt.ActivationIfc
 import cpt.SpBreed
+import libmain.arrayOfCidsNamed
 import libmain.cidNamed
 import java.util.*
 
@@ -28,10 +29,14 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
 
     override fun toString(): String {
         var s = super.toString()
-        s += "\n    _effects = $_effects"
-        if(_effects != null)
-            for((i, eff) in _effects!!.withIndex())
-                s += "\nEffect[$i] = $eff".replace("\n", "\n    ")
+        if(_effects == null)
+            s += "\n    _effects = null"
+        else {
+            s += "\n    _effects = ["
+            for ((i, eff) in _effects!!.withIndex())
+                s += "\nEffect[$i] = $eff".replace("\n", "\n        ")
+            s += "\n    ]"
+        }
 
         return s
     }
@@ -76,16 +81,17 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
      *      3. defining the first span with the upBound <= cutoff.
      *
      *  @param upperBound The upper boundary of the span, including.
-     *  @param actions Array of cids of acts. null or [] - no acts for this span.
+     *  @param actCids Array of cids of acts. null or [] - no acts for this span.
+     *  @param branCids Array of cids of brans. null or [] - no new brans for this span.
      *  @param stem Neuron of new stemCid. null - stay on the current stemCid.
-     *  @param branches Array of cids of brans. null or [] - no new brans for this span.
      */
-    open fun addEffect(upperBound: Float, actions: IntArray? = null, branches: IntArray? = null, stemCid: Cid = 0) {
+    open fun addEffect(upperBound: Float, actCids: IntArray? = null, branCids: IntArray? = null, stemCid: Cid = 0) {
 
-        val eff = Effect(upperBound, actions, branches, stemCid)
+        val eff = Effect(upperBound, actCids, branCids, stemCid)
 
         // May be disable cutoff
-        if(_effects == null || _effects!!.isEmpty()) {
+        val effSize = _effects?.size?:0
+        if(effSize == 0) {
             if      // is the upper bound of the first span overlaps cutoff?
                     (eff.upperBound <= cutoff)
                 disableCutoff()
@@ -97,7 +103,7 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
         }
 
         // Add new effect to the _effects array
-        if(_effects == null)
+        if(effSize == 0)
             _effects = Array<Effect>(1){ eff }
         else {
             _effects = Arrays.copyOf(_effects, _effects!!.size+1)
@@ -179,12 +185,28 @@ abstract class SpiritLogicalNeuron(cid: Cid): SpiritNeuron(cid) {
 
     override fun toString(): String {
         var s = super.toString()
-        s += "\n    _premises = $_premises"
-        if(_premises != null)
-            for((i, prem) in _premises!!.withIndex())
-                s += "\n_premises[$i] = $prem".replace("\n", "\n    ")
+        if(_premises == null)
+            s += "\n    _premises = null"
+        else {
+            s += "\n    _premises = ["
+            for ((i, prem) in _premises!!.withIndex())
+                s += "\n_premises[$i] = $prem".replace("\n", "\n        ")
+            s += "\n    ]"
+        }
 
         return s
+    }
+
+    /**
+     *      Load a number of premises' cids along with their possible negations.
+     *  @param prems Prem objects - cid and negation
+     */
+    fun loadPrems(vararg prems: Prem) {
+        if(prems.isEmpty())
+            _premises = null
+        else
+            @Suppress("UNCHECKED_CAST")
+            _premises = prems as Array<Prem>
     }
 
     /**
@@ -194,7 +216,7 @@ abstract class SpiritLogicalNeuron(cid: Cid): SpiritNeuron(cid) {
      *          calculating the activation value of the neuron. The wrapping is caused by prefixing the premise object with
      *          the ! sign.
      */
-    fun loadPrems(vararg premoids: Any): SpiritLogicalNeuron {
+    open fun loadPrems(vararg premoids: Any): SpiritLogicalNeuron {
 
         if      // nothing to add?
                 (premoids.isEmpty())
@@ -226,6 +248,10 @@ abstract class SpiritLogicalNeuron(cid: Cid): SpiritNeuron(cid) {
         return this
     }
 
+    fun resetPrems() {
+        _premises = null
+    }
+
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
     //
     //                                  Protected
@@ -251,16 +277,16 @@ abstract class LogicalNeuron(spLogicalNeuron: SpiritLogicalNeuron): Neuron(spLog
  */
 class Effect(
     var upperBound: Float,              // the upper boundary of the span, including
-    var actions: IntArray? = null,      // Array of cids of acts. null or [] - no acts for this span
-    var branches: IntArray? = null,     // Array of cids of brans. null or [] - no new brans for this span
+    var actCids: IntArray? = null,      // Array of cids of acts. null or [] - no acts for this span
+    var branCids: IntArray? = null,     // Array of cids of brans. null or [] - no new brans for this span
     var stemCid: Cid = 0                // 0 - stay on the current stemCid
 ) {
     override fun toString(): String {
         var s = this::class.qualifiedName?: ""
         s += "\n    upBound = $upperBound"
-        s += "\n    acts = $actions"
+        s += "\n${arrayOfCidsNamed("actCids", actCids)}".replace("\n", "\n    ")
+        s += "\n${arrayOfCidsNamed("branCids", branCids)}".replace("\n", "\n    ")
         s += "\n    stemCid = ${cidNamed(stemCid)}"
-        s += "\n    brans = $branches"
 
         return s
     }

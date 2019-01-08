@@ -25,3 +25,26 @@ fun namedCid(cid: Cid): String {
     else
         return "$s (noname)"
 }
+
+/**
+ *      Render array of cids to a string.
+ *  @param arrName array name
+ *  @param arr array
+ *  @param lim limit of elements of array to print
+ */
+fun arrayOfCidsNamed(arrName: String, arr: IntArray?, lim: Int = 5): String {
+    var s: String
+    if(arr == null) {
+        s = "$arrName = null"
+        return s
+    }
+    else
+        s = "$arrName(size = ${arr.size}) = ["
+
+    for(cid in arr.take(lim)) {
+        s += "\n    ${cidNamed(cid)}"
+    }
+    s += "\n]"
+
+    return s
+}

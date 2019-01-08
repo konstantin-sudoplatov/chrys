@@ -55,13 +55,13 @@ open class Branch(
             // Do the neuron's assessment and determine effect
             val eff = stem.calculateActivationAndSelectEffect(this)
             dlog {ar(
-                "activation = ${stem.activation}, actions: ${eff.actions?.size}, branches: ${eff.branches?.size}, stem: ${namedCid(eff.stemCid)}",
+                "activation = ${stem.activation}, actCids: ${eff.actCids?.size}, branCids: ${eff.branCids?.size}, stem: ${namedCid(eff.stemCid)}",
                 "activation = ${stem.activation}, $eff"
             )}
 
             // Do acts, if any
-            if(eff.actions != null)
-                for(actCid in eff.actions!!) {
+            if(eff.actCids != null)
+                for(actCid in eff.actCids!!) {
                     dlog {ar(
                         "action = ${this[actCid].toStr()}",
                         "action = ${this[actCid]}"
@@ -73,8 +73,8 @@ open class Branch(
                 }
 
             // Spawn brans, if any
-            if(eff.branches != null)
-                for(destBreedCid in eff.branches!!) {
+            if(eff.branCids != null)
+                for(destBreedCid in eff.branCids!!) {
                     dlog {ar(
                         "branch = ${this[destBreedCid].toStr()}",
                         "branch = ${this[destBreedCid]}"

@@ -46,7 +46,8 @@ object circle: CrankGroup {
     val copyOwnBradToUserInputRequest_act = SpA_2Cid(-2_059_132_975)
         .load(cmnSt.copyPremise, hCr.hardCid.circle_breed, ulread.userInputRequest_bradprem)
 
-    // Send ulread activated copyLive of the own breed as both a request for user line and the address of requester
+    // Send ulread activated brad as both the request for user line and the address of requester. It is used only the first
+    // time to pass to ulread branch our brad, after that we will just be reactivating the request.
     val transportUlreadInputRequest_act = SpA_2Cid(-2_089_689_065)
         .load(cmnSt.transportSingleConcept, ulread.breed, ulread.userInputRequest_bradprem)
 
@@ -59,13 +60,17 @@ object circle: CrankGroup {
 
     // Before requesting to output line of text, place it to the request concept (together with the activation field)
     val copyUserInputLineToOutputRequest_act = SpA_2Cid(517_308_633)
-        .load(cmnSt.copyPremise, ulread.userInputLine_strprem, ulwrite.userOutputLine_strprem)
+        .load(cmnSt.copyPremise, ulread.userInputLine_strprem, ulwrite.outputLine_strprem)
 
-    // Request sending text of line to user
+    // Pass to ulwrite request for sending text to user. Text is inside the request.
     val sendUlwriteOutputRequest_act = SpA_2Cid(1_873_323_521)
-        .load(cmnSt.transportSingleConcept, ulwrite.breed, ulwrite.userOutputLine_strprem)
+        .load(cmnSt.transportSingleConcept, ulwrite.breed, ulwrite.outputLine_strprem)
 
-    // Signal ulread to send next user line with the userInputLine_strprem premise
+    // Ask ulwrite to prompt user for next input
+    val activateRemotelyPromptRequest_act = SpA_2Cid(-1_275_797_463)
+        .load(cmnSt.activateRemotely, ulwrite.breed, ulwrite.promptRequest_pegprem)
+
+    // Signal ulread to send next user line with the userInputLine_strprem premise. Second time and on we just reactivate the request.
     val activateRemotelyInputRequest_act = SpA_2Cid(794_381_089)
         .load(cmnSt.activateRemotely, ulread.breed, ulread.userInputRequest_bradprem)
 
@@ -106,11 +111,12 @@ object circle: CrankGroup {
                 copyUserInputLineToOutputRequest_act,
                 anactivateUserInputLine_act,
                 sendUlwriteOutputRequest_act,
+                activateRemotelyPromptRequest_act,
                 activateRemotelyInputRequest_act
             )
         )
     }
-}   //    -1_275_797_463 2_091_624_554 313_424_276 -1_874_867_101 345_223_608 445_101_230
+}   //     2_091_624_554 313_424_276 -1_874_867_101 345_223_608 445_101_230
 
 // Reading user input lines.
 object ulread: CrankGroup {
@@ -179,21 +185,30 @@ object ulwrite: CrankGroup {
     val seed = SpSeed(-1_918_726_653)
 
     // Branch, that requesting the output injects this premise.
-    val userOutputLine_strprem = SpStringPrem(-1_186_670_642)
+    val outputLine_strprem = SpStringPrem(-1_186_670_642)
 
-    // Checks the request premise and sends it to user.
-    val outputRequestValve_andn = SpAndNeuron(-333_614_575)
+    // If client branch wants to prompt user for next line, it remotely activates this peg.
+    val promptRequest_pegprem = SpPegPrem(342_661_687)
+
+    // Checks the output request and prompt request premises and  and sends them to user. It's a pick neuron, it does
+    // work related to one of the premises from a list.
+    val requestValve_pickn = SpPickNeuron(-333_614_575)
 
     // Send text to user
     val sendTextToUser_act = SpA_2Cid(2_005_795_367)
-        .load(mnSt.circleTellsUser, hCr.hardCid.userThread_cthreadprem, userOutputLine_strprem)
+        .load(mnSt.circleTellsUser, hCr.hardCid.userThread_cthreadprem, outputLine_strprem)
 
     // After text is sent to user, the request needs to be anactivated
-    val anactivateOutputRequest_act = SpA_Cid(913_222_153)
-        .load(cmnSt.anactivate, userOutputLine_strprem)
+    val anactivateRequestForOutputLine_act = SpA_Cid(913_222_153)
+        .load(cmnSt.anactivate, outputLine_strprem)
 
-    val promptUser_act = SpA_Cid(-367_082_727)
+    // Send user the prompt message
+    val sendUserPrompt_act = SpA_Cid(-367_082_727)
         .load(mnSt.circlePromtsUser, hCr.hardCid.userThread_cthreadprem)
+
+    // Anactivate prompt request after it is processed
+    val anactivatePromptRequest_act = SpA_Cid(-1_419_169_404)
+        .load(cmnSt.anactivate, promptRequest_pegprem)
 
     override fun crank() {
 
@@ -205,19 +220,23 @@ object ulwrite: CrankGroup {
         )
 
         seed.load(
-            stem = outputRequestValve_andn
+            stem = requestValve_pickn
         )
 
-        outputRequestValve_andn.loadPrems(
-            userOutputLine_strprem
-        ).addEff(
-            Float.POSITIVE_INFINITY,
-            acts(
+        requestValve_pickn.add(
+            premoid = outputLine_strprem,
+            acts = acts(
                 sendTextToUser_act,
-                anactivateOutputRequest_act
+                anactivateRequestForOutputLine_act
+            )
+        ).add(
+            premoid = promptRequest_pegprem,
+            acts = acts(
+                sendUserPrompt_act,
+                anactivatePromptRequest_act
             )
         )
     }
-}   //     342_661_687 -1_419_169_404
+}   //  -1_596_525_606 -1_027_420_163 -10_664_875 107_759_426 -1_852_026_187 -1_255_850_367 -48_028_321
 
 }

@@ -1,11 +1,13 @@
 import crank.loadAndCrankDynamicConcepts
-import libmain._atnDispatcher_
-import libmain._console_
-import libmain._pp_
+import db.connectToDb
+import libmain.*
+import org.yaml.snakeyaml.Yaml
+import org.yaml.snakeyaml.constructor.Constructor
 import stat.loadStaticConcepts
+import java.io.FileNotFoundException
 
 /**
- * Initiation of a new session goes as following: this function starts the sequence by calling the
+ * Initiation of a new session goes this way: this function starts the sequence by calling the
  * _console_.requestCreationOfAttentionCircle() function. Console sends request to the attention dispatcher. The attention
  * dispatcher sends the pod pool a request for starting the attention circle. The pod pool starts the circle, which creates
  * the ulread branch, which sends the dispacher its origBrad. Dispatcher stores the origBrad along with the console thread reference
@@ -15,6 +17,7 @@ import stat.loadStaticConcepts
  * is sent ot the attention dispatcher, it in its turn sends it to the pod pool, which sends it to all pods and pods
  * terminate their brans. This function waits for termination of all threads, then finishes.
  */
+@Throws(FileNotFoundException::class)
 fun main(args: Array<String>) {
 
     loadStaticConcepts()
@@ -29,4 +32,5 @@ fun main(args: Array<String>) {
     _pp_.join()
     _atnDispatcher_.join()
     _console_.join()
+    _db_.close()
 }

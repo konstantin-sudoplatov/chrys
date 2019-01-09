@@ -1,0 +1,7 @@
+database:
+    connectionString: "jdbc:postgresql://localhost:5432/"
+    dbName: "chris"
+    user: "chris"
+    password: "chris"
+podPoolSize: 20
+

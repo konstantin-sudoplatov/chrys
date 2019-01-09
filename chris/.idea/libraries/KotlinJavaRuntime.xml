@@ -6,6 +6,8 @@
       <root url="jar://$KOTLIN_BUNDLED$/lib/kotlin-test.jar!/" />
       <root url="jar://$KOTLIN_BUNDLED$/lib/kotlin-stdlib-jdk7.jar!/" />
       <root url="jar://$KOTLIN_BUNDLED$/lib/kotlin-stdlib-jdk8.jar!/" />
+      <root url="jar://$PROJECT_DIR$/extlib/snakeyaml-1.23.jar!/" />
+      <root url="jar://$PROJECT_DIR$/extlib/postgresql-42.2.5.jar!/" />
     </CLASSES>
     <JAVADOC />
     <LIBRARY_FILE />

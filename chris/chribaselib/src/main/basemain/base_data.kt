@@ -20,6 +20,8 @@ const val MIN_DYNAMIC_CID: ULong = 2_000_000u
 @ExperimentalUnsignedTypes
 const val MAX_DYNAMIC_CID: ULong = 4_294_967_295u    // UInt.MAX_VALUE (can't be casted statically)
 
+const val CONFIG_FILE = "chris_config.yaml"
+
 /** Enable/disable manual console input. */
 const val EMULATE_CONSOLE = true
 

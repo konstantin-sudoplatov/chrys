@@ -160,3 +160,8 @@ open class CrankModule() {
 interface CrankGroup {
     fun crank()
 }
+
+class Conf() {
+    var database = HashMap<String, Any>()
+    var podPoolSize: Int = 0
+}

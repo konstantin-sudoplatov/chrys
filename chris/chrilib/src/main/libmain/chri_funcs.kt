@@ -1,6 +1,8 @@
 package libmain
 
 import basemain.Cid
+import org.yaml.snakeyaml.Yaml
+import org.yaml.snakeyaml.constructor.Constructor
 
 /**
  *          Give cid a name if it exists in the name map.
@@ -47,4 +49,20 @@ fun arrayOfCidsNamed(arrName: String, arr: IntArray?, lim: Int = 5): String {
     s += "\n]"
 
     return s
+}
+
+/**
+ *      Parse yaml config into the Conf object.
+ *  Define inputStream as a file, if you don't want to make the config file part of the source code. Some
+ *  extra logic will be needed to specify the config path in more civilized manner than this. The declaration would look like:
+ *
+ *  val inputStream = FileReader(File("src/main/chris_config.yaml"))
+ *
+ *  Define inputStream through class loader if it is acceptable to have the config file a part of source code.
+ *
+ *  val inputStream = object {}::class.java.classLoader.getResourceAsStream("chris_config.yaml")
+ */
+fun parseConfig(fileName: String): Conf {
+    val inputStream = object {}::class.java.classLoader.getResourceAsStream(fileName)
+    return Yaml(Constructor(Conf::class.java)).load<Conf>(inputStream)
 }

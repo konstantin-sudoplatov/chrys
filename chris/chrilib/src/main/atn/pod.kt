@@ -276,7 +276,7 @@ class PodComparator: Comparator<Pod>
  *  @param size number of pods in the pool
  */
 class Podpool(
-    val size: Int = POD_POOL_SIZE,
+    val size: Int = _conf_.podPoolSize,
     var dlv: Int = -1,          // Debugging level. There is also branch debug level and GDEBUG_LV.
     var dPodFilter: Int = -1    // Filter debugging messages for a pod. The field contains a pid. -1: no filtering.
 ): CuteThread(0, 0, "pod_pool")
@@ -312,7 +312,7 @@ class Podpool(
                 {   //yes: do spin-blocking - sleep a short wile then redispatch this message
                     assert(borrowedPods == pods.size)
                     if (!podpoolOverflowReported) {
-                        logit("no free pods to create a branch")    // log the overflow without flooding
+                        logit("Warning: No free pods to create a branch. Waiting...")    // log the overflow without flooding
                         podpoolOverflowReported = true
                     }
                     Thread.sleep(1)
@@ -324,7 +324,10 @@ class Podpool(
                 {   //no: take out a pod from the candidate's set and request the pod to create new branch/attention circle
                     val pod = hostCandidates.pollFirst()
                     borrowedPods++
-                    podpoolOverflowReported = false
+                    if(podpoolOverflowReported) {
+                        logit("Creating...")
+                        podpoolOverflowReported = false
+                    }
                     pod.putInQueue(msg)     // forward message to pod
 
                     return true

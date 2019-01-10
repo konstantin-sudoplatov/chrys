@@ -162,6 +162,14 @@ interface CrankGroup {
 }
 
 class Conf() {
-    var database = HashMap<String, Any>()
+
+    /** Map of database paramerers: <param name>: <value> */
+    var database = HashMap<String, String>()
+
+    /** Number pods in podpool. */
     var podPoolSize: Int = 0
+        set(value) {
+            require(value >= 1) {"Too few pods in pod pool. Demanded podpool size = $value"}
+            field = value
+        }
 }

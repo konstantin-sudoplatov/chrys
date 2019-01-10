@@ -5,21 +5,18 @@ import atn.Podpool
 import basemain.CONFIG_FILE
 import basemain.Cid
 import basemain.GDEBUG_LV
-import db.connectToDb
-import java.sql.Connection
-
-/** Number of pods in the pool */
-const val POD_POOL_SIZE = 10
+import db.DataBase
 
 /** Configuration parameters from the yaml config. */
 var _conf_: Conf = parseConfig(CONFIG_FILE)   // Conf() here is just placeholder, to avoid having Conf? instead of Conf type. It'll be replaced with parsing the config file.
 
 /** The database connection. */
-val _db_: Connection = connectToDb(
-        _conf_.database["connectionString"] as String,
-        _conf_.database["dbName"] as String,
-        _conf_.database["user"] as String,
-        _conf_.database["password"] as String
+val _db_ = DataBase(
+        _conf_.database["connectionString"]!!,
+        _conf_.database["dbName"]!!,
+        _conf_.database["schema"]!!,
+        _conf_.database["user"]!!,
+        _conf_.database["password"]!!
 )
 
 /** Shared attention dispatcher object */

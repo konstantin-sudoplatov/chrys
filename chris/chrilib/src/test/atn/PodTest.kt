@@ -1,6 +1,6 @@
 package atn
 
-import libmain.POD_POOL_SIZE
+import libmain._conf_
 import org.junit.Test
 
 class PodpoolTest {
@@ -19,6 +19,6 @@ class PodpoolTest {
     @Test
     fun poolCreationTest() {
         val pool = Podpool()
-        assert(pool.size == POD_POOL_SIZE)
+        assert(pool.size == _conf_.podPoolSize)
     }
 }

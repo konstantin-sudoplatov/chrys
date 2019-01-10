@@ -1,3 +1,5 @@
+
+import cpt.clReg
 import crank.loadAndCrankDynamicConcepts
 import libmain._atnDispatcher_
 import libmain._console_
@@ -5,6 +7,7 @@ import libmain._db_
 import libmain._pp_
 import stat.loadStaticConcepts
 import java.io.FileNotFoundException
+import kotlin.reflect.full.primaryConstructor
 
 /**
  * Initiation of a new session goes this way: this function starts the sequence by calling the
@@ -19,6 +22,8 @@ import java.io.FileNotFoundException
  */
 @Throws(FileNotFoundException::class)
 fun main(args: Array<String>) {
+    val clazz = clReg[1234]
+    val cpt = clazz.primaryConstructor?.call(0)
 
     loadStaticConcepts()
     loadAndCrankDynamicConcepts()

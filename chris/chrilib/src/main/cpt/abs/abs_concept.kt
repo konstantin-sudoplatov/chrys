@@ -6,6 +6,7 @@ import db.SerializedConceptData
 import libmain._cr_
 import libmain._nm_
 import libmain.cidNamed
+import java.nio.ByteBuffer
 
 /**
  *      Base class for all concepts.
@@ -90,9 +91,22 @@ abstract class SpiritDynamicConcept(cid: Cid): SpiritConcept(cid) {
         return _cr_[this] == _cr_[other as SpiritDynamicConcept]    // compare clids
     }
 
-    /** Serialize this object into form suitable for passage to the database. */
-    open fun serialize(): SerializedConceptData {
-        return SerializedConceptData(cid = cid, ver = ver, clid = _cr_[this])
+    /**
+     *      Serialize this object into form suitable for passage to the database.
+     *  @param stableSuccSpace space in the stable buffer requested by successors
+     *  @param tranSuccSpace space in the transient buffer requested by successors
+     */
+    open fun serialize(stableSuccSpace: Int, tranSuccSpace: Int): SerializedConceptData {
+        val stable = if(stableSuccSpace > 0) ByteBuffer.allocate(stableSuccSpace) else null
+        val transient = if(tranSuccSpace > 0) ByteBuffer.allocate(tranSuccSpace) else null
+
+        return SerializedConceptData(
+            cid = cid,
+            ver = ver,
+            clid = _cr_[this],
+            stable = stable,
+            transient = transient
+        )
     }
 
     /**

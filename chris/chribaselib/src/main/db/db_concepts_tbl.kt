@@ -3,6 +3,7 @@ package db
 import basemain.Cid
 import basemain.Clid
 import basemain.Ver
+import java.nio.ByteBuffer
 import java.sql.Connection
 import java.sql.SQLException
 
@@ -13,8 +14,8 @@ data class SerializedConceptData(
     var cid: Cid = 0,
     var ver: Ver = 0,
     var clid: Clid = 0,
-    var stable: ByteArray? = null,
-    var transient: ByteArray? = null
+    var stable: ByteBuffer? = null,
+    var transient: ByteBuffer? = null
 )
 
 /**
@@ -27,7 +28,7 @@ data class SerializedConceptData(
  *      "stable",       // data responsible for logic and behavior
  *      "transient"     // changeable data like usage statistics
  */
-class ConceptsTbl(private val conn: Connection, private val schema: String, private val tableName: String) {
+class ConceptsTbl(conn: Connection, private val schema: String, private val tableName: String) {
 
     fun insertConcept(cid: Cid, ver: Ver, clid: Clid, stable: ByteArray?, transient: ByteArray?) {
         insertConceptStmt_.setInt(1, cid)
@@ -51,15 +52,15 @@ class ConceptsTbl(private val conn: Connection, private val schema: String, priv
         getConceptStmt_.setShort(2, ver)
 
         val rs = getConceptStmt_.executeQuery()
-        if      // isn't there such record?
-                (!rs.next())
-                return rs.use{ null }
+        return if   // isn't there such record?
+                    (!rs.next())
+            rs.use{ null }
         else
-            return rs.use{
+            rs.use{
                 SerializedConceptData(
                     clid = it.getShort("clid"),
-                    stable = it.getBytes("stable"),
-                    transient = it.getBytes("transient")
+                    stable = ByteBuffer.wrap(it.getBytes("stable")),
+                    transient = ByteBuffer.wrap(it.getBytes("transient"))
                 )
             }
     }
@@ -78,11 +79,11 @@ class ConceptsTbl(private val conn: Connection, private val schema: String, priv
         findConceptVersionsStmt_.setInt(1, cid)
 
         val rs = findConceptVersionsStmt_.executeQuery()
-        if      // isn't there a record?
-                (!rs.next())
-                return rs.use{ null }
+        return if  // isn't there a record?
+                   (!rs.next())
+            rs.use{ null }
         else
-            return rs.use { it.getArray("ver") }.array as ShortArray    // not sure, needs debugging
+            rs.use { it.getArray("ver") }.array as ShortArray    // not sure, needs debugging
     }
 
     /** Prepared statement: insert new concept into table. */

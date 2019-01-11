@@ -38,7 +38,7 @@ class SpiritDynamicConceptTest {
             stem = SpWeightNeuron(2_000_013)
         )
 
-        val sCD = scp.serialize()
+        val sCD = scp.serialize(0, 0)
         val dcp = _cr_.construct(sCD.clid)     // object to deserialize
         dcp.deserialize(sCD)
 

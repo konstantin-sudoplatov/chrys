@@ -8,9 +8,7 @@ package cpt
 
 import atn.Branch
 import basemain.Cid
-import cpt.abs.Action
-import cpt.abs.SpiritAction
-import cpt.abs.SpiritDynamicConcept
+import cpt.abs.*
 import libmain._sm_
 import libmain.cidNamed
 import libmain.namedCid

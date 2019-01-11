@@ -1,7 +1,7 @@
 package libmain
 
 import basemain.*
-import cpt.SpStaticConcept
+import cpt.abs.SpStaticConcept
 import cpt.abs.SpiritConcept
 import cpt.abs.SpiritDynamicConcept
 import kotlin.random.Random
@@ -87,7 +87,7 @@ class SpiritMap {
 
         var cid: Cid
         do {
-            cid = Random.nextULong(MIN_DYNAMIC_CID.toULong(), (MAX_DYNAMIC_CID).toULong() + 1u).toInt()
+            cid = Random.nextULong(MIN_DYNAMIC_CID.toULong(), (MAX_DYNAMIC_CID).toULong()).toInt()
         } while(cid in this)
 
         return cid
@@ -101,7 +101,7 @@ class SpiritMap {
 
         var cid: Cid
         do {
-            cid = Random.nextULong(MIN_STATIC_CID.toULong(), (MAX_STATIC_CID).toULong() + 1u).toInt()
+            cid = Random.nextULong(MIN_STATIC_CID.toULong(), (MAX_STATIC_CID).toULong()).toInt()
         } while(cid in this)
 
         return cid

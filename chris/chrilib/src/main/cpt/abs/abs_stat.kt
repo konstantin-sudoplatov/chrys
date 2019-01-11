@@ -1,8 +1,7 @@
-package cpt
+package cpt.abs
 
 import atn.Branch
 import basemain.Cid
-import cpt.abs.SpiritConcept
 
 open class SpStaticConcept(cid: Cid): SpiritConcept(cid)
 

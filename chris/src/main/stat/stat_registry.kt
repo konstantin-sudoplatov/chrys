@@ -2,7 +2,7 @@ package stat
 
 import basemain.GDEBUG_LV
 import basemain.logit
-import cpt.SpStaticConcept
+import cpt.abs.SpStaticConcept
 import libmain._nm_
 import libmain._sm_
 
@@ -54,10 +54,9 @@ fun loadStaticConcepts() {
 fun logSomeFreeStaticCids() {
 
     val s = StringBuilder()
-    s.append("\nStatic:  ")
+    s.append("Static:  ")
     for(cid in _sm_.generateListOfStaticCids(12)){
         s.append("%,d ".format(cid).replace(",", "_"))
     }
-
     logit(s.toString())
 }

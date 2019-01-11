@@ -3,6 +3,8 @@ package libmain
 import basemain.Cid
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
+import java.io.File
+import java.io.FileReader
 
 /**
  *          Give cid a name if it exists in the name map.
@@ -62,7 +64,12 @@ fun arrayOfCidsNamed(arrName: String, arr: IntArray?, lim: Int = 5): String {
  *
  *  val inputStream = object {}::class.java.classLoader.getResourceAsStream("chris_config.yaml")
  */
-fun parseConfig(fileName: String): Conf {
+fun parseConfigWithClassLoader(fileName: String): Conf {
     val inputStream = object {}::class.java.classLoader.getResourceAsStream(fileName)
+    return Yaml(Constructor(Conf::class.java)).load<Conf>(inputStream)
+}
+
+fun parseConfigWithFile(filePath: String): Conf {
+    val inputStream = FileReader(File(filePath))
     return Yaml(Constructor(Conf::class.java)).load<Conf>(inputStream)
 }

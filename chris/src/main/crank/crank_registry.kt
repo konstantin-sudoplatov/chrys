@@ -34,6 +34,5 @@ fun logSomeFreeDynamicCids() {
     for(cid in _sm_.generateListOfDynamicCids(7)){
         s.append("%,d ".format(cid).replace(",", "_"))
     }
-
     logit(s.toString())
 }

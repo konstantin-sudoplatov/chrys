@@ -8,9 +8,12 @@ const val GDEBUG_LV = 0
 typealias Cid = Int
 
 /** Concept version type. */
-typealias Cvr = Short
+typealias Ver = Short
 
-// Ranges of cids as unsigned - generated as ulong, then assigned to Cid and Cvr. 0 excluded as special.
+/** Client identifier type */
+typealias Clid = Short
+
+// Ranges of cids and clids as unsigned - generated as ulong, then assigned to Cid and Ver. 0 excluded as special.
 @ExperimentalUnsignedTypes
 const val MIN_STATIC_CID: ULong = 1u
 @ExperimentalUnsignedTypes
@@ -19,6 +22,10 @@ const val MAX_STATIC_CID: ULong = 100_000u
 const val MIN_DYNAMIC_CID: ULong = 2_000_000u
 @ExperimentalUnsignedTypes
 const val MAX_DYNAMIC_CID: ULong = 4_294_967_295u    // UInt.MAX_VALUE (can't be casted statically)
+@ExperimentalUnsignedTypes
+const val MIN_CLID: ULong = 1u
+@ExperimentalUnsignedTypes
+const val MAX_CLID: ULong = 65_535u
 
 const val CONFIG_FILE = "chris_config.yaml"
 

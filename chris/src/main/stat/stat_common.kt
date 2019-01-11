@@ -5,8 +5,7 @@ import atn.Branch
 import basemain.Cid
 import basemain.logit
 import cpt.*
-import cpt.abs.DynamicConcept
-import cpt.abs.Premise
+import cpt.abs.*
 import libmain.ActivateRemotelyIbr
 import libmain.AnactivateRemotelyIbr
 import libmain.TransportSingleConceptIbr

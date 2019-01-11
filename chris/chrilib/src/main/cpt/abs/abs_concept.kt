@@ -2,6 +2,8 @@ package cpt.abs
 
 import atn.Branch
 import basemain.*
+import db.SerializedConceptData
+import libmain._cr_
 import libmain._nm_
 import libmain.cidNamed
 
@@ -17,7 +19,7 @@ abstract class SpiritConcept(cid: Cid) {
     var cid: Cid = cid
 
     /** Version number */
-    var ver: Cvr = 0
+    var ver: Ver = 0
 
     /**
      *      Minimal form of toString()
@@ -82,12 +84,35 @@ abstract class Concept(spiritConcept: SpiritConcept): Cloneable {
 abstract class SpiritDynamicConcept(cid: Cid): SpiritConcept(cid) {
 
     /**
+     *      Deep comparison for equality. cid and ver are not included.
+     */
+    override fun equals(other: Any?): Boolean {
+        return _cr_[this] == _cr_[other as SpiritDynamicConcept]    // compare clids
+    }
+
+    /** Serialize this object into form suitable for passage to the database. */
+    open fun serialize(): SerializedConceptData {
+        return SerializedConceptData(cid = cid, ver = ver, clid = _cr_[this])
+    }
+
+    /**
+     *      Deserialize into this object.
+     *  @param sCD serialized object data
+     */
+    open fun deserialize(sCD: SerializedConceptData) {
+        this.cid = sCD.cid
+        this.ver = sCD.ver
+        assert(sCD.clid in _cr_) {"Clid ${sCD.clid} for this object (${this::class}) is not in the class registry."}
+    }
+
+    /**
         Create "live" wrapper for this object.
     */
     abstract fun liveFactory(): DynamicConcept
 
     init {
         assert(cid == 0 || cid.toUInt() >= MIN_DYNAMIC_CID && cid.toUInt() <= MAX_DYNAMIC_CID)
+        assert(this in _cr_) { "Class ${this::class} isn't in the class registry."}
     }
 }
 

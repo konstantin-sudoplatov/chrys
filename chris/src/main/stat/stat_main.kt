@@ -4,6 +4,8 @@ import atn.Branch
 import basemain.Cid
 import chribase_thread.CuteThread
 import cpt.*
+import cpt.abs.F2Cid
+import cpt.abs.FCid
 import libmain.BranchSendsUserItsBrad
 import libmain.CirclePromptsUserMsg
 import libmain.CircleTellsUserMsg

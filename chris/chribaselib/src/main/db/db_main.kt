@@ -13,41 +13,56 @@ import java.sql.PreparedStatement
  *  @param password
  */
 class DataBase(connectionString: String, dbName: String, schema: String, user: String, password: String) {
-
-    /** Postgres connection object */
-    private var conn: Connection =
-        try {
-            DriverManager.getConnection(connectionString + dbName, user, password)
-        } catch (e: SQLException) {
-            throw IllegalStateException(e.message)
-        }
+    private var conn: Connection = connectDb(connectionString, dbName, schema, user, password)
 
     /** Table of system parameters */
     val params = ParamsTbl(conn, schema, "params")
 
+    /** Table of dynamic concepts */
+    val concepts = ConceptsTbl(conn, schema, "concepts")
+
     fun close() {
         conn.close()
+    }
+
+    /** Postgres connection object */
+    private inline fun connectDb(connectionString: String, dbName: String, schema: String, user: String, password: String):
+            Connection
+    {
+        var con: Connection
+        try {
+            con = DriverManager.getConnection(connectionString + dbName, user, password)
+        } catch (e: SQLException) {
+            throw IllegalStateException(e.message)
+        }
+        return con
     }
 }
 
 /**
  *      System parameters.
+ *  Table: params
+ *  Fields:
+ *      "name",      // parameter name
+ *      "value",    // parameter value
+ *      "description"     // description of the parameter
+ *
  *  @param schema
  *  @param tableName
  */
-class ParamsTbl(val conn: Connection, schema: String, private val tableName: String) {
+class ParamsTbl(private val conn: Connection, private val schema: String, private val tableName: String) {
 
     /**
      *      Get parameter value.
      *  @param parName
      */
     fun getParam(parName: String): String? {
-        prepGetParam.setString(1, parName)
-        val rs = prepGetParam.executeQuery()
+        getParamStmt_.setString(1, parName)
+        val rs = getParamStmt_.executeQuery()
         if(!rs.next())
-                throw java.lang.IllegalStateException("There is no parameter with name $parName in the $tableName table.")
+                rs.use {throw java.lang.IllegalStateException("There is no parameter with name $parName in the $schema.$tableName table.")}
         else
-            return rs.getString("value")
+            return rs.use{ it.getString("value") }
     }
 
     /**
@@ -55,13 +70,13 @@ class ParamsTbl(val conn: Connection, schema: String, private val tableName: Str
      *  @param parName
      */
     fun setParam(parName: String, value: String?) {
-        prepSetParam.setString(1, value)
-        prepSetParam.setString(2, parName)
-        val rs = prepSetParam.executeUpdate()
+        SetParamStmt_.setString(1, value)
+        SetParamStmt_.setString(2, parName)
+        SetParamStmt_.executeUpdate()
     }
 
     /** Prepared SQL for funk getParam() */
-    private var prepGetParam: PreparedStatement =
+    private var getParamStmt_: PreparedStatement =
         try {
             conn.prepareStatement("""select value from "$schema"."$tableName" where name = ?""")
         } catch (e: SQLException) {
@@ -69,7 +84,7 @@ class ParamsTbl(val conn: Connection, schema: String, private val tableName: Str
         }
 
     /** Prepared SQL for funk setParam() */
-    private var prepSetParam: PreparedStatement =
+    private var SetParamStmt_: PreparedStatement =
         try {
             conn.prepareStatement("""update "$schema"."$tableName" set value = ? where name = ?""")
         } catch (e: SQLException) {

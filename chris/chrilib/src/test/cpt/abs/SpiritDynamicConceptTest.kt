@@ -13,7 +13,7 @@ class SpiritDynamicConceptTest {
         val scp = SpAndNeuron(2_000_001)    // object to serialize
         scp.loadPrems(
             SpStringPrem(2_000_002),
-            SpPegPrem(2_000_003)
+            !SpPegPrem(2_000_003)
         ).addEff(
             1f,
             acts(
@@ -38,9 +38,10 @@ class SpiritDynamicConceptTest {
             stem = SpWeightNeuron(2_000_013)
         )
 
-        val sCD = scp.serialize(0, 0)
+        val sCD = scp.serialize()
         val dcp = _cr_.construct(sCD.clid)     // object to deserialize
         dcp.deserialize(sCD)
+        println(dcp)
 
         assert(dcp == scp)
     }

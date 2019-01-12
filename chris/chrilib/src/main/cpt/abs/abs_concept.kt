@@ -7,6 +7,7 @@ import libmain._cr_
 import libmain._nm_
 import libmain.cidNamed
 import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 /**
  *      Base class for all concepts.
@@ -88,17 +89,32 @@ abstract class SpiritDynamicConcept(cid: Cid): SpiritConcept(cid) {
      *      Deep comparison for equality. cid and ver are not included.
      */
     override fun equals(other: Any?): Boolean {
-        return _cr_[this] == _cr_[other as SpiritDynamicConcept]    // compare clids
+        if(other == null)
+            return false
+        else
+            return _cr_[this] == _cr_[other as SpiritDynamicConcept]    // compare clids
     }
 
     /**
      *      Serialize this object into form suitable for passage to the database.
+     *  Note: parameters are requiered only in calls from successors. A call from outside goes without parameters, using
+     *  defaults, like concept.serialize().
      *  @param stableSuccSpace space in the stable buffer requested by successors
      *  @param tranSuccSpace space in the transient buffer requested by successors
      */
-    open fun serialize(stableSuccSpace: Int, tranSuccSpace: Int): SerializedConceptData {
-        val stable = if(stableSuccSpace > 0) ByteBuffer.allocate(stableSuccSpace) else null
-        val transient = if(tranSuccSpace > 0) ByteBuffer.allocate(tranSuccSpace) else null
+    open fun serialize(stableSuccSpace: Int = 0, tranSuccSpace: Int = 0): SerializedConceptData {
+        var stable: ByteBuffer? =  null
+        if(stableSuccSpace > 0) {
+            stable = ByteBuffer.allocate(stableSuccSpace)
+            stable.order(ByteOrder.nativeOrder())
+            stable.position(0)
+        }
+        var transient: ByteBuffer? =  null
+        if(tranSuccSpace > 0) {
+            transient = ByteBuffer.allocate(tranSuccSpace)
+            transient.order(ByteOrder.nativeOrder())
+            transient.position(0)
+        }
 
         return SerializedConceptData(
             cid = cid,
@@ -117,6 +133,8 @@ abstract class SpiritDynamicConcept(cid: Cid): SpiritConcept(cid) {
         this.cid = sCD.cid
         this.ver = sCD.ver
         assert(sCD.clid in _cr_) {"Clid ${sCD.clid} for this object (${this::class}) is not in the class registry."}
+        sCD.stable?.position(0)
+        sCD.transient?.position(0)
     }
 
     /**

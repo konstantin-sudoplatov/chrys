@@ -6,6 +6,7 @@ import chribase_thread.CuteThread
 import cpt.abs.Premise
 import cpt.abs.SpiritDynamicConcept
 import cpt.abs.SpiritPremise
+import db.SerializedConceptData
 import libmain.cidNamed
 import java.util.*
 
@@ -68,6 +69,68 @@ class SpBreed(cid: Cid): SpBradPrem(cid) {
         s += "\n    seedCid = ${cidNamed(seedCid)}"
 
         return s
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if(super.equals(other) == false)
+            return false
+        else {
+            val o = other as SpBreed
+            if(seedCid != o.seedCid) return false
+
+            val insSize = ins?.size?:0
+            if(insSize != o.ins?.size?:0) return false
+            for(i in 0 until insSize)
+                if(ins!![i] != o.ins!![i]) return false
+
+            val outsSize = outs?.size?:0
+            if(outsSize != o.outs?.size?:0) return false
+            for(i in 0 until outsSize)
+                if(outs!![i] != o.outs!![i]) return false
+
+            return true
+        }
+    }
+
+    override fun serialize(stableSuccSpace: Int, tranSuccSpace: Int): SerializedConceptData {
+        val insSize = ins?.size?:0
+        val outsSize = outs?.size?:0
+        val sCD = super.serialize(
+            stableSuccSpace + Cid.SIZE_BYTES + Int.SIZE_BYTES + Int.SIZE_BYTES*insSize  // seedCid + ints size + ints +
+                    + Int.SIZE_BYTES + Int.SIZE_BYTES*outsSize,                                       // outs size + outs
+            tranSuccSpace + 0
+        )
+
+        val stable = sCD.stable!!
+        stable.putInt(seedCid)
+        stable.putInt(insSize)
+        for(cid in ins!!)
+            stable.putInt(cid)
+        stable.putInt(outsSize)
+        for(cid in outs!!)
+            stable.putInt(cid)
+
+        return sCD
+    }
+
+    override fun deserialize(sCD: SerializedConceptData) {
+        super.deserialize(sCD)
+
+        val stable = sCD.stable!!
+
+        seedCid = stable.getInt()
+
+        val insSize = stable.getInt()
+        if(insSize == 0)
+            ins = null
+        else
+            ins = IntArray(insSize) { stable.getInt() }
+
+        val outsSize = stable.getInt()
+        if(outsSize == 0)
+            outs = null
+        else
+            outs = IntArray(outsSize) { stable.getInt() }
     }
 
     override fun liveFactory() = Breed(this)

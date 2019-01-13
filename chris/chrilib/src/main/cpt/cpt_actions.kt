@@ -9,6 +9,7 @@ package cpt
 import atn.Branch
 import basemain.Cid
 import cpt.abs.*
+import db.SerializedConceptData
 import libmain._sm_
 import libmain.cidNamed
 import libmain.namedCid
@@ -64,6 +65,36 @@ class SpA_Cid(cid: Cid): SpiritAction(cid) {
         return A_Cid(this)
     }
 
+    override fun equals(other: Any?): Boolean {
+        if(super.equals(other) == false)
+            return false
+        else {
+            val o = other as SpA_Cid
+            return _statCid == o._statCid && p1Cid_ == o.p1Cid_
+        }
+    }
+
+    override fun serialize(stableSuccSpace: Int, tranSuccSpace: Int): SerializedConceptData {
+        val sCD = super.serialize(
+            stableSuccSpace + Cid.SIZE_BYTES + Cid.SIZE_BYTES,
+            tranSuccSpace + 0
+        )
+
+        val stable = sCD.stable!!
+        stable.putInt(_statCid)
+        stable.putInt(p1Cid_)
+
+        return sCD
+    }
+
+    override fun deserialize(sCD: SerializedConceptData) {
+        super.deserialize(sCD)
+
+        val stable = sCD.stable!!
+        _statCid = stable.getInt()
+        p1Cid_ = stable.getInt()
+    }
+
     /**
      *      Run the static concept functor in the context of the given branch.
      *  @param br The branch object to run the functor in
@@ -109,6 +140,38 @@ class SpA_2Cid(cid: Cid): SpiritAction(cid) {
 
     override fun liveFactory(): A_2Cid {
         return A_2Cid(this)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if(super.equals(other) == false)
+            return false
+        else {
+            val o = other as SpA_2Cid
+            return _statCid == o._statCid && p1Cid_ == o.p1Cid_ && p2Cid_ == o.p2Cid_
+        }
+    }
+
+    override fun serialize(stableSuccSpace: Int, tranSuccSpace: Int): SerializedConceptData {
+        val sCD = super.serialize(
+            stableSuccSpace + 3*Cid.SIZE_BYTES,
+            tranSuccSpace + 0
+        )
+
+        val stable = sCD.stable!!
+        stable.putInt(_statCid)
+        stable.putInt(p1Cid_)
+        stable.putInt(p2Cid_)
+
+        return sCD
+    }
+
+    override fun deserialize(sCD: SerializedConceptData) {
+        super.deserialize(sCD)
+
+        val stable = sCD.stable!!
+        _statCid = stable.getInt()
+        p1Cid_ = stable.getInt()
+        p2Cid_ = stable.getInt()
     }
 
     /**
@@ -169,6 +232,49 @@ class SpA_LCid(cid: Cid): SpiritAction(cid) {
 
     override fun liveFactory(): A_LCid {
         return A_LCid(this)
+    }
+
+    override fun equals(other: Any?): Boolean {
+        if(super.equals(other) == false)
+            return false
+        else {
+            val o = other as SpA_LCid
+            if(_statCid != o._statCid) return false
+            val pVarSize = pVar_?.size?:0
+            if(pVarSize != o.pVar_?.size?:0) return false
+            if(pVarSize != 0)
+                for((i, cid) in pVar_!!.withIndex())
+                    if(cid != o.pVar_!![i]) return false
+
+            return true
+        }
+    }
+
+    override fun serialize(stableSuccSpace: Int, tranSuccSpace: Int): SerializedConceptData {
+        val pVarSize = pVar_?.size?:0
+        val sCD = super.serialize(
+            stableSuccSpace + 2*Cid.SIZE_BYTES + pVarSize*Cid.SIZE_BYTES,   // _statCid + data size + data
+            tranSuccSpace + 0
+        )
+
+        val stable = sCD.stable!!
+        stable.putInt(_statCid)
+        stable.putInt(pVarSize)
+        for(i in 0 until pVarSize)
+            stable.putInt(pVar_!![i])
+        return sCD
+    }
+
+    override fun deserialize(sCD: SerializedConceptData) {
+        super.deserialize(sCD)
+
+        val stable = sCD.stable!!
+        _statCid = stable.getInt()
+        val pVarSize = stable.getInt()
+        if(pVarSize == 0)
+            pVar_ = null
+        else
+            pVar_ = IntArray(pVarSize) { stable.getInt() }
     }
 
     /**

@@ -4,6 +4,7 @@ import basemain.*
 import cpt.abs.SpStaticConcept
 import cpt.abs.SpiritConcept
 import cpt.abs.SpiritDynamicConcept
+import db.DataBase
 import kotlin.random.Random
 import kotlin.random.nextULong
 import kotlin.reflect.full.createType
@@ -161,6 +162,9 @@ interface CrankGroup {
     fun crank()
 }
 
+/**
+ *      Settings in the yaml config are parsed in here.
+ */
 class Conf() {
 
     /** Map of database paramerers: <param name>: <value> */
@@ -172,4 +176,27 @@ class Conf() {
             require(value >= 1) {"Too few pods in pod pool. Demanded podpool size = $value"}
             field = value
         }
+}
+
+/**
+ *      All communication with the database goes through this class. On initialization it creates an object of the DataBase
+ *  class which opens the database connection and provides methods for interacting with the tables.
+ */
+class DbManager(conf: Conf) {
+
+    /**
+     *      Close the database connection.
+     */
+    fun close() {
+        db_.close()
+    }
+
+    /** The database connection and methods for working with tables. */
+    val db_ = DataBase(
+            conf.database["connectionString"]!!,
+            conf.database["dbName"]!!,
+            conf.database["schema"]!!,
+            conf.database["user"]!!,
+            conf.database["password"]!!
+    )
 }

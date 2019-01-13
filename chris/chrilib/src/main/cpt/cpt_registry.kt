@@ -1,6 +1,9 @@
 package cpt
 
-import basemain.*
+import basemain.Clid
+import basemain.MAX_CLID
+import basemain.MIN_CLID
+import basemain.logit
 import cpt.abs.SpiritDynamicConcept
 import libmain._cr_
 import kotlin.random.Random

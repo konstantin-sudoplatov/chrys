@@ -166,6 +166,27 @@ abstract class SpiritAction(cid: Cid): SpiritDynamicConcept(cid) {
         return super.toString() + "\n    _statCid = ${cidNamed(_statCid)}"
     }
 
+    override fun equals(other: Any?): Boolean {
+        if(super.equals(other) == false)
+            return false
+        else
+            return _statCid == (other as SpiritAction)._statCid
+    }
+
+    override fun serialize(stableSuccSpace: Int, tranSuccSpace: Int): SerializedConceptData {
+        val sCD = super.serialize(
+            stableSuccSpace + Cid.SIZE_BYTES,
+            tranSuccSpace + 0
+        )
+        sCD.stable!!.putInt(_statCid)
+        return sCD
+    }
+
+    override fun deserialize(sCD: SerializedConceptData) {
+        super.deserialize(sCD)
+        _statCid = sCD.stable!!.getInt()
+    }
+
     /**
      *      Run the static concept functor in the context of the given branch.
      *  @param br The branch object to run the functor in

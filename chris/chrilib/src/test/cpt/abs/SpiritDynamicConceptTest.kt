@@ -41,7 +41,6 @@ class SpiritDynamicConceptTest {
         val sCD = scp.serialize()
         val dcp = _cr_.construct(sCD.clid)     // object to deserialize
         dcp.deserialize(sCD)
-        println(dcp)
 
         assert(dcp == scp)
     }

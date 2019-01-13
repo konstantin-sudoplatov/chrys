@@ -2,10 +2,8 @@ package libmain
 
 import atn.AttentionDispatcher
 import atn.Podpool
-import basemain.CONFIG_FILE
 import basemain.Cid
 import basemain.GDEBUG_LV
-import db.DataBase
 import cpt.ClassRegistry
 
 /** Configuration parameters from the yaml config. */
@@ -14,14 +12,8 @@ import cpt.ClassRegistry
 /** Configuration parameters from the yaml config. */
 var _conf_: Conf = parseConfigWithFile("/home/su/iskint/chris/src/main/chris_config.yaml")   // Conf() here is just placeholder, to avoid having Conf? instead of Conf type. It'll be replaced with parsing the config file.
 
-/** The database connection. */
-val _db_ = DataBase(
-        _conf_.database["connectionString"]!!,
-        _conf_.database["dbName"]!!,
-        _conf_.database["schema"]!!,
-        _conf_.database["user"]!!,
-        _conf_.database["password"]!!
-)
+/** The database manager. */
+val _dbm_ = DbManager(_conf_)
 
 /** Class registry. */
 val _cr_ = ClassRegistry()

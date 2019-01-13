@@ -2,7 +2,7 @@
 import crank.loadAndCrankDynamicConcepts
 import libmain._atnDispatcher_
 import libmain._console_
-import libmain._db_
+import libmain._dbm_
 import libmain._pp_
 import stat.loadStaticConcepts
 import java.io.FileNotFoundException
@@ -33,5 +33,5 @@ fun main(args: Array<String>) {
     _pp_.join()
     _atnDispatcher_.join()
     _console_.join()
-    _db_.close()
+    _dbm_.close()
 }

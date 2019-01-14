@@ -48,7 +48,7 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
         else {
             val o = other as SpiritNeuron
             if(isCutoff != o.isCutoff) return false
-            if(cutoff != o.cutoff) return false
+            if(!cutoff.isNaN() && cutoff != o.cutoff) return false
             val efSize = _effects?.size?:0
             if(efSize != o._effects?.size?:0) return false
             if(efSize == 0) return true
@@ -58,15 +58,19 @@ abstract class SpiritNeuron(cid: Cid): SpiritDynamicConcept(cid) {
 
                 val actSize = eff.actCids?.size?:0
                 if(actSize != oe[i].actCids?.size?:0) return false
-                val oa = oe[i].actCids!!
-                for((i, actCid) in eff.actCids!!.withIndex())
-                    if(actCid != oa[i]) return false
+                if(actSize != 0) {
+                    val oa = oe[i].actCids!!
+                    for ((j, actCid) in eff.actCids!!.withIndex())
+                        if (actCid != oa[j]) return false
+                }
 
                 val branSize = eff.branCids?.size?:0
                 if(branSize != oe[i].branCids?.size?:0) return false
-                val ob = oe[i].branCids!!
-                for((i, branCid) in eff.branCids!!.withIndex())
-                    if(branCid != ob[i]) return false
+                if(branSize != 0) {
+                    val ob = oe[i].branCids!!
+                    for ((j, branCid) in eff.branCids!!.withIndex())
+                        if (branCid != ob[j]) return false
+                }
 
                 if(eff.stemCid != oe[i].stemCid) return false
             }

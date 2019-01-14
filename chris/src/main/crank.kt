@@ -1,12 +1,15 @@
+
 import cpt.logSomeFreeClids
+import crank.actualizeCrankedConceptsInDb
 import crank.loadAndCrankDynamicConcepts
 import crank.logSomeFreeDynamicCids
-import stat.loadStaticConcepts
 import stat.logSomeFreeStaticCids
 
 fun main(args: Array<String>) {
-    loadStaticConcepts()
+    //loadStaticConcepts()
+
     loadAndCrankDynamicConcepts()
+    actualizeCrankedConceptsInDb()
 
     logSomeFreeClids()
     logSomeFreeStaticCids()

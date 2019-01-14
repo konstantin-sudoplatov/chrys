@@ -95,6 +95,7 @@ class SpBreed(cid: Cid): SpBradPrem(cid) {
     override fun serialize(stableSuccSpace: Int, tranSuccSpace: Int): SerializedConceptData {
         val insSize = ins?.size?:0
         val outsSize = outs?.size?:0
+
         val sCD = super.serialize(
             stableSuccSpace + Cid.SIZE_BYTES + Int.SIZE_BYTES + Int.SIZE_BYTES*insSize  // seedCid + ints size + ints +
                     + Int.SIZE_BYTES + Int.SIZE_BYTES*outsSize,                                       // outs size + outs
@@ -104,11 +105,11 @@ class SpBreed(cid: Cid): SpBradPrem(cid) {
         val stable = sCD.stable!!
         stable.putInt(seedCid)
         stable.putInt(insSize)
-        for(cid in ins!!)
-            stable.putInt(cid)
+        for(i in 0 until insSize)
+            stable.putInt(ins!![i])
         stable.putInt(outsSize)
-        for(cid in outs!!)
-            stable.putInt(cid)
+        for(i in 0 until outsSize)
+            stable.putInt(outs!![i])
 
         return sCD
     }

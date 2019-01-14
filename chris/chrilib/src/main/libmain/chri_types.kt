@@ -16,8 +16,8 @@ import kotlin.reflect.full.isSubtypeOf
  */
 class SpiritMap {
 
-    val size
-        get() = spMap_.size
+    /**  The spirit map */
+    val map = hashMapOf<Cid, SpiritConcept>()
 
     /**
      *      Add a concept to the spirit map. If cid of the concept is not set (0), then it will be generated.
@@ -38,26 +38,46 @@ class SpiritMap {
                 cpt is SpiritDynamicConcept) ||
                 (cpt.cid.toUInt() >= MIN_STATIC_CID && cpt.cid.toUInt() <= MAX_STATIC_CID &&
                 cpt is SpStaticConcept)) {"Cid ${cpt.cid} is out of its range. Concept: $cpt"}
-            assert(cpt.cid !in spMap_) {"Cid ${cpt.cid} is already in the map. Concept: $cpt"}
+            assert(cpt.cid !in map) {"Cid ${cpt.cid} is already in the map. Concept: $cpt"}
         }
 
-        spMap_[cpt.cid] = cpt
+        map[cpt.cid] = cpt
     }
 
     /**
      *      Get concept by cid. If no such concept, the IndexOutOfBoundsException is thrown.
      */
     @Synchronized operator fun get(cid: Cid): SpiritConcept {
-        val cpt = spMap_[cid]
+        var cpt = map[cid]
         if(cpt != null) {
-            assert(cpt.cid == cid) {"Cid $cid is not equal cpt.cid = ${cpt.cid}"}
+            assert(cpt.cid == cid) {"Cid $cid is not equal cpt.cid = ${cpt!!.cid}"}
             return cpt
         }
-        else
-            throw IndexOutOfBoundsException("There is no concept with cid $cid in the spirit map.")
+        else {
+            cpt = _dm_.getConcept(cid)
+            if(cpt != null) {
+                map[cpt.cid] = cpt
+                return cpt
+            }
+            else
+                throw IndexOutOfBoundsException("There is no concept with cid $cid in the spirit map or DB.")
+        }
     }
 
-    @Synchronized operator fun contains(cid: Cid) = cid in spMap_
+    @Synchronized operator fun contains(cid: Cid): Boolean {
+        if(cid in map)
+            return true
+        else {
+            val cpt = _dm_.getConcept(cid)
+            if(cpt != null) {
+                map[cpt.cid] = cpt
+                return true
+            }
+            else
+                return false
+        }
+
+    }
 
     @Synchronized fun generateListOfDynamicCids(size: Int): List<Cid> {
         return listOf<Cid>(*Array<Cid>(size, {generateDynamicCid()}))
@@ -74,9 +94,6 @@ class SpiritMap {
     //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
 
     //---%%%---%%%---%%%---%%%--- private data ---%%%---%%%---%%%---%%%---%%%---%%%
-
-    /**  The spirit map */
-    private val spMap_ = hashMapOf<Cid, SpiritConcept>()
 
     //---%%%---%%%---%%%---%%%--- private funcs ---%%%---%%%---%%%---%%%---%%%---%%%
 
@@ -199,4 +216,39 @@ class DbManager(conf: Conf) {
             conf.database["user"]!!,
             conf.database["password"]!!
     )
+
+    /**
+     *      Get concept with designated cid and ver.
+     *  @param cid concept identifier
+     *  @param ver concept version
+     *  @return spirit dynamic concept on null if not found. The static concepts are not kept in the database.
+     */
+    fun getConcept(cid: Cid, ver: Ver = 0): SpiritDynamicConcept? {
+        val sCD = db_.concepts.getConcept(cid, ver)
+        if(sCD == null) return null
+
+        val cpt = _cr_.construct(sCD.clid)
+        cpt.deserialize(sCD)
+
+        return cpt
+    }
+
+    /**
+     *      Insert a concept into the database.
+     *  @param cpt spirit dynamic concept to insert
+     */
+    fun insertConcept(cpt: SpiritDynamicConcept) {
+        val sCD = cpt.serialize()
+        db_.concepts.insertConcept(sCD.cid, sCD.ver, sCD.clid, sCD.stable?.array(), sCD.transient?.array())
+    }
+
+
+    /**
+     *      Update a concept in the database.
+     *  @param cpt spirit dynamic concept to update
+     */
+    fun updateConcept(cpt: SpiritDynamicConcept) {
+        val sCD = cpt.serialize()
+        db_.concepts.updateConcept(sCD.cid, sCD.ver, sCD.clid, sCD.stable?.array(), sCD.transient?.array())
+    }
 }

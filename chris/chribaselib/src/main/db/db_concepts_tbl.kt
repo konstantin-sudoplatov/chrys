@@ -4,6 +4,7 @@ import basemain.Cid
 import basemain.Clid
 import basemain.Ver
 import java.nio.ByteBuffer
+import java.nio.ByteOrder
 import java.sql.Connection
 import java.sql.SQLException
 
@@ -57,11 +58,21 @@ class ConceptsTbl(conn: Connection, private val schema: String, private val tabl
             rs.use{ null }
         else
             rs.use{
-                SerializedConceptData(
+                val sCD = SerializedConceptData(
+                    cid = cid,
+                    ver = ver,
                     clid = it.getShort("clid"),
-                    stable = ByteBuffer.wrap(it.getBytes("stable")),
-                    transient = ByteBuffer.wrap(it.getBytes("transient"))
+                    stable = null,
+                    transient = null
                 )
+                val stable = it.getBytes("stable")
+                if(stable != null)
+                    sCD.stable = ByteBuffer.wrap(stable).order(ByteOrder.nativeOrder())
+                val transient = it.getBytes("transient")
+                if(transient != null)
+                    sCD.transient = ByteBuffer.wrap(transient).order(ByteOrder.nativeOrder())
+
+                sCD
             }
     }
 

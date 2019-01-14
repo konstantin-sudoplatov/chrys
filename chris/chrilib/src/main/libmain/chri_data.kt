@@ -13,7 +13,7 @@ import cpt.ClassRegistry
 var _conf_: Conf = parseConfigWithFile("/home/su/iskint/chris/src/main/chris_config.yaml")   // Conf() here is just placeholder, to avoid having Conf? instead of Conf type. It'll be replaced with parsing the config file.
 
 /** The database manager. */
-val _dbm_ = DbManager(_conf_)
+val _dm_ = DbManager(_conf_)
 
 /** Class registry. */
 val _cr_ = ClassRegistry()

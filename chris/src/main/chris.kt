@@ -1,10 +1,14 @@
 
+import cpt.logSomeFreeClids
+import crank.actualizeCrankedConceptsInDb
 import crank.loadAndCrankDynamicConcepts
+import crank.logSomeFreeDynamicCids
 import libmain._atnDispatcher_
 import libmain._console_
-import libmain._dbm_
+import libmain._dm_
 import libmain._pp_
 import stat.loadStaticConcepts
+import stat.logSomeFreeStaticCids
 import java.io.FileNotFoundException
 
 /**
@@ -23,6 +27,11 @@ fun main(args: Array<String>) {
 
     loadStaticConcepts()
     loadAndCrankDynamicConcepts()
+    actualizeCrankedConceptsInDb()
+
+    logSomeFreeClids()
+    logSomeFreeStaticCids()
+    logSomeFreeDynamicCids()
 
     _pp_.start()
     _pp_.startPods()
@@ -33,5 +42,5 @@ fun main(args: Array<String>) {
     _pp_.join()
     _atnDispatcher_.join()
     _console_.join()
-    _dbm_.close()
+    _dm_.close()
 }

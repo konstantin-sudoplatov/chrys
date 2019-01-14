@@ -32,6 +32,12 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
             msg = _getBlocking()
         } while(msg !is BranchSendsUserItsBrad)
         circleBrad_ = msg.brad
+
+        if(EMULATE_CONSOLE) {
+            val line = userLinesIterator_.next()
+            println("> $line")
+            circleBrad_!!.pod.putInQueue(UserTellsCircleMsg(circleBrad_!!.brid, line))
+        }
     }
 
     //~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$~~~$$$
@@ -70,7 +76,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
                     print("> ")
                 else {  // Send to the circle next line from the list or request termination
                     val line = userLinesIterator_.next()
-                    print("> $line")
+                    println("> $line")
                     if      // did the emulator request termination?
                             (line == "p")
                     {   //yes: request termination from dispatcher and to itself
@@ -89,6 +95,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
                 {  // Send to the circle next line from the list or request termination
                     val line = userLinesIterator_.next()
                     println("> $line")
+
                     if      // did the emulator request termination?
                             (line == "p")
                     {   //yes: request termination from dispatcher and to itself
@@ -138,7 +145,11 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
                 }
             }.start()
         else {
-            userLinesIterator_ = listOf("hello", "world", "p").listIterator()
+            userLinesIterator_ = listOf(
+                "hello",
+                "world",
+                "p"
+            ).listIterator()
         }
     }
 }

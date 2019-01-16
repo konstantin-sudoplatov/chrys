@@ -21,7 +21,7 @@ abstract class SpiritConcept(cid: Cid) {
     var cid: Cid = cid
 
     /** Version number */
-    var ver: Ver = 0
+    var ver: Ver = CUR_VER_FLAG
 
     /**
      *      Minimal form of toString()

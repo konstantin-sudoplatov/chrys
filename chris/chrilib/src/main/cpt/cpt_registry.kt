@@ -7,7 +7,6 @@ import basemain.logit
 import cpt.abs.SpiritDynamicConcept
 import libmain._cr_
 import kotlin.random.Random
-import kotlin.random.nextULong
 import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
@@ -109,7 +108,7 @@ class ClassRegistry {
 
         var clid: Clid
         do {
-            clid = Random.nextULong(MIN_CLID.toULong(), (MAX_CLID).toULong()).toShort()
+            clid = Random.nextInt(MIN_CLID as Int, MAX_CLID as Int).toShort()
         } while(clid in _cr_)
 
         return clid

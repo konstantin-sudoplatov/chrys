@@ -1,9 +1,9 @@
 package db
 
 import java.sql.Connection
-import java.sql.SQLException
 import java.sql.DriverManager
 import java.sql.PreparedStatement
+import java.sql.SQLException
 
 /**
  *          Connection to the database and a set of tables to work with it.
@@ -68,6 +68,7 @@ class ParamsTbl(private val conn: Connection, private val schema: String, privat
     /**
      *      Set parameter value.
      *  @param parName
+     *  @param value
      */
     fun setParam(parName: String, value: String?) {
         SetParamStmt_.setString(1, value)

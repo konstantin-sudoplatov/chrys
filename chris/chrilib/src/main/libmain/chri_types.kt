@@ -14,17 +14,26 @@ import kotlin.reflect.full.isSubtypeOf
 /**
  *          Synchronized map cid/spiritConcept.
  */
-class SpiritMap {
+class SpiritMap(val dbm: DbManager) {
+
+    /** Current (the latest actual) version. */
+    var curVer: Ver = 0
+
+    /** Minimal actual version. */
+    var minVer: Ver = 0
+
+    /** Minimal stale version. Is to be cleared up to the minVer. */
+    var staleVer: Ver = 0;
 
     /**  The spirit map */
-    val map = hashMapOf<Cid, SpiritConcept>()
+    val map = hashMapOf<Int, SpiritConcept>()
 
     /**
      *      Add a concept to the spirit map. If cid of the concept is not set (0), then it will be generated.
      *  @param cpt concept to add
      */
     @UseExperimental(ExperimentalUnsignedTypes::class)
-    @Synchronized fun add(cpt: SpiritConcept) {
+    @Synchronized fun add(cpt: SpiritConcept, ver: Ver = CUR_VER_FLAG) {
 
         if      // is cid not set up?
                 (cpt.cid == 0)
@@ -38,17 +47,17 @@ class SpiritMap {
                 cpt is SpiritDynamicConcept) ||
                 (cpt.cid.toUInt() >= MIN_STATIC_CID && cpt.cid.toUInt() <= MAX_STATIC_CID &&
                 cpt is SpStaticConcept)) {"Cid ${cpt.cid} is out of its range. Concept: $cpt"}
-            assert(cpt.cid !in map) {"Cid ${cpt.cid} is already in the map. Concept: $cpt"}
+            assert(mapKey(cpt.cid, ver) !in map) {"Cid ${cpt.cid} is already in the map. Concept: $cpt"}
         }
 
-        map[cpt.cid] = cpt
+        map[mapKey(cpt.cid, ver)] = cpt
     }
 
     /**
      *      Get concept by cid. If no such concept, the IndexOutOfBoundsException is thrown.
      */
-    @Synchronized operator fun get(cid: Cid): SpiritConcept {
-        var cpt = map[cid]
+    @Synchronized operator fun get(cid: Cid, ver: Ver = CUR_VER_FLAG): SpiritConcept {
+        var cpt = map[mapKey(cid, ver)]
         if(cpt != null) {
             assert(cpt.cid == cid) {"Cid $cid is not equal cpt.cid = ${cpt!!.cid}"}
             return cpt
@@ -56,7 +65,7 @@ class SpiritMap {
         else {
             cpt = _dm_.getConcept(cid)
             if(cpt != null) {
-                map[cpt.cid] = cpt
+                map[mapKey(cid, ver)] = cpt
                 return cpt
             }
             else
@@ -64,13 +73,13 @@ class SpiritMap {
         }
     }
 
-    @Synchronized operator fun contains(cid: Cid): Boolean {
-        if(cid in map)
+    @Synchronized fun contains(cid: Cid, ver: Ver = CUR_VER_FLAG): Boolean {
+        if(mapKey(cid, ver) in map)
             return true
         else {
             val cpt = _dm_.getConcept(cid)
             if(cpt != null) {
-                map[cpt.cid] = cpt
+                map[mapKey(cid, ver)] = cpt
                 return true
             }
             else
@@ -106,7 +115,7 @@ class SpiritMap {
         var cid: Cid
         do {
             cid = Random.nextULong(MIN_DYNAMIC_CID.toULong(), (MAX_DYNAMIC_CID).toULong()).toInt()
-        } while(cid in this)
+        } while(mapKey(cid, ver) in this)
 
         return cid
     }
@@ -123,6 +132,21 @@ class SpiritMap {
         } while(cid in this)
 
         return cid
+    }
+
+    /**
+     *      Mix cid and version into a key for the spirit map.
+     *  @param cid cid
+     *  @param ver concept version
+     */
+    inline private fun mapKey(cid: Cid, ver: Ver): Int {
+        return cid xor (ver.toInt() shl 16)
+    }
+
+    init {
+        staleVer = requireNotNull(dbm.getParam("_stale_ver_")?.toShort()) {"Parameter _stale_ver_ not found in the DB."}
+        minVer = requireNotNull(dbm.getParam("_min_ver_")?.toShort()) {"Parameter _min_ver_ not found in the DB."}
+        curVer = requireNotNull(dbm.getParam("_cur_ver_")?.toShort()) {"Parameter _cur_ver_ not found in the DB."}
     }
 }
 
@@ -216,6 +240,23 @@ class DbManager(conf: Conf) {
             conf.database["user"]!!,
             conf.database["password"]!!
     )
+
+    /**
+     *      Get parameter value.
+     *  @param parName
+     */
+    fun getParam(parName: String): String? {
+        return db_.params.getParam(parName)
+    }
+
+    /**
+     *      Set parameter value.
+     *  @param parName
+     *  @param value
+     */
+    fun setParam(parName: String, value: String?) {
+        db_.params.setParam(parName, value)
+    }
 
     /**
      *      Get concept with designated cid and ver.

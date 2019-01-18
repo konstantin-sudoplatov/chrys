@@ -4,14 +4,15 @@ import basemain.acts
 import basemain.brans
 import basemain.ins
 import cpt.*
+import crank.word_processing.pulCr
 import libmain.CrankGroup
 import libmain.CrankModule
 import libmain.hCr
 import stat.cmnSt
 import stat.mnSt
 
-/*
- *          Main crank module.
+/**
+ *          Main cranks.
  */
 object mnCr: CrankModule() {
 
@@ -19,6 +20,9 @@ object mnCr: CrankModule() {
  *      Commonly used concepts.
  */
 object cmn: CrankGroup {
+
+    // Request parent finish the current branch.
+    val requestParentFinishThisBranch_act = SpA(313_424_276).load(cmnSt.requestParentFinishBranch)
 
     // Raise the Branch.breakPoint flag
     val setBreakPoint_act = SpA(-1_426_110_123).load(cmnSt.setBreakPoint)
@@ -35,12 +39,14 @@ object cmn: CrankGroup {
 
 }   //  -937_858_466 -1_491_380_944 -936_769_357 -1_978_110_017 -848_757_907 -1_193_562_290 389_616_405 -1_808_768_002 209_458_482 -1_380_871_710
 
-// Attention circle branch
+/**
+ *      Attention circle branch.
+ */
 object circle: CrankGroup {
 
     val seed = SpSeed(2_063_171_572)
 
-    val waitForUlreadUlwriteToStart_andn = SpAndNeuron(1_732_167_551)
+    val waitForUlreadAndUlwriteToStart_andn = SpAndNeuron(1_732_167_551)
 
     // The own breed is formed and active at the start of the branch.
     val copyOwnBradToUserInputRequest_act = SpA_2Cid(-2_059_132_975)
@@ -74,9 +80,12 @@ object circle: CrankGroup {
     val activateRemotelyInputRequest_act = SpA_2Cid(794_381_089)
         .load(cmnSt.activateRemotely, ulread.breed, ulread.userInputRequest_bradprem)
 
-    // For all brans in the project when branch is started it gets an activated breed with its own origBrad. This is
-    // true for the circle branch too. Besides, it gets the userThread_cthreadprem concept with user's thread reference (also
-    // activated), even if it isn't present in the breed.ins.
+    // Wait until result of splitting user line becomes available, then... what then?
+    val parsingResultValve_andn = SpAndNeuron(2_091_624_554)
+
+    // For all brans in the project when branch is started it gets an activated breed with its own Brad. This is
+    // true for the circle branch too. Besides, it gets the userThread_threadprem concept with user's thread reference (also
+    // activated), even though it isn't present in the breed.ins.
     override fun crank() {
 
         // Circle's breed. Ins and outs are null since this is a root branch, meaning is is not started/finished the usual way.
@@ -89,10 +98,12 @@ object circle: CrankGroup {
                 ulread.breed,
                 ulwrite.breed
             ),
-            stem = waitForUlreadUlwriteToStart_andn
+            stem = waitForUlreadAndUlwriteToStart_andn
         )
 
-        waitForUlreadUlwriteToStart_andn.loadPrems(
+        // Wait until the ulread and ulwrite branches are started then send ulread our brad (and it also means requesting
+        // the first user input from it).
+        waitForUlreadAndUlwriteToStart_andn.loadPrems(
             ulread.breed,       // ulread and
             ulwrite.breed       // ulwrite started?
         ).addEff(
@@ -102,9 +113,21 @@ object circle: CrankGroup {
             ),
             stem = userInputValve_andn
         )
+        // preparations finished, request for the first user input sent
 
+        // Wait for user input to come, then start parsing branch for that line
         userInputValve_andn.loadPrems(
             ulread.userInputLine_strprem    // user text line has come?
+        ).addEff(
+            Float.POSITIVE_INFINITY,
+            acts(
+            ),
+            brans(pulCr.splitUl.breed),
+            stem = parsingResultValve_andn
+        )
+
+        parsingResultValve_andn.loadPrems(
+            pulCr.splitUl.userChain_strqprem
         ).addEff(
             Float.POSITIVE_INFINITY,
             acts(
@@ -113,12 +136,15 @@ object circle: CrankGroup {
                 sendUlwriteOutputRequest_act,
                 activateRemotelyPromptRequest_act,
                 activateRemotelyInputRequest_act
-            )
+            ),
+            stem = userInputValve_andn
         )
     }
-}   //     2_091_624_554 313_424_276 -1_874_867_101 345_223_608 445_101_230
+}   //       -1_874_867_101 345_223_608 445_101_230
 
-// Reading user input lines.
+/**
+ *      Reading user input lines.
+ */
 object ulread: CrankGroup {
 
     val breed = SpBreed(-1_636_443_905)
@@ -126,7 +152,7 @@ object ulread: CrankGroup {
 
     // Send user own address, so enabling him to speak to our branch
     val ulreadSendsUserOwnBrad_act = SpA_Cid(432_419_405)
-        .load(mnSt.branchSendsUserItsBrad, hCr.hardCid.userThread_cthreadprem)
+        .load(mnSt.branchSendsUserItsBrad, hCr.hardCid.userThread_threadprem)
 
     // Line of text from user.
     val userInputLine_strprem = SpStringPrem(1_674_041_321)
@@ -153,7 +179,7 @@ object ulread: CrankGroup {
         breed.load(
             seed,
             ins(
-                hCr.hardCid.userThread_cthreadprem      // let ulread know user's thread to be able to communicate with it
+                hCr.hardCid.userThread_threadprem      // let ulread know user's thread to be able to communicate with it
             )
         )
 
@@ -164,9 +190,11 @@ object ulread: CrankGroup {
             stem = userInputValve_andn
         )
 
+        // Wait until lines from user are available and a request for user input comes. Then take one line from the user
+        // input buffer and send it to the requester.
         userInputValve_andn.loadPrems(
             userInputRequest_bradprem,              // either injected or activated remotely by requester
-            hCr.hardCid.userInputBuffer_strqprem  // filled and activated by the UserTellsCircleMsg user message
+            hCr.hardCid.userInputBuffer_strqprem    // filled and activated by the UserTellsCircleMsg user message
         ).addEff(
             Float.POSITIVE_INFINITY,
             acts(
@@ -178,7 +206,9 @@ object ulread: CrankGroup {
     }
 }   //  -1_988_590_990 -1_412_401_364 2_074_339_503 -888_399_507
 
-// Writing to user's console.
+/**
+ *      Writing to user's console.
+ */
 object ulwrite: CrankGroup {
 
     val breed = SpBreed(207_026_886)
@@ -196,7 +226,7 @@ object ulwrite: CrankGroup {
 
     // Send text to user
     val sendTextToUser_act = SpA_2Cid(2_005_795_367)
-        .load(mnSt.circleTellsUser, hCr.hardCid.userThread_cthreadprem, outputLine_strprem)
+        .load(mnSt.circleTellsUser, hCr.hardCid.userThread_threadprem, outputLine_strprem)
 
     // After text is sent to user, the request needs to be anactivated
     val anactivateRequestForOutputLine_act = SpA_Cid(913_222_153)
@@ -204,7 +234,7 @@ object ulwrite: CrankGroup {
 
     // Send user the prompt message
     val sendUserPrompt_act = SpA_Cid(-367_082_727)
-        .load(mnSt.circlePromtsUser, hCr.hardCid.userThread_cthreadprem)
+        .load(mnSt.circlePromtsUser, hCr.hardCid.userThread_threadprem)
 
     // Anactivate prompt request after it is processed
     val anactivatePromptRequest_act = SpA_Cid(-1_419_169_404)
@@ -215,7 +245,7 @@ object ulwrite: CrankGroup {
         breed.load(
             seed,
             ins(
-                hCr.hardCid.userThread_cthreadprem      // let ulread know user's thread to be able to communicate with it
+                hCr.hardCid.userThread_threadprem      // let ulread know user's thread to be able to communicate with it
             )
         )
 
@@ -237,6 +267,6 @@ object ulwrite: CrankGroup {
             )
         )
     }
-}   //  -1_596_525_606 -1_027_420_163 -10_664_875 107_759_426 -1_852_026_187 -1_255_850_367 -48_028_321
+}   //  -1_027_420_163 -10_664_875 107_759_426 -1_852_026_187 -1_255_850_367 -48_028_321
 
 }

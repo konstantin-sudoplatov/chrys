@@ -31,6 +31,14 @@ data class SerializedConceptData(
  */
 class ConceptsTbl(conn: Connection, private val schema: String, private val tableName: String) {
 
+    /**
+     *      Insert record to the concepts table.
+     *  @param cid cid
+     *  @param ver version
+     *  @param clid class identifier
+     *  @param stable serialized stable data of the concept
+     *  @param transient serialized transient data of the concept
+     */
     fun insertConcept(cid: Cid, ver: Ver, clid: Clid, stable: ByteArray?, transient: ByteArray?) {
         insertConceptStmt_.setInt(1, cid)
         insertConceptStmt_.setShort(2, ver)
@@ -41,6 +49,11 @@ class ConceptsTbl(conn: Connection, private val schema: String, private val tabl
         insertConceptStmt_.executeUpdate()
     }
 
+    /**
+     *      Delete record from the concepts table.
+     *  @param cid cid
+     *  @param ver version
+     */
     fun deleteConcept(cid: Cid, ver: Ver) {
         deleteConceptStmt_.setInt(1, cid)
         deleteConceptStmt_.setShort(2, ver)
@@ -48,6 +61,12 @@ class ConceptsTbl(conn: Connection, private val schema: String, private val tabl
         deleteConceptStmt_.executeUpdate()
     }
 
+    /**
+     *      Get record from the concepts table.
+     *  @param cid cid
+     *  @param ver version
+     *  @return SerializedConceptData object, that contains all the fields of the record or null if not found
+     */
     fun getConcept(cid: Cid, ver: Ver): SerializedConceptData? {
         getConceptStmt_.setInt(1, cid)
         getConceptStmt_.setShort(2, ver)
@@ -76,6 +95,14 @@ class ConceptsTbl(conn: Connection, private val schema: String, private val tabl
             }
     }
 
+    /**
+     *      Update record in the concepts table.
+     *  @param cid cid
+     *  @param ver version
+     *  @param clid class identifier
+     *  @param stable serialized stable data of the concept
+     *  @param transient serialized transient data of the concept
+     */
     fun updateConcept(cid: Cid, ver: Ver, clid: Clid, stable: ByteArray?, transient: ByteArray?) {
         updateConceptStmt_.setShort(1, clid)
         updateConceptStmt_.setBytes(2, stable)
@@ -86,16 +113,29 @@ class ConceptsTbl(conn: Connection, private val schema: String, private val tabl
         updateConceptStmt_.executeUpdate()
     }
 
-    fun findConceptVersions(cid: Cid): ShortArray? {
-        findConceptVersionsStmt_.setInt(1, cid)
+    /**
+     *      Get all versions of given concept.
+     *  @param cid cid
+     *  @return array of versions or null if no record with this cid is found
+     */
+    fun getConceptVersions(cid: Cid): ShortArray? {
+        getConceptVersionsStmt_.setInt(1, cid)
 
-        val rs = findConceptVersionsStmt_.executeQuery()
+        val rs = getConceptVersionsStmt_.executeQuery()
         return if  // isn't there a record?
                    (!rs.next())
             rs.use{ null }
         else
             rs.use { it.getArray("ver") }.array as ShortArray    // not sure, needs debugging
     }
+
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+    //
+    //                               Private
+    //
+    //###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%###%%%
+
+    //---%%%---%%%---%%%---%%%--- private data ---%%%---%%%---%%%---%%%---%%%---%%%
 
     /** Prepared statement: insert new concept into table. */
     private val insertConceptStmt_ =
@@ -130,7 +170,7 @@ class ConceptsTbl(conn: Connection, private val schema: String, private val tabl
         }
 
     /** Prepared statement: find all versions of a concept with given cid. */
-    private val findConceptVersionsStmt_ =
+    private val getConceptVersionsStmt_ =
         try {
             conn.prepareStatement("""select ver from "$schema"."$tableName" where cid = ? order by ver""")
         } catch (e: SQLException) {

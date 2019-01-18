@@ -135,7 +135,7 @@ class Pod(
             }
 
             // Create new branch
-            is BranchRequestsPodpoolCreateChildMsg -> {
+            is ParentRequestsPodpoolCreateChildMsg -> {
                 dlog_("msg = ${msg.toStr()}")
                 val brid = generateSockid()
                 val destBrad = Brad(this, brid)
@@ -300,7 +300,7 @@ class Podpool(
                 return true
             }
 
-            is BranchRequestsPodpoolCreateChildMsg,
+            is ParentRequestsPodpoolCreateChildMsg,
             is UserRequestsDispatcherCreateAttentionCircleMsg -> {
                 dlog_("msg = ${msg.toStr()}")
 

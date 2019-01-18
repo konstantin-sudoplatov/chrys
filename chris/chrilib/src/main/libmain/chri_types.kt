@@ -50,42 +50,79 @@ class SpiritMap(val dbm: DbManager) {
             assert(mapKey(cpt.cid, ver) !in map) {"Cid ${cpt.cid} is already in the map. Concept: $cpt"}
         }
 
+        // Must be new
+        require(cpt.cid !in this) {"Cid ${cidNamed(cpt.cid)} must not be present in the map nor in DB, but it is."}
+
+        // Put new concept in the map and DB
         map[mapKey(cpt.cid, ver)] = cpt
+        if(cpt is SpiritDynamicConcept)
+            dbm.insertConcept(cpt)
     }
 
     /**
      *      Get concept by cid. If no such concept, the IndexOutOfBoundsException is thrown.
+     *  @param cid
+     *  @param ver version to check
+     *  @return the concept or null if not found
      */
-    @Synchronized operator fun get(cid: Cid, ver: Ver = CUR_VER_FLAG): SpiritConcept {
+    @Synchronized operator fun get(cid: Cid, ver: Ver = CUR_VER_FLAG): SpiritConcept? {
         var cpt = map[mapKey(cid, ver)]
+
+        // The most likely case is when the ver parameter equal the CUR_VER_FLAG
         if(cpt != null) {
-            assert(cpt.cid == cid) {"Cid $cid is not equal cpt.cid = ${cpt!!.cid}"}
+            assert(cpt.cid == cid && cpt.ver == ver) {"Cid $cid($ver) is not equal cpt.cid = ${cpt!!.cid}(${cpt!!.ver})"}
             return cpt
         }
-        else {
-            cpt = _dm_.getConcept(cid)
-            if(cpt != null) {
-                map[mapKey(cid, ver)] = cpt
-                return cpt
+        else
+            if(ver == CUR_VER_FLAG) {
+                // May be the ver is not CUR_VER_FLAG but the curVer instead.
+                cpt = map[mapKey(cid, curVer)]
+                if (cpt != null) {
+                    assert(cpt.cid == cid && cpt.ver == ver) { "Cid $cid($ver) is not equal cpt.cid = ${cpt!!.cid}(${cpt!!.ver})" }
+                    return cpt
+                }
             }
-            else
-                throw IndexOutOfBoundsException("There is no concept with cid $cid in the spirit map or DB.")
+
+        // May be it is in the db under the CUR_VER_FLAG version
+        cpt = _dm_.getConcept(cid, ver)
+        if(cpt != null) {
+            map[mapKey(cid, ver)] = cpt
+            return cpt
         }
+        else
+            if(ver == CUR_VER_FLAG) {
+                // May be it is in the db under the curVer version
+                cpt = _dm_.getConcept(cid, curVer)
+                if (cpt != null) {
+                    map[mapKey(cid, curVer)] = cpt
+                    return cpt
+                }
+            }
+
+        // Concept not found
+        return null
     }
 
-    @Synchronized fun contains(cid: Cid, ver: Ver = CUR_VER_FLAG): Boolean {
-        if(mapKey(cid, ver) in map)
+    /**
+     *      Check if the map or DB contains this cid. Concept is in the map or DB if it has either the CUR_VER_FLAG or
+     *  curVer version.
+     *  @param cid
+     *  @return true/false
+     */
+    @Synchronized operator fun contains(cid: Cid): Boolean {
+        if(map[mapKey(cid, CUR_VER_FLAG)] != null)
             return true
-        else {
-            val cpt = _dm_.getConcept(cid)
-            if(cpt != null) {
-                map[mapKey(cid, ver)] = cpt
+        else
+            if(map[mapKey(cid, curVer)] != null)
                 return true
-            }
-            else
-                return false
-        }
 
+        if(dbm.getConcept(cid, CUR_VER_FLAG) != null)
+            return true
+        else
+            if(dbm.getConcept(cid, curVer) != null)
+                return true
+
+        return false
     }
 
     @Synchronized fun generateListOfDynamicCids(size: Int): List<Cid> {
@@ -115,7 +152,7 @@ class SpiritMap(val dbm: DbManager) {
         var cid: Cid
         do {
             cid = Random.nextULong(MIN_DYNAMIC_CID.toULong(), (MAX_DYNAMIC_CID).toULong()).toInt()
-        } while(mapKey(cid, ver) in this)
+        } while(cid in this)
 
         return cid
     }
@@ -139,7 +176,7 @@ class SpiritMap(val dbm: DbManager) {
      *  @param cid cid
      *  @param ver concept version
      */
-    inline private fun mapKey(cid: Cid, ver: Ver): Int {
+    private fun mapKey(cid: Cid, ver: Ver): Int {
         return cid xor (ver.toInt() shl 16)
     }
 
@@ -156,9 +193,10 @@ class SpiritMap(val dbm: DbManager) {
 open class CrankModule() {
 
     /**
-     *      Load concepts declared in all crank groups of the module into the spirit map
+     *      Load concepts declared in all crank groups of the module into the spirit map.
+     *  @param sm spirit map to load concepts to
      */
-    fun loadSpiritMap() {
+    fun loadSpiritMap(sm: SpiritMap) {
 
         // Extract list of crank groups
         @Suppress("UNCHECKED_CAST")
@@ -173,10 +211,32 @@ open class CrankModule() {
 
                 // Fill in the spirit map
                 val cpt = prop.getter.call(crankGroup) as SpiritConcept
-                _sm_.add(cpt)
+                require(cpt.cid.toUInt().toULong() >= MIN_DYNAMIC_CID && cpt.cid.toUInt().toULong() <= MAX_DYNAMIC_CID &&
+                        cpt.cid !in sm.map)
+                sm.map[cpt.cid] = cpt
 
                 // May be fill in the name map
                 if(GDEBUG_LV >= 0) _nm_!![cpt.cid] = crankGroup::class.simpleName + "." + prop.name
+            }
+        }
+    }
+
+    /**
+     *      Load name map with the names of concepts.
+     *  @param nm name map to load
+     */
+    fun loadNameMap(nm: HashMap<Cid, String>?) {
+
+        // Extract list of crank groups
+        @Suppress("UNCHECKED_CAST")
+        val crankGroups = this::class.nestedClasses.map { it.objectInstance }
+            .filter { it != null && CrankGroup::class.isInstance(it)} as List<CrankGroup>
+
+        // For every group load its concepts into the spirit map
+        for(crankGroup in crankGroups) {
+            for(prop in crankGroup::class.declaredMemberProperties) {
+                val cpt = prop.getter.call(crankGroup) as SpiritConcept
+                nm!![cpt.cid] = crankGroup::class.simpleName + "." + prop.name
             }
         }
     }
@@ -264,7 +324,7 @@ class DbManager(conf: Conf) {
      *  @param ver concept version
      *  @return spirit dynamic concept on null if not found. The static concepts are not kept in the database.
      */
-    fun getConcept(cid: Cid, ver: Ver = 0): SpiritDynamicConcept? {
+    fun getConcept(cid: Cid, ver: Ver): SpiritDynamicConcept? {
         val sCD = db_.concepts.getConcept(cid, ver)
         if(sCD == null) return null
 
@@ -283,7 +343,6 @@ class DbManager(conf: Conf) {
         db_.concepts.insertConcept(sCD.cid, sCD.ver, sCD.clid, sCD.stable?.array(), sCD.transient?.array())
     }
 
-
     /**
      *      Update a concept in the database.
      *  @param cpt spirit dynamic concept to update
@@ -291,5 +350,14 @@ class DbManager(conf: Conf) {
     fun updateConcept(cpt: SpiritDynamicConcept) {
         val sCD = cpt.serialize()
         db_.concepts.updateConcept(sCD.cid, sCD.ver, sCD.clid, sCD.stable?.array(), sCD.transient?.array())
+    }
+
+    /**
+     *      Get all versions of given concept in the database.
+     *  @param cid cid
+     *  @return array of versions or null if there no record with this cid in the database.
+     */
+    fun getConceptVersions(cid: Cid): ShortArray? {
+        return db_.concepts.getConceptVersions(cid)
     }
 }

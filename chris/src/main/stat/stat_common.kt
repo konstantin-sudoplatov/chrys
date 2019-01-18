@@ -4,15 +4,44 @@ import atn.Brad
 import atn.Branch
 import basemain.Cid
 import basemain.logit
-import cpt.*
+import cpt.ActivationIfc
+import cpt.BradPrem
+import cpt.Breed
+import cpt.SpBreed
 import cpt.abs.*
 import libmain.ActivateRemotelyIbr
 import libmain.AnactivateRemotelyIbr
+import libmain.ChildRequestsParentTerminatedItIbr
 import libmain.TransportSingleConceptIbr
 
+/**
+ *      Common stats.
+ */
 object cmnSt: StatModule() {
 
 /**
+ *      Request stopping the current branch.
+ *  All outs are packed into the ChildRequestsParentTerminatedItIbr message and sent to the parent. In response we expect
+ *  the parent to send a request to the pod for finishing our branch. Yet, the branch remains operational still we have
+ *  no information about anactivation our breed in the parent's name space.
+ */
+object requestParentFinishBranch: F(34_395) {
+    override fun func(br: Branch) {
+        val breed = br[br.breedCid] as Breed
+        val outs = (breed.sp as SpBreed).outs
+        val outCpts = if
+                    (outs != null)
+                Array<DynamicConcept>(outs?.size?:0) { br[outs[it]].clone() as DynamicConcept }
+            else
+                null
+
+        val parentBrad = br.parentBrad
+        assert(parentBrad != null) {"Ordinary branch ${br.branchName()} must have not null parent."}
+        parentBrad!!.pod.putInQueue(ChildRequestsParentTerminatedItIbr())
+    }
+}
+
+ /**
  *      Set the Branch.breakPoint flag to let the debugger stop at the right moment.
  */
 object setBreakPoint: F(50_055) {
@@ -99,7 +128,6 @@ object activateRemotely: F2Cid(75_671) {
      */
     override fun func(br: Branch, destBradPrem: Cid, cptCid: Cid) {
         val destBrad = (br[destBradPrem] as BradPrem).brad as Brad
-        val cpt = br[cptCid] as ActivationIfc
         destBrad.pod.putInQueue(ActivateRemotelyIbr(destBrad, cptCid))
     }
 }
@@ -115,7 +143,6 @@ object anactivateRemotely: F2Cid(59_771) {
      */
     override fun func(br: Branch, destBradPrem: Cid, cptCid: Cid) {
         val destBrad = (br[destBradPrem] as BradPrem).brad as Brad
-        val cpt = br[cptCid] as ActivationIfc
         destBrad.pod.putInQueue(AnactivateRemotelyIbr(destBrad, cptCid))
     }
 }
@@ -149,4 +176,4 @@ object transportSingleConcept: F2Cid(72_493) {
     }
 }
 
-}   //   34_395 95_519 40_417 33_598
+}   //    95_519 40_417 33_598

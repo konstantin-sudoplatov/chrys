@@ -3,14 +3,18 @@ package stat
 import atn.Branch
 import basemain.Cid
 import chribase_thread.CuteThread
-import cpt.*
+import cpt.CuteThreadPrem
+import cpt.StringPrem
+import cpt.StringQueuePrem
 import cpt.abs.F2Cid
 import cpt.abs.FCid
 import libmain.BranchSendsUserItsBrad
 import libmain.CirclePromptsUserMsg
 import libmain.CircleTellsUserMsg
 
-/** Main stat container */
+/**
+ *      Main stats.
+ */
 object mnSt: StatModule() {
 
 /**
@@ -53,17 +57,17 @@ object circlePromtsUser: FCid(27_383) {
 }
 
 /**
- *      Take line from the string queue and give it string premise. Take care of the activation status of both concepts.
+ *      Take line from the string queue and put it in the string premise. Take care of the activation status of both concepts.
  */
 object extractLineFromStringQueue: F2Cid(24_107) {
-    override fun func(br: Branch, queuePrem: Cid, stringPrem: Cid) {
-        val queuePrem = br[queuePrem] as StringQueuePrem
+    override fun func(br: Branch, queuePremCid: Cid, stringPremCid: Cid) {
+        val queuePrem = br[queuePremCid] as StringQueuePrem
         val queue = queuePrem.queue
         assert(!queue.isEmpty()) {"If we got here, the queue must not be empty."}
-        val strPrem = br[stringPrem] as StringPrem
+        val strPrem = br[stringPremCid] as StringPrem
         strPrem.text = queue.poll()
         strPrem.activate()
         if(queue.isEmpty()) queuePrem.anactivate()
     }
 }
-}   //      40_288 26_161 92_115 86_381 92_962 42_567 37_654 56_252 52_663 46_910
+}   //       26_161 92_115 86_381 92_962 42_567 37_654 56_252 52_663 46_910

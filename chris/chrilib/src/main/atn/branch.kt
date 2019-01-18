@@ -30,7 +30,7 @@ import kotlin.math.max
 open class Branch(
     val breedCid: Cid,
     val ownBrad: Brad,                  // own address
-    private val parentBrad: Brad?,      // parent's address
+    val parentBrad: Brad?,              // parent's address
     var dlv: Int = -1                   // branch debug level. There is also thread debug level and GDEBUG_LV.
 ) {
     var breakPoint = false              // cranking controlled break point flag (see the common.setBreakPoint functor).
@@ -85,7 +85,7 @@ open class Branch(
                     val clonedIns = if(insCids != null) Array(insCids.size)
                         { this[insCids[it]].clone() as DynamicConcept} else null
 
-                    _pp_.putInQueue(BranchRequestsPodpoolCreateChildMsg(destBreedCid, destIns = clonedIns, parentBrad = ownBrad))
+                    _pp_.putInQueue(ParentRequestsPodpoolCreateChildMsg(destBreedCid, destIns = clonedIns, parentBrad = ownBrad))
                 }
 
             // Assign new stem or yield
@@ -224,8 +224,8 @@ open class Branch(
 class AttentionCircle(breedCid: Cid, brad: Brad, userThread: CuteThread): Branch(breedCid, brad, null) {
     init {
 
-        // Inject the userThread_cthreadprem hard cid premise
-        val userThreadPrem = this[hCr.hardCid.userThread_cthreadprem.cid] as CuteThreadPrem
+        // Inject the userThread_threadprem hard cid premise
+        val userThreadPrem = this[hCr.hardCid.userThread_threadprem.cid] as CuteThreadPrem
         userThreadPrem.thread = userThread
         userThreadPrem.activate()
     }

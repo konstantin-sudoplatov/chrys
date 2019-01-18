@@ -1,6 +1,7 @@
 package libmain
 
 import atn.Brad
+import atn.Pod
 import basemain.Cid
 import chribase_thread.CuteThread
 import chribase_thread.MessageMsg
@@ -30,7 +31,20 @@ data class BranchSendsUserItsBrad(val brad: Brad): MessageMsg()
  *  @param destIns Array of live concepts to be injected into new branch
  *  @param parentBrad Address of the parent branch (for sending back report)
  */
-data class BranchRequestsPodpoolCreateChildMsg(val destBreedCid: Cid, val destIns: Array<DynamicConcept>?, val parentBrad: Brad): MessageMsg()
+data class ParentRequestsPodpoolCreateChildMsg(val destBreedCid: Cid, val destIns: Array<out DynamicConcept>?,
+                                               val parentBrad: Brad): MessageMsg()
+
+/**
+ *      Parent branch asks the pod to terminate its child branch.
+ *  @param destBrid identifier of the branch to delete
+ */
+class ParentRequestsPodTerminateChildMsg(val destBrid: Int): MessageMsg()
+
+/**
+ *      After deleting a branch pod sends podpool this message, so that it could actualize the hostCandidates set.
+ *  @param origPod own object reference for podpool to actualize.
+ */
+class PodReportsToPodpoolBranchTermination(val origPod: Pod): MessageMsg()
 
 /**
  *      User sends a line of text to the circle. (Is sent from the user thread to a pod thread).
@@ -82,6 +96,26 @@ abstract class IbrMsg(destBrad: Brad): MessageMsg() {
 }
 
 /**
+ *      Branch reports to the pod pool and its parent its creation and tells them its origBrad.
+ *  @param destBrad To be able to find parent
+ *  @param origBrad
+ *  @param origBreedCid
+ */
+class BranchReportsPodpoolAndParentItsCreationIbr(destBrad: Brad, val origBrad: Brad, val origBreedCid: Cid): IbrMsg(destBrad)
+
+/**
+ *      Child branch notifies its parent that it wants to be terminated and sends parent array of outs - concepts to be
+ *  injected into the parent's name space. After sending this message child formally is still working, since its breed
+ *  in the parent space is not yet anactivated. It's parent's responsibility to send the child's pod request for child
+ *  termination and anactivate its breed.
+ *  @param destBrad address of the parent branch
+ *  @param outs array of live concepts, which child sends to parent to be injected into parents name space
+ *  @param childBreedCid cid of the child breed, so that the parent could identify the child.
+ */
+class ChildRequestsParentTerminatedItIbr(destBrad: Brad, val outs: Array<out DynamicConcept>?, val childBreedCid: Cid):
+    IbrMsg(destBrad)
+
+/**
  *      Activate concept remotely (i.e. another's branch live concept).
  *  @param destBrad address (pod + brid) of the destination branch
  *  @param cptCid Cid of the concept.
@@ -114,14 +148,6 @@ class AnactivateRemotelyIbr(destBrad: Brad, val cptCid: Cid): IbrMsg(destBrad) {
         return super.toStr() + ", concept = ${cidNamed(cptCid)}"
     }
 }
-
-/**
- *      Branch reports to the pod pool and its parent its creation and tells them its origBrad.
- *  @param destBrad To be able to find parent
- *  @param origBrad
- *  @param origBreedCid
- */
-class BranchReportsPodpoolAndParentItsCreationIbr(destBrad: Brad, val origBrad: Brad, val origBreedCid: Cid): IbrMsg(destBrad)
 
 /**
  *      Passing a single concept. The concept is cloned on sending and injected into the receiver branch on the receiving.

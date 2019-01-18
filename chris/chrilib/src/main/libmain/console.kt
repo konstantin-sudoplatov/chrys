@@ -127,7 +127,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
     /** The circle branch to talk to. */
     private var circleBrad_: Brad? = null
 
-    /** This iterator used to answer circle's prompts at debugging */
+    /** This iterator is used to answer circle's prompts in the debugging mode. */
     private lateinit var userLinesIterator_: ListIterator<String>
 
     /**
@@ -146,7 +146,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
             }.start()
         else {
             userLinesIterator_ = listOf(
-                "hello",
+                "The hole hell of hellos",
                 "world",
                 "p"
             ).listIterator()

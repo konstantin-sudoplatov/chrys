@@ -5,14 +5,16 @@ import basemain.logit
 import cpt.abs.SpStaticConcept
 import libmain._nm_
 import libmain._sm_
+import stat.word_processing.puiSt
 
 
 /**
  *      List of classes, that contain static concepts
  */
 private val statModules = listOf(
-    cmnSt,
-    mnSt
+    cmnSt,      // common
+    mnSt,       // main
+    puiSt       // parse user input
 )
 
 /**

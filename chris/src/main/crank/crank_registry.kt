@@ -1,28 +1,29 @@
 package crank
 
+import basemain.Cid
 import basemain.logit
 import cpt.abs.SpiritDynamicConcept
-import libmain.CrankModule
-import libmain._dm_
-import libmain._sm_
-import libmain.hCr
+import crank.word_processing.pulCr
+import libmain.*
 
 /**
  *      List of classes, that contain crank definitions (enums and functions)
  */
 private val crankModules = listOf<CrankModule>(
-    hCr,
-    mnCr
+    hCr,            // hard cid
+    mnCr,           // main
+    pulCr           // parse user input
 )
 
 /**
- *      Load into the spirit map and crank all dynamic concepts
+ *      Load into the spirit map and crank all spirit dynamic concepts
+ *  @param sm spirit map to load
  */
-fun loadAndCrankDynamicConcepts() {
+fun loadAndCrankDynamicConcepts(sm: SpiritMap) {
 
     // Load
     for(crankModule in crankModules)
-        crankModule.loadSpiritMap()
+        crankModule.loadSpiritMap(sm)
 
     // Crank
     for(crankModule in crankModules)
@@ -30,30 +31,37 @@ fun loadAndCrankDynamicConcepts() {
 }
 
 /**
+ *      Load name map with the names of concepts.
+ *  @param nm name map to load
+ */
+fun loadNameMap(nm: HashMap<Cid, String>?) {
+    for(crankModule in crankModules)
+        crankModule.loadNameMap(nm)
+}
+
+/**
  *      After concepts are loaded into the spirit map and cranked, this function compares them to the database and inserts/updates
  *  them if they are absent or differ.
- *  Prerequisites: all dynamic concepts must by loaded into _sm_ and cranked.
+ *  @param sm the spirit map
  */
-fun actualizeCrankedConceptsInDb(){
+fun actualizeCrankedConceptsInDb(sm: SpiritMap){
 
-    var inserted: Int = 0
-    var updated: Int = 0
-    for((cid, cpt) in _sm_.map) {
+    var inserted = 0
+    var updated = 0
+    for((cid, cpt) in sm.map) {
         assert(cid == cpt.cid) { "Cid $cid is not equal to _sm_[cid].cid"}
 
         // Make sure all dynamic concept in the spirit map are present in the database and equal.
         if( cpt is SpiritDynamicConcept) {
-            val dbCpt = _dm_.getConcept(cid)
+            val dbCpt = _dm_.getConcept(cid, cpt.ver)
             if(cpt != dbCpt)
-                when {
-                    dbCpt == null -> {      // concept isn't found in the db? insert
-                        _dm_.insertConcept(cpt)
-                        inserted++
-                    }
-                    else -> {      // update in the db
-                        _dm_.updateConcept(cpt)
-                        updated++
-                    }
+                if (dbCpt == null) {      // concept isn't found in the db? insert
+                    _dm_.insertConcept(cpt)
+                    inserted++
+                }
+                else {      // update in the db
+                    _dm_.updateConcept(cpt)
+                    updated++
                 }
         }
     }
@@ -61,6 +69,12 @@ fun actualizeCrankedConceptsInDb(){
     logit("Added to database: $inserted, updated: $updated")
 }
 
+/**
+ *      Generate and log some free cids for dynamic concepts. They are guaranteed to be not used and be unique.
+ *  Note: usually the cids are generated in advance and put into the comments for using in the cranks. Moreover, they are not
+ *  generated in one go. That means they can be not unique. It is unlikely, but possible. For that we rely on the
+ *  checks in the code.
+ */
 fun logSomeFreeDynamicCids() {
 
     val s = StringBuilder()

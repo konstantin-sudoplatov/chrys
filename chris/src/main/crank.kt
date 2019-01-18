@@ -3,13 +3,15 @@ import cpt.logSomeFreeClids
 import crank.actualizeCrankedConceptsInDb
 import crank.loadAndCrankDynamicConcepts
 import crank.logSomeFreeDynamicCids
+import libmain.SpiritMap
+import libmain._dm_
 import stat.logSomeFreeStaticCids
 
 fun main(args: Array<String>) {
-    //loadStaticConcepts()
+    val sm = SpiritMap(_dm_)
 
-    loadAndCrankDynamicConcepts()
-    actualizeCrankedConceptsInDb()
+    loadAndCrankDynamicConcepts(sm)
+    actualizeCrankedConceptsInDb(sm)
 
     logSomeFreeClids()
     logSomeFreeStaticCids()

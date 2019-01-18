@@ -1,12 +1,11 @@
 
+import basemain.GDEBUG_LV
 import cpt.logSomeFreeClids
 import crank.actualizeCrankedConceptsInDb
 import crank.loadAndCrankDynamicConcepts
+import crank.loadNameMap
 import crank.logSomeFreeDynamicCids
-import libmain._atnDispatcher_
-import libmain._console_
-import libmain._dm_
-import libmain._pp_
+import libmain.*
 import stat.loadStaticConcepts
 import stat.logSomeFreeStaticCids
 import java.io.FileNotFoundException
@@ -25,9 +24,14 @@ import java.io.FileNotFoundException
 @Throws(FileNotFoundException::class)
 fun main(args: Array<String>) {
 
+    // Crank manually programmed concepts and put them in the database.
+    val sm = SpiritMap(_dm_)        // temporary spirit map only for cranking and actualizing the DB
+    loadAndCrankDynamicConcepts(sm)
+    actualizeCrankedConceptsInDb(sm)
+
+    // Load static concept into the spirit map. All the rest will be loaded dynamically from the DB.
     loadStaticConcepts()
-    loadAndCrankDynamicConcepts()
-    actualizeCrankedConceptsInDb()
+    if(GDEBUG_LV >= 0) loadNameMap(_nm_)
 
     logSomeFreeClids()
     logSomeFreeStaticCids()

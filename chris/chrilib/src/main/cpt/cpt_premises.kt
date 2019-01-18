@@ -7,6 +7,7 @@ import cpt.abs.Premise
 import cpt.abs.SpiritDynamicConcept
 import cpt.abs.SpiritPremise
 import db.SerializedConceptData
+import libmain.arrayOfCidsNamed
 import libmain.cidNamed
 import java.util.*
 
@@ -67,6 +68,8 @@ class SpBreed(cid: Cid): SpBradPrem(cid) {
     override fun toString(): String {
         var s = super.toString()
         s += "\n    seedCid = ${cidNamed(seedCid)}"
+        s += "\n${arrayOfCidsNamed("ins", ins)}".replace("\n", "\n    ")
+        s += "\n${arrayOfCidsNamed("outs", outs)}".replace("\n", "\n    ")
 
         return s
     }

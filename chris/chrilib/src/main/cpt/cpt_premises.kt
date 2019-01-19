@@ -28,7 +28,7 @@ open class BradPrem internal constructor(spBradPrem: SpBradPrem): Premise(spBrad
 
     override fun clone(): BradPrem {
         val o = super.clone() as BradPrem
-        o.brad = this.brad?.clone()
+        o.brad = this.brad?.copy()
 
         return o
     }
@@ -36,7 +36,7 @@ open class BradPrem internal constructor(spBradPrem: SpBradPrem): Premise(spBrad
     override fun copyLive(dest: Premise) {
         super.copyLive(dest)
         dest as BradPrem
-        dest.brad = this.brad?.clone()
+        dest.brad = this.brad?.copy()
     }
 
     override fun toString(): String {

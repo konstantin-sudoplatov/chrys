@@ -9,10 +9,7 @@ import cpt.BradPrem
 import cpt.Breed
 import cpt.SpBreed
 import cpt.abs.*
-import libmain.ActivateRemotelyIbr
-import libmain.AnactivateRemotelyIbr
-import libmain.ChildRequestsParentTerminatedItIbr
-import libmain.TransportSingleConceptIbr
+import libmain.*
 
 /**
  *      Common stats.
@@ -21,9 +18,8 @@ object cmnSt: StatModule() {
 
 /**
  *      Request stopping the current branch.
- *  All outs are packed into the ChildRequestsParentTerminatedItIbr message and sent to the parent. In response we expect
- *  the parent to send a request to the pod for finishing our branch. Yet, the branch remains operational still we have
- *  no information about anactivation our breed in the parent's name space.
+ *  All outs are packed into the ChildReportsParentItsTerminationIbr message and sent to the parent. To actually finish
+ *  the branch we send request to the pod.
  */
 object requestParentFinishBranch: F(34_395) {
     override fun func(br: Branch) {
@@ -31,13 +27,14 @@ object requestParentFinishBranch: F(34_395) {
         val outs = (breed.sp as SpBreed).outs
         val outCpts = if
                     (outs != null)
-                Array<DynamicConcept>(outs?.size?:0) { br[outs[it]].clone() as DynamicConcept }
+                Array<DynamicConcept>(outs.size) { br[outs[it]] }
             else
                 null
 
         val parentBrad = br.parentBrad
         assert(parentBrad != null) {"Ordinary branch ${br.branchName()} must have not null parent."}
-        parentBrad!!.pod.putInQueue(ChildRequestsParentTerminatedItIbr())
+        parentBrad!!.pod.putInQueue(ChildReportsParentItsTerminationIbr(parentBrad.brid, outCpts, br.ownBrad, br.breedCid))
+        br.ownBrad.pod.putInQueue(BranchRequestsPodToTerminateItMsg(br.ownBrad.brid))
     }
 }
 
@@ -128,7 +125,7 @@ object activateRemotely: F2Cid(75_671) {
      */
     override fun func(br: Branch, destBradPrem: Cid, cptCid: Cid) {
         val destBrad = (br[destBradPrem] as BradPrem).brad as Brad
-        destBrad.pod.putInQueue(ActivateRemotelyIbr(destBrad, cptCid))
+        destBrad.pod.putInQueue(ActivateRemotelyIbr(destBrad.brid, cptCid))
     }
 }
 
@@ -143,7 +140,7 @@ object anactivateRemotely: F2Cid(59_771) {
      */
     override fun func(br: Branch, destBradPrem: Cid, cptCid: Cid) {
         val destBrad = (br[destBradPrem] as BradPrem).brad as Brad
-        destBrad.pod.putInQueue(AnactivateRemotelyIbr(destBrad, cptCid))
+        destBrad.pod.putInQueue(AnactivateRemotelyIbr(destBrad.brid, cptCid))
     }
 }
 
@@ -172,7 +169,7 @@ object transportSingleConcept: F2Cid(72_493) {
      */
     override fun func(br: Branch, whereTo: Cid, load: Cid) {
         val destBrad = (br[whereTo] as BradPrem).brad as Brad
-        destBrad.pod.putInQueue(TransportSingleConceptIbr(destBrad, br[load].clone() as DynamicConcept))
+        destBrad.pod.putInQueue(TransportSingleConceptIbr(destBrad.brid, br[load].clone() as DynamicConcept))
     }
 }
 

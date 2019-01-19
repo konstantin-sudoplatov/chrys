@@ -8,7 +8,7 @@ import cpt.StringPrem
 import cpt.StringQueuePrem
 import cpt.abs.F2Cid
 import cpt.abs.FCid
-import libmain.BranchSendsUserItsBrad
+import libmain.BranchSendsUserItsBradMsg
 import libmain.CirclePromptsUserMsg
 import libmain.CircleTellsUserMsg
 
@@ -28,7 +28,7 @@ object branchSendsUserItsBrad: FCid(19_223) {
     @Suppress
     override fun func(br: Branch, userThread_premCid: Cid) {
         val userThread = (br[userThread_premCid] as CuteThreadPrem).thread as CuteThread
-        userThread.putInQueue(BranchSendsUserItsBrad(br.ownBrad.clone()))
+        userThread.putInQueue(BranchSendsUserItsBradMsg(br.ownBrad))
     }
 }
 

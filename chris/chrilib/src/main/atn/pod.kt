@@ -23,10 +23,6 @@ import kotlin.random.Random
  */
 data class Brad(val pod: Pod, val brid: Int): Cloneable {
 
-    public override fun clone(): Brad {
-        return super.clone() as Brad
-    }
-
     override fun toString(): String {
         var s = this::class.qualifiedName as String
         s += "\npod = $pod".replace("\n", "\n    ")
@@ -46,8 +42,7 @@ class Pod(
     val pid: Int,               // Index of the pod in the podArray of the pod pool.
     var dlv: Int = -1,          // Debugging level. There is also branch debug level and GDEBUG_LV.
     var dBranchFilter: Int = -1 // Filter debugging messages for a branch. The field contains a brid. -1: no filtering.
-): CuteThread(POD_THREAD_QUEUE_TIMEOUT, MAX_POD_THREAD_QUEUE, podName)
-{
+): CuteThread(POD_THREAD_QUEUE_TIMEOUT, MAX_POD_THREAD_QUEUE, podName) {
 
     /** Alias for threadName */
     val podName: String
@@ -115,17 +110,35 @@ class Pod(
                     }
 
                     is      // parent gets report on creating child branch?
-                            BranchReportsPodpoolAndParentItsCreationIbr ->
+                            ChildReportsParentItsCreationIbr ->
                     {
-                        val origBranch = msg.origBrad.pod[msg.origBrad.brid] as Branch
-                        dlog_(br,"(from ${origBranch.branchName()}): msg = ${msg.toStr()}")
-
-                        br.addChild(msg.origBrad)    // add new child to the list of children of the parent branch
+                        dlog_(br,"msg = ${msg.toStr()}")
 
                         // Set up and activate the child's breed in the parent's space name
                         val childBreed = br[msg.origBreedCid] as Breed
-                        childBreed.brad = msg.origBrad       // it's a clone of the child's brad object (not necessary, just nice)
+                        childBreed.brad = msg.origBrad       // cloning is not necessary, it will never change.
                         childBreed.activate()
+
+                        br.addChild(msg.origBrad)    // add new child to the set of children in the parent branch
+
+                        br.reasoning()
+
+                        return true
+                    }
+
+                    is ChildReportsParentItsTerminationIbr -> {
+                        dlog_(br,"msg = ${msg.toStr()}")
+
+                        // Take the child's devise, if present. No need to clone, there is no owner to them anymore.
+                        if(msg.outs != null)
+                            for(cpt in msg.outs)
+                                br.add(cpt)
+
+                        // Anactivate the child's breed in the parent's space name
+                        val childBreed = br[msg.origBreedCid] as Breed
+                        childBreed.anactivate()
+
+                        br.removeChild(msg.origBrad)    // delete the child from the set of children in the parent branch
 
                         br.reasoning()
 
@@ -145,14 +158,23 @@ class Pod(
                 if(msg.destIns != null)
                     for(cpt in msg.destIns)
                         br.add(cpt)
-
                 branchMap_[brid] = br
                 numOfBranches++
-                _pp_.putInQueue(BranchReportsPodpoolAndParentItsCreationIbr(destBrad = msg.parentBrad,
-                    origBrad = destBrad.clone(), origBreedCid = msg.destBreedCid
-                ))
+                _pp_.putInQueue(PodReportsPodpoolBranchCreationMsg(this))       // notify podpool
+                msg.parentBrad.pod.putInQueue(ChildReportsParentItsCreationIbr(destBrid = msg.parentBrad.brid,
+                    origBrad = destBrad, origBreedCid = msg.destBreedCid))      // notify parent
 
                 br.reasoning()      // kick off
+
+                return true
+            }
+
+            // Delete branch
+            is BranchRequestsPodToTerminateItMsg -> {
+                dlog_("msg = ${msg.toStr()}")
+                branchMap_.remove(msg.origBrid)
+                numOfBranches--
+                _pp_.putInQueue(PodReportsPodpoolBranchTerminationMsg(this))
 
                 return true
             }
@@ -277,26 +299,28 @@ class PodComparator: Comparator<Pod>
  */
 class Podpool(
     val size: Int = _conf_.podPoolSize,
-    var dlv: Int = -1,          // Debugging level. There is also branch debug level and GDEBUG_LV.
-    var dPodFilter: Int = -1    // Filter debugging messages for a pod. The field contains a pid. -1: no filtering.
+    var dlv: Int = -1           // Debugging level. There is also branch debug level and GDEBUG_LV.
 ): CuteThread(0, 0, "pod_pool")
 {
     protected override fun _messageProc(msg: MessageMsg?): Boolean {
         when(msg) {
 
-            // Forward all Ibrs to the destination pods
-            is IbrMsg -> {
-                val destPod = msg.destPod
-                dlog_(destPod, "msg: ${msg.toStr()}")
+            is PodReportsPodpoolBranchCreationMsg -> {
+                dlog_("msg = ${msg.toStr()}")
+                hostCandidates.add(msg.origPod)
+                borrowedPods--
 
-                if      //is it report for branch creation?
-                        (msg is BranchReportsPodpoolAndParentItsCreationIbr)
-                {   //yes: return some debts to podpool
-                    hostCandidates.add(msg.origBrad.pod)
-                    borrowedPods--
-                }
+                return true
+            }
 
-                msg.destPod.putInQueue(msg)
+            is PodReportsPodpoolBranchTerminationMsg -> {
+                dlog_("msg = ${msg.toStr()}")
+
+                // Reinsert pod in the hostCandidates. That may change the ordering.
+                val pod = msg.origPod
+                hostCandidates.remove(pod)
+                hostCandidates.add(pod)
+
                 return true
             }
 
@@ -392,25 +416,11 @@ class Podpool(
      *      The debug level is taken as a maximum of the global or thread debug level.
      *  @param line line to log.
      */
-    private inline fun dlog_(line: String) {
+    private fun dlog_(line: String) {
         if (GDEBUG_LV >= 0) {
             val effectiveLvl = max(GDEBUG_LV, this.dlv)
             if(effectiveLvl > 0)
                 logit(this.threadName + ": " + line)
-        }
-    }
-
-    /**
-     *          Log a debugging line if it passes the filter
-     *  @param pod Pod, the message is meant for
-     *  @param line line to log.
-     */
-    private inline fun dlog_(pod: Pod, line: String) {
-        if (GDEBUG_LV >= 0) {
-            val effectiveLvl = max(GDEBUG_LV, this.dlv)
-            if      // does the message pass the filter?
-                    (dPodFilter == -1 || dPodFilter == pod.pid)
-                dlog_(line)
         }
     }
 

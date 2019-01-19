@@ -30,8 +30,8 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
         var msg: MessageMsg
         do {
             msg = _getBlocking()
-        } while(msg !is BranchSendsUserItsBrad)
-        circleBrad_ = msg.brad
+        } while(msg !is BranchSendsUserItsBradMsg)
+        circleBrad_ = msg.brad      // cloning is not necessary, it is immutable.
 
         if(EMULATE_CONSOLE) {
             val line = userLinesIterator_.next()

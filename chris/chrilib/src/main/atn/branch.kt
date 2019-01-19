@@ -147,11 +147,19 @@ open class Branch(
     }
 
     /**
-     *      Add a child branch to the list of children.
+     *      Add a child branch to the set of children.
      *  @param childBrad
      */
     fun addChild(childBrad: Brad) {
         children.add(childBrad)
+    }
+
+    /**
+     *      Remove a child branch from the set of children.
+     *  @param childBrad
+     */
+    fun removeChild(childBrad: Brad) {
+        children.remove(childBrad)
     }
 
     /**
@@ -201,7 +209,7 @@ open class Branch(
     private var stem_: Neuron = this[(this[breedCid].sp as SpBreed).seedCid] as Neuron
 
     /** List of child brans. Used to send them the termination message. */
-    private val children = ArrayList<Brad>()
+    private val children = HashSet<Brad>()
 
     /**
      *      Main constructor.

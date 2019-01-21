@@ -57,7 +57,6 @@ abstract public class CuteThread extends Thread {
      */
     @Override
     public void run() {
-//System.out.printf("%s: in run, size = %s\n", threadName_, _msgQueue.size());     //todo: debugging
         while(true) {
             MessageMsg msg = _getBlocking();
             if (!_messageProc(msg)) {
@@ -68,7 +67,6 @@ abstract public class CuteThread extends Thread {
             if      // is termination requested?
                     (msg instanceof TerminationRequestMsg)
             {
-//System.out.println(threadName_ + ": terminating");    //todo: debugging
                 break;
             }
         }

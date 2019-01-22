@@ -22,13 +22,22 @@ object mnCr: CrankModule() {
 object cmn: CrankGroup {
 
     // Request parent finish the current branch.
-    val requestParentFinishThisBranch_act = SpA(313_424_276).load(cmnSt.requestParentFinishBranch)
+    val finishBranch_act = SpA(313_424_276).load(cmnSt.requestParentFinishBranch)
 
     // Raise the Branch.breakPoint flag
     val setBreakPoint_act = SpA(-1_426_110_123).load(cmnSt.setBreakPoint)
 
     val debugOn_act = SpA(-1_160_608_042).load(cmnSt.debugOn)
     val debugOff_act = SpA(1_216_614_327).load(cmnSt.debugOff)
+
+    val log_act = SpA_Cid(389_616_405)
+    val log1_act = SpA_Cid(-937_858_466)
+    val log2_act = SpA_Cid(-1_491_380_944)
+    val log3_act = SpA_Cid(-936_769_357)
+
+    val log1_actn = SpActionNeuron(-1_978_110_017).load(acts(log1_act))
+    val log2_actn = SpActionNeuron(-848_757_907).load(acts(log2_act))
+    val log3_actn = SpActionNeuron(-1_193_562_290).load(acts(log3_act))
 
     // Some numbers to work with in cranking
     val num0_numprim = SpNumPrim(2_059_457_726).load(0.0)
@@ -37,7 +46,7 @@ object cmn: CrankGroup {
 
     override fun crank() {}
 
-}   //  -937_858_466 -1_491_380_944 -936_769_357 -1_978_110_017 -848_757_907 -1_193_562_290 389_616_405 -1_808_768_002 209_458_482 -1_380_871_710
+}   //         -1_808_768_002 209_458_482 -1_380_871_710
 
 /**
  *      Attention circle branch.
@@ -83,6 +92,12 @@ object circle: CrankGroup {
     // Wait until result of splitting user line becomes available, then... what then?
     val parsingResultValve_andn = SpAndNeuron(2_091_624_554)
 
+    // Print something on the screen and request next input.
+    val giveUserFeedback_actn = SpActionNeuron(1_125_150_058)
+
+    // Jump to getting new user line
+    val gotoUserInputValve_andn = SpAndNeuron(-1_874_867_101)
+
     // For all brans in the project when branch is started it gets an activated breed with its own Brad. This is
     // true for the circle branch too. Besides, it gets the userThread_threadprem concept with user's thread reference (also
     // activated), even though it isn't present in the breed.ins.
@@ -120,27 +135,43 @@ object circle: CrankGroup {
             ulread.userInputLine_strprem    // user text line has come?
         ).addEff(
             Float.POSITIVE_INFINITY,
-            acts(
-            ),
-            brans(pulCr.splitUl.breed),
+            brans = brans(pulCr.splitUl.breed),
             stem = parsingResultValve_andn
         )
 
+        // Wait until user line is parsed then store the new words
         parsingResultValve_andn.loadPrems(
             pulCr.splitUl.userChain_strqprem
         ).addEff(
             Float.POSITIVE_INFINITY,
+            brans = brans(pulCr.storeWordsFromUserChain.breed),
+            stem = giveUserFeedback_actn
+        )
+
+        // Print something on the screen then prompt user
+        giveUserFeedback_actn.load(
             acts(
                 copyUserInputLineToOutputRequest_act,
-                anactivateUserInputLine_act,
                 sendUlwriteOutputRequest_act,
-                activateRemotelyPromptRequest_act,
+                activateRemotelyPromptRequest_act
+            ),
+            stem = gotoUserInputValve_andn
+        )
+
+        // Wait until ready for new user line then go get it
+        gotoUserInputValve_andn.loadPrems(
+            !pulCr.storeWordsFromUserChain.breed        // wait until the chain is stored
+        ).addEff(
+            Float.POSITIVE_INFINITY,
+            acts(
+                anactivateUserInputLine_act,
                 activateRemotelyInputRequest_act
             ),
             stem = userInputValve_andn
         )
+
     }
-}   //       -1_874_867_101 345_223_608 445_101_230
+}   //  -1_031_129_456 580_717_991 538_155_321 -1_945_366_218 1_675_242_166 1_592_949_000 345_223_608 445_101_230
 
 /**
  *      Reading user input lines.

@@ -3,6 +3,7 @@ package cpt
 import atn.Branch
 import basemain.Cid
 import cpt.abs.*
+import libmain.namedCid
 import java.util.*
 
 /**
@@ -17,7 +18,7 @@ open class SpActionNeuron(cid: Cid): SpiritNeuron(cid) {
      *      Load the action neuron with the acts, brans and stem.
      */
     fun load(acts: Array<out SpiritAction>? = null, brans: Array<SpBreed>? = null, stem: SpiritNeuron? = null): SpActionNeuron {
-        assert(_effects == null) {"load() must work only once."}
+        assert(_effects == null) {"${namedCid(cid)}: load() must work only once."}
         val actCids = if(acts != null) IntArray(acts.size) { acts[it].cid } else null
         val branCids = if(brans != null) IntArray(brans.size, { brans[it].cid }) else null
         super.addEffect(Float.POSITIVE_INFINITY, actCids, branCids, stem?.cid?: 0)

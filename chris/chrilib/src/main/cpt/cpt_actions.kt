@@ -39,6 +39,7 @@ class SpA(cid: Cid): SpiritAction(cid) {
      *  @param statCpt The concept functor.
      */
     fun load(statCpt: SpStaticConcept): SpA {
+        assert(_statCid == 0) {"${namedCid(cid)}: can be loaded only once"}
         _statCid = statCpt.cid
         return this
     }
@@ -190,6 +191,7 @@ class SpA_2Cid(cid: Cid): SpiritAction(cid) {
      *  @param p2 second parameter
      */
     fun load(statCpt: SpStaticConcept, p1: SpiritDynamicConcept, p2: SpiritDynamicConcept): SpA_2Cid {
+        assert(_statCid == 0) {"${namedCid(cid)}: can be loaded only once"}
         _statCid = statCpt.cid
         p1Cid_ = p1.cid
         p2Cid_ = p2.cid
@@ -292,6 +294,7 @@ class SpA_LCid(cid: Cid): SpiritAction(cid) {
      *  @param pVar Variable number of concepts
      */
     fun load(statCpt: SpStaticConcept, vararg pVar: SpiritDynamicConcept): SpA_LCid {
+        assert(_statCid == 0) {"${namedCid(cid)}: can be loaded only once"}
         _statCid = statCpt.cid
         pVar_ = IntArray(pVar.size) { pVar[it].cid }
         return this

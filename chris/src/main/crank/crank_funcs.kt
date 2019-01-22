@@ -3,8 +3,6 @@ package crank
 import basemain.acts
 import cpt.SpA_Cid
 import cpt.SpActionNeuron
-import cpt.SpBreed
-import cpt.abs.SpiritAction
 import cpt.abs.SpiritDynamicConcept
 import cpt.abs.SpiritNeuron
 import crank.mnCr.cmn.debugOff_act
@@ -53,13 +51,43 @@ fun log_acnr(vararg log_act: SpA_Cid): SpActionNeuron {
 }
 
 /**
- *          Create and load an action of logging a specified dynamic concept.
- * @param spCpt concept to log_act
+ *      Log action.
+ *  @param spCpt concept to log
  */
-fun log_act(spCpt: SpiritDynamicConcept): SpA_Cid {
-    val logAct = SpA_Cid(0)
-    _sm_.add(logAct)
-    logAct.load(cmnSt.logConcept, spCpt)
+fun log(spCpt: SpiritDynamicConcept) = mnCr.cmn.log_act.load(cmnSt.logConcept, spCpt)
 
-    return logAct
-}
+/**
+ *      Log action.
+ *  @param spCpt concept to log
+ */
+fun log1(spCpt: SpiritDynamicConcept) = mnCr.cmn.log1_act.load(cmnSt.logConcept, spCpt)
+
+/**
+ *      Log action.
+ *  @param spCpt concept to log
+ */
+fun log2(spCpt: SpiritDynamicConcept) = mnCr.cmn.log2_act.load(cmnSt.logConcept, spCpt)
+
+/**
+ *      Log action.
+ *  @param spCpt concept to log
+ */
+fun log3(spCpt: SpiritDynamicConcept) = mnCr.cmn.log3_act.load(cmnSt.logConcept, spCpt)
+
+/**
+ *      Log neuron.
+ *  @param spCpt concept to log
+ */
+fun logn1(spCpt: SpiritDynamicConcept) = mnCr.cmn.log1_actn.load(acts(log(spCpt)))
+
+/**
+ *      Log neuron.
+ *  @param spCpt concept to log
+ */
+fun logn2(spCpt: SpiritDynamicConcept) = mnCr.cmn.log2_actn.load(acts(log(spCpt)))
+
+/**
+ *      Log neuron.
+ *  @param spCpt concept to log
+ */
+fun logn3(spCpt: SpiritDynamicConcept) = mnCr.cmn.log3_actn.load(acts(log(spCpt)))

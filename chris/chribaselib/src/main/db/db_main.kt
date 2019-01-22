@@ -13,7 +13,7 @@ import java.sql.SQLException
  *  @param password
  */
 class DataBase(connectionString: String, dbName: String, schema: String, user: String, password: String) {
-    private var conn: Connection = connectDb(connectionString, dbName, schema, user, password)
+    private var conn: Connection = connectDb(connectionString, dbName, user, password)
 
     /** Table of system parameters */
     val params = ParamsTbl(conn, schema, "params")
@@ -26,10 +26,10 @@ class DataBase(connectionString: String, dbName: String, schema: String, user: S
     }
 
     /** Postgres connection object */
-    private inline fun connectDb(connectionString: String, dbName: String, schema: String, user: String, password: String):
+    private fun connectDb(connectionString: String, dbName: String, user: String, password: String):
             Connection
     {
-        var con: Connection
+        val con: Connection
         try {
             con = DriverManager.getConnection(connectionString + dbName, user, password)
         } catch (e: SQLException) {

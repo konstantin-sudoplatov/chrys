@@ -171,7 +171,7 @@ class SpPickNeuron(cid: Cid): SpiritLogicalNeuron(cid) {
             null -> null
             is NegatedPremise -> Prem(premoid.spiritPremise.cid, negated = true)
             is SpiritPremise -> Prem(premoid.cid, negated = false)
-            else -> throw IllegalStateException("Premoid must be either SpiritPremise or NegatedPremise, but it is ${premoid!!::class}")
+            else -> throw IllegalStateException("Premoid must be either SpiritPremise or NegatedPremise, but it is ${premoid::class}")
         }
         val actCids = if(acts == null) null else IntArray(acts.size){ acts[it].cid }
         val branCids = if(brans == null) null else IntArray(brans.size){ brans[it].cid }

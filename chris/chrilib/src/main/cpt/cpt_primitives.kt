@@ -49,7 +49,7 @@ class SpStringPrim(cid: Cid): SpiritPrimitive(cid) {
 
         val stable = sCD.stable!!
         val stringByteArraySize = stable.getInt()
-        val stringByteArray = ByteArray(stable.getInt()) { 0 }
+        val stringByteArray = ByteArray(stringByteArraySize) { 0 }
         stable.get(stringByteArray)
         string = String(stringByteArray)
     }

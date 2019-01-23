@@ -31,7 +31,10 @@ fun main(args: Array<String>) {
 
     // Load static concept into the spirit map. All the rest will be loaded dynamically from the DB.
     loadStaticConcepts()
-    if(GDEBUG_LV >= 0) loadNameMap(_nm_)
+    if(GDEBUG_LV >= 0) {
+        loadNameMap(_nm_)
+        loadFixedCidsIntoNameMap(_nm_!!)
+    }
 
     logSomeFreeClids()
     logSomeFreeStaticCids()

@@ -30,7 +30,6 @@ object cmn: CrankGroup {
     val debugOn_act = SpA(-1_160_608_042).load(cmnSt.debugOn)
     val debugOff_act = SpA(1_216_614_327).load(cmnSt.debugOff)
 
-    val log_act = SpA_Cid(389_616_405)
     val log1_act = SpA_Cid(-937_858_466)
     val log2_act = SpA_Cid(-1_491_380_944)
     val log3_act = SpA_Cid(-936_769_357)
@@ -73,6 +72,13 @@ object circle: CrankGroup {
     val anactivateUserInputLine_act = SpA_Cid(-139_070_542)
         .load(cmnSt.anactivate, ulread.userInputLine_strprem)
 
+    // Anactivate before splitting
+    val anactivateUserChain_act = SpA_Cid(-1_031_129_456).load(cmnSt.anactivate, pulCr.splitUl.userChain_strqprem)
+
+    // Prepare launching the store words branch
+    val anactivateStoreWordsFinishedPeg_act = SpA_Cid(580_717_991).load(cmnSt.anactivate,
+        pulCr.storeWordsFromUserChain.branchFinished_pegprem)
+
     // Before requesting to output line of text, place it to the request concept (together with the activation field)
     val copyUserInputLineToOutputRequest_act = SpA_2Cid(517_308_633)
         .load(cmnSt.copyPremise, ulread.userInputLine_strprem, ulwrite.outputLine_strprem)
@@ -96,7 +102,7 @@ object circle: CrankGroup {
     val giveUserFeedback_actn = SpActionNeuron(1_125_150_058)
 
     // Jump to getting new user line
-    val gotoUserInputValve_andn = SpAndNeuron(-1_874_867_101)
+    val storeWordsValve_andn = SpAndNeuron(-1_874_867_101)
 
     // For all brans in the project when branch is started it gets an activated breed with its own Brad. This is
     // true for the circle branch too. Besides, it gets the userThread_threadprem concept with user's thread reference (also
@@ -135,6 +141,7 @@ object circle: CrankGroup {
             ulread.userInputLine_strprem    // user text line has come?
         ).addEff(
             Float.POSITIVE_INFINITY,
+            acts(anactivateUserChain_act),
             brans = brans(pulCr.splitUl.breed),
             stem = parsingResultValve_andn
         )
@@ -144,6 +151,7 @@ object circle: CrankGroup {
             pulCr.splitUl.userChain_strqprem
         ).addEff(
             Float.POSITIVE_INFINITY,
+            acts(anactivateStoreWordsFinishedPeg_act),
             brans = brans(pulCr.storeWordsFromUserChain.breed),
             stem = giveUserFeedback_actn
         )
@@ -155,12 +163,12 @@ object circle: CrankGroup {
                 sendUlwriteOutputRequest_act,
                 activateRemotelyPromptRequest_act
             ),
-            stem = gotoUserInputValve_andn
+            stem = storeWordsValve_andn
         )
 
         // Wait until ready for new user line then go get it
-        gotoUserInputValve_andn.loadPrems(
-            !pulCr.storeWordsFromUserChain.breed        // wait until the chain is stored
+        storeWordsValve_andn.loadPrems(
+            pulCr.storeWordsFromUserChain.branchFinished_pegprem        // wait until the chain is stored
         ).addEff(
             Float.POSITIVE_INFINITY,
             acts(
@@ -171,7 +179,7 @@ object circle: CrankGroup {
         )
 
     }
-}   //  -1_031_129_456 580_717_991 538_155_321 -1_945_366_218 1_675_242_166 1_592_949_000 345_223_608 445_101_230
+}   //    538_155_321 -1_945_366_218 1_675_242_166 1_592_949_000 345_223_608 445_101_230
 
 /**
  *      Reading user input lines.

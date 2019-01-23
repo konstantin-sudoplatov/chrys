@@ -86,6 +86,11 @@ open class Branch(
                         { this[insCids[it]].clone() as DynamicConcept} else null
 
                     _pp_.putInQueue(ParentRequestsPodpoolCreateChildMsg(destBreedCid, destIns = clonedIns, parentBrad = ownBrad))
+
+                    // The breed will be fully activated  on getting report of creation message. Until then we change activation
+                    // value from -1 to 0 to show that the branch is in the process of starting. The breed will be anactivated
+                    // again on getting the report of finishing the branch.
+                    (this[destBreedCid] as Breed).activation = 0f
                 }
 
             // Assign new stem or yield

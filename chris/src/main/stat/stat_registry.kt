@@ -5,7 +5,7 @@ import basemain.logit
 import cpt.abs.SpStaticConcept
 import libmain._nm_
 import libmain._sm_
-import stat.word_processing.puiSt
+import stat.word_processing.pulSt
 
 
 /**
@@ -14,7 +14,7 @@ import stat.word_processing.puiSt
 private val statModules = listOf(
     cmnSt,      // common
     mnSt,       // main
-    puiSt       // parse user input
+    pulSt       // parse user input
 )
 
 /**

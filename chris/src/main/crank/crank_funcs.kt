@@ -54,12 +54,6 @@ fun log_acnr(vararg log_act: SpA_Cid): SpActionNeuron {
  *      Log action.
  *  @param spCpt concept to log
  */
-fun log(spCpt: SpiritDynamicConcept) = mnCr.cmn.log_act.load(cmnSt.logConcept, spCpt)
-
-/**
- *      Log action.
- *  @param spCpt concept to log
- */
 fun log1(spCpt: SpiritDynamicConcept) = mnCr.cmn.log1_act.load(cmnSt.logConcept, spCpt)
 
 /**
@@ -78,16 +72,16 @@ fun log3(spCpt: SpiritDynamicConcept) = mnCr.cmn.log3_act.load(cmnSt.logConcept,
  *      Log neuron.
  *  @param spCpt concept to log
  */
-fun logn1(spCpt: SpiritDynamicConcept) = mnCr.cmn.log1_actn.load(acts(log(spCpt)))
+fun logn1(spCpt: SpiritDynamicConcept) = mnCr.cmn.log1_actn.load(acts(log1(spCpt)))
 
 /**
  *      Log neuron.
  *  @param spCpt concept to log
  */
-fun logn2(spCpt: SpiritDynamicConcept) = mnCr.cmn.log2_actn.load(acts(log(spCpt)))
+fun logn2(spCpt: SpiritDynamicConcept) = mnCr.cmn.log2_actn.load(acts(log2(spCpt)))
 
 /**
  *      Log neuron.
  *  @param spCpt concept to log
  */
-fun logn3(spCpt: SpiritDynamicConcept) = mnCr.cmn.log3_actn.load(acts(log(spCpt)))
+fun logn3(spCpt: SpiritDynamicConcept) = mnCr.cmn.log3_actn.load(acts(log3(spCpt)))

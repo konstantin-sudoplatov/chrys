@@ -147,7 +147,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
         else {
             userLinesIterator_ = listOf(
                 "The hole hell of hellos",
-                "world",
+                "this crasy, crasy, crasy world",
                 "p"
             ).listIterator()
         }

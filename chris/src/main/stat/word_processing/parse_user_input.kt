@@ -8,9 +8,9 @@ import cpt.abs.F2Cid
 import stat.StatModule
 
 /**
- *      Parse user input stats.
+ *      Parse user line stats.
  */
-object puiSt: StatModule() {
+object pulSt: StatModule() {
 
 /**
  *      Parse user line into sequence of words and punctuation marks.
@@ -30,4 +30,20 @@ object splitUserLineIntoChain: F2Cid(40_288) {
         uChain.activate()
     }
 }
-}   // 61_969 404 97_283 29_046 48_703 4_213 21_345 62_076 42_444 13_759 70_651 30_783
+
+/**
+ *      Take new wordforms from a string queue premise and create primitives for them and add them to the wordform map.
+ */
+object adoptNewWordForms: F2Cid(61_969) {
+
+    /**
+     *  @param br
+     *  @param wordformMapCid wordform map.
+     *  @param wordformChain string queue of candidate wordforms.
+     */
+    override fun func(br: Branch, wordformMapCid: Cid, wordformChain: Cid) {
+
+    }
+}
+
+}   //  404 97_283 29_046 48_703 4_213 21_345 62_076 42_444 13_759 70_651 30_783

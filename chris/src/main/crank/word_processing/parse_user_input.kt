@@ -3,15 +3,12 @@ package crank.word_processing
 import basemain.acts
 import basemain.ins
 import basemain.outs
-import cpt.SpA_2Cid
-import cpt.SpBreed
-import cpt.SpSeed
-import cpt.SpStringQueuePrem
-import crank.log
+import cpt.*
 import crank.mnCr
 import libmain.CrankGroup
 import libmain.CrankModule
-import stat.word_processing.puiSt
+import stat.cmnSt
+import stat.word_processing.pulSt
 
 /**
  *      Parse user line cranks.
@@ -31,7 +28,7 @@ object splitUl: CrankGroup {
 
     // Parse user line into the user chain
     val splitUserLineIntoChain_act = SpA_2Cid(-397_711_011).
-        load(puiSt.splitUserLineIntoChain, mnCr.ulread.userInputLine_strprem, userChain_strqprem)
+        load(pulSt.splitUserLineIntoChain, mnCr.ulread.userInputLine_strprem, userChain_strqprem)
 
     override fun crank() {
 
@@ -58,18 +55,25 @@ object storeWordsFromUserChain: CrankGroup {
     val breed = SpBreed(1_230_588_599)
     val seed = SpSeed(304_785_243)
 
+    // Do actual storing
+//    val do_act = SpA_Cid(-2_075_622_757).load(pulSt.adoptNewWordForms, )
+
+    val branchFinished_pegprem = SpPegPrem(-310_425_497)
+    val activateBranchFinishedPeg_act = SpA_Cid(1_742_532_149).load(cmnSt.activate, branchFinished_pegprem)
+
     override fun crank() {
         breed.load(
             seed,
-            ins(splitUl.userChain_strqprem)
+            ins(splitUl.userChain_strqprem),
+            outs(branchFinished_pegprem)
         )
         seed.load(
             acts(
-log(splitUl.userChain_strqprem),
+                activateBranchFinishedPeg_act,
                 mnCr.cmn.finishBranch_act
             )
         )
     }
 }
 
-}   // -310_425_497 1_742_532_149 -2_075_622_757 1_756_690_313 298_222_796 485_556_822 -426_273_917 -103_273_421 -2_045_546_495
+}   //    1_756_690_313 298_222_796 485_556_822 -426_273_917 -103_273_421 -2_045_546_495

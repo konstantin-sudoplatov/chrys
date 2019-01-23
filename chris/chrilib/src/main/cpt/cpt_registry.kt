@@ -11,7 +11,7 @@ import kotlin.reflect.KClass
 import kotlin.reflect.full.primaryConstructor
 
 /**
- *      Registry enum of the spirit dynamic concept classes.
+ *      Registry of the spirit dynamic concept classes.
  *  We need this to be able to efficiently serialize/deserialize concepts when work with the database.
  *  Do not forget register class along with its clid when add a new dynamic concept to the project.
  */
@@ -42,8 +42,8 @@ enum class Reg(val clazz: KClass<out SpiritDynamicConcept>, val clid: Clid) {
     _8_328(clazz = SpMarkPrim::class, clid = 8_328),
     __32_327(clazz = SpStringPrim::class, clid = -32_327),
     __5_006(clazz = SpNumPrim::class, clid = -5_006),
+    __7_614(clazz = SpStringMapPrim::class, clid = -7_614),
 
-    //__7_614(clazz = ::class, clid = -7_614),
     //__26_035(clazz = ::class, clid = -26_035),
     //__18_796(clazz = ::class, clid = -18_796),
     //_16_390(clazz = ::class, clid = 16_390),
@@ -56,7 +56,7 @@ enum class Reg(val clazz: KClass<out SpiritDynamicConcept>, val clid: Clid) {
 /**
  *      Registry object of the spirit dynamic concept classes.
  *  It is a two-way map of class identifiers/class objects. Class identifier is a short integer.
- *  Also it contains a factory.
+ *  Also it contains a factory, that generates dynamic concepts objects on based their clid.
  */
 class ClassRegistry {
 
@@ -65,9 +65,9 @@ class ClassRegistry {
         return classMap_[clid] as KClass<out SpiritDynamicConcept>
     }
 
-    operator fun get(cpt: SpiritDynamicConcept): Clid {
-        assert(cpt::class in clidMap_) {"Class $cpt is not present in the class registry."}
-        return clidMap_[cpt::class] as Short
+    operator fun get(clazz: KClass<out SpiritDynamicConcept>): Clid {
+        assert(clazz in clidMap_) {"Class $clazz is not present in the class registry."}
+        return clidMap_[clazz] as Short
     }
 
     operator fun contains(clid: Clid): Boolean {

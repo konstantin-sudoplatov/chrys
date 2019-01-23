@@ -92,7 +92,7 @@ abstract class SpiritDynamicConcept(cid: Cid): SpiritConcept(cid) {
         if(other == null)
             return false
         else
-            return _cr_[this] == _cr_[other as SpiritDynamicConcept]    // compare clids
+            return _cr_[this::class] == _cr_[(other as SpiritDynamicConcept)::class]    // compare clids
     }
 
     /**
@@ -119,7 +119,7 @@ abstract class SpiritDynamicConcept(cid: Cid): SpiritConcept(cid) {
         return SerializedConceptData(
             cid = cid,
             ver = ver,
-            clid = _cr_[this],
+            clid = _cr_[this::class],
             stable = stable,
             transient = transient
         )

@@ -33,7 +33,6 @@ fun main(args: Array<String>) {
     loadStaticConcepts()
     if(GDEBUG_LV >= 0) {
         loadNameMap(_nm_)
-        loadFixedCidsIntoNameMap(_nm_!!)
     }
 
     logSomeFreeClids()

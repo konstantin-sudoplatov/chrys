@@ -108,26 +108,3 @@ class SpNumPrim(cid: Cid): SpiritPrimitive(cid) {
 }
 
 class NumPrim(spNumPrim: SpNumPrim): Primitive(spNumPrim)
-
-/**
- *      Map<String, Cid>
- */
-class SpStringMapPrim(cid: Cid): SpiritPrimitive(cid) {
-
-    val map = HashMap<String, Cid>()
-
-    override fun toString(): String {
-        val s = StringBuilder()
-        s.append("\nmap(size: ${map.size}) = [")
-        for(key in map.keys.take(5))
-            s.append("\n    $key: ${map[key]}")
-        s.append("\n]")
-
-        return super.toString() + s.toString().replace("\n", "\n    ")
-    }
-
-    override fun liveFactory()= StringMapPrim(this)
-}
-
-/** Live */
-class StringMapPrim(spStringMapPrim: SpStringMapPrim): Primitive(spStringMapPrim)

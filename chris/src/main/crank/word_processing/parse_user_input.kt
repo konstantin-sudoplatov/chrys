@@ -56,7 +56,8 @@ object storeWordsFromUserChain: CrankGroup {
     val seed = SpSeed(304_785_243)
 
     // Do actual storing
-//    val do_act = SpA_Cid(-2_075_622_757).load(pulSt.adoptNewWordForms, )
+    val store_act = SpA_2Cid(-2_075_622_757).load(pulSt.adoptNewWordForms, splitUl.userChain_strqprem,
+        mnCr.dict.russianWordforms_strcidmap)
 
     val branchFinished_pegprem = SpPegPrem(-310_425_497)
     val activateBranchFinishedPeg_act = SpA_Cid(1_742_532_149).load(cmnSt.activate, branchFinished_pegprem)
@@ -69,6 +70,7 @@ object storeWordsFromUserChain: CrankGroup {
         )
         seed.load(
             acts(
+                store_act,
                 activateBranchFinishedPeg_act,
                 mnCr.cmn.finishBranch_act
             )

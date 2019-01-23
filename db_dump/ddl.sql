@@ -2,8 +2,8 @@
 -- PostgreSQL database dump
 --
 
--- Dumped from database version 10.5 (Ubuntu 10.5-1.pgdg18.04+1)
--- Dumped by pg_dump version 10.5 (Ubuntu 10.5-1.pgdg18.04+1)
+-- Dumped from database version 10.5 (Ubuntu 10.5-2.pgdg14.04+1)
+-- Dumped by pg_dump version 10.5 (Ubuntu 10.5-2.pgdg14.04+1)
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -49,6 +49,19 @@ CREATE TABLE public.concepts (
 ALTER TABLE public.concepts OWNER TO chris;
 
 --
+-- Name: map_str_cid; Type: TABLE; Schema: public; Owner: chris
+--
+
+CREATE TABLE public.map_str_cid (
+    owner_cid integer NOT NULL,
+    key_str character varying NOT NULL,
+    value_cid integer NOT NULL
+);
+
+
+ALTER TABLE public.map_str_cid OWNER TO chris;
+
+--
 -- Name: params; Type: TABLE; Schema: public; Owner: chris
 --
 
@@ -67,6 +80,14 @@ ALTER TABLE public.params OWNER TO chris;
 
 ALTER TABLE ONLY public.concepts
     ADD CONSTRAINT concepts_pkey PRIMARY KEY (cid, ver);
+
+
+--
+-- Name: map_str_cid map_str_cid_pkey; Type: CONSTRAINT; Schema: public; Owner: chris
+--
+
+ALTER TABLE ONLY public.map_str_cid
+    ADD CONSTRAINT map_str_cid_pkey PRIMARY KEY (owner_cid, key_str);
 
 
 --

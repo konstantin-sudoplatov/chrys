@@ -210,3 +210,23 @@ abstract class Action(spiritAction: SpiritAction): DynamicConcept(spiritAction) 
      */
     fun run(br: Branch) = (sp as SpiritAction).run(br)
 }
+
+abstract class SpiritPrimitive(cid: Cid): SpiritDynamicConcept(cid) {
+
+}
+
+abstract class Primitive(spPrimitive: SpiritPrimitive): DynamicConcept(spPrimitive) {
+
+}
+
+abstract class SpiritDict(cid: Cid): SpiritDynamicConcept(cid) {
+    abstract val map: Map<out Any, Int>
+}
+
+abstract class Dict(spiritDict: SpiritDict): DynamicConcept(spiritDict) {
+
+    fun get(key: Any) = (sp as SpiritDict).map[key]
+
+    fun contains(key: Any) = key in (sp as SpiritDict).map
+
+}

@@ -45,7 +45,18 @@ object cmn: CrankGroup {
 
     override fun crank() {}
 
-}   //         -1_808_768_002 209_458_482 -1_380_871_710
+}   // -1_808_768_002 209_458_482 -1_380_871_710
+
+/**
+ *      Various dictionaries.
+ */
+object dict: CrankGroup {
+    // Dictionary of russian word forms
+    val russianWordforms_strcidmap = SpStringCidMap(-610_616_222)
+
+    override fun crank() {
+    }
+}   //  839_298_106 -758_057_277 -1_627_508_299 -1_530_438_504 68_415_566 403_449_370
 
 /**
  *      Attention circle branch.

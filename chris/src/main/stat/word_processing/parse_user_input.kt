@@ -2,6 +2,7 @@ package stat.word_processing
 
 import atn.Branch
 import basemain.Cid
+import cpt.StringCidMap
 import cpt.StringPrem
 import cpt.StringQueuePrem
 import cpt.abs.F2Cid
@@ -38,11 +39,16 @@ object adoptNewWordForms: F2Cid(61_969) {
 
     /**
      *  @param br
+     *  @param wordformChainCid string queue of candidate wordforms.
      *  @param wordformMapCid wordform map.
-     *  @param wordformChain string queue of candidate wordforms.
      */
-    override fun func(br: Branch, wordformMapCid: Cid, wordformChain: Cid) {
+    override fun func(br: Branch, wordformChainCid: Cid, wordformMapCid: Cid) {
+        val chain = br[wordformChainCid] as StringQueuePrem
+        val map = br[wordformMapCid] as StringCidMap
 
+//        for(w in chain.queue)
+//            if(w !in map)
+//                map[w] =
     }
 }
 

@@ -54,8 +54,8 @@ class StringCidMap(spStringCidMap: SpStringCidMap): Dict(spStringCidMap) {
     }
 
     operator fun get(key: String): Cid? {
-        val first = firstDelta.get(key, default = super.get(key))
-        return if(secondDelta == null) first else secondDelta!!.get(key, first)
+        val first = firstDelta.get(key, default = super.get(key)) as Cid?
+        return if(secondDelta == null) first else secondDelta!!.get(key, first) as Cid?
     }
 
     operator fun set(key: String, value: Cid) {
@@ -88,9 +88,9 @@ class StringCidMap(spStringCidMap: SpStringCidMap): Dict(spStringCidMap) {
 /**
  *      Common base for all map deltas.
  */
-abstract class BaseMapDelta() {
-    abstract val adds: Map<out Any, Cid>
-    abstract val dels: Set<Any>
+abstract class BaseMapDelta {
+    abstract val adds: Map<*, *>
+    abstract val dels: Set<*>
 
     override fun toString(): String {
         val s = java.lang.StringBuilder(this::class.qualifiedName as String)
@@ -114,7 +114,7 @@ abstract class BaseMapDelta() {
      *  @param default The base. This cid (or null, if there is no value to that key) is returned if there was no changes
      *      to that key.
      */
-    fun get(key: String, default: Cid?): Cid? {
+    fun get(key: Any, default: Any?): Any? {
         assert(!(key in adds && key in dels)) {"Key $key is in both adds and dels."}
         val v = adds[key]
         if(v != null) return v
@@ -127,7 +127,7 @@ abstract class BaseMapDelta() {
      *  @param key key
      *  @param default this is the base value. It is returned if there was no changes to that key.
      */
-    fun contains(key: String, default: Boolean): Boolean {
+    fun contains(key: Any, default: Boolean): Boolean {
         assert(!(key in adds && key in dels)) {"Key $key is in both adds and dels."}
         return when (key) {
             in adds -> true

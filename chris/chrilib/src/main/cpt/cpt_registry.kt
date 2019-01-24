@@ -42,7 +42,7 @@ enum class Reg(val clazz: KClass<out SpiritDynamicConcept>, val clid: Clid) {
     _8_328(clazz = SpMarkPrim::class, clid = 8_328),
     __32_327(clazz = SpStringPrim::class, clid = -32_327),
     __5_006(clazz = SpNumPrim::class, clid = -5_006),
-    __7_614(clazz = SpStringCidMap::class, clid = -7_614),
+    __7_614(clazz = SpStringCidDict::class, clid = -7_614),
 
     //__26_035(clazz = ::class, clid = -26_035),
     //__18_796(clazz = ::class, clid = -18_796),

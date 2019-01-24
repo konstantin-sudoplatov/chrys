@@ -52,7 +52,7 @@ object cmn: CrankGroup {
  */
 object dict: CrankGroup {
     // Dictionary of russian word forms
-    val russianWordforms_strcidmap = SpStringCidMap(-610_616_222)
+    val russianWordforms_strcidmap = SpStringCidDict(-610_616_222)
 
     override fun crank() {
     }

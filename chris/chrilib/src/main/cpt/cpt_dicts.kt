@@ -1,17 +1,15 @@
 package cpt
 
-import basemain.CUR_VER_FLAG
-import basemain.Cid
-import basemain.Ver
+import basemain.*
 import cpt.abs.Dict
 import cpt.abs.SpiritDict
 
 /**
  *      Map<String, Cid>. The base of the map is located in the spirit part and deltas in the live part.
  */
-class SpStringCidMap(cid: Cid): SpiritDict(cid) {
+class SpStringCidDict(cid: Cid): SpiritDict(cid) {
 
-    override val map = HashMap<String, Cid>()
+    val map = HashMap<String, Cid>()
 
     override fun toString(): String {
         val s = StringBuilder()
@@ -23,7 +21,7 @@ class SpStringCidMap(cid: Cid): SpiritDict(cid) {
         return super.toString() + s.toString()
     }
 
-    override fun liveFactory()= StringCidMap(this)
+    override fun liveFactory()= StringCidDict(this)
 }
 
 /**
@@ -33,114 +31,29 @@ class SpStringCidMap(cid: Cid): SpiritDict(cid) {
  *  when branch wants to get current changes written to the database and asks system to do so, it must stop changing the
  *  first level and start updating the second. The first level meanwhile is being assimilated by the system.
  */
-class StringCidMap(spStringCidMap: SpStringCidMap): Dict(spStringCidMap) {
+class StringCidDict(spStringCidDict: SpStringCidDict): Dict(spStringCidDict), DictDelta<String, Cid> {
+
+    /** Base map. */
+    override val baseMap: Map<String, Cid>
+        get() = (sp as SpStringCidDict).map
+
+    /** First level of delta. */
+    override val firstDelta = MapDelta<String, Cid>()
+
+    /** Second level of delta. */
+    override var secondDelta: MapDelta<String, Cid>? = null
 
     /**
      *      Set new version.
      *  Setting new version means that the first delta is fixed and all changes must go into the second delta.
      */
-    var ver: Ver = CUR_VER_FLAG
+    override var commitVer: Ver = CUR_VER_FLAG
         set(value) {
-            secondDelta = StringCidMapDelta()
+            secondDelta = MapDelta()
             field = value
         }
 
     override fun toString(): String {
-        var s = super.toString()
-        s += "\nfirstDelta = $firstDelta".replace("\n", "\n    ")
-        s += "\nsecondDelta = $secondDelta".replace("\n", "\n    ")
-
-        return s
+        return super.toString() + convertToString().replace("\n", "\n    ")
     }
-
-    operator fun get(key: String): Cid? {
-        val first = firstDelta.get(key, default = super.get(key)) as Cid?
-        return if(secondDelta == null) first else secondDelta!!.get(key, first) as Cid?
-    }
-
-    operator fun set(key: String, value: Cid) {
-        val delta = secondDelta?: firstDelta
-        delta.adds[key] = value
-        delta.dels.remove(key)
-    }
-
-    fun remove(key: String): Cid? {
-        val delta = secondDelta?: firstDelta
-        val removedCid = this[key]
-        delta.adds.remove(key)
-        delta.dels.add(key)
-
-        return removedCid
-    }
-
-    operator fun contains(key: String): Boolean {
-        val first = firstDelta.contains(key, default = super.contains(key))
-        return if(secondDelta == null) first else secondDelta!!.contains(key, first)
-    }
-
-    /** First level of delta. */
-    private val firstDelta = StringCidMapDelta()
-
-    /** Second level of delta. */
-    private var secondDelta: StringCidMapDelta? = null
-}
-
-/**
- *      Common base for all map deltas.
- */
-abstract class BaseMapDelta {
-    abstract val adds: Map<*, *>
-    abstract val dels: Set<*>
-
-    override fun toString(): String {
-        val s = java.lang.StringBuilder(this::class.qualifiedName as String)
-
-        s.append("\n    adds(size: ${adds.size}) = [")
-        for(key in adds.keys.take(5))
-            s.append("\n        $key: ${adds[key]}")
-        s.append("\n    ]")
-
-        s.append("\n    dels(size: ${dels.size}) = [ ")
-        for(key in dels.take(5))
-            s.append("$key, ")
-        s.append("]")
-
-        return s.toString()
-    }
-
-    /**
-     *      Get the value by key with respect to the changes.
-     *  @param key key
-     *  @param default The base. This cid (or null, if there is no value to that key) is returned if there was no changes
-     *      to that key.
-     */
-    fun get(key: Any, default: Any?): Any? {
-        assert(!(key in adds && key in dels)) {"Key $key is in both adds and dels."}
-        val v = adds[key]
-        if(v != null) return v
-        if(key in dels) return null
-        return default
-    }
-
-    /**
-     *      Check if the key is in the map, respecting the changes.
-     *  @param key key
-     *  @param default this is the base value. It is returned if there was no changes to that key.
-     */
-    fun contains(key: Any, default: Boolean): Boolean {
-        assert(!(key in adds && key in dels)) {"Key $key is in both adds and dels."}
-        return when (key) {
-            in adds -> true
-            in dels -> false
-            else -> default
-        }
-    }
-}
-
-/**
- *      Implementation of delta for the HashMap<String, Cid>
- */
-class StringCidMapDelta: BaseMapDelta() {
-    override val adds = HashMap<String, Cid>()
-    override val dels = HashSet<String>()
 }

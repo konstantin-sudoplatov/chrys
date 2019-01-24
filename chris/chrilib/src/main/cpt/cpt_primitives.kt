@@ -1,6 +1,9 @@
 package cpt
 
+import basemain.CUR_VER_FLAG
 import basemain.Cid
+import basemain.PrimDelta
+import basemain.Ver
 import cpt.abs.Primitive
 import cpt.abs.SpiritPrimitive
 import db.SerializedConceptData
@@ -60,7 +63,22 @@ class SpStringPrim(cid: Cid): SpiritPrimitive(cid) {
     }
 }
 
-class StringPrim(spStringPrim: SpStringPrim): Primitive(spStringPrim)
+class StringPrim(spStringPrim: SpStringPrim): Primitive(spStringPrim), PrimDelta<String> {
+
+    override val baseValue: String
+        get() = (sp as SpStringPrim).string
+
+    override var firstDelta: String? = null
+
+    override var secondDelta: String? = null
+
+    override var commitVer: Ver = CUR_VER_FLAG
+
+
+    override fun toString(): String {
+        return super.toString() + convertToString().replace("\n", "\n    ")
+    }
+}
 
 class SpNumPrim(cid: Cid): SpiritPrimitive(cid) {
     var num: Double = Double.NaN

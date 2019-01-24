@@ -68,14 +68,14 @@ class SpiritMap(val dbm: DbManager) {
     @Synchronized operator fun get(cid: Cid, ver: Ver = CUR_VER_FLAG): SpiritConcept? {
         var cpt = map[mapKey(cid, ver)]
 
-        // The most likely case is when the ver parameter equal the CUR_VER_FLAG
+        // The most likely case is when the commitVer parameter equal the CUR_VER_FLAG
         if(cpt != null) {
             assert(cpt.cid == cid && cpt.ver == ver) {"Cid $cid($ver) is not equal cpt.cid = ${cpt!!.cid}(${cpt!!.ver})"}
             return cpt
         }
         else
             if(ver == CUR_VER_FLAG) {
-                // May be the ver is not CUR_VER_FLAG but the curVer instead.
+                // May be the commitVer is not CUR_VER_FLAG but the curVer instead.
                 cpt = map[mapKey(cid, curVer)]
                 if (cpt != null) {
                     assert(cpt.cid == cid && cpt.ver == ver) { "Cid $cid($ver) is not equal cpt.cid = ${cpt!!.cid}(${cpt!!.ver})" }
@@ -319,7 +319,7 @@ class DbManager(conf: Conf) {
     }
 
     /**
-     *      Get concept with designated cid and ver.
+     *      Get concept with designated cid and commitVer.
      *  @param cid concept identifier
      *  @param ver concept version
      *  @return spirit dynamic concept on null if not found. The static concepts are not kept in the database.

@@ -86,7 +86,7 @@ abstract class Concept(spiritConcept: SpiritConcept): Cloneable {
 abstract class SpiritDynamicConcept(cid: Cid): SpiritConcept(cid) {
 
     /**
-     *      Deep comparison for equality. cid and ver are not included.
+     *      Deep comparison for equality. cid and commitVer are not included.
      */
     override fun equals(other: Any?): Boolean {
         if(other == null)
@@ -211,22 +211,10 @@ abstract class Action(spiritAction: SpiritAction): DynamicConcept(spiritAction) 
     fun run(br: Branch) = (sp as SpiritAction).run(br)
 }
 
-abstract class SpiritPrimitive(cid: Cid): SpiritDynamicConcept(cid) {
+abstract class SpiritPrimitive(cid: Cid): SpiritDynamicConcept(cid)
 
-}
+abstract class Primitive(spPrimitive: SpiritPrimitive): DynamicConcept(spPrimitive)
 
-abstract class Primitive(spPrimitive: SpiritPrimitive): DynamicConcept(spPrimitive) {
+abstract class SpiritDict(cid: Cid): SpiritDynamicConcept(cid)
 
-}
-
-abstract class SpiritDict(cid: Cid): SpiritDynamicConcept(cid) {
-    abstract val map: Map<out Any, Int>
-}
-
-abstract class Dict(spiritDict: SpiritDict): DynamicConcept(spiritDict) {
-
-    fun get(key: Any) = (sp as SpiritDict).map[key]
-
-    fun contains(key: Any) = key in (sp as SpiritDict).map
-
-}
+abstract class Dict(spiritDict: SpiritDict): DynamicConcept(spiritDict)

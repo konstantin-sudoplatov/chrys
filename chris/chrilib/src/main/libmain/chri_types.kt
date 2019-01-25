@@ -18,15 +18,21 @@ class SpiritMap(val dbm: DbManager) {
 
     /** Current (the latest actual) version. */
     var curVer: Ver = 0
+        @Synchronized get() = field
+        @Synchronized set(value) { field = value}
 
     /** Minimal actual version. */
     var minVer: Ver = 0
+        @Synchronized get() = field
+        @Synchronized set(value) { field = value}
 
     /** Minimal stale version. Is to be cleared up to the minVer. */
-    var staleVer: Ver = 0;
+    var staleVer: Ver = 0
+        @Synchronized get() = field
+        @Synchronized set(value) { field = value}
 
-    /**  The spirit map */
-    val map = hashMapOf<Int, SpiritConcept>()
+    /**  The spirit map. TODO Better isolate the map. Generally it should not be unsynchronizably changeable. */
+    val map = hashMapOf<Cid, SpiritConcept>()
 
     /**
      *      Add a concept to the spirit map. If cid of the concept is not set (0), then it will be generated.
@@ -55,8 +61,8 @@ class SpiritMap(val dbm: DbManager) {
 
         // Put new concept in the map and DB
         map[mapKey(cpt.cid, ver)] = cpt
-        if(cpt is SpiritDynamicConcept)
-            dbm.insertConcept(cpt)
+//        if(cpt is SpiritDynamicConcept)
+//            dbm.insertConcept(cpt)
     }
 
     /**
@@ -124,6 +130,13 @@ class SpiritMap(val dbm: DbManager) {
 
         return false
     }
+
+    /**
+     *      Branch on construction get its base version here.
+     */
+//    @Synchronized fun claimBaseVersion(): Ver {
+//        minVer = minOf(minVer, curVer)
+//    }
 
     @Synchronized fun generateListOfDynamicCids(size: Int): List<Cid> {
         return listOf<Cid>(*Array<Cid>(size, {generateDynamicCid()}))
@@ -305,7 +318,7 @@ class DbManager(conf: Conf) {
      *      Get parameter value.
      *  @param parName
      */
-    fun getParam(parName: String): String? {
+    @Synchronized fun getParam(parName: String): String? {
         return db_.params.getParam(parName)
     }
 
@@ -314,7 +327,7 @@ class DbManager(conf: Conf) {
      *  @param parName
      *  @param value
      */
-    fun setParam(parName: String, value: String?) {
+    @Synchronized fun setParam(parName: String, value: String?) {
         db_.params.setParam(parName, value)
     }
 
@@ -324,7 +337,7 @@ class DbManager(conf: Conf) {
      *  @param ver concept version
      *  @return spirit dynamic concept on null if not found. The static concepts are not kept in the database.
      */
-    fun getConcept(cid: Cid, ver: Ver): SpiritDynamicConcept? {
+    @Synchronized fun getConcept(cid: Cid, ver: Ver): SpiritDynamicConcept? {
         val sCD = db_.concepts.getConcept(cid, ver)
         if(sCD == null) return null
 
@@ -338,7 +351,7 @@ class DbManager(conf: Conf) {
      *      Insert a concept into the database.
      *  @param cpt spirit dynamic concept to insert
      */
-    fun insertConcept(cpt: SpiritDynamicConcept) {
+    @Synchronized fun insertConcept(cpt: SpiritDynamicConcept) {
         val sCD = cpt.serialize()
         db_.concepts.insertConcept(sCD.cid, sCD.ver, sCD.clid, sCD.stable?.array(), sCD.transient?.array())
     }
@@ -347,7 +360,7 @@ class DbManager(conf: Conf) {
      *      Update a concept in the database.
      *  @param cpt spirit dynamic concept to update
      */
-    fun updateConcept(cpt: SpiritDynamicConcept) {
+    @Synchronized fun updateConcept(cpt: SpiritDynamicConcept) {
         val sCD = cpt.serialize()
         db_.concepts.updateConcept(sCD.cid, sCD.ver, sCD.clid, sCD.stable?.array(), sCD.transient?.array())
     }
@@ -357,7 +370,7 @@ class DbManager(conf: Conf) {
      *  @param cid cid
      *  @return array of versions or null if there no record with this cid in the database.
      */
-    fun getConceptVersions(cid: Cid): ShortArray? {
+    @Synchronized fun getConceptVersions(cid: Cid): ShortArray? {
         return db_.concepts.getConceptVersions(cid)
     }
 }

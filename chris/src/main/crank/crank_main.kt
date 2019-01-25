@@ -162,7 +162,9 @@ object circle: CrankGroup {
             pulCr.splitUl.userChain_strqprem
         ).addEff(
             Float.POSITIVE_INFINITY,
-            acts(anactivateStoreWordsFinishedPeg_act),
+            acts(
+                anactivateStoreWordsFinishedPeg_act
+            ),
             brans = brans(pulCr.storeWordsFromUserChain.breed),
             stem = giveUserFeedback_actn
         )

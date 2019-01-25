@@ -4,7 +4,6 @@ import atn.Branch
 import basemain.Cid
 import cpt.*
 import cpt.abs.F2Cid
-import libmain._dm_
 import libmain._sm_
 import stat.StatModule
 
@@ -46,13 +45,8 @@ object adoptNewWordForms: F2Cid(61_969) {
         val chain = br[wordformChainCid] as StringQueuePrem
         val map = br[wordformMapCid] as StringCidDict
 
-val dbCpt = _dm_.getConcept(123456789, 32767)
-//val newSpStringPrim = SpStringPrim(0)
-//_sm_.add(newSpStringPrim)
-
         for(w in chain.queue)
             if(w !in map) {
-println("here")
                 val newSpStringPrim = SpStringPrim(0)
                 _sm_.add(newSpStringPrim)
                 val cid = newSpStringPrim.cid

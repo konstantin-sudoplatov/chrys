@@ -6,6 +6,7 @@ import basemain.Ver
 import java.nio.ByteBuffer
 import java.nio.ByteOrder
 import java.sql.Connection
+import java.sql.ResultSet
 import java.sql.SQLException
 
 /** 
@@ -71,7 +72,7 @@ class ConceptsTbl(conn: Connection, private val schema: String, private val tabl
         getConceptStmt_.setInt(1, cid)
         getConceptStmt_.setShort(2, ver)
 
-        val rs = getConceptStmt_.executeQuery()
+        val rs: ResultSet = getConceptStmt_.executeQuery()
         return if   // isn't there such record?
                     (!rs.next())
             rs.use{ null }

@@ -11,7 +11,7 @@ class CuteThreadTest {
      * released. Check that in the end 2*basemain.DEFAULT_MAX_THREAD_QUEUE messages have come through the queue.
      */
     @Test fun fillFreeQueueWithCongestion () {
-        val thread = object : CuteThread(0, DEFAULT_MAX_THREAD_QUEUE, "primary") {
+        val thread = object: CuteThread(0, DEFAULT_MAX_THREAD_QUEUE, "primary") {
 
             override fun run() {
                 Thread.sleep(1000)

@@ -1,5 +1,8 @@
 package basemain
 
+/**
+ *      Changeable primitive with two levels of delta.
+ */
 interface PrimDelta<T> {
 
     val baseValue: T
@@ -33,7 +36,7 @@ interface PrimDelta<T> {
 }
 
 /**
- *      Changing a dictionary with two levels of the delta - the firstDelta and secondDelta objects of type MapDelta.
+ *      Changeable dictionary with two levels of the delta - the firstDelta and secondDelta objects of type MapDelta.
  */
 interface DictDelta<K, V> {
 
@@ -107,9 +110,17 @@ interface DictDelta<K, V> {
 /**
  *      Changing a map without changing it. All changes are hold in the delta - the adds and dels maps.
  */
-class MapDelta<K, V> {
-    val adds = HashMap<K, V>()
-    val dels = HashSet<K>()
+class MapDelta<K, V>: Cloneable {
+    var adds = HashMap<K, V>()
+    var dels = HashSet<K>()
+
+    override public fun clone(): MapDelta<K, V> {
+        val c = super.clone() as MapDelta<K, V>
+        c.adds = adds.clone() as java.util.HashMap<K, V>
+        c.dels = dels.clone() as java.util.HashSet<K>
+
+        return c
+    }
 
     override fun toString(): String {
         val s = java.lang.StringBuilder(this::class.qualifiedName as String)
@@ -117,11 +128,15 @@ class MapDelta<K, V> {
         s.append("\n    adds(size: ${adds.size}) = [")
         for(key in adds.keys.take(5))
             s.append("\n        $key: ${adds[key]}")
+        if(adds.size > 5)
+            s.append("\n        ...")
         s.append("\n    ]")
 
         s.append("\n    dels(size: ${dels.size}) = [ ")
         for(key in dels.take(5))
             s.append("$key, ")
+        if(dels.size > 5)
+            s.append("\n    ....")
         s.append("]")
 
         return s.toString()

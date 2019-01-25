@@ -1,9 +1,6 @@
 package atn
 
-import basemain.Cid
-import basemain.GDEBUG_LV
-import basemain.ar
-import basemain.logit
+import basemain.*
 import chribase_thread.CuteThread
 import cpt.Breed
 import cpt.CuteThreadPrem
@@ -215,6 +212,9 @@ open class Branch(
 
     /** List of child brans. Used to send them the termination message. */
     private val children = HashSet<Brad>()
+
+    /** Base concept version for the branch and all its children. */
+    private var baseVer: Ver = 0
 
     /**
      *      Main constructor.

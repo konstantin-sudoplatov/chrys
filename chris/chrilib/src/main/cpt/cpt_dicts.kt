@@ -38,7 +38,7 @@ class StringCidDict(spStringCidDict: SpStringCidDict): Dict(spStringCidDict), Di
         get() = (sp as SpStringCidDict).map
 
     /** First level of delta. */
-    override val firstDelta = MapDelta<String, Cid>()
+    override var firstDelta = MapDelta<String, Cid>()
 
     /** Second level of delta. */
     override var secondDelta: MapDelta<String, Cid>? = null
@@ -52,6 +52,14 @@ class StringCidDict(spStringCidDict: SpStringCidDict): Dict(spStringCidDict), Di
             secondDelta = MapDelta()
             field = value
         }
+
+    override fun clone(): StringCidDict {
+        val c = super.clone()
+        (c as StringCidDict).firstDelta = firstDelta.clone()
+        c.secondDelta = secondDelta?.clone()
+
+        return c
+    }
 
     override fun toString(): String {
         return super.toString() + convertToString().replace("\n", "\n    ")

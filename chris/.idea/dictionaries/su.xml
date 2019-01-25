@@ -7,6 +7,8 @@
       <w>podpool</w>
       <w>ulread</w>
       <w>ulwrite</w>
+      <w>wordform</w>
+      <w>wordforms</w>
     </words>
   </dictionary>
 </component>

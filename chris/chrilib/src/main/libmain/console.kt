@@ -80,6 +80,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
                     if      // did the emulator request termination?
                             (line == "p")
                     {   //yes: request termination from dispatcher and to itself
+                        Thread.sleep(1000)
                         _atnDispatcher_.putInQueue(TerminationRequestMsg())
                         this.putInQueue(TerminationRequestMsg())
                     }
@@ -147,7 +148,7 @@ class ConsoleThread(threadName: String = "console"): CuteThread(1000, 0, threadN
         else {
             userLinesIterator_ = listOf(
                 "The hole hell of hellos",
-                "this crasy, crasy, crasy world",
+                "that crasy, crasy, crasy world",
                 "p"
             ).listIterator()
         }

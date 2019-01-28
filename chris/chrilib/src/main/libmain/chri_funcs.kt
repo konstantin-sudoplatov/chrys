@@ -1,10 +1,27 @@
 package libmain
 
 import basemain.Cid
+import basemain.MAX_VER
+import basemain.Ver
 import org.yaml.snakeyaml.Yaml
 import org.yaml.snakeyaml.constructor.Constructor
 import java.io.File
 import java.io.FileReader
+
+/**
+ *      Calculate effective version number. The effective version is version that would be if no folding happened.
+ *  @param ver version to be converted to the effective representation
+ *  @param staleVer stale (currently the minimal in the system) version.
+ *  @return effective version value
+ */
+fun effectiveVer(ver: Ver, staleVer: Ver) = if(ver >= staleVer) ver.toInt() else ver + MAX_VER + 1
+
+/**
+ *      Increment version, fold if necessary.
+ *  @param ver version value to increment
+ *  @return incremented possibly with folding version
+ */
+fun incrementVer(ver: Ver) = if(ver < MAX_VER) (ver + 1).toShort() else (ver - MAX_VER + 1).toShort()
 
 /**
  *          Give cid a name if it exists in the name map.

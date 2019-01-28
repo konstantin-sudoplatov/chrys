@@ -214,7 +214,7 @@ open class Branch(
     private val children = HashSet<Brad>()
 
     /** Base concept version for the branch and all its children. */
-    private var baseVer: Ver = 0
+//    private val version = Version()
 
     /**
      *      Main constructor.
@@ -231,10 +231,11 @@ open class Branch(
 /**
  *      Attention circle. It is the root branch for all the branch tree that communicates with userThread.
  *  @param breedCid Cid of the breed concept for the branch.
- *  @param brad Brad object, that identifies its place in the pod and pod pool.
- *  @param userThread User thread.
+ *  @param ownBrad Brad object, that identifies its place in the pod and pod pool.
+ *  @param userThread User thread - thread that controls communication with the user - console or http or a provider of
+ *      data, like reader of a book, perhaps.
  */
-class AttentionCircle(breedCid: Cid, brad: Brad, userThread: CuteThread): Branch(breedCid, brad, null) {
+class AttentionCircle(breedCid: Cid, ownBrad: Brad, userThread: CuteThread): Branch(breedCid, ownBrad, null) {
     init {
 
         // Inject the userThread_threadprem hard cid premise
@@ -243,3 +244,11 @@ class AttentionCircle(breedCid: Cid, brad: Brad, userThread: CuteThread): Branch
         userThreadPrem.activate()
     }
 }
+
+class Version(
+    /** The base version of concepts for the branch. */
+    var base: Ver,
+
+    /** Version, that Sage is currently storing. -1 no request to the Sage so far. */
+    var saged: Ver = -1
+)

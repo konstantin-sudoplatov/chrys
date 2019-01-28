@@ -23,6 +23,9 @@ abstract class SpiritConcept(cid: Cid) {
     /** Version number */
     var ver: Ver = CUR_VER_FLAG
 
+    /** Previous version concept in the chain. null - it is the last. */
+    var prevCpt: SpiritConcept? = null
+
     /**
      *      Minimal form of toString()
      */
@@ -32,6 +35,7 @@ abstract class SpiritConcept(cid: Cid) {
         var s = this::class.qualifiedName?: "anonymous"
         s += "\n    cid = ${cidNamed(cid)}"
         s += "\n    ver = $ver"
+        s += "\nprevCpt = $prevCpt".replace("\n", "\n    ")
 
         return s
     }

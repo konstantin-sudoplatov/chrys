@@ -22,16 +22,12 @@ const val MAX_STATIC_CID: ULong = 100_000u
 const val MIN_DYNAMIC_CID: ULong = 2_000_000u
 @ExperimentalUnsignedTypes
 const val MAX_DYNAMIC_CID: ULong = 4_294_967_295u    // UInt.MAX_VALUE (can't be casted statically)
-@ExperimentalUnsignedTypes
 const val MIN_CLID: Int = 1
-@ExperimentalUnsignedTypes
 const val MAX_CLID: Int = 65_535
-@ExperimentalUnsignedTypes
-const val MIN_VER: Short = 0
-@ExperimentalUnsignedTypes
-const val MAX_VER: Short = 32766
-@ExperimentalUnsignedTypes
-const val CUR_VER_FLAG: Short = 32767      // flag, showing that it is the last available concept version
+const val MIN_VER: Ver = 0
+const val MAX_VER: Ver = 32766
+const val CUR_VER_FLAG: Ver = 32767     // flag, showing that it is the last available concept version
+const val VER_GAP: Int = 50             // minimum allowed span between the newest and stale versions (how many is left before the newest will cactch up with the stale).
 
 // Config file
 //const val CONFIG_FILE = "chris_config.yaml"       // for loading yaml with class loader

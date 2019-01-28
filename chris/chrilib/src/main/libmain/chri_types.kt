@@ -17,22 +17,22 @@ import kotlin.reflect.full.isSubtypeOf
 class SpiritMap(val dbm: DbManager) {
 
     /** Current (the latest actual) version. */
-    var curVer: Ver = 0
+    var curVer: Ver = -1
         @Synchronized get() = field
         @Synchronized set(value) { field = value}
 
     /** Minimal actual version. */
-    var minVer: Ver = 0
+    var minVer: Ver = -1
         @Synchronized get() = field
         @Synchronized set(value) { field = value}
 
     /** Minimal stale version. Is to be cleared up to the minVer. */
-    var staleVer: Ver = 0
+    var staleVer: Ver = -1
         @Synchronized get() = field
         @Synchronized set(value) { field = value}
 
-    /**  The spirit map. TODO Better isolate the map. Generally it should not be unsynchronizably changeable. */
-    val map = hashMapOf<Cid, SpiritConcept>()
+    /**  The spirit map. TODO Better isolate the map. Generally it should not be asynchronously changeable. */
+    val map = hashMapOf<Int, SpiritConcept>()
 
     /**
      *      Add a concept to the spirit map. If cid of the concept is not set (0), then it will be generated.
